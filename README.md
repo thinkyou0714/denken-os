@@ -38,6 +38,14 @@
 | M3 弱点診断 prototype | 2026-08 | not started |
 | M4 公開ベータ (無料 trial) | 2026-Q4 | not started |
 
+## 情報発信 (X)
+
+プロダクトと並行して進める X(旧Twitter)発信の戦略・運用一式は
+[`docs/x-strategy/`](docs/x-strategy/README.md) にある。
+「凡人が電験二種に挑む当事者 × 学習アプリ開発 × 共闘」というポジションで、
+「今日の一問」をエンジンにアプリの成長へ繋げる。品質保証・著作権・持続性の
+根本対策まで運用可能な形で実装済み。
+
 ## License
 
 License は M2 段階で確定予定。候補:
