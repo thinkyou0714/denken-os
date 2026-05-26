@@ -31,6 +31,7 @@ docs/
 │   ├── 06-moat-community.md  関係性を堀に／コミュニティ立ち上げ
 │   ├── 07-monetization-failure-hedge.md 収益ブリッジ／不合格ヘッジ
 │   ├── 08-sustainability-kpi.md スコープ削減／バッチ運用／KPI
+│   ├── 09-anti-slop.md      脱Slop＆RTされる質／Grok対策
 │   └── templates/            投稿テンプレ／問題スキーマ／検証済みサンプル／カレンダー
 │
 └── automation/   自動化の実装指示（"作るときの仕様"・未実装）
