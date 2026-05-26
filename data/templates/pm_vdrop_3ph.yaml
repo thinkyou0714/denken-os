@@ -1,0 +1,52 @@
+id: pm_vdrop_3ph
+field_id: pm-transmission-vdrop
+type: calc
+title: 三相3線式送電線の電圧降下
+difficulty: applied
+
+params:
+  - {name: Vr, kind: choice, choices: [6600, 22000, 66000], unit: V}
+  - {name: P, kind: uniform_int, low: 1000000, high: 5000000, step: 500000, unit: W}
+  - {name: pf, kind: choice, choices: [0.8, 0.85, 0.9, 0.95]}
+  - {name: R, kind: uniform_float, low: 1.0, high: 5.0, step: 0.5, unit: ohm}
+  - {name: X, kind: uniform_float, low: 3.0, high: 10.0, step: 0.5, unit: ohm}
+
+# 上から順に評価。前の name を参照できる。
+expressions:
+  sinphi: "sqrt(1 - pf**2)"
+  phi_deg: "acos(pf)*180/pi"
+  I: "P/(sqrt(3)*Vr*pf)"
+  Vd: "sqrt(3)*I*(R*pf + X*sinphi)"
+  Vs: "Vr + Vd"
+
+answer:
+  expr: Vd
+  unit: V
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 10000
+
+figures:
+  - kind: single_line
+    caption: "図1 三相送電線の単線図(1線分の R, X)"
+    options:
+      source_label: "Source Vs"
+      load_label: "Load P={P}W pf={pf}"
+  - kind: phasor
+    caption: "図2 受電端電圧 V を基準とした電流 I のフェーザ図(遅れ力率)"
+    options:
+      vectors:
+        - {label: "V", mag: 1.0, angle_deg: 0, color: "C3"}
+        - {label: "I", mag: 0.8, angle_deg: "-phi_deg", color: "C0"}
+
+statement_template: >-
+  定格周波数の三相3線式送電線がある。受電端の線間電圧 {Vr} V、負荷の有効電力 {P} W、
+  力率 {pf}(遅れ)であり、1線当たりの抵抗 R = {R} Ω、リアクタンス X = {X} Ω である。
+  受電端電圧を基準とした近似式により、線間電圧降下 Vd[V] を求めよ。
+
+explanation_template: >-
+  受電端電流は I = P / (√3·Vr·cosφ) で求まる。三相線間の電圧降下は近似的に
+  Vd ≈ √3·I·(R·cosφ + X·sinφ) と表される。本問では Vd = {answer} となる。
+  送電端の線間電圧は Vs = Vr + Vd で評価できる。
+
+prompt_hint: 受電端を基準とした近似式であることを明示し、力率は遅れであることに触れる。

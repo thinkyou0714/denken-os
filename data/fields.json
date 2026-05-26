@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pm-transmission-vdrop",
+    "subject": "電力・管理",
+    "category": "送電系統",
+    "subcategory": "電圧降下",
+    "source_label": null
+  },
+  {
+    "id": "pm-power-flow",
+    "subject": "電力・管理",
+    "category": "送電系統",
+    "subcategory": "電力潮流",
+    "source_label": null
+  },
+  {
+    "id": "pm-loss-reduction",
+    "subject": "電力・管理",
+    "category": "配電",
+    "subcategory": "電力損失低減",
+    "source_label": null
+  },
+  {
+    "id": "mc-sync-gen-vreg",
+    "subject": "機械・制御",
+    "category": "同期機",
+    "subcategory": "電圧変動率",
+    "source_label": null
+  },
+  {
+    "id": "mc-transformer",
+    "subject": "機械・制御",
+    "category": "変圧器",
+    "subcategory": "効率",
+    "source_label": null
+  },
+  {
+    "id": "mc-control",
+    "subject": "機械・制御",
+    "category": "自動制御",
+    "subcategory": "フィードバック制御",
+    "source_label": null
+  }
+]

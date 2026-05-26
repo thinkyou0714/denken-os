@@ -1,0 +1,44 @@
+id: mc_sync_vreg
+field_id: mc-sync-gen-vreg
+type: calc
+title: 三相同期発電機の電圧変動率
+difficulty: applied
+
+params:
+  - {name: V, kind: choice, choices: [200, 220, 240], unit: V}
+  - {name: I, kind: uniform_int, low: 50, high: 150, step: 25, unit: A}
+  - {name: Xs, kind: uniform_float, low: 0.2, high: 0.6, step: 0.1, unit: ohm}
+  - {name: pf, kind: choice, choices: [0.8, 0.85, 0.9]}
+
+expressions:
+  sinphi: "sqrt(1 - pf**2)"
+  phi_deg: "acos(pf)*180/pi"
+  Eq: "sqrt((V + I*Xs*sinphi)**2 + (I*Xs*pf)**2)"
+  eps: "(Eq - V)/V*100"
+
+answer:
+  expr: eps
+  unit: "%"
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 60
+
+figures:
+  - kind: phasor
+    caption: "図1 端子電圧 V を基準としたフェーザ図(電機子抵抗を無視)"
+    options:
+      vectors:
+        - {label: "V", mag: 1.0, angle_deg: 0, color: "C3"}
+        - {label: "I", mag: 0.8, angle_deg: "-phi_deg", color: "C0"}
+
+statement_template: >-
+  三相同期発電機の1相分等価回路を考える。端子相電圧 V = {V} V、電機子電流 I = {I} A、
+  同期リアクタンス Xs = {Xs} Ω、力率 {pf}(遅れ)である。電機子抵抗を無視するとき、
+  電圧変動率 ε[%] を求めよ。
+
+explanation_template: >-
+  電機子抵抗を無視すると、無負荷誘導起電力は
+  Eq = √((V + I·Xs·sinφ)² + (I·Xs·cosφ)²) で求まる。電圧変動率は
+  ε = (Eq − V) / V × 100 で評価する。本問では ε = {answer} となる。
+
+prompt_hint: 電機子抵抗を無視する前提を明示する。

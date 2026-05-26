@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Generated study material (kept out of VCS by default)
+/generated/*.md
+/generated/*.json
+
+# Local source PDFs (copyright: never commit textbook content)
+/sources/
+*.pdf

@@ -4,10 +4,43 @@
 
 ## Status
 
-**Pre-alpha — 構想中** (2026-05-19)
+**Alpha — 類題生成エンジン プロトタイプ実装** (2026-05)
 
-このリポジトリは現在スケルトン段階です。実装はまだ開始していません。
-進捗を追いたい方は Watch / Star してください。
+電験二種 二次試験向けの **パラメトリック類題生成エンジン** (Python) を実装しました。
+計算問題は SymPy で厳密に解き、図 (単線図・フェーザ図) はパラメータから自動生成、
+論説問題は rubric で品質を検証します。生成エンジンは差し替え可能で、オフライン stub と
+ローカル Ollama の双方に対応します。
+
+### Quickstart
+
+```bash
+python -m venv .venv && . .venv/bin/activate
+pip install -e ".[figures,schedule,dev]"
+
+denken list                                   # 分野とテンプレート一覧
+denken gen --template pm_vdrop_3ph --seed 1   # 類題を生成 (generated/ に md+json+svg)
+denken gen --template pm_vdrop_3ph --seed 1 --backend ollama --model qwen2.5:14b
+denken check                                  # 全テンプレを複数 seed で検証
+pytest -q                                      # テスト
+```
+
+### 設計の要点
+
+- **正答保証**: 答えは SymPy solver が確定。LLM には計算させず文章整形のみ担当 (算術ミスを構造的に排除)。
+- **図⇔数値の一致**: 図は solver と同じパラメータから描くため、図・数値・答えが常に整合。
+- **再現性**: seed 固定でパラメータ・答え・図を完全再現。
+- **品質検証**: 計算問題は再計算と突合＋妥当範囲チェック、論説は rubric 充足率で採点。
+- **著作権**: 参考書 PDF は分野タクソノミー抽出のみ (本文は非保持)。生成は原理ベース。
+
+### ディレクトリ
+
+```
+src/denken/   models / params / solver / figures / llm / generate / validate / render / cli / schedule
+data/         fields.json (分野マスタ) + templates/*.yaml (問題雛形)
+tests/        solver・検証・図・スケジューラのテスト
+```
+
+このリポジトリは引き続き開発中です。進捗を追いたい方は Watch / Star してください。
 
 ## Vision
 
@@ -32,8 +65,9 @@
 
 | Milestone | Target | Status |
 |---|---|---|
-| M0 README + vision | 2026-05 | このコミット |
-| M1 過去問 1 年分を Obsidian markdown 化 | 2026-06 | not started |
+| M0 README + vision | 2026-05 | done |
+| M0.5 類題生成エンジン (Python, SymPy + 図 + Ollama) | 2026-05 | **done (alpha)** |
+| M1 過去問 1 年分を Obsidian markdown 化 | 2026-06 | in progress |
 | M2 Next.js skeleton + Supabase schema | 2026-07 | not started |
 | M3 弱点診断 prototype | 2026-08 | not started |
 | M4 公開ベータ (無料 trial) | 2026-Q4 | not started |

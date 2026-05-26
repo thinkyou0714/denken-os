@@ -1,0 +1,39 @@
+[project]
+name = "denken-os"
+version = "0.1.0"
+description = "電験二種 類題生成エンジン (parametric problem generator with deterministic solvers)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "sympy>=1.13",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+ollama = ["ollama>=0.4"]
+figures = ["matplotlib>=3.8", "schemdraw>=0.19"]
+schedule = ["fsrs>=5.0"]
+pdf = ["pdfplumber>=0.11"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+denken = "denken.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
