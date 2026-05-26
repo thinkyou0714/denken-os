@@ -1,0 +1,41 @@
+id: pe_full_wave_rect
+field_id: mc-rectifier
+type: calc
+title: 単相全波整流回路の直流平均電圧
+difficulty: basic
+
+params:
+  - {name: V, kind: choice, choices: [100, 141, 200], unit: V}
+
+expressions:
+  Vmax: "sqrt(2)*V"
+  Vdc: "2*sqrt(2)*V/pi"
+
+answer:
+  expr: Vdc
+  unit: V
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 1000
+
+figures:
+  - kind: waveform
+    caption: "図1 全波整流出力波形(破線=直流平均電圧 Vdc)"
+    role: technical
+    options:
+      wave: rectified
+      amp: Vmax
+      avg: Vdc
+      cycles: 2
+
+statement_template: >-
+  単相全波整流回路に、実効値 {V} V の正弦波交流電圧を入力する。
+  ダイオードは理想とし、出力は平滑しないものとする。
+  このときの出力電圧の直流平均値 Vdc[V] を求めよ。
+
+explanation_template: >-
+  正弦波の最大値は Vmax = √2·V である。全波整流出力の平均値は1周期の
+  半周期分の平均に等しく、Vdc = 2·Vmax/π = 2√2·V/π で与えられる。
+  本問では Vdc = {answer} となる。
+
+prompt_hint: 最大値 Vmax = √2·V を経由し、平均値 2Vmax/π を導く。

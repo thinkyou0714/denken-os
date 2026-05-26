@@ -1,0 +1,40 @@
+id: ct_rc_lowpass
+field_id: mc-control
+type: calc
+title: RC一次遅れ系の折点周波数
+difficulty: basic
+
+params:
+  - {name: R, kind: choice, choices: [1000, 4700, 10000, 47000, 100000], unit: ohm}
+  - {name: C, kind: choice, choices: [0.1, 1.0, 10.0], unit: uF}
+
+expressions:
+  tau: "R*C*1e-6"
+  wc: "1/(R*C*1e-6)"
+  fc: "1/(2*pi*R*C*1e-6)"
+
+answer:
+  expr: fc
+  unit: Hz
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 1000000
+
+figures:
+  - kind: bode
+    caption: "図1 一次遅れ系 H(jω)=1/(1+jωRC) のボード線図(破線=折点角周波数 ωc)"
+    role: technical
+    options:
+      tau: tau
+
+statement_template: >-
+  抵抗 R = {R} Ω とコンデンサ C = {C} µF からなる RC ローパスフィルタ
+  (一次遅れ系)がある。伝達関数を H(jω) = 1 / (1 + jωRC) とするとき、
+  折点周波数(カットオフ周波数)fc[Hz] を求めよ。
+
+explanation_template: >-
+  時定数は τ = RC で与えられ、折点角周波数は ωc = 1/τ、折点周波数は
+  fc = ωc / (2π) = 1 / (2πRC) である。本問では fc = {answer} となる。
+  この周波数でゲインは約 −3 dB、位相は −45° となる。
+
+prompt_hint: 折点で利得 −3 dB・位相 −45° になることに触れる。

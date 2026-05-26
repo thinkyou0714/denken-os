@@ -40,5 +40,12 @@
     "category": "自動制御",
     "subcategory": "フィードバック制御",
     "source_label": null
+  },
+  {
+    "id": "mc-rectifier",
+    "subject": "機械・制御",
+    "category": "パワーエレクトロニクス",
+    "subcategory": "整流回路",
+    "source_label": null
   }
 ]

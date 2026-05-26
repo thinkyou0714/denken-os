@@ -33,9 +33,17 @@ def load_templates(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str, Template]:
 def load_catalog(
     data_dir: Path = DEFAULT_DATA_DIR,
 ) -> tuple[dict[str, FieldNode], dict[str, Template]]:
+    from denken.figures import REGISTRY  # 図 generator の登録名(matplotlib は遅延 import)
+
     fields = load_fields(data_dir)
     templates = load_templates(data_dir)
     for t in templates.values():
         if t.field_id not in fields:
             raise ValueError(f"template {t.id}: unknown field_id '{t.field_id}'")
+        for spec in t.figures:
+            if spec.kind not in REGISTRY:
+                raise ValueError(
+                    f"template {t.id}: unknown figure kind '{spec.kind}' "
+                    f"(registered: {sorted(REGISTRY)})"
+                )
     return fields, templates

@@ -83,10 +83,13 @@ class FigureSpec(BaseModel):
     """図の生成指示。登録済みの generator (kind) を params/中間値から描画する。
 
     図は solver と同じ値から描かれるため、図・数値・答えが必ず一致する。
+    role="technical" は数値正確性が必須(コード生成のみ許可)。
+    role="decorative" は挿絵など精度不要な装飾(将来 raster 生成を許可する領域)。
     """
 
-    kind: str  # figures.py の登録名 (例: phasor / single_line)
+    kind: str  # figures.py の登録名 (例: phasor / single_line / waveform / bode)
     caption: str = ""
+    role: Literal["technical", "decorative"] = "technical"
     options: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -134,6 +137,9 @@ class FigureRef(BaseModel):
     path: str  # 生成された図への相対パス
     caption: str = ""
     alt: str = ""
+    kind: str = ""  # 来歴: どの generator が描いたか
+    role: str = "technical"  # technical / decorative
+    provenance: str = "solver"  # solver値由来 / llm_code / raster など
 
 
 class Problem(BaseModel):
