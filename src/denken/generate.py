@@ -23,6 +23,34 @@ def make_problem_id(template_id: str, seed: int) -> str:
     return f"{template_id}#{seed}"
 
 
+def param_signature(params: dict[str, Any]) -> tuple:
+    """パラメータ組合せの同一性キー。重複(同型問題)判定に使う。"""
+    return tuple(sorted((k, params[k]) for k in params))
+
+
+def iter_distinct_seeds(
+    template: Template, count: int, start_seed: int = 0, cap_factor: int = 200
+) -> list[int]:
+    """パラメータ組合せが互いに異なる seed を最大 count 個返す (アイデア#56)。
+
+    choice/整数パラメータが少ないテンプレートは取りうる組合せが有限なので、
+    空間を使い切ったら count 未満でも打ち切る(重複問題の量産を防ぐ)。
+    """
+    seen: set[tuple] = set()
+    seeds: list[int] = []
+    seed = start_seed
+    attempts = 0
+    max_attempts = max(count * cap_factor, 1000)
+    while len(seeds) < count and attempts < max_attempts:
+        sig = param_signature(sample_params(template, seed))
+        if sig not in seen:
+            seen.add(sig)
+            seeds.append(seed)
+        seed += 1
+        attempts += 1
+    return seeds
+
+
 def _safe_format(text: str, ctx: dict[str, Any], template_id: str) -> str:
     try:
         return text.format(**ctx)

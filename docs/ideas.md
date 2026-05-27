@@ -174,6 +174,32 @@
 - 変圧器の最大効率条件は「鉄損 = 銅損」、負荷率 = √(鉄損/全負荷銅損)。銅損は負荷電流の2乗に比例。
   - Transformer Losses and Efficiency — https://www.electricaleasy.com/2014/04/transformer-losses-and-efficiency.html
 
+## 2.8 問題セット生成と重複制御（2026-05-27）
+
+### 背景・根本原因
+`denken gen --count K` は seed を増やすだけで、**重複(同型問題の組合せ衝突)を防げない**。
+例: `pe_full_wave_rect` は V が3択のみ → 取りうる問題は3通りしかないのに、count=10 だと
+7問が重複する。問題集/模試としてのカバレッジ・多様性の保証が無かった。
+
+### 実装
+- `generate.param_signature` / `iter_distinct_seeds`:
+  パラメータ組合せが互いに異なる seed のみを返す。有限空間を使い切ったら打ち切る。
+- `problemset.build_set`: 複数テンプレからラウンドロビンで重複なし問題を集め、
+  あるテンプレが尽きたら他テンプレで total を埋める(分野バランス + 項目露出制御)。
+- `denken set --count N [--templates ...] [--out DIR]`: 目次(index.md)付きで出力。
+- 無パラメータの論説テンプレは組合せが1通りなので自動的に1問だけ寄与する。
+
+### 根拠（ベストプラクティス）
+- 本エンジンのテンプレは「同型問題(isomorphic problems)」生成器: 同じ概念・解法構造で
+  数値・文脈のみ変える。良い問題バンクは **重複しない組合せの確保・出題範囲(blueprint)の
+  カバレッジ・項目露出制御** を満たすべき、とされる。
+- 近重複検出(near-duplicate)・Diverse@k など多様性指標の研究も同方向。
+
+### 参考
+- Scalable Generation/Validation of Isomorphic Physics Problems (arxiv 2602.05114) — https://arxiv.org/pdf/2602.05114
+- Quickly Producing Isomorphic Exercises (ITiCSE 2024) — https://zilles.cs.illinois.edu/papers/fowler_surfacefeature_ITiCSE_2024.pdf
+- Near-duplicate Question Detection — https://assets.amazon.science/05/0e/7da5195f4976a9ebcd4a81266464/near-duplicate-question-detection.pdf
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

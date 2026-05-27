@@ -10,7 +10,8 @@ from denken.catalog import DEFAULT_DATA_DIR, load_catalog
 from denken.generate import generate, generate_validated
 from denken.llm import get_backend
 from denken.models import ProblemType
-from denken.render import write_problem
+from denken.problemset import build_set
+from denken.render import write_index, write_problem
 from denken.validate import validate_calc, validate_essay
 
 
@@ -70,6 +71,36 @@ def _cmd_validate(args: argparse.Namespace) -> int:
     return 0 if res.ok else 1
 
 
+def _cmd_set(args: argparse.Namespace) -> int:
+    """重複しない問題セット(模試/問題集)を生成する (アイデア#56, #78)。"""
+    fields, templates = load_catalog(args.data)
+    if args.templates:
+        ids = [s.strip() for s in args.templates.split(",") if s.strip()]
+        unknown = [i for i in ids if i not in templates]
+        if unknown:
+            print(f"unknown templates: {unknown}", file=sys.stderr)
+            return 2
+        selected = [templates[i] for i in ids]
+    else:
+        selected = list(templates.values())
+
+    out_dir = Path(args.out)
+    problems = build_set(
+        selected,
+        args.count,
+        start_seed=args.seed,
+        with_figures=not args.no_figures,
+        assets_dir=out_dir,
+    )
+    for p in problems:
+        write_problem(p, fields[p.field_id], templates[p.template_id], out_dir)
+    index = write_index(problems, fields, templates, out_dir)
+    print(f"generated {len(problems)} problems (requested {args.count}) -> {index}")
+    if len(problems) < args.count:
+        print("note: 組合せ空間が有限のため要求数に満たない問題セットです")
+    return 0
+
+
 def _cmd_check(args: argparse.Namespace) -> int:
     """全テンプレートを複数 seed で生成・検証し、次元整合も確認する (アイデア#62, #83, #99)。"""
     from denken.units import check_dimensions
@@ -119,6 +150,14 @@ def build_parser() -> argparse.ArgumentParser:
     v.add_argument("--template", required=True)
     v.add_argument("--seed", type=int, default=1)
     v.set_defaults(func=_cmd_validate)
+
+    s = sub.add_parser("set", help="重複しない問題セット(模試/問題集)を生成")
+    s.add_argument("--count", type=int, default=10)
+    s.add_argument("--seed", type=int, default=0)
+    s.add_argument("--templates", default="", help="カンマ区切りのテンプレID(未指定なら全件)")
+    s.add_argument("--no-figures", action="store_true")
+    s.add_argument("--out", default="problemset")
+    s.set_defaults(func=_cmd_set)
 
     c = sub.add_parser("check", help="全テンプレートを複数 seed で検証")
     c.add_argument("--seeds", type=int, default=10)

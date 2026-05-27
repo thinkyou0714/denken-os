@@ -54,6 +54,35 @@ def to_markdown(problem: Problem, field: FieldNode, template: Template) -> str:
     return "\n".join(out)
 
 
+def write_index(
+    problems: list[Problem],
+    fields: dict[str, FieldNode],
+    templates: dict[str, Template],
+    out_dir: Path,
+) -> Path:
+    """問題セットの目次(index.md)を書き出す。"""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "# 問題セット",
+        "",
+        f"全 {len(problems)} 問",
+        "",
+        "| # | 科目 | 分類 | 難易度 | タイトル |",
+        "|---|---|---|---|---|",
+    ]
+    for i, p in enumerate(problems, 1):
+        field = fields[p.field_id]
+        title = templates[p.template_id].title
+        base = p.id.replace("#", "_")
+        lines.append(
+            f"| {i} | {field.subject.value} | {field.category} | {p.difficulty} | "
+            f"[{title}]({base}.md) |"
+        )
+    path = out_dir / "index.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
 def write_problem(problem: Problem, field: FieldNode, template: Template, out_dir: Path) -> Path:
     """markdown と JSON を out_dir に書き出し、markdown のパスを返す。"""
     out_dir.mkdir(parents=True, exist_ok=True)
