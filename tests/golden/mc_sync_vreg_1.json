@@ -1,0 +1,20 @@
+{
+  "type": "calc",
+  "difficulty": "applied",
+  "params": {
+    "V": 200,
+    "I": 150,
+    "Xs": 0.2,
+    "pf": 0.85
+  },
+  "answer_value": 8.65,
+  "answer_display": "8.65 %",
+  "statement": "三相同期発電機の1相分等価回路を考える。端子相電圧 V = 200 V、電機子電流 I = 150 A、 同期リアクタンス Xs = 0.2 Ω、力率 0.85(遅れ)である。電機子抵抗を無視するとき、 電圧変動率 ε[%] を求めよ。",
+  "solution_steps": [
+    "$ sinphi = \\sqrt{1 - pf^{2}} = 0.5268 $",
+    "$ phi_deg = \\frac{180 \\operatorname{acos}{\\left(pf \\right)}}{\\pi} = 31.79 $",
+    "$ Eq = \\sqrt{I^{2} Xs^{2} pf^{2} + \\left(I Xs sinphi + V\\right)^{2}} = 217.3 $",
+    "$ eps = \\frac{100 \\left(Eq - V\\right)}{V} = 8.652 $"
+  ],
+  "explanation": "電機子抵抗を無視すると、無負荷誘導起電力は Eq = √((V + I·Xs·sinφ)² + (I·Xs·cosφ)²) で求まる。電圧変動率は ε = (Eq − V) / V × 100 で評価する。本問では ε = 8.65 % となる。"
+}

@@ -125,6 +125,36 @@
 - pint Tutorial — https://pint.readthedocs.io/en/stable/getting/tutorial.html
 - Units and Dimensional Analysis (Engineering LibreTexts) — https://eng.libretexts.org/Bookshelves/Introductory_Engineering/Introduction_to_Engineering_-_Thinking_Like_an_Engineer/05:_Units_and_Dimensional_Analysis
 
+## 2.6 数値グラウンディング検証 + ゴールデン回帰（2026-05-27）
+
+### 背景・根本原因
+本エンジンの核心テーゼは「LLM に計算させない」。しかし LLM(Ollama)バックエンドが
+問題文・解説を整形する際に **数値を捏造・改変するリスク** に対するガードが弱かった
+（最終解答の出現確認のみ）。また、リファクタや generator 変更で出力が意図せず変わる
+**回帰を検出する仕組みが無かった**。
+
+### 実装
+- **数値グラウンディング**（`validate.check_numeric_grounding`）:
+  問題文・解説中の全数値トークンを抽出し、許容集合
+  「solver の全中間値 ∪ 解答 ∪ テンプレ文字列中のリテラル定数 ∪ 構造定数{0,1,2,3,100}」
+  で説明できるか照合。±2% は表示丸めとして許容。説明できない数値があれば不合格。
+  - `validate()` の calc 合否に統合 → `generate_validated` が捏造を検知して再生成。
+  - stub は出力=テンプレ整形のため構造的に必ず合格（決定論を維持）。
+- **ゴールデン回帰**（`tests/test_golden.py` + `tests/golden/*.json`）:
+  決定論フィールド（statement/answer/steps/explanation 等）のみ保存・比較。
+  timestamp 等の揮発要素は除外。更新は `DENKEN_UPDATE_GOLDEN=1 pytest`。
+
+### 根拠（ベストプラクティス）
+- faithfulness/groundedness 検証は「主張を抽出 → 出典と照合 → 充足率」が定石。
+  数値は **決定論的な白box照合**が可能で、LLM-as-judge より確実・安価。
+- ゴールデンテストは timestamp/ID を正規化して比較するのが定石。スクラバの乱用は避ける。
+
+### 参考
+- How to Detect Hallucinations in LLM Apps — https://www.getmaxim.ai/articles/how-to-detect-hallucinations-in-your-llm-applications/
+- Consistency Is the Key (arxiv 2511.12236) — https://arxiv.org/html/2511.12236v1
+- Pytest Regressions / Golden File Updates 2025 — https://johal.in/pytest-regressions-data-golden-file-updates-2025/
+- Golden Tests in AI | Shaped — https://www.shaped.ai/blog/golden-tests-in-ai
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

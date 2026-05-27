@@ -1,0 +1,15 @@
+{
+  "type": "calc",
+  "difficulty": "basic",
+  "params": {
+    "V": 100
+  },
+  "answer_value": 90.0,
+  "answer_display": "90 V",
+  "statement": "単相全波整流回路に、実効値 100 V の正弦波交流電圧を入力する。 ダイオードは理想とし、出力は平滑しないものとする。 このときの出力電圧の直流平均値 Vdc[V] を求めよ。",
+  "solution_steps": [
+    "$ Vmax = \\sqrt{2} V = 141.4 $",
+    "$ Vdc = \\frac{2 \\sqrt{2} V}{\\pi} = 90.03 $"
+  ],
+  "explanation": "正弦波の最大値は Vmax = √2·V である。全波整流出力の平均値は1周期の 半周期分の平均に等しく、Vdc = 2·Vmax/π = 2√2·V/π で与えられる。 本問では Vdc = 90 V となる。"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "calc",
+  "difficulty": "applied",
+  "params": {
+    "Vr": 6600,
+    "P": 1500000,
+    "pf": 0.9,
+    "R": 1.5,
+    "X": 6.5
+  },
+  "answer_value": 1060.0,
+  "answer_display": "1060 V",
+  "statement": "定格周波数の三相3線式送電線がある。受電端の線間電圧 6600 V、負荷の有効電力 1500000 W、 力率 0.9(遅れ)であり、1線当たりの抵抗 R = 1.5 Ω、リアクタンス X = 6.5 Ω である。 受電端電圧を基準とした近似式により、線間電圧降下 Vd[V] を求めよ。",
+  "solution_steps": [
+    "$ sinphi = \\sqrt{1 - pf^{2}} = 0.4359 $",
+    "$ phi_deg = \\frac{180 \\operatorname{acos}{\\left(pf \\right)}}{\\pi} = 25.84 $",
+    "$ I = \\frac{\\sqrt{3} P}{3 Vr pf} = 145.8 $",
+    "$ Vd = \\sqrt{3} I \\left(R pf + X sinphi\\right) = 1056.0 $",
+    "$ Vs = Vd + Vr = 7656.0 $"
+  ],
+  "explanation": "受電端電流は I = P / (√3·Vr·cosφ) で求まる。三相線間の電圧降下は近似的に Vd ≈ √3·I·(R·cosφ + X·sinφ) と表される。本問では Vd = 1060 V となる。 送電端の線間電圧は Vs = Vr + Vd で評価できる。"
+}
