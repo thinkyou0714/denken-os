@@ -154,7 +154,7 @@ def generate(
         )
     )
 
-    return Problem(
+    problem = Problem(
         id=pid,
         template_id=template.id,
         field_id=template.field_id,
@@ -171,6 +171,29 @@ def generate(
         explanation=prose.explanation,
         model_name=backend.name,
     )
+    problem.content_hash = _content_hash(problem)
+    return problem
+
+
+def _content_hash(p: Problem) -> str:
+    """問題の確定的内容からハッシュを計算する(時刻・図パス等の環境依存値は除外)。"""
+    import hashlib
+    import json
+
+    payload = {
+        "template_id": p.template_id,
+        "difficulty": p.difficulty,
+        "seed": p.seed,
+        "params": p.params,
+        "answer": None if p.answer is None else [p.answer.value, p.answer.unit, p.answer.display],
+        "statement": p.statement,
+        "solution_steps": p.solution_steps,
+        "explanation": p.explanation,
+        "scoring": [(c.criterion, c.points) for c in p.scoring],
+        "pitfalls": [(pf.label, pf.display, pf.note) for pf in p.pitfalls],
+    }
+    blob = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
 
 def generate_validated(

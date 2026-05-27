@@ -437,6 +437,26 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 ### 参考
 - JSON Schema for scalable data models — https://romanglushach.medium.com/json-schema-the-secret-to-building-scalable-and-maintainable-data-models-2c456d90f73b
 
+## 2.19 完全再現性とコンテンツハッシュ（2026-05-27)
+
+### 背景・根本原因
+「seed決定論で完全再現」を謳うのに、`Problem.created_at = now()` のため
+`denken gen` が吐く .json が実行ごとに変わり、**再現性・差分比較が成立していなかった**。
+
+### 実装
+- `created_at` を既定で付与しない(`datetime | None = None`)→ 生成は完全に決定論的。
+- `content_hash`(確定的内容の sha256 先頭16桁)を追加。時刻・図パス等の環境依存値は除外し、
+  params/答え/本文/採点/誤りから算出。再現性検証・dedup・将来の外部キー(Supabase)に使う。
+- 同一 (template, seed) は **byte-identical な JSON** を生成(検証テスト追加)。
+
+### 根拠（ベストプラクティス)
+- 再現性のため出力に現在時刻を混ぜない(SOURCE_DATE_EPOCH 等の発想)。
+  コンテンツハッシュ(digest)で結果を検証可能にする。
+
+### 参考
+- Reproducible builds — https://en.wikipedia.org/wiki/Reproducible_builds
+- Determinism & Reproducibility (GlassAlpha) — https://glassalpha.com/guides/determinism/
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

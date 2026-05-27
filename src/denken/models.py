@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 from enum import StrEnum
 from typing import Any, Literal
 
@@ -202,4 +202,6 @@ class Problem(BaseModel):
     explanation: str = ""
     model_name: str = "stub"
     schema_version: int = SCHEMA_VERSION
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    content_hash: str = ""  # 決定論的な内容ハッシュ(再現性検証・dedup・外部キー用)
+    # 生成は決定論的に保つため、created_at は既定で付与しない(再現出力に時刻を混ぜない)。
+    created_at: datetime | None = None
