@@ -417,6 +417,26 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 ### 参考
 - 誘導電動機の動作原理・特性まとめ — https://denjoforest.com/induction-motor
 
+## 2.18 オーサリング・ツール(scaffold / JSON Schema)（2026-05-27)
+
+### 背景・根本原因
+コンテンツ網羅が最大の弱点だが、テンプレを1本ずつ手書きするのは非効率(filler)。
+**オーサリングの摩擦を下げる**のが網羅性拡大の根本対策。
+
+### 実装
+- `denken new-template --id ID --field F [--type calc|essay]`:
+  **検証を通る最小構成**の雛形を `data/templates/` に生成(working example から編集開始)。
+- `denken schema [--out]`: `Template` の JSON Schema を出力(エディタ補完・仕様の正本)。
+- `docs/templates.md`: 作成ガイド(params/expressions/figures/scoring/pitfalls/variants と
+  落とし穴: 単位換算の畳み込み・物理定数の次元・グラウンディング・予約名)。
+
+### 根拠
+- スキーマ駆動(JSON Schema)はファイル authoring で新規型を追加でき、検証・ドキュメント・
+  進化を低オーバーヘッドで実現する。
+
+### 参考
+- JSON Schema for scalable data models — https://romanglushach.medium.com/json-schema-the-secret-to-building-scalable-and-maintainable-data-models-2c456d90f73b
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

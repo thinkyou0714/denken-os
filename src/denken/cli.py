@@ -71,8 +71,95 @@ def _cmd_gen(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
-def _cmd_validate(args: argparse.Namespace) -> int:
+_SCAFFOLD_CALC = """\
+id: __ID__
+field_id: __FIELD__
+type: calc
+title: "（タイトルを記入）"
+difficulty: applied
+
+# パラメータ(seed から決定論的にサンプリングされる)
+params:
+  - {name: x, kind: choice, choices: [1.0, 2.0], unit: ""}
+
+# 上から順に評価。前の name を参照可。単位換算を式に直書きすると表示が崩れるので
+# 表示重視なら solution_template で記号式を明示する(docs/templates.md 参照)。
+expressions:
+  y: "x*2"
+
+answer:
+  expr: y
+  unit: ""
+  sig_figs: 3
+  # sane_min: 0
+  # sane_max: 100
+
+statement_template: "x = {x} のとき y = 2x を求めよ。"
+explanation_template: "y = 2x。本問では y = {answer}。"
+
+# 記述式の採点基準(配点)
+scoring:
+  - {criterion: "立式と計算", points: 1}
+
+# よくある誤り(誤った式→誤答値。正答と一致しないこと)
+# pitfalls:
+#   - {label: "係数を誤る", expr: "x*3", note: "y = 2x が正しい"}
+"""
+
+_SCAFFOLD_ESSAY = """\
+id: __ID__
+field_id: __FIELD__
+type: essay
+title: "（タイトルを記入）"
+difficulty: exam
+
+statement_template: "（論述の問いを記入）"
+# 模範解答。rubric の keywords を必ず本文に含めること(被覆率で採点するため)。
+explanation_template: "模範解答(観点 を含めて記述する)。"
+
+rubric:
+  - {point: "観点1", keywords: ["観点"], weight: 1}
+"""
+
+
+def _cmd_new_template(args: argparse.Namespace) -> int:
+    """テンプレートの雛形(検証を通る最小構成)を生成する (アイデア#74)。"""
     fields, templates = load_catalog(args.data)
+    if args.id in templates:
+        print(f"template id already exists: {args.id}", file=sys.stderr)
+        return 2
+    if args.field not in fields:
+        print(f"unknown field_id: {args.field}(候補: {sorted(fields)})", file=sys.stderr)
+        return 2
+    body = (_SCAFFOLD_ESSAY if args.type == "essay" else _SCAFFOLD_CALC)
+    body = body.replace("__ID__", args.id).replace("__FIELD__", args.field)
+    out = Path(args.out) if args.out else (args.data / "templates" / f"{args.id}.yaml")
+    if out.exists():
+        print(f"file already exists: {out}", file=sys.stderr)
+        return 2
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(body, encoding="utf-8")
+    print(f"created: {out}(編集後 `denken check` で検証してください)")
+    return 0
+
+
+def _cmd_schema(args: argparse.Namespace) -> int:
+    """Template の JSON Schema を出力する(エディタ補完・仕様参照用)。"""
+    import json
+
+    from denken.models import Template
+
+    text = json.dumps(Template.model_json_schema(), ensure_ascii=False, indent=2)
+    if args.out:
+        Path(args.out).write_text(text, encoding="utf-8")
+        print(f"wrote schema: {args.out}")
+    else:
+        print(text)
+    return 0
+
+
+def _cmd_validate(args: argparse.Namespace) -> int:
+    _fields, templates = load_catalog(args.data)
     template = templates[args.template]
     problem = generate(template, args.seed, backend=get_backend("stub"))
     if template.type == ProblemType.CALC:
@@ -249,6 +336,17 @@ def build_parser() -> argparse.ArgumentParser:
     c = sub.add_parser("check", help="全テンプレートを複数 seed で検証")
     c.add_argument("--seeds", type=int, default=10)
     c.set_defaults(func=_cmd_check)
+
+    nt = sub.add_parser("new-template", help="テンプレ雛形を生成(検証を通る最小構成)")
+    nt.add_argument("--id", required=True)
+    nt.add_argument("--field", required=True, help="field_id(fields.json のいずれか)")
+    nt.add_argument("--type", choices=["calc", "essay"], default="calc")
+    nt.add_argument("--out", default="", help="出力先(既定: data/templates/<id>.yaml)")
+    nt.set_defaults(func=_cmd_new_template)
+
+    sc = sub.add_parser("schema", help="Template の JSON Schema を出力")
+    sc.add_argument("--out", default="")
+    sc.set_defaults(func=_cmd_schema)
     return p
 
 

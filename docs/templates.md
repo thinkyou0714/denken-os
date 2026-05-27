@@ -3,9 +3,12 @@
 問題雛形は `data/templates/*.yaml` に置く(`id` がファイル名と一致するのが慣例)。
 分野は `data/fields.json` に定義し、テンプレの `field_id` がそれを参照する。
 
-作成後は必ず検証する:
+雛形の生成 → 編集 → 検証の流れ:
 
 ```bash
+denken new-template --id th_my_problem --field th-ac-rlc --type calc
+#   data/templates/th_my_problem.yaml に「検証を通る最小構成」を生成 → 編集する
+denken schema --out template.schema.json   # Template の JSON Schema(エディタ補完/仕様参照)
 denken check                       # 全テンプレを複数 seed で検証(次元・グラウンディング・誤り)
 denken gen --template <id> --seed 1 --out /tmp/preview   # 実際の出力を確認
 ```
