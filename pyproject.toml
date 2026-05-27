@@ -15,7 +15,8 @@ ollama = ["ollama>=0.4"]
 figures = ["matplotlib>=3.8", "schemdraw>=0.19"]
 schedule = ["fsrs>=5.0"]
 pdf = ["pdfplumber>=0.11"]
-dev = ["pytest>=8.0", "ruff>=0.6"]
+units = ["pint>=0.23"]
+dev = ["pytest>=8.0", "ruff>=0.6", "pint>=0.23"]
 
 [project.scripts]
 denken = "denken.cli:main"

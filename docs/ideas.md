@@ -101,6 +101,30 @@
 94. 構造化 alt（数値含む）でアクセシビリティ。95. 段階開示（ヒント→部分解→完全解）。96. 記述採点（rubric 流用）。
 97. オフライン完結を既定。98. コスト試算ダッシュボード。99. 配信ライセンス整理。100. ロードマップ反映。
 
+## 2.5 単位・次元検証の実装記録（2026-05-27）
+
+### 背景・根本原因
+テンプレートの式（SymPy）と宣言単位の **次元整合は何も検証されていなかった**。
+`Vd = I + R`(A+Ω) や、式は正しいが宣言単位だけ誤り、といったオーサリングバグを
+生成・検証パイプラインがすり抜けていた。
+
+### 実装
+- `denken/units.py`: pint で解答式を物理量評価し、解答の次元 = 宣言単位の次元 を検証。
+  - **解答式の依存閉包のみ**評価（三角関数など評価困難な補助式を回避）。
+  - `pint.DimensionalityError` は明確なバグ → `ok=False`。
+  - 未対応関数などその他例外は「検証不能(`checked=False`)」としビルドは止めない。
+- `denken check` に統合し、次元不一致があれば終了コード 1。
+- pint は `microfarad` 等にも対応するため µF 値も次元的に検証可（1e-6 はスケール=無次元）。
+
+### 根拠（ベストプラクティス）
+- pint は UnitRegistry で次元解析・`DimensionalityError`・numpy ufunc 対応を提供する標準ライブラリ。
+- 次元整合チェックは「方程式の物理的正しさを確認する」確立された手法で、
+  式の誤りを早期に検出できる（両辺・各項の次元一致）。
+
+### 参考
+- pint Tutorial — https://pint.readthedocs.io/en/stable/getting/tutorial.html
+- Units and Dimensional Analysis (Engineering LibreTexts) — https://eng.libretexts.org/Bookshelves/Introductory_Engineering/Introduction_to_Engineering_-_Thinking_Like_an_Engineer/05:_Units_and_Dimensional_Analysis
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

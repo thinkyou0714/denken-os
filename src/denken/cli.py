@@ -71,18 +71,30 @@ def _cmd_validate(args: argparse.Namespace) -> int:
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
-    """全テンプレートを複数 seed で生成・検証する (アイデア#83, #99)。"""
+    """全テンプレートを複数 seed で生成・検証し、次元整合も確認する (アイデア#62, #83, #99)。"""
+    from denken.units import check_dimensions
+
     _, templates = load_catalog(args.data)
     bad = 0
+    dim_bad = 0
     for tid, template in templates.items():
         for seed in range(args.seeds):
-            problem, ok = generate_validated(template, seed, attempts=1)
+            _problem, ok = generate_validated(template, seed, attempts=1)
             if not ok:
                 bad += 1
                 print(f"NG  {tid}#{seed}")
+        dim = check_dimensions(template)
+        if not dim.ok:
+            dim_bad += 1
+            print(f"DIM NG  {tid}: {dim.detail} ({dim.answer_dim} != {dim.expected_dim})")
+        elif not dim.checked:
+            print(f"DIM ??  {tid}: {dim.detail}")
     total = len(templates) * args.seeds
-    print(f"checked {total} (templates={len(templates)} x seeds={args.seeds}): {bad} failed")
-    return 1 if bad else 0
+    print(
+        f"checked {total} (templates={len(templates)} x seeds={args.seeds}): "
+        f"{bad} failed, dimension mismatches: {dim_bad}"
+    )
+    return 1 if (bad or dim_bad) else 0
 
 
 def build_parser() -> argparse.ArgumentParser:
