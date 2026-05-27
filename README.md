@@ -20,6 +20,7 @@ pip install -e ".[figures,schedule,dev]"
 denken list                                   # 分野とテンプレート一覧
 denken gen --template pm_vdrop_3ph --seed 1   # 類題を生成 (generated/ に md+json+svg)
 denken gen --template pm_vdrop_3ph --seed 1 --difficulty exam   # 難易度variantで生成
+denken gen --template th_rlc_series --seed 3 --mcq              # 五肢択一(一次向け)
 denken gen --template pm_vdrop_3ph --seed 1 --backend ollama --model qwen2.5:14b
 denken set --count 20 --out problemset        # 重複しない問題セット(模試/問題集)
 denken set --count 20 --difficulty exam        # 難易度を揃えたセット
@@ -39,6 +40,7 @@ pytest -q                                      # テスト
 - **回帰防止**: ゴールデン(スナップショット)テストで意図しない出力変化を検出。
 - **記述式の採点基準**: 計算問題に配点(立式/代入/計算/単位)を付与し、部分点を明示。
 - **よくある誤り**: √3 抜け等の典型誤答も solver で算出し、誤答値と理由を提示。
+- **五肢択一(MCQ)**: 一次向けに、よくある誤りを誤答選択肢として択一問題を組成。
 - **対応科目**: 二次(電力・管理/機械・制御)に加え、一次・理論(交流回路/共振/過渡)。
 - **問題セット**: 重複しない同型問題をバランスよく集めて模試/問題集を構築 (`denken set`)。
 - **著作権**: 参考書 PDF は分野タクソノミー抽出のみ (本文は非保持)。生成は原理ベース。

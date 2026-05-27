@@ -374,6 +374,28 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 ### 参考
 - 電気技術者試験センター(試験の概要) — https://www.shiken.or.jp/chief/second/qa/
 
+## 2.16 五肢択一(MCQ)組成（2026-05-27)
+
+### 背景・根本原因
+一次試験は **五肢択一**だが、エンジンは記述式(数値解)しか出力できず、出題形式が
+ミスマッチだった。良い誤答選択肢(distractor)は「実際の誤りで到達する値」が定石。
+
+### 実装
+- `mcq.build_mcq(template, problem, n_choices=5)`:
+  - 誤答は **pitfalls(よくある誤り)由来の値**を最優先で使用(実際の誤り=良い distractor)。
+  - 不足分のみ決定論的な撹乱係数で補い、正答・既存肢との重複は除外(相互排他)。
+  - 選択肢は `problem.seed` で決定論的にシャッフルし、正解letterを記録。
+- `render.to_markdown(..., mcq=)` が「## 選択肢」+「正解: (X)」を出力。
+- `denken gen --mcq [--choices N]`。
+
+### 根拠（ベストプラクティス)
+- distractor は「学生の誤解で到達する値」を使うと最も有効。選択肢は相互排他で重複を避ける。
+  五肢択一は妥当(3〜5択で psychometric に大差なし)。
+
+### 参考
+- Generating Plausible Distractors via Student Choice Prediction (arxiv 2501.13125) — https://arxiv.org/abs/2501.13125
+- The Art of Crafting Effective Distractors — https://www.numberanalytics.com/blog/crafting-effective-distractors
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

@@ -58,7 +58,12 @@ def _cmd_gen(args: argparse.Namespace) -> int:
             assets_dir=out_dir,
             difficulty=difficulty,
         )
-        path = write_problem(problem, field, template, out_dir)
+        mcq = None
+        if args.mcq and template.type == ProblemType.CALC:
+            from denken.mcq import build_mcq
+
+            mcq = build_mcq(template, problem, n_choices=args.choices)
+        path = write_problem(problem, field, template, out_dir, mcq=mcq)
         flag = "" if ok else "  [WARN: 検証不合格]"
         if not ok:
             failures += 1
@@ -206,6 +211,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="難易度 variant(テンプレに定義があれば適用)",
     )
     g.add_argument("--no-figures", action="store_true")
+    g.add_argument("--mcq", action="store_true", help="五肢択一(MCQ)形式で出力(一次向け)")
+    g.add_argument("--choices", type=int, default=5, help="MCQ の選択肢数")
     g.add_argument("--out", default="generated")
     g.set_defaults(func=_cmd_gen)
 

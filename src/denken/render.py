@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from denken.mcq import MCQ
 from denken.models import FieldNode, Problem, ProblemType, Template
 
 
@@ -26,7 +27,9 @@ def _frontmatter(problem: Problem, field: FieldNode) -> str:
     return "\n".join(lines)
 
 
-def to_markdown(problem: Problem, field: FieldNode, template: Template) -> str:
+def to_markdown(
+    problem: Problem, field: FieldNode, template: Template, mcq: MCQ | None = None
+) -> str:
     out: list[str] = [_frontmatter(problem, field), "", f"# {template.title}", ""]
 
     out += ["## 問題", "", problem.statement, ""]
@@ -39,6 +42,12 @@ def to_markdown(problem: Problem, field: FieldNode, template: Template) -> str:
             out.append("")
         else:
             out += [f"> [!warning] 図を生成できませんでした: {fig.alt}", ""]
+
+    if mcq is not None:
+        out += ["## 選択肢", ""]
+        for ch in mcq.choices:
+            out.append(f"- ({ch.letter}) {ch.display}")
+        out += ["", f"> [!success] 正解: ({mcq.correct_letter})", ""]
 
     if problem.type == ProblemType.CALC:
         out += ["## 解答", ""]
@@ -97,12 +106,14 @@ def write_index(
     return path
 
 
-def write_problem(problem: Problem, field: FieldNode, template: Template, out_dir: Path) -> Path:
+def write_problem(
+    problem: Problem, field: FieldNode, template: Template, out_dir: Path, mcq: MCQ | None = None
+) -> Path:
     """markdown と JSON を out_dir に書き出し、markdown のパスを返す。"""
     out_dir.mkdir(parents=True, exist_ok=True)
     base = problem.id.replace("#", "_")
     md_path = out_dir / f"{base}.md"
-    md_path.write_text(to_markdown(problem, field, template), encoding="utf-8")
+    md_path.write_text(to_markdown(problem, field, template, mcq), encoding="utf-8")
     (out_dir / f"{base}.json").write_text(
         json.dumps(problem.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
