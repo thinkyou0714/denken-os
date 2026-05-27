@@ -1,0 +1,39 @@
+id: pm_power_flow
+field_id: pm-power-flow
+type: calc
+title: 負荷の無効電力と皮相電力
+difficulty: basic
+
+params:
+  - {name: P, kind: choice, choices: [500, 1000, 2000], unit: kW}
+  - {name: pf, kind: choice, choices: [0.8, 0.85, 0.9]}
+
+expressions:
+  sinphi: "sqrt(1 - pf**2)"
+  S: "P/pf"
+  Q: "P*sinphi/pf"
+
+answer:
+  expr: Q
+  unit: kvar
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 100000
+
+figures:
+  - kind: power_triangle
+    caption: "図1 電力ベクトル図(P:有効電力, Q:無効電力, S:皮相電力)"
+    role: technical
+    options:
+      p: P
+      q: Q
+
+statement_template: >-
+  ある三相負荷が有効電力 {P} kW を消費しており、力率は {pf}(遅れ)である。
+  この負荷の無効電力 Q[kvar] を求めよ。
+
+explanation_template: >-
+  皮相電力は S = P / cosφ、無効電力は Q = P·tanφ = P·sinφ / cosφ で求まる。
+  ここで sinφ = √(1 − cos²φ) である。本問では Q = {answer} となる。
+
+prompt_hint: 力率角 φ を用いて P・Q・S が直角三角形をなす関係を説明する。

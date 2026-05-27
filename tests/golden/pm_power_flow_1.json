@@ -1,0 +1,17 @@
+{
+  "type": "calc",
+  "difficulty": "basic",
+  "params": {
+    "P": 500,
+    "pf": 0.9
+  },
+  "answer_value": 242.0,
+  "answer_display": "242 kvar",
+  "statement": "ある三相負荷が有効電力 500 kW を消費しており、力率は 0.9(遅れ)である。 この負荷の無効電力 Q[kvar] を求めよ。",
+  "solution_steps": [
+    "$ sinphi = \\sqrt{1 - pf^{2}} = 0.4359 $",
+    "$ S = \\frac{P}{pf} = 555.6 $",
+    "$ Q = \\frac{P sinphi}{pf} = 242.2 $"
+  ],
+  "explanation": "皮相電力は S = P / cosφ、無効電力は Q = P·tanφ = P·sinφ / cosφ で求まる。 ここで sinφ = √(1 − cos²φ) である。本問では Q = 242 kvar となる。"
+}

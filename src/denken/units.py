@@ -16,15 +16,18 @@ from pydantic import BaseModel
 from denken.models import ProblemType, Template
 from denken.solver import parse_expr
 
-# テンプレート単位文字列 -> pint 単位名
+# テンプレート単位文字列 -> pint 単位名。
+# 注: 次元のみ検証するため、VA/var(皮相・無効電力)は同じ次元[power]の watt 系へ写像する。
 _UNIT_ALIASES: dict[str, str | None] = {
     "": None,
     "ohm": "ohm",
     "%": "percent",
     "uF": "microfarad",
     "uH": "microhenry",
-    "var": "VA",
-    "VA": "VA",
+    "VA": "watt",
+    "kVA": "kilowatt",
+    "var": "watt",
+    "kvar": "kilowatt",
     "deg": "degree",
 }
 

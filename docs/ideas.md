@@ -155,6 +155,25 @@
 - Pytest Regressions / Golden File Updates 2025 — https://johal.in/pytest-regressions-data-golden-file-updates-2025/
 - Golden Tests in AI | Shaped — https://www.shaped.ai/blog/golden-tests-in-ai
 
+## 2.7 テンプレ拡充 + 図ジェネレータ追加（2026-05-27）
+
+### 背景・根本原因(カバレッジの穴)
+`fields.json` に `pm-power-flow`（送電系統/電力潮流）と `mc-transformer`（変圧器/効率）を
+宣言済みだが **対応テンプレートが 0 本** で、分野マスタと実コンテンツが乖離していた。
+
+### 実装
+- 新ジェネレータ: `power_triangle`（有効/無効/皮相電力の直角三角形）、
+  `transformer_efficiency`（負荷率-効率曲線、最大効率点 α*=√(Pi/Pc) と本問負荷率を明示）。
+- 新テンプレ: `pm_power_flow`（無効電力 Q=P·tanφ）、`mc_transformer_eff`（効率 η）。
+  → 計 7 テンプレ・全宣言フィールドに最低 1 本を確保。
+- `units.py`: VA/kVA/var/kvar を次元[power]の watt 系へ写像（次元検証のみのため妥当）。
+- 既存の units/grounding テストは全テンプレを走査するため、新テンプレも自動で
+  次元整合・数値グラウンディングが検証される。ゴールデンも追加。
+
+### 根拠
+- 変圧器の最大効率条件は「鉄損 = 銅損」、負荷率 = √(鉄損/全負荷銅損)。銅損は負荷電流の2乗に比例。
+  - Transformer Losses and Efficiency — https://www.electricaleasy.com/2014/04/transformer-losses-and-efficiency.html
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

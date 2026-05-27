@@ -192,6 +192,63 @@ def _waveform(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
     plt.close(fig)
 
 
+@register("power_triangle")
+def _power_triangle(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """電力の直角三角形(P:有効, Q:無効, S:皮相)。options.p / q は値キー。"""
+    plt = _use_agg()
+
+    p = resolve(spec.options["p"], values)
+    q = resolve(spec.options["q"], values)
+    fig, ax = plt.subplots(figsize=(4, 3.5))
+    arrow = dict(arrowstyle="-|>", lw=2)
+    ax.annotate("", xy=(p, 0), xytext=(0, 0), arrowprops={**arrow, "color": "C0"})
+    ax.annotate("", xy=(p, q), xytext=(p, 0), arrowprops={**arrow, "color": "C1"})
+    ax.annotate("", xy=(p, q), xytext=(0, 0), arrowprops={**arrow, "color": "C3"})
+    m = max(abs(p), abs(q), 1.0)
+    ax.text(p / 2, -0.06 * m, "P", color="C0", ha="center", va="top")
+    ax.text(p * 1.02, q / 2, "Q", color="C1", va="center")
+    ax.text(p * 0.45, q * 0.55, "S", color="C3", ha="right")
+    ax.set_xlim(-0.1 * m, m * 1.25)
+    ax.set_ylim(-0.18 * m, m * 1.25)
+    ax.set_aspect("equal")
+    ax.set_xlabel("P [kW]")
+    ax.set_ylabel("Q [kvar]")
+    ax.grid(True, alpha=0.3)
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
+@register("transformer_efficiency")
+def _transformer_efficiency(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """負荷率に対する効率曲線。最大効率点 α*=√(Pi/Pc) と本問の負荷率に縦線。
+
+    options: sn_w(VA), pf, pi(W), pc(W, 全負荷銅損), alpha(本問の負荷率)。
+    """
+    plt = _use_agg()
+    import numpy as np
+
+    sn = resolve(spec.options["sn_w"], values)
+    pf = resolve(spec.options["pf"], values)
+    pi = resolve(spec.options["pi"], values)
+    pc = resolve(spec.options["pc"], values)
+    cur = resolve(spec.options["alpha"], values)
+
+    a = np.linspace(0.05, 1.2, 200)
+    pout = a * sn * pf
+    eta = pout / (pout + pi + a**2 * pc) * 100
+    a_star = (pi / pc) ** 0.5
+
+    fig, ax = plt.subplots(figsize=(5, 3))
+    ax.plot(a, eta, color="C0")
+    ax.axvline(a_star, color="C3", ls="--", lw=1.0)
+    ax.axvline(cur, color="C2", ls=":", lw=1.2)
+    ax.set_xlabel("load factor")
+    ax.set_ylabel("efficiency [%]")
+    ax.grid(True, alpha=0.3)
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
 @register("bode")
 def _bode(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
     """一次遅れ系 H(jw)=1/(1+jw·tau) のボード線図。options.tau = 時定数キー。

@@ -24,6 +24,8 @@ CASES = [
     ("pe_full_wave_rect", 1),
     ("ct_rc_lowpass", 1),
     ("pm_loss_reduction", 1),
+    ("mc_transformer_eff", 1),
+    ("pm_power_flow", 1),
 ]
 
 

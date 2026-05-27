@@ -1,0 +1,47 @@
+id: mc_transformer_eff
+field_id: mc-transformer
+type: calc
+title: 変圧器の効率
+difficulty: applied
+
+params:
+  - {name: Sn, kind: choice, choices: [50, 100, 200, 500], unit: kVA}
+  - {name: pf, kind: choice, choices: [0.8, 0.9, 1.0]}
+  - {name: Pi, kind: uniform_int, low: 200, high: 1000, step: 100, unit: W}
+  - {name: Pc, kind: uniform_int, low: 500, high: 3000, step: 250, unit: W}
+  - {name: alpha, kind: choice, choices: [0.5, 0.75, 1.0]}
+
+expressions:
+  Sn_va: "Sn*1000"
+  Pout: "alpha*Sn_va*pf"
+  loss: "Pi + alpha**2*Pc"
+  eta: "Pout/(Pout + loss)*100"
+
+answer:
+  expr: eta
+  unit: "%"
+  sig_figs: 4
+  sane_min: 0
+  sane_max: 100
+
+figures:
+  - kind: transformer_efficiency
+    caption: "図1 負荷率に対する効率(破線=最大効率点 α*=√(Pi/Pc)、点線=本問の負荷率)"
+    role: technical
+    options:
+      sn_w: Sn_va
+      pf: pf
+      pi: Pi
+      pc: Pc
+      alpha: alpha
+
+statement_template: >-
+  定格容量 {Sn} kVA の単相変圧器がある。鉄損は {Pi} W、定格負荷時の銅損は {Pc} W である。
+  負荷力率 {pf}、負荷率 {alpha}(定格に対する割合)で運転するときの効率 η[%] を求めよ。
+
+explanation_template: >-
+  出力は Pout = α·Sn·cosφ、損失は鉄損 + 銅損 = Pi + α²·Pc である(銅損は負荷率の2乗に比例)。
+  効率は η = Pout / (Pout + Pi + α²·Pc) × 100 で求まる。本問では η = {answer} となる。
+  なお最大効率は鉄損 = 銅損、すなわち α = √(Pi/Pc) のとき得られる。
+
+prompt_hint: 銅損が負荷率の2乗に比例することと、最大効率条件 Pi=α²Pc に触れる。

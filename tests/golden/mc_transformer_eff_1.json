@@ -1,0 +1,21 @@
+{
+  "type": "calc",
+  "difficulty": "applied",
+  "params": {
+    "Sn": 100,
+    "pf": 1.0,
+    "Pi": 300,
+    "Pc": 1500,
+    "alpha": 0.5
+  },
+  "answer_value": 98.67,
+  "answer_display": "98.67 %",
+  "statement": "定格容量 100 kVA の単相変圧器がある。鉄損は 300 W、定格負荷時の銅損は 1500 W である。 負荷力率 1.0、負荷率 0.5(定格に対する割合)で運転するときの効率 η[%] を求めよ。",
+  "solution_steps": [
+    "$ Sn_va = 1000 Sn = 100000.0 $",
+    "$ Pout = Sn_{va} \\alpha pf = 50000.0 $",
+    "$ loss = Pc \\alpha^{2} + \\Pi = 675.0 $",
+    "$ eta = \\frac{100 Pout}{Pout + loss} = 98.67 $"
+  ],
+  "explanation": "出力は Pout = α·Sn·cosφ、損失は鉄損 + 銅損 = Pi + α²·Pc である(銅損は負荷率の2乗に比例)。 効率は η = Pout / (Pout + Pi + α²·Pc) × 100 で求まる。本問では η = 98.67 % となる。 なお最大効率は鉄損 = 銅損、すなわち α = √(Pi/Pc) のとき得られる。"
+}
