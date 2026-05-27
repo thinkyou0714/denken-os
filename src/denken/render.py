@@ -48,6 +48,13 @@ def to_markdown(problem: Problem, field: FieldNode, template: Template) -> str:
         if problem.answer:
             out += ["> [!success] 答え", f"> {problem.answer.display}", ""]
 
+        if problem.scoring:
+            total = sum(c.points for c in problem.scoring)
+            out += ["## 採点基準", "", "| 観点 | 配点 |", "|---|---|"]
+            for c in problem.scoring:
+                out.append(f"| {c.criterion} | {c.points} |")
+            out += [f"| **合計** | **{total}** |", ""]
+
     if problem.explanation:
         out += ["## 解説", "", problem.explanation, ""]
 

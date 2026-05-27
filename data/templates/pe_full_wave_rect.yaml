@@ -39,3 +39,9 @@ explanation_template: >-
   本問では Vdc = {answer} となる。
 
 prompt_hint: 最大値 Vmax = √2·V を経由し、平均値 2Vmax/π を導く。
+
+scoring:
+  - {criterion: "最大値 Vmax = √2·V の算出", points: 3}
+  - {criterion: "全波整流の平均値 Vdc = 2·Vmax/π の立式", points: 4}
+  - {criterion: "数値代入と計算", points: 2}
+  - {criterion: "有効数字・単位(V)", points: 1}

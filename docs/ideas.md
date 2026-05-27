@@ -200,6 +200,28 @@
 - Quickly Producing Isomorphic Exercises (ITiCSE 2024) — https://zilles.cs.illinois.edu/papers/fowler_surfacefeature_ITiCSE_2024.pdf
 - Near-duplicate Question Detection — https://assets.amazon.science/05/0e/7da5195f4976a9ebcd4a81266464/near-duplicate-question-detection.pdf
 
+## 2.9 記述式の採点基準(配点)（2026-05-27）
+
+### 背景・根本原因
+電験二種 二次は **記述式**で、答えが誤っていても過程(立式・代入・計算)が正しければ
+部分点が与えられる。しかしテンプレには `solution_steps`(導出)はあっても
+**「どこで何点取れるか=採点基準」が無く**、記述式の学習価値が不足していた。
+
+### 実装
+- `models.ScoringCriterion`(criterion, points>0)、`Template.scoring` / `Problem.scoring`。
+- 計算テンプレ6本に採点基準を付与(立式 / 数値代入 / 計算 / 有効数字・単位 の観点)。
+- `render`: 「## 採点基準」表(観点・配点・合計)を出力。論説には出さない。
+- `denken check`: 計算テンプレに scoring が無ければ警告。
+
+### 根拠（ベストプラクティス）
+- 記述式の採点は「関係式の立式・推論・代入・計算・単位」を評価し、最終解答が誤りでも
+  過程が正しければ部分点。式だけでなく日本語の説明も重要(A=B が等号か代入か明確に)。
+- 自動ルーブリック生成(RubricHub)など、観点ベースの採点が品質確保の定石。
+
+### 参考
+- 大学入試数学の採点基準 — https://examist.jp/mathematics/kijyutu-touan/scoring-system-2/
+- 採点項目に基づく記述式答案の自動採点(理研AIP/東北大) — https://anlp.jp/proceedings/annual_meeting/2018/pdf_dir/P4-17.pdf
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

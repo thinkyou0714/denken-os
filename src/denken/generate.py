@@ -138,6 +138,7 @@ def generate(
         statement=prose.statement,
         figures=figures,
         solution_steps=steps,
+        scoring=template.scoring,
         explanation=prose.explanation,
         model_name=backend.name,
     )

@@ -45,3 +45,9 @@ explanation_template: >-
   なお最大効率は鉄損 = 銅損、すなわち α = √(Pi/Pc) のとき得られる。
 
 prompt_hint: 銅損が負荷率の2乗に比例することと、最大効率条件 Pi=α²Pc に触れる。
+
+scoring:
+  - {criterion: "出力 Pout = α·Sn·cosφ の立式", points: 4}
+  - {criterion: "損失 Pi + α²·Pc(銅損は負荷率の2乗に比例)の把握", points: 5}
+  - {criterion: "効率 η = Pout/(Pout + 損失) × 100 の立式と計算", points: 4}
+  - {criterion: "有効数字・単位(%)", points: 2}

@@ -50,3 +50,9 @@ explanation_template: >-
   送電端の線間電圧は Vs = Vr + Vd で評価できる。
 
 prompt_hint: 受電端を基準とした近似式であることを明示し、力率は遅れであることに触れる。
+
+scoring:
+  - {criterion: "受電端電流 I = P/(√3·V·cosφ) の立式", points: 4}
+  - {criterion: "電圧降下式 Vd ≈ √3·I·(R·cosφ + X·sinφ) の立式", points: 6}
+  - {criterion: "数値代入と計算", points: 3}
+  - {criterion: "有効数字・単位(V)", points: 2}

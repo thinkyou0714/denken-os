@@ -79,6 +79,13 @@ class RubricItem(BaseModel):
     weight: int = 1
 
 
+class ScoringCriterion(BaseModel):
+    """計算問題の採点基準(配点)。記述式の部分点を表す。"""
+
+    criterion: str  # 観点 (例: 関係式の立式)
+    points: int = Field(gt=0)  # 配点 (正の整数)
+
+
 class FigureSpec(BaseModel):
     """図の生成指示。登録済みの generator (kind) を params/中間値から描画する。
 
@@ -110,7 +117,8 @@ class Template(BaseModel):
     solution_template: list[str] = Field(default_factory=list)
     explanation_template: str = ""  # 解説の雛形
     figures: list[FigureSpec] = Field(default_factory=list)
-    rubric: list[RubricItem] = Field(default_factory=list)
+    rubric: list[RubricItem] = Field(default_factory=list)  # 論説用
+    scoring: list[ScoringCriterion] = Field(default_factory=list)  # 計算用の採点基準(配点)
     prompt_hint: str = ""  # LLM への追加指示
 
     @model_validator(mode="after")
@@ -156,6 +164,7 @@ class Problem(BaseModel):
     statement: str
     figures: list[FigureRef] = Field(default_factory=list)
     solution_steps: list[str] = Field(default_factory=list)
+    scoring: list[ScoringCriterion] = Field(default_factory=list)
     explanation: str = ""
     model_name: str = "stub"
     schema_version: int = SCHEMA_VERSION

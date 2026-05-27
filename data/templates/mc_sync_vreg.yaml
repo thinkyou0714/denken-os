@@ -42,3 +42,9 @@ explanation_template: >-
   ε = (Eq − V) / V × 100 で評価する。本問では ε = {answer} となる。
 
 prompt_hint: 電機子抵抗を無視する前提を明示する。
+
+scoring:
+  - {criterion: "sinφ と1相分等価回路の関係把握", points: 3}
+  - {criterion: "誘導起電力 Eq = √((V + I·Xs·sinφ)² + (I·Xs·cosφ)²) の立式", points: 6}
+  - {criterion: "電圧変動率 ε = (Eq − V)/V × 100 の立式と計算", points: 4}
+  - {criterion: "有効数字・単位(%)", points: 2}

@@ -120,6 +120,8 @@ def _cmd_check(args: argparse.Namespace) -> int:
             print(f"DIM NG  {tid}: {dim.detail} ({dim.answer_dim} != {dim.expected_dim})")
         elif not dim.checked:
             print(f"DIM ??  {tid}: {dim.detail}")
+        if template.type == ProblemType.CALC and not template.scoring:
+            print(f"SCORING ??  {tid}: 採点基準(scoring)が未設定")
     total = len(templates) * args.seeds
     print(
         f"checked {total} (templates={len(templates)} x seeds={args.seeds}): "

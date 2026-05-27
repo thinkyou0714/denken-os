@@ -38,3 +38,9 @@ explanation_template: >-
   この周波数でゲインは約 −3 dB、位相は −45° となる。
 
 prompt_hint: 折点で利得 −3 dB・位相 −45° になることに触れる。
+
+scoring:
+  - {criterion: "時定数 τ = RC の把握", points: 3}
+  - {criterion: "折点周波数 fc = 1/(2πRC) の立式", points: 4}
+  - {criterion: "数値代入と計算", points: 2}
+  - {criterion: "有効数字・単位(Hz)", points: 1}

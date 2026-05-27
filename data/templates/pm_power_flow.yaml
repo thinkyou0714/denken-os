@@ -37,3 +37,9 @@ explanation_template: >-
   ここで sinφ = √(1 − cos²φ) である。本問では Q = {answer} となる。
 
 prompt_hint: 力率角 φ を用いて P・Q・S が直角三角形をなす関係を説明する。
+
+scoring:
+  - {criterion: "力率角 φ と sinφ = √(1 − cos²φ) の把握", points: 3}
+  - {criterion: "無効電力 Q = P·tanφ (= P·sinφ/cosφ) の立式", points: 4}
+  - {criterion: "数値代入と計算", points: 2}
+  - {criterion: "有効数字・単位(kvar)", points: 1}
