@@ -11,6 +11,21 @@ params:
   - {name: R, kind: uniform_float, low: 1.0, high: 5.0, step: 0.5, unit: ohm}
   - {name: X, kind: uniform_float, low: 3.0, high: 10.0, step: 0.5, unit: ohm}
 
+# 難易度別のパラメータ範囲(applied は上の base を使用)
+variants:
+  basic:
+    - {name: Vr, kind: choice, choices: [6600], unit: V}
+    - {name: P, kind: uniform_int, low: 1000000, high: 2000000, step: 500000, unit: W}
+    - {name: pf, kind: choice, choices: [0.8, 0.9], unit: ""}
+    - {name: R, kind: choice, choices: [2.0], unit: ohm}
+    - {name: X, kind: choice, choices: [4.0], unit: ohm}
+  exam:
+    - {name: Vr, kind: choice, choices: [66000, 154000], unit: V}
+    - {name: P, kind: uniform_int, low: 3000000, high: 8000000, step: 1000000, unit: W}
+    - {name: pf, kind: choice, choices: [0.8, 0.85], unit: ""}
+    - {name: R, kind: uniform_float, low: 3.0, high: 6.0, step: 0.5, unit: ohm}
+    - {name: X, kind: uniform_float, low: 8.0, high: 15.0, step: 1.0, unit: ohm}
+
 # 上から順に評価。前の name を参照できる。
 expressions:
   sinphi: "sqrt(1 - pf**2)"

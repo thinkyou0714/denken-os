@@ -243,6 +243,29 @@
 - Why and How to Implement Worked Examples in Physics (arxiv 2307.06315) — https://arxiv.org/pdf/2307.06315
 - DiVERT: Distractor Generation with Variational Errors (arxiv 2406.19356) — https://arxiv.org/pdf/2406.19356
 
+## 2.11 難易度のパラメータ化（2026-05-27）
+
+### 背景・根本原因
+`difficulty` は basic/applied/exam の **静的ラベルでしかなく**、出題内容(パラメータ範囲・
+複雑さ)を一切制御していなかった。良い問題バンクは「段階的に足場かけ(scaffold)された
+難易度」を持つべき、という指針に対し機能が伴っていなかった。
+
+### 実装
+- `Template.variants: dict[難易度, list[ParamSpec]]`(base の完全置換)。
+  - model validator で variant のパラメータ名集合が base と一致することを強制
+    (式・図・誤りが参照する名前を保証)。
+- `Template.effective_params(difficulty)` / `sample_params(..., difficulty)` /
+  `generate(..., difficulty)` / `generate_validated(..., difficulty)`。
+- 難易度を明示した場合は Problem.id に含め(`tmpl#exam#seed`)、同一 seed の
+  難易度違いでのファイル衝突を防止。difficulty 未指定時は従来どおり(後方互換)。
+- `denken gen --difficulty {basic,applied,exam}`。variant が無ければ base で生成し注記。
+- `pm_vdrop_3ph` に basic / exam の範囲を付与(pf は 1.0 を避け、√3 系の誤りが
+  全難易度で成立するようにした)。
+
+### 根拠（ベストプラクティス）
+- 問題バンク設計は「内容の多様性・難易度の段階的足場かけ・シラバス整合」が重要。
+- パラメータ化された同型問題は、難易度を範囲で制御するのが自然(surface/structural variation)。
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

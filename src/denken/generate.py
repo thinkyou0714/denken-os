@@ -82,9 +82,12 @@ def generate(
     backend: LLMBackend | None = None,
     with_figures: bool = False,
     assets_dir: Path | None = None,
+    difficulty: str | None = None,
 ) -> Problem:
     backend = backend or StubBackend()
-    params = sample_params(template, seed)
+    # 難易度を明示した場合は id に含め、同一 seed の難易度違いでの衝突を避ける
+    pid = f"{template.id}#{difficulty}#{seed}" if difficulty else make_problem_id(template.id, seed)
+    params = sample_params(template, seed, difficulty)
 
     answer: Answer | None = None
     values: dict[str, float] = {}
@@ -122,7 +125,7 @@ def generate(
             template.figures,
             {**params, **values},
             assets_dir,
-            make_problem_id(template.id, seed).replace("#", "_"),
+            pid.replace("#", "_"),
         )
 
     prose = backend.write(
@@ -139,11 +142,11 @@ def generate(
     )
 
     return Problem(
-        id=make_problem_id(template.id, seed),
+        id=pid,
         template_id=template.id,
         field_id=template.field_id,
         type=template.type,
-        difficulty=template.difficulty,
+        difficulty=difficulty or template.difficulty,
         seed=seed,
         params=params,
         answer=answer,
@@ -165,6 +168,7 @@ def generate_validated(
     attempts: int = 3,
     with_figures: bool = False,
     assets_dir: Path | None = None,
+    difficulty: str | None = None,
 ) -> tuple[Problem, bool]:
     """検証に通る問題を返す (best-of-N)。
 
@@ -176,7 +180,12 @@ def generate_validated(
     last: Problem | None = None
     for _ in range(max(1, attempts)):
         problem = generate(
-            template, seed, backend=backend, with_figures=with_figures, assets_dir=assets_dir
+            template,
+            seed,
+            backend=backend,
+            with_figures=with_figures,
+            assets_dir=assets_dir,
+            difficulty=difficulty,
         )
         if _validate(problem, template):
             return problem, True

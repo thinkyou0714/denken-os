@@ -25,7 +25,10 @@ def _sample_one(spec: ParamSpec, rng: random.Random) -> Any:
     return rng.uniform(low, high)
 
 
-def sample_params(template: Template, seed: int) -> dict[str, Any]:
-    """テンプレートの全パラメータを seed から決定的にサンプリングする。"""
+def sample_params(template: Template, seed: int, difficulty: str | None = None) -> dict[str, Any]:
+    """テンプレートのパラメータを seed から決定的にサンプリングする。
+
+    difficulty を指定し、その variant があればそのパラメータ範囲を使う。
+    """
     rng = random.Random(seed)
-    return {spec.name: _sample_one(spec, rng) for spec in template.params}
+    return {spec.name: _sample_one(spec, rng) for spec in template.effective_params(difficulty)}

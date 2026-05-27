@@ -123,6 +123,8 @@ class Template(BaseModel):
     title: str
     difficulty: Literal["basic", "applied", "exam"] = "applied"
     params: list[ParamSpec] = Field(default_factory=list)
+    # 難易度別のパラメータ上書き。difficulty 名 -> params の完全置換 (アイデア#54)。
+    variants: dict[str, list[ParamSpec]] = Field(default_factory=dict)
     # calc 用: name -> sympy 文字列。上から順に評価し、前の name を参照可。
     expressions: dict[str, str] = Field(default_factory=dict)
     answer: AnswerSpec | None = None
@@ -147,7 +149,19 @@ class Template(BaseModel):
                 )
         if self.type == ProblemType.ESSAY and not self.rubric:
             raise ValueError(f"template {self.id}: essay requires rubric")
+        base_names = {p.name for p in self.params}
+        for diff, specs in self.variants.items():
+            if {p.name for p in specs} != base_names:
+                raise ValueError(
+                    f"template {self.id}: variant '{diff}' のパラメータ名が base と不一致"
+                )
         return self
+
+    def effective_params(self, difficulty: str | None = None) -> list[ParamSpec]:
+        """指定難易度のパラメータ仕様(variant があれば上書き、無ければ base)。"""
+        if difficulty and difficulty in self.variants:
+            return self.variants[difficulty]
+        return self.params
 
 
 class Answer(BaseModel):

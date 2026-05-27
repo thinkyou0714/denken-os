@@ -39,6 +39,13 @@ def _cmd_gen(args: argparse.Namespace) -> int:
         backend = get_backend(args.backend)
     out_dir = Path(args.out)
 
+    difficulty = args.difficulty or None
+    if difficulty and difficulty not in template.variants and difficulty != template.difficulty:
+        print(
+            f"note: template {template.id} に難易度 '{difficulty}' の variant が無いため "
+            f"基本パラメータで生成します",
+            file=sys.stderr,
+        )
     failures = 0
     for i in range(args.count):
         seed = args.seed + i
@@ -49,6 +56,7 @@ def _cmd_gen(args: argparse.Namespace) -> int:
             attempts=args.attempts,
             with_figures=not args.no_figures,
             assets_dir=out_dir,
+            difficulty=difficulty,
         )
         path = write_problem(problem, field, template, out_dir)
         flag = "" if ok else "  [WARN: 検証不合格]"
@@ -149,6 +157,12 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--backend", choices=["stub", "ollama"], default="stub")
     g.add_argument("--model", default="qwen2.5:14b")
     g.add_argument("--attempts", type=int, default=3, help="検証に通るまでの再生成回数")
+    g.add_argument(
+        "--difficulty",
+        choices=["basic", "applied", "exam"],
+        default="",
+        help="難易度 variant(テンプレに定義があれば適用)",
+    )
     g.add_argument("--no-figures", action="store_true")
     g.add_argument("--out", default="generated")
     g.set_defaults(func=_cmd_gen)
