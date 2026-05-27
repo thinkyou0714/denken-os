@@ -1,0 +1,50 @@
+id: th_rc_transient
+field_id: th-transient
+type: calc
+title: RC直列回路の時定数
+difficulty: basic
+
+params:
+  - {name: E, kind: choice, choices: [10, 100], unit: V}
+  - {name: R, kind: choice, choices: [1, 5, 10], unit: kohm}
+  - {name: C, kind: choice, choices: [100, 200], unit: uF}
+
+expressions:
+  tau_s: "R*1e3 * C*1e-6"
+  tau_ms: "R*1e3 * C*1e-6 * 1000"
+
+answer:
+  expr: tau_ms
+  unit: ms
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 1000000
+
+figures:
+  - kind: transient_curve
+    caption: "図1 コンデンサ電圧の充電曲線 v(t)=E(1−e^{−t/τ})(破線=時定数 τ、点線=63.2%)"
+    role: technical
+    options:
+      tau_s: tau_s
+      e: E
+
+statement_template: >-
+  起電力 E = {E} V の直流電源、抵抗 R = {R} kΩ、コンデンサ C = {C} µF を直列に接続し、
+  t = 0 でスイッチを閉じてコンデンサを充電する。この RC 直列回路の時定数 τ[ms] を求めよ。
+
+explanation_template: >-
+  RC 直列回路の時定数は τ = RC で与えられる。コンデンサ電圧は
+  v(t) = E(1 − e^(−t/τ)) で変化し、t = τ で最終値の約 63.2% に達する。
+  本問では τ = {answer} である。
+
+prompt_hint: τ = RC。kΩ と µF の積が ms になる単位関係に触れる。
+
+scoring:
+  - {criterion: "時定数 τ = RC の立式", points: 4}
+  - {criterion: "単位換算(kΩ・µF → ms)", points: 3}
+  - {criterion: "数値計算", points: 2}
+  - {criterion: "有効数字・単位(ms)", points: 1}
+
+pitfalls:
+  - {label: "ms へ換算し忘れ(秒のまま)", expr: "R*1e3 * C*1e-6", note: "τ = RC は秒。本問は ms 表示"}
+  - {label: "整定時間 5τ と混同", expr: "R*1e3 * C*1e-6 * 1000 * 5", note: "時定数 τ は 5τ(ほぼ整定)とは異なる"}

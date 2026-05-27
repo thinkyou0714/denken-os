@@ -266,6 +266,24 @@
 - 問題バンク設計は「内容の多様性・難易度の段階的足場かけ・シラバス整合」が重要。
 - パラメータ化された同型問題は、難易度を範囲で制御するのが自然(surface/structural variation)。
 
+## 2.12 一次・理論テンプレの追加（2026-05-27）
+
+### 内容
+一次試験「理論」科目の例題として、図つきの計算テンプレを3本追加。
+- `th_rlc_series`(RLC直列回路の電流)+ `impedance_triangle` 図
+- `th_series_resonance`(直列共振周波数)+ `resonance_curve` 図
+- `th_rc_transient`(RC直列回路の時定数)+ `transient_curve` 図
+- `Subject.THEORY = "理論"`、分野 th-ac-rlc / th-resonance / th-transient を追加。
+
+### 既知の表示課題(別途修正予定)
+自動生成の解答ステップに以下の違和感があり、表示整形の改善が必要:
+1. 単位換算定数(×1e-3 等)が式に畳み込まれ `0.002 π L f` のように汚くなる。
+2. 図専用の中間式(L_h, C_f 等)が解答ステップに混入する。
+3. 内部変数名(Icur, tau_ms)がそのまま数式に出る。
+4. よくある誤りの単位が正答の単位に固定され、別単位の誤答で不整合(例: 0.5 s が "0.5 ms")。
+
+→ 対策案: 表示名マッピング、ステップ非表示フラグ、pitfall への unit 付与、solution_template 化。
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

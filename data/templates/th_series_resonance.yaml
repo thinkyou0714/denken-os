@@ -1,0 +1,53 @@
+id: th_series_resonance
+field_id: th-resonance
+type: calc
+title: 直列共振周波数
+difficulty: basic
+
+params:
+  - {name: L, kind: choice, choices: [10, 20], unit: mH}
+  - {name: C, kind: choice, choices: [1, 10], unit: uF}
+  - {name: R, kind: choice, choices: [5, 10], unit: ohm}
+
+expressions:
+  L_h: "L*1e-3"
+  C_f: "C*1e-6"
+  f0: "1/(2*pi*sqrt(L*1e-3 * C*1e-6))"
+
+answer:
+  expr: f0
+  unit: Hz
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 1000000
+
+figures:
+  - kind: resonance_curve
+    caption: "図1 直列RLCの電流-周波数特性(破線=共振周波数 f0、共振時に電流最大)"
+    role: technical
+    options:
+      l_h: L_h
+      c_f: C_f
+      r_ohm: R
+      f0: f0
+
+statement_template: >-
+  インダクタンス L = {L} mH とコンデンサ C = {C} µF、抵抗 R = {R} Ω を
+  直列に接続した。この回路の直列共振周波数 f0[Hz] を求めよ。
+
+explanation_template: >-
+  直列共振は誘導性リアクタンスと容量性リアクタンスが等しい(XL = XC)、すなわち
+  2πf0·L = 1/(2πf0·C) のときに起こる。これを解くと f0 = 1/(2π√(LC)) となる。
+  本問では f0 = {answer} である。共振時は回路インピーダンスが最小(= R)、電流が最大になる。
+
+prompt_hint: 共振条件 XL = XC から f0 を導く。共振時に電流最大となることに触れる。
+
+scoring:
+  - {criterion: "共振条件 XL = XC の把握", points: 3}
+  - {criterion: "f0 = 1/(2π√(LC)) の立式", points: 4}
+  - {criterion: "単位換算(mH, µF → H, F)と計算", points: 2}
+  - {criterion: "有効数字・単位(Hz)", points: 1}
+
+pitfalls:
+  - {label: "2π を落として角周波数を答える", expr: "1/sqrt(L*1e-3 * C*1e-6)", note: "これは ω0[rad/s]。f0 = ω0/(2π)"}
+  - {label: "mH・µF の単位換算を忘れる", expr: "1/(2*pi*sqrt(L*C))", note: "L[H], C[F] に換算してから計算する"}

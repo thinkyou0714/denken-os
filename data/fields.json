@@ -47,5 +47,26 @@
     "category": "パワーエレクトロニクス",
     "subcategory": "整流回路",
     "source_label": null
+  },
+  {
+    "id": "th-ac-rlc",
+    "subject": "理論",
+    "category": "交流回路",
+    "subcategory": "RLC直列回路",
+    "source_label": null
+  },
+  {
+    "id": "th-resonance",
+    "subject": "理論",
+    "category": "交流回路",
+    "subcategory": "直列共振",
+    "source_label": null
+  },
+  {
+    "id": "th-transient",
+    "subject": "理論",
+    "category": "過渡現象",
+    "subcategory": "RC回路",
+    "source_label": null
   }
 ]

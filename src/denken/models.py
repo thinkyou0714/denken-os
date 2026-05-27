@@ -16,10 +16,11 @@ from denken import SCHEMA_VERSION
 
 
 class Subject(StrEnum):
-    """電験二種 二次試験の科目."""
+    """電験二種の科目(二次=電力・管理/機械・制御、一次=理論ほか)."""
 
-    POWER_MANAGEMENT = "電力・管理"
-    MACHINE_CONTROL = "機械・制御"
+    POWER_MANAGEMENT = "電力・管理"  # 二次
+    MACHINE_CONTROL = "機械・制御"  # 二次
+    THEORY = "理論"  # 一次
 
 
 class ProblemType(StrEnum):

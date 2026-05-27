@@ -1,0 +1,57 @@
+id: th_rlc_series
+field_id: th-ac-rlc
+type: calc
+title: RLC直列回路の電流
+difficulty: applied
+
+params:
+  - {name: V, kind: choice, choices: [100, 200], unit: V}
+  - {name: f, kind: choice, choices: [50, 60], unit: Hz}
+  - {name: R, kind: choice, choices: [8, 10], unit: ohm}
+  - {name: L, kind: choice, choices: [30, 40, 50], unit: mH}
+  - {name: C, kind: choice, choices: [500, 1000], unit: uF}
+
+expressions:
+  XL: "2*pi*f*L*1e-3"
+  XC: "1/(2*pi*f*C*1e-6)"
+  X: "XL - XC"
+  Z: "sqrt(R**2 + X**2)"
+  Icur: "V/Z"
+  pf: "R/Z"
+
+answer:
+  expr: Icur
+  unit: A
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 1000
+
+figures:
+  - kind: impedance_triangle
+    caption: "図1 インピーダンス三角形(R, X = XL − XC, Z)"
+    role: technical
+    options:
+      r: R
+      x: X
+
+statement_template: >-
+  正弦波交流電源(実効値 {V} V、周波数 {f} Hz)に、抵抗 R = {R} Ω、
+  インダクタンス L = {L} mH、静電容量 C = {C} µF を直列に接続した。
+  この回路に流れる電流の実効値 I[A] を求めよ。
+
+explanation_template: >-
+  誘導性リアクタンス XL = 2πfL、容量性リアクタンス XC = 1/(2πfC)、
+  合成リアクタンスは X = XL − XC である。インピーダンスは Z = √(R² + X²)、
+  電流は I = V/Z で求まる。本問では I = {answer} となる。
+
+prompt_hint: 直列回路では合成リアクタンスが XL − XC であることを明示する。
+
+scoring:
+  - {criterion: "XL = 2πfL, XC = 1/(2πfC) の立式", points: 4}
+  - {criterion: "合成リアクタンス X = XL − XC とインピーダンス Z = √(R²+X²)", points: 5}
+  - {criterion: "電流 I = V/Z の計算", points: 3}
+  - {criterion: "有効数字・単位(A)", points: 2}
+
+pitfalls:
+  - {label: "容量性リアクタンスを引き忘れ", expr: "V/sqrt(R**2 + XL**2)", note: "X = XL − XC を使う"}
+  - {label: "リアクタンスを加算してしまう", expr: "V/sqrt(R**2 + (XL + XC)**2)", note: "直列では X = XL − XC(差)"}

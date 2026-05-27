@@ -249,6 +249,91 @@ def _transformer_efficiency(values: dict[str, float], spec: FigureSpec, out: Pat
     plt.close(fig)
 
 
+@register("impedance_triangle")
+def _impedance_triangle(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """インピーダンス三角形 (R 水平, X 垂直, Z 斜辺)。options.r / x は値キー。
+
+    X が負(容量性)のときは下向きに描く。
+    """
+    plt = _use_agg()
+
+    r = resolve(spec.options["r"], values)
+    x = resolve(spec.options["x"], values)
+    fig, ax = plt.subplots(figsize=(4, 3.5))
+    arrow = dict(arrowstyle="-|>", lw=2)
+    ax.annotate("", xy=(r, 0), xytext=(0, 0), arrowprops={**arrow, "color": "C0"})
+    ax.annotate("", xy=(r, x), xytext=(r, 0), arrowprops={**arrow, "color": "C1"})
+    ax.annotate("", xy=(r, x), xytext=(0, 0), arrowprops={**arrow, "color": "C3"})
+    m = max(abs(r), abs(x), 1.0)
+    ax.text(r / 2, -0.06 * m * (1 if x >= 0 else -1), "R", color="C0", ha="center")
+    ax.text(r * 1.02, x / 2, "X", color="C1", va="center")
+    ax.text(r * 0.45, x * 0.55, "Z", color="C3", ha="right")
+    pad = 0.25 * m
+    ax.set_xlim(-pad, r + pad)
+    ax.set_ylim(min(0, x) - pad, max(0, x) + pad)
+    ax.set_aspect("equal")
+    ax.set_xlabel("R [ohm]")
+    ax.set_ylabel("X [ohm]")
+    ax.grid(True, alpha=0.3)
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
+@register("resonance_curve")
+def _resonance_curve(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """直列 RLC の電流-周波数特性。共振周波数 f0 にピーク(縦線)。
+
+    options: l_h(H), c_f(F), r_ohm(Ω), f0(Hz)。電流は V=1 と仮定した相対値。
+    """
+    plt = _use_agg()
+    import numpy as np
+
+    ind = resolve(spec.options["l_h"], values)
+    cap = resolve(spec.options["c_f"], values)
+    r = resolve(spec.options["r_ohm"], values)
+    f0 = resolve(spec.options["f0"], values)
+
+    f = np.linspace(f0 * 0.2, f0 * 1.8, 600)
+    w = 2 * np.pi * f
+    z = np.sqrt(r**2 + (w * ind - 1.0 / (w * cap)) ** 2)
+    current = 1.0 / z
+
+    fig, ax = plt.subplots(figsize=(5, 3))
+    ax.plot(f, current, color="C0")
+    ax.axvline(f0, color="C3", ls="--", lw=1.0)
+    ax.set_xlabel("frequency [Hz]")
+    ax.set_ylabel("current (V=1) [A]")
+    ax.grid(True, alpha=0.3)
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
+@register("transient_curve")
+def _transient_curve(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """RC 充電の過渡応答 v(t)=E(1-e^{-t/τ})。時定数 τ で 63.2% を示す。
+
+    options: tau_s(秒), e(V)。
+    """
+    plt = _use_agg()
+    import numpy as np
+
+    tau = resolve(spec.options["tau_s"], values)
+    e = resolve(spec.options.get("e", 1.0), values)
+    t = np.linspace(0, 5 * tau, 400)
+    v = e * (1 - np.exp(-t / tau))
+
+    fig, ax = plt.subplots(figsize=(5, 3))
+    ax.plot(t, v, color="C0")
+    ax.axvline(tau, color="C3", ls="--", lw=1.0)
+    ax.axhline(0.632 * e, color="C2", ls=":", lw=1.0)
+    ax.text(tau, 0.632 * e, " 63.2%", color="C2", va="bottom")
+    ax.set_xlabel("time [s]")
+    ax.set_ylabel("v(t) [V]")
+    ax.grid(True, alpha=0.3)
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
 @register("bode")
 def _bode(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
     """一次遅れ系 H(jw)=1/(1+jw·tau) のボード線図。options.tau = 時定数キー。
