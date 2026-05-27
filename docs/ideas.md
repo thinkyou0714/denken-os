@@ -330,6 +330,29 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 - Real Python: Project Layout — https://realpython.com/ref/best-practices/project-layout/
 - python-blueprint(best-practice テンプレ) — https://github.com/johnthagen/python-blueprint
 
+## 2.14 難易度variantの検証カバレッジと難易度別セット組成（2026-05-27）
+
+### 背景・根本原因
+難易度variant(F54)を導入したが、`denken check`(CIゲート)は **base パラメータしか検証
+していなかった**。variant が妥当範囲外・未グラウンディング・誤り無効化を起こしても
+検出できない、という難易度導入で生まれた検証の穴。
+
+### 実装
+- `generate.template_difficulties()`(base=None + 全 variant)を追加。
+- `denken check` を全難易度ループに変更(各 difficulty × seed を generate_validated で検証、
+  `check_pitfalls(difficulty)` も難易度別に実施)。検証件数 100 → 160 に増加。
+- `check_pitfalls` / `iter_distinct_seeds` / `build_set` に `difficulty` を伝播。
+- `denken set --difficulty {basic,applied,exam}`: 難易度を揃えた問題セット(模試)を組成。
+- 理論3テンプレに `exam` variant を付与(新しい検証で全 seed・全難易度を担保)。
+
+### 根拠（ベストプラクティス)
+- 試験ブループリントは「内容領域 × 難易度」で項目を配分し、難易度分布を目標化する。
+  難易度別にセットを組めることは段階的学習・模試構成の前提。
+
+### 参考
+- Test Blueprints & Specifications | Assessment Systems — https://assess.com/test-blueprints-specifications/
+- Item Writing and Exam Assembly | PSI — https://www.psiexams.com/knowledge-hub/item-writing-and-exam-assembly-in-credentialing-importance-and-best-practices/
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

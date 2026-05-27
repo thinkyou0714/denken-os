@@ -99,6 +99,7 @@ def _cmd_set(args: argparse.Namespace) -> int:
         start_seed=args.seed,
         with_figures=not args.no_figures,
         assets_dir=out_dir,
+        difficulty=args.difficulty or None,
     )
     for p in problems:
         write_problem(p, fields[p.field_id], templates[p.template_id], out_dir)
@@ -111,6 +112,7 @@ def _cmd_set(args: argparse.Namespace) -> int:
 
 def _cmd_check(args: argparse.Namespace) -> int:
     """全テンプレートを複数 seed で生成・検証し、次元整合も確認する (アイデア#62, #83, #99)。"""
+    from denken.generate import template_difficulties
     from denken.units import check_dimensions
     from denken.validate import check_pitfalls
 
@@ -118,12 +120,20 @@ def _cmd_check(args: argparse.Namespace) -> int:
     bad = 0
     dim_bad = 0
     pitfall_bad = 0
+    checked = 0
     for tid, template in templates.items():
-        for seed in range(args.seeds):
-            _problem, ok = generate_validated(template, seed, attempts=1)
-            if not ok:
-                bad += 1
-                print(f"NG  {tid}#{seed}")
+        # base と全難易度 variant を検証する(難易度導入で増えた検証経路を塞ぐ)
+        for diff in template_difficulties(template):
+            label = diff or "base"
+            for seed in range(args.seeds):
+                _problem, ok = generate_validated(template, seed, attempts=1, difficulty=diff)
+                checked += 1
+                if not ok:
+                    bad += 1
+                    print(f"NG  {tid}[{label}]#{seed}")
+            for plabel in check_pitfalls(template, difficulty=diff):
+                pitfall_bad += 1
+                print(f"PITFALL NG  {tid}[{label}]: よくある誤り『{plabel}』が正答と一致")
         dim = check_dimensions(template)
         if not dim.ok:
             dim_bad += 1
@@ -132,13 +142,10 @@ def _cmd_check(args: argparse.Namespace) -> int:
             print(f"DIM ??  {tid}: {dim.detail}")
         if template.type == ProblemType.CALC and not template.scoring:
             print(f"SCORING ??  {tid}: 採点基準(scoring)が未設定")
-        for label in check_pitfalls(template):
-            pitfall_bad += 1
-            print(f"PITFALL NG  {tid}: よくある誤り『{label}』が正答と一致")
-    total = len(templates) * args.seeds
     print(
-        f"checked {total} (templates={len(templates)} x seeds={args.seeds}): "
-        f"{bad} failed, dimension mismatches: {dim_bad}, pitfall issues: {pitfall_bad}"
+        f"checked {checked} problems across {len(templates)} templates "
+        f"(incl. difficulty variants): {bad} failed, "
+        f"dimension mismatches: {dim_bad}, pitfall issues: {pitfall_bad}"
     )
     return 1 if (bad or dim_bad or pitfall_bad) else 0
 
@@ -176,6 +183,12 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--count", type=int, default=10)
     s.add_argument("--seed", type=int, default=0)
     s.add_argument("--templates", default="", help="カンマ区切りのテンプレID(未指定なら全件)")
+    s.add_argument(
+        "--difficulty",
+        choices=["basic", "applied", "exam"],
+        default="",
+        help="難易度 variant(各テンプレに定義があれば適用)",
+    )
     s.add_argument("--no-figures", action="store_true")
     s.add_argument("--out", default="problemset")
     s.set_defaults(func=_cmd_set)

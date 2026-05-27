@@ -11,6 +11,20 @@ params:
   - {name: L, kind: choice, choices: [30, 40, 50], unit: mH}
   - {name: C, kind: choice, choices: [500, 1000], unit: uF}
 
+variants:
+  basic:
+    - {name: V, kind: choice, choices: [100], unit: V}
+    - {name: f, kind: choice, choices: [50], unit: Hz}
+    - {name: R, kind: choice, choices: [10], unit: ohm}
+    - {name: L, kind: choice, choices: [30, 40], unit: mH}
+    - {name: C, kind: choice, choices: [1000], unit: uF}
+  exam:
+    - {name: V, kind: choice, choices: [100, 200, 400], unit: V}
+    - {name: f, kind: choice, choices: [50, 60], unit: Hz}
+    - {name: R, kind: choice, choices: [3, 5], unit: ohm}
+    - {name: L, kind: choice, choices: [60, 80, 100], unit: mH}
+    - {name: C, kind: choice, choices: [200, 300], unit: uF}
+
 expressions:
   XL: "2*pi*f*L*1e-3"
   XC: "1/(2*pi*f*C*1e-6)"

@@ -138,14 +138,14 @@ def validate_essay(problem: Problem, template: Template, threshold: float = 0.6)
     )
 
 
-def check_pitfalls(template: Template, seed: int = 0) -> list[str]:
+def check_pitfalls(template: Template, seed: int = 0, difficulty: str | None = None) -> list[str]:
     """よくある誤りの誤答値が正答と一致(=誤りになっていない)ものを返す。"""
     if template.type != ProblemType.CALC or not template.pitfalls or template.answer is None:
         return []
     from denken.params import sample_params
     from denken.solver import eval_expr
 
-    params = sample_params(template, seed)
+    params = sample_params(template, seed, difficulty)
     answer, values = solve(template, params)
     a = answer.value
     bad: list[str] = []

@@ -56,6 +56,35 @@ def test_variants_validate_and_pitfalls_hold(difficulty):
         assert all(pf.display != problem.answer.display for pf in problem.pitfalls)
 
 
+def test_template_difficulties_lists_base_and_variants():
+    from denken.generate import template_difficulties
+
+    t = TEMPLATES["pm_vdrop_3ph"]
+    assert template_difficulties(t) == [None, "basic", "exam"]
+    # variant の無いテンプレは base のみ
+    assert template_difficulties(TEMPLATES["pm_loss_reduction"]) == [None]
+
+
+def test_build_set_with_difficulty_applies_variant():
+    from denken.problemset import build_set
+
+    t = TEMPLATES["th_rlc_series"]
+    problems = build_set([t], 3, difficulty="exam")
+    assert problems
+    for p in problems:
+        assert p.difficulty == "exam"
+        # exam では R は {3,5}
+        assert p.params["R"] in (3, 5)
+
+
+@pytest.mark.parametrize("tid", ["th_rlc_series", "th_series_resonance", "th_rc_transient"])
+def test_theory_exam_variants_validate(tid):
+    t = TEMPLATES[tid]
+    for seed in range(6):
+        _p, ok = generate_validated(t, seed, difficulty="exam")
+        assert ok, f"{tid}[exam]#{seed} 検証不合格"
+
+
 def test_template_rejects_variant_with_mismatched_param_names():
     with pytest.raises(ValidationError):
         Template(

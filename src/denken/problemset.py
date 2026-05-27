@@ -21,15 +21,18 @@ def build_set(
     backend: LLMBackend | None = None,
     with_figures: bool = False,
     assets_dir: Path | None = None,
+    difficulty: str | None = None,
 ) -> list[Problem]:
     """total 問の問題セットを作る。テンプレ間はラウンドロビン、各テンプレ内は重複なし。
 
     あるテンプレの組合せ空間を使い切ったら他テンプレで埋める。全テンプレが尽きれば
-    total 未満で打ち切る。
+    total 未満で打ち切る。difficulty を与えると、その variant がある場合は適用する。
     """
     if not templates:
         return []
-    seeds = {t.id: iter_distinct_seeds(t, total, start_seed) for t in templates}
+    seeds = {
+        t.id: iter_distinct_seeds(t, total, start_seed, difficulty=difficulty) for t in templates
+    }
     pos = {t.id: 0 for t in templates}
 
     problems: list[Problem] = []
@@ -48,6 +51,7 @@ def build_set(
                     backend=backend,
                     with_figures=with_figures,
                     assets_dir=assets_dir,
+                    difficulty=difficulty,
                 )
             )
             pos[t.id] += 1

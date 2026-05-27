@@ -28,8 +28,17 @@ def param_signature(params: dict[str, Any]) -> tuple:
     return tuple(sorted((k, params[k]) for k in params))
 
 
+def template_difficulties(template: Template) -> list[str | None]:
+    """検証・生成対象とする難易度の一覧(base=None と各 variant)。"""
+    return [None, *sorted(template.variants)]
+
+
 def iter_distinct_seeds(
-    template: Template, count: int, start_seed: int = 0, cap_factor: int = 200
+    template: Template,
+    count: int,
+    start_seed: int = 0,
+    cap_factor: int = 200,
+    difficulty: str | None = None,
 ) -> list[int]:
     """パラメータ組合せが互いに異なる seed を最大 count 個返す (アイデア#56)。
 
@@ -42,7 +51,7 @@ def iter_distinct_seeds(
     attempts = 0
     max_attempts = max(count * cap_factor, 1000)
     while len(seeds) < count and attempts < max_attempts:
-        sig = param_signature(sample_params(template, seed))
+        sig = param_signature(sample_params(template, seed, difficulty))
         if sig not in seen:
             seen.add(sig)
             seeds.append(seed)

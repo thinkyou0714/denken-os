@@ -9,6 +9,12 @@ params:
   - {name: C, kind: choice, choices: [1, 10], unit: uF}
   - {name: R, kind: choice, choices: [5, 10], unit: ohm}
 
+variants:
+  exam:
+    - {name: L, kind: choice, choices: [1, 2], unit: mH}
+    - {name: C, kind: choice, choices: [0.1, 1], unit: uF}
+    - {name: R, kind: choice, choices: [2, 5], unit: ohm}
+
 expressions:
   L_h: "L*1e-3"
   C_f: "C*1e-6"

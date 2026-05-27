@@ -9,6 +9,12 @@ params:
   - {name: R, kind: choice, choices: [1, 5, 10], unit: kohm}
   - {name: C, kind: choice, choices: [100, 200], unit: uF}
 
+variants:
+  exam:
+    - {name: E, kind: choice, choices: [100, 200], unit: V}
+    - {name: R, kind: choice, choices: [10, 50, 100], unit: kohm}
+    - {name: C, kind: choice, choices: [200, 470], unit: uF}
+
 expressions:
   tau_s: "R*1e3 * C*1e-6"
   tau_ms: "R*1e3 * C*1e-6 * 1000"
