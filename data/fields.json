@@ -68,5 +68,19 @@
     "category": "過渡現象",
     "subcategory": "RC回路",
     "source_label": null
+  },
+  {
+    "id": "th-three-phase",
+    "subject": "理論",
+    "category": "交流回路",
+    "subcategory": "三相交流",
+    "source_label": null
+  },
+  {
+    "id": "mc-induction",
+    "subject": "機械・制御",
+    "category": "誘導機",
+    "subcategory": "すべり",
+    "source_label": null
   }
 ]

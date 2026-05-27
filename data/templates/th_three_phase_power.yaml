@@ -1,0 +1,52 @@
+id: th_three_phase_power
+field_id: th-three-phase
+type: calc
+title: 三相平衡負荷の有効電力
+difficulty: basic
+
+params:
+  - {name: V, kind: choice, choices: [200, 400, 6600], unit: V}
+  - {name: I, kind: choice, choices: [10, 20, 50], unit: A}
+  - {name: pf, kind: choice, choices: [0.8, 0.85, 0.9]}
+
+expressions:
+  sinphi: "sqrt(1 - pf**2)"
+  P_kW: "sqrt(3)*V*I*pf/1000"
+  Q_kvar: "sqrt(3)*V*I*sinphi/1000"
+
+answer:
+  expr: P_kW
+  unit: kW
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 100000
+
+figures:
+  - kind: power_triangle
+    caption: "図1 電力ベクトル図(P:有効, Q:無効, S:皮相)"
+    role: technical
+    options:
+      p: P_kW
+      q: Q_kvar
+
+statement_template: >-
+  線間電圧 {V} V の三相平衡負荷に、線電流 {I} A が流れている。負荷の力率が {pf}(遅れ)の
+  とき、三相負荷が消費する有効電力 P[kW] を求めよ。
+
+explanation_template: >-
+  三相平衡負荷の有効電力は、線間電圧 V・線電流 I・力率 cosφ を用いて
+  P = √3·V·I·cosφ で求まる。本問では P = {answer} となる。
+
+prompt_hint: 三相電力は P = √3·V·I·cosφ(V は線間電圧、I は線電流)であることを明示する。
+
+solution_template:
+  - '$P = \sqrt{{3}}\, V I \cos\varphi = \sqrt{{3}} \times {V} \times {I} \times {pf} =$ {answer}'
+
+scoring:
+  - {criterion: "三相電力 P = √3·V·I·cosφ の立式", points: 5}
+  - {criterion: "数値代入と計算", points: 3}
+  - {criterion: "有効数字・単位(kW)", points: 2}
+
+pitfalls:
+  - {label: "√3 を掛け忘れる", expr: "V*I*pf/1000", note: "三相電力は √3·V·I·cosφ(単相と混同)"}
+  - {label: "力率を掛け忘れ(皮相電力を答える)", expr: "sqrt(3)*V*I/1000", note: "有効電力は cosφ を掛ける"}

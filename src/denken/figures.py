@@ -334,6 +334,31 @@ def _transient_curve(values: dict[str, float], spec: FigureSpec, out: Path) -> N
     plt.close(fig)
 
 
+@register("slip_line")
+def _slip_line(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
+    """誘導機の回転速度図: 0〜同期速度 Ns の軸に N と Ns を示し、すべり区間を網掛け。
+
+    options: ns(同期速度), n(回転速度)。
+    """
+    plt = _use_agg()
+
+    ns = resolve(spec.options["ns"], values)
+    n = resolve(spec.options["n"], values)
+    fig, ax = plt.subplots(figsize=(5, 1.8))
+    ax.hlines(0, 0, ns, color="black", lw=1)
+    ax.axvspan(n, ns, color="C1", alpha=0.25)  # すべり区間
+    for x, lab, col in ((0, "0", "gray"), (n, "N", "C0"), (ns, "Ns", "C3")):
+        ax.plot([x], [0], marker="|", markersize=18, color=col)
+        ax.text(x, 0.12, f"{lab}", color=col, ha="center")
+    ax.text((n + ns) / 2, -0.18, "slip", color="C1", ha="center", va="top")
+    ax.set_xlim(-0.05 * ns, ns * 1.08)
+    ax.set_ylim(-0.4, 0.4)
+    ax.set_yticks([])
+    ax.set_xlabel("speed [rpm]")
+    fig.savefig(out, format="svg", bbox_inches="tight")
+    plt.close(fig)
+
+
 @register("bode")
 def _bode(values: dict[str, float], spec: FigureSpec, out: Path) -> None:
     """一次遅れ系 H(jw)=1/(1+jw·tau) のボード線図。options.tau = 時定数キー。

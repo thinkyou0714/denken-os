@@ -396,6 +396,27 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 - Generating Plausible Distractors via Student Choice Prediction (arxiv 2501.13125) — https://arxiv.org/abs/2501.13125
 - The Art of Crafting Effective Distractors — https://www.numberanalytics.com/blog/crafting-effective-distractors
 
+## 2.17 コンテンツ拡充: 誘導機すべり・三相電力（2026-05-27)
+
+### 背景
+評価で最大の弱点だった「コンテンツ網羅」を、未カバー分野(誘導機・三相)で拡充。
+いずれも埋め込み物理定数を含まない教科書公式なので、既存の自動検証で正しさを担保できる。
+
+### 実装
+- 図ジェネレータ `slip_line`(0〜同期速度の軸に N/Ns、すべり区間を網掛け)。
+- `mc_induction_slip`(機械/誘導機): Ns=120f/p, s=(Ns−N)/Ns。
+  - N は与えるすべり s_in と Ns から逆算(N>Ns 等の不整合を防ぐ。全組合せで整数)。
+  - pitfalls: 分母に N / 二次効率(1−s)との取り違え。
+- `th_three_phase_power`(理論/三相): P=√3·V·I·cosφ(既存 power_triangle 図を再利用)。
+  - pitfalls: √3 抜け / 力率抜け(皮相電力)。
+- → 計12テンプレ・5分野(理論/電力・管理/機械・制御 を横断)。検証 180問。
+
+### 根拠
+- Ns=120f/p、s=(Ns−N)/Ns、二次入力:出力:二次銅損 = 1:(1−s):s(二次効率=1−s)。
+
+### 参考
+- 誘導電動機の動作原理・特性まとめ — https://denjoforest.com/induction-motor
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

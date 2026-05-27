@@ -1,0 +1,55 @@
+id: mc_induction_slip
+field_id: mc-induction
+type: calc
+title: 三相誘導電動機のすべり
+difficulty: applied
+
+# 与える回転速度 N は「すべり s_in」と同期速度から逆算する(N>Ns 等の不整合を防ぐ)。
+# Ns は f,p の全組合せで整数、N も s_in 0.02〜0.05 で整数になる。
+params:
+  - {name: f, kind: choice, choices: [50, 60], unit: Hz}
+  - {name: p, kind: choice, choices: [2, 4, 6]}
+  - {name: s_in, kind: choice, choices: [0.02, 0.03, 0.04, 0.05]}
+
+expressions:
+  Ns: "120*f/p"
+  N: "Ns*(1 - s_in)"
+  s_pct: "(Ns - N)/Ns*100"
+
+answer:
+  expr: s_pct
+  unit: "%"
+  sig_figs: 3
+  sane_min: 0
+  sane_max: 20
+
+figures:
+  - kind: slip_line
+    caption: "図1 回転速度図(0〜同期速度 Ns、網掛け=すべり区間 Ns−N)"
+    role: technical
+    options:
+      ns: Ns
+      n: N
+
+statement_template: >-
+  電源周波数 {f} Hz、極数 {p} の三相誘導電動機が、回転速度 N = {N:.0f} min⁻¹ で
+  運転している。この電動機のすべり s[%] を求めよ。
+
+explanation_template: >-
+  同期速度は Ns = 120f/p で求まる。すべりは s = (Ns − N) / Ns で定義される。
+  本問では s = {answer} となる。なお二次効率(出力/二次入力)は 1 − s に等しい。
+
+prompt_hint: 同期速度 Ns = 120f/p を経由し、すべり s = (Ns−N)/Ns を導く。二次効率 = 1−s に触れる。
+
+solution_template:
+  - '同期速度 $N_s = \dfrac{{120 f}}{{p}} = {Ns:.0f}$ min⁻¹'
+  - 'すべり $s = \dfrac{{N_s - N}}{{N_s}} \times 100 =$ {answer}'
+
+scoring:
+  - {criterion: "同期速度 Ns = 120f/p の立式", points: 4}
+  - {criterion: "すべり s = (Ns − N)/Ns の立式", points: 4}
+  - {criterion: "有効数字・単位(%)", points: 2}
+
+pitfalls:
+  - {label: "分母に N を使う", expr: "(Ns - N)/N*100", note: "すべりの分母は同期速度 Ns"}
+  - {label: "二次効率(1−s)と取り違え", expr: "N/Ns*100", note: "これは二次効率 = 1 − s。すべりではない"}
