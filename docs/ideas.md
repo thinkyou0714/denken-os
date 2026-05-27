@@ -353,6 +353,27 @@ LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、
 - Test Blueprints & Specifications | Assessment Systems — https://assess.com/test-blueprints-specifications/
 - Item Writing and Exam Assembly | PSI — https://www.psiexams.com/knowledge-hub/item-writing-and-exam-assembly-in-credentialing-importance-and-best-practices/
 
+## 2.15 ブループリント(科目×問題数)による模試組成（2026-05-27)
+
+### 背景・根本原因
+`denken set` は全テンプレを均等ラウンドロビンするだけで、**実際の試験構成(科目別の
+問題数配分)を反映できない**。試験ブループリントは内容領域ごとに問題数を配分するのが定石。
+
+### 実装
+- `problemset.parse_blueprint('理論=3,機械・制御=2')` と `build_blueprint_set(groups, blueprint)`。
+- 実際の電験二種構成に基づくプリセット `EXAM_PRESETS`:
+  - `2ji`: 電力・管理 4 + 機械・制御 2(二次の選択解答数)
+  - `1ji-theory`: 理論 7(A問題4 + B問題3)
+- `denken set --exam 2ji` / `--blueprint "理論=3,..."`(`--difficulty` と併用可)。
+- 各科目内は `build_set` で重複なく充足(同型問題の衝突回避)。
+
+### 根拠
+- 第二種電気主任技術者試験: 一次は理論/電力/機械/法規、二次は電力・管理(6問中4問)と
+  機械・制御(4問中2問)を選択解答。
+
+### 参考
+- 電気技術者試験センター(試験の概要) — https://www.shiken.or.jp/chief/second/qa/
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

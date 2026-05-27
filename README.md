@@ -23,6 +23,7 @@ denken gen --template pm_vdrop_3ph --seed 1 --difficulty exam   # 難易度varia
 denken gen --template pm_vdrop_3ph --seed 1 --backend ollama --model qwen2.5:14b
 denken set --count 20 --out problemset        # 重複しない問題セット(模試/問題集)
 denken set --count 20 --difficulty exam        # 難易度を揃えたセット
+denken set --exam 2ji                          # 二次本番構成(電力管理4+機械制御2)
 denken check                                  # 全テンプレを複数 seed で検証
 pytest -q                                      # テスト
 ```

@@ -12,6 +12,26 @@ from denken.generate import generate, iter_distinct_seeds
 from denken.llm import LLMBackend
 from denken.models import Problem, Template
 
+# 実際の電験二種の出題構成に基づくプリセット(科目名 -> 問題数)
+EXAM_PRESETS: dict[str, dict[str, int]] = {
+    "2ji": {"電力・管理": 4, "機械・制御": 2},  # 二次: 選択して解答する問題数
+    "1ji-theory": {"理論": 7},  # 一次・理論: A問題4 + B問題3
+}
+
+
+def parse_blueprint(spec: str) -> dict[str, int]:
+    """'理論=3,機械・制御=2' をパースして {科目: 問題数} を返す。"""
+    blueprint: dict[str, int] = {}
+    for part in spec.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "=" not in part:
+            raise ValueError(f"blueprint の書式が不正: '{part}'(期待: 科目=問題数)")
+        key, _, val = part.partition("=")
+        blueprint[key.strip()] = int(val.strip())
+    return blueprint
+
 
 def build_set(
     templates: list[Template],
@@ -58,4 +78,32 @@ def build_set(
             consecutive_misses = 0
         else:
             consecutive_misses += 1
+    return problems
+
+
+def build_blueprint_set(
+    groups: dict[str, list[Template]],
+    blueprint: dict[str, int],
+    *,
+    start_seed: int = 0,
+    backend: LLMBackend | None = None,
+    with_figures: bool = False,
+    assets_dir: Path | None = None,
+    difficulty: str | None = None,
+) -> list[Problem]:
+    """ブループリント(科目 -> 問題数)に従って問題セットを組成する (アイデア#78)。
+
+    groups は科目名 -> その科目のテンプレ一覧。各科目は build_set で重複なく充足する。
+    """
+    problems: list[Problem] = []
+    for subject, n in blueprint.items():
+        problems += build_set(
+            groups.get(subject, []),
+            n,
+            start_seed=start_seed,
+            backend=backend,
+            with_figures=with_figures,
+            assets_dir=assets_dir,
+            difficulty=difficulty,
+        )
     return problems

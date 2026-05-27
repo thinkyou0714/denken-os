@@ -81,31 +81,66 @@ def _cmd_validate(args: argparse.Namespace) -> int:
 
 def _cmd_set(args: argparse.Namespace) -> int:
     """重複しない問題セット(模試/問題集)を生成する (アイデア#56, #78)。"""
-    fields, templates = load_catalog(args.data)
-    if args.templates:
-        ids = [s.strip() for s in args.templates.split(",") if s.strip()]
-        unknown = [i for i in ids if i not in templates]
-        if unknown:
-            print(f"unknown templates: {unknown}", file=sys.stderr)
-            return 2
-        selected = [templates[i] for i in ids]
-    else:
-        selected = list(templates.values())
+    from denken.problemset import EXAM_PRESETS, build_blueprint_set, parse_blueprint
 
+    fields, templates = load_catalog(args.data)
     out_dir = Path(args.out)
-    problems = build_set(
-        selected,
-        args.count,
-        start_seed=args.seed,
-        with_figures=not args.no_figures,
-        assets_dir=out_dir,
-        difficulty=args.difficulty or None,
-    )
+    difficulty = args.difficulty or None
+
+    # ブループリント(科目×問題数)指定があればそれに従う
+    blueprint: dict[str, int] | None = None
+    if args.exam:
+        blueprint = EXAM_PRESETS[args.exam]
+    elif args.blueprint:
+        try:
+            blueprint = parse_blueprint(args.blueprint)
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            return 2
+
+    if blueprint is not None:
+        subjects = {fields[t.field_id].subject.value for t in templates.values()}
+        unknown = [s for s in blueprint if s not in subjects]
+        if unknown:
+            print(f"unknown subjects: {unknown}(候補: {sorted(subjects)})", file=sys.stderr)
+            return 2
+        groups: dict[str, list] = {}
+        for t in templates.values():
+            groups.setdefault(fields[t.field_id].subject.value, []).append(t)
+        problems = build_blueprint_set(
+            groups,
+            blueprint,
+            start_seed=args.seed,
+            with_figures=not args.no_figures,
+            assets_dir=out_dir,
+            difficulty=difficulty,
+        )
+        requested = sum(blueprint.values())
+    else:
+        if args.templates:
+            ids = [s.strip() for s in args.templates.split(",") if s.strip()]
+            unknown = [i for i in ids if i not in templates]
+            if unknown:
+                print(f"unknown templates: {unknown}", file=sys.stderr)
+                return 2
+            selected = [templates[i] for i in ids]
+        else:
+            selected = list(templates.values())
+        problems = build_set(
+            selected,
+            args.count,
+            start_seed=args.seed,
+            with_figures=not args.no_figures,
+            assets_dir=out_dir,
+            difficulty=difficulty,
+        )
+        requested = args.count
+
     for p in problems:
         write_problem(p, fields[p.field_id], templates[p.template_id], out_dir)
     index = write_index(problems, fields, templates, out_dir)
-    print(f"generated {len(problems)} problems (requested {args.count}) -> {index}")
-    if len(problems) < args.count:
+    print(f"generated {len(problems)} problems (requested {requested}) -> {index}")
+    if len(problems) < requested:
         print("note: 組合せ空間が有限のため要求数に満たない問題セットです")
     return 0
 
@@ -183,6 +218,17 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--count", type=int, default=10)
     s.add_argument("--seed", type=int, default=0)
     s.add_argument("--templates", default="", help="カンマ区切りのテンプレID(未指定なら全件)")
+    s.add_argument(
+        "--blueprint",
+        default="",
+        help="科目別配分 '理論=3,機械・制御=2'(指定時は --count より優先)",
+    )
+    s.add_argument(
+        "--exam",
+        choices=["2ji", "1ji-theory"],
+        default="",
+        help="出題構成プリセット(2ji=電力管理4+機械制御2 等)",
+    )
     s.add_argument(
         "--difficulty",
         choices=["basic", "applied", "exam"],
