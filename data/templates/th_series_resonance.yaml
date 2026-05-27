@@ -31,6 +31,10 @@ figures:
       r_ohm: R
       f0: f0
 
+solution_template:
+  - '直列共振条件 $X_L = X_C$ より $2\pi f_0 L = \dfrac{{1}}{{2\pi f_0 C}}$'
+  - 'これを解いて $f_0 = \dfrac{{1}}{{2\pi\sqrt{{LC}}}} =$ {answer}'
+
 statement_template: >-
   インダクタンス L = {L} mH とコンデンサ C = {C} µF、抵抗 R = {R} Ω を
   直列に接続した。この回路の直列共振周波数 f0[Hz] を求めよ。

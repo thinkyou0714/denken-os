@@ -34,6 +34,13 @@ figures:
       r: R
       x: X
 
+solution_template:
+  - '$X_L = 2\pi f L = {XL:.2f}$ Ω(誘導性リアクタンス)'
+  - '$X_C = \dfrac{{1}}{{2\pi f C}} = {XC:.2f}$ Ω(容量性リアクタンス)'
+  - '$X = X_L - X_C = {X:.2f}$ Ω'
+  - '$Z = \sqrt{{R^2 + X^2}} = {Z:.2f}$ Ω'
+  - '$I = \dfrac{{V}}{{Z}} =$ {answer}'
+
 statement_template: >-
   正弦波交流電源(実効値 {V} V、周波数 {f} Hz)に、抵抗 R = {R} Ω、
   インダクタンス L = {L} mH、静電容量 C = {C} µF を直列に接続した。

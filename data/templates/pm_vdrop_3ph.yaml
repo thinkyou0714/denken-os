@@ -34,6 +34,9 @@ expressions:
   Vd: "sqrt(3)*I*(R*pf + X*sinphi)"
   Vs: "Vr + Vd"
 
+# phi_deg はフェーザ図の角度算出用。解答ステップには出さない。
+hidden_exprs: [phi_deg]
+
 answer:
   expr: Vd
   unit: V

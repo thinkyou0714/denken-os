@@ -13,7 +13,6 @@
   "statement": "定格周波数の三相3線式送電線がある。受電端の線間電圧 6600 V、負荷の有効電力 1500000 W、 力率 0.9(遅れ)であり、1線当たりの抵抗 R = 1.5 Ω、リアクタンス X = 6.5 Ω である。 受電端電圧を基準とした近似式により、線間電圧降下 Vd[V] を求めよ。",
   "solution_steps": [
     "$ sinphi = \\sqrt{1 - pf^{2}} = 0.4359 $",
-    "$ phi_deg = \\frac{180 \\operatorname{acos}{\\left(pf \\right)}}{\\pi} = 25.84 $",
     "$ I = \\frac{\\sqrt{3} P}{3 Vr pf} = 145.8 $",
     "$ Vd = \\sqrt{3} I \\left(R pf + X sinphi\\right) = 1056.0 $",
     "$ Vs = Vd + Vr = 7656.0 $"

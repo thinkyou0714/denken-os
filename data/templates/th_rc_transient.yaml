@@ -28,6 +28,10 @@ figures:
       tau_s: tau_s
       e: E
 
+solution_template:
+  - '時定数は $\tau = RC$ で与えられる'
+  - '$\tau = ({R}\,\mathrm{{k\Omega}}) \times ({C}\,\mathrm{{\mu F}}) =$ {answer}'
+
 statement_template: >-
   起電力 E = {E} V の直流電源、抵抗 R = {R} kΩ、コンデンサ C = {C} µF を直列に接続し、
   t = 0 でスイッチを閉じてコンデンサを充電する。この RC 直列回路の時定数 τ[ms] を求めよ。
@@ -46,5 +50,5 @@ scoring:
   - {criterion: "有効数字・単位(ms)", points: 1}
 
 pitfalls:
-  - {label: "ms へ換算し忘れ(秒のまま)", expr: "R*1e3 * C*1e-6", note: "τ = RC は秒。本問は ms 表示"}
+  - {label: "ms へ換算し忘れ(秒のまま)", expr: "R*1e3 * C*1e-6", unit: "s", note: "τ = RC は秒。本問は ms 表示"}
   - {label: "整定時間 5τ と混同", expr: "R*1e3 * C*1e-6 * 1000 * 5", note: "時定数 τ は 5τ(ほぼ整定)とは異なる"}

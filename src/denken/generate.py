@@ -65,8 +65,11 @@ def _auto_steps(template: Template, values: dict[str, float]) -> list[str]:
     from denken.solver import parse_expr
 
     names = {p.name for p in template.params} | set(template.expressions)
+    hidden = set(template.hidden_exprs)
     steps: list[str] = []
     for name, expr in template.expressions.items():
+        if name in hidden:
+            continue
         try:
             latex = sympy.latex(parse_expr(expr, names))
         except Exception:  # noqa: BLE001 - 整形失敗時は素の式にフォールバック
@@ -110,7 +113,7 @@ def generate(
             pitfalls.append(
                 PitfallResult(
                     label=pf.label,
-                    display=format_value(wrong, answer.unit, template.answer.sig_figs),
+                    display=format_value(wrong, pf.unit or answer.unit, template.answer.sig_figs),
                     note=pf.note,
                 )
             )

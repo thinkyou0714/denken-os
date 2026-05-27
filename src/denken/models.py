@@ -93,6 +93,7 @@ class Pitfall(BaseModel):
     label: str  # 誤りの呼び名 (例: √3 を掛け忘れる)
     expr: str  # 誤った計算式 (params/中間値を参照可)
     note: str = ""  # なぜ誤りかの説明
+    unit: str = ""  # 誤答値の単位 (空なら answer の単位を使う)
 
 
 class PitfallResult(BaseModel):
@@ -128,6 +129,8 @@ class Template(BaseModel):
     variants: dict[str, list[ParamSpec]] = Field(default_factory=dict)
     # calc 用: name -> sympy 文字列。上から順に評価し、前の name を参照可。
     expressions: dict[str, str] = Field(default_factory=dict)
+    # 自動解答ステップから除外する式名(図補助・単位換算用の中間式など)
+    hidden_exprs: list[str] = Field(default_factory=list)
     answer: AnswerSpec | None = None
     statement_template: str = ""  # {param}/{value} を埋める問題文 (オフラインでも有効)
     # 電験王スタイルの解法ステップ雛形。空なら expressions から自動生成する。

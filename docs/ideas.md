@@ -284,6 +284,28 @@
 
 → 対策案: 表示名マッピング、ステップ非表示フラグ、pitfall への unit 付与、solution_template 化。
 
+## 2.12 一次・理論テンプレと解答ステップの整形（2026-05-27）
+
+### 背景
+一次・理論(交流回路・共振・過渡)の例題を出力したところ、自動生成の解答ステップに
+違和感が判明: ①単位換算定数が式に露出(`0.002πLf`)、②図用の中間式が混入(`L_h`)、
+③内部変数名が露出(`Icur`)、④よくある誤りの単位が固定(秒の値を ms 表示)。
+
+### 実装(根本修正)
+- `Subject.THEORY="理論"` を追加し、一次・理論の分野/テンプレを新設。
+  - 図ジェネレータ追加: `impedance_triangle`(R, X, Z)、`resonance_curve`(電流-周波数)、
+    `transient_curve`(RC 充電 v(t)=E(1−e^(−t/τ)))。
+  - テンプレ: `th_rlc_series`、`th_series_resonance`、`th_rc_transient`。
+- ②③ `Template.hidden_exprs`: 図補助・換算用の中間式を自動ステップから除外
+  (`pm_vdrop_3ph`/`mc_sync_vreg` の `phi_deg` にも適用)。
+- ①③ 理論テンプレに整形済み `solution_template` を付与(記号・単位を手書きし、
+  最終値は `{answer}` を参照して採点と一致)。
+- ④ `Pitfall.unit` を追加し、誤答ごとに正しい単位で表示(例: 秒のまま → `0.5 s`)。
+
+### 教訓
+単位換算(mH→H 等)を式に直書きすると SymPy が係数へ畳み込み表示が崩れる。
+表示が重要なテンプレは `solution_template` で記号式を明示するのが定石。
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

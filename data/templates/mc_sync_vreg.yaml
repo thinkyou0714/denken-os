@@ -16,6 +16,9 @@ expressions:
   Eq: "sqrt((V + I*Xs*sinphi)**2 + (I*Xs*pf)**2)"
   eps: "(Eq - V)/V*100"
 
+# phi_deg はフェーザ図の角度算出用。解答ステップには出さない。
+hidden_exprs: [phi_deg]
+
 answer:
   expr: eps
   unit: "%"
