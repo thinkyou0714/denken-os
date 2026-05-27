@@ -44,3 +44,6 @@ scoring:
   - {criterion: "折点周波数 fc = 1/(2πRC) の立式", points: 4}
   - {criterion: "数値代入と計算", points: 2}
   - {criterion: "有効数字・単位(Hz)", points: 1}
+
+pitfalls:
+  - {label: "2π を落として角周波数を答える", expr: "1/(R*C*1e-6)", note: "これは ωc[rad/s]。fc = ωc/(2π)"}

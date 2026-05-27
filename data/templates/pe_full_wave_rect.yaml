@@ -45,3 +45,7 @@ scoring:
   - {criterion: "全波整流の平均値 Vdc = 2·Vmax/π の立式", points: 4}
   - {criterion: "数値代入と計算", points: 2}
   - {criterion: "有効数字・単位(V)", points: 1}
+
+pitfalls:
+  - {label: "半波整流と混同", expr: "sqrt(2)*V/pi", note: "全波は 2Vmax/π、半波は Vmax/π"}
+  - {label: "実効値を最大値と取り違え", expr: "2*V/pi", note: "Vmax = √2·V を使う必要がある"}

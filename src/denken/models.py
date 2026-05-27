@@ -86,6 +86,20 @@ class ScoringCriterion(BaseModel):
     points: int = Field(gt=0)  # 配点 (正の整数)
 
 
+class Pitfall(BaseModel):
+    """よくある誤り(典型誤答)。誤った式 expr から誤答値を solver で算出する。"""
+
+    label: str  # 誤りの呼び名 (例: √3 を掛け忘れる)
+    expr: str  # 誤った計算式 (params/中間値を参照可)
+    note: str = ""  # なぜ誤りかの説明
+
+
+class PitfallResult(BaseModel):
+    label: str
+    display: str  # 誤答値の表示 (正答と同じ単位・有効数字)
+    note: str = ""
+
+
 class FigureSpec(BaseModel):
     """図の生成指示。登録済みの generator (kind) を params/中間値から描画する。
 
@@ -119,6 +133,7 @@ class Template(BaseModel):
     figures: list[FigureSpec] = Field(default_factory=list)
     rubric: list[RubricItem] = Field(default_factory=list)  # 論説用
     scoring: list[ScoringCriterion] = Field(default_factory=list)  # 計算用の採点基準(配点)
+    pitfalls: list[Pitfall] = Field(default_factory=list)  # 計算用のよくある誤り
     prompt_hint: str = ""  # LLM への追加指示
 
     @model_validator(mode="after")
@@ -165,6 +180,7 @@ class Problem(BaseModel):
     figures: list[FigureRef] = Field(default_factory=list)
     solution_steps: list[str] = Field(default_factory=list)
     scoring: list[ScoringCriterion] = Field(default_factory=list)
+    pitfalls: list[PitfallResult] = Field(default_factory=list)
     explanation: str = ""
     model_name: str = "stub"
     schema_version: int = SCHEMA_VERSION

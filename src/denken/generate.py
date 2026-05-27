@@ -10,9 +10,9 @@ from typing import Any
 
 from denken.figures import render_figures
 from denken.llm import LLMBackend, ProseRequest, StubBackend
-from denken.models import Answer, FigureRef, Problem, ProblemType, Template
+from denken.models import Answer, FigureRef, PitfallResult, Problem, ProblemType, Template
 from denken.params import sample_params
-from denken.solver import round_sig, solve
+from denken.solver import eval_expr, format_value, round_sig, solve
 
 
 class GenerateError(ValueError):
@@ -100,6 +100,18 @@ def generate(
             else _auto_steps(template, values)
         )
 
+    pitfalls: list[PitfallResult] = []
+    if template.type == ProblemType.CALC and template.pitfalls and answer is not None:
+        for pf in template.pitfalls:
+            wrong = eval_expr(template, values, pf.expr)
+            pitfalls.append(
+                PitfallResult(
+                    label=pf.label,
+                    display=format_value(wrong, answer.unit, template.answer.sig_figs),
+                    note=pf.note,
+                )
+            )
+
     ctx: dict[str, Any] = {**values, **params, "answer": answer.display if answer else ""}
     draft_statement = _safe_format(template.statement_template, ctx, template.id)
     draft_explanation = _safe_format(template.explanation_template, ctx, template.id)
@@ -139,6 +151,7 @@ def generate(
         figures=figures,
         solution_steps=steps,
         scoring=template.scoring,
+        pitfalls=pitfalls,
         explanation=prose.explanation,
         model_name=backend.name,
     )

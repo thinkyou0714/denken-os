@@ -56,3 +56,7 @@ scoring:
   - {criterion: "電圧降下式 Vd ≈ √3·I·(R·cosφ + X·sinφ) の立式", points: 6}
   - {criterion: "数値代入と計算", points: 3}
   - {criterion: "有効数字・単位(V)", points: 2}
+
+pitfalls:
+  - {label: "√3 を掛け忘れる", expr: "I*(R*pf + X*sinphi)", note: "三相線間の電圧降下は √3 倍が必要"}
+  - {label: "リアクタンス分 X·sinφ を落とす", expr: "sqrt(3)*I*R*pf", note: "抵抗分だけで計算してしまう誤り"}

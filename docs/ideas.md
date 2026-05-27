@@ -222,6 +222,27 @@
 - 大学入試数学の採点基準 — https://examist.jp/mathematics/kijyutu-touan/scoring-system-2/
 - 採点項目に基づく記述式答案の自動採点(理研AIP/東北大) — https://anlp.jp/proceedings/annual_meeting/2018/pdf_dir/P4-17.pdf
 
+## 2.10 よくある誤り(典型誤答)の自動付与（2026-05-27）
+
+### 背景・根本原因
+電験は √3 抜け・度/ラジアン取り違え・実効値/最大値の混同など **定型ミス** が頻出。
+正答の提示だけでは「なぜ間違うか」を学べず、誤答(distractor)の教材化ができていなかった。
+
+### 実装
+- `models.Pitfall`(label, expr, note)/`PitfallResult`、`Template.pitfalls`/`Problem.pitfalls`。
+- 誤答値も **solver で決定論的に算出**(`solver.eval_expr`)し、正答と同じ単位・有効数字で表示。
+- `render`: 「## よくある誤り」節を出力。
+- `validate.check_pitfalls` + `denken check`: 誤答値が正答と一致(=誤りになっていない)場合は失敗。
+- 4テンプレに典型誤答を付与(√3 抜け / X·sinφ 脱落 / 半波と全波の混同 / sin・cos 取り違え / 2π 脱落)。
+
+### 根拠（ベストプラクティス）
+- 「erroneous examples / student error task」は反省を促し学習効果が高い。
+  distractor は「誤りを犯して到達する値」であり、誤答の体系化は評価・指導の要。
+
+### 参考
+- Why and How to Implement Worked Examples in Physics (arxiv 2307.06315) — https://arxiv.org/pdf/2307.06315
+- DiVERT: Distractor Generation with Variational Errors (arxiv 2406.19356) — https://arxiv.org/pdf/2406.19356
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/

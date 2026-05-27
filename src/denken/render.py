@@ -58,6 +58,13 @@ def to_markdown(problem: Problem, field: FieldNode, template: Template) -> str:
     if problem.explanation:
         out += ["## 解説", "", problem.explanation, ""]
 
+    if problem.pitfalls:
+        out += ["## よくある誤り", ""]
+        for pf in problem.pitfalls:
+            note = f" — {pf.note}" if pf.note else ""
+            out.append(f"- **{pf.label}**: {pf.display}{note}")
+        out.append("")
+
     return "\n".join(out)
 
 

@@ -43,3 +43,6 @@ scoring:
   - {criterion: "無効電力 Q = P·tanφ (= P·sinφ/cosφ) の立式", points: 4}
   - {criterion: "数値代入と計算", points: 2}
   - {criterion: "有効数字・単位(kvar)", points: 1}
+
+pitfalls:
+  - {label: "sin と cos を取り違え", expr: "P*pf/sinphi", note: "Q = P·tanφ = P·sinφ/cosφ"}

@@ -138,6 +138,31 @@ def validate_essay(problem: Problem, template: Template, threshold: float = 0.6)
     )
 
 
+def check_pitfalls(template: Template, seed: int = 0) -> list[str]:
+    """よくある誤りの誤答値が正答と一致(=誤りになっていない)ものを返す。"""
+    if template.type != ProblemType.CALC or not template.pitfalls or template.answer is None:
+        return []
+    from denken.params import sample_params
+    from denken.solver import eval_expr
+
+    params = sample_params(template, seed)
+    answer, values = solve(template, params)
+    a = answer.value
+    bad: list[str] = []
+    for pf in template.pitfalls:
+        try:
+            w = eval_expr(template, values, pf.expr)
+        except Exception:  # noqa: BLE001
+            bad.append(f"{pf.label}(評価不能)")
+            continue
+        if a is None:
+            continue
+        same = abs(w) < 1e-9 if abs(a) < 1e-12 else abs(w - a) / abs(a) <= 0.01
+        if same:
+            bad.append(pf.label)
+    return bad
+
+
 def validate(problem: Problem, template: Template) -> bool:
     """種別に応じた検証の合否のみ返す簡易ヘルパ。"""
     if template.type == ProblemType.CALC:

@@ -104,10 +104,12 @@ def _cmd_set(args: argparse.Namespace) -> int:
 def _cmd_check(args: argparse.Namespace) -> int:
     """全テンプレートを複数 seed で生成・検証し、次元整合も確認する (アイデア#62, #83, #99)。"""
     from denken.units import check_dimensions
+    from denken.validate import check_pitfalls
 
     _, templates = load_catalog(args.data)
     bad = 0
     dim_bad = 0
+    pitfall_bad = 0
     for tid, template in templates.items():
         for seed in range(args.seeds):
             _problem, ok = generate_validated(template, seed, attempts=1)
@@ -122,12 +124,15 @@ def _cmd_check(args: argparse.Namespace) -> int:
             print(f"DIM ??  {tid}: {dim.detail}")
         if template.type == ProblemType.CALC and not template.scoring:
             print(f"SCORING ??  {tid}: 採点基準(scoring)が未設定")
+        for label in check_pitfalls(template):
+            pitfall_bad += 1
+            print(f"PITFALL NG  {tid}: よくある誤り『{label}』が正答と一致")
     total = len(templates) * args.seeds
     print(
         f"checked {total} (templates={len(templates)} x seeds={args.seeds}): "
-        f"{bad} failed, dimension mismatches: {dim_bad}"
+        f"{bad} failed, dimension mismatches: {dim_bad}, pitfall issues: {pitfall_bad}"
     )
-    return 1 if (bad or dim_bad) else 0
+    return 1 if (bad or dim_bad or pitfall_bad) else 0
 
 
 def build_parser() -> argparse.ArgumentParser:

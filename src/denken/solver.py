@@ -95,5 +95,25 @@ def solve(template: Template, params: dict[str, Any]) -> tuple[Answer, dict[str,
     return answer, values
 
 
+def eval_expr(template: Template, values: dict[str, float], expr_str: str) -> float:
+    """既に計算済みの values の文脈で任意の式を評価する(よくある誤りの誤答値などに使う)。"""
+    names = {p.name for p in template.params} | set(template.expressions)
+    expr = parse_expr(expr_str, names)
+    result = expr.subs({sympy.Symbol(k): v for k, v in values.items()})
+    if result.free_symbols:
+        raise SolverError(
+            f"template {template.id}: expr '{expr_str}' has undefined {result.free_symbols}"
+        )
+    num = float(result.evalf())
+    if not _finite(num):
+        raise SolverError(f"template {template.id}: expr '{expr_str}' is not finite ({num})")
+    return num
+
+
+def format_value(value: float, unit: str, sig: int) -> str:
+    """solver と同じ規則で数値を表示する(誤答値の整形に使う)。"""
+    return _display(value, unit, sig)
+
+
 def _is_number(v: Any) -> bool:
     return isinstance(v, (int, float)) and not isinstance(v, bool)
