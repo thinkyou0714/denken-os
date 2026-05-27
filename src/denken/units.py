@@ -11,6 +11,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel
 
 from denken.models import ProblemType, Template
@@ -41,8 +43,8 @@ class DimResult(BaseModel):
     detail: str = ""
 
 
-def _to_quantity(ureg, unit: str):
-    norm = _UNIT_ALIASES.get(unit, unit)
+def _to_quantity(ureg: Any, unit: str | None) -> Any:
+    norm = _UNIT_ALIASES.get(unit, unit) if unit else None
     if not norm:
         return 1.0 * ureg.dimensionless
     return 1.0 * ureg(norm)
@@ -74,9 +76,9 @@ def check_dimensions(template: Template) -> DimResult:
 
     import pint
 
-    ureg = pint.UnitRegistry()
+    ureg: Any = pint.UnitRegistry()
     names = {p.name for p in template.params} | set(template.expressions)
-    qty: dict[str, object] = {p.name: _to_quantity(ureg, p.unit) for p in template.params}
+    qty: dict[str, Any] = {p.name: _to_quantity(ureg, p.unit) for p in template.params}
 
     target = template.answer.expr
     closure = _dependency_closure(target, template.expressions, {p.name for p in template.params})
@@ -94,7 +96,7 @@ def check_dimensions(template: Template) -> DimResult:
 
         result = qty[target]
         expected = _to_quantity(ureg, template.answer.unit)
-        result_dim = result.dimensionality  # type: ignore[union-attr]
+        result_dim = result.dimensionality
         expected_dim = expected.dimensionality
         ok = result_dim == expected_dim
         return DimResult(

@@ -108,6 +108,7 @@ def generate(
 
     pitfalls: list[PitfallResult] = []
     if template.type == ProblemType.CALC and template.pitfalls and answer is not None:
+        assert template.answer is not None
         for pf in template.pitfalls:
             wrong = eval_expr(template, values, pf.expr)
             pitfalls.append(

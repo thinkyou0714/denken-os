@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "電験二種 類題生成エンジン (parametric problem generator with deterministic solvers)"
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
 dependencies = [
     "sympy>=1.13",
     "pydantic>=2.7",
@@ -16,7 +17,7 @@ figures = ["matplotlib>=3.8", "schemdraw>=0.19"]
 schedule = ["fsrs>=5.0"]
 pdf = ["pdfplumber>=0.11"]
 units = ["pint>=0.23"]
-dev = ["pytest>=8.0", "ruff>=0.6", "pint>=0.23"]
+dev = ["pytest>=8.0", "ruff>=0.6", "mypy>=1.10", "pint>=0.23"]
 
 [project.scripts]
 denken = "denken.cli:main"
@@ -27,6 +28,16 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+denken = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/denken"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+no_implicit_optional = true
 
 [tool.ruff]
 line-length = 100

@@ -1,0 +1,72 @@
+{
+  "id": "th_rlc_series#3",
+  "template_id": "th_rlc_series",
+  "field_id": "th-ac-rlc",
+  "type": "calc",
+  "difficulty": "applied",
+  "seed": 3,
+  "params": {
+    "V": 100,
+    "f": 50,
+    "R": 10,
+    "L": 50,
+    "C": 1000
+  },
+  "answer": {
+    "value": 6.24,
+    "unit": "A",
+    "display": "6.24 A"
+  },
+  "statement": "正弦波交流電源(実効値 100 V、周波数 50 Hz)に、抵抗 R = 10 Ω、 インダクタンス L = 50 mH、静電容量 C = 1000 µF を直列に接続した。 この回路に流れる電流の実効値 I[A] を求めよ。",
+  "figures": [
+    {
+      "path": "th_rlc_series_3_0.svg",
+      "caption": "図1 インピーダンス三角形(R, X = XL − XC, Z)",
+      "alt": "図1 インピーダンス三角形(R, X = XL − XC, Z)",
+      "kind": "impedance_triangle",
+      "role": "technical",
+      "provenance": "solver"
+    }
+  ],
+  "solution_steps": [
+    "$X_L = 2\\pi f L = 15.71$ Ω(誘導性リアクタンス)",
+    "$X_C = \\dfrac{1}{2\\pi f C} = 3.18$ Ω(容量性リアクタンス)",
+    "$X = X_L - X_C = 12.52$ Ω",
+    "$Z = \\sqrt{R^2 + X^2} = 16.03$ Ω",
+    "$I = \\dfrac{V}{Z} =$ 6.24 A"
+  ],
+  "scoring": [
+    {
+      "criterion": "XL = 2πfL, XC = 1/(2πfC) の立式",
+      "points": 4
+    },
+    {
+      "criterion": "合成リアクタンス X = XL − XC とインピーダンス Z = √(R²+X²)",
+      "points": 5
+    },
+    {
+      "criterion": "電流 I = V/Z の計算",
+      "points": 3
+    },
+    {
+      "criterion": "有効数字・単位(A)",
+      "points": 2
+    }
+  ],
+  "pitfalls": [
+    {
+      "label": "容量性リアクタンスを引き忘れ",
+      "display": "5.37 A",
+      "note": "X = XL − XC を使う"
+    },
+    {
+      "label": "リアクタンスを加算してしまう",
+      "display": "4.68 A",
+      "note": "直列では X = XL − XC(差)"
+    }
+  ],
+  "explanation": "誘導性リアクタンス XL = 2πfL、容量性リアクタンス XC = 1/(2πfC)、 合成リアクタンスは X = XL − XC である。インピーダンスは Z = √(R² + X²)、 電流は I = V/Z で求まる。本問では I = 6.24 A となる。",
+  "model_name": "stub",
+  "schema_version": 1,
+  "created_at": "2026-05-27T05:47:33.322325Z"
+}

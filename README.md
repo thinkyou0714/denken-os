@@ -81,11 +81,18 @@ tests/        solver・検証・図・スケジューラのテスト
 | M3 弱点診断 prototype | 2026-08 | not started |
 | M4 公開ベータ (無料 trial) | 2026-Q4 | not started |
 
+## ドキュメント
+
+- [アーキテクチャ](docs/architecture.md) — パイプラインとモジュール責務
+- [テンプレート作成ガイド](docs/templates.md) — YAML スキーマと記述方法
+- [設計判断ログ](docs/ideas.md) — 調査記録と根拠
+- [生成例](examples/) — 実際の出力サンプル
+- [CHANGELOG](CHANGELOG.md)
+
 ## License
 
-License は M2 段階で確定予定。候補:
-- アプリ部分 = MIT
-- 問題集データ = CC-BY-SA or 独自ライセンス (商用利用と非商用利用の切り分けを検討中)
+本エンジン(コード)は [MIT License](LICENSE)。
+問題集データの配布ライセンスは別途検討(商用/非商用の切り分け、CC-BY-SA 等を想定)。
 
 ## Contact
 

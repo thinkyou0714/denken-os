@@ -71,12 +71,12 @@ def _cmd_validate(args: argparse.Namespace) -> int:
     template = templates[args.template]
     problem = generate(template, args.seed, backend=get_backend("stub"))
     if template.type == ProblemType.CALC:
-        res = validate_calc(problem, template)
-        print(res.model_dump_json(indent=2))
-        return 0 if res.ok else 1
-    res = validate_essay(problem, template)
-    print(res.model_dump_json(indent=2))
-    return 0 if res.ok else 1
+        calc = validate_calc(problem, template)
+        print(calc.model_dump_json(indent=2))
+        return 0 if calc.ok else 1
+    essay = validate_essay(problem, template)
+    print(essay.model_dump_json(indent=2))
+    return 0 if essay.ok else 1
 
 
 def _cmd_set(args: argparse.Namespace) -> int:

@@ -306,6 +306,30 @@
 単位換算(mH→H 等)を式に直書きすると SymPy が係数へ畳み込み表示が崩れる。
 表示が重要なテンプレは `solution_template` で記号式を明示するのが定石。
 
+## 2.13 リポジトリ構造のベストプラクティス整備（2026-05-27）
+
+### 背景
+構造評価(87/100)で、減点が「公開リポジトリとしての周辺整備」に集中していた:
+LICENSE 無し、テンプレ作成ガイド無し、型チェック未導入、設計図がログのみ、生成例が未コミット。
+
+### 実装
+- **MIT LICENSE** + PEP 561 `py.typed`(配布パッケージに型情報を明示、wheel に同梱確認)。
+- **mypy** 導入: 8 件の型エラーを修正(pint の generic registry を `Any` 明示、
+  fsrs TypedDict 境界を `cast`、`AnswerSpec | None` の絞り込み、変数再代入の型衝突)。
+  `[tool.mypy]` を pyproject に追加し、CI に型チェック工程を追加。
+- **CI**: Python 3.11/3.12 マトリクス + ruff + mypy + pytest + `denken check`。
+- **ドキュメント**: `docs/architecture.md`(パイプライン/責務)、
+  `docs/templates.md`(YAML スキーマと作成手順)、`CHANGELOG.md`。
+- **examples/**: 実際の生成物(理論calc/二次calc/論説)を意図的にコミットし出力像を提示。
+
+### 根拠（ベストプラクティス）
+- 2026 の Python 標準は `src/` レイアウト + `pyproject.toml`。PEP 561 は `py.typed` で
+  型情報の有無を静的チェッカに伝える方式を規定。型付けライブラリは必須。
+
+### 参考
+- Real Python: Project Layout — https://realpython.com/ref/best-practices/project-layout/
+- python-blueprint(best-practice テンプレ) — https://github.com/johnthagen/python-blueprint
+
 ## 3. 参考文献
 - OpenAI: GPT Image 1 Model — https://developers.openai.com/api/docs/models/gpt-image-1
 - GPT Image 2 Guide (2026) — https://mindwiredai.com/2026/04/22/what-is-gpt-image-2-the-complete-breakdown-features-pricing-and-who-gets-access/
