@@ -3,7 +3,7 @@ import { SUBJECTS, SUBJECT_LABELS } from "@/domain/content/schema";
 import { MarkdownMath } from "@/components/MarkdownMath";
 
 export const metadata = {
-  title: "問題一覧 — DENKEN-OS",
+  title: "問題一覧 — DNKN-OS",
 };
 
 export default function ProblemsPage() {

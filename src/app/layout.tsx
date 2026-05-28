@@ -5,14 +5,14 @@ import "./globals.css";
 import { StreakChip } from "@/components/StreakChip";
 
 export const metadata: Metadata = {
-  title: "DENKEN-OS — 電験 学習 OS",
+  title: "DNKN-OS — 電験 学習 OS",
   description:
     "電験(電気主任技術者試験)を、FSRS による間隔反復学習で再現性のある合格プロセスに体系化する学習 OS。",
-  applicationName: "DENKEN-OS",
+  applicationName: "DNKN-OS",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "DENKEN-OS",
+    title: "DNKN-OS",
   },
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
           <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
             <div className="flex items-center">
               <Link href="/" className="text-lg font-bold tracking-tight">
-                DENKEN<span className="text-indigo-600">-OS</span>
+                DNKN<span className="text-indigo-600">-OS</span>
               </Link>
               <StreakChip />
             </div>

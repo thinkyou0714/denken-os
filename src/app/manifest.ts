@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "DENKEN-OS — 電験 学習 OS",
-    short_name: "DENKEN-OS",
+    name: "DNKN-OS — 電験 学習 OS",
+    short_name: "DNKN-OS",
     description:
       "FSRS による間隔反復で電験合格を再現性のある学習プロセスに体系化する学習 OS。",
     start_url: "/",
