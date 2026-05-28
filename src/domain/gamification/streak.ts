@@ -52,7 +52,7 @@ function longestRun(active: Set<string>): number {
 }
 
 function daysSinceLast(active: Set<string>, today: Date): number {
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < 36_500; i++) {
     if (active.has(dayKeyNDaysAgo(today, i))) return i;
   }
   return -1;
@@ -80,8 +80,9 @@ export function computeStreak(
   let cursor = 0;
   let firstActiveFound = false;
 
-  // 過去 400 日まで遡る安全境界つきウォーク。
-  while (cursor < 400) {
+  // 安全境界つきウォーク(無限ループ防御。実用上の上限としては超長期学習者を想定して 100 年)。
+  const MAX_LOOKBACK = 36_500;
+  while (cursor < MAX_LOOKBACK) {
     const key = dayKeyNDaysAgo(today, cursor);
     if (active.has(key)) {
       current += 1;
