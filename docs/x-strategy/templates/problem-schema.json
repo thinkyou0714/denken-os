@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DENKEN-OS Problem",
+  "description": "問題データの共通スキーマ。アプリの出題・検算・出典管理と『今日の一問』発信を一元化する。",
+  "type": "object",
+  "required": ["id", "subject", "topic", "difficulty", "statement", "answer", "solution", "validation", "source"],
+  "$comment": "正解が選択肢のいずれかと一致する制約(multiple_choice)は、他フィールド参照のため標準JSON Schema draft-07では表現できない。03-quality-pipeline の投稿前チェックリストと生成ツール側で担保する。",
+  "properties": {
+    "id": { "type": "string", "description": "連番ID 例: T-0127" },
+    "exam": { "type": "string", "enum": ["denken2_primary", "denken2_secondary", "denken3"], "description": "対象試験区分" },
+    "subject": { "type": "string", "enum": ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] },
+    "topic": { "type": "string", "description": "論点 例: 三相交流電力" },
+    "format": { "type": "string", "enum": ["multiple_choice", "numeric", "descriptive"], "description": "記述(descriptive)は二次の主戦場" },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5, "description": "★1-5。実測正答率で補正する" },
+    "params": {
+      "type": "object",
+      "description": "係数いじりの可変パラメータ。realistic_range 内で、答えが綺麗になる値のみ採用",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "number" },
+          "unit": { "type": "string" },
+          "realistic_range": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+        }
+      }
+    },
+    "statement": { "type": "string", "description": "問題文" },
+    "figure": { "type": "string", "description": "図/回路図のパスまたは説明(任意)" },
+    "choices": { "type": "array", "items": { "type": "string" }, "description": "選択肢。誤りが『成立する引っ掛け』であること。multiple_choice では必須かつ2件以上" },
+    "answer": { "type": "string", "description": "正解(綺麗な値・一意・有限であること)。multiple_choice では choices のいずれかと一致" },
+    "solution": { "type": "array", "items": { "type": "string" }, "description": "解法ステップ(自作。引き写し禁止)" },
+    "validation": {
+      "type": "object",
+      "required": ["solver_checked", "human_checked", "clean_answer", "physically_valid"],
+      "description": "03-quality-pipeline の検算結果。全 true でないと validated/published にできない",
+      "properties": {
+        "solver_checked": { "type": "boolean", "description": "ソルバーで再現し答えが一致" },
+        "human_checked": { "type": "boolean", "description": "人が手で解き直した" },
+        "clean_answer": { "type": "boolean", "description": "答えが綺麗な値" },
+        "physically_valid": { "type": "boolean", "description": "力率≦1 等、物理的に成立" },
+        "supervisor_checked": { "type": "boolean", "description": "合格者監修(任意・重要論点は必須)" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "閾値未満は出題しない" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["type"],
+      "description": "04-compliance に基づく出典。発信・アプリ双方で必ず表示。original 以外は citation 必須",
+      "properties": {
+        "type": { "type": "string", "enum": ["original", "past_exam_modified", "past_exam_quoted"], "description": "original=完全オリジナル(主軸推奨)" },
+        "citation": { "type": "string", "description": "例: 令和○年度 第二種電気主任技術者試験 一次 機械（一部改変・改題）" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "enum": ["past_exam_modified", "past_exam_quoted"] } } },
+          "then": { "required": ["citation"] }
+        }
+      ]
+    },
+    "stats": {
+      "type": "object",
+      "description": "発信で集まる集合知。06 の誤答データ=堀 / 02 の難易度補正に使う",
+      "properties": {
+        "answered": { "type": "integer", "minimum": 0 },
+        "correct_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "common_wrong_choice": { "type": "string" }
+      }
+    },
+    "status": { "type": "string", "enum": ["draft", "validated", "published", "retracted"], "description": "validated/published は検証4項目が全 true のときのみ。誤り発覚時は retracted" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["format"],
+        "properties": { "format": { "const": "multiple_choice" } }
+      },
+      "then": {
+        "required": ["choices"],
+        "properties": { "choices": { "minItems": 2 } }
+      }
+    },
+    {
+      "if": {
+        "required": ["status"],
+        "properties": { "status": { "enum": ["validated", "published"] } }
+      },
+      "then": {
+        "required": ["validation"],
+        "properties": {
+          "validation": {
+            "required": ["solver_checked", "human_checked", "clean_answer", "physically_valid"],
+            "properties": {
+              "solver_checked": { "const": true },
+              "human_checked": { "const": true },
+              "clean_answer": { "const": true },
+              "physically_valid": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
