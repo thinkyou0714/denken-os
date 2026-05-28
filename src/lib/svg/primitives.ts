@@ -43,14 +43,27 @@ function textHalo(
   return `<text x="${x}" y="${y}" font-family="${FONT}" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}"${italic} paint-order="stroke fill" stroke="${HALO}" stroke-width="3" stroke-linejoin="round">${content}</text>`;
 }
 
-/** SVG ルート要素を組み立てる。content は子要素の文字列の可変長引数。 */
+/** インライン SVG の ID 衝突回避用シーケンス(同一ページに複数の SVG があっても安全)。 */
+let svgIdSeq = 0;
+function nextNs(): string {
+  svgIdSeq += 1;
+  return `s${svgIdSeq.toString(36)}`;
+}
+
+/**
+ * SVG ルート要素。
+ * - role + aria-labelledby + aria-describedby で screen reader 対応
+ * - <title> に短い意図、<desc> に詳細説明
+ * - ID は name space で衝突回避 (項目 95)
+ */
 export function svg(
   width: number,
   height: number,
   title: string,
   ...content: string[]
 ): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="t" style="max-width:100%;height:auto"><title id="t">${title}</title><defs><marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="${STROKE}"/></marker><marker id="ahb" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="${BLUE}"/></marker></defs>${content.join("")}</svg>`;
+  const ns = nextNs();
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${ns}t" aria-describedby="${ns}d" style="max-width:100%;height:auto"><title id="${ns}t">${title}</title><desc id="${ns}d">${title}の回路図(DNKN-OS 学習教材)</desc><defs><marker id="${ns}ah" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="${STROKE}"/></marker><marker id="${ns}ahb" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="${BLUE}"/></marker></defs>${content.join("").replaceAll("url(#ah)", `url(#${ns}ah)`).replaceAll("url(#ahb)", `url(#${ns}ahb)`)}</svg>`;
 }
 
 /** 折れ線。任意数の (x,y) 頂点を順に結ぶ。線幅 2px 統一。 */
@@ -285,4 +298,100 @@ export function arrow(
   const marker = isBlue ? "ahb" : "ah";
   const dash = opts.dashed ? ` stroke-dasharray="4 3"` : "";
   return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="2.5" marker-end="url(#${marker})"${dash}/>`;
+}
+
+/**
+ * 接地(アース)記号。JIS C 0617 準拠。
+ * 3 段の水平短線が下に向かって短くなる。
+ * (x,y) は接続点(垂直配線の終端)。
+ */
+export function ground(x: number, y: number): string {
+  return `<g><line x1="${x - 14}" y1="${y}" x2="${x + 14}" y2="${y}" stroke="${STROKE}" stroke-width="2.5"/><line x1="${x - 9}" y1="${y + 5}" x2="${x + 9}" y2="${y + 5}" stroke="${STROKE}" stroke-width="2"/><line x1="${x - 4}" y1="${y + 10}" x2="${x + 4}" y2="${y + 10}" stroke="${STROKE}" stroke-width="2"/></g>`;
+}
+
+/**
+ * 半円ジャンパ(交差非接続)。
+ * 水平線が垂直線をまたぐとき、水平線が垂直線の上を半円アーチで越える。
+ * (x,y) は交差中心、`bridge` で線の向きを指定。
+ */
+export function crossover(
+  x: number,
+  y: number,
+  opts: { bridge?: "horizontal" | "vertical"; r?: number } = {},
+): string {
+  const r = opts.r ?? 7;
+  const dir = opts.bridge ?? "horizontal";
+  if (dir === "horizontal") {
+    return `<path d="M ${x - r} ${y} A ${r} ${r} 0 0 1 ${x + r} ${y}" fill="none" stroke="${STROKE}" stroke-width="2"/>`;
+  }
+  return `<path d="M ${x} ${y - r} A ${r} ${r} 0 0 1 ${x} ${y + r}" fill="none" stroke="${STROKE}" stroke-width="2"/>`;
+}
+
+/**
+ * AC 電源(円内に正弦波シンボル)。JIS C 0617 準拠。
+ * (x,y) は円の中心。
+ */
+export function acSource(x: number, y: number, label: string): string {
+  const wave = `<path d="M ${x - 8} ${y} q 4 -7 8 0 q 4 7 8 0" fill="none" stroke="${STROKE}" stroke-width="1.8"/>`;
+  return `<g><circle cx="${x}" cy="${y}" r="16" fill="#fff" stroke="${STROKE}" stroke-width="2"/>${wave}${textHalo(x - 22, y + 5, label, { anchor: "end", color: BLUE, weight: 800, italic: true, size: 15 })}</g>`;
+}
+
+/** 電圧ベクトル/降下を示す両端三角矢印。+極性側の終点に "+", -側に "-"。 */
+export function voltageArrow(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  label: string,
+  opts: { color?: "black" | "blue" } = {},
+): string {
+  const isBlue = opts.color !== "black";
+  const c = isBlue ? BLUE : STROKE;
+  const marker = isBlue ? "ahb" : "ah";
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
+  // 線の方向に対して垂直方向へ12pxずらしてラベル
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy / len;
+  const ny = dx / len;
+  const lx = midX + nx * 14;
+  const ly = midY + ny * 14;
+  return `<g><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="2" marker-end="url(#${marker})"/>${textHalo(lx, ly + 5, label, { color: c, weight: 800, italic: true, size: 14 })}</g>`;
+}
+
+/** 補助線(寸法線・基準線)。破線で薄めの黒。 */
+export function dashedWire(...points: Array<[number, number]>): string {
+  const pts = points.map(([x, y]) => `${x},${y}`).join(" ");
+  return `<polyline points="${pts}" fill="none" stroke="${STROKE}" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>`;
+}
+
+/**
+ * 寸法線(2点間の距離を矢印つき線で表示)。
+ * 機械系問題で寸法表示が必要なとき。
+ */
+export function dimension(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  label: string,
+): string {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy / len;
+  const ny = dx / len;
+  return `<g><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${STROKE}" stroke-width="1.5" marker-start="url(#ah)" marker-end="url(#ah)"/>${textHalo((x1 + x2) / 2 + nx * 10, (y1 + y2) / 2 + ny * 10 + 5, label, { weight: 700, size: 13 })}</g>`;
+}
+
+/** 未知量(?マーク)を黄色で囲んで強調。教育的注意喚起。 */
+export function unknownHighlight(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+): string {
+  return `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 2" rx="4"/>`;
 }

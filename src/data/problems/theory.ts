@@ -12,6 +12,7 @@ import {
   arrow,
   rightAngle,
   arcAngle,
+  unknownHighlight,
 } from "@/lib/svg/primitives";
 
 export const theoryProblems: Problem[] = [
@@ -260,6 +261,8 @@ export const theoryProblems: Problem[] = [
       label(260, 248, "D", { color: "#475569", weight: 700, size: 13 }),
       wire([260, 220], [310, 220]),
       resistor(350, 220, "R₄=?", { labelPos: "below" }),
+      // 未知量強調(教育的)
+      unknownHighlight(350, 220, 74, 32),
       wire([390, 220], [440, 220]),
       // 左右の縦レール (A レール, C レール)
       wire([80, 80], [80, 220]),
