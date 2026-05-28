@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { ProgressStore } from "@/domain/progress/store";
 import {
   localStorageBackend,
@@ -10,25 +10,35 @@ import type { Grade4 } from "@/domain/srs/scheduler";
 
 const STORAGE_KEY = "denken-os/progress/v1";
 
+function createStore(): ProgressStore {
+  const backend =
+    typeof window !== "undefined"
+      ? localStorageBackend(STORAGE_KEY)
+      : memoryBackend();
+  return new ProgressStore(backend);
+}
+
+/**
+ * SSR ではなくクライアントで描画が確定したか(ハイドレーション完了)を返す。
+ * サーバーと初回クライアント描画の不一致を避けるための定番パターン。
+ */
+function useIsHydrated(): boolean {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 /**
  * クライアント側で ProgressStore を保持するフック。
  * localStorage は client でのみ参照できるため、`mounted` が true になってから
- * 実データを描画する(SSR とのハイドレーション不一致を防ぐ)。
+ * 実データを描画する。
  */
 export function useProgress() {
-  const storeRef = useRef<ProgressStore | null>(null);
-  if (storeRef.current === null) {
-    const backend =
-      typeof window !== "undefined"
-        ? localStorageBackend(STORAGE_KEY)
-        : memoryBackend();
-    storeRef.current = new ProgressStore(backend);
-  }
-  const store = storeRef.current;
-
+  const [store] = useState(createStore);
   const [, setVersion] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const mounted = useIsHydrated();
 
   const bump = useCallback(() => setVersion((v) => v + 1), []);
 

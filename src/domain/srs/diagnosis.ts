@@ -20,6 +20,15 @@ export interface Diagnosis {
   totalDue: number;
 }
 
+interface Accumulator {
+  total: number;
+  seen: number;
+  dueCount: number;
+  reviews: number;
+  correct: number;
+  rSum: number;
+}
+
 /**
  * 習熟度スコア。正答率・記憶保持率・網羅率を重み付けした合成指標。
  * 未着手科目は 0 に近づき、復習が定着するほど 100 に近づく。
@@ -33,56 +42,64 @@ export function diagnose(
   store: ProgressStore,
   now: Date = new Date(),
 ): Diagnosis {
-  const stats = SUBJECTS.map<SubjectStat>((subject) => {
-    const subjectProblems = problems.filter((p) => p.subject === subject);
-    const total = subjectProblems.length;
+  const acc = new Map<Subject, Accumulator>(
+    SUBJECTS.map((s) => [
+      s,
+      { total: 0, seen: 0, dueCount: 0, reviews: 0, correct: 0, rSum: 0 },
+    ]),
+  );
+  const subjectOf = new Map<string, Subject>();
 
-    let seen = 0;
-    let dueCount = 0;
-    let rSum = 0;
-
-    for (const p of subjectProblems) {
-      const card = store.getCard(p.id);
-      if (card) {
-        seen += 1;
-        rSum += retrievability(card, now);
-      }
-      if (isDue(card, now)) dueCount += 1;
+  // 問題を 1 度だけ走査(カード状態の集計)。
+  for (const p of problems) {
+    subjectOf.set(p.id, p.subject);
+    const a = acc.get(p.subject)!;
+    a.total += 1;
+    const card = store.getCard(p.id);
+    if (card) {
+      a.seen += 1;
+      a.rSum += retrievability(card, now);
     }
+    if (isDue(card, now)) a.dueCount += 1;
+  }
 
-    const logs = store.logs().filter((l) => {
-      const sp = subjectProblems.find((p) => p.id === l.problemId);
-      return sp !== undefined;
-    });
-    const reviews = logs.length;
-    const correct = logs.filter((l) => l.correct).length;
-    const accuracy = reviews > 0 ? correct / reviews : 0;
-    const avgRetrievability = seen > 0 ? rSum / seen : 0;
-    const coverage = total > 0 ? seen / total : 0;
+  // ログを 1 度だけ走査(正答率の集計)。
+  for (const log of store.logs()) {
+    const subject = subjectOf.get(log.problemId);
+    if (!subject) continue; // 既に削除された問題のログは無視
+    const a = acc.get(subject)!;
+    a.reviews += 1;
+    if (log.correct) a.correct += 1;
+  }
 
+  const subjects = SUBJECTS.map<SubjectStat>((subject) => {
+    const a = acc.get(subject)!;
+    const accuracy = a.reviews > 0 ? a.correct / a.reviews : 0;
+    const avgRetrievability = a.seen > 0 ? a.rSum / a.seen : 0;
+    const coverage = a.total > 0 ? a.seen / a.total : 0;
     return {
       subject,
-      total,
-      seen,
-      dueCount,
-      reviews,
-      correct,
+      total: a.total,
+      seen: a.seen,
+      dueCount: a.dueCount,
+      reviews: a.reviews,
+      correct: a.correct,
       accuracy,
       avgRetrievability,
       mastery: masteryScore(accuracy, avgRetrievability, coverage),
     };
   });
 
-  const started = stats.filter((s) => s.reviews > 0);
+  const started = subjects.filter((s) => s.reviews > 0);
   const weakest =
     started.length > 0
       ? started.reduce((a, b) => (b.mastery < a.mastery ? b : a)).subject
       : null;
 
   return {
-    subjects: stats,
+    subjects,
     weakest,
-    totalDue: stats.reduce((sum, s) => sum + s.dueCount, 0),
+    totalDue: subjects.reduce((sum, s) => sum + s.dueCount, 0),
   };
 }
 

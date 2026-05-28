@@ -20,9 +20,9 @@ const RATING_MAP: Record<Grade4, Grade> = {
 
 export const GRADE_LABELS: Record<Grade4, string> = {
   again: "もう一度",
-  hard: "難しい",
-  good: "正解",
-  easy: "簡単",
+  hard: "難しかった",
+  good: "できた",
+  easy: "簡単だった",
 };
 
 // 既定パラメータは大規模データ由来で初日から妥当に動作する(FSRS-5)。
