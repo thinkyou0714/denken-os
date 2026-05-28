@@ -4,10 +4,44 @@
 
 ## Status
 
-**Pre-alpha — 構想中** (2026-05-19)
+**Alpha — ローカルファースト中核を実装** (2026-05-28)
 
-このリポジトリは現在スケルトン段階です。実装はまだ開始していません。
-進捗を追いたい方は Watch / Star してください。
+外部サービス(Supabase / Stripe 等)なしで完結する学習中核を実装済みです。
+
+- FSRS-5 による間隔反復スケジューリングと弱点科目の自動診断
+- 電験三種 4 科目(理論 / 電力 / 機械 / 法規)のサンプル問題 10 問(KaTeX 数式対応)
+- ブラウザ単体で動作(進捗は localStorage に保存)。学習・ダッシュボード・問題一覧の 3 画面
+- 永続化は adapter 化(`StorageBackend`)してあり、将来 Supabase へ差し替え可能
+
+## Getting started
+
+```bash
+pnpm install
+pnpm dev        # http://localhost:3000
+pnpm test       # ドメインロジックの単体テスト (Vitest)
+pnpm build      # 本番ビルド
+```
+
+## Architecture
+
+学習ロジックはフレームワーク非依存の `src/domain/` に集約し、UI / 永続化と分離している。
+
+```
+src/
+  domain/
+    content/schema.ts     Zod による問題スキーマ
+    srs/scheduler.ts      ts-fsrs (FSRS-5) ラッパ
+    srs/diagnosis.ts      弱点診断 + 復習キュー生成
+    progress/store.ts     進捗ストア(StorageBackend 非依存)
+    storage/backend.ts    永続化 adapter (memory / localStorage / 将来 Supabase)
+  data/problems/          科目別シード問題 (起動時に Zod 検証)
+  app/                    Next.js App Router (/, /study, /problems)
+  components/             MarkdownMath (Markdown + KaTeX)
+tests/                    Vitest によるドメイン検証
+```
+
+なぜ FSRS か: SM-2(Anki 旧来方式)比で同じ定着率を得るのに復習回数が 20〜30% 少なく、
+学習データが増えるほど個人の忘却曲線に最適化できる現行のベストプラクティスのため。
 
 ## Vision
 
@@ -32,11 +66,11 @@
 
 | Milestone | Target | Status |
 |---|---|---|
-| M0 README + vision | 2026-05 | このコミット |
-| M1 過去問 1 年分を Obsidian markdown 化 | 2026-06 | not started |
-| M2 Next.js skeleton + Supabase schema | 2026-07 | not started |
-| M3 弱点診断 prototype | 2026-08 | not started |
-| M4 公開ベータ (無料 trial) | 2026-Q4 | not started |
+| M0 README + vision | 2026-05 | done |
+| M1 学習中核 (FSRS + スキーマ + サンプル問題 + 3 画面) | 2026-06 | **done (local-first)** |
+| M2 Supabase schema + 認証で進捗をクラウド同期 | 2026-07 | not started |
+| M3 弱点診断の高度化 + Claude API による問題自動生成 | 2026-08 | prototype (診断は実装済) |
+| M4 公開ベータ (無料 trial) + Stripe | 2026-Q4 | not started |
 
 ## License
 

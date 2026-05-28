@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* KaTeX のブロック数式が横にあふれた場合にスクロールさせる */
+.markdown .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+.markdown p {
+  @apply leading-relaxed;
+}
+
+.markdown p + p {
+  @apply mt-3;
+}
+
+.markdown strong {
+  @apply font-semibold text-slate-900;
+}
