@@ -1,4 +1,12 @@
 import type { Problem } from "@/domain/content/schema";
+import {
+  svg,
+  wire,
+  node,
+  resistor,
+  label,
+  annotation,
+} from "@/lib/svg/primitives";
 
 export const theoryProblems: Problem[] = [
   {
@@ -158,5 +166,70 @@ export const theoryProblems: Problem[] = [
     explanation:
       "インピーダンス三角形において、力率は隣辺/斜辺。\n\n$$\\cos\\theta = \\frac{R}{Z} = \\frac{3}{5} = 0.6$$",
     tags: ["力率", "インピーダンス三角形", "ベクトル図"],
+  },
+  {
+    id: "theory-012",
+    subject: "theory",
+    topic: "ホイートストンブリッジ",
+    difficulty: 3,
+    source: "オリジナル(本試験レベル)",
+    figureSvg: svg(
+      460,
+      290,
+      "ホイートストンブリッジ回路",
+      // 上辺: A(60,80) → R1 → B(230,80) → R2 → C(400,80)
+      wire([60, 80], [110, 80]),
+      resistor(140, 80, "R₁=100Ω"),
+      wire([170, 80], [230, 80]),
+      node(230, 80),
+      wire([230, 80], [290, 80]),
+      resistor(320, 80, "R₂=200Ω"),
+      wire([350, 80], [400, 80]),
+      // 右辺: 縦線
+      wire([400, 80], [400, 220]),
+      // 下辺: A'(60,220) → R3 → D(230,220) → R4 → C'(400,220)
+      wire([60, 220], [110, 220]),
+      resistor(140, 220, "R₃=150Ω"),
+      wire([170, 220], [230, 220]),
+      node(230, 220),
+      wire([230, 220], [290, 220]),
+      resistor(320, 220, "R₄=?", { labelOffset: 6 }),
+      wire([350, 220], [400, 220]),
+      // 左辺: A → A' (電源 E を表示)
+      wire([60, 80], [60, 220]),
+      // 検流計ブリッジ: B → G → D
+      wire([230, 80], [230, 124]),
+      `<circle cx="230" cy="148" r="18" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="lbl" x="230" y="153" text-anchor="middle" font-size="14" fill="#0f172a">G</text>`,
+      wire([230, 172], [230, 220]),
+      // 電源 E の表示(左の外側)
+      wire([60, 150], [30, 150]),
+      `<circle cx="20" cy="150" r="10" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="lbl" x="20" y="155" text-anchor="middle" font-size="14" fill="#1d4ed8" font-weight="600">E</text>`,
+      // ノードラベル
+      label(60, 70, "A", { anchor: "start", size: 12, color: "#475569" }),
+      label(404, 70, "C", { anchor: "start", size: 12, color: "#475569" }),
+      label(214, 76, "B", { anchor: "end", size: 12, color: "#475569" }),
+      label(214, 232, "D", { anchor: "end", size: 12, color: "#475569" }),
+    ),
+    question:
+      "図のホイートストンブリッジ回路で、検流計 $G$ が振れない(平衡状態)とき、抵抗 $R_4$ の値はいくらか。ただし $R_1=100\\,\\Omega$、$R_2=200\\,\\Omega$、$R_3=150\\,\\Omega$ とする。",
+    choices: ["100 Ω", "200 Ω", "300 Ω", "450 Ω", "600 Ω"],
+    answerIndex: 2,
+    explanation:
+      "ブリッジの平衡条件は対辺の積が等しいこと:\n\n$$R_1 R_4 = R_2 R_3$$\n\nしたがって\n\n$$R_4 = \\frac{R_2 R_3}{R_1} = \\frac{200 \\times 150}{100} = 300\\,\\Omega$$\n\n平衡状態では検流計 $G$ には電流が流れず、4 つの抵抗値の比だけで決まる。",
+    tags: ["ホイートストンブリッジ", "平衡条件", "回路図"],
+  },
+  {
+    id: "theory-013",
+    subject: "theory",
+    topic: "平行平板コンデンサ",
+    difficulty: 3,
+    source: "オリジナル(本試験レベル)",
+    question:
+      "極板面積 $S = 100\\,\\mathrm{cm}^2$、極板間隔 $d = 1\\,\\mathrm{mm}$ の平行平板コンデンサに比誘電率 $\\varepsilon_r = 4$ の誘電体を満たした。真空の誘電率を $\\varepsilon_0 = 8.85 \\times 10^{-12}\\,\\mathrm{F/m}$ とする。静電容量 $C$ に最も近い値はどれか。",
+    choices: ["88.5 pF", "177 pF", "354 pF", "708 pF", "1416 pF"],
+    answerIndex: 2,
+    explanation:
+      "平行平板コンデンサの静電容量は\n\n$$C = \\varepsilon_0 \\varepsilon_r \\frac{S}{d}$$\n\n$S = 100\\,\\mathrm{cm}^2 = 1.0 \\times 10^{-2}\\,\\mathrm{m}^2$、$d = 1.0 \\times 10^{-3}\\,\\mathrm{m}$ を代入すると\n\n$$C = 8.85 \\times 10^{-12} \\times 4 \\times \\frac{10^{-2}}{10^{-3}} = 3.54 \\times 10^{-10}\\,\\mathrm{F} \\approx 354\\,\\mathrm{pF}$$\n\n単位換算と桁の取り扱いに注意。",
+    tags: ["コンデンサ", "誘電体", "静電容量"],
   },
 ];

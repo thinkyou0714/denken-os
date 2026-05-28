@@ -1,4 +1,12 @@
 import type { Problem } from "@/domain/content/schema";
+import {
+  svg,
+  wire,
+  node,
+  label,
+  annotation,
+  currentArrow,
+} from "@/lib/svg/primitives";
 
 export const powerProblems: Problem[] = [
   {
@@ -149,5 +157,63 @@ export const powerProblems: Problem[] = [
     explanation:
       "Y 結線では **線電流 = 相電流**($I_l = I_p$)。相電流は\n\n$$I_p = \\frac{V_p}{Z} = \\frac{100}{10} = 10\\,\\mathrm{A}$$\n\nなお線間電圧と相電圧の関係は $V_l = \\sqrt{3}\\,V_p$。",
     tags: ["Y結線", "三相", "結線図"],
+  },
+  {
+    id: "power-011",
+    subject: "power",
+    topic: "力率改善コンデンサ",
+    difficulty: 4,
+    source: "オリジナル(本試験レベル)",
+    question:
+      "皮相電力 $S = 10\\,\\mathrm{kVA}$、力率 $\\cos\\theta_1 = 0.8$(遅れ)の単相負荷がある。これを力率 $1.0$ に改善するために並列接続する進相コンデンサの容量 $Q_C$ [kvar] はいくらか。",
+    choices: ["2 kvar", "4 kvar", "6 kvar", "8 kvar", "10 kvar"],
+    answerIndex: 2,
+    explanation:
+      "改善前の有効電力と無効電力は\n\n$$P = S \\cos\\theta_1 = 10 \\times 0.8 = 8\\,\\mathrm{kW}$$\n\n$$Q_1 = S \\sin\\theta_1 = 10 \\times 0.6 = 6\\,\\mathrm{kvar}$$\n\n力率 1.0 に改善するには無効電力をゼロにする必要があるため、コンデンサで負荷の遅れ無効電力をちょうど打ち消す。\n\n$$Q_C = Q_1 = 6\\,\\mathrm{kvar}$$",
+    tags: ["力率改善", "進相コンデンサ", "無効電力"],
+  },
+  {
+    id: "power-012",
+    subject: "power",
+    topic: "単相3線式配電",
+    difficulty: 3,
+    source: "オリジナル(本試験レベル)",
+    figureSvg: svg(
+      480,
+      260,
+      "単相 3 線式配電線路",
+      // 3 horizontal rails (L1, N, L2) from source (left) to loads (right)
+      wire([60, 60], [400, 60]), // L1
+      wire([60, 130], [400, 130]), // N (中性線)
+      wire([60, 200], [400, 200]), // L2
+      // Source markers (left): small circles
+      `<circle cx="50" cy="60" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
+      `<circle cx="50" cy="130" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
+      `<circle cx="50" cy="200" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
+      label(34, 64, "L₁", { anchor: "end", size: 12, color: "#475569" }),
+      label(34, 134, "N", { anchor: "end", size: 12, color: "#475569" }),
+      label(34, 204, "L₂", { anchor: "end", size: 12, color: "#475569" }),
+      // Load 1: between L1 and N (vertical resistor box)
+      wire([300, 60], [300, 130]),
+      `<rect x="280" y="78" width="40" height="34" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
+      label(300, 100, "30 A 負荷"),
+      // Load 2: between N and L2
+      wire([400, 130], [400, 200]),
+      `<rect x="380" y="148" width="40" height="34" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
+      label(400, 170, "20 A 負荷"),
+      // Current arrows on rails
+      currentArrow(160, 60, "I₁=30A", { dir: "right" }),
+      currentArrow(160, 200, "I₂=20A", { dir: "right", labelDy: 18 }),
+      currentArrow(200, 130, "I_N=?", { dir: "right" }),
+      // 中性線 annotation
+      annotation(340, 122, "中性線", { anchor: "middle" }),
+    ),
+    question:
+      "図の単相 3 線式配電線路において、L₁-N 間の負荷電流 $I_1 = 30\\,\\mathrm{A}$、N-L₂ 間の負荷電流 $I_2 = 20\\,\\mathrm{A}$(いずれも力率 1.0)である。中性線に流れる電流 $I_N$ の大きさはいくらか。",
+    choices: ["0 A", "5 A", "10 A", "20 A", "50 A"],
+    answerIndex: 2,
+    explanation:
+      "単相 3 線式では、上下の負荷電流が中性線で打ち消される。\n\n$$I_N = |I_1 - I_2| = |30 - 20| = 10\\,\\mathrm{A}$$\n\n両負荷が平衡している(=等しい)とき中性線電流はゼロになるのが理想。負荷の不平衡があるほど中性線に大きな電流が流れる点は重要。",
+    tags: ["単相3線式", "中性線", "配電", "不平衡"],
   },
 ];

@@ -116,4 +116,44 @@ export const machineryProblems: Problem[] = [
       "蛍光灯は負性抵抗特性を持つため安定器が必須。スターター式では、回路遮断時にチョークコイルが誘導起電力(キック電圧)を発生させ放電を開始させ、点灯後はリアクタンスとして電流を制限する。",
     tags: ["蛍光灯", "安定器"],
   },
+  {
+    id: "machinery-009",
+    subject: "machinery",
+    topic: "誘導電動機の出力計算",
+    difficulty: 3,
+    source: "オリジナル(本試験レベル)",
+    question:
+      "三相誘導電動機の二次入力(回転子入力)が $P_2 = 5.0\\,\\mathrm{kW}$、滑り $s = 0.04$ で運転している。機械的出力 $P_m$ [kW] と二次銅損 $P_{c2}$ [kW] の組合せとして最も近いのはどれか。",
+    choices: [
+      "$P_m = 5.0$, $P_{c2} = 0.0$",
+      "$P_m = 4.8$, $P_{c2} = 0.2$",
+      "$P_m = 4.5$, $P_{c2} = 0.5$",
+      "$P_m = 4.0$, $P_{c2} = 1.0$",
+      "$P_m = 0.2$, $P_{c2} = 4.8$",
+    ],
+    answerIndex: 1,
+    explanation:
+      "二次入力 $P_2$ は機械的出力 $P_m$ と二次銅損 $P_{c2}$ に分配され、その配分は滑りで決まる。\n\n$$P_{c2} = s \\cdot P_2 = 0.04 \\times 5.0 = 0.2\\,\\mathrm{kW}$$\n\n$$P_m = (1 - s) P_2 = 0.96 \\times 5.0 = 4.8\\,\\mathrm{kW}$$\n\n滑りが小さいほど効率が高く、入力のほとんどが機械的出力になる。",
+    tags: ["誘導電動機", "滑り", "出力配分"],
+  },
+  {
+    id: "machinery-010",
+    subject: "machinery",
+    topic: "直流分巻電動機の速度",
+    difficulty: 4,
+    source: "オリジナル(本試験レベル)",
+    question:
+      "直流分巻電動機において、端子電圧 $V = 220\\,\\mathrm{V}$、電機子抵抗 $R_a = 0.5\\,\\Omega$、界磁磁束は一定とする。無負荷時(電機子電流 $\\approx 0$)の回転速度が $1500\\,\\mathrm{min^{-1}}$ のとき、電機子電流が $I_a = 30\\,\\mathrm{A}$ となる負荷をかけたときの回転速度に最も近い値はどれか。",
+    choices: [
+      "1300 min⁻¹",
+      "1400 min⁻¹",
+      "1450 min⁻¹",
+      "1480 min⁻¹",
+      "1500 min⁻¹",
+    ],
+    answerIndex: 1,
+    explanation:
+      "界磁磁束が一定のとき、回転速度は逆起電力 $E$ に比例する($N \\propto E$)。\n\n無負荷: $E_0 \\approx V = 220\\,\\mathrm{V}$\n\n負荷時: $E = V - I_a R_a = 220 - 30 \\times 0.5 = 205\\,\\mathrm{V}$\n\nしたがって\n\n$$N = N_0 \\times \\frac{E}{E_0} = 1500 \\times \\frac{205}{220} \\approx 1398\\,\\mathrm{min^{-1}} \\approx 1400\\,\\mathrm{min^{-1}}$$",
+    tags: ["直流分巻電動機", "逆起電力", "回転速度"],
+  },
 ];
