@@ -168,15 +168,15 @@ export function StudySession({
       </div>
 
       <div
-        className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100"
+        className="h-2 w-full overflow-hidden rounded-full bg-slate-200"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={queue.length}
         aria-valuenow={index}
       >
         <div
-          className="h-full rounded-full bg-indigo-500 transition-all"
-          style={{ width: `${(index / queue.length) * 100}%` }}
+          className="h-full rounded-full bg-indigo-600 transition-all"
+          style={{ width: `${Math.max(2, (index / queue.length) * 100)}%` }}
         />
       </div>
 
@@ -186,8 +186,8 @@ export function StudySession({
       </div>
 
       {confidenceTracking && !revealed && (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="mb-2 text-xs text-slate-500">
+        <div className="rounded-lg border border-slate-300 bg-slate-50 p-3">
+          <p className="mb-2 text-xs font-medium text-slate-600">
             解答前の自信度を選んでください(メタ認知の校正に使います、任意)
           </p>
           <div className="flex gap-2">
@@ -195,10 +195,10 @@ export function StudySession({
               <button
                 key={c}
                 onClick={() => setConfidence(c)}
-                className={`flex-1 rounded-md border px-3 py-1.5 text-xs font-medium transition ${
+                className={`flex-1 rounded-md border-2 px-3 py-2 text-sm font-semibold transition ${
                   confidence === c
-                    ? "border-indigo-400 bg-indigo-50 text-indigo-700"
-                    : "border-slate-200 bg-white text-slate-600 hover:border-indigo-300"
+                    ? "border-indigo-500 bg-indigo-50 text-indigo-800"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/50"
                 }`}
               >
                 {CONFIDENCE_LABELS[c]}
@@ -210,8 +210,8 @@ export function StudySession({
 
       <div className="space-y-2">
         {!revealed && (
-          <p className="text-xs text-slate-400">
-            数字キー(1〜{problem.choices.length})でも選べます
+          <p className="text-xs font-medium text-slate-500">
+            💡 数字キー(1〜{problem.choices.length})でも選択できます
           </p>
         )}
         {problem.choices.map((choice, i) => {
@@ -229,20 +229,28 @@ export function StudySession({
               disabled={revealed}
               aria-keyshortcuts={String(i + 1)}
               className={[
-                "flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left transition",
+                "flex w-full items-center gap-3 rounded-lg border-2 px-4 py-3 text-left transition",
                 state === "idle" &&
-                  "border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50",
-                state === "correct" && "border-emerald-400 bg-emerald-50",
-                state === "wrong" && "border-rose-400 bg-rose-50",
-                state === "muted" && "border-slate-200 bg-white opacity-60",
+                  "border-slate-300 bg-white hover:border-indigo-400 hover:bg-indigo-50",
+                state === "correct" && "border-emerald-500 bg-emerald-50",
+                state === "wrong" && "border-rose-500 bg-rose-50",
+                state === "muted" && "border-slate-200 bg-white opacity-50",
               ]
                 .filter(Boolean)
                 .join(" ")}
             >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-300 text-xs font-semibold text-slate-500">
+              <span
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+                  state === "correct"
+                    ? "border-2 border-emerald-600 bg-emerald-100 text-emerald-700"
+                    : state === "wrong"
+                      ? "border-2 border-rose-600 bg-rose-100 text-rose-700"
+                      : "border-2 border-slate-400 bg-white text-slate-700"
+                }`}
+              >
                 {String.fromCharCode(65 + i)}
               </span>
-              <span className="markdown">
+              <span className="markdown text-slate-900">
                 <MarkdownMath>{choice}</MarkdownMath>
               </span>
             </button>

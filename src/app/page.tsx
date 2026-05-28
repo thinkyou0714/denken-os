@@ -128,7 +128,11 @@ export default function DashboardPage() {
         <StatCard
           label="要注意科目"
           value={
-            diagnosis.weakest ? SUBJECT_LABELS[diagnosis.weakest] : "—"
+            diagnosis.weakest
+              ? SUBJECT_LABELS[diagnosis.weakest]
+              : totalReviews > 0
+                ? "—"
+                : "未学習"
           }
         />
       </section>
@@ -275,19 +279,31 @@ function StreakPanel({
   streak: ReturnType<typeof computeStreak>;
   settings: { freezes: number; maxFreezes: number };
 }) {
+  const notStarted = streak.current === 0 && streak.longest === 0;
   return (
     <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-      <div className="text-xs font-medium text-orange-700">連続学習</div>
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-semibold text-orange-700">連続学習</div>
+        {notStarted && (
+          <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[11px] font-semibold text-orange-700">
+            未スタート
+          </span>
+        )}
+      </div>
       <div className="mt-1 flex items-baseline gap-2">
         <span className="text-3xl font-bold text-orange-900">
           🔥 {streak.current}
         </span>
-        <span className="text-sm text-orange-700">日</span>
+        <span className="text-sm font-medium text-orange-700">日</span>
       </div>
-      <div className="mt-2 text-xs text-orange-800/80">
-        過去最高 {streak.longest} 日 ・ フリーズ{" "}
-        {settings.freezes - streak.freezesUsed}/{settings.maxFreezes}
-        {streak.daysSinceLast > 1 && ` ・ 最終学習 ${streak.daysSinceLast} 日前`}
+      <div className="mt-2 text-xs font-medium text-orange-800/90">
+        {notStarted
+          ? `今日 1 問解くとストリーク開始 ・ フリーズ ${settings.freezes}/${settings.maxFreezes}`
+          : `過去最高 ${streak.longest} 日 ・ フリーズ ${settings.freezes - streak.freezesUsed}/${settings.maxFreezes}${
+              streak.daysSinceLast > 1
+                ? ` ・ 最終学習 ${streak.daysSinceLast} 日前`
+                : ""
+            }`}
       </div>
     </div>
   );
@@ -597,19 +613,33 @@ function DashboardSkeleton() {
 }
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
+  const isEmpty = value === "—" || value === "未学習";
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <div className="text-xs font-medium text-slate-500">{label}</div>
-      <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
+      <div className="text-xs font-semibold text-slate-600">{label}</div>
+      <div
+        className={`mt-1 text-2xl font-bold tabular-nums ${
+          isEmpty ? "text-base font-medium text-slate-400" : "text-slate-900"
+        }`}
+      >
+        {value}
+      </div>
     </div>
   );
 }
 
 function Metric({ label, value }: { label: string; value: string | number }) {
+  const isEmpty = value === "—";
   return (
     <div>
-      <dt className="text-slate-400">{label}</dt>
-      <dd className="font-medium tabular-nums text-slate-700">{value}</dd>
+      <dt className="text-xs font-medium text-slate-500">{label}</dt>
+      <dd
+        className={`font-semibold tabular-nums ${
+          isEmpty ? "text-slate-400" : "text-slate-900"
+        }`}
+      >
+        {value}
+      </dd>
     </div>
   );
 }
