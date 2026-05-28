@@ -27,6 +27,8 @@ export const ProblemSchema = z
     topic: z.string().min(1),
     difficulty: z.number().int().min(1).max(5),
     year: z.number().int().min(1990).max(2100).optional(),
+    /** 出典表記。例: "オリジナル", "電験三種令和X年" 等。 */
+    source: z.string().optional(),
     question: z.string().min(1),
     choices: z.array(z.string().min(1)).min(2).max(6),
     answerIndex: z.number().int().min(0),

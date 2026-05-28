@@ -32,4 +32,16 @@ describe("シードコンテンツ", () => {
     expect(isSubject(null)).toBe(false);
     expect(isSubject(undefined)).toBe(false);
   });
+
+  it("各科目に最低 5 問のコンテンツが存在する", () => {
+    for (const s of SUBJECTS) {
+      const count = problems.filter((p) => p.subject === s).length;
+      expect(count, `subject=${s}`).toBeGreaterThanOrEqual(5);
+    }
+  });
+
+  it("source 付きの問題が存在する(過去問/オリジナル区別の運用確認)", () => {
+    const withSource = problems.filter((p) => p.source !== undefined);
+    expect(withSource.length).toBeGreaterThan(0);
+  });
 });
