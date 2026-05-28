@@ -7,6 +7,7 @@ import {
   memoryBackend,
 } from "@/domain/storage/backend";
 import type { Grade4 } from "@/domain/srs/scheduler";
+import type { Confidence } from "@/domain/progress/store";
 
 const STORAGE_KEY = "denken-os/progress/v1";
 
@@ -43,8 +44,13 @@ export function useProgress() {
   const bump = useCallback(() => setVersion((v) => v + 1), []);
 
   const record = useCallback(
-    (problemId: string, grade: Grade4, correct: boolean) => {
-      store.recordReview(problemId, grade, correct);
+    (
+      problemId: string,
+      grade: Grade4,
+      correct: boolean,
+      confidence?: Confidence,
+    ) => {
+      store.recordReview(problemId, grade, correct, undefined, confidence);
       bump();
     },
     [store, bump],
@@ -64,5 +70,13 @@ export function useProgress() {
     [store, bump],
   );
 
-  return { store, record, reset, importJson, mounted };
+  const setNote = useCallback(
+    (problemId: string, note: string) => {
+      store.setNote(problemId, note);
+      bump();
+    },
+    [store, bump],
+  );
+
+  return { store, record, reset, importJson, setNote, mounted };
 }

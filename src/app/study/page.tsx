@@ -4,6 +4,7 @@ import { Suspense, useMemo } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useProgress } from "@/lib/useProgress";
+import { useSettings } from "@/lib/useSettings";
 import { problems, problemsBySubject } from "@/data/problems";
 import { buildQueue } from "@/domain/srs/diagnosis";
 import { StudySession } from "@/components/StudySession";
@@ -23,6 +24,7 @@ function StudyInner() {
   const subject = isSubject(subjectParam) ? subjectParam : null;
 
   const { store, record, mounted } = useProgress();
+  const { store: settings, mounted: settingsMounted } = useSettings();
   const pool = subject ? problemsBySubject(subject) : problems;
 
   // セッション開始時点のキューを固定(解答で再計算されて順序が乱れないように)。
@@ -31,7 +33,8 @@ function StudyInner() {
     return buildQueue(pool, store, new Date(), 20);
   }, [mounted, store, pool]);
 
-  if (!mounted) return <p className="text-slate-500">読み込み中…</p>;
+  if (!mounted || !settingsMounted)
+    return <p className="text-slate-500">読み込み中…</p>;
 
   return (
     <div className="space-y-4">
@@ -53,6 +56,7 @@ function StudyInner() {
         queue={queue}
         onGrade={record}
         getCard={(id) => store.getCard(id)}
+        confidenceTracking={settings.confidenceTracking}
       />
     </div>
   );

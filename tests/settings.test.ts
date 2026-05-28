@@ -42,6 +42,15 @@ describe("SettingsStore", () => {
     expect(s.minimalUI).toBe(true);
   });
 
+  it("confidenceTracking は既定 false でトグル + 永続化される", () => {
+    const backend = memoryBackend();
+    const s1 = new SettingsStore(backend, new Date(2026, 4, 28));
+    expect(s1.confidenceTracking).toBe(false);
+    s1.setConfidenceTracking(true);
+    const s2 = new SettingsStore(backend, new Date(2026, 4, 28));
+    expect(s2.confidenceTracking).toBe(true);
+  });
+
   it("永続化: 再起動後も値が残る", () => {
     const backend = memoryBackend();
     const s1 = new SettingsStore(backend, new Date(2026, 4, 28));

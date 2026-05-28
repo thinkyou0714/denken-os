@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Card } from "ts-fsrs";
 import type { Problem } from "@/domain/content/schema";
 import { SUBJECT_LABELS } from "@/domain/content/schema";
+import type { Confidence } from "@/domain/progress/store";
 import {
   GRADE_LABELS,
   newCard,
@@ -12,28 +13,62 @@ import {
   type Grade4,
 } from "@/domain/srs/scheduler";
 import { xpForReview } from "@/domain/gamification/xp";
+import {
+  shouldRecommendBreak,
+  BREAK_RECOMMEND_AFTER_MIN,
+} from "@/domain/gamification/break";
 import { MarkdownMath } from "@/components/MarkdownMath";
 
 export interface StudySessionProps {
   queue: Problem[];
-  onGrade: (problemId: string, grade: Grade4, correct: boolean) => void;
+  onGrade: (
+    problemId: string,
+    grade: Grade4,
+    correct: boolean,
+    confidence?: Confidence,
+  ) => void;
   /**
    * 指定された問題の現在 FSRS カードを返すコールバック。
    * 渡すと評価ボタンに「次回 ◯日後」を表示する(任意)。
    */
   getCard?: (problemId: string) => Card | null;
+  /** 自信度トラッキング ON のとき、解答前に低/中/高を選択させる(任意)。 */
+  confidenceTracking?: boolean;
 }
+
+const CONFIDENCE_LABELS: Record<Confidence, string> = {
+  0: "知らない",
+  1: "曖昧",
+  2: "知ってる",
+};
 
 // 正答時に提示する評価。誤答時は常に "again"(FSRS の lapse)に固定する。
 const CORRECT_GRADES: Grade4[] = ["hard", "good", "easy"];
 
-export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
+export function StudySession({
+  queue,
+  onGrade,
+  getCard,
+  confidenceTracking = false,
+}: StudySessionProps) {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const [confidence, setConfidence] = useState<Confidence | null>(null);
+  // セッション開始時刻はマウント時に確定し、以後変更しない不変値。
+  const [sessionStart] = useState(() => new Date());
+  const [breakSnoozed, setBreakSnoozed] = useState(false);
+  // wall-clock check every 30s for retrieval break
+  const [now, setNow] = useState<Date>(() => new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(t);
+  }, []);
 
   const problem: Problem | undefined = queue[index];
   const revealed = selected !== null;
   const isCorrect = problem != null && selected === problem.answerIndex;
+  const showBreakBanner =
+    !revealed && !breakSnoozed && shouldRecommendBreak(sessionStart, now);
 
   // 評価ボタンに表示する「もし◯を選んだら次は◯日後」のプレビュー。
   const intervals = useMemo(() => {
@@ -48,8 +83,9 @@ export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
 
   function gradeAndNext(grade: Grade4) {
     if (!problem || selected === null) return;
-    onGrade(problem.id, grade, isCorrect);
+    onGrade(problem.id, grade, isCorrect, confidence ?? undefined);
     setSelected(null);
+    setConfidence(null);
     setIndex((i) => i + 1);
   }
 
@@ -98,6 +134,28 @@ export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
 
   return (
     <div className="space-y-6">
+      {showBreakBanner && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <span>
+            🍵 {BREAK_RECOMMEND_AFTER_MIN} 分以上集中しました。短い休憩を挟むと
+            記憶定着率が上がります(retrieval break)。
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setBreakSnoozed(true)}
+              className="rounded-md border border-amber-300 bg-white px-3 py-1 text-xs font-medium text-amber-800 hover:bg-amber-100"
+            >
+              続ける
+            </button>
+            <Link
+              href="/"
+              className="rounded-md bg-amber-700 px-3 py-1 text-xs font-medium text-white hover:bg-amber-800"
+            >
+              休憩する
+            </Link>
+          </div>
+        </div>
+      )}
       <div className="flex items-center justify-between text-sm text-slate-500">
         <span aria-live="polite">
           {index + 1} / {queue.length}
@@ -124,6 +182,29 @@ export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
       <div className="rounded-xl border border-slate-200 bg-white p-6">
         <MarkdownMath>{problem.question}</MarkdownMath>
       </div>
+
+      {confidenceTracking && !revealed && (
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <p className="mb-2 text-xs text-slate-500">
+            解答前の自信度を選んでください(メタ認知の校正に使います、任意)
+          </p>
+          <div className="flex gap-2">
+            {([0, 1, 2] as Confidence[]).map((c) => (
+              <button
+                key={c}
+                onClick={() => setConfidence(c)}
+                className={`flex-1 rounded-md border px-3 py-1.5 text-xs font-medium transition ${
+                  confidence === c
+                    ? "border-indigo-400 bg-indigo-50 text-indigo-700"
+                    : "border-slate-200 bg-white text-slate-600 hover:border-indigo-300"
+                }`}
+              >
+                {CONFIDENCE_LABELS[c]}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="space-y-2">
         {!revealed && (

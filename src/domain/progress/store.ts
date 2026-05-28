@@ -2,21 +2,28 @@ import type { Card } from "ts-fsrs";
 import { newCard, review, reviveCard, type Grade4 } from "@/domain/srs/scheduler";
 import type { StorageBackend } from "@/domain/storage/backend";
 
+/** 解答時の自己申告自信度。0=低(知らない) / 1=中(曖昧) / 2=高(知ってる)。 */
+export type Confidence = 0 | 1 | 2;
+
 export interface ReviewRecord {
   problemId: string;
   grade: Grade4;
   correct: boolean;
   reviewedAt: string; // ISO 8601
+  /** メタ認知校正のため、解答前に申告した自信度(任意)。 */
+  confidence?: Confidence;
 }
 
 interface PersistShape {
   version: 1;
   cards: Record<string, unknown>;
   logs: ReviewRecord[];
+  /** 問題ごとの個人メモ(問題id → markdown 文字列)。 */
+  notes: Record<string, string>;
 }
 
 function emptyState(): PersistShape {
-  return { version: 1, cards: {}, logs: [] };
+  return { version: 1, cards: {}, logs: [], notes: {} };
 }
 
 /**
@@ -39,6 +46,10 @@ export class ProgressStore {
         version: 1,
         cards: parsed.cards ?? {},
         logs: parsed.logs ?? [],
+        notes:
+          typeof parsed.notes === "object" && parsed.notes !== null
+            ? parsed.notes
+            : {},
       };
     } catch {
       return emptyState();
@@ -65,17 +76,40 @@ export class ProgressStore {
     grade: Grade4,
     correct: boolean,
     now: Date = new Date(),
+    confidence?: Confidence,
   ): Card {
     const { card } = review(this.cardFor(problemId, now), grade, now);
     this.state.cards[problemId] = card;
-    this.state.logs.push({
+    const log: ReviewRecord = {
       problemId,
       grade,
       correct,
       reviewedAt: now.toISOString(),
-    });
+    };
+    if (confidence !== undefined) log.confidence = confidence;
+    this.state.logs.push(log);
     this.persist();
     return card;
+  }
+
+  /** 問題ごとの個人メモ取得(空なら空文字列)。 */
+  getNote(problemId: string): string {
+    return this.state.notes[problemId] ?? "";
+  }
+
+  /** メモを保存(空文字列を渡せば削除)。 */
+  setNote(problemId: string, note: string): void {
+    if (note === "") {
+      delete this.state.notes[problemId];
+    } else {
+      this.state.notes[problemId] = note;
+    }
+    this.persist();
+  }
+
+  /** メモがある問題数(ダッシュボード等の集計用)。 */
+  noteCount(): number {
+    return Object.keys(this.state.notes).length;
   }
 
   logs(): ReviewRecord[] {
@@ -113,10 +147,15 @@ export class ProgressStore {
     if (obj.version !== 1) return false;
     if (typeof obj.cards !== "object" || obj.cards === null) return false;
     if (!Array.isArray(obj.logs)) return false;
+    const notes =
+      typeof obj.notes === "object" && obj.notes !== null
+        ? (obj.notes as Record<string, string>)
+        : {};
     this.state = {
       version: 1,
       cards: obj.cards as Record<string, unknown>,
       logs: obj.logs as ReviewRecord[],
+      notes,
     };
     this.persist();
     return true;

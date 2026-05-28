@@ -58,7 +58,7 @@ describe("StudySession", () => {
       screen.queryByRole("button", { name: GRADE_LABELS.again }),
     ).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: GRADE_LABELS.good }));
-    expect(onGrade).toHaveBeenCalledWith("t-1", "good", true);
+    expect(onGrade).toHaveBeenCalledWith("t-1", "good", true, undefined);
 
     // 問2へ進む。誤答を選ぶ
     expect(screen.getByText("問2の本文")).toBeInTheDocument();
@@ -67,7 +67,7 @@ describe("StudySession", () => {
 
     // 誤答時は評価ボタンは出さず "次の問題へ" のみ。grade は again 固定
     await user.click(screen.getByRole("button", { name: /次の問題へ/ }));
-    expect(onGrade).toHaveBeenLastCalledWith("p-1", "again", false);
+    expect(onGrade).toHaveBeenLastCalledWith("p-1", "again", false, undefined);
 
     // 完了画面
     expect(screen.getByText(/セッション完了/)).toBeInTheDocument();

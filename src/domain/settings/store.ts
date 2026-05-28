@@ -12,6 +12,8 @@ interface SettingsState {
   freezes: number;
   /** 最後にフリーズを月次付与した月 (YYYY-MM)。 */
   freezeLastGrantedMonth: string | null;
+  /** 自信度トラッキングを有効化(メタ認知矯正用、解答前に低/中/高を選択)。 */
+  confidenceTracking: boolean;
 }
 
 function emptyState(): SettingsState {
@@ -21,6 +23,7 @@ function emptyState(): SettingsState {
     minimalUI: false,
     freezes: 0,
     freezeLastGrantedMonth: null,
+    confidenceTracking: false,
   };
 }
 
@@ -57,6 +60,7 @@ export class SettingsStore {
             ? Math.min(MAX_FREEZES, parsed.freezes)
             : 0,
         freezeLastGrantedMonth: parsed.freezeLastGrantedMonth ?? null,
+        confidenceTracking: Boolean(parsed.confidenceTracking),
       };
     } catch {
       return emptyState();
@@ -99,6 +103,14 @@ export class SettingsStore {
   }
   get maxFreezes(): number {
     return MAX_FREEZES;
+  }
+
+  get confidenceTracking(): boolean {
+    return this.state.confidenceTracking;
+  }
+  setConfidenceTracking(v: boolean): void {
+    this.state.confidenceTracking = v;
+    this.persist();
   }
 }
 

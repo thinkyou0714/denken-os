@@ -3,7 +3,8 @@
 import { useSettings } from "@/lib/useSettings";
 
 export default function SettingsPage() {
-  const { store, setExamDate, setMinimalUI, mounted } = useSettings();
+  const { store, setExamDate, setMinimalUI, setConfidenceTracking, mounted } =
+    useSettings();
   if (!mounted) return <p className="text-slate-500">読み込み中…</p>;
 
   return (
@@ -50,6 +51,26 @@ export default function SettingsPage() {
             <span className="block text-slate-500">
               ストリーク・XP・バッジ等のゲーミフィケーション要素を非表示にし、純粋に学習内容のみを表示します。
               プレッシャーを感じる方や、装飾を好まない方に。
+            </span>
+          </span>
+        </label>
+      </section>
+
+      <section className="space-y-3 rounded-xl border border-slate-200 bg-white p-5">
+        <h2 className="font-semibold">メタ認知トラッキング</h2>
+        <label className="flex items-start gap-3">
+          <input
+            type="checkbox"
+            checked={store.confidenceTracking}
+            onChange={(e) => setConfidenceTracking(e.target.checked)}
+            className="mt-1"
+          />
+          <span className="text-sm">
+            <span className="font-medium">確信度トラッキング</span>
+            <span className="block text-slate-500">
+              解答前に「自信:低/中/高」を選ぶと、ダッシュボードで過信・謙虚の傾向と
+              校正スコアが見られます。自分の「わかっているつもり」を矯正する
+              学習科学の手法(メタ認知校正)。
             </span>
           </span>
         </label>

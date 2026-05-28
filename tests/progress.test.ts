@@ -51,6 +51,39 @@ describe("ProgressStore", () => {
     expect(dst.logs()).toHaveLength(1);
   });
 
+  it("recordReview に confidence を渡すと log に保存される", () => {
+    const store = new ProgressStore(memoryBackend());
+    store.recordReview("theory-001", "good", true, undefined, 2);
+    const log = store.logs()[0];
+    expect(log.confidence).toBe(2);
+  });
+
+  it("confidence を省略すると log に乗らない", () => {
+    const store = new ProgressStore(memoryBackend());
+    store.recordReview("theory-001", "good", true);
+    expect(store.logs()[0].confidence).toBeUndefined();
+  });
+
+  it("getNote / setNote / noteCount のラウンドトリップ", () => {
+    const store = new ProgressStore(memoryBackend());
+    expect(store.getNote("theory-001")).toBe("");
+    store.setNote("theory-001", "メモ A");
+    store.setNote("power-001", "メモ B");
+    expect(store.getNote("theory-001")).toBe("メモ A");
+    expect(store.noteCount()).toBe(2);
+    store.setNote("theory-001", ""); // 空で削除
+    expect(store.noteCount()).toBe(1);
+  });
+
+  it("notes は snapshot/restore に乗る", () => {
+    const a = new ProgressStore(memoryBackend());
+    a.setNote("theory-001", "重要");
+    const json = a.snapshot();
+    const b = new ProgressStore(memoryBackend());
+    expect(b.restore(json)).toBe(true);
+    expect(b.getNote("theory-001")).toBe("重要");
+  });
+
   it("restore は不正な JSON / 想定外形式で false を返し既存状態を保つ", () => {
     const store = new ProgressStore(memoryBackend());
     store.recordReview("theory-001", "good", true);

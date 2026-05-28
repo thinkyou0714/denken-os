@@ -48,5 +48,19 @@ export function useSettings() {
     [store, bump],
   );
 
-  return { store, setExamDate, setMinimalUI, mounted };
+  const setConfidenceTracking = useCallback(
+    (value: boolean) => {
+      store.setConfidenceTracking(value);
+      bump();
+    },
+    [store, bump],
+  );
+
+  return {
+    store,
+    setExamDate,
+    setMinimalUI,
+    setConfidenceTracking,
+    mounted,
+  };
 }

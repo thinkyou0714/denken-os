@@ -1,6 +1,7 @@
 import { problemsBySubject } from "@/data/problems";
 import { SUBJECTS, SUBJECT_LABELS } from "@/domain/content/schema";
 import { MarkdownMath } from "@/components/MarkdownMath";
+import { ProblemNoteEditor } from "@/components/ProblemNoteEditor";
 
 export const metadata = {
   title: "問題一覧 — DNKN-OS",
@@ -70,6 +71,7 @@ export default function ProblemsPage() {
                       <p className="mb-1 font-semibold text-slate-700">解説</p>
                       <MarkdownMath>{p.explanation}</MarkdownMath>
                     </div>
+                    <ProblemNoteEditor problemId={p.id} />
                   </div>
                 </details>
               ))}

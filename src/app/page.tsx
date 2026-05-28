@@ -17,6 +17,7 @@ import {
   computeAchievements,
   todayReviewCount,
 } from "@/domain/gamification/achievements";
+import { calibrationStats } from "@/domain/gamification/calibration";
 import { daysUntilExam } from "@/domain/settings/store";
 
 const TODAY_MISSION_SIZE = 3;
@@ -50,6 +51,8 @@ export default function DashboardPage() {
   const week = weeklyActiveDays(store.logs(), now);
   const examDays = daysUntilExam(settings.examDate, now);
   const showGame = !settings.minimalUI;
+  const calibration = calibrationStats(store.logs());
+  const noteCount = store.noteCount();
 
   function handleExport() {
     const blob = new Blob([store.snapshot()], { type: "application/json" });
@@ -199,6 +202,19 @@ export default function DashboardPage() {
 
       {showGame && totalReviews > 0 && (
         <AchievementsCard achievements={achievements} />
+      )}
+
+      {showGame && calibration.total >= 5 && (
+        <CalibrationCard stats={calibration} />
+      )}
+
+      {noteCount > 0 && (
+        <p className="text-xs text-slate-500">
+          個人メモあり: <strong>{noteCount}</strong> 問 ・{" "}
+          <Link href="/problems" className="text-indigo-600 hover:underline">
+            問題一覧で確認
+          </Link>
+        </p>
       )}
 
       {showGame && totalReviews > 0 && (
@@ -446,6 +462,58 @@ function AchievementsCard({
             </div>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function CalibrationCard({
+  stats,
+}: {
+  stats: ReturnType<typeof calibrationStats>;
+}) {
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <div className="text-sm font-semibold">メタ認知校正</div>
+          <div className="mt-0.5 text-xs text-slate-500">
+            自己申告の自信度と実際の正誤の一致度({stats.total} 回の解答から)
+          </div>
+        </div>
+        <div className="text-2xl font-bold tabular-nums">
+          {stats.score}
+          <span className="ml-1 text-xs font-normal text-slate-500">/ 100</span>
+        </div>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+        <div
+          className="rounded border border-rose-200 bg-rose-50 p-2"
+          title="自信=高 で誤答した回数。"
+        >
+          <div className="text-rose-700">過信ゾーン</div>
+          <div className="text-lg font-semibold text-rose-900 tabular-nums">
+            {stats.overconfident}
+          </div>
+        </div>
+        <div
+          className="rounded border border-slate-200 bg-slate-50 p-2"
+          title="自信と結果が整合した回数。"
+        >
+          <div className="text-slate-700">校正済</div>
+          <div className="text-lg font-semibold text-slate-900 tabular-nums">
+            {stats.calibrated}
+          </div>
+        </div>
+        <div
+          className="rounded border border-emerald-200 bg-emerald-50 p-2"
+          title="自信=低 で正答した回数。"
+        >
+          <div className="text-emerald-700">謙虚ゾーン</div>
+          <div className="text-lg font-semibold text-emerald-900 tabular-nums">
+            {stats.underconfident}
+          </div>
+        </div>
       </div>
     </section>
   );
