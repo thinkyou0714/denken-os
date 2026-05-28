@@ -11,6 +11,7 @@ import {
   preview,
   type Grade4,
 } from "@/domain/srs/scheduler";
+import { xpForReview } from "@/domain/gamification/xp";
 import { MarkdownMath } from "@/components/MarkdownMath";
 
 export interface StudySessionProps {
@@ -175,7 +176,12 @@ export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
                 isCorrect ? "text-emerald-700" : "text-rose-700"
               }`}
             >
-              {isCorrect ? "正解" : "不正解"}
+              <span>{isCorrect ? "正解" : "不正解"}</span>
+              {isCorrect && (
+                <span className="ml-2 text-xs font-medium text-emerald-600">
+                  +{xpForReview(problem, true)} XP
+                </span>
+              )}
             </p>
             <MarkdownMath>{problem.explanation}</MarkdownMath>
           </div>
