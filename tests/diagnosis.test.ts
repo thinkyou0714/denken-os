@@ -66,4 +66,12 @@ describe("復習キュー", () => {
     const store = new ProgressStore(memoryBackend());
     expect(buildQueue(problems, store, new Date(), 3)).toHaveLength(3);
   });
+
+  it("科目で絞った pool を渡すとその科目のみ出題される(重点学習)", () => {
+    const store = new ProgressStore(memoryBackend());
+    const pool = problemsBySubject("machinery");
+    const queue = buildQueue(pool, store, new Date(), 100);
+    expect(queue.length).toBe(pool.length);
+    expect(queue.every((p) => p.subject === "machinery")).toBe(true);
+  });
 });

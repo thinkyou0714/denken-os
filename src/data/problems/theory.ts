@@ -40,4 +40,17 @@ export const theoryProblems: Problem[] = [
       "抵抗の消費電力は\n\n$$P = I^2 R = 2^2 \\times 10 = 40\\,\\mathrm{W}$$",
     tags: ["消費電力", "ジュール熱"],
   },
+  {
+    id: "theory-004",
+    subject: "theory",
+    topic: "直流回路",
+    difficulty: 2,
+    question:
+      "抵抗 $R_1 = 6\\,\\Omega$ と $R_2 = 3\\,\\Omega$ を並列に接続したときの合成抵抗 $R$ はいくらか。",
+    choices: ["1.5 Ω", "2 Ω", "4.5 Ω", "9 Ω"],
+    answerIndex: 1,
+    explanation:
+      "並列合成抵抗は\n\n$$\\frac{1}{R} = \\frac{1}{R_1} + \\frac{1}{R_2} = \\frac{1}{6} + \\frac{1}{3} = \\frac{1}{2}$$\n\nよって $R = 2\\,\\Omega$。",
+    tags: ["合成抵抗", "並列"],
+  },
 ];

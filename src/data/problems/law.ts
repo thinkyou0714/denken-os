@@ -32,4 +32,17 @@ export const lawProblems: Problem[] = [
       "需要率は設備容量に対する最大需要電力の割合。\n\n$$\\text{需要率} = \\frac{\\text{最大需要電力}}{\\text{設備容量}} \\times 100 = \\frac{140}{200} \\times 100 = 70\\,\\%$$",
     tags: ["需要率", "電力管理"],
   },
+  {
+    id: "law-003",
+    subject: "law",
+    topic: "負荷率",
+    difficulty: 2,
+    question:
+      "ある需要家の最大需要電力が $80\\,\\mathrm{kW}$、平均需要電力が $40\\,\\mathrm{kW}$ であった。負荷率はいくらか。",
+    choices: ["40 %", "50 %", "80 %", "200 %"],
+    answerIndex: 1,
+    explanation:
+      "負荷率は最大需要電力に対する平均需要電力の割合。\n\n$$\\text{負荷率} = \\frac{\\text{平均需要電力}}{\\text{最大需要電力}} \\times 100 = \\frac{40}{80} \\times 100 = 50\\,\\%$$",
+    tags: ["負荷率", "電力管理"],
+  },
 ];

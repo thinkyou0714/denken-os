@@ -27,4 +27,17 @@ export const machineryProblems: Problem[] = [
       "巻数比は $a = \\dfrac{N_1}{N_2} = \\dfrac{1000}{50} = 20$。理想変圧器では電圧は巻数比に比例するので\n\n$$V_2 = \\frac{V_1}{a} = \\frac{6600}{20} = 330\\,\\mathrm{V}$$",
     tags: ["巻数比", "変圧比"],
   },
+  {
+    id: "machinery-003",
+    subject: "machinery",
+    topic: "直流機",
+    difficulty: 3,
+    question:
+      "直流分巻電動機で、端子電圧 $V = 100\\,\\mathrm{V}$、電機子電流 $I_a = 10\\,\\mathrm{A}$、電機子抵抗 $R_a = 0.5\\,\\Omega$ である。逆起電力 $E$ はいくらか。",
+    choices: ["90 V", "95 V", "100 V", "105 V"],
+    answerIndex: 1,
+    explanation:
+      "電動機の逆起電力は端子電圧から電機子抵抗による電圧降下を引いたもの。\n\n$$E = V - I_a R_a = 100 - 10 \\times 0.5 = 95\\,\\mathrm{V}$$",
+    tags: ["逆起電力", "電機子"],
+  },
 ];

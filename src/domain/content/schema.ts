@@ -12,6 +12,10 @@ export const SUBJECT_LABELS: Record<Subject, string> = {
   law: "法規",
 };
 
+export function isSubject(value: unknown): value is Subject {
+  return typeof value === "string" && (SUBJECTS as readonly string[]).includes(value);
+}
+
 /**
  * 問題スキーマ。question / explanation は Markdown(KaTeX 数式 `$...$` 対応)。
  * answerIndex は choices の 0 始まりインデックス。

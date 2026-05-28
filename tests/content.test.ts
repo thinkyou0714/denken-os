@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { problems } from "@/data/problems";
-import { ProblemListSchema, SUBJECTS } from "@/domain/content/schema";
+import { ProblemListSchema, SUBJECTS, isSubject } from "@/domain/content/schema";
 
 describe("シードコンテンツ", () => {
   it("全問題が Zod スキーマに適合する", () => {
@@ -23,5 +23,13 @@ describe("シードコンテンツ", () => {
     for (const s of SUBJECTS) {
       expect(problems.some((p) => p.subject === s)).toBe(true);
     }
+  });
+
+  it("isSubject は有効な科目のみ true", () => {
+    expect(isSubject("theory")).toBe(true);
+    expect(isSubject("law")).toBe(true);
+    expect(isSubject("unknown")).toBe(false);
+    expect(isSubject(null)).toBe(false);
+    expect(isSubject(undefined)).toBe(false);
   });
 });

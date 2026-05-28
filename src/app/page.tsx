@@ -101,6 +101,18 @@ export default function DashboardPage() {
                   value={s.seen ? `${Math.round(s.avgRetrievability * 100)}%` : "—"}
                 />
               </dl>
+              <div className="mt-3 flex justify-end">
+                <Link
+                  href={`/study?subject=${s.subject}`}
+                  className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                    s.subject === diagnosis.weakest
+                      ? "bg-rose-600 text-white hover:bg-rose-700"
+                      : "border border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  この科目を重点学習
+                </Link>
+              </div>
             </div>
           ))}
         </div>

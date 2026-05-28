@@ -40,4 +40,17 @@ export const powerProblems: Problem[] = [
       "単相 2 線式は往復 2 線分の抵抗を考慮する。\n\n$$v = 2 I r = 2 \\times 20 \\times 0.1 = 4\\,\\mathrm{V}$$",
     tags: ["配電", "電圧降下"],
   },
+  {
+    id: "power-004",
+    subject: "power",
+    topic: "変圧器効率",
+    difficulty: 2,
+    question:
+      "ある変圧器が出力 $9.5\\,\\mathrm{kW}$ で運転しているとき、内部損失の合計が $0.5\\,\\mathrm{kW}$ であった。このときの効率はいくらか。",
+    choices: ["90 %", "95 %", "99 %", "105 %"],
+    answerIndex: 1,
+    explanation:
+      "効率は出力を入力(出力 + 損失)で割る。\n\n$$\\eta = \\frac{P_\\text{out}}{P_\\text{out} + P_\\text{loss}} = \\frac{9.5}{9.5 + 0.5} = 0.95 = 95\\,\\%$$",
+    tags: ["効率", "損失"],
+  },
 ];
