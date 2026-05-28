@@ -11,12 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
+
+      # corepack は Node 22 同梱。packageManager フィールドから pnpm バージョンを起動する。
+      # サードパーティの pnpm/action-setup を使わないことで Actions allowlist 制限を回避する。
+      - name: Enable pnpm via corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.0 --activate
+          pnpm --version
 
       - run: pnpm install --frozen-lockfile
 
