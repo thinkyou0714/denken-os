@@ -36,7 +36,7 @@ export default function DashboardPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!mounted || !settingsMounted) {
-    return <p className="text-slate-500">読み込み中…</p>;
+    return <DashboardSkeleton />;
   }
 
   const now = new Date();
@@ -492,6 +492,39 @@ function WeeklyReportCard({
         </span>
       </div>
     </section>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div
+      aria-busy="true"
+      aria-label="ダッシュボードを読み込み中"
+      className="space-y-8 animate-pulse"
+    >
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-2">
+          <div className="h-7 w-48 rounded bg-slate-200" />
+          <div className="h-4 w-72 rounded bg-slate-200" />
+        </div>
+        <div className="h-10 w-44 rounded-lg bg-slate-200" />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="h-24 rounded-xl bg-slate-100" />
+        <div className="h-24 rounded-xl bg-slate-100" />
+      </div>
+      <div className="h-20 rounded-xl bg-slate-100" />
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="h-20 rounded-xl bg-slate-100" />
+        ))}
+      </div>
+      <div className="space-y-3">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="h-32 rounded-xl bg-slate-100" />
+        ))}
+      </div>
+    </div>
   );
 }
 

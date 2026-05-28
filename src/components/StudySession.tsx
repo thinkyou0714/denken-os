@@ -126,6 +126,11 @@ export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
       </div>
 
       <div className="space-y-2">
+        {!revealed && (
+          <p className="text-xs text-slate-400">
+            数字キー(1〜{problem.choices.length})でも選べます
+          </p>
+        )}
         {problem.choices.map((choice, i) => {
           const state = !revealed
             ? "idle"

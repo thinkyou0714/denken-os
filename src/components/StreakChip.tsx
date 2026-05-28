@@ -17,9 +17,13 @@ export function StreakChip() {
   const r = computeStreak(store.logs(), new Date(), settings.freezes);
   if (r.current === 0) return null;
 
+  const remainingFreezes = settings.freezes - r.freezesUsed;
+  const label = `連続学習 ${r.current} 日。過去最高 ${r.longest} 日。フリーズ残 ${remainingFreezes} / ${settings.maxFreezes}。`;
   return (
     <span
-      title={`過去最高 ${r.longest} 日 / フリーズ ${settings.freezes - r.freezesUsed}/${settings.maxFreezes}`}
+      role="status"
+      aria-label={label}
+      title={label}
       className="ml-2 inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-700"
     >
       <span aria-hidden>🔥</span>

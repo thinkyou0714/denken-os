@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import "katex/dist/katex.min.css";
 import "./globals.css";
@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   title: "DENKEN-OS — 電験 学習 OS",
   description:
     "電験(電気主任技術者試験)を、FSRS による間隔反復学習で再現性のある合格プロセスに体系化する学習 OS。",
+  applicationName: "DENKEN-OS",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "DENKEN-OS",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#4f46e5",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

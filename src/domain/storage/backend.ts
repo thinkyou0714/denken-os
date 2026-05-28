@@ -23,11 +23,33 @@ export function memoryBackend(initial: string | null = null): StorageBackend {
   };
 }
 
-/** ブラウザ用 localStorage 実装。 */
+/** ブラウザ用 localStorage 実装。
+ *
+ * プライベートブラウズ等で localStorage が無効/容量超過時、ブラウザは throw する。
+ * その場合は in-memory フォールバックで silently 動作させ、アプリを壊さない。
+ */
 export function localStorageBackend(key: string): StorageBackend {
   return {
-    read: () => localStorage.getItem(key),
-    write: (v) => localStorage.setItem(key, v),
-    remove: () => localStorage.removeItem(key),
+    read: () => {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+    write: (v) => {
+      try {
+        localStorage.setItem(key, v);
+      } catch {
+        // private mode / quota exceeded: アプリは続行する(セッション内のみ保持)。
+      }
+    },
+    remove: () => {
+      try {
+        localStorage.removeItem(key);
+      } catch {
+        // noop
+      }
+    },
   };
 }
