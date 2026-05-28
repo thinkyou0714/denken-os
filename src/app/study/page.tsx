@@ -49,7 +49,11 @@ function StudyInner() {
           全科目をミックスして出題します(インターリーブ学習は長期定着に有効です)。
         </p>
       )}
-      <StudySession queue={queue} onGrade={record} />
+      <StudySession
+        queue={queue}
+        onGrade={record}
+        getCard={(id) => store.getCard(id)}
+      />
     </div>
   );
 }

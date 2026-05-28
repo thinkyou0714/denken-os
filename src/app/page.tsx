@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { useProgress } from "@/lib/useProgress";
 import { problems } from "@/data/problems";
@@ -13,7 +14,8 @@ function masteryColor(mastery: number): string {
 }
 
 export default function DashboardPage() {
-  const { store, reset, mounted } = useProgress();
+  const { store, reset, importJson, mounted } = useProgress();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!mounted) {
     return <p className="text-slate-500">読み込み中…</p>;
@@ -21,6 +23,32 @@ export default function DashboardPage() {
 
   const diagnosis = diagnose(problems, store);
   const totalReviews = diagnosis.subjects.reduce((s, x) => s + x.reviews, 0);
+
+  function handleExport() {
+    const blob = new Blob([store.snapshot()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `denken-os-progress-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function handleImportFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = typeof reader.result === "string" ? reader.result : "";
+      if (importJson(text)) {
+        alert("進捗を取り込みました。");
+      } else {
+        alert("ファイル形式が想定外です。読み込めませんでした。");
+      }
+    };
+    reader.readAsText(file);
+  }
 
   return (
     <div className="space-y-8">
@@ -118,20 +146,45 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {totalReviews > 0 && (
-        <section className="border-t border-slate-200 pt-4">
+      <section className="flex flex-wrap items-center gap-4 border-t border-slate-200 pt-4 text-sm">
+        {totalReviews > 0 && (
+          <button
+            onClick={handleExport}
+            className="text-slate-600 underline-offset-2 hover:text-indigo-600 hover:underline"
+          >
+            進捗を書き出す
+          </button>
+        )}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="text-slate-600 underline-offset-2 hover:text-indigo-600 hover:underline"
+        >
+          進捗を読み込む
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/json,.json"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleImportFile(file);
+            e.target.value = "";
+          }}
+        />
+        {totalReviews > 0 && (
           <button
             onClick={() => {
               if (confirm("学習進捗をすべて消去します。よろしいですか？")) {
                 reset();
               }
             }}
-            className="text-sm text-slate-400 underline-offset-2 hover:text-rose-600 hover:underline"
+            className="ml-auto text-slate-400 underline-offset-2 hover:text-rose-600 hover:underline"
           >
             学習進捗をリセット
           </button>
-        </section>
-      )}
+        )}
+      </section>
     </div>
   );
 }

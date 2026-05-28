@@ -90,4 +90,35 @@ export class ProgressStore {
     this.state = emptyState();
     this.persist();
   }
+
+  /** 進捗を JSON 文字列に書き出す(端末移行・バックアップ用)。 */
+  snapshot(): string {
+    return JSON.stringify(this.state);
+  }
+
+  /**
+   * JSON 文字列から進捗を復元する。
+   * - 形式が想定外(version 不一致、cards/logs の型違い等)なら false を返し既存状態は維持。
+   * - 正常に復元できれば true。
+   */
+  restore(serialized: string): boolean {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(serialized);
+    } catch {
+      return false;
+    }
+    if (typeof parsed !== "object" || parsed === null) return false;
+    const obj = parsed as Record<string, unknown>;
+    if (obj.version !== 1) return false;
+    if (typeof obj.cards !== "object" || obj.cards === null) return false;
+    if (!Array.isArray(obj.logs)) return false;
+    this.state = {
+      version: 1,
+      cards: obj.cards as Record<string, unknown>,
+      logs: obj.logs as ReviewRecord[],
+    };
+    this.persist();
+    return true;
+  }
 }

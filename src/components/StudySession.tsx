@@ -1,27 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import type { Card } from "ts-fsrs";
 import type { Problem } from "@/domain/content/schema";
 import { SUBJECT_LABELS } from "@/domain/content/schema";
-import { GRADE_LABELS, type Grade4 } from "@/domain/srs/scheduler";
+import {
+  GRADE_LABELS,
+  newCard,
+  preview,
+  type Grade4,
+} from "@/domain/srs/scheduler";
 import { MarkdownMath } from "@/components/MarkdownMath";
 
 export interface StudySessionProps {
   queue: Problem[];
   onGrade: (problemId: string, grade: Grade4, correct: boolean) => void;
+  /**
+   * 指定された問題の現在 FSRS カードを返すコールバック。
+   * 渡すと評価ボタンに「次回 ◯日後」を表示する(任意)。
+   */
+  getCard?: (problemId: string) => Card | null;
 }
 
 // 正答時に提示する評価。誤答時は常に "again"(FSRS の lapse)に固定する。
 const CORRECT_GRADES: Grade4[] = ["hard", "good", "easy"];
 
-export function StudySession({ queue, onGrade }: StudySessionProps) {
+export function StudySession({ queue, onGrade, getCard }: StudySessionProps) {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
 
   const problem: Problem | undefined = queue[index];
   const revealed = selected !== null;
   const isCorrect = problem != null && selected === problem.answerIndex;
+
+  // 評価ボタンに表示する「もし◯を選んだら次は◯日後」のプレビュー。
+  const intervals = useMemo(() => {
+    if (!problem || !revealed || !getCard) return null;
+    const card = getCard(problem.id) ?? newCard();
+    return preview(card);
+  }, [problem, revealed, getCard]);
 
   function choose(i: number) {
     if (selected === null) setSelected(i);
@@ -173,9 +191,14 @@ export function StudySession({ queue, onGrade }: StudySessionProps) {
                     key={g}
                     onClick={() => gradeAndNext(g)}
                     aria-keyshortcuts={String(i + 1)}
-                    className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50"
+                    className="flex flex-col items-center rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50"
                   >
-                    {GRADE_LABELS[g]}
+                    <span>{GRADE_LABELS[g]}</span>
+                    {intervals && (
+                      <span className="mt-0.5 text-xs font-normal text-slate-400">
+                        {intervals[g].intervalLabel}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -185,7 +208,12 @@ export function StudySession({ queue, onGrade }: StudySessionProps) {
               onClick={() => gradeAndNext("again")}
               className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-700"
             >
-              次の問題へ(あとで復習)
+              次の問題へ
+              {intervals && (
+                <span className="ml-2 text-xs font-normal text-indigo-100">
+                  ({intervals.again.intervalLabel}に再出題)
+                </span>
+              )}
             </button>
           )}
         </div>

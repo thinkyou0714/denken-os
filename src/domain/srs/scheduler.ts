@@ -65,3 +65,40 @@ export function reviveCard(raw: Record<string, unknown>): Card {
       raw.last_review != null ? new Date(raw.last_review as string) : undefined,
   } as Card;
 }
+
+export interface GradePreview {
+  dueAt: Date;
+  intervalLabel: string;
+}
+
+/**
+ * 4 段階それぞれを選んだ場合の次回出題日プレビュー。
+ * 評価前にユーザに「もう一度=10分後 / できた=3日後」等を提示するために使う。
+ */
+export function preview(
+  card: Card,
+  now: Date = new Date(),
+): Record<Grade4, GradePreview> {
+  const log = scheduler.repeat(card, now);
+  const out = {} as Record<Grade4, GradePreview>;
+  (Object.keys(RATING_MAP) as Grade4[]).forEach((g) => {
+    const item = log[RATING_MAP[g]];
+    const due = new Date(item.card.due);
+    out[g] = { dueAt: due, intervalLabel: formatInterval(now, due) };
+  });
+  return out;
+}
+
+function formatInterval(from: Date, to: Date): string {
+  const ms = to.getTime() - from.getTime();
+  if (ms <= 0) return "今すぐ";
+  const minutes = ms / 60_000;
+  if (minutes < 60) return `${Math.max(1, Math.round(minutes))}分後`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.round(hours)}時間後`;
+  const days = hours / 24;
+  if (days < 30) return `${Math.round(days)}日後`;
+  const months = days / 30;
+  if (months < 12) return `${Math.round(months)}か月後`;
+  return `${Math.round(days / 365)}年後`;
+}

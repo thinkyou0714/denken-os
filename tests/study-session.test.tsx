@@ -79,4 +79,20 @@ describe("StudySession", () => {
     await user.keyboard("1"); // 1 番目(正答)を選択
     expect(screen.getByText("正解")).toBeInTheDocument();
   });
+
+  it("getCard を渡すと評価ボタンに次回出題間隔が表示される", async () => {
+    const user = userEvent.setup();
+    render(
+      <StudySession
+        queue={queue}
+        onGrade={vi.fn()}
+        getCard={() => null /* 新規カード扱い */}
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /TrueOne/ }));
+    const goodBtn = screen.getByRole("button", {
+      name: new RegExp(GRADE_LABELS.good),
+    });
+    expect(goodBtn.textContent).toMatch(/分後|時間後|日後|か月後|今すぐ/);
+  });
 });

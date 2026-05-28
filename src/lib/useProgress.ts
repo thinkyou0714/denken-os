@@ -55,5 +55,14 @@ export function useProgress() {
     bump();
   }, [store, bump]);
 
-  return { store, record, reset, mounted };
+  const importJson = useCallback(
+    (json: string) => {
+      const ok = store.restore(json);
+      if (ok) bump();
+      return ok;
+    },
+    [store, bump],
+  );
+
+  return { store, record, reset, importJson, mounted };
 }

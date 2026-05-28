@@ -1,6 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { State } from "ts-fsrs";
-import { newCard, review, retrievability, isDue } from "@/domain/srs/scheduler";
+import {
+  newCard,
+  review,
+  retrievability,
+  isDue,
+  preview,
+} from "@/domain/srs/scheduler";
 
 describe("FSRS スケジューラ", () => {
   it("新規カードは即座に復習対象", () => {
@@ -28,6 +34,19 @@ describe("FSRS スケジューラ", () => {
     const easy = review(base, "easy", now).card;
     expect(new Date(easy.due).getTime()).toBeGreaterThan(
       new Date(again.due).getTime(),
+    );
+  });
+
+  it("preview は 4 段階の次回出題日を返し、easy ほど遠い", () => {
+    const now = new Date("2026-01-01T00:00:00Z");
+    const p = preview(newCard(now), now);
+    expect(p.again.intervalLabel).toBeTruthy();
+    expect(p.easy.intervalLabel).toBeTruthy();
+    expect(p.easy.dueAt.getTime()).toBeGreaterThanOrEqual(
+      p.again.dueAt.getTime(),
+    );
+    expect(p.good.dueAt.getTime()).toBeGreaterThanOrEqual(
+      p.hard.dueAt.getTime(),
     );
   });
 
