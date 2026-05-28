@@ -6,6 +6,9 @@ import {
   label,
   annotation,
   currentArrow,
+  terminal,
+  resistor,
+  caption,
 } from "@/lib/svg/primitives";
 
 export const powerProblems: Problem[] = [
@@ -149,7 +152,61 @@ export const powerProblems: Problem[] = [
     topic: "三相Y結線",
     difficulty: 2,
     source: "オリジナル",
-    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 260" role="img" aria-labelledby="p10-title" style="max-width:100%;height:auto"><title id="p10-title">対称三相 Y(スター)結線の回路図</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.t{font-family:system-ui,sans-serif;font-size:14px;fill:#111}.l{font-family:system-ui,sans-serif;font-size:14px;font-weight:600;fill:#1d4ed8}.z{font-family:system-ui,sans-serif;font-size:13px;fill:#047857;font-weight:600}</style><circle cx="150" cy="140" r="4" fill="#0f172a"/><text class="t" x="158" y="156">N (中性点)</text><line class="w" x1="150" y1="140" x2="150" y2="40"/><rect x="135" y="70" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="z" x="143" y="85">Z</text><circle cx="150" cy="40" r="3" fill="#0f172a"/><text class="l" x="142" y="28">a</text><line class="w" x1="150" y1="140" x2="240" y2="220"/><rect x="184" y="170" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2" transform="rotate(41 199 180)"/><text class="z" x="215" y="170">Z</text><circle cx="240" cy="220" r="3" fill="#0f172a"/><text class="l" x="246" y="230">b</text><line class="w" x1="150" y1="140" x2="60" y2="220"/><rect x="86" y="170" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2" transform="rotate(-41 101 180)"/><text class="z" x="60" y="170">Z</text><circle cx="60" cy="220" r="3" fill="#0f172a"/><text class="l" x="42" y="230">c</text><text class="t" x="100" y="60" style="font-size:12px;fill:#6b7280">V_p = 100 V</text></svg>`,
+    figureSvg: svg(
+      360,
+      320,
+      "対称三相 Y(スター)結線",
+      // a 相(上)
+      wire([180, 170], [180, 70]),
+      label(160, 122, "Z", {
+        color: "#047857",
+        weight: 800,
+        size: 16,
+        anchor: "end",
+      }),
+      terminal(180, 60),
+      label(180, 46, "a", { color: "#1d4ed8", weight: 800, size: 18 }),
+      // b 相(右下)
+      wire([180, 170], [262, 244]),
+      label(232, 192, "Z", {
+        color: "#047857",
+        weight: 800,
+        size: 16,
+      }),
+      terminal(266, 248),
+      label(280, 262, "b", {
+        color: "#1d4ed8",
+        weight: 800,
+        size: 18,
+        anchor: "start",
+      }),
+      // c 相(左下)
+      wire([180, 170], [98, 244]),
+      label(128, 192, "Z", {
+        color: "#047857",
+        weight: 800,
+        size: 16,
+        anchor: "end",
+      }),
+      terminal(94, 248),
+      label(80, 262, "c", {
+        color: "#1d4ed8",
+        weight: 800,
+        size: 18,
+        anchor: "end",
+      }),
+      // 中性点 N(b 相ワイヤを避けて上側に配置)
+      node(180, 170),
+      label(198, 158, "N (中性点)", {
+        anchor: "start",
+        weight: 800,
+        size: 14,
+        color: "#475569",
+      }),
+      // V_p 注釈
+      annotation(30, 110, "V_p = 100 V", { anchor: "start", size: 14 }),
+      caption(360, 320, "図 4"),
+    ),
     question:
       "下図のような対称三相 Y(スター)結線において、各相のインピーダンス $Z = 10\\,\\Omega$、相電圧 $V_p = 100\\,\\mathrm{V}$ である。線電流 $I_l$ はいくらか。",
     choices: ["5 A", "10 A", "17.3 A", "20 A", "30 A"],
@@ -179,34 +236,45 @@ export const powerProblems: Problem[] = [
     difficulty: 3,
     source: "オリジナル(本試験レベル)",
     figureSvg: svg(
-      480,
-      260,
+      540,
+      300,
       "単相 3 線式配電線路",
-      // 3 horizontal rails (L1, N, L2) from source (left) to loads (right)
-      wire([60, 60], [400, 60]), // L1
-      wire([60, 130], [400, 130]), // N (中性線)
-      wire([60, 200], [400, 200]), // L2
-      // Source markers (left): small circles
-      `<circle cx="50" cy="60" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
-      `<circle cx="50" cy="130" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
-      `<circle cx="50" cy="200" r="5" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
-      label(34, 64, "L₁", { anchor: "end", size: 12, color: "#475569" }),
-      label(34, 134, "N", { anchor: "end", size: 12, color: "#475569" }),
-      label(34, 204, "L₂", { anchor: "end", size: 12, color: "#475569" }),
-      // Load 1: between L1 and N (vertical resistor box)
-      wire([300, 60], [300, 130]),
-      `<rect x="280" y="78" width="40" height="34" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
-      label(300, 100, "30 A 負荷"),
-      // Load 2: between N and L2
-      wire([400, 130], [400, 200]),
-      `<rect x="380" y="148" width="40" height="34" fill="#fff" stroke="#0f172a" stroke-width="2"/>`,
-      label(400, 170, "20 A 負荷"),
-      // Current arrows on rails
-      currentArrow(160, 60, "I₁=30A", { dir: "right" }),
-      currentArrow(160, 200, "I₂=20A", { dir: "right", labelDy: 18 }),
-      currentArrow(200, 130, "I_N=?", { dir: "right" }),
-      // 中性線 annotation
-      annotation(340, 122, "中性線", { anchor: "middle" }),
+      // 3 horizontal rails
+      wire([80, 70], [460, 70]), // L1
+      wire([80, 150], [460, 150]), // N (中性線)
+      wire([80, 230], [460, 230]), // L2
+      // 電源端子(左)
+      terminal(80, 70),
+      terminal(80, 150),
+      terminal(80, 230),
+      label(64, 70, "L₁", { anchor: "end", size: 14, color: "#475569" }),
+      label(64, 150, "N", { anchor: "end", size: 14, color: "#475569" }),
+      label(64, 230, "L₂", { anchor: "end", size: 14, color: "#475569" }),
+      // 負荷 1 (L1-N 間、縦置き抵抗 36×40)
+      wire([340, 70], [340, 90]),
+      resistor(340, 110, "30 A 負荷", {
+        vertical: true,
+        w: 40,
+        h: 36,
+        labelPos: "right",
+      }),
+      wire([340, 130], [340, 150]),
+      // 負荷 2 (N-L2 間)
+      wire([440, 150], [440, 170]),
+      resistor(440, 190, "20 A 負荷", {
+        vertical: true,
+        w: 40,
+        h: 36,
+        labelPos: "right",
+      }),
+      wire([440, 210], [440, 230]),
+      // 電流矢印
+      currentArrow(190, 70, "I₁=30A", { dir: "right", labelDy: -14 }),
+      currentArrow(240, 150, "I_N=?", { dir: "right", labelDy: -14 }),
+      currentArrow(190, 230, "I₂=20A", { dir: "right", labelDy: 24 }),
+      // 中性線アノテーション(N 線の少し上、ロードから離す)
+      annotation(410, 140, "中性線", { anchor: "middle" }),
+      caption(540, 300, "図 5"),
     ),
     question:
       "図の単相 3 線式配電線路において、L₁-N 間の負荷電流 $I_1 = 30\\,\\mathrm{A}$、N-L₂ 間の負荷電流 $I_2 = 20\\,\\mathrm{A}$(いずれも力率 1.0)である。中性線に流れる電流 $I_N$ の大きさはいくらか。",

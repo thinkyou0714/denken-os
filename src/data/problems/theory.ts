@@ -5,7 +5,13 @@ import {
   node,
   resistor,
   label,
-  annotation,
+  caption,
+  currentArrow,
+  terminal,
+  circleSymbol,
+  arrow,
+  rightAngle,
+  arcAngle,
 } from "@/lib/svg/primitives";
 
 export const theoryProblems: Problem[] = [
@@ -143,7 +149,45 @@ export const theoryProblems: Problem[] = [
     topic: "直列並列混合回路",
     difficulty: 2,
     source: "オリジナル",
-    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="t10-title" style="max-width:100%;height:auto"><title id="t10-title">R1 直列 + R2 と R3 の並列回路</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.r{fill:#fff;stroke:#0f172a;stroke-width:2}.t{font-family:system-ui,sans-serif;font-size:13px;fill:#111}.l{font-family:system-ui,sans-serif;font-size:13px;font-weight:600;fill:#1d4ed8}</style><line class="w" x1="40" y1="60" x2="40" y2="160"/><line class="w" x1="28" y1="105" x2="52" y2="105"/><line class="w" x1="34" y1="115" x2="46" y2="115"/><text class="l" x="4" y="92">E=12V</text><line class="w" x1="40" y1="60" x2="90" y2="60"/><rect class="r" x="90" y="50" width="60" height="20"/><text class="t" x="103" y="65">R₁=2Ω</text><line class="w" x1="150" y1="60" x2="200" y2="60"/><circle cx="200" cy="60" r="3" fill="#0f172a"/><line class="w" x1="200" y1="60" x2="200" y2="30"/><line class="w" x1="200" y1="30" x2="220" y2="30"/><rect class="r" x="220" y="20" width="60" height="20"/><text class="t" x="233" y="35">R₂=6Ω</text><line class="w" x1="280" y1="30" x2="340" y2="30"/><line class="w" x1="340" y1="30" x2="340" y2="60"/><line class="w" x1="200" y1="60" x2="200" y2="90"/><line class="w" x1="200" y1="90" x2="220" y2="90"/><rect class="r" x="220" y="80" width="60" height="20"/><text class="t" x="233" y="95">R₃=3Ω</text><line class="w" x1="280" y1="90" x2="340" y2="90"/><line class="w" x1="340" y1="60" x2="340" y2="90"/><circle cx="340" cy="60" r="3" fill="#0f172a"/><line class="w" x1="340" y1="60" x2="340" y2="160"/><line class="w" x1="40" y1="160" x2="340" y2="160"/><path d="M 70 52 L 80 60 L 70 68 Z" fill="#1d4ed8"/><text class="l" x="55" y="48">I</text><text class="t" x="195" y="78" style="font-size:11px;fill:#6b7280">A</text><text class="t" x="345" y="78" style="font-size:11px;fill:#6b7280">B</text></svg>`,
+    figureSvg: svg(
+      500,
+      300,
+      "R₁ 直列 + R₂‖R₃ 並列回路",
+      // 左の電源端子(上下に開放端子)
+      terminal(60, 80),
+      terminal(60, 220),
+      label(8, 154, "E=12V", {
+        color: "#1d4ed8",
+        italic: true,
+        weight: 800,
+        size: 16,
+        anchor: "start",
+      }),
+      // 左縦線(電源側内部)
+      wire([60, 80], [60, 220]),
+      // 上幹線: 電源 → I矢印 → R1 → A
+      wire([60, 80], [130, 80]),
+      resistor(170, 80, "R₁=2Ω"),
+      wire([210, 80], [260, 80]),
+      node(260, 80),
+      label(252, 64, "A", { color: "#475569", weight: 800, anchor: "end" }),
+      // 並列上枝: A → R2 → B(右上)
+      wire([260, 80], [260, 38], [310, 38]),
+      resistor(350, 38, "R₂=6Ω"),
+      wire([390, 38], [440, 38], [440, 80]),
+      // 並列下枝: A → R3 → B
+      wire([260, 80], [260, 122], [310, 122]),
+      resistor(350, 122, "R₃=3Ω", { labelPos: "below" }),
+      wire([390, 122], [440, 122], [440, 80]),
+      // 結節点 B
+      node(440, 80),
+      label(448, 64, "B", { color: "#475569", weight: 800, anchor: "start" }),
+      // 右下りと底辺戻り線
+      wire([440, 80], [440, 220], [60, 220]),
+      // 電流 I 矢印
+      currentArrow(100, 80, "I", { labelDy: -14 }),
+      caption(500, 300, "図 1"),
+    ),
     question:
       "下図の回路において、回路全体に流れる電流 $I$ はいくらか。",
     choices: ["1.5 A", "2 A", "3 A", "4 A", "6 A"],
@@ -158,7 +202,29 @@ export const theoryProblems: Problem[] = [
     topic: "インピーダンス三角形",
     difficulty: 2,
     source: "オリジナル",
-    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" role="img" aria-labelledby="t11-title" style="max-width:100%;height:auto"><title id="t11-title">インピーダンス三角形 R=3, X_L=4, Z=5</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.h{stroke:#1d4ed8;stroke-width:2.5;fill:none}.t{font-family:system-ui,sans-serif;font-size:14px;fill:#111}.a{font-family:system-ui,sans-serif;font-size:14px;font-weight:600;fill:#dc2626}</style><line class="w" x1="40" y1="170" x2="230" y2="170" marker-end="url(#a)"/><line class="w" x1="230" y1="170" x2="230" y2="50" marker-end="url(#a)"/><line class="h" x1="40" y1="170" x2="230" y2="50" marker-end="url(#b)"/><polyline class="w" points="218,170 218,158 230,158"/><path class="w" d="M 80 170 A 40 40 0 0 0 65 142"/><defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#0f172a"/></marker><marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#1d4ed8"/></marker></defs><text class="t" x="120" y="190">R = 3 Ω</text><text class="t" x="240" y="115">X_L = 4 Ω</text><text class="t" x="95" y="105" fill="#1d4ed8" font-weight="600">Z = 5 Ω</text><text class="a" x="68" y="158">θ</text></svg>`,
+    figureSvg: svg(
+      340,
+      320,
+      "インピーダンス三角形 R=3, X_L=4, Z=5(3:4:5)",
+      // R 水平(黒矢印)
+      arrow(50, 250, 200, 250),
+      label(125, 274, "R = 3 Ω"),
+      // X_L 垂直(黒矢印)
+      arrow(200, 250, 200, 50),
+      label(216, 150, "X_L = 4 Ω", { anchor: "start" }),
+      // Z 斜辺(青矢印)
+      arrow(50, 250, 200, 50, { color: "blue" }),
+      label(95, 135, "Z = 5 Ω", {
+        color: "#1d4ed8",
+        weight: 800,
+        size: 16,
+      }),
+      // 直角マーカ(右下角・内側へ向かう L)
+      rightAngle(200, 250, { orientation: "br" }),
+      // 角度 θ(赤・原点付近)
+      arcAngle(50, 250, 42, 0, -53.13, "θ"),
+      caption(340, 320, "図 2"),
+    ),
     question:
       "下図のインピーダンス三角形(抵抗 $R$、誘導性リアクタンス $X_L$、合成インピーダンス $Z$)から、力率 $\\cos\\theta$ を求めよ。",
     choices: ["0.4", "0.6", "0.75", "0.8", "1.33"],
@@ -174,41 +240,42 @@ export const theoryProblems: Problem[] = [
     difficulty: 3,
     source: "オリジナル(本試験レベル)",
     figureSvg: svg(
-      460,
-      290,
+      540,
+      340,
       "ホイートストンブリッジ回路",
-      // 上辺: A(60,80) → R1 → B(230,80) → R2 → C(400,80)
-      wire([60, 80], [110, 80]),
-      resistor(140, 80, "R₁=100Ω"),
-      wire([170, 80], [230, 80]),
-      node(230, 80),
-      wire([230, 80], [290, 80]),
-      resistor(320, 80, "R₂=200Ω"),
-      wire([350, 80], [400, 80]),
-      // 右辺: 縦線
-      wire([400, 80], [400, 220]),
-      // 下辺: A'(60,220) → R3 → D(230,220) → R4 → C'(400,220)
-      wire([60, 220], [110, 220]),
-      resistor(140, 220, "R₃=150Ω"),
-      wire([170, 220], [230, 220]),
-      node(230, 220),
-      wire([230, 220], [290, 220]),
-      resistor(320, 220, "R₄=?", { labelOffset: 6 }),
-      wire([350, 220], [400, 220]),
-      // 左辺: A → A' (電源 E を表示)
-      wire([60, 80], [60, 220]),
-      // 検流計ブリッジ: B → G → D
-      wire([230, 80], [230, 124]),
-      `<circle cx="230" cy="148" r="18" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="lbl" x="230" y="153" text-anchor="middle" font-size="14" fill="#0f172a">G</text>`,
-      wire([230, 172], [230, 220]),
-      // 電源 E の表示(左の外側)
-      wire([60, 150], [30, 150]),
-      `<circle cx="20" cy="150" r="10" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="lbl" x="20" y="155" text-anchor="middle" font-size="14" fill="#1d4ed8" font-weight="600">E</text>`,
-      // ノードラベル
-      label(60, 70, "A", { anchor: "start", size: 12, color: "#475569" }),
-      label(404, 70, "C", { anchor: "start", size: 12, color: "#475569" }),
-      label(214, 76, "B", { anchor: "end", size: 12, color: "#475569" }),
-      label(214, 232, "D", { anchor: "end", size: 12, color: "#475569" }),
+      // 上路: A(80,80) → R1 → B → R2 → C(440,80)
+      wire([80, 80], [130, 80]),
+      resistor(170, 80, "R₁=100Ω"),
+      wire([210, 80], [260, 80]),
+      node(260, 80),
+      label(260, 60, "B", { color: "#475569", weight: 700, size: 13 }),
+      wire([260, 80], [310, 80]),
+      resistor(350, 80, "R₂=200Ω"),
+      wire([390, 80], [440, 80]),
+      // 下路: A(80,220) → R3 → D → R4 → C(440,220)
+      wire([80, 220], [130, 220]),
+      resistor(170, 220, "R₃=150Ω", { labelPos: "below" }),
+      wire([210, 220], [260, 220]),
+      node(260, 220),
+      label(260, 248, "D", { color: "#475569", weight: 700, size: 13 }),
+      wire([260, 220], [310, 220]),
+      resistor(350, 220, "R₄=?", { labelPos: "below" }),
+      wire([390, 220], [440, 220]),
+      // 左右の縦レール (A レール, C レール)
+      wire([80, 80], [80, 220]),
+      wire([440, 80], [440, 220]),
+      // ノードラベル A, C
+      label(64, 80, "A", { color: "#475569", weight: 700, anchor: "end", size: 14 }),
+      label(456, 80, "C", { color: "#475569", weight: 700, anchor: "start", size: 14 }),
+      // 検流計 G (中央縦)
+      wire([260, 80], [260, 136]),
+      circleSymbol(260, 150, "G", { r: 14, color: "#0f172a" }),
+      wire([260, 164], [260, 220]),
+      // 外部電源 E (下側ループ A→E→C)
+      wire([80, 220], [80, 290], [240, 290]),
+      circleSymbol(260, 290, "E"),
+      wire([280, 290], [440, 290], [440, 220]),
+      caption(540, 340, "図 3"),
     ),
     question:
       "図のホイートストンブリッジ回路で、検流計 $G$ が振れない(平衡状態)とき、抵抗 $R_4$ の値はいくらか。ただし $R_1=100\\,\\Omega$、$R_2=200\\,\\Omega$、$R_3=150\\,\\Omega$ とする。",
