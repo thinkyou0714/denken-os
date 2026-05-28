@@ -2,6 +2,7 @@ import { problemsBySubject } from "@/data/problems";
 import { SUBJECTS, SUBJECT_LABELS } from "@/domain/content/schema";
 import { MarkdownMath } from "@/components/MarkdownMath";
 import { ProblemNoteEditor } from "@/components/ProblemNoteEditor";
+import { ProblemFigure } from "@/components/ProblemFigure";
 
 export const metadata = {
   title: "問題一覧 — DNKN-OS",
@@ -39,6 +40,9 @@ export default function ProblemsPage() {
                         <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500">
                           {p.topic}
                         </span>
+                        {p.figureSvg && (
+                          <ProblemFigure svg={p.figureSvg} />
+                        )}
                         <MarkdownMath>{p.question}</MarkdownMath>
                       </div>
                       <span className="shrink-0 text-xs text-indigo-600 group-open:hidden">

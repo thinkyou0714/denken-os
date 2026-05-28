@@ -29,6 +29,8 @@ export const ProblemSchema = z
     year: z.number().int().min(1990).max(2100).optional(),
     /** 出典表記。例: "オリジナル", "電験三種令和X年" 等。 */
     source: z.string().optional(),
+    /** インライン SVG 文字列(回路図 / ベクトル図等)。問題本文の上に描画される。 */
+    figureSvg: z.string().optional(),
     question: z.string().min(1),
     choices: z.array(z.string().min(1)).min(2).max(6),
     answerIndex: z.number().int().min(0),

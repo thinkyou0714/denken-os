@@ -135,4 +135,19 @@ export const powerProblems: Problem[] = [
       "鉄損(ヒステリシス損 + 渦電流損)は印加電圧と周波数で決まり、無負荷でも発生し負荷電流にはほぼ依存しない。銅損(巻線抵抗による損失)は $P = I^2 R$ で **負荷電流の 2 乗に比例**。最大効率は両者が等しくなる負荷で得られる。",
     tags: ["鉄損", "銅損", "変圧器"],
   },
+  {
+    id: "power-010",
+    subject: "power",
+    topic: "三相Y結線",
+    difficulty: 2,
+    source: "オリジナル",
+    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 260" role="img" aria-labelledby="p10-title" style="max-width:100%;height:auto"><title id="p10-title">対称三相 Y(スター)結線の回路図</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.t{font-family:system-ui,sans-serif;font-size:14px;fill:#111}.l{font-family:system-ui,sans-serif;font-size:14px;font-weight:600;fill:#1d4ed8}.z{font-family:system-ui,sans-serif;font-size:13px;fill:#047857;font-weight:600}</style><circle cx="150" cy="140" r="4" fill="#0f172a"/><text class="t" x="158" y="156">N (中性点)</text><line class="w" x1="150" y1="140" x2="150" y2="40"/><rect x="135" y="70" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2"/><text class="z" x="143" y="85">Z</text><circle cx="150" cy="40" r="3" fill="#0f172a"/><text class="l" x="142" y="28">a</text><line class="w" x1="150" y1="140" x2="240" y2="220"/><rect x="184" y="170" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2" transform="rotate(41 199 180)"/><text class="z" x="215" y="170">Z</text><circle cx="240" cy="220" r="3" fill="#0f172a"/><text class="l" x="246" y="230">b</text><line class="w" x1="150" y1="140" x2="60" y2="220"/><rect x="86" y="170" width="30" height="20" fill="#fff" stroke="#0f172a" stroke-width="2" transform="rotate(-41 101 180)"/><text class="z" x="60" y="170">Z</text><circle cx="60" cy="220" r="3" fill="#0f172a"/><text class="l" x="42" y="230">c</text><text class="t" x="100" y="60" style="font-size:12px;fill:#6b7280">V_p = 100 V</text></svg>`,
+    question:
+      "下図のような対称三相 Y(スター)結線において、各相のインピーダンス $Z = 10\\,\\Omega$、相電圧 $V_p = 100\\,\\mathrm{V}$ である。線電流 $I_l$ はいくらか。",
+    choices: ["5 A", "10 A", "17.3 A", "20 A", "30 A"],
+    answerIndex: 1,
+    explanation:
+      "Y 結線では **線電流 = 相電流**($I_l = I_p$)。相電流は\n\n$$I_p = \\frac{V_p}{Z} = \\frac{100}{10} = 10\\,\\mathrm{A}$$\n\nなお線間電圧と相電圧の関係は $V_l = \\sqrt{3}\\,V_p$。",
+    tags: ["Y結線", "三相", "結線図"],
+  },
 ];

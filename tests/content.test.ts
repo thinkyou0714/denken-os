@@ -44,4 +44,13 @@ describe("シードコンテンツ", () => {
     const withSource = problems.filter((p) => p.source !== undefined);
     expect(withSource.length).toBeGreaterThan(0);
   });
+
+  it("図(figureSvg)付きの問題が複数存在する(回路/ベクトル/結線図)", () => {
+    const withFigure = problems.filter((p) => p.figureSvg !== undefined);
+    expect(withFigure.length).toBeGreaterThanOrEqual(3);
+    // 全 SVG は <svg で始まることを確認(壊れた markup を防ぐ)
+    for (const p of withFigure) {
+      expect(p.figureSvg!.trim().startsWith("<svg")).toBe(true);
+    }
+  });
 });

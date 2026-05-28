@@ -18,6 +18,7 @@ import {
   BREAK_RECOMMEND_AFTER_MIN,
 } from "@/domain/gamification/break";
 import { MarkdownMath } from "@/components/MarkdownMath";
+import { ProblemFigure } from "@/components/ProblemFigure";
 
 export interface StudySessionProps {
   queue: Problem[];
@@ -180,6 +181,7 @@ export function StudySession({
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-6">
+        {problem.figureSvg && <ProblemFigure svg={problem.figureSvg} />}
         <MarkdownMath>{problem.question}</MarkdownMath>
       </div>
 

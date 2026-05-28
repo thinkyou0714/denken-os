@@ -129,4 +129,34 @@ export const theoryProblems: Problem[] = [
       "キルヒホッフの電流則(KCL)より、節点に流入する電流の総和は流出する電流の総和に等しい。\n\n$$I_3 = I_1 + I_2 = 2 + 3 = 5\\,\\mathrm{A}$$",
     tags: ["キルヒホッフ", "KCL"],
   },
+  {
+    id: "theory-010",
+    subject: "theory",
+    topic: "直列並列混合回路",
+    difficulty: 2,
+    source: "オリジナル",
+    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="t10-title" style="max-width:100%;height:auto"><title id="t10-title">R1 直列 + R2 と R3 の並列回路</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.r{fill:#fff;stroke:#0f172a;stroke-width:2}.t{font-family:system-ui,sans-serif;font-size:13px;fill:#111}.l{font-family:system-ui,sans-serif;font-size:13px;font-weight:600;fill:#1d4ed8}</style><line class="w" x1="40" y1="60" x2="40" y2="160"/><line class="w" x1="28" y1="105" x2="52" y2="105"/><line class="w" x1="34" y1="115" x2="46" y2="115"/><text class="l" x="4" y="92">E=12V</text><line class="w" x1="40" y1="60" x2="90" y2="60"/><rect class="r" x="90" y="50" width="60" height="20"/><text class="t" x="103" y="65">R₁=2Ω</text><line class="w" x1="150" y1="60" x2="200" y2="60"/><circle cx="200" cy="60" r="3" fill="#0f172a"/><line class="w" x1="200" y1="60" x2="200" y2="30"/><line class="w" x1="200" y1="30" x2="220" y2="30"/><rect class="r" x="220" y="20" width="60" height="20"/><text class="t" x="233" y="35">R₂=6Ω</text><line class="w" x1="280" y1="30" x2="340" y2="30"/><line class="w" x1="340" y1="30" x2="340" y2="60"/><line class="w" x1="200" y1="60" x2="200" y2="90"/><line class="w" x1="200" y1="90" x2="220" y2="90"/><rect class="r" x="220" y="80" width="60" height="20"/><text class="t" x="233" y="95">R₃=3Ω</text><line class="w" x1="280" y1="90" x2="340" y2="90"/><line class="w" x1="340" y1="60" x2="340" y2="90"/><circle cx="340" cy="60" r="3" fill="#0f172a"/><line class="w" x1="340" y1="60" x2="340" y2="160"/><line class="w" x1="40" y1="160" x2="340" y2="160"/><path d="M 70 52 L 80 60 L 70 68 Z" fill="#1d4ed8"/><text class="l" x="55" y="48">I</text><text class="t" x="195" y="78" style="font-size:11px;fill:#6b7280">A</text><text class="t" x="345" y="78" style="font-size:11px;fill:#6b7280">B</text></svg>`,
+    question:
+      "下図の回路において、回路全体に流れる電流 $I$ はいくらか。",
+    choices: ["1.5 A", "2 A", "3 A", "4 A", "6 A"],
+    answerIndex: 2,
+    explanation:
+      "$R_2$ と $R_3$ の並列合成抵抗は\n\n$$R_{23} = \\frac{R_2 R_3}{R_2 + R_3} = \\frac{6 \\times 3}{6 + 3} = 2\\,\\Omega$$\n\nこれが $R_1$ と直列なので全体は\n\n$$R = R_1 + R_{23} = 2 + 2 = 4\\,\\Omega$$\n\nしたがって $I = E/R = 12/4 = 3\\,\\mathrm{A}$。",
+    tags: ["直列並列", "合成抵抗", "回路図"],
+  },
+  {
+    id: "theory-011",
+    subject: "theory",
+    topic: "インピーダンス三角形",
+    difficulty: 2,
+    source: "オリジナル",
+    figureSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" role="img" aria-labelledby="t11-title" style="max-width:100%;height:auto"><title id="t11-title">インピーダンス三角形 R=3, X_L=4, Z=5</title><style>.w{stroke:#0f172a;stroke-width:2;fill:none}.h{stroke:#1d4ed8;stroke-width:2.5;fill:none}.t{font-family:system-ui,sans-serif;font-size:14px;fill:#111}.a{font-family:system-ui,sans-serif;font-size:14px;font-weight:600;fill:#dc2626}</style><line class="w" x1="40" y1="170" x2="230" y2="170" marker-end="url(#a)"/><line class="w" x1="230" y1="170" x2="230" y2="50" marker-end="url(#a)"/><line class="h" x1="40" y1="170" x2="230" y2="50" marker-end="url(#b)"/><polyline class="w" points="218,170 218,158 230,158"/><path class="w" d="M 80 170 A 40 40 0 0 0 65 142"/><defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#0f172a"/></marker><marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#1d4ed8"/></marker></defs><text class="t" x="120" y="190">R = 3 Ω</text><text class="t" x="240" y="115">X_L = 4 Ω</text><text class="t" x="95" y="105" fill="#1d4ed8" font-weight="600">Z = 5 Ω</text><text class="a" x="68" y="158">θ</text></svg>`,
+    question:
+      "下図のインピーダンス三角形(抵抗 $R$、誘導性リアクタンス $X_L$、合成インピーダンス $Z$)から、力率 $\\cos\\theta$ を求めよ。",
+    choices: ["0.4", "0.6", "0.75", "0.8", "1.33"],
+    answerIndex: 1,
+    explanation:
+      "インピーダンス三角形において、力率は隣辺/斜辺。\n\n$$\\cos\\theta = \\frac{R}{Z} = \\frac{3}{5} = 0.6$$",
+    tags: ["力率", "インピーダンス三角形", "ベクトル図"],
+  },
 ];
