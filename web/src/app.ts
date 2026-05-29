@@ -11,6 +11,7 @@ import { buildPlaylist, type PlaylistOptions, playlistTranscript, sessionSummary
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { planExam } from "../../lib/study/exam-plan.js";
 import {
   buildLesson,
   lessonFeedback,
@@ -69,6 +70,23 @@ function renderReadiness(): void {
       return `<span class="rd">${mark} ${escapeHtml(r.subject)} ${pct}% ${note}</span>`;
     })
     .join("");
+  renderExamPlan();
+}
+
+/** 試験日からの合格逆算ペース（今日の目標・重点科目）を表示する。 */
+function renderExamPlan(): void {
+  const el = document.getElementById("exam-plan");
+  if (!el) return;
+  const examMs = progress.examDateMs();
+  if (!examMs) {
+    el.textContent = "試験日を設定すると、合格逆算で今日の目標を表示します。";
+    return;
+  }
+  const plan = planExam({ examMs, nowMs: Date.now(), readiness: passReadiness(progress.subjectAccuracy()) });
+  const doneToday = progress.todayAnswered();
+  const progressText =
+    plan.todayTarget > 0 ? `（今日 ${Math.min(doneToday, plan.todayTarget)}/${plan.todayTarget}問）` : "";
+  el.textContent = `${plan.message}${progressText}`;
 }
 
 function renderQuestion(forced?: Problem): void {
@@ -436,6 +454,21 @@ function setMediaMetadata(topic: string, id: string): void {
   ms.metadata = new w.MediaMetadata({ title: `${topic}（${id}）`, artist: "DENKEN-OS 法規 聞き流し" });
 }
 
+function setupExamDate(): void {
+  const input = document.getElementById("exam-date") as HTMLInputElement | null;
+  if (!input) return;
+  // 保存済みの試験日を YYYY-MM-DD 形式で復元。
+  const ms = progress.examDateMs();
+  if (ms) {
+    const d = new Date(ms);
+    input.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+  input.addEventListener("change", () => {
+    progress.setExamDate(input.value);
+    renderExamPlan();
+  });
+}
+
 async function main(): Promise<void> {
   $("next").onclick = () => renderQuestion();
   try {
@@ -444,6 +477,7 @@ async function main(): Promise<void> {
   } catch {
     problems = [];
   }
+  setupExamDate();
   renderStats();
   renderQuestion();
   setupAudio();

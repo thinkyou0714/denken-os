@@ -14,6 +14,7 @@ export interface StorageLike {
 
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
+const EXAM_KEY = "denken:examDate";
 const DAY_MS = 86_400_000;
 
 export class LocalProgress {
@@ -113,5 +114,29 @@ export class LocalProgress {
     const last = new Map<string, boolean>();
     for (const l of this.logs()) last.set(l.topic, l.correct);
     return [...last.entries()].filter(([, correct]) => !correct).map(([topic]) => topic);
+  }
+
+  /** 試験日（epoch ms）。未設定は null。合格逆算のペース計画に使う。 */
+  examDateMs(): number | null {
+    const raw = this.storage.getItem(EXAM_KEY);
+    if (!raw) return null;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /** 試験日を保存する（"YYYY-MM-DD" or epoch ms）。空文字でクリア。 */
+  setExamDate(value: string): void {
+    if (!value) {
+      this.storage.setItem(EXAM_KEY, "");
+      return;
+    }
+    const ms = /^\d+$/.test(value) ? Number(value) : Date.parse(value);
+    if (Number.isFinite(ms)) this.storage.setItem(EXAM_KEY, String(ms));
+  }
+
+  /** 今日の解答数（日次目標の達成判定に使う）。 */
+  todayAnswered(nowMs: number = Date.now()): number {
+    const today = Math.floor(nowMs / DAY_MS);
+    return this.logs().filter((l) => Math.floor(l.atMs / DAY_MS) === today).length;
   }
 }

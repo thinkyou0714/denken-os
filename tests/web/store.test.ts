@@ -87,4 +87,22 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     p.record("旧問題", true, Date.UTC(2026, 0, 10)); // subject なし
     expect(p.subjectAccuracy()).toEqual([]);
   });
+
+  it("試験日を保存・復元できる（YYYY-MM-DD / クリア）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    expect(p.examDateMs()).toBeNull();
+    p.setExamDate("2026-08-30");
+    expect(p.examDateMs()).toBe(Date.parse("2026-08-30"));
+    p.setExamDate(""); // クリア
+    expect(p.examDateMs()).toBeNull();
+  });
+
+  it("今日の解答数を todayAnswered で数える（日次目標の達成判定）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const today = Date.UTC(2026, 0, 10);
+    p.record("a", true, today, undefined, "法規");
+    p.record("b", false, today, undefined, "法規");
+    p.record("c", true, today - DAY, undefined, "理論"); // 昨日はカウントしない
+    expect(p.todayAnswered(today)).toBe(2);
+  });
 });
