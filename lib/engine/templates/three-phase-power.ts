@@ -67,7 +67,13 @@ function buildFrom(V: number, R: number, X: number): GenerationResult | null {
   const Vp = V / Math.sqrt(3);
   const I = Vp / Z;
 
+  // 動的難易度: 基準★2。高圧(√3換算が直感的でない)と大きいピタゴラス組で加点。
+  let difficulty = 2;
+  if (V >= 3300) difficulty += 1;
+  if (Z > 13) difficulty += 1; // 5-12-13 を超える組（8-15-17, 7-24-25 等）
+
   return {
+    difficulty,
     params: {
       line_voltage: { value: V, unit: "V", realistic_range: [100, 6600] },
       R: { value: R, unit: "ohm", realistic_range: [1, 50] },

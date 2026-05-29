@@ -30,7 +30,13 @@ function buildFrom(f: number, p: number, s: number): GenerationResult | null {
   const answerText = String(N);
   const choices = [...texts].sort((a, b) => Number(a) - Number(b));
 
+  // 動的難易度: 基準★2。極数が多いほど Ns 計算がやや難、滑りが大きいと減速量も大きく難。
+  let difficulty = 2;
+  if (p >= 8) difficulty += 1;
+  if (s >= 5) difficulty += 1;
+
   return {
+    difficulty,
     params: {
       frequency: { value: f, unit: "Hz", realistic_range: [50, 60] },
       poles: { value: p, unit: "pole", realistic_range: [2, 12] },

@@ -1,9 +1,12 @@
 /** topic 名 → Template のレジストリ。 */
 import { capacitorEnergy } from "./capacitor-energy.js";
+import { dcMotorEmf } from "./dc-motor-emf.js";
 import { demandFactor } from "./demand-factor.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
+import { lineVoltageDrop } from "./line-voltage-drop.js";
 import { resistorNetwork } from "./resistor-network.js";
+import { shortCircuitCapacity } from "./short-circuit-capacity.js";
 import { threePhasePower } from "./three-phase-power.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
 import type { Template } from "./types.js";
@@ -16,6 +19,9 @@ const templates: Template[] = [
   transformerVoltageRegulation,
   groundingResistance,
   demandFactor,
+  shortCircuitCapacity,
+  lineVoltageDrop,
+  dcMotorEmf,
 ];
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
@@ -30,10 +36,13 @@ export function listTopics(): string[] {
 export type { Template };
 export {
   capacitorEnergy,
+  dcMotorEmf,
   demandFactor,
   groundingResistance,
   inductionMotorSpeed,
+  lineVoltageDrop,
   resistorNetwork,
+  shortCircuitCapacity,
   threePhasePower,
   transformerVoltageRegulation,
 };

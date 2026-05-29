@@ -42,7 +42,11 @@ function buildFrom(R1: number, R2: number, R3: number): GenerationResult | null 
   const answerText = String(total);
   const choices = [...texts].sort((a, b) => Number(a) - Number(b));
 
+  // 動的難易度: 基準★1。並列の R2≠R3（非対称）は約分が一手増えるので加点。
+  const difficulty = R2 === R3 ? 1 : 2;
+
   return {
+    difficulty,
     params: {
       R1: { value: R1, unit: "ohm", realistic_range: [1, 100] },
       R2: { value: R2, unit: "ohm", realistic_range: [1, 100] },

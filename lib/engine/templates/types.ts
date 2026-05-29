@@ -31,6 +31,11 @@ export interface Distractor {
 export interface GenerationResult {
   /** 出題形式（既定: multiple_choice）。numeric は選択肢なし。 */
   format?: ProblemFormat;
+  /**
+   * この draw の難易度(1-5)。係数で難度が変わる論点で上書きする。
+   * 省略時は Template.difficulty を既定値として使う（generate.ts）。
+   */
+  difficulty?: number;
   params: Record<string, ParamValue>;
   /** コードが算出した数値の真値（検算の基準）。 */
   answerValue: number;

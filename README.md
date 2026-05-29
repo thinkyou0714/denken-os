@@ -14,7 +14,7 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ7種＝5科目: 理論/電力/機械/法規/機械制御。MC＋numeric＋descriptive形式） | `docs/automation/01` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ**10種＝全6科目網羅**: 理論/電力/機械/法規/電力管理/機械制御。MC＋numeric＋descriptive形式。**係数に応じた動的難易度**と**誤答ごとの着眼を解説へ自動付与**） | `docs/automation/01` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック（**PR #4 で実CI緑**） | `docs/automation/09` |
 | アプリのデプロイ | `.github/workflows/deploy-pages.yml`（main マージで `web/` を GitHub Pages へ自動公開） | README ビジョン |
 | X投稿生成＋予約 | `lib/engine/toXPost.ts`＋`xlength.ts`（重み付き280字・自動スレッド）＋`publish.ts`（poll併設・朝→夜引用） | `docs/automation/02` |
@@ -31,7 +31,9 @@
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。
 > 日本語は1文字=2カウントで280字を超えやすいため、投稿は重み付き長で自動スレッド分割。
 > `problem-schema.json`(ajv) と zod 定義の**ドリフトをテストで検知**。Supabase スキーマは RLS 付きで `supabase/migrations/` に DDL を用意（実投稿/永続化の実体は認証取得後にアダプタ接続）。
-> 二次=記述(descriptive)は自動採点せず**自己採点**（模範解答＋採点観点を提示）。`data/problems/` に手検算済みの validated 問題（T-0001〜0003）を収録。
+> 二次=記述(descriptive)は自動採点せず**自己採点**（模範解答＋採点観点を提示）。`data/problems/` に手検算済みの validated 問題（T-0001〜0006、全6科目を網羅）を収録。
+> テンプレは draw ごとに難易度(★1-5)を係数から算出し、適応出題の精度を上げる。multiple_choice は誤答選択肢ごとに「なぜ誤るか（典型ミス）」を解説へ自動付与する（品質チェックリストの『成立する引っ掛け』を成果物に反映）。
+> 科目とテンプレの乖離（enum に科目があるのに実装が無い等）は **ドリフト検知テスト**で恒久的にガードする。
 > アプリ公開手順: Settings → Pages → Source = "GitHub Actions" にすると、main マージで自動デプロイされる。
 
 ### 使い方
@@ -40,13 +42,15 @@
 npm install
 npm run gen -- --topic 三相交流電力 --count 5            # 問題を生成（JSON を標準出力）
 npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他: 直並列合成抵抗 / コンデンサの静電エネルギー(numeric)
+npm run gen -- --topic パーセントインピーダンスと短絡容量 --count 5  # 電力管理(二次)
+npm run gen -- --topic 単相2線式の電圧降下 --count 5      # 電力 / 他: 直流電動機の逆起電力(機械)
 npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿スレッドも表示
 npm run validate:data                                     # data/ の問題を schema 検証（CIと同じ）
 npm run export:vault -- --out out/vault                   # 問題を Obsidian Markdown に書き出し
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
 npm run typecheck && npm run typecheck:web               # 型チェック
-npm test                                                  # ユニットテスト（87件）
+npm test                                                  # ユニットテスト（111件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。
