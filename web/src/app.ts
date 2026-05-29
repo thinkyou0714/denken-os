@@ -11,6 +11,7 @@ import { buildPlaylist, type PlaylistOptions, playlistTranscript, sessionSummary
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { buildLesson, lessonFeedback, type QuizResult, summarizeLesson } from "../../lib/study/lesson.js";
 import { AudioPlayer } from "./audio-player.js";
 import { BrowserSpeaker, isSpeechAvailable } from "./browser-speaker.js";
 import { LocalProgress } from "./store.js";
@@ -44,8 +45,8 @@ function renderStats(): void {
   $("weak").textContent = weak.length > 0 ? `弱点: ${weak.join(" / ")}` : "弱点: （まだデータなし）";
 }
 
-function renderQuestion(): void {
-  current = pickNext();
+function renderQuestion(forced?: Problem): void {
+  current = forced ?? pickNext();
   $("feedback").textContent = "";
   $("solution").innerHTML = "";
   $("share").textContent = "";
@@ -128,7 +129,13 @@ function grade(given: string): void {
     weeklyMinutes: 0,
   });
   renderStats();
+
+  // レッスンモード中なら採点結果をレッスンへ通知（聞く→解く→弱点ループ）。
+  onGraded?.(p, correct);
 }
+
+/** レッスン（聞く→解く）の採点完了フック。通常モードでは null。 */
+let onGraded: ((p: Problem, correct: boolean) => void) | null = null;
 
 function sourceText(p: Problem): string {
   return p.source.type === "original"
@@ -273,6 +280,63 @@ function setupAudio(): void {
     return;
   }
 
+  // 「聞く→解く→弱点講評」レッスン: まず聞き、聞いた論点をそのまま解いて弱点へ還元する。
+  const beginQuiz = (quiz: Problem[], rate: number): void => {
+    const results: QuizResult[] = [];
+    let idx = 0;
+    now.textContent = `✍️ いま聞いた${quiz.length}問を解いてみましょう。`;
+    void speaker.speak(`では、いま聞いた${quiz.length}問を解いてみましょう。`, { rate });
+    onGraded = (p, correct) => {
+      results.push({ topic: p.topic, subject: p.subject, correct });
+      idx += 1;
+      if (idx < quiz.length) {
+        renderQuestion(quiz[idx]!);
+      } else {
+        onGraded = null;
+        const summary = summarizeLesson(results);
+        const fb = lessonFeedback(summary);
+        now.textContent = `📊 ${fb}`;
+        renderStats(); // 弱点表示を更新（次レッスンの対象が変わる）
+        void speaker.speak(fb, { rate });
+      }
+    };
+    if (quiz[0]) renderQuestion(quiz[0]);
+  };
+
+  const startLesson = (): void => {
+    if (audioPlayer?.isPlaying) return;
+    const cfg = readConfig();
+    const count = cfg.maxItems > 0 ? cfg.maxItems : 5;
+    const lesson = buildLesson(problems, {
+      subjects: cfg.playlistOpts.subjects,
+      weakTopics: weakTopics(),
+      dueOnly: cfg.playlistOpts.dueOnly,
+      dueTopics: cfg.playlistOpts.dueTopics,
+      count,
+    });
+    if (lesson.listen.length === 0) {
+      now.textContent = "レッスンにする問題がありません（科目/対象を変えてみてください）。";
+      return;
+    }
+    now.textContent = `📚 レッスン開始：まず${lesson.listen.length}問を聞いてください。`;
+    audioPlayer = new AudioPlayer(lesson.listen, speaker, {
+      rate: cfg.rate,
+      loop: false,
+      script: { includeSource: false, gapMs: cfg.gapMs, repeatAnswer: cfg.repeatAnswer },
+      onSegment: ({ script, segmentIndex }) => {
+        now.textContent = `🎧 ${script.topic}（${script.problemId}）`;
+        transcript.textContent = script.segments[segmentIndex]?.text ?? "";
+        setMediaMetadata(script.topic, script.problemId);
+      },
+      onComplete: ({ completed }) => {
+        transcript.textContent = "";
+        if (completed) beginQuiz(lesson.quiz, cfg.rate);
+        else now.textContent = "レッスンを中断しました。";
+      },
+    });
+    void audioPlayer.start();
+  };
+
   const play = (): void => {
     if (audioPlayer?.isPlaying) {
       if (audioPlayer.isPaused) audioPlayer.resume();
@@ -294,6 +358,7 @@ function setupAudio(): void {
     else audioPlayer.pause();
   };
 
+  $("audio-lesson").onclick = startLesson;
   $("audio-play").onclick = play;
   $("audio-pause").onclick = togglePause;
   $("audio-prev").onclick = () => audioPlayer?.prev();

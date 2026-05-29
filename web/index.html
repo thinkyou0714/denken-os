@@ -59,6 +59,10 @@
       <section class="audio" id="audio-panel">
         <h2>🔊 法規 聞き流し（音声学習）</h2>
         <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。ショートカット: Space=再生/一時停止、N=次、P=前、R=もう一度。</p>
+        <div class="controls" role="group" aria-label="学習モード">
+          <button id="audio-lesson" aria-label="聞く→解くレッスンを開始" style="background:#0b5394;color:#fff;font-weight:600;">📚 レッスン（聞く→解く）</button>
+        </div>
+        <p class="hint">レッスン：選んだ件数を聞き終えると、いま聞いた論点がそのまま出題されます（テスト効果）。結果は弱点として記録され、次の復習に回ります。</p>
         <div class="controls" role="group" aria-label="再生コントロール">
           <button id="audio-play" aria-label="再生">▶ 再生</button>
           <button id="audio-pause" aria-label="一時停止/再開">⏸ 一時停止</button>
