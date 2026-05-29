@@ -20,7 +20,10 @@ describe("threePhasePower テンプレート", () => {
 
   it("ランダム生成は綺麗な値・物理的に成立・answer∈choices を満たす", () => {
     let s = 12345;
-    const rng = () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+    const rng = () => {
+      s = (s * 1103515245 + 12345) & 0x7fffffff;
+      return s / 0x7fffffff;
+    };
     for (let i = 0; i < 50; i++) {
       const g = threePhasePower.generate(rng);
       if (!g) continue;

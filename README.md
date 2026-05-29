@@ -14,25 +14,35 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI） | `docs/automation/01` |
-| CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv） | `docs/automation/09` |
-| X投稿テキスト生成 | `lib/engine/toXPost.ts`（朝/夜・ジッター・出典・URL検査） | `docs/automation/02` |
-| 解答集計 | `lib/aggregate/`（poll→正答率・難易度提案） | `docs/automation/03` |
-| 適応出題 | `lib/scheduler/`（SM-2 ＋ FSRS ＋ 弱点診断） | `docs/automation/05` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ3種: 三相電力/誘導電動機/直並列抵抗） | `docs/automation/01` |
+| CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック | `docs/automation/09` |
+| X投稿生成 | `lib/engine/toXPost.ts` ＋ `xlength.ts`（重み付き280字・自動スレッド分割・ジッター・出典・URL検査） | `docs/automation/02` |
+| 解答集計 | `lib/aggregate/`（poll→正答率・最頻誤答・難易度提案） | `docs/automation/03` |
+| 過去問取込 | `lib/ingest/`（出典メタ必須・原典/生成分離・重複検出・要手修正フラグ） | `docs/automation/04` |
+| 適応出題 | `lib/scheduler/`（SM-2 ＋ FSRS ＋ 弱点診断）＋ 永続化抽象 `lib/store/` | `docs/automation/05` |
+| コミュニティ儀式 | `lib/community/`（チェックイン・出戻り歓迎・卒業ロール） | `docs/automation/08` |
+| 通知計画 | `lib/notify/`（頻度制御・オプトアウト・ジッター・試験カウントダウン） | `docs/automation/12` |
 | シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics` | `docs/automation/06,07,10,11` |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。
+> 日本語は1文字=2カウントで280字を超えやすいため、投稿は重み付き長で自動スレッド分割。
+> `problem-schema.json`(ajv) と zod 定義の**ドリフトをテストで検知**。外部サービス(Supabase/Discord/X実投稿)は型付きインターフェースで差込口のみ。
 
 ### 使い方
 
 ```bash
 npm install
 npm run gen -- --topic 三相交流電力 --count 5            # 問題を生成（JSON を標準出力）
-npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿テキストも表示
+npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他の topic も（直並列合成抵抗 等）
+npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿スレッドも表示
 npm run validate:data                                     # data/ の問題を schema 検証（CIと同じ）
-npm test                                                  # ユニットテスト
+npm run lint                                              # Biome（lint + format チェック）
+npm run typecheck                                         # 型チェック
+npm test                                                  # ユニットテスト（65件）
 ```
+
+引数なしの `npm run gen` で利用可能な topic 一覧を表示。
 
 `ANTHROPIC_API_KEY` があれば解説文を Claude で言い回し生成、無ければ決定論スタブで動作（数値はどちらもコード算出で同一）。
 

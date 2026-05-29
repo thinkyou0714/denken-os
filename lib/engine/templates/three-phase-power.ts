@@ -16,9 +16,22 @@ import type { GenerationResult, Template } from "./types.js";
 // 係数いじりの母集合（|Z| が整数になる Pythagorean ペア × round な電圧）。
 // 「答えが綺麗になる係数だけ採用」(03-quality-pipeline) をサンプリング段で担保する。
 const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
-  [3, 4], [4, 3], [6, 8], [8, 6], [5, 12], [12, 5],
-  [9, 12], [12, 9], [8, 15], [15, 8], [12, 16], [16, 12],
-  [20, 15], [15, 20], [7, 24], [24, 7],
+  [3, 4],
+  [4, 3],
+  [6, 8],
+  [8, 6],
+  [5, 12],
+  [12, 5],
+  [9, 12],
+  [12, 9],
+  [8, 15],
+  [15, 8],
+  [12, 16],
+  [16, 12],
+  [20, 15],
+  [15, 20],
+  [7, 24],
+  [24, 7],
 ];
 const VOLTAGES: ReadonlyArray<number> = [100, 200, 400, 440, 3300, 6600];
 
@@ -67,7 +80,9 @@ function buildFrom(V: number, R: number, X: number): GenerationResult | null {
     distractors: distractorVals.map((d) => ({ text: formatKW(d.value), reason: d.reason })),
     likelyWrongChoice: formatKW(noSqrt3),
     facts: {
-      V, R, X,
+      V,
+      R,
+      X,
       Z: Number(Z.toFixed(4)),
       cosPhi: Number(cosPhi.toFixed(4)),
       Vp: Number(Vp.toFixed(4)),
@@ -75,8 +90,7 @@ function buildFrom(V: number, R: number, X: number): GenerationResult | null {
       P_watt: P,
     },
     defaultStatement:
-      `平衡三相Y結線の負荷に線間電圧${V}Vを加えた。` +
-      `1相のインピーダンスがZ=${R}+j${X}Ωのとき三相有効電力P〔kW〕は?`,
+      `平衡三相Y結線の負荷に線間電圧${V}Vを加えた。` + `1相のインピーダンスがZ=${R}+j${X}Ωのとき三相有効電力P〔kW〕は?`,
     defaultSolution: [
       `|Z|=√(${R}²+${X}²)=${Z}Ω`,
       `力率cosφ=R/|Z|=${Number(cosPhi.toFixed(4))}`,

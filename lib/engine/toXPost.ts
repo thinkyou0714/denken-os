@@ -8,6 +8,7 @@
  * - 予約時刻にジッターを入れる（±分）。
  */
 import type { Problem } from "./schema.js";
+import { splitIntoThread, xWeightedLength } from "./xlength.js";
 
 const URL_RE = /(https?:\/\/|www\.)\S+/i;
 
@@ -80,8 +81,10 @@ function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
 }
 
 export interface XPosts {
-  morning: string;
-  evening: string;
+  /** 朝出題スレッド（各要素が1ポスト, X重み付き280以内）。 */
+  morning: string[];
+  /** 夜解答スレッド。 */
+  evening: string[];
 }
 
 export interface BuildXPostsOptions {
@@ -90,13 +93,24 @@ export interface BuildXPostsOptions {
   correctRate?: number;
 }
 
-/** 1件の validated 問題から朝/夜の投稿テキストを生成する。 */
+/**
+ * 1件の validated 問題から朝/夜の投稿スレッドを生成する。
+ * 日本語は1文字=2カウントで容易に280を超えるため、必ずスレッド分割する。
+ */
 export function buildXPosts(p: Problem, opts: BuildXPostsOptions = {}): XPosts {
   const rng = opts.rng ?? Math.random;
-  const morning = pick(MORNING_TEMPLATES, rng)(p);
-  const evening = pick(EVENING_TEMPLATES, rng)(p, opts.correctRate);
-  if (containsUrl(morning) || containsUrl(evening)) {
+  const morningText = pick(MORNING_TEMPLATES, rng)(p);
+  const eveningText = pick(EVENING_TEMPLATES, rng)(p, opts.correctRate);
+  if (containsUrl(morningText) || containsUrl(eveningText)) {
     throw new Error("投稿本文に URL が含まれています（リンクはリプ/プロフへ）");
+  }
+  const morning = splitIntoThread(morningText);
+  const evening = splitIntoThread(eveningText);
+  // 不変条件: 全ポストが X の重み付き上限に収まる。
+  for (const post of [...morning, ...evening]) {
+    if (xWeightedLength(post) > 280) {
+      throw new Error(`投稿が X の重み付き280字を超えています: ${xWeightedLength(post)}`);
+    }
   }
   return { morning, evening };
 }

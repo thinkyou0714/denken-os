@@ -77,9 +77,10 @@ export function narrationMatchesAnswer(solution: string[], answerText: string): 
     return solution.some((s) => s.includes(answerText));
   }
   // 解説全体から数値を抽出し、想定値に十分近いものが含まれるか。
-  const nums = solution
-    .join(" ")
-    .match(/-?\d+(?:\.\d+)?/g)
-    ?.map(Number) ?? [];
+  const nums =
+    solution
+      .join(" ")
+      .match(/-?\d+(?:\.\d+)?/g)
+      ?.map(Number) ?? [];
   return nums.some((n) => Math.abs(n - expected) < 1e-6);
 }

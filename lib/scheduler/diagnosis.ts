@@ -44,11 +44,7 @@ export function weaknessScore(p: TopicProgress, nowMs: number): number {
  * 今日出すべき弱点 topic を優先度順に返す。
  * 同 topic で連続不正解 → rate 低下 → 優先度が上がる。
  */
-export function weakestTopics(
-  progress: Iterable<TopicProgress>,
-  nowMs: number = Date.now(),
-  limit = 3,
-): string[] {
+export function weakestTopics(progress: Iterable<TopicProgress>, nowMs: number = Date.now(), limit = 3): string[] {
   return [...progress]
     .map((p) => ({ topic: p.topic, score: weaknessScore(p, nowMs) }))
     .sort((a, b) => b.score - a.score)

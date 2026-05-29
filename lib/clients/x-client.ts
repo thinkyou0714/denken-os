@@ -45,8 +45,6 @@ export class DraftExportClient implements XClient {
 
   /** 下書きを人手投稿用にエクスポート（テキスト連結）。 */
   export(): string {
-    return this.drafts
-      .map((d) => `## ${d.scheduledAt.toISOString()} (${d.id})\n${d.text}`)
-      .join("\n\n---\n\n");
+    return this.drafts.map((d) => `## ${d.scheduledAt.toISOString()} (${d.id})\n${d.text}`).join("\n\n---\n\n");
   }
 }

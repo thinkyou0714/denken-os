@@ -9,11 +9,11 @@
 import {
   type Card,
   createEmptyCard,
-  fsrs,
   type FSRS,
-  generatorParameters,
-  type Grade,
   Rating as FsrsRating,
+  fsrs,
+  type Grade,
+  generatorParameters,
 } from "ts-fsrs";
 import type { Rating } from "./types.js";
 
@@ -28,10 +28,14 @@ export interface FsrsView {
 
 function toFsrsRating(r: Rating): Grade {
   switch (r) {
-    case "again": return FsrsRating.Again;
-    case "hard": return FsrsRating.Hard;
-    case "good": return FsrsRating.Good;
-    case "easy": return FsrsRating.Easy;
+    case "again":
+      return FsrsRating.Again;
+    case "hard":
+      return FsrsRating.Hard;
+    case "good":
+      return FsrsRating.Good;
+    case "easy":
+      return FsrsRating.Easy;
   }
 }
 

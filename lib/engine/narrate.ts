@@ -120,9 +120,7 @@ export class AnthropicNarrator implements Narrator {
     const response = await client.messages.parse({
       model: this.model,
       max_tokens: 2048,
-      system: [
-        { type: "text", text: NARRATION_SYSTEM, cache_control: { type: "ephemeral" } },
-      ],
+      system: [{ type: "text", text: NARRATION_SYSTEM, cache_control: { type: "ephemeral" } }],
       messages: [{ role: "user", content: userText }],
       // zod v3(schema 検証用) と SDK の zod v4 型の差をここで吸収（実行時は問題なし）。
       output_config: { format: zodOutputFormat(NarrationSchema as never) },

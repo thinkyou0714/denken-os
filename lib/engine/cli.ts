@@ -32,13 +32,27 @@ function parseArgs(argv: string[]): Args {
     const a = argv[i];
     const next = () => argv[++i];
     switch (a) {
-      case "--topic": args.topic = next(); break;
-      case "--count": args.count = Number(next()); break;
-      case "--source": args.source = next() as SourceType; break;
-      case "--citation": args.citation = next(); break;
-      case "--out": args.out = next(); break;
-      case "--xpost": args.xpost = true; break;
-      case "--seed": args.seed = Number(next()); break;
+      case "--topic":
+        args.topic = next();
+        break;
+      case "--count":
+        args.count = Number(next());
+        break;
+      case "--source":
+        args.source = next() as SourceType;
+        break;
+      case "--citation":
+        args.citation = next();
+        break;
+      case "--out":
+        args.out = next();
+        break;
+      case "--xpost":
+        args.xpost = true;
+        break;
+      case "--seed":
+        args.seed = Number(next());
+        break;
       default:
         if (a?.startsWith("--")) console.warn(`未知のオプション: ${a}`);
     }
@@ -90,10 +104,11 @@ async function main() {
   }
 
   if (args.xpost) {
-    console.error("\n--- X 投稿プレビュー ---");
+    console.error("\n--- X 投稿プレビュー（朝/夜スレッド） ---");
     for (const p of problems) {
       const posts = buildXPosts(p, { rng: makeRng(args.seed) });
-      console.error(`\n[${p.id}] 朝:\n${posts.morning}\n\n[${p.id}] 夜:\n${posts.evening}`);
+      const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
+      console.error(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
     }
   }
 }

@@ -34,7 +34,14 @@ function makeId(prefix: string, n: number): string {
  */
 export async function generateOne(
   template: Template,
-  opts: { id: string; source: SourceType; citation?: string; narrator: Narrator; rng: () => number; maxAttempts: number },
+  opts: {
+    id: string;
+    source: SourceType;
+    citation?: string;
+    narrator: Narrator;
+    rng: () => number;
+    maxAttempts: number;
+  },
 ): Promise<Problem | null> {
   let draw = null as ReturnType<Template["generate"]>;
   for (let i = 0; i < opts.maxAttempts; i++) {
@@ -48,10 +55,7 @@ export async function generateOne(
   // [4] 整合確認: 解説の最終数値がコード正解と一致しなければ破棄。
   if (!narrationMatchesAnswer(narration.solution, draw.answerText)) return null;
 
-  const citation =
-    opts.source === "original"
-      ? "DENKEN-OS オリジナル問題"
-      : opts.citation;
+  const citation = opts.source === "original" ? "DENKEN-OS オリジナル問題" : opts.citation;
   if (opts.source !== "original" && !citation) return null; // 改題は citation 必須
 
   const problem: Problem = {

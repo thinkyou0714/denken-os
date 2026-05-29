@@ -50,7 +50,7 @@ export function aggregate(p: Problem, poll: PollResult | null): AggregateOutput 
   const choices = p.choices ?? [];
   const total = poll.votes.reduce((a, b) => a + b, 0);
   const answerIdx = choices.indexOf(p.answer);
-  const correct = answerIdx >= 0 ? poll.votes[answerIdx] ?? 0 : 0;
+  const correct = answerIdx >= 0 ? (poll.votes[answerIdx] ?? 0) : 0;
   const correctRate = total > 0 ? clamp(correct / total, 0, 1) : 0;
 
   // 最頻誤答 = 正解以外で最多票の選択肢。

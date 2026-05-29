@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aggregateByTopic, type AnswerLog, weakestTopics } from "../../lib/scheduler/diagnosis.js";
+import { type AnswerLog, aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 
 describe("弱点診断", () => {
   it("連続不正解の topic ほど優先度が上がる", () => {

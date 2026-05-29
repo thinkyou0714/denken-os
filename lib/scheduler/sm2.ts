@@ -9,10 +9,14 @@ const MIN_EASE = 1.3;
 
 function qualityOf(rating: Rating): number {
   switch (rating) {
-    case "again": return 1;
-    case "hard": return 3;
-    case "good": return 4;
-    case "easy": return 5;
+    case "again":
+      return 1;
+    case "hard":
+      return 3;
+    case "good":
+      return 4;
+    case "easy":
+      return 5;
   }
 }
 

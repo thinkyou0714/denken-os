@@ -6,9 +6,7 @@ import { aggregate, applyStats, suggestDifficulty } from "../../lib/aggregate/ag
 import type { Problem } from "../../lib/engine/schema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(
-  readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"),
-);
+const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
 // choices: ["2.56","3.2","4.0","9.6"], answer "3.2" (index 1)
 
 describe("aggregate", () => {

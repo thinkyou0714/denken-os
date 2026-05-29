@@ -3,14 +3,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { classifyReply, draftCorrectionReply, flagCorrections } from "../../lib/correction/classify.js";
-import type { Problem } from "../../lib/engine/schema.js";
 import { repurpose } from "../../lib/crosspost/repurpose.js";
+import type { Problem } from "../../lib/engine/schema.js";
 import { cardText, hasPii } from "../../lib/share-card/card-text.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(
-  readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"),
-);
+const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
 
 describe("crosspost.repurpose", () => {
   it("媒体別に異なる形式の下書きを出す（丸コピーでない）", () => {
@@ -26,12 +24,16 @@ describe("crosspost.repurpose", () => {
 describe("share-card.cardText", () => {
   it("3種類のカードテキストを生成しブランドタグを含む", () => {
     expect(cardText("streak", { streakDays: 30, todayMinutes: 60, weeklyMinutes: 300 })).toContain("#今日のDENKEN");
-    expect(cardText("daily", { streakDays: 1, todayMinutes: 45, weeklyMinutes: 45, correctRate: 0.8 })).toContain("80%");
+    expect(cardText("daily", { streakDays: 1, todayMinutes: 45, weeklyMinutes: 45, correctRate: 0.8 })).toContain(
+      "80%",
+    );
     expect(cardText("weekly", { streakDays: 7, todayMinutes: 30, weeklyMinutes: 210 })).toContain("今週");
   });
 
   it("URL を含めない / PII 検出が効く", () => {
-    expect(() => cardText("streak", { nickname: "see http://x.com", streakDays: 1, todayMinutes: 1, weeklyMinutes: 1 })).toThrow();
+    expect(() =>
+      cardText("streak", { nickname: "see http://x.com", streakDays: 1, todayMinutes: 1, weeklyMinutes: 1 }),
+    ).toThrow();
     expect(hasPii("連絡は a@b.com まで")).toBe(true);
     expect(hasPii("学習30分")).toBe(false);
   });

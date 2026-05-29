@@ -1,8 +1,11 @@
 /** topic 名 → Template のレジストリ。 */
-import type { Template } from "./types.js";
+import { inductionMotorSpeed } from "./induction-motor-speed.js";
+import { resistorNetwork } from "./resistor-network.js";
 import { threePhasePower } from "./three-phase-power.js";
+import type { Template } from "./types.js";
 
-const registry = new Map<string, Template>([[threePhasePower.topic, threePhasePower]]);
+const templates: Template[] = [threePhasePower, inductionMotorSpeed, resistorNetwork];
+const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
 export function getTemplate(topic: string): Template | undefined {
   return registry.get(topic);
@@ -12,5 +15,5 @@ export function listTopics(): string[] {
   return [...registry.keys()];
 }
 
-export { threePhasePower };
 export type { Template };
+export { inductionMotorSpeed, resistorNetwork, threePhasePower };
