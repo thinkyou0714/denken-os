@@ -1,14 +1,12 @@
 name: validate
 
 # 09-ci-quality-gate: schema違反・出典欠落・検証未通過の公開を機械的に止める安全網。
-# 注意: マーケットプレイス action (actions/checkout 等) を一切使わない。
-#   一部の制限環境では action の解決/取得に失敗してジョブが即座に落ちるため、
-#   組み込みトークンでの手動 checkout と runner プリインストールの Node を使う。
 on:
   push:
   pull_request:
   workflow_dispatch:
 
+# push と pull_request の二重起動を抑制。
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -17,20 +15,29 @@ jobs:
   quality-gate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (manual, no marketplace action)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git init -q .
-          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git -c protocol.version=2 fetch -q --depth=1 origin "${GITHUB_SHA}"
-          git checkout -q FETCH_HEAD
+      - uses: actions/checkout@v4
 
-      - name: Toolchain versions
-        run: node -v && npm -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify (lint, typecheck, web typecheck, schema, tests, web build)
-        run: npm run verify
+      - name: Lint & format check (Biome)
+        run: npm run lint
+
+      - name: Typecheck (lib/scripts/tests)
+        run: npm run typecheck
+
+      - name: Typecheck (web app)
+        run: npm run typecheck:web
+
+      - name: Validate problem data against schema
+        run: npm run validate:data
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Build offline web app
+        run: npm run build:web
