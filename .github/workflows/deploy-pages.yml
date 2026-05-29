@@ -33,7 +33,7 @@ jobs:
       - name: Build offline web app (web/dist/app.js)
         run: npm run build:web
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
       - name: Upload web/ as Pages artifact
         uses: actions/upload-pages-artifact@v3
