@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { audioScriptToPlainText, buildPlaylist, sessionSummaryText, toAudioScript } from "../../lib/audio/script.js";
+import {
+  audioScriptToPlainText,
+  buildPlaylist,
+  playlistTranscript,
+  sessionSummaryText,
+  toAudioScript,
+} from "../../lib/audio/script.js";
 import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
 import type { Problem } from "../../lib/engine/schema.js";
@@ -71,6 +77,22 @@ describe("sessionSummaryText — 締めの要約", () => {
 
   it("0問なら終了アナウンスのみ", () => {
     expect(sessionSummaryText({ count: 0 })).toBe("再生を終了します。");
+  });
+});
+
+describe("playlistTranscript — 原稿の一括書き出し", () => {
+  it("各問の原稿を区切り線で連結する", async () => {
+    const a = await one(insulationResistance, 1);
+    const b = await one(threePhasePower, 2);
+    const text = playlistTranscript([a, b]);
+    expect(text).toContain("———"); // 区切り
+    expect(text).toContain("問題。");
+    expect(text.split("———").length).toBe(2); // 2問ぶん
+    expect(text).not.toMatch(/[〔〕Ω]/); // 読み上げ正規化済み
+  });
+
+  it("空配列なら空文字", () => {
+    expect(playlistTranscript([])).toBe("");
   });
 });
 

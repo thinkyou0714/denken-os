@@ -7,7 +7,7 @@
  * バックエンド不要・完全オフライン（Service Worker で app shell をキャッシュ）。
  */
 
-import { sessionSummaryText } from "../../lib/audio/script.js";
+import { buildPlaylist, type PlaylistOptions, playlistTranscript, sessionSummaryText } from "../../lib/audio/script.js";
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
@@ -162,13 +162,7 @@ function bindPersisted(id: string, prop: "value" | "checked"): void {
 function setupAudio(): void {
   const now = $("audio-now");
   const transcript = $("audio-transcript");
-  if (!isSpeechAvailable()) {
-    $("audio-unsupported").textContent = "この端末/ブラウザは音声合成に未対応のため、聞き流しは利用できません。";
-    for (const id of ["audio-play", "audio-pause", "audio-prev", "audio-repeat", "audio-next", "audio-stop"]) {
-      ($(id) as HTMLButtonElement).disabled = true;
-    }
-    return;
-  }
+  const speechOk = isSpeechAvailable();
 
   // 設定を復元＋変更を永続化。
   for (const [id, prop] of [
@@ -189,34 +183,44 @@ function setupAudio(): void {
 
   const RESUME_KEY = "denken:audio:resumeIndex";
 
-  const build = (): AudioPlayer => {
+  // UI から現在の聞き流し設定を読み取る（再生・原稿書き出しで共有）。
+  const readConfig = () => {
     const subjectVal = ($("audio-subject") as HTMLSelectElement).value;
-    const subjects = subjectVal ? [subjectVal as Subject] : undefined;
-    const rate = Number(($("audio-rate") as HTMLSelectElement).value) || 1;
-    const gapMs = Number(($("audio-gap") as HTMLSelectElement).value) || 6000;
-    const maxItems = Number(($("audio-max") as HTMLSelectElement).value) || 0;
-    const maxMin = Number(($("audio-maxmin") as HTMLSelectElement).value) || 0;
-    const loop = ($("audio-loop") as HTMLInputElement).checked;
-    const repeatAnswer = ($("audio-repeatans") as HTMLInputElement).checked;
     const mode = ($("audio-mode") as HTMLSelectElement).value;
-    const resume = ($("audio-resume") as HTMLInputElement).checked;
-
-    // 出題対象（SRS 連携）: 通常=弱点優先 / 復習=期日到来のみ / 間違い=直近不正解のみ。
-    // due/wrong は「topic 許可リストで絞る」共通機構（buildPlaylist.dueOnly）に乗せる。
-    const dueOnly = mode === "due" || mode === "wrong";
     const dueTopics = mode === "due" ? progress.dueTopics() : mode === "wrong" ? progress.wrongTopics() : undefined;
-    const startIndex = resume ? Number(window.localStorage.getItem(RESUME_KEY) ?? "0") || 0 : 0;
+    const playlistOpts: PlaylistOptions = {
+      subjects: subjectVal ? [subjectVal as Subject] : undefined,
+      weakTopics: weakTopics(),
+      dueOnly: mode === "due" || mode === "wrong",
+      dueTopics,
+      interleave: true,
+    };
+    return {
+      playlistOpts,
+      rate: Number(($("audio-rate") as HTMLSelectElement).value) || 1,
+      gapMs: Number(($("audio-gap") as HTMLSelectElement).value) || 6000,
+      maxItems: Number(($("audio-max") as HTMLSelectElement).value) || 0,
+      maxMin: Number(($("audio-maxmin") as HTMLSelectElement).value) || 0,
+      loop: ($("audio-loop") as HTMLInputElement).checked,
+      repeatAnswer: ($("audio-repeatans") as HTMLInputElement).checked,
+      startIndex: ($("audio-resume") as HTMLInputElement).checked
+        ? Number(window.localStorage.getItem(RESUME_KEY) ?? "0") || 0
+        : 0,
+    };
+  };
 
+  const build = (): AudioPlayer => {
+    const cfg = readConfig();
     return new AudioPlayer(
       problems,
       speaker,
       {
-        rate,
-        loop,
-        maxItems: maxItems > 0 ? maxItems : undefined,
-        maxMs: maxMin > 0 ? maxMin * 60_000 : undefined,
-        startIndex,
-        script: { includeSource: true, gapMs, repeatAnswer },
+        rate: cfg.rate,
+        loop: cfg.loop,
+        maxItems: cfg.maxItems > 0 ? cfg.maxItems : undefined,
+        maxMs: cfg.maxMin > 0 ? cfg.maxMin * 60_000 : undefined,
+        startIndex: cfg.startIndex,
+        script: { includeSource: true, gapMs: cfg.gapMs, repeatAnswer: cfg.repeatAnswer },
         onSegment: ({ script, segmentIndex }) => {
           now.textContent = `▶ ${script.topic}（${script.problemId}）`;
           transcript.textContent = script.segments[segmentIndex]?.text ?? "";
@@ -230,19 +234,44 @@ function setupAudio(): void {
           transcript.textContent = "";
           // 末尾到達/タイマー終了時のみ締め要約を読み上げる（手動停止では出さない）。
           if (completed && played > 0) {
-            void speaker.speak(sessionSummaryText({ count: played, weakTopics: weakTopics() }), { rate });
+            void speaker.speak(sessionSummaryText({ count: played, weakTopics: weakTopics() }), { rate: cfg.rate });
           }
         },
       },
-      {
-        subjects,
-        weakTopics: weakTopics(),
-        dueOnly,
-        dueTopics,
-        interleave: true,
-      },
+      cfg.playlistOpts,
     );
   };
+
+  // 現在の設定で読み上げ原稿をクリップボードへ（聴覚補助・読み返し・学習ログ）。
+  const copyTranscript = async (): Promise<void> => {
+    const cfg = readConfig();
+    const list = buildPlaylist(problems, cfg.playlistOpts);
+    if (list.length === 0) {
+      now.textContent = "原稿にする問題がありません。";
+      return;
+    }
+    const text = playlistTranscript(list, { includeSource: true, gapMs: cfg.gapMs, repeatAnswer: cfg.repeatAnswer });
+    try {
+      await navigator.clipboard.writeText(text);
+      now.textContent = `原稿（${list.length}問）をコピーしました。`;
+    } catch {
+      // クリップボード不可の環境では画面に表示してフォールバック。
+      transcript.textContent = text;
+      now.textContent = `原稿（${list.length}問）を下に表示しました。`;
+    }
+  };
+
+  // 原稿コピーは音声合成が無くても使える（聴覚補助・no-TTS 端末対応）→ ガード前に配線。
+  $("audio-transcript-btn").onclick = () => void copyTranscript();
+
+  if (!speechOk) {
+    $("audio-unsupported").textContent =
+      "この端末/ブラウザは音声合成に未対応です。聞き流し再生は使えませんが、原稿コピーは利用できます。";
+    for (const id of ["audio-play", "audio-pause", "audio-prev", "audio-repeat", "audio-next", "audio-stop"]) {
+      ($(id) as HTMLButtonElement).disabled = true;
+    }
+    return;
+  }
 
   const play = (): void => {
     if (audioPlayer?.isPlaying) {

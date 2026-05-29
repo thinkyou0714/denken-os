@@ -51,23 +51,24 @@
       <div id="meta"></div>
       <div id="statement">読み込み中…</div>
       <div id="answers"></div>
-      <div id="feedback"></div>
-      <div id="solution"></div>
+      <div id="feedback" role="status" aria-live="assertive"></div>
+      <div id="solution" aria-live="polite"></div>
       <div id="share"></div>
       <button id="next">次の問題 →</button>
 
       <section class="audio" id="audio-panel">
         <h2>🔊 法規 聞き流し（音声学習）</h2>
         <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。ショートカット: Space=再生/一時停止、N=次、P=前、R=もう一度。</p>
-        <div class="controls">
-          <button id="audio-play">▶ 再生</button>
-          <button id="audio-pause">⏸ 一時停止</button>
-          <button id="audio-prev">⏮ 前へ</button>
-          <button id="audio-repeat">🔁 もう一度</button>
-          <button id="audio-next">⏭ 次へ</button>
-          <button id="audio-stop">⏹ 停止</button>
+        <div class="controls" role="group" aria-label="再生コントロール">
+          <button id="audio-play" aria-label="再生">▶ 再生</button>
+          <button id="audio-pause" aria-label="一時停止/再開">⏸ 一時停止</button>
+          <button id="audio-prev" aria-label="前の問題へ">⏮ 前へ</button>
+          <button id="audio-repeat" aria-label="現在の問題をもう一度">🔁 もう一度</button>
+          <button id="audio-next" aria-label="次の問題へ">⏭ 次へ</button>
+          <button id="audio-stop" aria-label="停止">⏹ 停止</button>
+          <button id="audio-transcript-btn" aria-label="現在の設定で読み上げ原稿をコピー">📄 原稿をコピー</button>
         </div>
-        <div class="controls">
+        <div class="controls" role="group" aria-label="再生設定">
           <label><input type="checkbox" id="audio-loop" checked /> 連続再生</label>
           <label><input type="checkbox" id="audio-repeatans" /> 正解を2回読む</label>
           <label>速度
@@ -116,9 +117,9 @@
           </label>
           <label><input type="checkbox" id="audio-resume" /> 続きから</label>
         </div>
-        <div id="audio-now"></div>
+        <div id="audio-now" role="status" aria-live="polite"></div>
         <div id="audio-transcript" aria-live="polite"></div>
-        <div id="audio-unsupported"></div>
+        <div id="audio-unsupported" role="alert"></div>
       </section>
     </main>
 

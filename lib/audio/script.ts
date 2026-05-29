@@ -103,6 +103,14 @@ export function audioScriptToPlainText(script: AudioScript): string {
 }
 
 /**
+ * 複数問の読み上げ原稿をまとめたテキスト（アクセシビリティ＝聴覚補助/読み返し、
+ * 学習ログの書き出しに使う）。各問は区切り線で分ける。
+ */
+export function playlistTranscript(problems: Problem[], opts?: AudioScriptOptions): string {
+  return problems.map((p) => audioScriptToPlainText(toAudioScript(p, opts))).join("\n\n———\n\n");
+}
+
+/**
  * 聞き流しセッションの締め文言（読み上げ用）。
  * 「何問聞いたか」と「重点復習したい論点」を簡潔に伝える（継続のフック）。
  */
