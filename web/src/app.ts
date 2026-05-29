@@ -411,7 +411,7 @@ function setMediaMetadata(topic: string, id: string): void {
 }
 
 async function main(): Promise<void> {
-  $("next").onclick = renderQuestion;
+  $("next").onclick = () => renderQuestion();
   try {
     const res = await fetch("./problems.json");
     problems = (await res.json()) as Problem[];
