@@ -6,9 +6,11 @@
  *  - 連続日数・弱点・シェアテキストを表示
  * バックエンド不要・完全オフライン（Service Worker で app shell をキャッシュ）。
  */
-import type { Problem } from "../../lib/engine/schema.js";
+import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { AudioPlayer } from "./audio-player.js";
+import { BrowserSpeaker, isSpeechAvailable } from "./browser-speaker.js";
 import { LocalProgress } from "./store.js";
 
 function weakTopics(): string[] {
@@ -136,6 +138,59 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
+let audioPlayer: AudioPlayer | null = null;
+
+/** 法規 聞き流しモードのUI配線。 */
+function setupAudio(): void {
+  const now = $("audio-now");
+  if (!isSpeechAvailable()) {
+    $("audio-unsupported").textContent = "この端末/ブラウザは音声合成に未対応のため、聞き流しは利用できません。";
+    for (const id of ["audio-play", "audio-next", "audio-stop"]) {
+      ($(id) as HTMLButtonElement).disabled = true;
+    }
+    return;
+  }
+
+  const speaker = new BrowserSpeaker();
+
+  const build = (): AudioPlayer => {
+    const subjectVal = ($("audio-subject") as HTMLSelectElement).value;
+    const subjects = subjectVal ? [subjectVal as Subject] : undefined;
+    const rate = Number(($("audio-rate") as HTMLSelectElement).value) || 1;
+    const loop = ($("audio-loop") as HTMLInputElement).checked;
+    return new AudioPlayer(
+      problems,
+      speaker,
+      {
+        rate,
+        loop,
+        script: { includeSource: true },
+        onSegment: ({ script }) => {
+          now.textContent = `▶ ${script.topic}（${script.problemId}）`;
+        },
+      },
+      { subjects, weakTopics: weakTopics() },
+    );
+  };
+
+  $("audio-play").onclick = () => {
+    if (audioPlayer?.isPlaying) return;
+    audioPlayer = build();
+    if (audioPlayer.length === 0) {
+      now.textContent = "対象の問題がありません（科目を変えてみてください）。";
+      return;
+    }
+    void audioPlayer.start().then(() => {
+      if (!audioPlayer?.isPlaying) now.textContent = "再生が終了しました。";
+    });
+  };
+  $("audio-next").onclick = () => audioPlayer?.next();
+  $("audio-stop").onclick = () => {
+    audioPlayer?.stop();
+    now.textContent = "停止しました。";
+  };
+}
+
 async function main(): Promise<void> {
   $("next").onclick = renderQuestion;
   try {
@@ -146,6 +201,7 @@ async function main(): Promise<void> {
   }
   renderStats();
   renderQuestion();
+  setupAudio();
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});

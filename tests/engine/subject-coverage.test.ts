@@ -21,7 +21,8 @@ describe("科目カバレッジ拡充（法規・電力）", () => {
     const topics = listTopics();
     expect(topics).toContain("B種接地抵抗"); // 法規
     expect(topics).toContain("需要率"); // 電力
-    expect(topics.length).toBe(10);
+    expect(topics).toContain("低圧電路の絶縁抵抗"); // 法規(暗記・音声学習向け)
+    expect(topics.length).toBe(11);
   });
 
   it("【ドリフト検知】subject enum の全科目に最低1テンプレが存在する", () => {

@@ -4,6 +4,7 @@ import { dcMotorEmf } from "./dc-motor-emf.js";
 import { demandFactor } from "./demand-factor.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
+import { insulationResistance } from "./insulation-resistance.js";
 import { lineVoltageDrop } from "./line-voltage-drop.js";
 import { resistorNetwork } from "./resistor-network.js";
 import { shortCircuitCapacity } from "./short-circuit-capacity.js";
@@ -22,6 +23,7 @@ const templates: Template[] = [
   shortCircuitCapacity,
   lineVoltageDrop,
   dcMotorEmf,
+  insulationResistance,
 ];
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
@@ -40,6 +42,7 @@ export {
   demandFactor,
   groundingResistance,
   inductionMotorSpeed,
+  insulationResistance,
   lineVoltageDrop,
   resistorNetwork,
   shortCircuitCapacity,

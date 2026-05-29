@@ -26,6 +26,15 @@
       .src { opacity: .65; font-size: .8rem; }
       #share { white-space: pre-wrap; background: #88884011; padding: .6rem; border-radius: .5rem; font-size: .85rem; min-height: 1px; }
       #next { margin-top: 1rem; padding: .6rem 1.2rem; font-size: 1rem; border-radius: .5rem; border: none; background: #0b5394; color: #fff; cursor: pointer; }
+      .audio { margin: 1.2rem 0; padding: .8rem; border: 1px solid #8884; border-radius: .6rem; background: #0b539410; }
+      .audio h2 { font-size: 1rem; margin: 0 0 .2rem; }
+      .audio .hint { font-size: .8rem; opacity: .75; margin: 0 0 .6rem; }
+      .audio .controls { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+      .audio button { padding: .5rem .9rem; font-size: .95rem; border-radius: .5rem; border: 1px solid #8884; background: #88884011; cursor: pointer; }
+      .audio button:hover { background: #8888; }
+      .audio label { font-size: .85rem; display: inline-flex; gap: .3rem; align-items: center; }
+      #audio-now { font-size: .85rem; opacity: .8; margin-top: .5rem; min-height: 1.2em; }
+      #audio-unsupported { color: #dc3545; font-size: .85rem; }
       footer { margin-top: 2rem; font-size: .75rem; opacity: .6; }
     </style>
   </head>
@@ -45,6 +54,33 @@
       <div id="solution"></div>
       <div id="share"></div>
       <button id="next">次の問題 →</button>
+
+      <section class="audio" id="audio-panel">
+        <h2>🔊 法規 聞き流し（音声学習）</h2>
+        <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。</p>
+        <div class="controls">
+          <button id="audio-play">▶ 再生</button>
+          <button id="audio-next">⏭ 次へ</button>
+          <button id="audio-stop">⏹ 停止</button>
+          <label><input type="checkbox" id="audio-loop" checked /> 連続再生</label>
+          <label>速度
+            <select id="audio-rate">
+              <option value="0.8">0.8x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.2">1.2x</option>
+              <option value="1.5">1.5x</option>
+            </select>
+          </label>
+          <label>科目
+            <select id="audio-subject">
+              <option value="法規" selected>法規のみ</option>
+              <option value="">全科目</option>
+            </select>
+          </label>
+        </div>
+        <div id="audio-now"></div>
+        <div id="audio-unsupported"></div>
+      </section>
     </main>
 
     <footer>

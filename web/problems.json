@@ -2390,5 +2390,169 @@
       "common_wrong_choice": "230"
     },
     "status": "draft"
+  },
+  {
+    "id": "D-0041",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "低圧電路の絶縁抵抗",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "voltage": {
+        "value": 105,
+        "unit": "V",
+        "realistic_range": [
+          50,
+          600
+        ]
+      }
+    },
+    "statement": "対地電圧105Vの低圧電路がある。電気設備技術基準（省令第58条）で定める絶縁抵抗の最小値〔MΩ〕を求めよ。",
+    "answer": "0.1",
+    "solution": [
+      "省令58条の区分: 対地電圧150V以下=0.1MΩ、150V超300V以下=0.2MΩ、300V超=0.4MΩ",
+      "対地電圧105Vは「150V以下」に該当",
+      "絶縁抵抗の最小値 = 0.1MΩ"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0042",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "低圧電路の絶縁抵抗",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "voltage": {
+        "value": 150,
+        "unit": "V",
+        "realistic_range": [
+          50,
+          600
+        ]
+      }
+    },
+    "statement": "対地電圧150Vの低圧電路がある。電気設備技術基準（省令第58条）で定める絶縁抵抗の最小値〔MΩ〕を求めよ。",
+    "answer": "0.1",
+    "solution": [
+      "省令58条の区分: 対地電圧150V以下=0.1MΩ、150V超300V以下=0.2MΩ、300V超=0.4MΩ",
+      "対地電圧150Vは「150V以下」に該当",
+      "絶縁抵抗の最小値 = 0.1MΩ"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0043",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "低圧電路の絶縁抵抗",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "voltage": {
+        "value": 210,
+        "unit": "V",
+        "realistic_range": [
+          50,
+          600
+        ]
+      }
+    },
+    "statement": "対地電圧210Vの低圧電路がある。電気設備技術基準（省令第58条）で定める絶縁抵抗の最小値〔MΩ〕を求めよ。",
+    "answer": "0.2",
+    "solution": [
+      "省令58条の区分: 対地電圧150V以下=0.1MΩ、150V超300V以下=0.2MΩ、300V超=0.4MΩ",
+      "対地電圧210Vは「150Vを超え300V以下」に該当",
+      "絶縁抵抗の最小値 = 0.2MΩ"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0044",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "低圧電路の絶縁抵抗",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "voltage": {
+        "value": 150,
+        "unit": "V",
+        "realistic_range": [
+          50,
+          600
+        ]
+      }
+    },
+    "statement": "対地電圧150Vの低圧電路がある。電気設備技術基準（省令第58条）で定める絶縁抵抗の最小値〔MΩ〕を求めよ。",
+    "answer": "0.1",
+    "solution": [
+      "省令58条の区分: 対地電圧150V以下=0.1MΩ、150V超300V以下=0.2MΩ、300V超=0.4MΩ",
+      "対地電圧150Vは「150V以下」に該当",
+      "絶縁抵抗の最小値 = 0.1MΩ"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
   }
 ]
