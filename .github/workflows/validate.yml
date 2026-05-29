@@ -24,11 +24,17 @@ jobs:
       - name: Lint & format check (Biome)
         run: npm run lint
 
-      - name: Typecheck
+      - name: Typecheck (lib/scripts/tests)
         run: npm run typecheck
+
+      - name: Typecheck (web app)
+        run: npm run typecheck:web
 
       - name: Validate problem data against schema
         run: npm run validate:data
 
-      - name: Run engine unit tests
+      - name: Run unit tests
         run: npm test
+
+      - name: Build offline web app
+        run: npm run build:web

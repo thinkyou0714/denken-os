@@ -6,13 +6,16 @@
       "lib/**",
       "scripts/**",
       "tests/**",
+      "web/src/**",
+      "web/sw.js",
       "*.ts",
       "biome.json",
       "tsconfig.json",
       "!!**/node_modules",
       "!!**/out",
       "!!**/dist",
-      "!!**/data"
+      "!!**/data",
+      "!!web/problems.json"
     ]
   },
   "formatter": {

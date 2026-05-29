@@ -23,6 +23,8 @@
 | コミュニティ儀式 | `lib/community/`（チェックイン・出戻り歓迎・卒業ロール） | `docs/automation/08` |
 | 通知計画 | `lib/notify/`（頻度制御・オプトアウト・ジッター・試験カウントダウン） | `docs/automation/12` |
 | シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI・UTM計測 | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics`（`utm.ts`） | `docs/automation/06,07,10,11` |
+| **オフライン学習アプリ MVP** | `web/`（PWA・localStorage・SM-2弱点出題・解説・記録/シェア。esbuild バンドル・Service Worker） | README ビジョン |
+| Obsidian/Markdown 書き出し | `lib/export/markdown.ts` ＋ `scripts/export-vault.ts`（vault レイアウト） | README ビジョン |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。
@@ -37,14 +39,21 @@ npm run gen -- --topic 三相交流電力 --count 5            # 問題を生成
 npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他: 直並列合成抵抗 / コンデンサの静電エネルギー(numeric)
 npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿スレッドも表示
 npm run validate:data                                     # data/ の問題を schema 検証（CIと同じ）
+npm run export:vault -- --out out/vault                   # 問題を Obsidian Markdown に書き出し
+npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
-npm run typecheck                                         # 型チェック
-npm test                                                  # ユニットテスト（80件）
+npm run typecheck && npm run typecheck:web               # 型チェック
+npm test                                                  # ユニットテスト（87件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。
 
 `ANTHROPIC_API_KEY` があれば解説文を Claude で言い回し生成、無ければ決定論スタブで動作（数値はどちらもコード算出で同一）。
+
+### オフライン学習アプリ（`web/`）
+
+`npm run build:web` 後、`web/` を静的配信（例 `npx serve web`）すると、ブラウザで「今日の一問」を解けます。
+弱点 topic を優先出題し、解答→即解説、SM-2 で記憶状態を localStorage に保存。Service Worker により**オフラインでも動作**します（バックエンド不要）。`web/problems.json` は自動生成のデモ問題（未監修）。
 
 ## Vision
 
