@@ -42,9 +42,27 @@ export function sourceFooter(p: Problem): string {
   return `（出典: ${p.source.citation}）`;
 }
 
+const CHOICE_MARKS = ["①", "②", "③", "④", "⑤", "⑥"];
+
 function choicesLine(p: Problem): string {
-  const marks = ["①", "②", "③", "④", "⑤", "⑥"];
-  return (p.choices ?? []).map((c, i) => `${marks[i] ?? `(${i + 1})`} ${c}`).join("  ");
+  if (!p.choices || p.choices.length === 0) {
+    return "答えを計算してリプで👇"; // numeric: 選択肢なし
+  }
+  return p.choices.map((c, i) => `${CHOICE_MARKS[i] ?? `(${i + 1})`} ${c}`).join("  ");
+}
+
+/**
+ * 朝出題に併設する X アンケート(poll)。03 の正答率集計の一次ソース。
+ * multiple_choice のみ（X poll は最大4択）。numeric は poll なし。
+ */
+export function morningPoll(
+  p: Problem,
+  durationMinutes = 12 * 60,
+): { options: string[]; durationMinutes: number } | null {
+  if (p.format !== "multiple_choice" || !p.choices) return null;
+  const options = p.choices.slice(0, 4); // X poll は最大4択
+  if (options.length < 2) return null;
+  return { options, durationMinutes };
 }
 
 // 朝出題テンプレ（複数）。{N} 等は埋め込み。

@@ -7,7 +7,7 @@
  *   { 正解, 各量, 誤答選択肢, 制約 }
  * を返す。LLM は narrate.ts で「言い回し」だけを担当する。
  */
-import type { Exam, Subject } from "../schema.js";
+import type { Exam, ProblemFormat, Subject } from "../schema.js";
 
 export interface ParamSpec {
   unit?: string;
@@ -29,17 +29,19 @@ export interface Distractor {
 }
 
 export interface GenerationResult {
+  /** 出題形式（既定: multiple_choice）。numeric は選択肢なし。 */
+  format?: ProblemFormat;
   params: Record<string, ParamValue>;
   /** コードが算出した数値の真値（検算の基準）。 */
   answerValue: number;
   answerUnit: string;
-  /** 整形済みの正解テキスト（choices のいずれかと一致する）。 */
+  /** 整形済みの正解テキスト（multiple_choice では choices のいずれかと一致）。 */
   answerText: string;
-  /** 正解を含む選択肢（昇順）。 */
-  choices: string[];
-  distractors: Distractor[];
+  /** 正解を含む選択肢（昇順）。numeric では省略。 */
+  choices?: string[];
+  distractors?: Distractor[];
   /** 最頻誤答になりやすい選択肢テキスト（stats.common_wrong_choice の既定値）。 */
-  likelyWrongChoice: string;
+  likelyWrongChoice?: string;
   /** narrate.ts が言い回しに使う事実（数値）。 */
   facts: Record<string, number | string>;
   /** LLM 不在でも成立する既定の問題文。 */

@@ -14,32 +14,32 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ3種: 三相電力/誘導電動機/直並列抵抗） | `docs/automation/01` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ4種: 三相電力/誘導電動機/直並列抵抗/コンデンサ。MC＋numeric形式） | `docs/automation/01` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック | `docs/automation/09` |
-| X投稿生成 | `lib/engine/toXPost.ts` ＋ `xlength.ts`（重み付き280字・自動スレッド分割・ジッター・出典・URL検査） | `docs/automation/02` |
+| X投稿生成＋予約 | `lib/engine/toXPost.ts`＋`xlength.ts`（重み付き280字・自動スレッド）＋`publish.ts`（poll併設・朝→夜引用） | `docs/automation/02` |
 | 解答集計 | `lib/aggregate/`（poll→正答率・最頻誤答・難易度提案） | `docs/automation/03` |
 | 過去問取込 | `lib/ingest/`（出典メタ必須・原典/生成分離・重複検出・要手修正フラグ） | `docs/automation/04` |
-| 適応出題 | `lib/scheduler/`（SM-2 ＋ FSRS ＋ 弱点診断）＋ 永続化抽象 `lib/store/` | `docs/automation/05` |
+| 適応出題＋永続化 | `lib/scheduler/`（SM-2＋FSRS＋弱点診断）＋`lib/store/`（インメモリ/JSONファイル）＋`supabase/migrations`（RLS付きDDL） | `docs/automation/05` |
 | コミュニティ儀式 | `lib/community/`（チェックイン・出戻り歓迎・卒業ロール） | `docs/automation/08` |
 | 通知計画 | `lib/notify/`（頻度制御・オプトアウト・ジッター・試験カウントダウン） | `docs/automation/12` |
-| シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics` | `docs/automation/06,07,10,11` |
+| シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI・UTM計測 | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics`（`utm.ts`） | `docs/automation/06,07,10,11` |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
-> X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。
+> X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。
 > 日本語は1文字=2カウントで280字を超えやすいため、投稿は重み付き長で自動スレッド分割。
-> `problem-schema.json`(ajv) と zod 定義の**ドリフトをテストで検知**。外部サービス(Supabase/Discord/X実投稿)は型付きインターフェースで差込口のみ。
+> `problem-schema.json`(ajv) と zod 定義の**ドリフトをテストで検知**。Supabase スキーマは RLS 付きで `supabase/migrations/` に DDL を用意（実投稿/永続化の実体は認証取得後にアダプタ接続）。
 
 ### 使い方
 
 ```bash
 npm install
 npm run gen -- --topic 三相交流電力 --count 5            # 問題を生成（JSON を標準出力）
-npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他の topic も（直並列合成抵抗 等）
+npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他: 直並列合成抵抗 / コンデンサの静電エネルギー(numeric)
 npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿スレッドも表示
 npm run validate:data                                     # data/ の問題を schema 検証（CIと同じ）
 npm run lint                                              # Biome（lint + format チェック）
 npm run typecheck                                         # 型チェック
-npm test                                                  # ユニットテスト（65件）
+npm test                                                  # ユニットテスト（80件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。

@@ -28,7 +28,7 @@ describe("threePhasePower テンプレート", () => {
       const g = threePhasePower.generate(rng);
       if (!g) continue;
       expect(g.choices).toContain(g.answerText);
-      expect(g.choices.length).toBe(4);
+      expect(g.choices?.length).toBe(4);
       expect(g.physicallyValid).toBe(true);
     }
   });

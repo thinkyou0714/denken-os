@@ -22,6 +22,8 @@ export interface GenerateOptions {
   maxAttemptsPerProblem?: number;
   idPrefix?: string;
   startIndex?: number;
+  /** confidence の足切り（これ未満は出題しない。既定0=無効）。 */
+  minConfidence?: number;
 }
 
 function makeId(prefix: string, n: number): string {
@@ -41,6 +43,7 @@ export async function generateOne(
     narrator: Narrator;
     rng: () => number;
     maxAttempts: number;
+    minConfidence?: number;
   },
 ): Promise<Problem | null> {
   let draw = null as ReturnType<Template["generate"]>;
@@ -58,16 +61,23 @@ export async function generateOne(
   const citation = opts.source === "original" ? "DENKEN-OS オリジナル問題" : opts.citation;
   if (opts.source !== "original" && !citation) return null; // 改題は citation 必須
 
+  const confidence = 0.9;
+  // confidence 足切り（怪しいものは出さない閾値, 03-quality-pipeline）。
+  if (opts.minConfidence !== undefined && confidence < opts.minConfidence) return null;
+
+  const format = draw.format ?? "multiple_choice";
+
   const problem: Problem = {
     id: opts.id,
     exam: template.exam,
     subject: template.subject,
     topic: template.topic,
-    format: "multiple_choice",
+    format,
     difficulty: template.difficulty,
     params: draw.params,
     statement: narration.statement,
-    choices: draw.choices,
+    // numeric は選択肢なし。multiple_choice のみ choices を持つ。
+    ...(format === "multiple_choice" ? { choices: draw.choices } : {}),
     answer: draw.answerText,
     solution: narration.solution,
     validation: {
@@ -75,7 +85,7 @@ export async function generateOne(
       human_checked: false, // 自動生成段階では未了（人間の承認ゲート）
       clean_answer: true, // [2] テンプレートが綺麗な draw だけ通す
       physically_valid: draw.physicallyValid,
-      confidence: 0.9,
+      confidence,
     },
     source: { type: opts.source, citation },
     stats: { answered: 0, correct_rate: 0, common_wrong_choice: draw.likelyWrongChoice },
@@ -108,6 +118,7 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
       narrator,
       rng,
       maxAttempts,
+      minConfidence: opts.minConfidence,
     });
     if (p) {
       out.push(p);
