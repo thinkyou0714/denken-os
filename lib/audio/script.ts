@@ -31,6 +31,8 @@ export interface AudioScriptOptions {
   includeExplanation?: boolean;
   /** 出典を読み上げに含めるか（既定 false。連続再生でうるさいため）。 */
   includeSource?: boolean;
+  /** 正解をもう一度読み上げるか（暗記定着。法規の数値に有効。既定 false）。 */
+  repeatAnswer?: boolean;
 }
 
 const CHOICE_WORDS = ["1ばん", "2ばん", "3ばん", "4ばん", "5ばん", "6ばん"];
@@ -57,6 +59,7 @@ export function toAudioScript(p: Problem, opts: AudioScriptOptions = {}): AudioS
   const gapMs = opts.gapMs ?? 6000;
   const includeExplanation = opts.includeExplanation ?? true;
   const includeSource = opts.includeSource ?? false;
+  const repeatAnswer = opts.repeatAnswer ?? false;
 
   const segments: AudioSegment[] = [];
 
@@ -75,7 +78,11 @@ export function toAudioScript(p: Problem, opts: AudioScriptOptions = {}): AudioS
 
   segments.push({ kind: "gap", text: "では、答えを考えてください。", pauseMsAfter: gapMs });
 
-  segments.push({ kind: "answer", text: `正解は、${toSpeech(p.answer)}、です。`, pauseMsAfter: 500 });
+  const spokenAnswer = toSpeech(p.answer);
+  const answerText = repeatAnswer
+    ? `正解は、${spokenAnswer}、です。もう一度、${spokenAnswer}。`
+    : `正解は、${spokenAnswer}、です。`;
+  segments.push({ kind: "answer", text: answerText, pauseMsAfter: 500 });
 
   if (includeExplanation && p.solution.length > 0) {
     const body = p.solution.map((s) => toSpeech(s)).join("。 ");
@@ -100,14 +107,43 @@ export interface PlaylistOptions {
   subjects?: Subject[];
   /** 先頭に寄せる弱点 topic（この順序を優先）。 */
   weakTopics?: string[];
+  /** 除外する topic。 */
+  excludeTopics?: string[];
   /** 残りをシャッフルするか。 */
   shuffle?: boolean;
+  /** 同じ topic が連続しないよう散らす（弱点先頭の後ろ＝rest に適用）。 */
+  interleave?: boolean;
+  /** 最大件数（セッション長・件数スリープタイマー）。 */
+  limit?: number;
   rng?: () => number;
+}
+
+/** 同一 topic が連続しないよう、topic バケットのラウンドロビンで並べ替える（順序安定）。 */
+function interleaveByTopic(items: Problem[]): Problem[] {
+  const buckets = new Map<string, Problem[]>();
+  for (const p of items) {
+    const b = buckets.get(p.topic) ?? [];
+    b.push(p);
+    buckets.set(p.topic, b);
+  }
+  const queues = [...buckets.values()];
+  const out: Problem[] = [];
+  let remaining = items.length;
+  while (remaining > 0) {
+    for (const q of queues) {
+      const next = q.shift();
+      if (next) {
+        out.push(next);
+        remaining -= 1;
+      }
+    }
+  }
+  return out;
 }
 
 /**
  * 聞き流しの再生順を組む。
- * 科目フィルタ → 弱点 topic を前方に寄せる → 残りを（任意で）シャッフル。
+ * 科目フィルタ → 除外 → 弱点 topic を前方へ → 残りをシャッフル/インターリーブ → 件数上限。
  */
 export function buildPlaylist(problems: Problem[], opts: PlaylistOptions = {}): Problem[] {
   const rng = opts.rng ?? Math.random;
@@ -116,11 +152,15 @@ export function buildPlaylist(problems: Problem[], opts: PlaylistOptions = {}): 
     const set = new Set(opts.subjects);
     pool = pool.filter((p) => set.has(p.subject));
   }
+  if (opts.excludeTopics && opts.excludeTopics.length > 0) {
+    const ex = new Set(opts.excludeTopics);
+    pool = pool.filter((p) => !ex.has(p.topic));
+  }
 
   const weak = opts.weakTopics ?? [];
   const weakSet = new Set(weak);
   const weakItems = pool.filter((p) => weakSet.has(p.topic));
-  const rest = pool.filter((p) => !weakSet.has(p.topic));
+  let rest = pool.filter((p) => !weakSet.has(p.topic));
 
   // 弱点 topic は weakTopics の順序を保って前方へ。
   weakItems.sort((a, b) => weak.indexOf(a.topic) - weak.indexOf(b.topic));
@@ -131,6 +171,8 @@ export function buildPlaylist(problems: Problem[], opts: PlaylistOptions = {}): 
       [rest[i], rest[j]] = [rest[j]!, rest[i]!];
     }
   }
+  if (opts.interleave) rest = interleaveByTopic(rest);
 
-  return [...weakItems, ...rest];
+  const ordered = [...weakItems, ...rest];
+  return opts.limit && opts.limit > 0 ? ordered.slice(0, opts.limit) : ordered;
 }

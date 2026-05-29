@@ -34,4 +34,21 @@ describe("toSpeech — TTS 向け読み上げ正規化", () => {
     expect(out).not.toMatch(/[〔〕Ω]/);
     expect(out).not.toContain("kW");
   });
+
+  it("上付き指数の連なりを『の…乗』に変換する", () => {
+    expect(toSpeech("8²")).toBe("8の2乗");
+    expect(toSpeech("10⁻⁶")).toBe("10のマイナス6乗");
+  });
+
+  it("専門用語の読みを上書きする（誤読防止）", () => {
+    expect(toSpeech("力率")).toBe("りきりつ");
+    expect(toSpeech("線間電圧")).toBe("せんかんでんあつ"); // 「電圧」より先に長い語を当てる
+    expect(toSpeech("極数")).toBe("きょくすう");
+  });
+
+  it("無効電力・電力量などの単位も読める", () => {
+    expect(toSpeech("50kvar")).toBe("50キロバール");
+    expect(toSpeech("3kWh")).toBe("3キロワットアワー");
+    expect(toSpeech("100VA")).toBe("100ボルトアンペア");
+  });
 });

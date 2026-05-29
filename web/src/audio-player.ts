@@ -4,6 +4,9 @@
  * 実際の音声合成は Speaker インターフェース越しに行う（store.ts の StorageLike と同じ
  * 注入パターン）。これにより SpeechSynthesis 無しの Node 環境でも単体テストできる。
  * DOM/Web Speech 実装は browser-speaker.ts に隔離する。
+ *
+ * 対応操作: 再生/一時停止/再開/停止/次へ/前へ/現在をリピート/指定位置へジャンプ、
+ *           連続再生(loop)、件数スリープタイマー(maxItems)。
  */
 import {
   type AudioScript,
@@ -34,26 +37,33 @@ export interface AudioPlayerOptions {
   lang?: string;
   /** 末尾まで行ったら先頭へ戻り連続再生するか。 */
   loop?: boolean;
+  /** この件数を読み終えたら停止する（件数スリープタイマー）。 */
+  maxItems?: number;
   /** 台本生成オプション（考える間・解説有無など）。 */
   script?: AudioScriptOptions;
-  /** 区間が切り替わるたびに呼ばれる（UI 更新用）。 */
+  /** 区間が切り替わるたびに呼ばれる（UI 更新・字幕用）。 */
   onSegment?: (info: { script: AudioScript; segmentIndex: number; problemIndex: number }) => void;
   /** 1問の再生が終わるたびに呼ばれる。 */
   onProblem?: (info: { problem: Problem; problemIndex: number }) => void;
+  /** 全再生が終了/停止したときに呼ばれる。 */
+  onComplete?: () => void;
 }
 
 const defaultSleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 /**
  * 与えた問題列を「出題→考える間→正解→解説」で順に読み上げる。
- * stop() / next() で中断・スキップできる。
  */
 export class AudioPlayer {
   private playlist: Problem[];
   private index = 0;
   private aborted = false;
   private running = false;
+  private paused = false;
   private skip = false;
+  private repeatOnce = false;
+  private pendingIndex: number | null = null;
+  private resumeWaiters: Array<() => void> = [];
   private readonly sleep: (ms: number) => Promise<void>;
   private readonly rate: number;
   private readonly lang: string;
@@ -78,10 +88,26 @@ export class AudioPlayer {
     return this.running;
   }
 
-  /** 1問ぶんの台本を読み上げる。中断(abort/skip)時は途中で返る。 */
+  get isPaused(): boolean {
+    return this.paused;
+  }
+
+  get currentIndex(): number {
+    return this.index;
+  }
+
+  /** 一時停止が解除されるまで待つ。 */
+  private async waitWhilePaused(): Promise<void> {
+    while (this.paused && !this.aborted) {
+      await new Promise<void>((r) => this.resumeWaiters.push(r));
+    }
+  }
+
+  /** 1問ぶんの台本を読み上げる。中断(abort/skip/pause)を尊重する。 */
   async playScript(problem: Problem, problemIndex = 0): Promise<void> {
     const script = toAudioScript(problem, this.opts.script);
     for (let i = 0; i < script.segments.length; i++) {
+      await this.waitWhilePaused();
       if (this.aborted || this.skip) return;
       const seg = script.segments[i]!;
       this.opts.onSegment?.({ script, segmentIndex: i, problemIndex });
@@ -96,29 +122,77 @@ export class AudioPlayer {
     if (this.running || this.playlist.length === 0) return;
     this.running = true;
     this.aborted = false;
+    let played = 0;
     do {
-      while (this.index < this.playlist.length && !this.aborted) {
+      while (this.index >= 0 && this.index < this.playlist.length && !this.aborted) {
+        if (this.opts.maxItems && played >= this.opts.maxItems) {
+          this.aborted = true;
+          break;
+        }
         this.skip = false;
+        this.repeatOnce = false;
+        this.pendingIndex = null;
         const problem = this.playlist[this.index]!;
         await this.playScript(problem, this.index);
         if (this.aborted) break;
         this.opts.onProblem?.({ problem, problemIndex: this.index });
-        this.index += 1;
+        played += 1;
+        if (this.pendingIndex !== null) this.index = this.pendingIndex;
+        else if (!this.repeatOnce) this.index += 1;
       }
       if (this.opts.loop && !this.aborted) this.index = 0;
     } while (this.opts.loop && !this.aborted);
     this.running = false;
+    this.opts.onComplete?.();
   }
 
-  /** 再生を止める（現在の発話もキャンセル）。 */
-  stop(): void {
-    this.aborted = true;
-    this.running = false;
+  /** 一時停止（現在の発話も止める。再開で次区間から続行）。 */
+  pause(): void {
+    this.paused = true;
     this.speaker.cancel();
   }
 
-  /** 次の問題へスキップする。 */
+  /** 再開。 */
+  resume(): void {
+    this.paused = false;
+    const waiters = this.resumeWaiters;
+    this.resumeWaiters = [];
+    for (const r of waiters) r();
+  }
+
+  /** 再生を止める。 */
+  stop(): void {
+    this.aborted = true;
+    this.running = false;
+    this.resume(); // 一時停止待ちを解放してループを終わらせる
+    this.speaker.cancel();
+  }
+
+  /** 次の問題へ。 */
   next(): void {
+    this.skip = true;
+    this.speaker.cancel();
+  }
+
+  /** 前の問題へ。 */
+  prev(): void {
+    this.pendingIndex = Math.max(0, this.index - 1);
+    this.skip = true;
+    this.speaker.cancel();
+  }
+
+  /** 現在の問題をもう一度。 */
+  repeat(): void {
+    this.repeatOnce = true;
+    this.pendingIndex = this.index;
+    this.skip = true;
+    this.speaker.cancel();
+  }
+
+  /** 指定位置へジャンプ。 */
+  jumpTo(index: number): void {
+    if (index < 0 || index >= this.playlist.length) return;
+    this.pendingIndex = index;
     this.skip = true;
     this.speaker.cancel();
   }

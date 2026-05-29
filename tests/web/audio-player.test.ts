@@ -71,4 +71,37 @@ describe("AudioPlayer — 聞き流し再生", () => {
     expect(speaker.canceled).toBeGreaterThan(0);
     expect(player.isPlaying).toBe(false);
   });
+
+  it("maxItems で件数スリープタイマーが働く", async () => {
+    const speaker = new FakeSpeaker();
+    const done: string[] = [];
+    const problems = [mk("a", "T1", "法規"), mk("b", "T2", "法規"), mk("c", "T3", "法規")];
+    const player = new AudioPlayer(problems, speaker, {
+      sleep: immediateSleep,
+      maxItems: 2,
+      onProblem: ({ problem }) => done.push(problem.id),
+    });
+    await player.start();
+    expect(done).toEqual(["a", "b"]); // 3問目には進まない
+  });
+
+  it("pause()/resume() で一時停止状態を切り替える", () => {
+    const player = new AudioPlayer([mk("a", "T1", "法規")], new FakeSpeaker(), { sleep: immediateSleep });
+    player.pause();
+    expect(player.isPaused).toBe(true);
+    player.resume();
+    expect(player.isPaused).toBe(false);
+  });
+
+  it("onComplete は再生完了時に呼ばれる", async () => {
+    let completed = 0;
+    const player = new AudioPlayer([mk("a", "T1", "法規")], new FakeSpeaker(), {
+      sleep: immediateSleep,
+      onComplete: () => {
+        completed += 1;
+      },
+    });
+    await player.start();
+    expect(completed).toBe(1);
+  });
 });

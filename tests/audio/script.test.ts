@@ -54,6 +54,12 @@ describe("toAudioScript — 聞き流し台本", () => {
     const text = audioScriptToPlainText(toAudioScript(p));
     expect(text).not.toMatch(/[〔〕Ω]/);
   });
+
+  it("repeatAnswer で正解を2回読み上げる（暗記定着）", async () => {
+    const p = await one(insulationResistance, 5);
+    const ans = toAudioScript(p, { repeatAnswer: true }).segments.find((s) => s.kind === "answer")!;
+    expect(ans.text).toContain("もう一度");
+  });
 });
 
 describe("buildPlaylist — 再生順の構築", () => {
@@ -84,5 +90,25 @@ describe("buildPlaylist — 再生順の構築", () => {
 
   it("科目未指定なら全件返す", () => {
     expect(buildPlaylist(pool).length).toBe(3);
+  });
+
+  it("excludeTopics で除外できる", () => {
+    const list = buildPlaylist(pool, { excludeTopics: ["三相交流電力"] });
+    expect(list.map((p) => p.id).sort()).toEqual(["a", "c"]);
+  });
+
+  it("limit で件数を制限する（セッション長）", () => {
+    expect(buildPlaylist(pool, { limit: 2 }).length).toBe(2);
+  });
+
+  it("interleave で同一 topic が連続しない", () => {
+    const many = [mk("a", "法規", "T1"), mk("b", "法規", "T1"), mk("c", "法規", "T2")];
+    const list = buildPlaylist(many, { interleave: true });
+    for (let i = 1; i < list.length; i++) {
+      if (list.filter((p) => p.topic === list[i]!.topic).length <= 1) continue;
+      // 別 topic が存在する限り、隣接は別 topic になっている
+      expect(list[i]!.topic === list[i - 1]!.topic && list.length > 2).toBe(false);
+    }
+    expect(list[0]!.topic).not.toBe(list[1]!.topic);
   });
 });

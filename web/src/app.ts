@@ -140,15 +140,44 @@ function escapeHtml(s: string): string {
 
 let audioPlayer: AudioPlayer | null = null;
 
+const AUDIO_PREFIX = "denken:audio:";
+
+/** 設定UIを localStorage と同期する（次回起動時に復元）。 */
+function bindPersisted(id: string, prop: "value" | "checked"): void {
+  const el = $(id) as HTMLInputElement | HTMLSelectElement;
+  const saved = window.localStorage.getItem(AUDIO_PREFIX + id);
+  if (saved !== null) {
+    if (prop === "checked") (el as HTMLInputElement).checked = saved === "true";
+    else el.value = saved;
+  }
+  el.addEventListener("change", () => {
+    const v = prop === "checked" ? String((el as HTMLInputElement).checked) : el.value;
+    window.localStorage.setItem(AUDIO_PREFIX + id, v);
+  });
+}
+
 /** 法規 聞き流しモードのUI配線。 */
 function setupAudio(): void {
   const now = $("audio-now");
+  const transcript = $("audio-transcript");
   if (!isSpeechAvailable()) {
     $("audio-unsupported").textContent = "この端末/ブラウザは音声合成に未対応のため、聞き流しは利用できません。";
-    for (const id of ["audio-play", "audio-next", "audio-stop"]) {
+    for (const id of ["audio-play", "audio-pause", "audio-prev", "audio-repeat", "audio-next", "audio-stop"]) {
       ($(id) as HTMLButtonElement).disabled = true;
     }
     return;
+  }
+
+  // 設定を復元＋変更を永続化。
+  for (const [id, prop] of [
+    ["audio-loop", "checked"],
+    ["audio-repeatans", "checked"],
+    ["audio-rate", "value"],
+    ["audio-gap", "value"],
+    ["audio-subject", "value"],
+    ["audio-max", "value"],
+  ] as const) {
+    bindPersisted(id, prop);
   }
 
   const speaker = new BrowserSpeaker();
@@ -157,38 +186,101 @@ function setupAudio(): void {
     const subjectVal = ($("audio-subject") as HTMLSelectElement).value;
     const subjects = subjectVal ? [subjectVal as Subject] : undefined;
     const rate = Number(($("audio-rate") as HTMLSelectElement).value) || 1;
+    const gapMs = Number(($("audio-gap") as HTMLSelectElement).value) || 6000;
+    const maxItems = Number(($("audio-max") as HTMLSelectElement).value) || 0;
     const loop = ($("audio-loop") as HTMLInputElement).checked;
+    const repeatAnswer = ($("audio-repeatans") as HTMLInputElement).checked;
     return new AudioPlayer(
       problems,
       speaker,
       {
         rate,
         loop,
-        script: { includeSource: true },
-        onSegment: ({ script }) => {
+        maxItems: maxItems > 0 ? maxItems : undefined,
+        script: { includeSource: true, gapMs, repeatAnswer },
+        onSegment: ({ script, segmentIndex }) => {
           now.textContent = `▶ ${script.topic}（${script.problemId}）`;
+          transcript.textContent = script.segments[segmentIndex]?.text ?? "";
+          setMediaMetadata(script.topic, script.problemId);
+        },
+        onComplete: () => {
+          now.textContent = "再生が終了しました。";
         },
       },
-      { subjects, weakTopics: weakTopics() },
+      { subjects, weakTopics: weakTopics(), interleave: true },
     );
   };
 
-  $("audio-play").onclick = () => {
-    if (audioPlayer?.isPlaying) return;
+  const play = (): void => {
+    if (audioPlayer?.isPlaying) {
+      if (audioPlayer.isPaused) audioPlayer.resume();
+      return;
+    }
     audioPlayer = build();
     if (audioPlayer.length === 0) {
       now.textContent = "対象の問題がありません（科目を変えてみてください）。";
       return;
     }
-    void audioPlayer.start().then(() => {
-      if (!audioPlayer?.isPlaying) now.textContent = "再生が終了しました。";
-    });
+    void audioPlayer.start();
   };
+  const togglePause = (): void => {
+    if (!audioPlayer?.isPlaying) {
+      play();
+      return;
+    }
+    if (audioPlayer.isPaused) audioPlayer.resume();
+    else audioPlayer.pause();
+  };
+
+  $("audio-play").onclick = play;
+  $("audio-pause").onclick = togglePause;
+  $("audio-prev").onclick = () => audioPlayer?.prev();
+  $("audio-repeat").onclick = () => audioPlayer?.repeat();
   $("audio-next").onclick = () => audioPlayer?.next();
   $("audio-stop").onclick = () => {
     audioPlayer?.stop();
     now.textContent = "停止しました。";
+    transcript.textContent = "";
   };
+
+  setupMediaSession({ play, pause: togglePause, next: () => audioPlayer?.next(), prev: () => audioPlayer?.prev() });
+
+  // キーボードショートカット（入力欄にフォーカスが無いときのみ）。
+  document.addEventListener("keydown", (e) => {
+    const tag = (document.activeElement?.tagName ?? "").toLowerCase();
+    if (tag === "input" || tag === "select" || tag === "textarea") return;
+    if (e.key === " ") {
+      e.preventDefault();
+      togglePause();
+    } else if (e.key.toLowerCase() === "n") {
+      audioPlayer?.next();
+    } else if (e.key.toLowerCase() === "p") {
+      audioPlayer?.prev();
+    } else if (e.key.toLowerCase() === "r") {
+      audioPlayer?.repeat();
+    }
+  });
+}
+
+/** ロック画面/メディアキー連携（対応端末のみ）。 */
+function setupMediaSession(actions: { play: () => void; pause: () => void; next: () => void; prev: () => void }): void {
+  const ms = (navigator as Navigator & { mediaSession?: MediaSession }).mediaSession;
+  if (!ms) return;
+  try {
+    ms.setActionHandler("play", actions.play);
+    ms.setActionHandler("pause", actions.pause);
+    ms.setActionHandler("nexttrack", actions.next);
+    ms.setActionHandler("previoustrack", actions.prev);
+  } catch {
+    // 一部アクション未対応でも致命的でない。
+  }
+}
+
+function setMediaMetadata(topic: string, id: string): void {
+  const w = window as Window & { MediaMetadata?: typeof MediaMetadata };
+  const ms = (navigator as Navigator & { mediaSession?: MediaSession }).mediaSession;
+  if (!ms || !w.MediaMetadata) return;
+  ms.metadata = new w.MediaMetadata({ title: `${topic}（${id}）`, artist: "DENKEN-OS 法規 聞き流し" });
 }
 
 async function main(): Promise<void> {

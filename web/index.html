@@ -34,6 +34,7 @@
       .audio button:hover { background: #8888; }
       .audio label { font-size: .85rem; display: inline-flex; gap: .3rem; align-items: center; }
       #audio-now { font-size: .85rem; opacity: .8; margin-top: .5rem; min-height: 1.2em; }
+      #audio-transcript { font-size: .9rem; margin-top: .4rem; padding: .4rem .6rem; border-radius: .4rem; background: #88884011; min-height: 1.2em; }
       #audio-unsupported { color: #dc3545; font-size: .85rem; }
       footer { margin-top: 2rem; font-size: .75rem; opacity: .6; }
     </style>
@@ -57,28 +58,50 @@
 
       <section class="audio" id="audio-panel">
         <h2>🔊 法規 聞き流し（音声学習）</h2>
-        <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。</p>
+        <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。ショートカット: Space=再生/一時停止、N=次、P=前、R=もう一度。</p>
         <div class="controls">
           <button id="audio-play">▶ 再生</button>
+          <button id="audio-pause">⏸ 一時停止</button>
+          <button id="audio-prev">⏮ 前へ</button>
+          <button id="audio-repeat">🔁 もう一度</button>
           <button id="audio-next">⏭ 次へ</button>
           <button id="audio-stop">⏹ 停止</button>
+        </div>
+        <div class="controls">
           <label><input type="checkbox" id="audio-loop" checked /> 連続再生</label>
+          <label><input type="checkbox" id="audio-repeatans" /> 正解を2回読む</label>
           <label>速度
             <select id="audio-rate">
               <option value="0.8">0.8x</option>
-              <option value="1" selected>1.0x</option>
+              <option value="1">1.0x</option>
               <option value="1.2">1.2x</option>
               <option value="1.5">1.5x</option>
             </select>
           </label>
+          <label>考える間
+            <select id="audio-gap">
+              <option value="3000">3秒</option>
+              <option value="6000">6秒</option>
+              <option value="10000">10秒</option>
+            </select>
+          </label>
           <label>科目
             <select id="audio-subject">
-              <option value="法規" selected>法規のみ</option>
+              <option value="法規">法規のみ</option>
               <option value="">全科目</option>
+            </select>
+          </label>
+          <label>タイマー
+            <select id="audio-max">
+              <option value="0">無制限</option>
+              <option value="5">5問</option>
+              <option value="10">10問</option>
+              <option value="20">20問</option>
             </select>
           </label>
         </div>
         <div id="audio-now"></div>
+        <div id="audio-transcript" aria-live="polite"></div>
         <div id="audio-unsupported"></div>
       </section>
     </main>
