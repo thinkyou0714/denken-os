@@ -17,6 +17,8 @@ export interface AnswerLog {
   correct: boolean;
   timeMs?: number;
   atMs: number;
+  /** 科目（科目別の合格到達度集計に使う。旧ログは未設定でも動く）。 */
+  subject?: string;
 }
 
 /** 解答ログから topic 別の集計を作る（dueMs は外部スケジューラで更新する前提の素地）。 */

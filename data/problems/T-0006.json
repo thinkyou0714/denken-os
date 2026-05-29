@@ -1,0 +1,36 @@
+{
+  "id": "T-0006",
+  "exam": "denken3",
+  "subject": "機械",
+  "topic": "直流電動機の逆起電力",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "terminal_voltage": { "value": 200, "unit": "V", "realistic_range": [10, 1000] },
+    "armature_current": { "value": 10, "unit": "A", "realistic_range": [1, 200] },
+    "armature_resistance": { "value": 0.5, "unit": "ohm", "realistic_range": [0.01, 5] }
+  },
+  "statement": "端子電圧200Vの直流分巻電動機が、電機子電流10A、電機子抵抗0.5Ωで運転している。電機子の逆起電力E〔V〕は?",
+  "choices": ["5", "195", "200", "205"],
+  "answer": "195",
+  "solution": [
+    "電動機の逆起電力: E = V − Ia·Ra",
+    "電機子降下 Ia·Ra = 10·0.5 = 5 V",
+    "E = 200 − 5 = 195 V",
+    "【誤答の着眼】各選択肢は次の典型ミスに対応する:",
+    "・205 … 発電機式 E=V+Ia·Ra と取り違え（符号ミス）",
+    "・200 … 電機子抵抗の電圧降下 Ia·Ra を無視",
+    "・5 … 逆起電力ではなく電圧降下 Ia·Ra を答えた"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "205" },
+  "status": "validated"
+}

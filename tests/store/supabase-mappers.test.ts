@@ -30,6 +30,20 @@ describe("Supabase row mappers", () => {
     expect(rowToProblem(row).choices).toBeUndefined();
   });
 
+  it("記述式の rubric が往復で保たれる（保存で失われない）", () => {
+    const t0002: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0002.json"), "utf8"));
+    expect(t0002.rubric, "T-0002 に rubric が無い").toBeDefined();
+    const back = rowToProblem(problemToRow(t0002));
+    expect(back.rubric).toEqual(t0002.rubric);
+    expect(back.rubric?.[0]?.aspect).toBe("立式");
+  });
+
+  it("rubric が無い問題は row.rubric=null・復元後も未定義", () => {
+    const row = problemToRow(T0001);
+    expect(row.rubric).toBeNull();
+    expect(rowToProblem(row).rubric).toBeUndefined();
+  });
+
   it("ReviewState ⇔ row 往復（due/last の epoch↔ISO 変換）", () => {
     const st: ReviewState = {
       reps: 2,

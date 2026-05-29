@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
-import { demandFactor, groundingResistance, listTopics } from "../../lib/engine/templates/index.js";
+import { subjectEnum } from "../../lib/engine/schema.js";
+import { demandFactor, getTemplate, groundingResistance, listTopics } from "../../lib/engine/templates/index.js";
 import { validateProblem } from "../../lib/engine/validate.js";
 
 function seededRng(seed: number): () => number {
@@ -20,7 +21,17 @@ describe("科目カバレッジ拡充（法規・電力）", () => {
     const topics = listTopics();
     expect(topics).toContain("B種接地抵抗"); // 法規
     expect(topics).toContain("需要率"); // 電力
-    expect(topics.length).toBe(7);
+    expect(topics).toContain("低圧電路の絶縁抵抗"); // 法規(暗記・音声学習向け)
+    expect(topics.length).toBe(14);
+  });
+
+  it("【ドリフト検知】subject enum の全科目に最低1テンプレが存在する", () => {
+    // schema.ts の subjectEnum とテンプレ群の subject が乖離していないことを保証する。
+    // 以前は enum に「電力管理」があるのにテンプレが無く、誰も気づけなかった（根本対策）。
+    const covered = new Set(listTopics().map((t) => getTemplate(t)?.subject));
+    for (const subject of subjectEnum.options) {
+      expect(covered.has(subject), `科目「${subject}」を扱うテンプレが存在しません`).toBe(true);
+    }
   });
 
   it("B種接地抵抗 R=150/Ig を正しく算出（Ig=3 → 50Ω, numeric）", () => {

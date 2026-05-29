@@ -46,4 +46,20 @@ describe("記述(descriptive)形式: 二種二次の変圧器電圧変動率", (
       expect(validateProblem(p).ok).toBe(true);
     }
   });
+
+  it("記述問題に部分点ルーブリックが付与され、配点合計>0・id一意", async () => {
+    const [p] = await generate(transformerVoltageRegulation, {
+      count: 1,
+      narrator: new StubNarrator(),
+      rng: seededRng(5),
+    });
+    expect(p!.rubric).toBeDefined();
+    const rubric = p!.rubric!;
+    expect(rubric.length).toBeGreaterThan(0);
+    expect(rubric.reduce((a, r) => a + r.points, 0)).toBeGreaterThan(0);
+    const ids = rubric.map((r) => r.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    // 必須観点が最低1つある（合否に直結する観点）。
+    expect(rubric.some((r) => r.required)).toBe(true);
+  });
 });

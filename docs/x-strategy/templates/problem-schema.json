@@ -29,6 +29,22 @@
     "choices": { "type": "array", "items": { "type": "string" }, "description": "選択肢。誤りが『成立する引っ掛け』であること。multiple_choice では必須かつ2件以上" },
     "answer": { "type": "string", "description": "正解(綺麗な値・一意・有限であること)。multiple_choice では choices のいずれかと一致" },
     "solution": { "type": "array", "items": { "type": "string" }, "description": "解法ステップ(自作。引き写し禁止)" },
+    "rubric": {
+      "type": "array",
+      "description": "記述式(descriptive)の部分点ルーブリック。模範解答を採点観点に分解し、自己採点で部分点を合算する(15-descriptive-secondary)",
+      "items": {
+        "type": "object",
+        "required": ["id", "points", "criterion"],
+        "properties": {
+          "id": { "type": "string", "description": "採点項目ID(集計キー・一意)" },
+          "points": { "type": "number", "exclusiveMinimum": 0, "description": "配点。合計が満点" },
+          "criterion": { "type": "string", "description": "採点規準(何が書けていれば加点か)" },
+          "aspect": { "type": "string", "enum": ["立式", "計算", "単位", "論述", "作図"], "description": "横断的な能力軸。観点別弱点集計のタグ" },
+          "keywords": { "type": "array", "items": { "type": "string" }, "description": "記述に含まれるべき手がかり語" },
+          "required": { "type": "boolean", "description": "合否に必須の観点か" }
+        }
+      }
+    },
     "validation": {
       "type": "object",
       "required": ["solver_checked", "human_checked", "clean_answer", "physically_valid"],
@@ -80,6 +96,17 @@
       }
     },
     {
+      "$comment": "rubric は記述式(descriptive)専用。format が descriptive でないなら rubric を禁止。",
+      "if": {
+        "required": ["rubric"],
+        "properties": { "rubric": { "type": "array", "minItems": 1 } }
+      },
+      "then": {
+        "required": ["format"],
+        "properties": { "format": { "const": "descriptive" } }
+      }
+    },
+    {
       "if": {
         "required": ["status"],
         "properties": { "status": { "enum": ["validated", "published"] } }
@@ -97,6 +124,25 @@
             }
           }
         }
+      }
+    },
+    {
+      "$comment": "exam↔subject の整合: 一次/三種は4科目、二種二次は2科目。制度上あり得ない組合せを弾く。",
+      "if": {
+        "required": ["exam"],
+        "properties": { "exam": { "enum": ["denken3", "denken2_primary"] } }
+      },
+      "then": {
+        "properties": { "subject": { "enum": ["理論", "電力", "機械", "法規"] } }
+      }
+    },
+    {
+      "if": {
+        "required": ["exam"],
+        "properties": { "exam": { "const": "denken2_secondary" } }
+      },
+      "then": {
+        "properties": { "subject": { "enum": ["電力管理", "機械制御"] } }
       }
     }
   ]

@@ -10,6 +10,7 @@
   },
   "scripts": {
     "gen": "tsx lib/engine/cli.ts",
+    "gen:web": "tsx scripts/build-problems.ts",
     "export:vault": "tsx scripts/export-vault.ts",
     "build:web": "tsx scripts/build-web.ts",
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
@@ -20,7 +21,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check",
     "format": "biome check --write",
-    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm test && npm run build:web"
+    "hooks:install": "git config core.hooksPath .githooks",
+    "postinstall": "git config core.hooksPath .githooks || true",
+    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm run test:coverage && npm run build:web"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

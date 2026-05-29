@@ -71,7 +71,8 @@ lib/engine/
 
 ## 9. CLI
 - `gen --topic <名> --count <n> [--source original|modified] [--xpost] [--out file.json]`
-- 既定は validated のみ。`--include-drafts` で draft も出す
+- 生成物は常に `status=draft`（`human_checked` は人間の承認ゲートのため自動生成では満たされない）。
+  CLI は人手レビュー前の **draft 候補**を出力する。`validated` への昇格は人が検算して `gate.ts` を通す運用（=「validated のみ出力」はこの段階では空になるため設けない）。
 
 ## 10. リスク / コンプラ / セキュリティ
 - `ANTHROPIC_API_KEY` は `.env`。**コミット禁止**（.gitignore 確認）

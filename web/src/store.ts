@@ -6,6 +6,7 @@
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
 import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import type { ReviewState } from "../../lib/scheduler/types.js";
+import { type AspectTotal, accumulateAspects, type RubricScore } from "../../lib/study/rubric.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -14,6 +15,8 @@ export interface StorageLike {
 
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
+const EXAM_KEY = "denken:examDate";
+const ASPECT_KEY = "denken:aspects";
 const DAY_MS = 86_400_000;
 
 export class LocalProgress {
@@ -46,8 +49,8 @@ export class LocalProgress {
     return new Map(Object.entries(this.reviews()));
   }
 
-  /** 採点を記録し、SM-2 で記憶状態を更新する。 */
-  record(topic: string, correct: boolean, nowMs: number = Date.now(), timeMs?: number): ReviewState {
+  /** 採点を記録し、SM-2 で記憶状態を更新する。subject は科目別到達度の集計に使う。 */
+  record(topic: string, correct: boolean, nowMs: number = Date.now(), timeMs?: number, subject?: string): ReviewState {
     const prev = this.getReview(topic) ?? this.scheduler.init(nowMs);
     const next = this.scheduler.review(prev, correct ? "good" : "again", nowMs);
 
@@ -56,9 +59,27 @@ export class LocalProgress {
     this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
 
     const logs = this.logs();
-    logs.push({ topic, correct, atMs: nowMs, timeMs });
+    logs.push({ topic, correct, atMs: nowMs, timeMs, ...(subject ? { subject } : {}) });
     this.storage.setItem(LOG_KEY, JSON.stringify(logs));
     return next;
+  }
+
+  /**
+   * 科目別の正答率（合格到達度の素地）。subject 付きログのみ集計する。
+   * lib/study/lesson.ts の passReadiness にそのまま渡せる形で返す。
+   */
+  subjectAccuracy(): Array<{ subject: string; accuracy: number; attempts: number }> {
+    const m = new Map<string, { correct: number; attempts: number }>();
+    for (const l of this.logs()) {
+      if (!l.subject) continue;
+      const cur = m.get(l.subject) ?? { correct: 0, attempts: 0 };
+      cur.attempts += 1;
+      if (l.correct) cur.correct += 1;
+      m.set(l.subject, cur);
+    }
+    return [...m.entries()]
+      .map(([subject, s]) => ({ subject, accuracy: s.attempts > 0 ? s.correct / s.attempts : 0, attempts: s.attempts }))
+      .sort((a, b) => a.accuracy - b.accuracy);
   }
 
   /** 今日まで連続して学習した日数（UTC 日基準）。 */
@@ -83,5 +104,52 @@ export class LocalProgress {
       .filter((l) => Math.floor(l.atMs / DAY_MS) === today)
       .reduce((a, l) => a + (l.timeMs ?? 0), 0);
     return Math.round(ms / 60_000);
+  }
+
+  /** 復習期日(dueMs)が到来している topic（間隔反復の復習対象）。 */
+  dueTopics(nowMs: number = Date.now()): string[] {
+    return [...this.allReviews().entries()].filter(([, s]) => s.dueMs <= nowMs).map(([topic]) => topic);
+  }
+
+  /** 直近の解答が不正解だった topic（間違い直し用）。 */
+  wrongTopics(): string[] {
+    const last = new Map<string, boolean>();
+    for (const l of this.logs()) last.set(l.topic, l.correct);
+    return [...last.entries()].filter(([, correct]) => !correct).map(([topic]) => topic);
+  }
+
+  /** 試験日（epoch ms）。未設定は null。合格逆算のペース計画に使う。 */
+  examDateMs(): number | null {
+    const raw = this.storage.getItem(EXAM_KEY);
+    if (!raw) return null;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /** 試験日を保存する（"YYYY-MM-DD" or epoch ms）。空文字でクリア。 */
+  setExamDate(value: string): void {
+    if (!value) {
+      this.storage.setItem(EXAM_KEY, "");
+      return;
+    }
+    const ms = /^\d+$/.test(value) ? Number(value) : Date.parse(value);
+    if (Number.isFinite(ms)) this.storage.setItem(EXAM_KEY, String(ms));
+  }
+
+  /** 今日の解答数（日次目標の達成判定に使う）。 */
+  todayAnswered(nowMs: number = Date.now()): number {
+    const today = Math.floor(nowMs / DAY_MS);
+    return this.logs().filter((l) => Math.floor(l.atMs / DAY_MS) === today).length;
+  }
+
+  /** 記述採点の観点別累積（立式/計算/単位/論述/作図）。 */
+  aspectTotals(): AspectTotal[] {
+    return this.read<AspectTotal[]>(ASPECT_KEY, []);
+  }
+
+  /** ルーブリック採点結果を観点別累積へ足し込み永続化する。 */
+  recordRubric(score: RubricScore): void {
+    const next = accumulateAspects(this.aspectTotals(), score);
+    this.storage.setItem(ASPECT_KEY, JSON.stringify(next));
   }
 }

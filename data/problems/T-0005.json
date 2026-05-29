@@ -1,0 +1,38 @@
+{
+  "id": "T-0005",
+  "exam": "denken3",
+  "subject": "電力",
+  "topic": "単相2線式の電圧降下",
+  "format": "multiple_choice",
+  "difficulty": 3,
+  "params": {
+    "current": { "value": 10, "unit": "A", "realistic_range": [1, 100] },
+    "resistance": { "value": 0.5, "unit": "ohm", "realistic_range": [0.01, 5] },
+    "reactance": { "value": 0.5, "unit": "ohm", "realistic_range": [0.01, 5] },
+    "power_factor": { "value": 0.8, "unit": "", "realistic_range": [0.5, 1] }
+  },
+  "statement": "単相2線式配電線（1線あたり抵抗R=0.5Ω、リアクタンスX=0.5Ω）に、力率cosθ=0.8（遅れ）で電流I=10Aが流れている。線路の電圧降下vd〔V〕は?",
+  "choices": ["2", "7", "8", "14"],
+  "answer": "14",
+  "solution": [
+    "単相2線式の電圧降下（近似）: vd = 2·I·(R·cosθ + X·sinθ)",
+    "sinθ = 0.6",
+    "vd = 2·10·(0.5·0.8 + 0.5·0.6)",
+    "vd = 14 V",
+    "【誤答の着眼】各選択肢は次の典型ミスに対応する:",
+    "・7 … 往復2線ぶんの係数2を忘れ片道だけで計算",
+    "・8 … リアクタンス降下 X·sinθ の項を落とした",
+    "・2 … 遅れ力率なのに符号を取り違え X·sinθ を減算"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.96
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "7" },
+  "status": "validated"
+}

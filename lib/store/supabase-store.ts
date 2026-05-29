@@ -25,6 +25,7 @@ export interface ProblemRow {
   choices: string[] | null;
   answer: string;
   solution: string[];
+  rubric: Problem["rubric"] | null;
   validation: Problem["validation"];
   source: Problem["source"];
   stats: Problem["stats"] | null;
@@ -43,6 +44,7 @@ export function problemToRow(p: Problem): ProblemRow {
     choices: p.choices ?? null,
     answer: p.answer,
     solution: p.solution,
+    rubric: p.rubric ?? null,
     validation: p.validation,
     source: p.source,
     stats: p.stats ?? null,
@@ -62,6 +64,7 @@ export function rowToProblem(r: ProblemRow): Problem {
     choices: r.choices ?? undefined,
     answer: r.answer,
     solution: r.solution,
+    ...(r.rubric ? { rubric: r.rubric } : {}),
     validation: r.validation,
     source: r.source,
     stats: r.stats ?? undefined,

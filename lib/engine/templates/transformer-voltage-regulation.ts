@@ -47,6 +47,34 @@ function buildFrom(p: number, q: number, cos: number, sin: number): GenerationRe
       `ε=${answerText}%`,
       `（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）`,
     ],
+    // 部分点ルーブリック（記述の自己採点の足場・15-descriptive-secondary）。
+    rubric: [
+      {
+        id: "formula",
+        points: 3,
+        criterion: "一次近似式 ε≈p·cosθ+q·sinθ を提示",
+        aspect: "立式",
+        keywords: ["ε", "cos", "sin"],
+        required: true,
+      },
+      {
+        id: "sin",
+        points: 2,
+        criterion: "sinθ=√(1−cos²θ) を正しく求める",
+        aspect: "計算",
+        keywords: ["sin", "√", "cos"],
+      },
+      { id: "substitute", points: 2, criterion: "数値を正しく代入する", aspect: "計算", keywords: [`${p}`, `${q}`] },
+      {
+        id: "result",
+        points: 2,
+        criterion: `最終値 ε=${answerText}% を単位つきで結論`,
+        aspect: "単位",
+        keywords: [answerText, "%"],
+        required: true,
+      },
+      { id: "note", points: 1, criterion: "一次近似である旨（厳密式との別）に言及", aspect: "論述" },
+    ],
     physicallyValid: true,
   };
 }

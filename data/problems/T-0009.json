@@ -1,0 +1,36 @@
+{
+  "id": "T-0009",
+  "exam": "denken3",
+  "subject": "機械",
+  "topic": "変圧器の巻数比と二次電圧",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "primary_voltage": { "value": 6600, "unit": "V", "realistic_range": [100, 6600] },
+    "n1": { "value": 33, "unit": "turn", "realistic_range": [1, 100] },
+    "n2": { "value": 1, "unit": "turn", "realistic_range": [1, 100] }
+  },
+  "statement": "一次巻数33、二次巻数1の変圧器の一次に6600Vを加えた。二次電圧V2〔V〕は?（理想変圧器）",
+  "choices": ["33", "200", "6600", "217800"],
+  "answer": "200",
+  "solution": [
+    "巻数比 a=N1/N2=V1/V2 より V2=V1·N2/N1",
+    "V2 = 6600×1/33",
+    "V2 = 200 V",
+    "【誤答の着眼】各選択肢は次の典型ミスに対応する:",
+    "・217800 … 巻数比を逆に適用（V1·N1/N2）",
+    "・6600 … 二次へ変換せず一次電圧のまま",
+    "・33 … 巻数比 N1/N2 そのものを電圧と誤答"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.98
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "217800" },
+  "status": "validated"
+}

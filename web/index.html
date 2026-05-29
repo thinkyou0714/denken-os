@@ -14,6 +14,19 @@
       h1 { font-size: 1.1rem; margin: 0; }
       .stats { font-size: .9rem; opacity: .85; }
       .demo { background: #fff3cd; color: #664d03; padding: .4rem .6rem; border-radius: .4rem; font-size: .8rem; margin: .6rem 0; }
+      .readiness { display: flex; flex-wrap: wrap; gap: .4rem; font-size: .8rem; margin: .4rem 0; }
+      .readiness .rd { background: #88884011; border: 1px solid #8884; border-radius: .4rem; padding: .2rem .5rem; }
+      .readiness .rd-label { opacity: .6; font-size: .75rem; align-self: center; }
+      .exam { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; font-size: .85rem; margin: .4rem 0; }
+      .exam #exam-plan { opacity: .9; }
+      textarea#desc-input { font-family: inherit; font-size: .95rem; padding: .5rem; border: 1px solid #8884; border-radius: .5rem; }
+      .rubric { display: grid; gap: .5rem; margin: .4rem 0; }
+      .rubric-row { border: 1px solid #8884; border-radius: .5rem; padding: .5rem; }
+      .rubric-row .hint { opacity: .6; font-size: .8rem; }
+      .rubric-row .req { color: #dc3545; font-size: .75rem; border: 1px solid #dc3545; border-radius: .3rem; padding: 0 .3rem; }
+      .rubric-marks { display: flex; gap: .4rem; margin-top: .4rem; }
+      .rubric-marks .mark { padding: .3rem .6rem; font-size: .85rem; border: 1px solid #8884; border-radius: .4rem; background: #88884011; cursor: pointer; }
+      .rubric-marks .mark.sel { background: #0b5394; color: #fff; border-color: #0b5394; }
       #meta { opacity: .7; font-size: .85rem; margin-top: 1rem; }
       #statement { font-size: 1.1rem; margin: .4rem 0 1rem; }
       #answers { display: grid; gap: .5rem; }
@@ -26,6 +39,16 @@
       .src { opacity: .65; font-size: .8rem; }
       #share { white-space: pre-wrap; background: #88884011; padding: .6rem; border-radius: .5rem; font-size: .85rem; min-height: 1px; }
       #next { margin-top: 1rem; padding: .6rem 1.2rem; font-size: 1rem; border-radius: .5rem; border: none; background: #0b5394; color: #fff; cursor: pointer; }
+      .audio { margin: 1.2rem 0; padding: .8rem; border: 1px solid #8884; border-radius: .6rem; background: #0b539410; }
+      .audio h2 { font-size: 1rem; margin: 0 0 .2rem; }
+      .audio .hint { font-size: .8rem; opacity: .75; margin: 0 0 .6rem; }
+      .audio .controls { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+      .audio button { padding: .5rem .9rem; font-size: .95rem; border-radius: .5rem; border: 1px solid #8884; background: #88884011; cursor: pointer; }
+      .audio button:hover { background: #8888; }
+      .audio label { font-size: .85rem; display: inline-flex; gap: .3rem; align-items: center; }
+      #audio-now { font-size: .85rem; opacity: .8; margin-top: .5rem; min-height: 1.2em; }
+      #audio-transcript { font-size: .9rem; margin-top: .4rem; padding: .4rem .6rem; border-radius: .4rem; background: #88884011; min-height: 1.2em; }
+      #audio-unsupported { color: #dc3545; font-size: .85rem; }
       footer { margin-top: 2rem; font-size: .75rem; opacity: .6; }
     </style>
   </head>
@@ -37,14 +60,92 @@
 
     <p class="demo">⚠️ デモ版：問題は自動生成（未監修）です。学習の目安に。正解はコードで検算済みですが、本番運用では人の目チェックを通します。</p>
 
+    <div class="exam">
+      <label>🎯 試験日 <input type="date" id="exam-date" /></label>
+      <span id="exam-plan" aria-live="polite"></span>
+    </div>
+
+    <div id="readiness" class="readiness" aria-live="polite"></div>
+    <div id="aspects" class="readiness" aria-live="polite"></div>
+
     <main>
       <div id="meta"></div>
       <div id="statement">読み込み中…</div>
       <div id="answers"></div>
-      <div id="feedback"></div>
-      <div id="solution"></div>
+      <div id="feedback" role="status" aria-live="assertive"></div>
+      <div id="solution" aria-live="polite"></div>
       <div id="share"></div>
       <button id="next">次の問題 →</button>
+
+      <section class="audio" id="audio-panel">
+        <h2>🔊 法規 聞き流し（音声学習）</h2>
+        <p class="hint">出題 → 考える間 → 正解 → 解説 を音声で連続再生します。通勤・家事のながら学習に。端末の音声合成を使うためオフラインでも動作します。ショートカット: Space=再生/一時停止、N=次、P=前、R=もう一度。</p>
+        <div class="controls" role="group" aria-label="学習モード">
+          <button id="audio-lesson" aria-label="聞く→解くレッスンを開始" style="background:#0b5394;color:#fff;font-weight:600;">📚 レッスン（聞く→解く）</button>
+        </div>
+        <p class="hint">レッスン：選んだ件数を聞き終えると、いま聞いた論点がそのまま出題されます（テスト効果）。結果は弱点として記録され、次の復習に回ります。</p>
+        <div class="controls" role="group" aria-label="再生コントロール">
+          <button id="audio-play" aria-label="再生">▶ 再生</button>
+          <button id="audio-pause" aria-label="一時停止/再開">⏸ 一時停止</button>
+          <button id="audio-prev" aria-label="前の問題へ">⏮ 前へ</button>
+          <button id="audio-repeat" aria-label="現在の問題をもう一度">🔁 もう一度</button>
+          <button id="audio-next" aria-label="次の問題へ">⏭ 次へ</button>
+          <button id="audio-stop" aria-label="停止">⏹ 停止</button>
+          <button id="audio-transcript-btn" aria-label="現在の設定で読み上げ原稿をコピー">📄 原稿をコピー</button>
+        </div>
+        <div class="controls" role="group" aria-label="再生設定">
+          <label><input type="checkbox" id="audio-loop" checked /> 連続再生</label>
+          <label><input type="checkbox" id="audio-repeatans" /> 正解を2回読む</label>
+          <label>速度
+            <select id="audio-rate">
+              <option value="0.8">0.8x</option>
+              <option value="1">1.0x</option>
+              <option value="1.2">1.2x</option>
+              <option value="1.5">1.5x</option>
+            </select>
+          </label>
+          <label>考える間
+            <select id="audio-gap">
+              <option value="3000">3秒</option>
+              <option value="6000">6秒</option>
+              <option value="10000">10秒</option>
+            </select>
+          </label>
+          <label>科目
+            <select id="audio-subject">
+              <option value="法規">法規のみ</option>
+              <option value="">全科目</option>
+            </select>
+          </label>
+          <label>出題対象
+            <select id="audio-mode">
+              <option value="normal">通常（弱点優先）</option>
+              <option value="due">復習（期日到来）</option>
+              <option value="wrong">間違いのみ</option>
+            </select>
+          </label>
+          <label>件数
+            <select id="audio-max">
+              <option value="0">無制限</option>
+              <option value="5">5問</option>
+              <option value="10">10問</option>
+              <option value="20">20問</option>
+            </select>
+          </label>
+          <label>分タイマー
+            <select id="audio-maxmin">
+              <option value="0">なし</option>
+              <option value="10">10分</option>
+              <option value="20">20分</option>
+              <option value="30">30分</option>
+            </select>
+          </label>
+          <label><input type="checkbox" id="audio-resume" /> 続きから</label>
+        </div>
+        <div id="audio-now" role="status" aria-live="polite"></div>
+        <div id="audio-transcript" aria-live="polite"></div>
+        <div id="audio-unsupported" role="alert"></div>
+      </section>
     </main>
 
     <footer>

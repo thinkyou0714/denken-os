@@ -18,6 +18,13 @@
     "ε=1.6+3.0=4.6%",
     "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
   ],
+  "rubric": [
+    { "id": "formula", "points": 3, "criterion": "一次近似式 ε≈p·cosθ+q·sinθ を提示する", "aspect": "立式", "keywords": ["ε", "cos", "sin"], "required": true },
+    { "id": "sin", "points": 2, "criterion": "sinθ=√(1−cos²θ)=0.6 を正しく求める", "aspect": "計算", "keywords": ["sin", "0.6"] },
+    { "id": "substitute", "points": 2, "criterion": "数値を正しく代入する（2×0.8+5×0.6）", "aspect": "計算", "keywords": ["2", "5"] },
+    { "id": "result", "points": 2, "criterion": "最終値 ε=4.6% を単位つきで結論する", "aspect": "単位", "keywords": ["4.6", "%"], "required": true },
+    { "id": "note", "points": 1, "criterion": "一次近似である旨（厳密式との別）に言及する", "aspect": "論述" }
+  ],
   "validation": {
     "solver_checked": true,
     "human_checked": true,
