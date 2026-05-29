@@ -105,4 +105,30 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     p.record("c", true, today - DAY, undefined, "理論"); // 昨日はカウントしない
     expect(p.todayAnswered(today)).toBe(2);
   });
+
+  it("記述採点の観点別累積を recordRubric で永続化・横断集計する", () => {
+    const storage = new MemoryStorage();
+    const p = new LocalProgress(storage);
+    // 立式3/3・論述0/3 の採点を2回 → 立式6/6, 論述0/6 に累積。
+    const score = {
+      items: [],
+      maxPoints: 6,
+      awarded: 3,
+      ratio: 0.5,
+      passed: false,
+      missingRequired: [],
+      weakItemIds: [],
+      byAspect: [
+        { aspect: "立式" as const, points: 3, awarded: 3, ratio: 1 },
+        { aspect: "論述" as const, points: 3, awarded: 0, ratio: 0 },
+      ],
+    };
+    p.recordRubric(score);
+    p.recordRubric(score);
+    const totals = p.aspectTotals();
+    expect(totals.find((t) => t.aspect === "立式")).toMatchObject({ points: 6, awarded: 6 });
+    expect(totals.find((t) => t.aspect === "論述")).toMatchObject({ points: 6, awarded: 0 });
+    // 別インスタンスでも復元できる（永続）。
+    expect(new LocalProgress(storage).aspectTotals().length).toBe(2);
+  });
 });

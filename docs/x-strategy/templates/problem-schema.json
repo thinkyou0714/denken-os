@@ -39,6 +39,7 @@
           "id": { "type": "string", "description": "採点項目ID(集計キー・一意)" },
           "points": { "type": "number", "exclusiveMinimum": 0, "description": "配点。合計が満点" },
           "criterion": { "type": "string", "description": "採点規準(何が書けていれば加点か)" },
+          "aspect": { "type": "string", "enum": ["立式", "計算", "単位", "論述", "作図"], "description": "横断的な能力軸。観点別弱点集計のタグ" },
           "keywords": { "type": "array", "items": { "type": "string" }, "description": "記述に含まれるべき手がかり語" },
           "required": { "type": "boolean", "description": "合否に必須の観点か" }
         }

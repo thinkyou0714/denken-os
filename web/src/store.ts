@@ -6,6 +6,7 @@
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
 import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import type { ReviewState } from "../../lib/scheduler/types.js";
+import { type AspectTotal, accumulateAspects, type RubricScore } from "../../lib/study/rubric.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -15,6 +16,7 @@ export interface StorageLike {
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
 const EXAM_KEY = "denken:examDate";
+const ASPECT_KEY = "denken:aspects";
 const DAY_MS = 86_400_000;
 
 export class LocalProgress {
@@ -138,5 +140,16 @@ export class LocalProgress {
   todayAnswered(nowMs: number = Date.now()): number {
     const today = Math.floor(nowMs / DAY_MS);
     return this.logs().filter((l) => Math.floor(l.atMs / DAY_MS) === today).length;
+  }
+
+  /** 記述採点の観点別累積（立式/計算/単位/論述/作図）。 */
+  aspectTotals(): AspectTotal[] {
+    return this.read<AspectTotal[]>(ASPECT_KEY, []);
+  }
+
+  /** ルーブリック採点結果を観点別累積へ足し込み永続化する。 */
+  recordRubric(score: RubricScore): void {
+    const next = accumulateAspects(this.aspectTotals(), score);
+    this.storage.setItem(ASPECT_KEY, JSON.stringify(next));
   }
 }

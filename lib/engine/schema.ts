@@ -15,6 +15,14 @@ export const formatEnum = z.enum(["multiple_choice", "numeric", "descriptive"]);
 export const sourceTypeEnum = z.enum(["original", "past_exam_modified", "past_exam_quoted"]);
 export const statusEnum = z.enum(["draft", "validated", "published", "retracted"]);
 
+/**
+ * 記述採点の横断的な観点カテゴリ。問題固有の rubric id とは別に、
+ * 「立式/計算/単位/論述/作図」という記述特有の能力軸で弱点を集計するためのタグ。
+ * 例: 「立式は強いが論述が弱い」を科目横断で可視化する（15-descriptive-secondary #61）。
+ */
+export const rubricAspectEnum = z.enum(["立式", "計算", "単位", "論述", "作図"]);
+export type RubricAspect = z.infer<typeof rubricAspectEnum>;
+
 export type Exam = z.infer<typeof examEnum>;
 export type Subject = z.infer<typeof subjectEnum>;
 export type ProblemFormat = z.infer<typeof formatEnum>;
@@ -80,6 +88,8 @@ export const rubricItemSchema = z.object({
   points: z.number().positive(),
   /** 採点規準（この観点で何が書けていれば加点か）。 */
   criterion: z.string().min(1),
+  /** 横断的な能力軸（立式/計算/単位/論述/作図）。観点別弱点集計のタグ。 */
+  aspect: rubricAspectEnum.optional(),
   /** 自己採点の手がかりになるキーワード（記述に含まれるべき語）。 */
   keywords: z.array(z.string()).optional(),
   /** 合否に必須の観点か（単位明記・前提条件など）。 */

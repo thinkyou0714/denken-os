@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { RubricItem } from "../../lib/engine/schema.js";
-import { keywordHits, maxPoints, rubricFeedback, scoreRubric } from "../../lib/study/rubric.js";
+import {
+  accumulateAspects,
+  aspectReadiness,
+  keywordHits,
+  maxPoints,
+  rubricFeedback,
+  scoreRubric,
+} from "../../lib/study/rubric.js";
 
 const rubric: RubricItem[] = [
   { id: "formula", points: 3, criterion: "式を提示", keywords: ["ε", "cos"], required: true },
@@ -118,5 +125,60 @@ describe("rubricFeedback — 講評", () => {
 
   it("ルーブリック無しは明示", () => {
     expect(rubricFeedback(scoreRubric([], []))).toContain("ルーブリック");
+  });
+});
+
+const aspectRubric: RubricItem[] = [
+  { id: "f", points: 3, criterion: "立式", aspect: "立式" },
+  { id: "c1", points: 2, criterion: "計算1", aspect: "計算" },
+  { id: "c2", points: 2, criterion: "計算2", aspect: "計算" },
+  { id: "r", points: 3, criterion: "論述", aspect: "論述" },
+];
+
+describe("scoreRubric — 観点別(byAspect)", () => {
+  it("aspect ごとに配点・獲得を集計し、得点率の低い順に並ぶ", () => {
+    const s = scoreRubric(aspectRubric, [
+      { id: "f", mark: "full" }, // 立式 3/3
+      { id: "c1", mark: "partial" }, // 計算 1/2
+      { id: "c2", mark: "none" }, // 計算 0/2 → 計算 1/4
+      { id: "r", mark: "none" }, // 論述 0/3
+    ]);
+    const byId = new Map(s.byAspect.map((a) => [a.aspect, a]));
+    expect(byId.get("立式")).toMatchObject({ points: 3, awarded: 3, ratio: 1 });
+    expect(byId.get("計算")).toMatchObject({ points: 4, awarded: 1, ratio: 0.25 });
+    expect(byId.get("論述")).toMatchObject({ points: 3, awarded: 0, ratio: 0 });
+    expect(s.byAspect[0]!.aspect).toBe("論述"); // 0% が先頭
+  });
+
+  it("aspect 無し項目は byAspect に現れない", () => {
+    const s = scoreRubric([{ id: "x", points: 2, criterion: "無タグ" }], [{ id: "x", mark: "full" }]);
+    expect(s.byAspect).toEqual([]);
+  });
+});
+
+describe("accumulateAspects / aspectReadiness — セッション横断の観点弱点", () => {
+  it("複数回の採点を観点別に足し込む", () => {
+    const s1 = scoreRubric(aspectRubric, [{ id: "f", mark: "full" }]); // 立式3/3, 計算0/4, 論述0/3
+    const s2 = scoreRubric(aspectRubric, [{ id: "c1", mark: "full" }]); // 計算+2/4
+    const total = accumulateAspects(accumulateAspects([], s1), s2);
+    const calc = total.find((t) => t.aspect === "計算")!;
+    expect(calc.points).toBe(8); // 4+4
+    expect(calc.awarded).toBe(2); // 0+2
+  });
+
+  it("到達度を低い順に出し、配点不足は判定保留", () => {
+    const total = [
+      { aspect: "立式" as const, points: 10, awarded: 9 },
+      { aspect: "論述" as const, points: 10, awarded: 3 },
+      { aspect: "計算" as const, points: 2, awarded: 0 }, // points<6 → enoughData=false
+    ];
+    const r = aspectReadiness(total);
+    expect(r[0]!.aspect).toBe("計算"); // ratio 0 が先頭（保留でも順序は ratio）
+    const ronjutsu = r.find((a) => a.aspect === "論述")!;
+    expect(ronjutsu.onTrack).toBe(false);
+    expect(ronjutsu.enoughData).toBe(true);
+    const ritsu = r.find((a) => a.aspect === "立式")!;
+    expect(ritsu.onTrack).toBe(true);
+    expect(r.find((a) => a.aspect === "計算")!.enoughData).toBe(false);
   });
 });

@@ -8,7 +8,7 @@
  * 設計: 純関数のみ。UI(web) と将来のサーバ集計の両方から使える。
  */
 
-import type { RubricItem } from "../engine/schema.js";
+import type { RubricAspect, RubricItem } from "../engine/schema.js";
 import { PASS_LINE } from "./lesson.js";
 
 /** 自己採点のマーク。満点/部分点(半分)/未達。 */
@@ -29,6 +29,15 @@ export interface RubricItemScore {
   awarded: number;
   mark: RubricMark;
   required: boolean;
+  aspect?: RubricAspect;
+}
+
+/** 観点(立式/計算/…)ごとの得点集計。 */
+export interface AspectScore {
+  aspect: RubricAspect;
+  points: number;
+  awarded: number;
+  ratio: number;
 }
 
 export interface RubricScore {
@@ -44,6 +53,8 @@ export interface RubricScore {
   missingRequired: string[];
   /** 落とした（満点でない）観点のID（弱点分析用）。 */
   weakItemIds: string[];
+  /** 能力軸(aspect)別の得点（記述特有の弱点分析: 立式/計算/単位/論述/作図）。 */
+  byAspect: AspectScore[];
 }
 
 /** rubric の満点（配点合計）。 */
@@ -66,6 +77,7 @@ export function scoreRubric(rubric: RubricItem[], marks: RubricMarkInput[]): Rub
       awarded: Number((r.points * MARK_RATIO[mark]).toFixed(4)),
       mark,
       required: r.required ?? false,
+      ...(r.aspect ? { aspect: r.aspect } : {}),
     };
   });
 
@@ -75,10 +87,28 @@ export function scoreRubric(rubric: RubricItem[], marks: RubricMarkInput[]): Rub
   const missingRequired = items.filter((i) => i.required && i.mark === "none").map((i) => i.id);
   const weakItemIds = items.filter((i) => i.mark !== "full").map((i) => i.id);
 
+  // 能力軸(aspect)別に配点・獲得を積む（記述特有の弱点分析）。
+  const aspectMap = new Map<RubricAspect, { points: number; awarded: number }>();
+  for (const i of items) {
+    if (!i.aspect) continue;
+    const cur = aspectMap.get(i.aspect) ?? { points: 0, awarded: 0 };
+    cur.points += i.points;
+    cur.awarded += i.awarded;
+    aspectMap.set(i.aspect, cur);
+  }
+  const byAspect: AspectScore[] = [...aspectMap.entries()]
+    .map(([aspect, a]) => ({
+      aspect,
+      points: a.points,
+      awarded: Number(a.awarded.toFixed(4)),
+      ratio: a.points > 0 ? a.awarded / a.points : 0,
+    }))
+    .sort((a, b) => a.ratio - b.ratio);
+
   // 合格は「得点率が合格ライン以上」かつ「必須観点を未達にしていない」。
   const passed = ratio >= PASS_LINE && missingRequired.length === 0;
 
-  return { items, maxPoints: max, awarded, ratio, passed, missingRequired, weakItemIds };
+  return { items, maxPoints: max, awarded, ratio, passed, missingRequired, weakItemIds, byAspect };
 }
 
 /**
@@ -120,4 +150,51 @@ export function rubricFeedback(score: RubricScore): string {
     return `${head}合格ライン60%を超えています。落とした観点を詰めれば満点が狙えます。`;
   }
   return `${head}合格ライン60%まであと少し。部分点を取りこぼした観点を復習しましょう。`;
+}
+
+/** 観点別の累積得点（セッション横断の永続集計に使う）。 */
+export interface AspectTotal {
+  aspect: RubricAspect;
+  points: number;
+  awarded: number;
+}
+
+/** 観点別の到達度（弱点軸の特定）。 */
+export interface AspectReadiness {
+  aspect: RubricAspect;
+  ratio: number;
+  /** 採点に現れた配点総量（少ないと判定保留）。 */
+  points: number;
+  /** 合格ライン(60%)到達か。 */
+  onTrack: boolean;
+  /** データ十分か（配点総量が minPoints 以上）。 */
+  enoughData: boolean;
+}
+
+/** 1回の採点結果(byAspect)を累積に足し込む（純関数・新しい累積を返す）。 */
+export function accumulateAspects(prev: AspectTotal[], score: RubricScore): AspectTotal[] {
+  const m = new Map<RubricAspect, AspectTotal>(prev.map((a) => [a.aspect, { ...a }]));
+  for (const a of score.byAspect) {
+    const cur = m.get(a.aspect) ?? { aspect: a.aspect, points: 0, awarded: 0 };
+    cur.points = Number((cur.points + a.points).toFixed(4));
+    cur.awarded = Number((cur.awarded + a.awarded).toFixed(4));
+    m.set(a.aspect, cur);
+  }
+  return [...m.values()];
+}
+
+/**
+ * 累積から観点別到達度を出す。配点総量が minPoints 未満は判定保留。
+ * 「立式は強いが論述が弱い」を記述特有の能力軸で可視化する。
+ */
+export function aspectReadiness(totals: AspectTotal[], minPoints = 6): AspectReadiness[] {
+  return totals
+    .map((t) => ({
+      aspect: t.aspect,
+      ratio: t.points > 0 ? t.awarded / t.points : 0,
+      points: t.points,
+      onTrack: t.points > 0 && t.awarded / t.points >= PASS_LINE,
+      enoughData: t.points >= minPoints,
+    }))
+    .sort((a, b) => a.ratio - b.ratio);
 }

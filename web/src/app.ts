@@ -19,7 +19,7 @@ import {
   type QuizResult,
   summarizeLesson,
 } from "../../lib/study/lesson.js";
-import { keywordHits, type RubricMark, rubricFeedback, scoreRubric } from "../../lib/study/rubric.js";
+import { aspectReadiness, keywordHits, type RubricMark, rubricFeedback, scoreRubric } from "../../lib/study/rubric.js";
 import { AudioPlayer } from "./audio-player.js";
 import { BrowserSpeaker, isSpeechAvailable } from "./browser-speaker.js";
 import { LocalProgress } from "./store.js";
@@ -52,6 +52,25 @@ function renderStats(): void {
   const weak = weakTopics();
   $("weak").textContent = weak.length > 0 ? `弱点: ${weak.join(" / ")}` : "弱点: （まだデータなし）";
   renderReadiness();
+  renderAspects();
+}
+
+/** 記述採点の観点別到達度（立式/計算/単位/論述/作図）を表示する。 */
+function renderAspects(): void {
+  const el = document.getElementById("aspects");
+  if (!el) return;
+  const ready = aspectReadiness(progress.aspectTotals());
+  if (ready.length === 0) {
+    el.textContent = "";
+    return;
+  }
+  el.innerHTML = `<span class="rd-label">記述の観点別</span>${ready
+    .map((a) => {
+      const pct = Math.round(a.ratio * 100);
+      const mark = !a.enoughData ? "⏳" : a.onTrack ? "✅" : "⚠️";
+      return `<span class="rd">${mark} ${escapeHtml(a.aspect)} ${pct}%</span>`;
+    })
+    .join("")}`;
 }
 
 /** 科目別の合格到達度（60%ライン）を表示する。科目合格制の資源配分を支援。 */
@@ -225,8 +244,11 @@ function renderRubricScoring(p: Problem, rubric: RubricItem[], answerText: strin
     );
     $("feedback").textContent = `📝 ${rubricFeedback(score)}`;
     $("feedback").className = score.passed ? "ok" : "ng";
+    // 観点別(立式/計算/論述…)の累積へ記録（記述特有の弱点軸を可視化）。
+    progress.recordRubric(score);
     // 合格ライン到達を正誤として記録（弱点ループ・科目別到達度に接続）。
     grade(score.passed ? p.answer : "__self_incorrect__", { silentFeedback: true });
+    renderAspects();
   };
   answers.appendChild(submit);
 }
