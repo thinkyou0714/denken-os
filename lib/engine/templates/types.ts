@@ -7,7 +7,7 @@
  *   { 正解, 各量, 誤答選択肢, 制約 }
  * を返す。LLM は narrate.ts で「言い回し」だけを担当する。
  */
-import type { Exam, ProblemFormat, Subject } from "../schema.js";
+import type { Exam, ProblemFormat, RubricItem, Subject } from "../schema.js";
 
 export interface ParamSpec {
   unit?: string;
@@ -53,6 +53,8 @@ export interface GenerationResult {
   defaultStatement: string;
   /** LLM 不在でも成立する既定の解法ステップ。 */
   defaultSolution: string[];
+  /** 記述式(descriptive)の部分点ルーブリック（任意。自己採点の足場）。 */
+  rubric?: RubricItem[];
   /** 物理的に成立するか（力率<=1 等）。 */
   physicallyValid: boolean;
 }

@@ -8,7 +8,7 @@
  */
 
 import { buildPlaylist, type PlaylistOptions, playlistTranscript, sessionSummaryText } from "../../lib/audio/script.js";
-import type { Problem, Subject } from "../../lib/engine/schema.js";
+import type { Problem, RubricItem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { planExam } from "../../lib/study/exam-plan.js";
@@ -19,6 +19,7 @@ import {
   type QuizResult,
   summarizeLesson,
 } from "../../lib/study/lesson.js";
+import { keywordHits, type RubricMark, rubricFeedback, scoreRubric } from "../../lib/study/rubric.js";
 import { AudioPlayer } from "./audio-player.js";
 import { BrowserSpeaker, isSpeechAvailable } from "./browser-speaker.js";
 import { LocalProgress } from "./store.js";
@@ -115,25 +116,7 @@ function renderQuestion(forced?: Problem): void {
       answers.appendChild(btn);
     }
   } else if (p.format === "descriptive") {
-    // 記述(二次): 自動採点しない → 模範解答を表示して自己採点。
-    const reveal = document.createElement("button");
-    reveal.className = "choice";
-    reveal.textContent = "模範解答を表示";
-    reveal.onclick = () => {
-      showSolution(p);
-      answers.innerHTML = "";
-      const ok = document.createElement("button");
-      ok.className = "choice";
-      ok.textContent = "✅ 自分の解答で書けた";
-      ok.onclick = () => grade(p.answer); // 正解扱い
-      const ng = document.createElement("button");
-      ng.className = "choice";
-      ng.textContent = "❌ 書けなかった";
-      ng.onclick = () => grade("__self_incorrect__"); // 不正解扱い
-      answers.appendChild(ok);
-      answers.appendChild(ng);
-    };
-    answers.appendChild(reveal);
+    renderDescriptive(p, answers);
   } else {
     // numeric: 入力欄
     const input = document.createElement("input");
@@ -154,15 +137,112 @@ function showSolution(p: Problem): void {
     `<strong>模範解答</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
 }
 
-function grade(given: string): void {
+/**
+ * 記述式(二次)の出題: ①自分の解答を入力 → ②模範解答と並置 →
+ * ③ルーブリック項目を◯△✕で自己採点 → ④得点率と弱点観点。
+ * rubric が無い問題は従来の二択自己採点に劣化対応する。
+ */
+function renderDescriptive(p: Problem, answers: HTMLElement): void {
+  const input = document.createElement("textarea");
+  input.id = "desc-input";
+  input.rows = 4;
+  input.placeholder = "自分の解答・方針を書いてから模範解答を表示（先に書くほど身につきます）";
+  input.style.width = "100%";
+  answers.appendChild(input);
+
+  const reveal = document.createElement("button");
+  reveal.className = "choice";
+  reveal.textContent = "模範解答を表示して採点へ";
+  reveal.onclick = () => {
+    showSolution(p);
+    answers.innerHTML = "";
+    if (p.rubric && p.rubric.length > 0) {
+      renderRubricScoring(p, p.rubric, input.value, answers);
+    } else {
+      // 旧来の二択自己採点（rubric 未設定問題の後方互換）。
+      const ok = document.createElement("button");
+      ok.className = "choice";
+      ok.textContent = "✅ 自分の解答で書けた";
+      ok.onclick = () => grade(p.answer);
+      const ng = document.createElement("button");
+      ng.className = "choice";
+      ng.textContent = "❌ 書けなかった";
+      ng.onclick = () => grade("__self_incorrect__");
+      answers.appendChild(ok);
+      answers.appendChild(ng);
+    }
+  };
+  answers.appendChild(reveal);
+}
+
+/** ルーブリック項目ごとに満点/部分/未達を選び、採点ボタンで集計する。 */
+function renderRubricScoring(p: Problem, rubric: RubricItem[], answerText: string, answers: HTMLElement): void {
+  const marks = new Map<string, RubricMark>();
+  const hits = keywordHits(rubric, answerText);
+  const hitById = new Map(hits.map((h) => [h.id, h]));
+
+  const wrap = document.createElement("div");
+  wrap.className = "rubric";
+  for (const item of rubric) {
+    const row = document.createElement("div");
+    row.className = "rubric-row";
+    const req = item.required ? ' <span class="req">必須</span>' : "";
+    const hit = hitById.get(item.id);
+    const hintText = hit && hit.total > 0 ? `（キーワード ${hit.hit}/${hit.total}）` : "";
+    const label = document.createElement("div");
+    label.innerHTML = `<b>${item.points}点</b> ${escapeHtml(item.criterion)}${req} <span class="hint">${escapeHtml(hintText)}</span>`;
+    row.appendChild(label);
+
+    const group = document.createElement("div");
+    group.className = "rubric-marks";
+    for (const [mark, text] of [
+      ["full", "◯ 満点"],
+      ["partial", "△ 部分"],
+      ["none", "✕ 未達"],
+    ] as const) {
+      const b = document.createElement("button");
+      b.className = "mark";
+      b.textContent = text;
+      b.onclick = () => {
+        marks.set(item.id, mark);
+        for (const sib of group.querySelectorAll("button")) sib.classList.remove("sel");
+        b.classList.add("sel");
+      };
+      group.appendChild(b);
+    }
+    row.appendChild(group);
+    wrap.appendChild(row);
+  }
+  answers.appendChild(wrap);
+
+  const submit = document.createElement("button");
+  submit.className = "choice";
+  submit.textContent = "採点する";
+  submit.onclick = () => {
+    const score = scoreRubric(
+      rubric,
+      [...marks.entries()].map(([id, mark]) => ({ id, mark })),
+    );
+    $("feedback").textContent = `📝 ${rubricFeedback(score)}`;
+    $("feedback").className = score.passed ? "ok" : "ng";
+    // 合格ライン到達を正誤として記録（弱点ループ・科目別到達度に接続）。
+    grade(score.passed ? p.answer : "__self_incorrect__", { silentFeedback: true });
+  };
+  answers.appendChild(submit);
+}
+
+function grade(given: string, opts: { silentFeedback?: boolean } = {}): void {
   if (!current) return;
   const p = current;
   const correct = given === p.answer;
   const timeMs = Date.now() - questionShownAt;
   progress.record(p.topic, correct, Date.now(), timeMs, p.subject);
 
-  $("feedback").textContent = correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`;
-  $("feedback").className = correct ? "ok" : "ng";
+  // ルーブリック採点時は呼び出し側が講評を出すので、ここでは上書きしない。
+  if (!opts.silentFeedback) {
+    $("feedback").textContent = correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`;
+    $("feedback").className = correct ? "ok" : "ng";
+  }
   $("solution").innerHTML =
     `<strong>解説</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
 

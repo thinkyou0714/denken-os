@@ -107,6 +107,8 @@ export async function generateOne(
     ...(format === "multiple_choice" ? { choices: draw.choices } : {}),
     answer: draw.answerText,
     solution,
+    // descriptive のみルーブリックを載せる（自己採点の足場）。
+    ...(format === "descriptive" && draw.rubric ? { rubric: draw.rubric } : {}),
     validation: {
       solver_checked: true, // [3] 純関数で算出した正解
       human_checked: false, // 自動生成段階では未了（人間の承認ゲート）

@@ -1060,6 +1060,53 @@
       "ε=2%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
     ],
+    "rubric": [
+      {
+        "id": "formula",
+        "points": 3,
+        "criterion": "一次近似式 ε≈p·cosθ+q·sinθ を提示",
+        "keywords": [
+          "ε",
+          "cos",
+          "sin"
+        ],
+        "required": true
+      },
+      {
+        "id": "sin",
+        "points": 2,
+        "criterion": "sinθ=√(1−cos²θ) を正しく求める",
+        "keywords": [
+          "sin",
+          "√",
+          "cos"
+        ]
+      },
+      {
+        "id": "substitute",
+        "points": 2,
+        "criterion": "数値を正しく代入する",
+        "keywords": [
+          "2",
+          "10"
+        ]
+      },
+      {
+        "id": "result",
+        "points": 2,
+        "criterion": "最終値 ε=2% を単位つきで結論",
+        "keywords": [
+          "2",
+          "%"
+        ],
+        "required": true
+      },
+      {
+        "id": "note",
+        "points": 1,
+        "criterion": "一次近似である旨（厳密式との別）に言及"
+      }
+    ],
     "validation": {
       "solver_checked": true,
       "human_checked": false,
@@ -1117,6 +1164,53 @@
       "ε≈p·cosθ+q·sinθ=4×0.6+5×0.8",
       "ε=6.4%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+    ],
+    "rubric": [
+      {
+        "id": "formula",
+        "points": 3,
+        "criterion": "一次近似式 ε≈p·cosθ+q·sinθ を提示",
+        "keywords": [
+          "ε",
+          "cos",
+          "sin"
+        ],
+        "required": true
+      },
+      {
+        "id": "sin",
+        "points": 2,
+        "criterion": "sinθ=√(1−cos²θ) を正しく求める",
+        "keywords": [
+          "sin",
+          "√",
+          "cos"
+        ]
+      },
+      {
+        "id": "substitute",
+        "points": 2,
+        "criterion": "数値を正しく代入する",
+        "keywords": [
+          "4",
+          "5"
+        ]
+      },
+      {
+        "id": "result",
+        "points": 2,
+        "criterion": "最終値 ε=6.4% を単位つきで結論",
+        "keywords": [
+          "6.4",
+          "%"
+        ],
+        "required": true
+      },
+      {
+        "id": "note",
+        "points": 1,
+        "criterion": "一次近似である旨（厳密式との別）に言及"
+      }
     ],
     "validation": {
       "solver_checked": true,
@@ -1176,6 +1270,53 @@
       "ε=8%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
     ],
+    "rubric": [
+      {
+        "id": "formula",
+        "points": 3,
+        "criterion": "一次近似式 ε≈p·cosθ+q·sinθ を提示",
+        "keywords": [
+          "ε",
+          "cos",
+          "sin"
+        ],
+        "required": true
+      },
+      {
+        "id": "sin",
+        "points": 2,
+        "criterion": "sinθ=√(1−cos²θ) を正しく求める",
+        "keywords": [
+          "sin",
+          "√",
+          "cos"
+        ]
+      },
+      {
+        "id": "substitute",
+        "points": 2,
+        "criterion": "数値を正しく代入する",
+        "keywords": [
+          "4",
+          "8"
+        ]
+      },
+      {
+        "id": "result",
+        "points": 2,
+        "criterion": "最終値 ε=8% を単位つきで結論",
+        "keywords": [
+          "8",
+          "%"
+        ],
+        "required": true
+      },
+      {
+        "id": "note",
+        "points": 1,
+        "criterion": "一次近似である旨（厳密式との別）に言及"
+      }
+    ],
     "validation": {
       "solver_checked": true,
       "human_checked": false,
@@ -1233,6 +1374,53 @@
       "ε≈p·cosθ+q·sinθ=3×0.8+5×0.6",
       "ε=5.4%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+    ],
+    "rubric": [
+      {
+        "id": "formula",
+        "points": 3,
+        "criterion": "一次近似式 ε≈p·cosθ+q·sinθ を提示",
+        "keywords": [
+          "ε",
+          "cos",
+          "sin"
+        ],
+        "required": true
+      },
+      {
+        "id": "sin",
+        "points": 2,
+        "criterion": "sinθ=√(1−cos²θ) を正しく求める",
+        "keywords": [
+          "sin",
+          "√",
+          "cos"
+        ]
+      },
+      {
+        "id": "substitute",
+        "points": 2,
+        "criterion": "数値を正しく代入する",
+        "keywords": [
+          "3",
+          "5"
+        ]
+      },
+      {
+        "id": "result",
+        "points": 2,
+        "criterion": "最終値 ε=5.4% を単位つきで結論",
+        "keywords": [
+          "5.4",
+          "%"
+        ],
+        "required": true
+      },
+      {
+        "id": "note",
+        "points": 1,
+        "criterion": "一次近似である旨（厳密式との別）に言及"
+      }
     ],
     "validation": {
       "solver_checked": true,

@@ -69,6 +69,25 @@ export const statsSchema = z.object({
   common_wrong_choice: z.string().optional(),
 });
 
+/**
+ * 記述式(descriptive)の採点項目（部分点ルーブリック）。
+ * 二次の記述は自動採点できないため、模範解答を採点観点に分解し、
+ * 利用者が観点ごとに自己採点して部分点を合算する（15-descriptive-secondary 参照）。
+ */
+export const rubricItemSchema = z.object({
+  id: z.string().min(1),
+  /** 配点（>0）。合計が満点になる。 */
+  points: z.number().positive(),
+  /** 採点規準（この観点で何が書けていれば加点か）。 */
+  criterion: z.string().min(1),
+  /** 自己採点の手がかりになるキーワード（記述に含まれるべき語）。 */
+  keywords: z.array(z.string()).optional(),
+  /** 合否に必須の観点か（単位明記・前提条件など）。 */
+  required: z.boolean().optional(),
+});
+
+export type RubricItem = z.infer<typeof rubricItemSchema>;
+
 export const problemSchema = z
   .object({
     id: z.string().min(1),
@@ -83,6 +102,7 @@ export const problemSchema = z
     choices: z.array(z.string()).optional(),
     answer: z.string().min(1),
     solution: z.array(z.string()).min(1),
+    rubric: z.array(rubricItemSchema).optional(),
     validation: validationSchema,
     source: sourceSchema,
     stats: statsSchema.optional(),
@@ -106,6 +126,25 @@ export const problemSchema = z
         path: ["subject"],
         message: `subject="${p.subject}" は exam="${p.exam}" に存在しない科目です（許容: ${EXAM_SUBJECTS[p.exam].join("/")}）`,
       });
+    }
+    // rubric は記述式(descriptive)専用。択一/数値には付けない。
+    if (p.rubric && p.rubric.length > 0 && p.format !== "descriptive") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["rubric"],
+        message: "rubric は format=descriptive のときだけ指定できます",
+      });
+    }
+    // rubric の id は一意（採点集計のキーになる）。
+    if (p.rubric && p.rubric.length > 0) {
+      const ids = p.rubric.map((r) => r.id);
+      if (new Set(ids).size !== ids.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["rubric"],
+          message: "rubric の id は一意である必要があります",
+        });
+      }
     }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）
     if (p.status === "validated" || p.status === "published") {

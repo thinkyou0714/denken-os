@@ -78,4 +78,21 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
     expect(r.ajv).toBe(true);
     expect(r.zod).toBe(true);
   });
+
+  it("rubric を multiple_choice に付けると両方が拒否する（記述専用）", () => {
+    const broken = {
+      ...T0001,
+      rubric: [{ id: "a", points: 1, criterion: "x" }],
+    };
+    const r = bothAccept(broken);
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  it("rubric 付きの descriptive 問題（T-0002）は両方が受理する", () => {
+    const t0002 = JSON.parse(readFileSync(join(ROOT, "data/problems/T-0002.json"), "utf8"));
+    const r = bothAccept(t0002);
+    expect(r.ajv).toBe(true);
+    expect(r.zod).toBe(true);
+  });
 });
