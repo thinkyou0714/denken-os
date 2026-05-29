@@ -1,0 +1,31 @@
+name: validate
+
+# 09-ci-quality-gate: PR #1 でCIが無かった穴を埋める安全網。
+# schema違反・出典欠落・検証未通過の公開を機械的に止める。
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Validate problem data against schema
+        run: npm run validate:data
+
+      - name: Run engine unit tests
+        run: npm test

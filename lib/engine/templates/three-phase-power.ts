@@ -1,0 +1,111 @@
+/**
+ * テンプレート T-0001: 平衡三相 Y 結線・線間電圧 V・1相 Z=R+jX → 三相有効電力 P。
+ *
+ * 閉形式（コードが算出する唯一の真値）:
+ *   相電圧 V_p = V/√3,  相電流 I = V_p/|Z|,  |Z| = √(R²+X²)
+ *   P = 3·I²·R = 3·(V²/3)/|Z|²·R = V²·R / (R²+X²)   〔W〕
+ *
+ * 誤答（すべて「成立する典型ミス」, problem-sample.md）:
+ *   ① 力率二重掛け  P·cosφ
+ *   ③ 力率掛け忘れ  皮相電力 S = P/cosφ
+ *   ④ √3 忘れ       線間電圧を相電圧として計算 = 3·P
+ */
+import { formatKW, isCleanAnswer } from "../clean.js";
+import type { GenerationResult, Template } from "./types.js";
+
+// 係数いじりの母集合（|Z| が整数になる Pythagorean ペア × round な電圧）。
+// 「答えが綺麗になる係数だけ採用」(03-quality-pipeline) をサンプリング段で担保する。
+const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
+  [3, 4], [4, 3], [6, 8], [8, 6], [5, 12], [12, 5],
+  [9, 12], [12, 9], [8, 15], [15, 8], [12, 16], [16, 12],
+  [20, 15], [15, 20], [7, 24], [24, 7],
+];
+const VOLTAGES: ReadonlyArray<number> = [100, 200, 400, 440, 3300, 6600];
+
+function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)]!;
+}
+
+/** V,R,X から決定論的に1問分を組み立てる。綺麗でない/選択肢が衝突する場合は null。 */
+function buildFrom(V: number, R: number, X: number): GenerationResult | null {
+  if (R <= 0 || X <= 0 || V <= 0) return null;
+  const Z = Math.sqrt(R * R + X * X);
+  const cosPhi = R / Z;
+  if (cosPhi > 1 + 1e-9) return null; // 物理的に不成立
+
+  const P = (V * V * R) / (R * R + X * X); // 正解(W)
+  const pfDouble = P * cosPhi; // ① 力率二重掛け
+  const apparent = P / cosPhi; // ③ 力率掛け忘れ(皮相)
+  const noSqrt3 = 3 * P; // ④ √3 忘れ
+
+  const answerText = formatKW(P);
+  const distractorVals: { value: number; reason: string }[] = [
+    { value: pfDouble, reason: "力率を二重に掛けた (3I²R にさらに cosφ)" },
+    { value: apparent, reason: "力率を掛け忘れ、皮相電力 S と混同" },
+    { value: noSqrt3, reason: "Y結線で √3 を忘れ、線間電圧を相電圧として計算" },
+  ];
+
+  // 正解・全誤答が「綺麗」かつ相互に重複しないことを要求（汚い/被る draw は捨てる）。
+  if (![P, pfDouble, apparent, noSqrt3].every((w) => isCleanAnswer(w / 1000))) return null;
+  const texts = new Set([answerText, ...distractorVals.map((d) => formatKW(d.value))]);
+  if (texts.size !== 4) return null;
+
+  const choices = [...texts].sort((a, b) => Number(a) - Number(b));
+  const Vp = V / Math.sqrt(3);
+  const I = Vp / Z;
+
+  return {
+    params: {
+      line_voltage: { value: V, unit: "V", realistic_range: [100, 6600] },
+      R: { value: R, unit: "ohm", realistic_range: [1, 50] },
+      X: { value: X, unit: "ohm", realistic_range: [1, 50] },
+    },
+    answerValue: P,
+    answerUnit: "kW",
+    answerText,
+    choices,
+    distractors: distractorVals.map((d) => ({ text: formatKW(d.value), reason: d.reason })),
+    likelyWrongChoice: formatKW(noSqrt3),
+    facts: {
+      V, R, X,
+      Z: Number(Z.toFixed(4)),
+      cosPhi: Number(cosPhi.toFixed(4)),
+      Vp: Number(Vp.toFixed(4)),
+      I: Number(I.toFixed(4)),
+      P_watt: P,
+    },
+    defaultStatement:
+      `平衡三相Y結線の負荷に線間電圧${V}Vを加えた。` +
+      `1相のインピーダンスがZ=${R}+j${X}Ωのとき三相有効電力P〔kW〕は?`,
+    defaultSolution: [
+      `|Z|=√(${R}²+${X}²)=${Z}Ω`,
+      `力率cosφ=R/|Z|=${Number(cosPhi.toFixed(4))}`,
+      `相電圧V_p=${V}/√3、相電流I=V_p/|Z|`,
+      `P=3·I²·R=${answerText}kW`,
+      `別解 P=√3·V_l·I_l·cosφ でも一致`,
+    ],
+    physicallyValid: true,
+  };
+}
+
+export const threePhasePower: Template = {
+  topic: "三相交流電力",
+  subject: "理論",
+  exam: "denken2_primary",
+  difficulty: 2,
+  paramSpecs: {
+    line_voltage: { unit: "V", realistic_range: [100, 6600] },
+    R: { unit: "ohm", realistic_range: [1, 50] },
+    X: { unit: "ohm", realistic_range: [1, 50] },
+  },
+  generate(rng) {
+    const V = pick(VOLTAGES, rng);
+    const [R, X] = pick(RX_PAIRS, rng);
+    return buildFrom(V, R, X);
+  },
+  generateFrom(params) {
+    const { line_voltage, R, X } = params;
+    if (line_voltage === undefined || R === undefined || X === undefined) return null;
+    return buildFrom(line_voltage, R, X);
+  },
+};
