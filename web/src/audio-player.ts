@@ -51,8 +51,8 @@ export interface AudioPlayerOptions {
   onSegment?: (info: { script: AudioScript; segmentIndex: number; problemIndex: number }) => void;
   /** 1問の再生が終わるたびに呼ばれる。 */
   onProblem?: (info: { problem: Problem; problemIndex: number }) => void;
-  /** 全再生が終了/停止したときに呼ばれる。 */
-  onComplete?: () => void;
+  /** 全再生が終了/停止したときに呼ばれる。completed=ユーザー停止でなく最後まで(or タイマー)到達。 */
+  onComplete?: (info: { completed: boolean; played: number }) => void;
 }
 
 const defaultSleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
@@ -64,6 +64,7 @@ export class AudioPlayer {
   private playlist: Problem[];
   private index = 0;
   private aborted = false;
+  private userStopped = false;
   private running = false;
   private paused = false;
   private skip = false;
@@ -133,6 +134,7 @@ export class AudioPlayer {
     if (this.running || this.playlist.length === 0) return;
     this.running = true;
     this.aborted = false;
+    this.userStopped = false;
     // 再生終端を過ぎていたら先頭へ（再スタート時の空振り防止）。
     if (this.index >= this.playlist.length) this.index = 0;
     let played = 0;
@@ -161,7 +163,8 @@ export class AudioPlayer {
       if (this.opts.loop && !this.aborted) this.index = 0;
     } while (this.opts.loop && !this.aborted);
     this.running = false;
-    this.opts.onComplete?.();
+    // ユーザー明示停止では締め要約を出さない。タイマー/末尾到達では出す。
+    this.opts.onComplete?.({ completed: !this.userStopped, played });
   }
 
   /** 一時停止（現在の発話も止める。再開で次区間から続行）。 */
@@ -178,9 +181,10 @@ export class AudioPlayer {
     for (const r of waiters) r();
   }
 
-  /** 再生を止める。 */
+  /** 再生を止める（ユーザー操作）。 */
   stop(): void {
     this.aborted = true;
+    this.userStopped = true;
     this.running = false;
     this.resume(); // 一時停止待ちを解放してループを終わらせる
     this.speaker.cancel();

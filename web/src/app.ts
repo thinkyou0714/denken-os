@@ -6,6 +6,8 @@
  *  - 連続日数・弱点・シェアテキストを表示
  * バックエンド不要・完全オフライン（Service Worker で app shell をキャッシュ）。
  */
+
+import { sessionSummaryText } from "../../lib/audio/script.js";
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
@@ -223,8 +225,13 @@ function setupAudio(): void {
         onProblem: ({ problemIndex }) => {
           window.localStorage.setItem(RESUME_KEY, String(problemIndex + 1));
         },
-        onComplete: () => {
-          now.textContent = "再生が終了しました。";
+        onComplete: ({ completed, played }) => {
+          now.textContent = `再生が終了しました（${played}問）。`;
+          transcript.textContent = "";
+          // 末尾到達/タイマー終了時のみ締め要約を読み上げる（手動停止では出さない）。
+          if (completed && played > 0) {
+            void speaker.speak(sessionSummaryText({ count: played, weakTopics: weakTopics() }), { rate });
+          }
         },
       },
       {

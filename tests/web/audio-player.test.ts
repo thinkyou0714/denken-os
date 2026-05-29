@@ -133,15 +133,14 @@ describe("AudioPlayer — 聞き流し再生", () => {
     expect(done).toEqual(["a", "b"]);
   });
 
-  it("onComplete は再生完了時に呼ばれる", async () => {
-    let completed = 0;
-    const player = new AudioPlayer([mk("a", "T1", "法規")], new FakeSpeaker(), {
+  it("onComplete は完了情報（completed/played）を伴って呼ばれる", async () => {
+    const calls: Array<{ completed: boolean; played: number }> = [];
+    const problems = [mk("a", "T1", "法規"), mk("b", "T2", "法規")];
+    const player = new AudioPlayer(problems, new FakeSpeaker(), {
       sleep: immediateSleep,
-      onComplete: () => {
-        completed += 1;
-      },
+      onComplete: (info) => calls.push(info),
     });
     await player.start();
-    expect(completed).toBe(1);
+    expect(calls).toEqual([{ completed: true, played: 2 }]); // 末尾到達=completed
   });
 });

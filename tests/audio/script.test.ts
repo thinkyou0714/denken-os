@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { audioScriptToPlainText, buildPlaylist, toAudioScript } from "../../lib/audio/script.js";
+import { audioScriptToPlainText, buildPlaylist, sessionSummaryText, toAudioScript } from "../../lib/audio/script.js";
 import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
 import type { Problem } from "../../lib/engine/schema.js";
@@ -59,6 +59,18 @@ describe("toAudioScript — 聞き流し台本", () => {
     const p = await one(insulationResistance, 5);
     const ans = toAudioScript(p, { repeatAnswer: true }).segments.find((s) => s.kind === "answer")!;
     expect(ans.text).toContain("もう一度");
+  });
+});
+
+describe("sessionSummaryText — 締めの要約", () => {
+  it("件数と弱点論点を伝える", () => {
+    const t = sessionSummaryText({ count: 3, weakTopics: ["B種接地抵抗", "需要率"] });
+    expect(t).toContain("3問");
+    expect(t).toContain("B種接地抵抗");
+  });
+
+  it("0問なら終了アナウンスのみ", () => {
+    expect(sessionSummaryText({ count: 0 })).toBe("再生を終了します。");
   });
 });
 

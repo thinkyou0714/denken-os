@@ -102,6 +102,18 @@ export function audioScriptToPlainText(script: AudioScript): string {
   return script.segments.map((s) => s.text).join("\n");
 }
 
+/**
+ * 聞き流しセッションの締め文言（読み上げ用）。
+ * 「何問聞いたか」と「重点復習したい論点」を簡潔に伝える（継続のフック）。
+ */
+export function sessionSummaryText(opts: { count: number; weakTopics?: string[] }): string {
+  if (opts.count <= 0) return "再生を終了します。";
+  const head = `お疲れさまでした。今回は${opts.count}問を聞きました。`;
+  const weak = opts.weakTopics?.slice(0, 3) ?? [];
+  const tail = weak.length > 0 ? `特に復習したい論点は、${weak.join("、")} です。` : "";
+  return head + tail;
+}
+
 export interface PlaylistOptions {
   /** この科目だけに絞る（例: ["法規"]）。未指定なら全科目。 */
   subjects?: Subject[];
