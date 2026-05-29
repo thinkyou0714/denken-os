@@ -57,6 +57,7 @@ function renderQuestion(): void {
   const answers = $("answers");
   answers.innerHTML = "";
   if (p.choices && p.choices.length > 0) {
+    // multiple_choice: 選択肢ボタン
     for (const choice of p.choices) {
       const btn = document.createElement("button");
       btn.className = "choice";
@@ -64,6 +65,26 @@ function renderQuestion(): void {
       btn.onclick = () => grade(choice);
       answers.appendChild(btn);
     }
+  } else if (p.format === "descriptive") {
+    // 記述(二次): 自動採点しない → 模範解答を表示して自己採点。
+    const reveal = document.createElement("button");
+    reveal.className = "choice";
+    reveal.textContent = "模範解答を表示";
+    reveal.onclick = () => {
+      showSolution(p);
+      answers.innerHTML = "";
+      const ok = document.createElement("button");
+      ok.className = "choice";
+      ok.textContent = "✅ 自分の解答で書けた";
+      ok.onclick = () => grade(p.answer); // 正解扱い
+      const ng = document.createElement("button");
+      ng.className = "choice";
+      ng.textContent = "❌ 書けなかった";
+      ng.onclick = () => grade("__self_incorrect__"); // 不正解扱い
+      answers.appendChild(ok);
+      answers.appendChild(ng);
+    };
+    answers.appendChild(reveal);
   } else {
     // numeric: 入力欄
     const input = document.createElement("input");
@@ -77,6 +98,11 @@ function renderQuestion(): void {
     answers.appendChild(input);
     answers.appendChild(btn);
   }
+}
+
+function showSolution(p: Problem): void {
+  $("solution").innerHTML =
+    `<strong>模範解答</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
 }
 
 function grade(given: string): void {
