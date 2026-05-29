@@ -1,6 +1,6 @@
 # 実装指示 11: クロスポスト／転載自動化
 
-> ステータス: 指示のみ（未実装）。
+> ステータス: 実装済み（コア）。 実装: `lib/crosspost/repurpose.ts`。
 
 ## 0. ゴール
 Xで作ったコンテンツ（今日の一問・図解・まとめ）を note / Instagram / YouTube Shorts へ

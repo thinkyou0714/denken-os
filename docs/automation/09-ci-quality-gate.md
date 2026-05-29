@@ -1,6 +1,6 @@
 # 実装指示 09: CI品質ゲート（schema検証）
 
-> ステータス: 指示のみ（未実装）。**PR #1 でCIが無かった穴を埋める**最優先の安全網。
+> ステータス: 実装済み（コア）。 実装: `.github/workflows/validate.yml ＋ scripts/validate-problems.ts`。**PR #1 でCIが無かった穴を埋める**最優先の安全網。
 
 ## 0. ゴール
 全ての問題JSONを `problem-schema.json` に対して**PR時に自動検証**し、

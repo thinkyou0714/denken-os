@@ -1,0 +1,43 @@
+name: validate
+
+# 09-ci-quality-gate: schema違反・出典欠落・検証未通過の公開を機械的に止める安全網。
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# push と pull_request の二重起動を抑制。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint & format check (Biome)
+        run: npm run lint
+
+      - name: Typecheck (lib/scripts/tests)
+        run: npm run typecheck
+
+      - name: Typecheck (web app)
+        run: npm run typecheck:web
+
+      - name: Validate problem data against schema
+        run: npm run validate:data
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Build offline web app
+        run: npm run build:web

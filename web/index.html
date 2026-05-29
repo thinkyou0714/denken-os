@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DENKEN-OS — 今日の一問</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <meta name="theme-color" content="#0b5394" />
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; max-width: 720px; margin-inline: auto; line-height: 1.6; }
+      header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+      h1 { font-size: 1.1rem; margin: 0; }
+      .stats { font-size: .9rem; opacity: .85; }
+      .demo { background: #fff3cd; color: #664d03; padding: .4rem .6rem; border-radius: .4rem; font-size: .8rem; margin: .6rem 0; }
+      #meta { opacity: .7; font-size: .85rem; margin-top: 1rem; }
+      #statement { font-size: 1.1rem; margin: .4rem 0 1rem; }
+      #answers { display: grid; gap: .5rem; }
+      .choice { padding: .7rem 1rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; background: #88884011; cursor: pointer; text-align: left; }
+      .choice:hover { background: #8888; }
+      input#numeric-input { padding: .7rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; }
+      #feedback { font-weight: 700; margin: 1rem 0 .3rem; }
+      .ok { color: #198754; } .ng { color: #dc3545; }
+      #solution ol { margin: .3rem 0; padding-left: 1.2rem; }
+      .src { opacity: .65; font-size: .8rem; }
+      #share { white-space: pre-wrap; background: #88884011; padding: .6rem; border-radius: .5rem; font-size: .85rem; min-height: 1px; }
+      #next { margin-top: 1rem; padding: .6rem 1.2rem; font-size: 1rem; border-radius: .5rem; border: none; background: #0b5394; color: #fff; cursor: pointer; }
+      footer { margin-top: 2rem; font-size: .75rem; opacity: .6; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>DENKEN-OS — 今日の一問</h1>
+      <div class="stats"><span id="streak"></span> ／ <span id="weak"></span></div>
+    </header>
+
+    <p class="demo">⚠️ デモ版：問題は自動生成（未監修）です。学習の目安に。正解はコードで検算済みですが、本番運用では人の目チェックを通します。</p>
+
+    <main>
+      <div id="meta"></div>
+      <div id="statement">読み込み中…</div>
+      <div id="answers"></div>
+      <div id="feedback"></div>
+      <div id="solution"></div>
+      <div id="share"></div>
+      <button id="next">次の問題 →</button>
+    </main>
+
+    <footer>
+      オフライン対応 PWA。学習記録はこの端末内（localStorage）にのみ保存されます。<br />
+      コード=MIT / 問題データ=CC-BY-SA-4.0。
+    </footer>
+
+    <script type="module" src="./dist/app.js"></script>
+  </body>
+</html>

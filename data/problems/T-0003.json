@@ -1,0 +1,32 @@
+{
+  "id": "T-0003",
+  "exam": "denken3",
+  "subject": "機械",
+  "topic": "誘導電動機の回転速度",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "frequency": { "value": 60, "unit": "Hz", "realistic_range": [50, 60] },
+    "poles": { "value": 4, "unit": "pole", "realistic_range": [2, 12] },
+    "slip": { "value": 5, "unit": "%", "realistic_range": [1, 10] }
+  },
+  "statement": "周波数60Hz、極数4の三相誘導電動機が滑り5%で運転している。回転速度N〔min⁻¹〕は?",
+  "choices": ["1620", "1710", "1800", "1890"],
+  "answer": "1710",
+  "solution": [
+    "同期速度 Ns=120·f/p=120·60/4=1800 min⁻¹",
+    "滑り s=5% より N=Ns·(1−s/100)",
+    "N=1800·(1−0.05)=1710 min⁻¹"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "1800" },
+  "status": "validated"
+}

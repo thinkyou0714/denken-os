@@ -1,0 +1,41 @@
+{
+  "name": "denken-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "電験二種 学習OS — 問題生成＆検証エンジンと運用ロジックの実装",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "gen": "tsx lib/engine/cli.ts",
+    "export:vault": "tsx scripts/export-vault.ts",
+    "build:web": "tsx scripts/build-web.ts",
+    "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
+    "validate:data": "tsx scripts/validate-problems.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check",
+    "format": "biome check --write",
+    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm test && npm run build:web"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.1",
+    "@supabase/supabase-js": "^2.106.2",
+    "ts-fsrs": "^4.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.16",
+    "@vitest/coverage-v8": "^2.1.9",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "esbuild": "^0.24.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
