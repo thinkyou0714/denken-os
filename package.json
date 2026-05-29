@@ -23,7 +23,7 @@
     "format": "biome check --write",
     "hooks:install": "git config core.hooksPath .githooks",
     "postinstall": "git config core.hooksPath .githooks || true",
-    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm test && npm run build:web"
+    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm run test:coverage && npm run build:web"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

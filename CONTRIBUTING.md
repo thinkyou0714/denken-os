@@ -37,11 +37,24 @@ npm run verify    # CI と同一の全品質ゲート（lint→型→型web→da
 2. `lib/engine/templates/index.ts` のレジストリに登録。
 3. `tests/engine/templates.test.ts` 系に、既知 params の再現テストと「N問生成→全件 validate 通過」を追加。
 
+## 監修フロー（公開前の人手チェック）
+
+品質パイプライン（`docs/x-strategy/03-quality-pipeline.md`）の「重要論点は二重チェック」を運用に落とす。
+
+- **監修が必須**になる問題は `lib/engine/gate.ts` の `requiresSupervision` で機械判定する:
+  - 二種二次の記述（論述の正しさは人の判断が要る）
+  - difficulty ≥ 4 の重要・難問（誤りが致命的）
+  - 過去問引用（`past_exam_quoted`、原典確認）
+- これらは検証4項目が揃っても、`validation.supervisor_checked=true` が無いと **`published`（対外配信）にできない**（`canPublish`）。
+- 監修者（合格者/技術士）が手で解き直し・出典確認した上で `supervisor_checked` を立てる。
+- `validated`（アプリ内の自己学習向け）と `published`（X発信・監修済みバッジ付き）を区別する。
+
 ## PR の前に
 
-- [ ] `npm run verify` が緑（lint→typecheck→typecheck:web→validate:data→test→build:web を一括。CI と同一）
-- [ ] 新規ロジックにテストを追加した
+- [ ] `npm run verify` が緑（lint→typecheck→typecheck:web→validate:data→test:coverage→build:web を一括。CI と同一）
+- [ ] 新規ロジックにテストを追加した（カバレッジ閾値: lib コアで line/func/stmt 80%・branch 75%）
 - [ ] 問題データを足した場合、`source` と（改題なら）`citation` を明記した
+- [ ] 監修必須の問題（二種二次記述・難問・過去問引用）は監修を経てから `published` にした
 - [ ] 秘密情報・個人情報を含めていない
 
 ## ライセンス
