@@ -46,8 +46,8 @@ export class LocalProgress {
     return new Map(Object.entries(this.reviews()));
   }
 
-  /** 採点を記録し、SM-2 で記憶状態を更新する。 */
-  record(topic: string, correct: boolean, nowMs: number = Date.now(), timeMs?: number): ReviewState {
+  /** 採点を記録し、SM-2 で記憶状態を更新する。subject は科目別到達度の集計に使う。 */
+  record(topic: string, correct: boolean, nowMs: number = Date.now(), timeMs?: number, subject?: string): ReviewState {
     const prev = this.getReview(topic) ?? this.scheduler.init(nowMs);
     const next = this.scheduler.review(prev, correct ? "good" : "again", nowMs);
 
@@ -56,9 +56,27 @@ export class LocalProgress {
     this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
 
     const logs = this.logs();
-    logs.push({ topic, correct, atMs: nowMs, timeMs });
+    logs.push({ topic, correct, atMs: nowMs, timeMs, ...(subject ? { subject } : {}) });
     this.storage.setItem(LOG_KEY, JSON.stringify(logs));
     return next;
+  }
+
+  /**
+   * 科目別の正答率（合格到達度の素地）。subject 付きログのみ集計する。
+   * lib/study/lesson.ts の passReadiness にそのまま渡せる形で返す。
+   */
+  subjectAccuracy(): Array<{ subject: string; accuracy: number; attempts: number }> {
+    const m = new Map<string, { correct: number; attempts: number }>();
+    for (const l of this.logs()) {
+      if (!l.subject) continue;
+      const cur = m.get(l.subject) ?? { correct: 0, attempts: 0 };
+      cur.attempts += 1;
+      if (l.correct) cur.correct += 1;
+      m.set(l.subject, cur);
+    }
+    return [...m.entries()]
+      .map(([subject, s]) => ({ subject, accuracy: s.attempts > 0 ? s.correct / s.attempts : 0, attempts: s.attempts }))
+      .sort((a, b) => a.accuracy - b.accuracy);
   }
 
   /** 今日まで連続して学習した日数（UTC 日基準）。 */

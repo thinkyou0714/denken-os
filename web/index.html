@@ -14,6 +14,8 @@
       h1 { font-size: 1.1rem; margin: 0; }
       .stats { font-size: .9rem; opacity: .85; }
       .demo { background: #fff3cd; color: #664d03; padding: .4rem .6rem; border-radius: .4rem; font-size: .8rem; margin: .6rem 0; }
+      .readiness { display: flex; flex-wrap: wrap; gap: .4rem; font-size: .8rem; margin: .4rem 0; }
+      .readiness .rd { background: #88884011; border: 1px solid #8884; border-radius: .4rem; padding: .2rem .5rem; }
       #meta { opacity: .7; font-size: .85rem; margin-top: 1rem; }
       #statement { font-size: 1.1rem; margin: .4rem 0 1rem; }
       #answers { display: grid; gap: .5rem; }
@@ -46,6 +48,8 @@
     </header>
 
     <p class="demo">⚠️ デモ版：問題は自動生成（未監修）です。学習の目安に。正解はコードで検算済みですが、本番運用では人の目チェックを通します。</p>
+
+    <div id="readiness" class="readiness" aria-live="polite"></div>
 
     <main>
       <div id="meta"></div>

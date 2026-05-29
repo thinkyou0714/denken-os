@@ -11,7 +11,13 @@ import { buildPlaylist, type PlaylistOptions, playlistTranscript, sessionSummary
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
-import { buildLesson, lessonFeedback, type QuizResult, summarizeLesson } from "../../lib/study/lesson.js";
+import {
+  buildLesson,
+  lessonFeedback,
+  passReadiness,
+  type QuizResult,
+  summarizeLesson,
+} from "../../lib/study/lesson.js";
 import { AudioPlayer } from "./audio-player.js";
 import { BrowserSpeaker, isSpeechAvailable } from "./browser-speaker.js";
 import { LocalProgress } from "./store.js";
@@ -43,6 +49,26 @@ function renderStats(): void {
   $("streak").textContent = `🔥 連続 ${streak} 日`;
   const weak = weakTopics();
   $("weak").textContent = weak.length > 0 ? `弱点: ${weak.join(" / ")}` : "弱点: （まだデータなし）";
+  renderReadiness();
+}
+
+/** 科目別の合格到達度（60%ライン）を表示する。科目合格制の資源配分を支援。 */
+function renderReadiness(): void {
+  const el = document.getElementById("readiness");
+  if (!el) return;
+  const ready = passReadiness(progress.subjectAccuracy());
+  if (ready.length === 0) {
+    el.textContent = "科目別合格到達度: （問題を解くと表示されます）";
+    return;
+  }
+  el.innerHTML = ready
+    .map((r) => {
+      const pct = Math.round(r.accuracy * 100);
+      const mark = !r.enoughData ? "⏳" : r.onTrack ? "✅" : "⚠️";
+      const note = !r.enoughData ? "（データ不足）" : r.onTrack ? "合格圏" : "要強化";
+      return `<span class="rd">${mark} ${escapeHtml(r.subject)} ${pct}% ${note}</span>`;
+    })
+    .join("");
 }
 
 function renderQuestion(forced?: Problem): void {
@@ -115,7 +141,7 @@ function grade(given: string): void {
   const p = current;
   const correct = given === p.answer;
   const timeMs = Date.now() - questionShownAt;
-  progress.record(p.topic, correct, Date.now(), timeMs);
+  progress.record(p.topic, correct, Date.now(), timeMs, p.subject);
 
   $("feedback").textContent = correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`;
   $("feedback").className = correct ? "ok" : "ng";

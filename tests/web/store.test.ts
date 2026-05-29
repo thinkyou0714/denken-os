@@ -67,4 +67,24 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     p.record("法規", true, now + DAY); // 直近が正解になれば外れる
     expect(p.wrongTopics()).not.toContain("法規");
   });
+
+  it("科目別正答率を subjectAccuracy で集計する（合格到達度の素地）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("B種接地抵抗", true, now, undefined, "法規");
+    p.record("低圧電路の絶縁抵抗", false, now, undefined, "法規");
+    p.record("三相交流電力", true, now, undefined, "理論");
+    const acc = p.subjectAccuracy();
+    const houki = acc.find((a) => a.subject === "法規")!;
+    expect(houki.attempts).toBe(2);
+    expect(houki.accuracy).toBeCloseTo(0.5);
+    // 低正答率順（法規0.5 が 理論1.0 より先）
+    expect(acc[0]!.subject).toBe("法規");
+  });
+
+  it("subject 未指定の旧ログは科目集計に含めない（後方互換）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    p.record("旧問題", true, Date.UTC(2026, 0, 10)); // subject なし
+    expect(p.subjectAccuracy()).toEqual([]);
+  });
 });
