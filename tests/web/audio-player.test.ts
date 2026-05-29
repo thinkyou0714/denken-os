@@ -93,6 +93,46 @@ describe("AudioPlayer — 聞き流し再生", () => {
     expect(player.isPaused).toBe(false);
   });
 
+  it("maxMs で時間スリープタイマーが働く", async () => {
+    let t = 0;
+    const now = () => t++; // 呼ぶたびに +1
+    const done: string[] = [];
+    const problems = [mk("a", "T1", "法規"), mk("b", "T2", "法規"), mk("c", "T3", "法規")];
+    const player = new AudioPlayer(problems, new FakeSpeaker(), {
+      sleep: immediateSleep,
+      maxMs: 2,
+      now,
+      onProblem: ({ problem }) => done.push(problem.id),
+    });
+    await player.start();
+    expect(done).toEqual(["a"]); // 経過2で停止
+  });
+
+  it("startIndex で続きから再生する（レジューム）", async () => {
+    const done: string[] = [];
+    const problems = [mk("a", "T1", "法規"), mk("b", "T2", "法規"), mk("c", "T3", "法規")];
+    const player = new AudioPlayer(problems, new FakeSpeaker(), {
+      sleep: immediateSleep,
+      startIndex: 1,
+      onProblem: ({ problem }) => done.push(problem.id),
+    });
+    await player.start();
+    expect(done).toEqual(["b", "c"]);
+  });
+
+  it("終端到達後に再度 start() すると先頭から再生する", async () => {
+    let done: string[] = [];
+    const problems = [mk("a", "T1", "法規"), mk("b", "T2", "法規")];
+    const player = new AudioPlayer(problems, new FakeSpeaker(), {
+      sleep: immediateSleep,
+      onProblem: ({ problem }) => done.push(problem.id),
+    });
+    await player.start();
+    done = [];
+    await player.start();
+    expect(done).toEqual(["a", "b"]);
+  });
+
   it("onComplete は再生完了時に呼ばれる", async () => {
     let completed = 0;
     const player = new AudioPlayer([mk("a", "T1", "法規")], new FakeSpeaker(), {

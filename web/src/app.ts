@@ -172,15 +172,20 @@ function setupAudio(): void {
   for (const [id, prop] of [
     ["audio-loop", "checked"],
     ["audio-repeatans", "checked"],
+    ["audio-resume", "checked"],
     ["audio-rate", "value"],
     ["audio-gap", "value"],
     ["audio-subject", "value"],
+    ["audio-mode", "value"],
     ["audio-max", "value"],
+    ["audio-maxmin", "value"],
   ] as const) {
     bindPersisted(id, prop);
   }
 
   const speaker = new BrowserSpeaker();
+
+  const RESUME_KEY = "denken:audio:resumeIndex";
 
   const build = (): AudioPlayer => {
     const subjectVal = ($("audio-subject") as HTMLSelectElement).value;
@@ -188,8 +193,18 @@ function setupAudio(): void {
     const rate = Number(($("audio-rate") as HTMLSelectElement).value) || 1;
     const gapMs = Number(($("audio-gap") as HTMLSelectElement).value) || 6000;
     const maxItems = Number(($("audio-max") as HTMLSelectElement).value) || 0;
+    const maxMin = Number(($("audio-maxmin") as HTMLSelectElement).value) || 0;
     const loop = ($("audio-loop") as HTMLInputElement).checked;
     const repeatAnswer = ($("audio-repeatans") as HTMLInputElement).checked;
+    const mode = ($("audio-mode") as HTMLSelectElement).value;
+    const resume = ($("audio-resume") as HTMLInputElement).checked;
+
+    // 出題対象（SRS 連携）: 通常=弱点優先 / 復習=期日到来のみ / 間違い=直近不正解のみ。
+    // due/wrong は「topic 許可リストで絞る」共通機構（buildPlaylist.dueOnly）に乗せる。
+    const dueOnly = mode === "due" || mode === "wrong";
+    const dueTopics = mode === "due" ? progress.dueTopics() : mode === "wrong" ? progress.wrongTopics() : undefined;
+    const startIndex = resume ? Number(window.localStorage.getItem(RESUME_KEY) ?? "0") || 0 : 0;
+
     return new AudioPlayer(
       problems,
       speaker,
@@ -197,17 +212,28 @@ function setupAudio(): void {
         rate,
         loop,
         maxItems: maxItems > 0 ? maxItems : undefined,
+        maxMs: maxMin > 0 ? maxMin * 60_000 : undefined,
+        startIndex,
         script: { includeSource: true, gapMs, repeatAnswer },
         onSegment: ({ script, segmentIndex }) => {
           now.textContent = `▶ ${script.topic}（${script.problemId}）`;
           transcript.textContent = script.segments[segmentIndex]?.text ?? "";
           setMediaMetadata(script.topic, script.problemId);
         },
+        onProblem: ({ problemIndex }) => {
+          window.localStorage.setItem(RESUME_KEY, String(problemIndex + 1));
+        },
         onComplete: () => {
           now.textContent = "再生が終了しました。";
         },
       },
-      { subjects, weakTopics: weakTopics(), interleave: true },
+      {
+        subjects,
+        weakTopics: weakTopics(),
+        dueOnly,
+        dueTopics,
+        interleave: true,
+      },
     );
   };
 

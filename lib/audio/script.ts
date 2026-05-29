@@ -109,6 +109,12 @@ export interface PlaylistOptions {
   weakTopics?: string[];
   /** 除外する topic。 */
   excludeTopics?: string[];
+  /** この難易度(★)だけに絞る。 */
+  difficulties?: number[];
+  /** 復習期日が到来している topic（SM-2 由来）。dueOnly と併用。 */
+  dueTopics?: string[];
+  /** dueTopics に含まれる topic だけに絞る（間隔反復の復習セッション）。 */
+  dueOnly?: boolean;
   /** 残りをシャッフルするか。 */
   shuffle?: boolean;
   /** 同じ topic が連続しないよう散らす（弱点先頭の後ろ＝rest に適用）。 */
@@ -155,6 +161,14 @@ export function buildPlaylist(problems: Problem[], opts: PlaylistOptions = {}): 
   if (opts.excludeTopics && opts.excludeTopics.length > 0) {
     const ex = new Set(opts.excludeTopics);
     pool = pool.filter((p) => !ex.has(p.topic));
+  }
+  if (opts.difficulties && opts.difficulties.length > 0) {
+    const d = new Set(opts.difficulties);
+    pool = pool.filter((p) => d.has(p.difficulty));
+  }
+  if (opts.dueOnly) {
+    const due = new Set(opts.dueTopics ?? []);
+    pool = pool.filter((p) => due.has(p.topic));
   }
 
   const weak = opts.weakTopics ?? [];

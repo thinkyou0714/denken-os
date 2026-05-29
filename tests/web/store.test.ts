@@ -50,4 +50,21 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(b.logs().length).toBe(1);
     expect(b.getReview("機械")?.lapses).toBe(1);
   });
+
+  it("復習期日が到来した topic を dueTopics で返す（SRS 連携）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("理論", true, now); // 次回は未来 → 今は due でない
+    expect(p.dueTopics(now)).not.toContain("理論");
+    expect(p.dueTopics(now + 365 * DAY)).toContain("理論"); // 十分先なら due
+  });
+
+  it("直近不正解の topic を wrongTopics で返す（間違い直し）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("法規", false, now);
+    expect(p.wrongTopics()).toContain("法規");
+    p.record("法規", true, now + DAY); // 直近が正解になれば外れる
+    expect(p.wrongTopics()).not.toContain("法規");
+  });
 });

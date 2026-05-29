@@ -84,4 +84,16 @@ export class LocalProgress {
       .reduce((a, l) => a + (l.timeMs ?? 0), 0);
     return Math.round(ms / 60_000);
   }
+
+  /** 復習期日(dueMs)が到来している topic（間隔反復の復習対象）。 */
+  dueTopics(nowMs: number = Date.now()): string[] {
+    return [...this.allReviews().entries()].filter(([, s]) => s.dueMs <= nowMs).map(([topic]) => topic);
+  }
+
+  /** 直近の解答が不正解だった topic（間違い直し用）。 */
+  wrongTopics(): string[] {
+    const last = new Map<string, boolean>();
+    for (const l of this.logs()) last.set(l.topic, l.correct);
+    return [...last.entries()].filter(([, correct]) => !correct).map(([topic]) => topic);
+  }
 }

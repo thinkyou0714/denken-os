@@ -39,6 +39,12 @@ export interface AudioPlayerOptions {
   loop?: boolean;
   /** この件数を読み終えたら停止する（件数スリープタイマー）。 */
   maxItems?: number;
+  /** この経過時間(ms)で停止する（時間スリープタイマー）。 */
+  maxMs?: number;
+  /** 現在時刻取得（既定 Date.now）。時間タイマーのテスト用に注入可能。 */
+  now?: () => number;
+  /** 再生開始位置（レジューム）。 */
+  startIndex?: number;
   /** 台本生成オプション（考える間・解説有無など）。 */
   script?: AudioScriptOptions;
   /** 区間が切り替わるたびに呼ばれる（UI 更新・字幕用）。 */
@@ -65,6 +71,7 @@ export class AudioPlayer {
   private pendingIndex: number | null = null;
   private resumeWaiters: Array<() => void> = [];
   private readonly sleep: (ms: number) => Promise<void>;
+  private readonly now: () => number;
   private readonly rate: number;
   private readonly lang: string;
 
@@ -76,8 +83,12 @@ export class AudioPlayer {
   ) {
     this.playlist = buildPlaylist(problems, playlistOpts);
     this.sleep = opts.sleep ?? defaultSleep;
+    this.now = opts.now ?? (() => Date.now());
     this.rate = opts.rate ?? 1;
     this.lang = opts.lang ?? "ja-JP";
+    if (opts.startIndex && opts.startIndex > 0 && opts.startIndex < this.playlist.length) {
+      this.index = opts.startIndex;
+    }
   }
 
   get length(): number {
@@ -122,10 +133,17 @@ export class AudioPlayer {
     if (this.running || this.playlist.length === 0) return;
     this.running = true;
     this.aborted = false;
+    // 再生終端を過ぎていたら先頭へ（再スタート時の空振り防止）。
+    if (this.index >= this.playlist.length) this.index = 0;
     let played = 0;
+    const startedAt = this.now();
     do {
       while (this.index >= 0 && this.index < this.playlist.length && !this.aborted) {
         if (this.opts.maxItems && played >= this.opts.maxItems) {
+          this.aborted = true;
+          break;
+        }
+        if (this.opts.maxMs && this.now() - startedAt >= this.opts.maxMs) {
           this.aborted = true;
           break;
         }

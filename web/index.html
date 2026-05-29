@@ -91,7 +91,14 @@
               <option value="">全科目</option>
             </select>
           </label>
-          <label>タイマー
+          <label>出題対象
+            <select id="audio-mode">
+              <option value="normal">通常（弱点優先）</option>
+              <option value="due">復習（期日到来）</option>
+              <option value="wrong">間違いのみ</option>
+            </select>
+          </label>
+          <label>件数
             <select id="audio-max">
               <option value="0">無制限</option>
               <option value="5">5問</option>
@@ -99,6 +106,15 @@
               <option value="20">20問</option>
             </select>
           </label>
+          <label>分タイマー
+            <select id="audio-maxmin">
+              <option value="0">なし</option>
+              <option value="10">10分</option>
+              <option value="20">20分</option>
+              <option value="30">30分</option>
+            </select>
+          </label>
+          <label><input type="checkbox" id="audio-resume" /> 続きから</label>
         </div>
         <div id="audio-now"></div>
         <div id="audio-transcript" aria-live="polite"></div>

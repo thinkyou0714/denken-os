@@ -101,6 +101,23 @@ describe("buildPlaylist — 再生順の構築", () => {
     expect(buildPlaylist(pool, { limit: 2 }).length).toBe(2);
   });
 
+  it("difficulties で難易度を絞る", () => {
+    const withDiff = (id: string, topic: string, d: number): Problem =>
+      ({ ...mk(id, "法規", topic), difficulty: d }) as Problem;
+    const items = [withDiff("a", "T1", 1), withDiff("b", "T2", 3), withDiff("c", "T3", 3)];
+    const list = buildPlaylist(items, { difficulties: [3] });
+    expect(list.map((p) => p.id).sort()).toEqual(["b", "c"]);
+  });
+
+  it("dueOnly で復習対象 topic のみに絞る", () => {
+    const list = buildPlaylist(pool, { dueOnly: true, dueTopics: ["B種接地抵抗"] });
+    expect(list.map((p) => p.id)).toEqual(["a"]);
+  });
+
+  it("dueOnly で対象が無ければ空", () => {
+    expect(buildPlaylist(pool, { dueOnly: true, dueTopics: [] }).length).toBe(0);
+  });
+
   it("interleave で同一 topic が連続しない", () => {
     const many = [mk("a", "法規", "T1"), mk("b", "法規", "T1"), mk("c", "法規", "T2")];
     const list = buildPlaylist(many, { interleave: true });
