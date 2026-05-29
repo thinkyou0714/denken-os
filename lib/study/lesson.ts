@@ -155,8 +155,8 @@ export function lessonFeedback(summary: LessonSummary): string {
   return `${head}合格ライン60%まであと${summary.toPass}問。${focus}弱点モードで重点復習しましょう。`;
 }
 
-export interface PassReadiness {
-  subject: Subject;
+export interface PassReadiness<S = Subject> {
+  subject: S;
   accuracy: number;
   attempts: number;
   /** 合格圏(>=60%)か。 */
@@ -168,11 +168,12 @@ export interface PassReadiness {
 /**
  * 科目別の合格到達度（蓄積された解答ログ集計から）。
  * attempts が minAttempts 未満は「データ不足」で判定を保留する。
+ * subject 型は呼び出し側に合わせて推論する（永続ログの string でもそのまま使える）。
  */
-export function passReadiness(
-  bySubject: Array<{ subject: Subject; accuracy: number; attempts: number }>,
+export function passReadiness<S = Subject>(
+  bySubject: Array<{ subject: S; accuracy: number; attempts: number }>,
   minAttempts = 5,
-): PassReadiness[] {
+): PassReadiness<S>[] {
   return bySubject.map((s) => ({
     subject: s.subject,
     accuracy: s.accuracy,
