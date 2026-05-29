@@ -81,7 +81,7 @@
 51. ◎ **Biome**（lint+format）— 高速・単一ツール。現行採用。
 52. ◎ **Vitest**（ユニットテスト）— 現行182件。高速・ESM親和。
 53. ◎ **GitHub Actions**（CI 品質ゲート）— 現行 `validate.yml`。問題データ検証を必須化。
-54. ○ **Playwright**（E2E/PWA・音声UI）— ブラウザ実機でSW/音声UIの回帰検出。`speechSynthesis` はモック。
+54. ○ **Playwright**（E2E/PWA・音声UI）— ブラウザ実機でSW/音声UIの回帰検出。`speechSynthesis` はモック。**現状は重い依存(ブラウザバイナリ)を避け、純ロジック97%＋バンドル/HTMLスモークで代替。UI複雑化時に導入**（`tests/web/bundle-smoke.test.ts` が暫定の生存確認）。
 55. ○ **@vitest/coverage-v8**（カバレッジ）— 現行devDep。閾値ゲート化で品質可視化。
 56. ○ **Lighthouse CI**（PWA/性能/A11y 計測）— PWAスコア・アクセシビリティを自動採点。
 57. ○ **Renovate / Dependabot**（依存更新）— 現行 dependabot 有り。Renovateは粒度細かい。
