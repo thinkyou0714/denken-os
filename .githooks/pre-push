@@ -1,0 +1,19 @@
+#!/bin/sh
+# pre-push — push 前に CI と同一の品質ゲートを機械的に実行する。
+#
+# 背景（再発防止）: `npm run verify` の途中段（特に typecheck:web）の失敗を
+# 人間が見落としたまま push し、CI(quality-gate) を複数回赤にした。
+# ここで verify を丸ごと回し、1段でも落ちたら push を中止する（人手確認に依存しない）。
+#
+# 有効化（クローン後に一度だけ）: npm run hooks:install
+#   緊急時のスキップ: git push --no-verify
+set -e
+
+echo "[pre-push] npm run verify を実行します（CI と同一の品質ゲート）…"
+if ! npm run verify; then
+  echo ""
+  echo "[pre-push] ❌ verify が失敗しました。push を中止します。"
+  echo "           修正してから再度 push してください（緊急時のみ: git push --no-verify）。"
+  exit 1
+fi
+echo "[pre-push] ✅ verify 通過。push を続行します。"
