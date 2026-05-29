@@ -14,13 +14,13 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ5種: 三相電力/誘導電動機/直並列抵抗/コンデンサ/変圧器電圧変動率。MC＋numeric＋descriptive形式） | `docs/automation/01` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ7種＝5科目: 理論/電力/機械/法規/機械制御。MC＋numeric＋descriptive形式） | `docs/automation/01` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック（**PR #4 で実CI緑**） | `docs/automation/09` |
 | アプリのデプロイ | `.github/workflows/deploy-pages.yml`（main マージで `web/` を GitHub Pages へ自動公開） | README ビジョン |
 | X投稿生成＋予約 | `lib/engine/toXPost.ts`＋`xlength.ts`（重み付き280字・自動スレッド）＋`publish.ts`（poll併設・朝→夜引用） | `docs/automation/02` |
 | 解答集計 | `lib/aggregate/`（poll→正答率・最頻誤答・難易度提案） | `docs/automation/03` |
 | 過去問取込 | `lib/ingest/`（出典メタ必須・原典/生成分離・重複検出・要手修正フラグ） | `docs/automation/04` |
-| 適応出題＋永続化 | `lib/scheduler/`（SM-2＋FSRS＋弱点診断）＋`lib/store/`（インメモリ/JSONファイル）＋`supabase/migrations`（RLS付きDDL） | `docs/automation/05` |
+| 適応出題＋永続化 | `lib/scheduler/`（SM-2＋FSRS＋弱点診断）＋`lib/store/`（インメモリ/JSONファイル/**Supabase実装**）＋`supabase/migrations`（RLS付きDDL） | `docs/automation/05` |
 | コミュニティ儀式 | `lib/community/`（チェックイン・出戻り歓迎・卒業ロール） | `docs/automation/08` |
 | 通知計画 | `lib/notify/`（頻度制御・オプトアウト・ジッター・試験カウントダウン） | `docs/automation/12` |
 | シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI・UTM計測 | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics`（`utm.ts`） | `docs/automation/06,07,10,11` |

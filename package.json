@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
+    "@supabase/supabase-js": "^2.106.2",
     "ts-fsrs": "^4.6.0",
     "zod": "^3.23.8"
   },

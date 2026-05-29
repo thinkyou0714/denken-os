@@ -74,73 +74,7 @@
     "difficulty": 2,
     "params": {
       "line_voltage": {
-        "value": 400,
-        "unit": "V",
-        "realistic_range": [
-          100,
-          6600
-        ]
-      },
-      "R": {
-        "value": 8,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          50
-        ]
-      },
-      "X": {
-        "value": 6,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          50
-        ]
-      }
-    },
-    "statement": "平衡三相Y結線の負荷に線間電圧400Vを加えた。1相のインピーダンスがZ=8+j6Ωのとき三相有効電力P〔kW〕は?",
-    "choices": [
-      "10.24",
-      "12.8",
-      "16.0",
-      "38.4"
-    ],
-    "answer": "12.8",
-    "solution": [
-      "|Z|=√(8²+6²)=10Ω",
-      "力率cosφ=R/|Z|=0.8",
-      "相電圧V_p=400/√3、相電流I=V_p/|Z|",
-      "P=3·I²·R=12.8kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "38.4"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0003",
-    "exam": "denken2_primary",
-    "subject": "理論",
-    "topic": "三相交流電力",
-    "format": "multiple_choice",
-    "difficulty": 2,
-    "params": {
-      "line_voltage": {
-        "value": 100,
+        "value": 3300,
         "unit": "V",
         "realistic_range": [
           100,
@@ -164,19 +98,19 @@
         ]
       }
     },
-    "statement": "平衡三相Y結線の負荷に線間電圧100Vを加えた。1相のインピーダンスがZ=12+j16Ωのとき三相有効電力P〔kW〕は?",
+    "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=12+j16Ωのとき三相有効電力P〔kW〕は?",
     "choices": [
-      "0.18",
-      "0.3",
-      "0.5",
-      "0.9"
+      "196.02",
+      "326.7",
+      "544.5",
+      "980.1"
     ],
-    "answer": "0.3",
+    "answer": "326.7",
     "solution": [
       "|Z|=√(12²+16²)=20Ω",
       "力率cosφ=R/|Z|=0.6",
-      "相電圧V_p=100/√3、相電流I=V_p/|Z|",
-      "P=3·I²·R=0.3kW",
+      "相電圧V_p=3300/√3、相電流I=V_p/|Z|",
+      "P=3·I²·R=326.7kW",
       "別解 P=√3·V_l·I_l·cosφ でも一致"
     ],
     "validation": {
@@ -193,7 +127,73 @@
     "stats": {
       "answered": 0,
       "correct_rate": 0,
-      "common_wrong_choice": "0.9"
+      "common_wrong_choice": "980.1"
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0003",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "三相交流電力",
+    "format": "multiple_choice",
+    "difficulty": 2,
+    "params": {
+      "line_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "R": {
+        "value": 16,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "X": {
+        "value": 12,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "平衡三相Y結線の負荷に線間電圧200Vを加えた。1相のインピーダンスがZ=16+j12Ωのとき三相有効電力P〔kW〕は?",
+    "choices": [
+      "1.28",
+      "1.6",
+      "2.0",
+      "4.8"
+    ],
+    "answer": "1.6",
+    "solution": [
+      "|Z|=√(16²+12²)=20Ω",
+      "力率cosφ=R/|Z|=0.8",
+      "相電圧V_p=200/√3、相電流I=V_p/|Z|",
+      "P=3·I²·R=1.6kW",
+      "別解 P=√3·V_l·I_l·cosφ でも一致"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0,
+      "common_wrong_choice": "4.8"
     },
     "status": "draft"
   },
@@ -206,7 +206,7 @@
     "difficulty": 2,
     "params": {
       "line_voltage": {
-        "value": 400,
+        "value": 3300,
         "unit": "V",
         "realistic_range": [
           100,
@@ -230,19 +230,19 @@
         ]
       }
     },
-    "statement": "平衡三相Y結線の負荷に線間電圧400Vを加えた。1相のインピーダンスがZ=3+j4Ωのとき三相有効電力P〔kW〕は?",
+    "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=3+j4Ωのとき三相有効電力P〔kW〕は?",
     "choices": [
-      "11.52",
-      "19.2",
-      "32.0",
-      "57.6"
+      "784.08",
+      "1306.8",
+      "2178.0",
+      "3920.4"
     ],
-    "answer": "19.2",
+    "answer": "1306.8",
     "solution": [
       "|Z|=√(3²+4²)=5Ω",
       "力率cosφ=R/|Z|=0.6",
-      "相電圧V_p=400/√3、相電流I=V_p/|Z|",
-      "P=3·I²·R=19.2kW",
+      "相電圧V_p=3300/√3、相電流I=V_p/|Z|",
+      "P=3·I²·R=1306.8kW",
       "別解 P=√3·V_l·I_l·cosφ でも一致"
     ],
     "validation": {
@@ -259,57 +259,55 @@
     "stats": {
       "answered": 0,
       "correct_rate": 0,
-      "common_wrong_choice": "57.6"
+      "common_wrong_choice": "3920.4"
     },
     "status": "draft"
   },
   {
     "id": "D-0005",
-    "exam": "denken2_primary",
-    "subject": "理論",
-    "topic": "三相交流電力",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "誘導電動機の回転速度",
     "format": "multiple_choice",
     "difficulty": 2,
     "params": {
-      "line_voltage": {
-        "value": 100,
-        "unit": "V",
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
         "realistic_range": [
-          100,
-          6600
+          50,
+          60
         ]
       },
-      "R": {
-        "value": 16,
-        "unit": "ohm",
+      "poles": {
+        "value": 10,
+        "unit": "pole",
         "realistic_range": [
-          1,
-          50
+          2,
+          12
         ]
       },
-      "X": {
-        "value": 12,
-        "unit": "ohm",
+      "slip": {
+        "value": 3,
+        "unit": "%",
         "realistic_range": [
           1,
-          50
+          10
         ]
       }
     },
-    "statement": "平衡三相Y結線の負荷に線間電圧100Vを加えた。1相のインピーダンスがZ=16+j12Ωのとき三相有効電力P〔kW〕は?",
+    "statement": "周波数50Hz、極数10の三相誘導電動機が滑り3%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
-      "0.32",
-      "0.4",
-      "0.5",
-      "1.2"
+      "564",
+      "582",
+      "600",
+      "618"
     ],
-    "answer": "0.4",
+    "answer": "582",
     "solution": [
-      "|Z|=√(16²+12²)=20Ω",
-      "力率cosφ=R/|Z|=0.8",
-      "相電圧V_p=100/√3、相電流I=V_p/|Z|",
-      "P=3·I²·R=0.4kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "同期速度 Ns=120·f/p=120·50/10=600 min⁻¹",
+      "滑り s=3% より N=Ns·(1−s/100)",
+      "N=600·(1−3/100)=582 min⁻¹"
     ],
     "validation": {
       "solver_checked": true,
@@ -325,12 +323,76 @@
     "stats": {
       "answered": 0,
       "correct_rate": 0,
-      "common_wrong_choice": "1.2"
+      "common_wrong_choice": "600"
     },
     "status": "draft"
   },
   {
     "id": "D-0006",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "誘導電動機の回転速度",
+    "format": "multiple_choice",
+    "difficulty": 2,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 8,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      },
+      "slip": {
+        "value": 3,
+        "unit": "%",
+        "realistic_range": [
+          1,
+          10
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数8の三相誘導電動機が滑り3%で運転している。回転速度N〔min⁻¹〕は?",
+    "choices": [
+      "846",
+      "873",
+      "900",
+      "927"
+    ],
+    "answer": "873",
+    "solution": [
+      "同期速度 Ns=120·f/p=120·60/8=900 min⁻¹",
+      "滑り s=3% より N=Ns·(1−s/100)",
+      "N=900·(1−3/100)=873 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0,
+      "common_wrong_choice": "900"
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0007",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -390,70 +452,6 @@
       "answered": 0,
       "correct_rate": 0,
       "common_wrong_choice": "1800"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0007",
-    "exam": "denken3",
-    "subject": "機械",
-    "topic": "誘導電動機の回転速度",
-    "format": "multiple_choice",
-    "difficulty": 2,
-    "params": {
-      "frequency": {
-        "value": 50,
-        "unit": "Hz",
-        "realistic_range": [
-          50,
-          60
-        ]
-      },
-      "poles": {
-        "value": 6,
-        "unit": "pole",
-        "realistic_range": [
-          2,
-          12
-        ]
-      },
-      "slip": {
-        "value": 5,
-        "unit": "%",
-        "realistic_range": [
-          1,
-          10
-        ]
-      }
-    },
-    "statement": "周波数50Hz、極数6の三相誘導電動機が滑り5%で運転している。回転速度N〔min⁻¹〕は?",
-    "choices": [
-      "900",
-      "950",
-      "1000",
-      "1050"
-    ],
-    "answer": "950",
-    "solution": [
-      "同期速度 Ns=120·f/p=120·50/6=1000 min⁻¹",
-      "滑り s=5% より N=Ns·(1−s/100)",
-      "N=1000·(1−5/100)=950 min⁻¹"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "1000"
     },
     "status": "draft"
   },
@@ -524,48 +522,48 @@
   {
     "id": "D-0009",
     "exam": "denken3",
-    "subject": "機械",
-    "topic": "誘導電動機の回転速度",
+    "subject": "理論",
+    "topic": "直並列合成抵抗",
     "format": "multiple_choice",
-    "difficulty": 2,
+    "difficulty": 1,
     "params": {
-      "frequency": {
-        "value": 50,
-        "unit": "Hz",
-        "realistic_range": [
-          50,
-          60
-        ]
-      },
-      "poles": {
-        "value": 2,
-        "unit": "pole",
-        "realistic_range": [
-          2,
-          12
-        ]
-      },
-      "slip": {
-        "value": 2,
-        "unit": "%",
+      "R1": {
+        "value": 15,
+        "unit": "ohm",
         "realistic_range": [
           1,
-          10
+          100
+        ]
+      },
+      "R2": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "R3": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          100
         ]
       }
     },
-    "statement": "周波数50Hz、極数2の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
+    "statement": "抵抗R1=15Ωに、R2=10ΩとR3=10Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
     "choices": [
-      "2880",
-      "2940",
-      "3000",
-      "3060"
+      "5",
+      "20",
+      "25",
+      "35"
     ],
-    "answer": "2940",
+    "answer": "20",
     "solution": [
-      "同期速度 Ns=120·f/p=120·50/2=3000 min⁻¹",
-      "滑り s=2% より N=Ns·(1−s/100)",
-      "N=3000·(1−2/100)=2940 min⁻¹"
+      "並列部 R2∥R3 = R2·R3/(R2+R3) = 10·10/(10+10) = 5Ω",
+      "直列なので R = R1 + (R2∥R3) = 15 + 5",
+      "R = 20Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -581,84 +579,20 @@
     "stats": {
       "answered": 0,
       "correct_rate": 0,
-      "common_wrong_choice": "3000"
+      "common_wrong_choice": "35"
     },
     "status": "draft"
   },
   {
     "id": "D-0010",
     "exam": "denken3",
-    "subject": "機械",
-    "topic": "誘導電動機の回転速度",
-    "format": "multiple_choice",
-    "difficulty": 2,
-    "params": {
-      "frequency": {
-        "value": 50,
-        "unit": "Hz",
-        "realistic_range": [
-          50,
-          60
-        ]
-      },
-      "poles": {
-        "value": 6,
-        "unit": "pole",
-        "realistic_range": [
-          2,
-          12
-        ]
-      },
-      "slip": {
-        "value": 2,
-        "unit": "%",
-        "realistic_range": [
-          1,
-          10
-        ]
-      }
-    },
-    "statement": "周波数50Hz、極数6の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
-    "choices": [
-      "960",
-      "980",
-      "1000",
-      "1020"
-    ],
-    "answer": "980",
-    "solution": [
-      "同期速度 Ns=120·f/p=120·50/6=1000 min⁻¹",
-      "滑り s=2% より N=Ns·(1−s/100)",
-      "N=1000·(1−2/100)=980 min⁻¹"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "1000"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0011",
-    "exam": "denken3",
     "subject": "理論",
     "topic": "直並列合成抵抗",
     "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "R1": {
-        "value": 5,
+        "value": 20,
         "unit": "ohm",
         "realistic_range": [
           1,
@@ -682,146 +616,18 @@
         ]
       }
     },
-    "statement": "抵抗R1=5Ωに、R2=20ΩとR3=20Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "statement": "抵抗R1=20Ωに、R2=20ΩとR3=20Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
     "choices": [
       "10",
-      "15",
-      "25",
-      "45"
-    ],
-    "answer": "15",
-    "solution": [
-      "並列部 R2∥R3 = R2·R3/(R2+R3) = 20·20/(20+20) = 10Ω",
-      "直列なので R = R1 + (R2∥R3) = 5 + 10",
-      "R = 15Ω"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "45"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0012",
-    "exam": "denken3",
-    "subject": "理論",
-    "topic": "直並列合成抵抗",
-    "format": "multiple_choice",
-    "difficulty": 1,
-    "params": {
-      "R1": {
-        "value": 20,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R2": {
-        "value": 12,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R3": {
-        "value": 12,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      }
-    },
-    "statement": "抵抗R1=20Ωに、R2=12ΩとR3=12Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
-    "choices": [
-      "6",
-      "26",
-      "32",
-      "44"
-    ],
-    "answer": "26",
-    "solution": [
-      "並列部 R2∥R3 = R2·R3/(R2+R3) = 12·12/(12+12) = 6Ω",
-      "直列なので R = R1 + (R2∥R3) = 20 + 6",
-      "R = 26Ω"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "44"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0013",
-    "exam": "denken3",
-    "subject": "理論",
-    "topic": "直並列合成抵抗",
-    "format": "multiple_choice",
-    "difficulty": 1,
-    "params": {
-      "R1": {
-        "value": 10,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R2": {
-        "value": 10,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R3": {
-        "value": 40,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      }
-    },
-    "statement": "抵抗R1=10Ωに、R2=10ΩとR3=40Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
-    "choices": [
-      "8",
-      "18",
-      "20",
+      "30",
+      "40",
       "60"
     ],
-    "answer": "18",
+    "answer": "30",
     "solution": [
-      "並列部 R2∥R3 = R2·R3/(R2+R3) = 10·40/(10+40) = 8Ω",
-      "直列なので R = R1 + (R2∥R3) = 10 + 8",
-      "R = 18Ω"
+      "並列部 R2∥R3 = R2·R3/(R2+R3) = 20·20/(20+20) = 10Ω",
+      "直列なので R = R1 + (R2∥R3) = 20 + 10",
+      "R = 30Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -842,7 +648,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0014",
+    "id": "D-0011",
     "exam": "denken3",
     "subject": "理論",
     "topic": "直並列合成抵抗",
@@ -858,7 +664,7 @@
         ]
       },
       "R2": {
-        "value": 60,
+        "value": 50,
         "unit": "ohm",
         "realistic_range": [
           1,
@@ -866,7 +672,7 @@
         ]
       },
       "R3": {
-        "value": 30,
+        "value": 50,
         "unit": "ohm",
         "realistic_range": [
           1,
@@ -874,81 +680,17 @@
         ]
       }
     },
-    "statement": "抵抗R1=15Ωに、R2=60ΩとR3=30Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "statement": "抵抗R1=15Ωに、R2=50ΩとR3=50Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
     "choices": [
-      "20",
-      "35",
-      "75",
-      "105"
-    ],
-    "answer": "35",
-    "solution": [
-      "並列部 R2∥R3 = R2·R3/(R2+R3) = 60·30/(60+30) = 20Ω",
-      "直列なので R = R1 + (R2∥R3) = 15 + 20",
-      "R = 35Ω"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0,
-      "common_wrong_choice": "105"
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0015",
-    "exam": "denken3",
-    "subject": "理論",
-    "topic": "直並列合成抵抗",
-    "format": "multiple_choice",
-    "difficulty": 1,
-    "params": {
-      "R1": {
-        "value": 30,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R2": {
-        "value": 20,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "R3": {
-        "value": 20,
-        "unit": "ohm",
-        "realistic_range": [
-          1,
-          100
-        ]
-      }
-    },
-    "statement": "抵抗R1=30Ωに、R2=20ΩとR3=20Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
-    "choices": [
-      "10",
+      "25",
       "40",
-      "50",
-      "70"
+      "65",
+      "115"
     ],
     "answer": "40",
     "solution": [
-      "並列部 R2∥R3 = R2·R3/(R2+R3) = 20·20/(20+20) = 10Ω",
-      "直列なので R = R1 + (R2∥R3) = 30 + 10",
+      "並列部 R2∥R3 = R2·R3/(R2+R3) = 50·50/(50+50) = 25Ω",
+      "直列なので R = R1 + (R2∥R3) = 15 + 25",
       "R = 40Ω"
     ],
     "validation": {
@@ -965,12 +707,76 @@
     "stats": {
       "answered": 0,
       "correct_rate": 0,
-      "common_wrong_choice": "70"
+      "common_wrong_choice": "115"
     },
     "status": "draft"
   },
   {
-    "id": "D-0016",
+    "id": "D-0012",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "直並列合成抵抗",
+    "format": "multiple_choice",
+    "difficulty": 1,
+    "params": {
+      "R1": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "R2": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "R3": {
+        "value": 30,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "抵抗R1=10Ωに、R2=20ΩとR3=30Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "choices": [
+      "12",
+      "22",
+      "30",
+      "60"
+    ],
+    "answer": "22",
+    "solution": [
+      "並列部 R2∥R3 = R2·R3/(R2+R3) = 20·30/(20+30) = 12Ω",
+      "直列なので R = R1 + (R2∥R3) = 10 + 12",
+      "R = 22Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0,
+      "common_wrong_choice": "60"
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0013",
     "exam": "denken3",
     "subject": "理論",
     "topic": "コンデンサの静電エネルギー",
@@ -978,7 +784,7 @@
     "difficulty": 2,
     "params": {
       "capacitance": {
-        "value": 4,
+        "value": 10,
         "unit": "uF",
         "realistic_range": [
           1,
@@ -994,12 +800,12 @@
         ]
       }
     },
-    "statement": "静電容量4μFのコンデンサに200Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
-    "answer": "80",
+    "statement": "静電容量10μFのコンデンサに200Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
+    "answer": "200",
     "solution": [
       "W=½·C·V² で算出する",
-      "W=0.5×4×10⁻⁶×200²",
-      "W=80mJ"
+      "W=0.5×10×10⁻⁶×200²",
+      "W=200mJ"
     ],
     "validation": {
       "solver_checked": true,
@@ -1019,7 +825,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0017",
+    "id": "D-0014",
     "exam": "denken3",
     "subject": "理論",
     "topic": "コンデンサの静電エネルギー",
@@ -1027,7 +833,7 @@
     "difficulty": 2,
     "params": {
       "capacitance": {
-        "value": 4,
+        "value": 1,
         "unit": "uF",
         "realistic_range": [
           1,
@@ -1035,7 +841,7 @@
         ]
       },
       "voltage": {
-        "value": 10,
+        "value": 20,
         "unit": "V",
         "realistic_range": [
           10,
@@ -1043,11 +849,11 @@
         ]
       }
     },
-    "statement": "静電容量4μFのコンデンサに10Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
+    "statement": "静電容量1μFのコンデンサに20Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
     "answer": "0.2",
     "solution": [
       "W=½·C·V² で算出する",
-      "W=0.5×4×10⁻⁶×10²",
+      "W=0.5×1×10⁻⁶×20²",
       "W=0.2mJ"
     ],
     "validation": {
@@ -1068,7 +874,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0018",
+    "id": "D-0015",
     "exam": "denken3",
     "subject": "理論",
     "topic": "コンデンサの静電エネルギー",
@@ -1076,105 +882,7 @@
     "difficulty": 2,
     "params": {
       "capacitance": {
-        "value": 10,
-        "unit": "uF",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "voltage": {
-        "value": 10,
-        "unit": "V",
-        "realistic_range": [
-          10,
-          200
-        ]
-      }
-    },
-    "statement": "静電容量10μFのコンデンサに10Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
-    "answer": "0.5",
-    "solution": [
-      "W=½·C·V² で算出する",
-      "W=0.5×10×10⁻⁶×10²",
-      "W=0.5mJ"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0019",
-    "exam": "denken3",
-    "subject": "理論",
-    "topic": "コンデンサの静電エネルギー",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "capacitance": {
-        "value": 4,
-        "unit": "uF",
-        "realistic_range": [
-          1,
-          100
-        ]
-      },
-      "voltage": {
-        "value": 50,
-        "unit": "V",
-        "realistic_range": [
-          10,
-          200
-        ]
-      }
-    },
-    "statement": "静電容量4μFのコンデンサに50Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
-    "answer": "5",
-    "solution": [
-      "W=½·C·V² で算出する",
-      "W=0.5×4×10⁻⁶×50²",
-      "W=5mJ"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0020",
-    "exam": "denken3",
-    "subject": "理論",
-    "topic": "コンデンサの静電エネルギー",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "capacitance": {
-        "value": 100,
+        "value": 2,
         "unit": "uF",
         "realistic_range": [
           1,
@@ -1190,12 +898,12 @@
         ]
       }
     },
-    "statement": "静電容量100μFのコンデンサに100Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
-    "answer": "500",
+    "statement": "静電容量2μFのコンデンサに100Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
+    "answer": "10",
     "solution": [
       "W=½·C·V² で算出する",
-      "W=0.5×100×10⁻⁶×100²",
-      "W=500mJ"
+      "W=0.5×2×10⁻⁶×100²",
+      "W=10mJ"
     ],
     "validation": {
       "solver_checked": true,
@@ -1215,7 +923,56 @@
     "status": "draft"
   },
   {
-    "id": "D-0021",
+    "id": "D-0016",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コンデンサの静電エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "capacitance": {
+        "value": 5,
+        "unit": "uF",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          200
+        ]
+      }
+    },
+    "statement": "静電容量5μFのコンデンサに100Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?",
+    "answer": "25",
+    "solution": [
+      "W=½·C·V² で算出する",
+      "W=0.5×5×10⁻⁶×100²",
+      "W=25mJ"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0017",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -1223,7 +980,7 @@
     "difficulty": 3,
     "params": {
       "percent_resistance": {
-        "value": 4,
+        "value": 3,
         "unit": "%",
         "realistic_range": [
           1,
@@ -1231,7 +988,7 @@
         ]
       },
       "percent_reactance": {
-        "value": 6,
+        "value": 8,
         "unit": "%",
         "realistic_range": [
           2,
@@ -1239,7 +996,7 @@
         ]
       },
       "power_factor": {
-        "value": 0.6,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.5,
@@ -1247,11 +1004,11 @@
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=4%、%リアクタンス降下 q=6%、負荷力率 cosθ=0.6（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=3%、%リアクタンス降下 q=8%、負荷力率 cosθ=0.8（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
     "answer": "7.2",
     "solution": [
-      "sinθ=√(1−cos²θ)=√(1−0.6²)=0.8",
-      "ε≈p·cosθ+q·sinθ=4×0.6+6×0.8",
+      "sinθ=√(1−cos²θ)=√(1−0.8²)=0.6",
+      "ε≈p·cosθ+q·sinθ=3×0.8+8×0.6",
       "ε=7.2%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
     ],
@@ -1273,65 +1030,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0022",
-    "exam": "denken2_secondary",
-    "subject": "機械制御",
-    "topic": "変圧器の電圧変動率",
-    "format": "descriptive",
-    "difficulty": 3,
-    "params": {
-      "percent_resistance": {
-        "value": 2,
-        "unit": "%",
-        "realistic_range": [
-          1,
-          5
-        ]
-      },
-      "percent_reactance": {
-        "value": 4,
-        "unit": "%",
-        "realistic_range": [
-          2,
-          15
-        ]
-      },
-      "power_factor": {
-        "value": 1,
-        "unit": "",
-        "realistic_range": [
-          0.5,
-          1
-        ]
-      }
-    },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=2%、%リアクタンス降下 q=4%、負荷力率 cosθ=1（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
-    "answer": "2",
-    "solution": [
-      "sinθ=√(1−cos²θ)=√(1−1²)=0",
-      "ε≈p·cosθ+q·sinθ=2×1+4×0",
-      "ε=2%",
-      "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0023",
+    "id": "D-0018",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -1355,6 +1054,64 @@
         ]
       },
       "power_factor": {
+        "value": 1,
+        "unit": "",
+        "realistic_range": [
+          0.5,
+          1
+        ]
+      }
+    },
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=2%、%リアクタンス降下 q=5%、負荷力率 cosθ=1（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "answer": "2",
+    "solution": [
+      "sinθ=√(1−cos²θ)=√(1−1²)=0",
+      "ε≈p·cosθ+q·sinθ=2×1+5×0",
+      "ε=2%",
+      "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0019",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "変圧器の電圧変動率",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_resistance": {
+        "value": 3,
+        "unit": "%",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "percent_reactance": {
+        "value": 10,
+        "unit": "%",
+        "realistic_range": [
+          2,
+          15
+        ]
+      },
+      "power_factor": {
         "value": 0.6,
         "unit": "",
         "realistic_range": [
@@ -1363,13 +1120,194 @@
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=2%、%リアクタンス降下 q=5%、負荷力率 cosθ=0.6（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
-    "answer": "5.2",
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=3%、%リアクタンス降下 q=10%、負荷力率 cosθ=0.6（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "answer": "9.8",
     "solution": [
       "sinθ=√(1−cos²θ)=√(1−0.6²)=0.8",
-      "ε≈p·cosθ+q·sinθ=2×0.6+5×0.8",
-      "ε=5.2%",
+      "ε≈p·cosθ+q·sinθ=3×0.6+10×0.8",
+      "ε=9.8%",
       "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0020",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "変圧器の電圧変動率",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_resistance": {
+        "value": 3,
+        "unit": "%",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "percent_reactance": {
+        "value": 10,
+        "unit": "%",
+        "realistic_range": [
+          2,
+          15
+        ]
+      },
+      "power_factor": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.5,
+          1
+        ]
+      }
+    },
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=3%、%リアクタンス降下 q=10%、負荷力率 cosθ=0.8（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "answer": "8.4",
+    "solution": [
+      "sinθ=√(1−cos²θ)=√(1−0.8²)=0.6",
+      "ε≈p·cosθ+q·sinθ=3×0.8+10×0.6",
+      "ε=8.4%",
+      "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0021",
+    "exam": "denken3",
+    "subject": "法規",
+    "topic": "B種接地抵抗",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ground_fault_current": {
+        "value": 30,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          30
+        ]
+      }
+    },
+    "statement": "高圧電路の1線地絡電流が30Aである。B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。",
+    "answer": "5",
+    "solution": [
+      "B種接地抵抗の基本式: R = 150 / Ig",
+      "R = 150 / 30 = 5Ω",
+      "（参考: 高圧電路を1〜2秒で自動遮断する装置があれば300/Ig、1秒以内なら600/Ig まで緩和される）"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0022",
+    "exam": "denken3",
+    "subject": "法規",
+    "topic": "B種接地抵抗",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ground_fault_current": {
+        "value": 30,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          30
+        ]
+      }
+    },
+    "statement": "高圧電路の1線地絡電流が30Aである。B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。",
+    "answer": "5",
+    "solution": [
+      "B種接地抵抗の基本式: R = 150 / Ig",
+      "R = 150 / 30 = 5Ω",
+      "（参考: 高圧電路を1〜2秒で自動遮断する装置があれば300/Ig、1秒以内なら600/Ig まで緩和される）"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0023",
+    "exam": "denken3",
+    "subject": "法規",
+    "topic": "B種接地抵抗",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ground_fault_current": {
+        "value": 5,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          30
+        ]
+      }
+    },
+    "statement": "高圧電路の1線地絡電流が5Aである。B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。",
+    "answer": "30",
+    "solution": [
+      "B種接地抵抗の基本式: R = 150 / Ig",
+      "R = 150 / 5 = 30Ω",
+      "（参考: 高圧電路を1〜2秒で自動遮断する装置があれば300/Ig、1秒以内なら600/Ig まで緩和される）"
     ],
     "validation": {
       "solver_checked": true,
@@ -1390,44 +1328,27 @@
   },
   {
     "id": "D-0024",
-    "exam": "denken2_secondary",
-    "subject": "機械制御",
-    "topic": "変圧器の電圧変動率",
-    "format": "descriptive",
-    "difficulty": 3,
+    "exam": "denken3",
+    "subject": "法規",
+    "topic": "B種接地抵抗",
+    "format": "numeric",
+    "difficulty": 2,
     "params": {
-      "percent_resistance": {
-        "value": 1,
-        "unit": "%",
+      "ground_fault_current": {
+        "value": 3,
+        "unit": "A",
         "realistic_range": [
           1,
-          5
-        ]
-      },
-      "percent_reactance": {
-        "value": 4,
-        "unit": "%",
-        "realistic_range": [
-          2,
-          15
-        ]
-      },
-      "power_factor": {
-        "value": 0.8,
-        "unit": "",
-        "realistic_range": [
-          0.5,
-          1
+          30
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=1%、%リアクタンス降下 q=4%、負荷力率 cosθ=0.8（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
-    "answer": "3.2",
+    "statement": "高圧電路の1線地絡電流が3Aである。B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。",
+    "answer": "50",
     "solution": [
-      "sinθ=√(1−cos²θ)=√(1−0.8²)=0.6",
-      "ε≈p·cosθ+q·sinθ=1×0.8+4×0.6",
-      "ε=3.2%",
-      "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+      "B種接地抵抗の基本式: R = 150 / Ig",
+      "R = 150 / 3 = 50Ω",
+      "（参考: 高圧電路を1〜2秒で自動遮断する装置があれば300/Ig、1秒以内なら600/Ig まで緩和される）"
     ],
     "validation": {
       "solver_checked": true,
@@ -1448,44 +1369,182 @@
   },
   {
     "id": "D-0025",
-    "exam": "denken2_secondary",
-    "subject": "機械制御",
-    "topic": "変圧器の電圧変動率",
-    "format": "descriptive",
-    "difficulty": 3,
+    "exam": "denken3",
+    "subject": "電力",
+    "topic": "需要率",
+    "format": "numeric",
+    "difficulty": 1,
     "params": {
-      "percent_resistance": {
-        "value": 1,
-        "unit": "%",
+      "installed_capacity": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          10,
+          1000
+        ]
+      },
+      "max_demand": {
+        "value": 75,
+        "unit": "kW",
         "realistic_range": [
           1,
-          5
-        ]
-      },
-      "percent_reactance": {
-        "value": 8,
-        "unit": "%",
-        "realistic_range": [
-          2,
-          15
-        ]
-      },
-      "power_factor": {
-        "value": 0.6,
-        "unit": "",
-        "realistic_range": [
-          0.5,
-          1
+          1000
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=1%、%リアクタンス降下 q=8%、負荷力率 cosθ=0.6（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
-    "answer": "7",
+    "statement": "ある需要家の設備容量が150kW、最大需要電力が75kWである。需要率〔%〕を求めよ。",
+    "answer": "50",
     "solution": [
-      "sinθ=√(1−cos²θ)=√(1−0.6²)=0.8",
-      "ε≈p·cosθ+q·sinθ=1×0.6+8×0.8",
-      "ε=7%",
-      "（補足: 二次項 (q·cosθ−p·sinθ)²/200 を含む厳密式もあるが、本問は一次近似で評価）"
+      "需要率 = 最大需要電力 / 設備容量 × 100",
+      "= 75 / 150 × 100",
+      "= 50%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0026",
+    "exam": "denken3",
+    "subject": "電力",
+    "topic": "需要率",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "installed_capacity": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          10,
+          1000
+        ]
+      },
+      "max_demand": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の設備容量が250kW、最大需要電力が150kWである。需要率〔%〕を求めよ。",
+    "answer": "60",
+    "solution": [
+      "需要率 = 最大需要電力 / 設備容量 × 100",
+      "= 150 / 250 × 100",
+      "= 60%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0027",
+    "exam": "denken3",
+    "subject": "電力",
+    "topic": "需要率",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "installed_capacity": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          10,
+          1000
+        ]
+      },
+      "max_demand": {
+        "value": 45,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の設備容量が250kW、最大需要電力が45kWである。需要率〔%〕を求めよ。",
+    "answer": "18",
+    "solution": [
+      "需要率 = 最大需要電力 / 設備容量 × 100",
+      "= 45 / 250 × 100",
+      "= 18%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0028",
+    "exam": "denken3",
+    "subject": "電力",
+    "topic": "需要率",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "installed_capacity": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          10,
+          1000
+        ]
+      },
+      "max_demand": {
+        "value": 120,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の設備容量が150kW、最大需要電力が120kWである。需要率〔%〕を求めよ。",
+    "answer": "80",
+    "solution": [
+      "需要率 = 最大需要電力 / 設備容量 × 100",
+      "= 120 / 150 × 100",
+      "= 80%"
     ],
     "validation": {
       "solver_checked": true,
