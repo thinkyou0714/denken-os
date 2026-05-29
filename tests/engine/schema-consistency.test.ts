@@ -64,4 +64,18 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
     expect(r.ajv).toBe(false);
     expect(r.zod).toBe(false);
   });
+
+  it("制度上あり得ない exam×subject（三種×電力管理）は両方が拒否する", () => {
+    const broken = { ...T0001, exam: "denken3", subject: "電力管理" };
+    const r = bothAccept(broken);
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  it("制度上正しい exam×subject（二種二次×電力管理）は両方が受理する", () => {
+    const ok = { ...T0001, exam: "denken2_secondary", subject: "電力管理" };
+    const r = bothAccept(ok);
+    expect(r.ajv).toBe(true);
+    expect(r.zod).toBe(true);
+  });
 });

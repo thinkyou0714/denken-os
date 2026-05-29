@@ -21,6 +21,23 @@ export type ProblemFormat = z.infer<typeof formatEnum>;
 export type SourceType = z.infer<typeof sourceTypeEnum>;
 export type ProblemStatus = z.infer<typeof statusEnum>;
 
+/**
+ * 試験区分ごとに「実在する科目」。電験の制度構造（一次/三種=4科目、二種二次=2科目）。
+ * 例: 「電力管理」は二種二次のみ、三種に電力管理は存在しない。
+ * これを満たさない (exam, subject) は制度上あり得ない問題 ⇒ 検証で弾く。
+ */
+export const EXAM_SUBJECTS: Record<Exam, readonly Subject[]> = {
+  denken3: ["理論", "電力", "機械", "法規"],
+  denken2_primary: ["理論", "電力", "機械", "法規"],
+  denken2_secondary: ["電力管理", "機械制御"],
+};
+
+/** (exam, subject) が制度上成立するか。exam 未指定なら制約なし(true)。 */
+export function isExamSubjectValid(exam: Exam | undefined, subject: Subject): boolean {
+  if (!exam) return true;
+  return EXAM_SUBJECTS[exam].includes(subject);
+}
+
 const paramField = z.object({
   value: z.number(),
   unit: z.string().optional(),
@@ -81,6 +98,14 @@ export const problemSchema = z
           message: "multiple_choice では choices が 2 件以上必要です",
         });
       }
+    }
+    // exam↔subject の整合（制度上あり得ない区分×科目を弾く。problem-schema.json の allOf と同じ）
+    if (p.exam && !isExamSubjectValid(p.exam, p.subject)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["subject"],
+        message: `subject="${p.subject}" は exam="${p.exam}" に存在しない科目です（許容: ${EXAM_SUBJECTS[p.exam].join("/")}）`,
+      });
     }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）
     if (p.status === "validated" || p.status === "published") {

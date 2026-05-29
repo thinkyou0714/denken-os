@@ -50,6 +50,21 @@ function customChecks(file: string, p: any): Failure[] {
     failures.push({ file, rule: "citation_required", message: `source.type=${p.source.type} は citation 必須です` });
   }
 
+  // exam↔subject 整合（schema 済だが二重チェック。制度上あり得ない区分×科目）
+  const EXAM_SUBJECTS: Record<string, string[]> = {
+    denken3: ["理論", "電力", "機械", "法規"],
+    denken2_primary: ["理論", "電力", "機械", "法規"],
+    denken2_secondary: ["電力管理", "機械制御"],
+  };
+  const allowedSubjects = p.exam ? EXAM_SUBJECTS[p.exam] : undefined;
+  if (allowedSubjects && !allowedSubjects.includes(p.subject)) {
+    failures.push({
+      file,
+      rule: "exam_subject_consistency",
+      message: `subject="${p.subject}" は exam="${p.exam}" に存在しない科目です`,
+    });
+  }
+
   return failures;
 }
 

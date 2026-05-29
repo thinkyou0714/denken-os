@@ -98,6 +98,25 @@
           }
         }
       }
+    },
+    {
+      "$comment": "exam↔subject の整合: 一次/三種は4科目、二種二次は2科目。制度上あり得ない組合せを弾く。",
+      "if": {
+        "required": ["exam"],
+        "properties": { "exam": { "enum": ["denken3", "denken2_primary"] } }
+      },
+      "then": {
+        "properties": { "subject": { "enum": ["理論", "電力", "機械", "法規"] } }
+      }
+    },
+    {
+      "if": {
+        "required": ["exam"],
+        "properties": { "exam": { "const": "denken2_secondary" } }
+      },
+      "then": {
+        "properties": { "subject": { "enum": ["電力管理", "機械制御"] } }
+      }
     }
   ]
 }

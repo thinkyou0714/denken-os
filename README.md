@@ -34,6 +34,8 @@
 > 二次=記述(descriptive)は自動採点せず**自己採点**（模範解答＋採点観点を提示）。`data/problems/` に手検算済みの validated 問題（T-0001〜0006、全6科目を網羅）を収録。
 > テンプレは draw ごとに難易度(★1-5)を係数から算出し、適応出題の精度を上げる。multiple_choice は誤答選択肢ごとに「なぜ誤るか（典型ミス）」を解説へ自動付与する（品質チェックリストの『成立する引っ掛け』を成果物に反映）。
 > 科目とテンプレの乖離（enum に科目があるのに実装が無い等）は **ドリフト検知テスト**で恒久的にガードする。
+> **exam↔subject 整合**（例: 三種に「電力管理」は存在しない）を schema(ajv⇄zod 両方)＋CIで検証し、制度上あり得ない問題を弾く。
+> **data↔engine 整合**: `data/problems/` の種問題は対応テンプレの決定論計算と一致し続けることをテストで保証（式変更による種問題の無言の乖離を検知）。
 > アプリ公開手順: Settings → Pages → Source = "GitHub Actions" にすると、main マージで自動デプロイされる。
 
 ### 使い方
@@ -50,7 +52,7 @@ npm run export:vault -- --out out/vault                   # 問題を Obsidian M
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
 npm run typecheck && npm run typecheck:web               # 型チェック
-npm test                                                  # ユニットテスト（111件）
+npm test                                                  # ユニットテスト（140件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。
