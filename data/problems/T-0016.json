@@ -92,7 +92,7 @@
     {
       "choice": "975",
       "correct": false,
-      "explanation": "誤り: 磁束 Φ を 2 倍に読み違えた（N は Φ に反比例）"
+      "explanation": "誤り: 機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）"
     },
     {
       "choice": "1950",

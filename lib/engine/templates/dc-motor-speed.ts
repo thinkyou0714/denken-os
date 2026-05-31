@@ -7,7 +7,7 @@
  * 誤答（成立する典型ミス）:
  *   ① V/Kφ            逆起電力 E でなく端子電圧 V を使った（R_a 降下無視）
  *   ② (V+I_a·R_a)/Kφ  電圧降下を引くべきところ足した（発電機と混同）
- *   ③ N/2             磁束 Φ を 2 倍に読み違えた（N∝E/Φ）
+ *   ③ N/2             機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import type { GenerationResult, Template } from "./types.js";
@@ -57,7 +57,7 @@ function buildFrom(V: number, Ia: number, Ra: number, Kphi: number): GenerationR
     distractors: [
       { text: formatClean(useV), reason: "逆起電力 E でなく端子電圧 V を使った（R_a 降下を無視）" },
       { text: formatClean(addDrop), reason: "電圧降下を引くべきところ足した（発電機の式 E=V+I_aR_a と混同）" },
-      { text: formatClean(halfFlux), reason: "磁束 Φ を 2 倍に読み違えた（N は Φ に反比例）" },
+      { text: formatClean(halfFlux), reason: "機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）" },
     ],
     likelyWrongChoice: formatClean(useV),
     facts: { V, Ia, Ra, Kphi, E, N },

@@ -49,9 +49,8 @@ function buildFrom(P: number, c1: number, c2: number): GenerationResult | null {
       `必要なコンデンサ（調相設備）容量 Q_c〔kvar〕を導出過程とともに求めよ。`,
     defaultSolution: [
       `Q_c = P·(tanθ₁ − tanθ₂)`,
-      `tanθ₁=√(1−${c1}²)/${c1}、tanθ₂=√(1−${c2}²)/${c2}`,
-      `Q_c = ${P}×(${round2(tanOf(c1))} − ${round2(tanOf(c2))})`,
-      `Q_c ≒ ${answerText} kvar`,
+      `tanθ₁=√(1−${c1}²)/${c1}≒${round2(tanOf(c1))}、tanθ₂=√(1−${c2}²)/${c2}≒${round2(tanOf(c2))}`,
+      `Q_c = ${P}×(tanθ₁ − tanθ₂) ≒ ${answerText} kvar`,
     ],
     physicallyValid: true,
   };

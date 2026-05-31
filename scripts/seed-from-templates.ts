@@ -8,7 +8,7 @@
  *
  *   npm run build:seeds   （既存 data/problems は上書きしない。T-0010 以降のみ書く）
  */
-import { writeFileSync } from "node:fs";
+import { existsSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate } from "../lib/engine/generate.js";
@@ -75,6 +75,11 @@ async function main() {
       status: "validated" as const,
     };
     const file = join(ROOT, "data/problems", `${seedProblem.id}.json`);
+    if (existsSync(file)) {
+      console.error(`skip: ${seedProblem.id}（既存。手修正保護のため上書きしない）`);
+      n += 1;
+      continue;
+    }
     writeFileSync(file, `${JSON.stringify(seedProblem, null, 2)}\n`, "utf8");
     written.push(`${seedProblem.id} ${topic}`);
     n += 1;

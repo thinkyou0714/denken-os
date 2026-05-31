@@ -10305,9 +10305,8 @@
     "answer": "233.33",
     "solution": [
       "Q_c = P·(tanθ₁ − tanθ₂)",
-      "tanθ₁=√(1−0.6²)/0.6、tanθ₂=√(1−0.8²)/0.8",
-      "Q_c = 400×(1.33 − 0.75)",
-      "Q_c ≒ 233.33 kvar"
+      "tanθ₁=√(1−0.6²)/0.6≒1.33、tanθ₂=√(1−0.8²)/0.8≒0.75",
+      "Q_c = 400×(tanθ₁ − tanθ₂) ≒ 233.33 kvar"
     ],
     "validation": {
       "solver_checked": true,
@@ -10404,9 +10403,8 @@
     "answer": "350",
     "solution": [
       "Q_c = P·(tanθ₁ − tanθ₂)",
-      "tanθ₁=√(1−0.6²)/0.6、tanθ₂=√(1−0.8²)/0.8",
-      "Q_c = 600×(1.33 − 0.75)",
-      "Q_c ≒ 350 kvar"
+      "tanθ₁=√(1−0.6²)/0.6≒1.33、tanθ₂=√(1−0.8²)/0.8≒0.75",
+      "Q_c = 600×(tanθ₁ − tanθ₂) ≒ 350 kvar"
     ],
     "validation": {
       "solver_checked": true,
@@ -10503,9 +10501,8 @@
     "answer": "210",
     "solution": [
       "Q_c = P·(tanθ₁ − tanθ₂)",
-      "tanθ₁=√(1−0.6²)/0.6、tanθ₂=√(1−0.8²)/0.8",
-      "Q_c = 360×(1.33 − 0.75)",
-      "Q_c ≒ 210 kvar"
+      "tanθ₁=√(1−0.6²)/0.6≒1.33、tanθ₂=√(1−0.8²)/0.8≒0.75",
+      "Q_c = 360×(tanθ₁ − tanθ₂) ≒ 210 kvar"
     ],
     "validation": {
       "solver_checked": true,
@@ -10916,7 +10913,7 @@
       {
         "choice": "900",
         "correct": false,
-        "explanation": "誤り: 磁束 Φ を 2 倍に読み違えた（N は Φ に反比例）"
+        "explanation": "誤り: 機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）"
       },
       {
         "choice": "1800",
@@ -11037,7 +11034,7 @@
       {
         "choice": "950",
         "correct": false,
-        "explanation": "誤り: 磁束 Φ を 2 倍に読み違えた（N は Φ に反比例）"
+        "explanation": "誤り: 機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）"
       },
       {
         "choice": "1900",
@@ -11158,7 +11155,7 @@
       {
         "choice": "1100",
         "correct": false,
-        "explanation": "誤り: 磁束 Φ を 2 倍に読み違えた（N は Φ に反比例）"
+        "explanation": "誤り: 機械定数 Kφ を 2 倍に読み違えた（N は Kφ に反比例）"
       },
       {
         "choice": "2200",

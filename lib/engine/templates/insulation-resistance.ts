@@ -25,7 +25,10 @@ function buildFrom(v: number): GenerationResult | null {
   const answer = minInsulation(v);
   const reasonFor = (c: string): string => {
     if (c === "0.3") return "0.3 MΩ という区分は存在しない（基準値は 0.1/0.2/0.4 MΩ）";
-    if (c === "0.1") return "対地電圧 150V を超えるので 0.1 MΩ では不足";
+    if (c === "0.1")
+      return v > 300
+        ? "対地電圧が 300V を超えるので 0.4 MΩ が必要（0.1 では不足）"
+        : "対地電圧 150V を超えるので 0.1 MΩ では不足";
     if (c === "0.2") return v <= 150 ? "150V 以下なので 0.1 MΩ で足りる" : "300V を超えるので 0.2 MΩ では不足";
     return "300V 以下なので 0.4 MΩ は不要";
   };

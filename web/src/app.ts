@@ -179,10 +179,20 @@ function showSolution(p: Problem): void {
   $("solution").innerHTML = richSolutionHtml(p, "模範解答");
 }
 
+/** 採点: numeric は許容誤差(numeric.tolerance)内なら正解。それ以外は文字列一致。 */
+function isCorrect(p: Problem, given: string): boolean {
+  if ((p.format ?? "multiple_choice") === "numeric" && p.numeric) {
+    const g = Number(given);
+    const a = Number(p.answer);
+    if (Number.isFinite(g) && Number.isFinite(a)) return Math.abs(g - a) <= p.numeric.tolerance;
+  }
+  return given === p.answer;
+}
+
 function grade(given: string): void {
   if (!current) return;
   const p = current;
-  const correct = given === p.answer;
+  const correct = isCorrect(p, given);
   const timeMs = Date.now() - questionShownAt;
   progress.record(p.topic, correct, Date.now(), timeMs);
 
