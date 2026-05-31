@@ -14,7 +14,8 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、テンプレ7種＝5科目: 理論/電力/機械/法規/機械制御。MC＋numeric＋descriptive形式） | `docs/automation/01` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、**テンプレ28論点＝全6科目**: 理論/電力/機械/法規/電力管理/機械制御。MC＋numeric＋descriptive形式。**誤答解説/公式/学習目標/ヒント/前提/関連/想定時間/法令条文/採点観点を自動付与**、試験区分は**一種〜三種**を表現） | `docs/automation/01`,`13` |
+| シラバス被覆の定量化 | `lib/engine/syllabus.ts` ＋ `scripts/syllabus-coverage.ts`（全6科目の被覆率レポート＋**CI最小被覆ゲート**で退行防止） | `docs/automation/13` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック（**PR #4 で実CI緑**） | `docs/automation/09` |
 | アプリのデプロイ | `.github/workflows/deploy-pages.yml`（main マージで `web/` を GitHub Pages へ自動公開） | README ビジョン |
 | X投稿生成＋予約 | `lib/engine/toXPost.ts`＋`xlength.ts`（重み付き280字・自動スレッド）＋`publish.ts`（poll併設・朝→夜引用） | `docs/automation/02` |
@@ -42,6 +43,7 @@ npm run gen -- --topic 三相交流電力 --count 5            # 問題を生成
 npm run gen -- --topic 誘導電動機の回転速度 --count 5     # 他: 直並列合成抵抗 / コンデンサの静電エネルギー(numeric)
 npm run gen -- --topic 三相交流電力 --count 5 --xpost    # 朝/夜の投稿スレッドも表示
 npm run validate:data                                     # data/ の問題を schema 検証（CIと同じ）
+npm run coverage:syllabus                                 # 電験シラバスの科目別被覆率を表示（未カバー論点も列挙）
 npm run export:vault -- --out out/vault                   # 問題を Obsidian Markdown に書き出し
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）

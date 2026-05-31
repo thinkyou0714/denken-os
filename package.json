@@ -14,6 +14,7 @@
     "build:web": "tsx scripts/build-web.ts",
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
     "validate:data": "tsx scripts/validate-problems.ts",
+    "coverage:syllabus": "tsx scripts/syllabus-coverage.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

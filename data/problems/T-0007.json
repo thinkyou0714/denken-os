@@ -1,0 +1,39 @@
+{
+  "id": "T-0007",
+  "exam": "denken3",
+  "subject": "電力",
+  "topic": "力率改善用コンデンサ容量",
+  "format": "numeric",
+  "difficulty": 3,
+  "params": {
+    "active_power": { "value": 100, "unit": "kW", "realistic_range": [1, 1000] },
+    "pf_before": { "value": 0.8, "unit": "", "realistic_range": [0.5, 0.95] },
+    "pf_after": { "value": 1.0, "unit": "", "realistic_range": [0.8, 1.0] }
+  },
+  "statement": "有効電力100kWの負荷の力率を0.8（遅れ）から1.0に改善したい。必要な進相コンデンサの容量 Q_c〔kvar〕を求めよ。",
+  "answer": "75",
+  "solution": [
+    "Q_c = P·(tanθ1 − tanθ2)",
+    "cosθ1=0.8 → tanθ1=0.75、cosθ2=1.0 → tanθ2=0",
+    "Q_c = 100×(0.75 − 0) = 75kvar"
+  ],
+  "tags": ["電力", "送配電", "力率改善", "進相コンデンサ"],
+  "learning_objectives": ["目標力率に改善するための無効電力の差から必要容量を求められる"],
+  "formulas": ["Q_c = P(tanθ1 − tanθ2)", "tanθ = sinθ/cosθ"],
+  "hints": ["必要なのは無効電力の差", "Q = P·tanθ", "改善前 tanθ1 から改善後 tanθ2 を引く"],
+  "related_topics": ["無効電力", "電力用コンデンサ", "需要率"],
+  "prerequisites": ["三相交流電力", "力率"],
+  "estimated_time_sec": 180,
+  "numeric": { "tolerance": 0.1, "unit": "kvar" },
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0 },
+  "status": "validated"
+}

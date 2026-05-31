@@ -9,7 +9,13 @@
  */
 import { z } from "zod";
 
-export const examEnum = z.enum(["denken2_primary", "denken2_secondary", "denken3"]);
+export const examEnum = z.enum([
+  "denken1_primary",
+  "denken1_secondary",
+  "denken2_primary",
+  "denken2_secondary",
+  "denken3",
+]);
 export const subjectEnum = z.enum(["理論", "電力", "機械", "法規", "電力管理", "機械制御"]);
 export const formatEnum = z.enum(["multiple_choice", "numeric", "descriptive"]);
 export const sourceTypeEnum = z.enum(["original", "past_exam_modified", "past_exam_quoted"]);
@@ -50,6 +56,48 @@ export const statsSchema = z.object({
   answered: z.number().int().min(0).optional(),
   correct_rate: z.number().min(0).max(1).optional(),
   common_wrong_choice: z.string().optional(),
+  // 識別力(discrimination): 上位群と下位群の正答率差（item analysis, 任意）。
+  discrimination: z.number().min(-1).max(1).optional(),
+});
+
+/**
+ * 誤答解説（13-best-practices §18 ＝ 最大の学習資産）。
+ * 各選択肢が「なぜ正解/不正解か」「どの典型ミスか」を保持する。
+ * multiple_choice では choice は choices のいずれかと一致させる（validate.ts で担保）。
+ */
+export const choiceExplanationSchema = z.object({
+  choice: z.string().min(1),
+  correct: z.boolean(),
+  explanation: z.string().min(1),
+});
+
+/** 数値採点の許容誤差と単位（有効数字差・丸め差の吸収, §24）。 */
+export const numericGradingSchema = z.object({
+  tolerance: z.number().min(0),
+  unit: z.string().optional(),
+});
+
+/** 過去問の出典メタ（年度・回・問番号, §4）。 */
+export const examMetaSchema = z.object({
+  year: z.number().int().optional(),
+  era: z.string().optional(), // 例: "令和6年度"
+  session: z.string().optional(), // 例: "上期" / "下期" / "一次" / "二次"
+  question_no: z.string().optional(), // 例: "問7" / "B-15"
+});
+
+/** 法令条文などの根拠参照（§5）。 */
+export const referenceSchema = z.object({
+  label: z.string().min(1),
+  article: z.string().optional(), // 例: "電技解釈 第17条"
+  url: z.string().optional(),
+});
+
+/** B問題の小問（§6）。 */
+export const subQuestionSchema = z.object({
+  statement: z.string().min(1),
+  choices: z.array(z.string()).optional(),
+  answer: z.string().min(1),
+  solution: z.array(z.string()).optional(),
 });
 
 export const problemSchema = z
@@ -70,6 +118,20 @@ export const problemSchema = z
     source: sourceSchema,
     stats: statsSchema.optional(),
     status: statusEnum.optional(),
+    // --- 教育的メタデータ（すべて任意・後方互換, 13-best-practices）---
+    tags: z.array(z.string()).optional(),
+    learning_objectives: z.array(z.string()).optional(),
+    formulas: z.array(z.string()).optional(),
+    hints: z.array(z.string()).optional(),
+    choice_explanations: z.array(choiceExplanationSchema).optional(),
+    related_topics: z.array(z.string()).optional(),
+    prerequisites: z.array(z.string()).optional(),
+    estimated_time_sec: z.number().int().positive().optional(),
+    numeric: numericGradingSchema.optional(),
+    exam_meta: examMetaSchema.optional(),
+    references: z.array(referenceSchema).optional(),
+    grading_points: z.array(z.string()).optional(), // descriptive の採点観点
+    sub_questions: z.array(subQuestionSchema).optional(), // B問題の小問
   })
   .superRefine((p, ctx) => {
     // multiple_choice は choices>=2 必須（draft-07 の allOf と同じ）
@@ -80,6 +142,30 @@ export const problemSchema = z
           path: ["choices"],
           message: "multiple_choice では choices が 2 件以上必要です",
         });
+      }
+    }
+    // choice_explanations の一貫性（multiple_choice のとき）:
+    //  - 各 choice は choices のいずれかと一致
+    //  - correct=true はちょうど1件かつ answer と一致
+    if (p.format === "multiple_choice" && p.choice_explanations && p.choices) {
+      for (const ce of p.choice_explanations) {
+        if (!p.choices.includes(ce.choice)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["choice_explanations"],
+            message: `choice_explanations の "${ce.choice}" が choices に含まれていません`,
+          });
+        }
+      }
+      const correctOnes = p.choice_explanations.filter((c) => c.correct);
+      if (correctOnes.length > 0) {
+        if (correctOnes.length !== 1 || correctOnes[0]!.choice !== p.answer) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["choice_explanations"],
+            message: "choice_explanations の correct=true はちょうど1件かつ answer と一致する必要があります",
+          });
+        }
       }
     }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）

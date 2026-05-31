@@ -50,6 +50,25 @@ export interface GenerationResult {
   defaultSolution: string[];
   /** 物理的に成立するか（力率<=1 等）。 */
   physicallyValid: boolean;
+  /** 数値採点の許容誤差（numeric のとき。13-best-practices §24）。 */
+  numericTolerance?: number;
+}
+
+/**
+ * 論点に紐づく教育的メタデータ（13-best-practices §B/§G）。
+ * draw ごとに変わらない静的情報はテンプレート側に置き、generate.ts が問題へ転記する。
+ */
+export interface TemplateMeta {
+  tags?: string[];
+  learningObjectives?: string[];
+  formulas?: string[];
+  hints?: string[];
+  relatedTopics?: string[];
+  prerequisites?: string[];
+  estimatedTimeSec?: number;
+  references?: { label: string; article?: string; url?: string }[];
+  /** descriptive(記述)の採点観点（自己採点用）。 */
+  gradingPoints?: string[];
 }
 
 export interface Template {
@@ -58,6 +77,8 @@ export interface Template {
   exam: Exam;
   difficulty: number;
   paramSpecs: Record<string, ParamSpec>;
+  /** 論点共通の教育的メタデータ（任意。生成時に問題へ転記される）。 */
+  meta?: TemplateMeta;
   /**
    * rng(0..1) で係数を振り、コードで正解を算出する。
    * 「答えが綺麗にならない」「物理的に不成立」な draw は null を返す（呼び出し側で振り直し）。
