@@ -14,8 +14,8 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、**テンプレ28論点＝全6科目**: 理論/電力/機械/法規/電力管理/機械制御。MC＋numeric＋descriptive形式。**誤答解説/公式/学習目標/ヒント/前提/関連/想定時間/法令条文/採点観点を自動付与**、試験区分は**一種〜三種**を表現） | `docs/automation/01`,`13` |
-| シラバス被覆の定量化 | `lib/engine/syllabus.ts` ＋ `scripts/syllabus-coverage.ts`（全6科目の被覆率レポート＋**CI最小被覆ゲート**で退行防止） | `docs/automation/13` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、**テンプレ67論点＝全6科目**: 理論/電力/機械/法規/電力管理/機械制御。MC＋numeric＋descriptive形式。**誤答解説/公式/学習目標/ヒント/前提/関連/想定時間/法令条文/採点観点/認知レベル(Bloom)を自動付与**、試験区分は**一種〜三種**を表現） | `docs/automation/01`,`13`,`15` |
+| シラバス被覆の定量化 | `lib/engine/syllabus.ts` ＋ `scripts/syllabus-coverage.ts`（全6科目の被覆率レポート＋**CI最小被覆ゲート**で退行防止。**高優先論点を全網羅し被覆 88%/77論点**） | `docs/automation/13` |
 | 問題品質の測定＆ゲート | `lib/engine/quality.ts`（誤答妥当性サニティ・相対許容誤差・完全性スコア）＋`scripts/quality-report.ts`（`quality:problems`）＋生成の**バッチ重複排除**＋**CI品質ゲート** | `docs/automation/14` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック（**PR #4 で実CI緑**） | `docs/automation/09` |
 | アプリのデプロイ | `.github/workflows/deploy-pages.yml`（main マージで `web/` を GitHub Pages へ自動公開） | README ビジョン |
@@ -26,14 +26,14 @@
 | コミュニティ儀式 | `lib/community/`（チェックイン・出戻り歓迎・卒業ロール） | `docs/automation/08` |
 | 通知計画 | `lib/notify/`（頻度制御・オプトアウト・ジッター・試験カウントダウン） | `docs/automation/12` |
 | シェアカード文言 / クロスポスト / 誤り訂正 / 週次KPI・UTM計測 | `lib/share-card` `lib/crosspost` `lib/correction` `lib/analytics`（`utm.ts`） | `docs/automation/06,07,10,11` |
-| **オフライン学習アプリ MVP** | `web/`（PWA・localStorage・SM-2弱点出題・解説・記録/シェア。esbuild バンドル・Service Worker） | README ビジョン |
+| **オフライン学習アプリ MVP** | `web/`（PWA・localStorage・SM-2弱点出題・**誤答解説/段階ヒント/公式/想定時間/認知レベル表示**・記録/シェア。esbuild バンドル・Service Worker。全67論点201問を `build:problems` で同梱） | README ビジョン |
 | Obsidian/Markdown 書き出し | `lib/export/markdown.ts` ＋ `scripts/export-vault.ts`（vault レイアウト） | README ビジョン |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。
 > 日本語は1文字=2カウントで280字を超えやすいため、投稿は重み付き長で自動スレッド分割。
 > `problem-schema.json`(ajv) と zod 定義の**ドリフトをテストで検知**。Supabase スキーマは RLS 付きで `supabase/migrations/` に DDL を用意（実投稿/永続化の実体は認証取得後にアダプタ接続）。
-> 二次=記述(descriptive)は自動採点せず**自己採点**（模範解答＋採点観点を提示）。`data/problems/` に手検算済みの validated 問題（T-0001〜0003）を収録。
+> 二次=記述(descriptive)は自動採点せず**自己採点**（模範解答＋採点観点を提示）。`data/problems/` に手検算済みの validated 問題（T-0001〜0021）を収録。
 > アプリ公開手順: Settings → Pages → Source = "GitHub Actions" にすると、main マージで自動デプロイされる。
 
 ### 使い方
@@ -47,10 +47,12 @@ npm run validate:data                                     # data/ の問題を s
 npm run coverage:syllabus                                 # 電験シラバスの科目別被覆率を表示（未カバー論点も列挙）
 npm run quality:problems                                  # 問題品質レポート（誤答妥当性・重複・完全性スコア）＋サニティゲート
 npm run export:vault -- --out out/vault                   # 問題を Obsidian Markdown に書き出し
+npm run build:problems                                    # 全67論点の問題を生成し web/problems.json に同梱
+npm run build:seeds                                       # テンプレから validated シードを派生生成（data/problems）
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
 npm run typecheck && npm run typecheck:web               # 型チェック
-npm test                                                  # ユニットテスト（87件）
+npm test                                                  # ユニットテスト（178件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。

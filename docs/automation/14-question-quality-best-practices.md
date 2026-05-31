@@ -165,3 +165,13 @@
 - 品質レポート `scripts/quality-report.ts`（`npm run quality:problems`）＋ CI サニティゲート。
 - テスト追加（誤答妥当性・許容誤差・重複排除・同期速度修正）。
 </content>
+
+---
+
+## Phase 2 実装状況（2026-06）
+
+- 全67テンプレの生成サンプルが **品質スコア平均100・誤答破綻0・重複0**。
+- 難易度校正ヒント `expectedDifficultyBand`（形式/解法ステップ→想定難易度帯, 情報レベル）を追加。
+- 誤答解説/段階ヒント/公式/想定時間/認知レベルを **学習UIに反映**（`web/`）。
+- 既知値回帰テストを全新規テンプレに追加（`tests/engine/templates-v2.test.ts`）。
+- 関連調査（worked-example/self-explanation/fading, FSRS, QTI/Bloom）は **`docs/automation/15`**。
