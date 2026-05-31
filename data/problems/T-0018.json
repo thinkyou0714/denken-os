@@ -1,0 +1,102 @@
+{
+  "id": "T-0018",
+  "exam": "denken3",
+  "subject": "法規",
+  "topic": "電圧の区分",
+  "format": "multiple_choice",
+  "difficulty": 1,
+  "params": {
+    "voltage": {
+      "value": 750,
+      "unit": "V",
+      "realistic_range": [
+        1,
+        500000
+      ]
+    },
+    "is_dc": {
+      "value": 1,
+      "unit": "",
+      "realistic_range": [
+        0,
+        1
+      ]
+    }
+  },
+  "statement": "直流 750V は、電気設備技術基準上どの電圧区分に該当するか。",
+  "choices": [
+    "低圧",
+    "高圧",
+    "特別高圧"
+  ],
+  "answer": "低圧",
+  "solution": [
+    "直流の低圧上限は 750V、高圧は7000V以下、それを超えると特別高圧（電技 第2条）",
+    "直流 750V → 低圧"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "高圧"
+  },
+  "status": "validated",
+  "tags": [
+    "法規",
+    "電気設備技術基準",
+    "電圧区分"
+  ],
+  "learning_objectives": [
+    "交流・直流の電圧区分（低圧/高圧/特別高圧）の境界を判別できる"
+  ],
+  "formulas": [
+    "交流 低圧≤600V / 直流 低圧≤750V",
+    "高圧≤7000V / 特別高圧>7000V"
+  ],
+  "hints": [
+    "交流600V・直流750Vが低圧上限",
+    "7000Vが高圧/特別高圧の境界",
+    "交直で低圧上限が違う"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "低圧",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "高圧",
+      "correct": false,
+      "explanation": "誤り: 750V 以下なので高圧でなく低圧"
+    },
+    {
+      "choice": "特別高圧",
+      "correct": false,
+      "explanation": "誤り: 7000V 以下なので特別高圧ではない"
+    }
+  ],
+  "related_topics": [
+    "電気事業法（主任技術者）",
+    "最大使用電圧"
+  ],
+  "prerequisites": [],
+  "estimated_time_sec": 60,
+  "cognitive_level": "remember",
+  "references": [
+    {
+      "label": "電気設備技術基準 第2条",
+      "article": "電圧の種別"
+    }
+  ]
+}

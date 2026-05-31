@@ -1,0 +1,115 @@
+{
+  "id": "T-0015",
+  "exam": "denken3",
+  "subject": "電力",
+  "topic": "三相線路の電圧降下",
+  "format": "multiple_choice",
+  "difficulty": 3,
+  "params": {
+    "current": {
+      "value": 10,
+      "unit": "A",
+      "realistic_range": [
+        1,
+        200
+      ]
+    },
+    "R": {
+      "value": 2,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        20
+      ]
+    },
+    "X": {
+      "value": 3,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        20
+      ]
+    }
+  },
+  "statement": "三相3線式線路で、1 線あたり抵抗 2Ω・リアクタンス 3Ω、線電流 10A、遅れ力率 cosθ=0.8 である。線間の電圧降下 v〔V〕は? （√3≒1.73）",
+  "choices": [
+    "34",
+    "58.82",
+    "62.28",
+    "68"
+  ],
+  "answer": "58.82",
+  "solution": [
+    "v = √3·I·(R·cosθ + X·sinθ)",
+    "= 1.73 × 10 × (2×0.8 + 3×0.6)",
+    "v = 58.82 V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "68"
+  },
+  "status": "validated",
+  "tags": [
+    "電力",
+    "送配電",
+    "電圧降下",
+    "三相"
+  ],
+  "learning_objectives": [
+    "三相3線式の線間電圧降下を √3 係数で正しく計算できる"
+  ],
+  "formulas": [
+    "v = √3·I·(R·cosθ + X·sinθ) 〔V〕（三相3線）",
+    "単相2線は v = 2·I·(R·cosθ + X·sinθ)"
+  ],
+  "hints": [
+    "三相3線は √3、単相2線は 2",
+    "力率角 θ で R は cosθ、X は sinθ",
+    "√3≒1.73"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "34",
+      "correct": false,
+      "explanation": "誤り: √3（線間換算）を掛け忘れた"
+    },
+    {
+      "choice": "58.82",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "62.28",
+      "correct": false,
+      "explanation": "誤り: R と X（cosθ と sinθ）を取り違えた"
+    },
+    {
+      "choice": "68",
+      "correct": false,
+      "explanation": "誤り: 単相2線式の係数 2 を使った（三相3線式は √3）"
+    }
+  ],
+  "related_topics": [
+    "単相線路の電圧降下",
+    "電力損失"
+  ],
+  "prerequisites": [
+    "三相交流電力",
+    "単相線路の電圧降下"
+  ],
+  "estimated_time_sec": 150,
+  "cognitive_level": "apply"
+}

@@ -1,0 +1,122 @@
+{
+  "id": "T-0021",
+  "exam": "denken2_secondary",
+  "subject": "機械制御",
+  "topic": "自動制御の安定判別",
+  "format": "multiple_choice",
+  "difficulty": 4,
+  "params": {
+    "a": {
+      "value": 3,
+      "unit": "",
+      "realistic_range": [
+        0.1,
+        20
+      ]
+    },
+    "b": {
+      "value": 3,
+      "unit": "",
+      "realistic_range": [
+        0.1,
+        20
+      ]
+    },
+    "c": {
+      "value": 9,
+      "unit": "",
+      "realistic_range": [
+        0.1,
+        20
+      ]
+    }
+  },
+  "statement": "特性方程式 s³ + 3s² + 3s + 9 = 0 で表される制御系の安定性を、ラウス＝フルビッツの安定判別により評価せよ。",
+  "choices": [
+    "安定（全係数が正、かつ a·b > c を満たす）",
+    "不安定（a·b < c によりラウス表第1列に符号変化が生じる）",
+    "不安定（係数に負または零があり、安定の必要条件を満たさない）",
+    "安定限界（a·b = c で、s 平面の虚軸上に極をもつ）"
+  ],
+  "answer": "安定限界（a·b = c で、s 平面の虚軸上に極をもつ）",
+  "solution": [
+    "3次系の安定条件: 全係数が正、かつ a·b > c",
+    "a·b = 3×3 = 9、c = 9",
+    "a·b=c であるから、判定結果は次のとおり",
+    "安定限界（a·b = c で、s 平面の虚軸上に極をもつ）"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "安定（全係数が正、かつ a·b > c を満たす）"
+  },
+  "status": "validated",
+  "tags": [
+    "機械制御",
+    "二次試験",
+    "自動制御",
+    "安定判別",
+    "ラウス"
+  ],
+  "learning_objectives": [
+    "3次系の特性方程式からラウス＝フルビッツ条件で安定性を判別できる"
+  ],
+  "formulas": [
+    "3次 s³+as²+bs+c: 安定 ⇔ a,b,c>0 かつ ab>c",
+    "ラウス表第1列の符号"
+  ],
+  "hints": [
+    "まず全係数の符号（必要条件）",
+    "3次は ab>c が決め手",
+    "ab=c は安定限界（持続振動）"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "安定（全係数が正、かつ a·b > c を満たす）",
+      "correct": false,
+      "explanation": "誤り: a·b>c かつ全係数正のときの結論。この係数では成り立たない"
+    },
+    {
+      "choice": "不安定（a·b < c によりラウス表第1列に符号変化が生じる）",
+      "correct": false,
+      "explanation": "誤り: a·b<c のときの結論。この係数には当てはまらない"
+    },
+    {
+      "choice": "不安定（係数に負または零があり、安定の必要条件を満たさない）",
+      "correct": false,
+      "explanation": "誤り: 係数に負・零があるときの結論。本問は全係数正"
+    },
+    {
+      "choice": "安定限界（a·b = c で、s 平面の虚軸上に極をもつ）",
+      "correct": true,
+      "explanation": "正解。"
+    }
+  ],
+  "related_topics": [
+    "自動制御（伝達関数・ブロック線図）",
+    "状態方程式"
+  ],
+  "prerequisites": [
+    "自動制御（伝達関数・ブロック線図）"
+  ],
+  "estimated_time_sec": 420,
+  "cognitive_level": "analyze",
+  "references": [
+    {
+      "label": "ラウス・フルビッツの安定判別",
+      "article": "機械・制御（二次）頻出テーマ"
+    }
+  ]
+}

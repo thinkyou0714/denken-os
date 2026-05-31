@@ -13,6 +13,7 @@
     "export:vault": "tsx scripts/export-vault.ts",
     "build:web": "tsx scripts/build-web.ts",
     "build:problems": "tsx scripts/build-problems.ts",
+    "build:seeds": "tsx scripts/seed-from-templates.ts",
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
     "validate:data": "tsx scripts/validate-problems.ts",
     "coverage:syllabus": "tsx scripts/syllabus-coverage.ts",

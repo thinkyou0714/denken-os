@@ -1,0 +1,106 @@
+{
+  "id": "T-0010",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "オームの法則",
+  "format": "multiple_choice",
+  "difficulty": 1,
+  "params": {
+    "current": {
+      "value": 20,
+      "unit": "A",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    },
+    "resistance": {
+      "value": 5,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        1000
+      ]
+    }
+  },
+  "statement": "抵抗 5Ω に電流 20A が流れているとき、抵抗の端子電圧 V〔V〕は?",
+  "choices": [
+    "0.25",
+    "4",
+    "25",
+    "100"
+  ],
+  "answer": "100",
+  "solution": [
+    "オームの法則 V = I·R",
+    "= 20 × 5",
+    "V = 100 V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "4"
+  },
+  "status": "validated",
+  "tags": [
+    "理論",
+    "直流回路",
+    "オームの法則"
+  ],
+  "learning_objectives": [
+    "オームの法則で電圧・電流・抵抗を相互に求められる"
+  ],
+  "formulas": [
+    "V = I·R",
+    "I = V/R",
+    "R = V/I"
+  ],
+  "hints": [
+    "V・I・R の三角形（V を I と R で割る/掛ける）",
+    "求めるのは電圧なので掛け算",
+    "単位は V"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "0.25",
+      "correct": false,
+      "explanation": "誤り: V=R/I と分母分子を逆にした"
+    },
+    {
+      "choice": "4",
+      "correct": false,
+      "explanation": "誤り: V=IR を V=I/R と取り違えた（除算方向の誤り）"
+    },
+    {
+      "choice": "25",
+      "correct": false,
+      "explanation": "誤り: 電流と抵抗を加算した（単位の異なる量の誤加算）"
+    },
+    {
+      "choice": "100",
+      "correct": true,
+      "explanation": "正解。"
+    }
+  ],
+  "related_topics": [
+    "直並列合成抵抗",
+    "分圧の法則"
+  ],
+  "prerequisites": [
+    "電圧・電流・抵抗の定義"
+  ],
+  "estimated_time_sec": 60,
+  "cognitive_level": "apply"
+}

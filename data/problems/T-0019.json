@@ -1,0 +1,123 @@
+{
+  "id": "T-0019",
+  "exam": "denken3",
+  "subject": "法規",
+  "topic": "支線の張力",
+  "format": "multiple_choice",
+  "difficulty": 3,
+  "params": {
+    "horizontal_tension": {
+      "value": 1200,
+      "unit": "N",
+      "realistic_range": [
+        100,
+        50000
+      ]
+    },
+    "pole_height": {
+      "value": 4,
+      "unit": "m",
+      "realistic_range": [
+        1,
+        30
+      ]
+    },
+    "horizontal_distance": {
+      "value": 3,
+      "unit": "m",
+      "realistic_range": [
+        1,
+        30
+      ]
+    }
+  },
+  "statement": "高さ 4m の電柱頂部に水平張力 1200N が作用する。頂部と地上の点（水平距離 3m）を結ぶ支線で支える。支線の長さは √(4²+3²)=5m である。支線の張力 T〔N〕は?",
+  "choices": [
+    "720",
+    "1200",
+    "1500",
+    "2000"
+  ],
+  "answer": "2000",
+  "solution": [
+    "支線長 ℓ=√(h²+d²)=5m",
+    "水平方向のつり合い T·(d/ℓ)=P より T = P·ℓ/d",
+    "= 1200×5/3",
+    "T = 2000 N"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "720"
+  },
+  "status": "validated",
+  "tags": [
+    "法規",
+    "電技解釈",
+    "支線",
+    "機械的強度"
+  ],
+  "learning_objectives": [
+    "幾何と力のつり合いから支線張力を求められる"
+  ],
+  "formulas": [
+    "T = P·ℓ/d",
+    "ℓ=√(h²+d²)",
+    "水平分力 T·d/ℓ = P"
+  ],
+  "hints": [
+    "支線長 ℓ は三平方の定理",
+    "水平分力で電線張力を支える",
+    "T = P × (斜辺/水平距離)"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "720",
+      "correct": false,
+      "explanation": "誤り: 分力比を逆数にした（張力は ℓ/d 倍。d/ℓ ではない）"
+    },
+    {
+      "choice": "1200",
+      "correct": false,
+      "explanation": "誤り: 支線の傾斜（幾何）を無視し、水平張力をそのまま支線張力とした"
+    },
+    {
+      "choice": "1500",
+      "correct": false,
+      "explanation": "誤り: 水平距離 d でなく高さ h で割った"
+    },
+    {
+      "choice": "2000",
+      "correct": true,
+      "explanation": "正解。"
+    }
+  ],
+  "related_topics": [
+    "風圧荷重",
+    "架空電線のたるみ（弛度）"
+  ],
+  "prerequisites": [
+    "風圧荷重",
+    "三平方の定理"
+  ],
+  "estimated_time_sec": 180,
+  "cognitive_level": "apply",
+  "references": [
+    {
+      "label": "電気設備技術基準の解釈 第61条",
+      "article": "支線の施設"
+    }
+  ]
+}
