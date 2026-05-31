@@ -88,6 +88,7 @@
     "related_topics": { "type": "array", "items": { "type": "string" }, "description": "関連論点（推奨出題/知識グラフ）" },
     "prerequisites": { "type": "array", "items": { "type": "string" }, "description": "前提となる論点" },
     "estimated_time_sec": { "type": "integer", "minimum": 1, "description": "想定解答時間（秒）。ペース配分練習に使用" },
+    "cognitive_level": { "type": "string", "enum": ["remember", "understand", "apply", "analyze"], "description": "認知レベル（Bloom改訂版の下位4段, QTI/item-bankメタ標準）" },
     "numeric": {
       "type": "object",
       "description": "数値採点の許容誤差と単位（有効数字差・丸め差の吸収）",

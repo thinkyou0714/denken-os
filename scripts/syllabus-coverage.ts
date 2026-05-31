@@ -19,14 +19,14 @@ const ROOT = join(__dirname, "..");
 
 /** 科目別の最小カバー論点数（これを下回ると CI 失敗）。現状値から余裕をもたせた床。 */
 const MIN_BY_SUBJECT: Record<Subject, number> = {
-  理論: 6,
-  電力: 6,
-  機械: 5,
-  法規: 3,
-  機械制御: 1,
-  電力管理: 1,
+  理論: 18,
+  電力: 13,
+  機械: 14,
+  法規: 9,
+  機械制御: 3,
+  電力管理: 5,
 };
-const MIN_TOTAL = 24;
+const MIN_TOTAL = 62;
 
 function dataTopics(): string[] {
   const dir = join(ROOT, "data/problems");

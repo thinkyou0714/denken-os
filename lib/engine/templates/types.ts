@@ -7,7 +7,7 @@
  *   { 正解, 各量, 誤答選択肢, 制約 }
  * を返す。LLM は narrate.ts で「言い回し」だけを担当する。
  */
-import type { Exam, ProblemFormat, Subject } from "../schema.js";
+import type { CognitiveLevel, Exam, ProblemFormat, Subject } from "../schema.js";
 
 export interface ParamSpec {
   unit?: string;
@@ -69,6 +69,8 @@ export interface TemplateMeta {
   references?: { label: string; article?: string; url?: string }[];
   /** descriptive(記述)の採点観点（自己採点用）。 */
   gradingPoints?: string[];
+  /** 認知レベル（Bloom/QTI, 14-best-practices）。既定は apply 想定。 */
+  cognitiveLevel?: CognitiveLevel;
 }
 
 export interface Template {

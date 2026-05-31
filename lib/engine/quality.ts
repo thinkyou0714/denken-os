@@ -63,6 +63,20 @@ export function distractorSanity(answer: number, distractor: number): "ok" | "ex
   return "ok";
 }
 
+/**
+ * 難易度校正のヒント（14-best-practices §難易度校正）。
+ * 研究上、item-writer は難易度を読み違えやすい（Bloom と実測 difficulty の相関は弱い）。
+ * 出題形式と解法ステップ数から妥当な difficulty の「帯」を返し、実測正答率での補正前の
+ * sanity（情報レベル）に用いる。記述(descriptive)と多段解法は難度が上がる。
+ */
+export function expectedDifficultyBand(p: Problem): [number, number] {
+  const steps = p.solution?.length ?? 0;
+  if ((p.format ?? "multiple_choice") === "descriptive") return [3, 5];
+  if (steps >= 5) return [3, 5];
+  if (steps >= 3) return [2, 4];
+  return [1, 3];
+}
+
 /** 1 問の品質を評価する。 */
 export function assessProblem(p: Problem): QualityResult {
   const findings: QualityFinding[] = [];
@@ -124,6 +138,15 @@ export function assessProblem(p: Problem): QualityResult {
   if (!p.hints || p.hints.length === 0) add("warn", "no_hints", "ヒント(hints)がありません");
   if (!p.tags || p.tags.length === 0) add("warn", "no_tags", "タグ(tags)がありません");
   if (!p.estimated_time_sec) add("info", "no_estimated_time", "想定解答時間(estimated_time_sec)がありません");
+  if (!p.cognitive_level) add("info", "no_cognitive_level", "認知レベル(cognitive_level)がありません");
+  // 難易度校正（情報レベル。スコアは下げない＝実測正答率での補正が本筋）。
+  const [dlo, dhi] = expectedDifficultyBand(p);
+  if (p.difficulty < dlo || p.difficulty > dhi)
+    add(
+      "info",
+      "difficulty_off_band",
+      `difficulty=${p.difficulty} が想定帯[${dlo}-${dhi}]の外です（形式/解法ステップ基準）`,
+    );
   if (p.solution.length < 2) add("warn", "thin_solution", "解説ステップが少なすぎます");
 
   const errors = findings.filter((f) => f.severity === "error").length;

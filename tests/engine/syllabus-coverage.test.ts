@@ -10,12 +10,12 @@ import { computeCoverage, SYLLABUS } from "../../lib/engine/syllabus.js";
 import { listTopics } from "../../lib/engine/templates/index.js";
 
 const MIN_BY_SUBJECT: Record<Subject, number> = {
-  理論: 6,
-  電力: 6,
-  機械: 5,
-  法規: 3,
-  機械制御: 1,
-  電力管理: 1,
+  理論: 18,
+  電力: 13,
+  機械: 14,
+  法規: 9,
+  機械制御: 3,
+  電力管理: 5,
 };
 
 describe("シラバス被覆", () => {

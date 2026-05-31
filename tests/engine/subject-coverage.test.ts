@@ -21,7 +21,7 @@ describe("科目カバレッジ拡充（法規・電力）", () => {
     expect(topics).toContain("B種接地抵抗"); // 法規
     expect(topics).toContain("需要率"); // 電力
     // 拡充により論点数は増加し続ける。退行検知のため下限のみを固定する。
-    expect(topics.length).toBeGreaterThanOrEqual(28);
+    expect(topics.length).toBeGreaterThanOrEqual(60);
   });
 
   it("B種接地抵抗 R=150/Ig を正しく算出（Ig=3 → 50Ω, numeric）", () => {

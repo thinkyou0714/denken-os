@@ -127,6 +127,7 @@ export async function generateOne(
     ...(meta.relatedTopics ? { related_topics: meta.relatedTopics } : {}),
     ...(meta.prerequisites ? { prerequisites: meta.prerequisites } : {}),
     ...(meta.estimatedTimeSec ? { estimated_time_sec: meta.estimatedTimeSec } : {}),
+    ...(meta.cognitiveLevel ? { cognitive_level: meta.cognitiveLevel } : {}),
     ...(format === "numeric" && draw.numericTolerance !== undefined
       ? { numeric: { tolerance: draw.numericTolerance, unit: draw.answerUnit } }
       : {}),
