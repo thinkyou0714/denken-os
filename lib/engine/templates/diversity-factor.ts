@@ -6,6 +6,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // 合成最大需要を基準にし、個別和 = 合成最大 × 不等率（整数）になる組で逆算。
@@ -32,7 +33,7 @@ function buildFrom(sumOfMax: number, combinedMax: number): GenerationResult | nu
     answerUnit: "",
     answerText,
     facts: { sumOfMax, combinedMax, df },
-    numericTolerance: 0.01,
+    numericTolerance: gradingTolerance(df),
     defaultStatement:
       `複数の負荷の個別最大需要の合計が ${sumOfMax}kW、合成最大需要が ${combinedMax}kW である。` + `不等率を求めよ。`,
     defaultSolution: [

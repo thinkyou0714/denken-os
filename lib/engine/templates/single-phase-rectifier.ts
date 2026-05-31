@@ -12,7 +12,7 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import type { GenerationResult, Template } from "./types.js";
 
-const E_SET: ReadonlyArray<number> = [100, 110, 140, 200, 210, 220];
+const E_SET: ReadonlyArray<number> = [24, 48, 80, 100, 105, 110, 140, 200, 210, 220, 240, 277, 400];
 
 function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
   return arr[Math.floor(rng() * arr.length)]!;

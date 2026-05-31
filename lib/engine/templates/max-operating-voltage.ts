@@ -7,6 +7,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const VN_SET: ReadonlyArray<number> = [1100, 2200, 3300, 6600, 11000, 22000, 33000, 66000];
@@ -30,7 +31,7 @@ function buildFrom(Vn: number): GenerationResult | null {
     answerUnit: "V",
     answerText,
     facts: { Vn, Vm },
-    numericTolerance: 1,
+    numericTolerance: gradingTolerance(Vm),
     defaultStatement: `公称電圧 ${Vn}V の電路の最大使用電圧 V_m〔V〕を求めよ。（V_m=V_n×1.15/1.1）`,
     defaultSolution: [`V_m = V_n × 1.15/1.1`, `= ${Vn} × 1.15/1.1`, `V_m = ${answerText} V`],
     physicallyValid: true,

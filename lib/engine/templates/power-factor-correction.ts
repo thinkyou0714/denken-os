@@ -8,6 +8,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 function tanFromCos(cos: number): number {
@@ -47,7 +48,7 @@ function buildFrom(P: number, cos1: number, cos2: number): GenerationResult | nu
     answerUnit: "kvar",
     answerText,
     facts: { P, cos1, cos2, Qc },
-    numericTolerance: 0.1,
+    numericTolerance: gradingTolerance(Qc),
     defaultStatement:
       `有効電力 ${P}kW の負荷の力率を ${cos1} から ${cos2} に改善したい。` +
       `必要な進相コンデンサの容量 Q_c〔kvar〕を求めよ。`,

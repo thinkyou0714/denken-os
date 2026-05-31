@@ -22,11 +22,12 @@ function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
 function buildFrom(f: number, p: number): GenerationResult | null {
   if (f <= 0 || p <= 0 || p % 2 !== 0) return null; // 極数は偶数
   const Ns = (120 * f) / p; // 正解
-  const half = (60 * f) / p; // ①
-  const polePair = (240 * f) / p; // ②
-  const mult = 120 * f * p; // ③
+  const half = (60 * f) / p; // ① 係数 120→60 取り違え
+  const polePair = (240 * f) / p; // ② 極数でなく極対数 p/2 で割った
+  // ③ 50/60Hz を取り違え（機能する誤答。荒唐無稽な 120·f·p は採用しない: 13/14-best-practices §誤答妥当性）
+  const wrongFreq = (120 * (f === 50 ? 60 : 50)) / p;
 
-  const vals = [Ns, half, polePair, mult];
+  const vals = [Ns, half, polePair, wrongFreq];
   if (!vals.every((v) => isCleanAnswer(v))) return null;
   const answerText = formatClean(Ns);
   const texts = new Set(vals.map((v) => formatClean(v)));
@@ -45,7 +46,7 @@ function buildFrom(f: number, p: number): GenerationResult | null {
     distractors: [
       { text: formatClean(half), reason: "係数 120 を 60 と取り違えた" },
       { text: formatClean(polePair), reason: "極数 p でなく極対数 p/2 で割った" },
-      { text: formatClean(mult), reason: "p で割るべきところを掛けた" },
+      { text: formatClean(wrongFreq), reason: `周波数を ${f === 50 ? 60 : 50}Hz と取り違えた` },
     ],
     likelyWrongChoice: formatClean(half),
     facts: { f, p, Ns },

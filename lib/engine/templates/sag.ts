@@ -7,6 +7,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const W_SET: ReadonlyArray<number> = [10, 16, 20, 24, 30, 40];
@@ -34,7 +35,7 @@ function buildFrom(W: number, S: number, T: number): GenerationResult | null {
     answerUnit: "m",
     answerText,
     facts: { W, S, T, D },
-    numericTolerance: 0.05,
+    numericTolerance: gradingTolerance(D),
     defaultStatement:
       `径間 ${S}m、電線の単位長あたり荷重 ${W}N/m、水平張力 ${T}N の架空電線がある。` +
       `たるみ（弛度）D〔m〕を求めよ。（D=WS²/8T）`,

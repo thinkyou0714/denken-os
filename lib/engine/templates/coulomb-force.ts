@@ -14,18 +14,24 @@ import { formatClean, isCleanAnswer } from "../clean.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const K = 9e9;
-// (q1[µC], q2[µC], r[m]) の母集合（F が綺麗な N になる組）。
+// (q1[µC], q2[µC], r[m]) の母集合。
+// r=1 では F·r=F、r=2 では F·r=2F と誤答が衝突するため r≥3 を採用（綺麗な N になる組）。
 const SETS: ReadonlyArray<readonly [number, number, number]> = [
   [10, 10, 3],
   [10, 20, 3],
   [20, 20, 3],
-  [10, 10, 1],
   [30, 10, 3],
-  [10, 40, 2],
+  [10, 30, 3],
+  [10, 60, 3],
+  [30, 20, 3],
+  [40, 20, 3],
   [20, 30, 3],
-  [40, 10, 2],
   [10, 90, 3],
-  [50, 20, 1],
+  [60, 10, 3],
+  [50, 10, 5],
+  [10, 50, 5],
+  [20, 50, 5],
+  [50, 20, 5],
 ];
 
 function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {

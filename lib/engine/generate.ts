@@ -150,6 +150,11 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
 
   const out: Problem[] = [];
   let n = start;
+  // 重複（同一 params/answer）を避けるためのベストエフォート de-dup。
+  // 14-best-practices §重複: 「15問」に同じ問題が混ざる品質劣化を防ぐ。
+  // 母集合を出し切ったら（staleTries が上限超）重複も許して count を満たす（件数は従来どおり）。
+  const seen = new Set<string>();
+  let staleTries = 0;
   // 全体としても上限を設け、無限ループを防ぐ。
   const globalCap = opts.count * maxAttempts;
   for (let tries = 0; out.length < opts.count && tries < globalCap; tries++) {
@@ -162,10 +167,17 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
       maxAttempts,
       minConfidence: opts.minConfidence,
     });
-    if (p) {
-      out.push(p);
-      n++;
+    if (!p) continue;
+    const sig = [p.topic, p.answer, JSON.stringify(p.params ?? {})].join("|");
+    const exhausted = staleTries >= maxAttempts; // 母集合を出し切ったとみなす
+    if (seen.has(sig) && !exhausted) {
+      staleTries++;
+      continue; // 重複はスキップして別の draw を試す
     }
+    seen.add(sig);
+    staleTries = 0;
+    out.push(p);
+    n++;
   }
   return out;
 }

@@ -6,6 +6,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。負荷率 ≤ 100% を担保。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const MAX_SET: ReadonlyArray<number> = [100, 120, 150, 200, 250, 400, 500];
@@ -32,7 +33,7 @@ function buildFrom(maxDemand: number, avgDemand: number): GenerationResult | nul
     answerUnit: "%",
     answerText,
     facts: { maxDemand, avgDemand, lf },
-    numericTolerance: 0.1,
+    numericTolerance: gradingTolerance(lf),
     defaultStatement:
       `ある需要家の最大需要電力が ${maxDemand}kW、平均需要電力が ${avgDemand}kW である。` + `負荷率〔%〕を求めよ。`,
     defaultSolution: [

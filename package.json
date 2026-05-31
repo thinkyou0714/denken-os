@@ -15,6 +15,7 @@
     "typecheck:web": "tsc -p web/tsconfig.json --noEmit",
     "validate:data": "tsx scripts/validate-problems.ts",
     "coverage:syllabus": "tsx scripts/syllabus-coverage.ts",
+    "quality:problems": "tsx scripts/quality-report.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

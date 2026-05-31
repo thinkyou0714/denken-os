@@ -3,6 +3,7 @@
  *   W = ½·C·V²  〔J〕   (C は静電容量, V は電圧)
  * 二次（記述/計算）寄りの「選択肢なし・数値回答」形式のデモ。正解はコードで算出。
  */
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const CAP_UF = [1, 2, 4, 5, 10, 20, 47, 100]; // μF
@@ -36,6 +37,7 @@ function buildFrom(C_uF: number, V: number): GenerationResult | null {
     answerValue: W,
     answerUnit: "mJ",
     answerText: text,
+    numericTolerance: gradingTolerance(W),
     facts: { C_uF, V, W_joule: W },
     defaultStatement: `静電容量${C_uF}μFのコンデンサに${V}Vの電圧を加えた。` + `蓄えられる静電エネルギーW〔mJ〕は?`,
     defaultSolution: [`W=½·C·V² で算出する`, `W=0.5×${C_uF}×10⁻⁶×${V}²`, `W=${text}mJ`],

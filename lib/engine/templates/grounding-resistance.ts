@@ -5,6 +5,7 @@
  * 正解はコードで算出（出典: 電気設備技術基準・電験法規の標準式）。
  */
 import { isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // 150/Ig が綺麗な値になる 1線地絡電流〔A〕。
@@ -25,6 +26,7 @@ function buildFrom(ig: number): GenerationResult | null {
     answerValue: R,
     answerUnit: "Ω",
     answerText,
+    numericTolerance: gradingTolerance(R),
     facts: { Ig: ig, R },
     defaultStatement:
       `高圧電路の1線地絡電流が${ig}Aである。` + `B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。`,

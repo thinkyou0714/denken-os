@@ -7,6 +7,7 @@
  * numeric 形式（選択肢なし・許容誤差つき）。綺麗な η になる draw のみ採用。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { gradingTolerance } from "../quality.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const POUT: ReadonlyArray<number> = [90, 95, 180, 190, 270, 380, 450, 475, 950];
@@ -34,7 +35,7 @@ function buildFrom(Pout: number, Pi: number, Pc: number): GenerationResult | nul
     answerUnit: "%",
     answerText,
     facts: { Pout, Pi, Pc, eta },
-    numericTolerance: 0.1,
+    numericTolerance: gradingTolerance(eta),
     defaultStatement:
       `出力 ${Pout}kW で運転中の変圧器の鉄損が ${Pi}kW、銅損が ${Pc}kW である。` + `このときの効率 η〔%〕を求めよ。`,
     defaultSolution: [
