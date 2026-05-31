@@ -1,0 +1,108 @@
+{
+  "id": "T-0020",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "対称座標法による故障計算",
+  "format": "descriptive",
+  "difficulty": 4,
+  "params": {
+    "phase_emf": {
+      "value": 190,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        100000
+      ]
+    },
+    "z1": {
+      "value": 1,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    },
+    "z2": {
+      "value": 1,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    },
+    "z0": {
+      "value": 1,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        200
+      ]
+    }
+  },
+  "statement": "相起電力 190V、正相・逆相・零相インピーダンスがそれぞれ Z₁=1Ω、Z₂=1Ω、Z₀=1Ω の三相系統で一線地絡が生じた。対称座標法により地絡電流 I_g〔A〕を、導出過程とともに求めよ。",
+  "answer": "190",
+  "solution": [
+    "一線地絡では I₁=I₂=I₀、I_g=3I₀=3E/(Z₁+Z₂+Z₀)",
+    "= 3×190/(1+1+1)",
+    "I_g = 190 A"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated",
+  "tags": [
+    "電力管理",
+    "二次試験",
+    "対称座標法",
+    "故障計算",
+    "地絡"
+  ],
+  "learning_objectives": [
+    "対称座標法で各故障様相の電流を求め、正相・逆相・零相の役割を説明できる"
+  ],
+  "formulas": [
+    "一線地絡 I_g=3E/(Z₁+Z₂+Z₀)",
+    "三相短絡 I_s=E/Z₁",
+    "線間短絡 I=√3E/(Z₁+Z₂)"
+  ],
+  "hints": [
+    "一線地絡は3成分が直列に和",
+    "I_g=3I₀",
+    "三相短絡は正相のみ Z₁"
+  ],
+  "related_topics": [
+    "三相短絡容量",
+    "中性点接地と地絡"
+  ],
+  "prerequisites": [
+    "三相交流電力",
+    "パーセントインピーダンスと短絡電流"
+  ],
+  "estimated_time_sec": 600,
+  "cognitive_level": "analyze",
+  "references": [
+    {
+      "label": "対称座標法による不平衡故障計算",
+      "article": "電力・管理（二次）頻出テーマ"
+    }
+  ],
+  "grading_points": [
+    "一線地絡で I_g=3I₀=3E/(Z₁+Z₂+Z₀) を正しく立式（4点）",
+    "正相・逆相・零相インピーダンスの直列和を理解（2点）",
+    "数値代入と計算が正しい（2点）",
+    "単位 A を明記（1点）"
+  ]
+}

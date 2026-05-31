@@ -7,7 +7,7 @@
   "$comment": "正解が選択肢のいずれかと一致する制約(multiple_choice)は、他フィールド参照のため標準JSON Schema draft-07では表現できない。03-quality-pipeline の投稿前チェックリストと生成ツール側で担保する。",
   "properties": {
     "id": { "type": "string", "description": "連番ID 例: T-0127" },
-    "exam": { "type": "string", "enum": ["denken2_primary", "denken2_secondary", "denken3"], "description": "対象試験区分" },
+    "exam": { "type": "string", "enum": ["denken1_primary", "denken1_secondary", "denken2_primary", "denken2_secondary", "denken3"], "description": "対象試験区分（電験一種〜三種）" },
     "subject": { "type": "string", "enum": ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] },
     "topic": { "type": "string", "description": "論点 例: 三相交流電力" },
     "format": { "type": "string", "enum": ["multiple_choice", "numeric", "descriptive"], "description": "記述(descriptive)は二次の主戦場" },
@@ -63,10 +63,79 @@
       "properties": {
         "answered": { "type": "integer", "minimum": 0 },
         "correct_rate": { "type": "number", "minimum": 0, "maximum": 1 },
-        "common_wrong_choice": { "type": "string" }
+        "common_wrong_choice": { "type": "string" },
+        "discrimination": { "type": "number", "minimum": -1, "maximum": 1, "description": "識別力 D（上位群-下位群の正答率差）" }
       }
     },
-    "status": { "type": "string", "enum": ["draft", "validated", "published", "retracted"], "description": "validated/published は検証4項目が全 true のときのみ。誤り発覚時は retracted" }
+    "status": { "type": "string", "enum": ["draft", "validated", "published", "retracted"], "description": "validated/published は検証4項目が全 true のときのみ。誤り発覚時は retracted" },
+    "tags": { "type": "array", "items": { "type": "string" }, "description": "横断検索・関連出題・弱点クラスタリング用タグ" },
+    "learning_objectives": { "type": "array", "items": { "type": "string" }, "description": "この問題が測る到達目標（逆向き設計）" },
+    "formulas": { "type": "array", "items": { "type": "string" }, "description": "使用する主要公式（暗記カード/逆引き用）" },
+    "hints": { "type": "array", "items": { "type": "string" }, "description": "答えを見る前の段階的ヒント（足場かけ）" },
+    "choice_explanations": {
+      "type": "array",
+      "description": "各選択肢の誤答解説。13-best-practices §18 = 最大の学習資産",
+      "items": {
+        "type": "object",
+        "required": ["choice", "correct", "explanation"],
+        "properties": {
+          "choice": { "type": "string" },
+          "correct": { "type": "boolean" },
+          "explanation": { "type": "string" }
+        }
+      }
+    },
+    "related_topics": { "type": "array", "items": { "type": "string" }, "description": "関連論点（推奨出題/知識グラフ）" },
+    "prerequisites": { "type": "array", "items": { "type": "string" }, "description": "前提となる論点" },
+    "estimated_time_sec": { "type": "integer", "minimum": 1, "description": "想定解答時間（秒）。ペース配分練習に使用" },
+    "cognitive_level": { "type": "string", "enum": ["remember", "understand", "apply", "analyze"], "description": "認知レベル（Bloom改訂版の下位4段, QTI/item-bankメタ標準）" },
+    "numeric": {
+      "type": "object",
+      "description": "数値採点の許容誤差と単位（有効数字差・丸め差の吸収）",
+      "required": ["tolerance"],
+      "properties": {
+        "tolerance": { "type": "number", "minimum": 0 },
+        "unit": { "type": "string" }
+      }
+    },
+    "exam_meta": {
+      "type": "object",
+      "description": "過去問の出典メタ（年度・回・問番号）",
+      "properties": {
+        "year": { "type": "integer" },
+        "era": { "type": "string" },
+        "session": { "type": "string" },
+        "question_no": { "type": "string" }
+      }
+    },
+    "references": {
+      "type": "array",
+      "description": "法令条文などの根拠参照（法規で特に重要）",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string" },
+          "article": { "type": "string" },
+          "url": { "type": "string" }
+        }
+      }
+    },
+    "grading_points": { "type": "array", "items": { "type": "string" }, "description": "descriptive(記述)の採点観点（自己採点用）" },
+    "sub_questions": {
+      "type": "array",
+      "description": "B問題の小問（1問内の小問構成）",
+      "items": {
+        "type": "object",
+        "required": ["statement", "answer"],
+        "properties": {
+          "statement": { "type": "string" },
+          "choices": { "type": "array", "items": { "type": "string" } },
+          "answer": { "type": "string" },
+          "solution": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
   },
   "allOf": [
     {

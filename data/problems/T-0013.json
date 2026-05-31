@@ -1,0 +1,100 @@
+{
+  "id": "T-0013",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "RC・RL過渡現象",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "source_voltage": {
+      "value": 20,
+      "unit": "V",
+      "realistic_range": [
+        1,
+        1000
+      ]
+    }
+  },
+  "statement": "直流電圧 20V を、抵抗 R とコンデンサ C の直列回路に印加して充電する。時定数 τ=RC だけ経過した時刻におけるコンデンサ端子電圧 v〔V〕に最も近いのは? （e⁻¹≒0.37）",
+  "choices": [
+    "7.4",
+    "10",
+    "12.6",
+    "20"
+  ],
+  "answer": "12.6",
+  "solution": [
+    "v(t) = E(1 − e^(−t/τ))",
+    "t=τ で v = E(1 − e⁻¹) ≒ E×0.63 = 20×0.63",
+    "v ≒ 12.6 V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "7.4"
+  },
+  "status": "validated",
+  "tags": [
+    "理論",
+    "過渡現象",
+    "時定数",
+    "RC回路"
+  ],
+  "learning_objectives": [
+    "時定数の物理的意味（63%到達）を理解し充電電圧を見積もれる"
+  ],
+  "formulas": [
+    "v(t)=E(1−e^(−t/τ))",
+    "τ=RC（RC回路）",
+    "τ=L/R（RL回路）"
+  ],
+  "hints": [
+    "1τ で約63%、5τ でほぼ定常",
+    "充電は (1−e⁻¹)、放電は e⁻¹(=37%)",
+    "e⁻¹≒0.37"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "7.4",
+      "correct": false,
+      "explanation": "誤り: 時定数 τ で充電は約63%。残り37%（放電側）と取り違えた"
+    },
+    {
+      "choice": "10",
+      "correct": false,
+      "explanation": "誤り: 時定数で半分(50%)に達すると誤認した"
+    },
+    {
+      "choice": "12.6",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "20",
+      "correct": false,
+      "explanation": "誤り: 十分時間後の定常値(100%)と混同した"
+    }
+  ],
+  "related_topics": [
+    "直列共振",
+    "コンデンサの静電エネルギー"
+  ],
+  "prerequisites": [
+    "コンデンサの静電エネルギー",
+    "指数関数"
+  ],
+  "estimated_time_sec": 120,
+  "cognitive_level": "understand"
+}

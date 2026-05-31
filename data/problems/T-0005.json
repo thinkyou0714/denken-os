@@ -1,0 +1,46 @@
+{
+  "id": "T-0005",
+  "exam": "denken3",
+  "subject": "法規",
+  "topic": "絶縁耐力試験電圧",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "max_operating_voltage": { "value": 6900, "unit": "V", "realistic_range": [500, 7000] }
+  },
+  "statement": "最大使用電圧6900V（7000V以下）の電路の絶縁耐力試験を行う。交流試験電圧〔V〕として正しいものは? （電技解釈 第15条）",
+  "choices": ["6900", "8625", "10350", "13800"],
+  "answer": "10350",
+  "solution": [
+    "7000V以下の電路: 試験電圧 = 最大使用電圧 × 1.5",
+    "= 6900 × 1.5",
+    "試験電圧 = 10350V（連続10分間印加）"
+  ],
+  "tags": ["法規", "電技解釈", "絶縁耐力", "試験電圧"],
+  "learning_objectives": ["電圧区分に応じた絶縁耐力試験の試験電圧倍率を選べる"],
+  "formulas": ["7000V以下: 試験電圧 = 最大使用電圧 × 1.5（最低500V）"],
+  "hints": ["7000V以下は 1.5 倍", "10分間連続印加", "最大使用電圧を基準にする"],
+  "choice_explanations": [
+    { "choice": "6900", "correct": false, "explanation": "誤り: 倍率の掛け忘れ（最大使用電圧そのまま）" },
+    { "choice": "8625", "correct": false, "explanation": "誤り: 倍率を 1.25 と取り違えた（7000V以下は 1.5 倍）" },
+    { "choice": "10350", "correct": true, "explanation": "正解。6900 × 1.5 = 10350V" },
+    { "choice": "13800", "correct": false, "explanation": "誤り: 別区分の倍率 2 倍と混同した" }
+  ],
+  "related_topics": ["最大使用電圧", "低圧電路の絶縁抵抗"],
+  "prerequisites": ["最大使用電圧"],
+  "estimated_time_sec": 120,
+  "references": [
+    { "label": "電気設備技術基準の解釈 第15条", "article": "電技解釈 第15条" }
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.98
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "8625" },
+  "status": "validated"
+}

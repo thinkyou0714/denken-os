@@ -1,0 +1,106 @@
+{
+  "id": "T-0017",
+  "exam": "denken3",
+  "subject": "機械",
+  "topic": "照度計算（逆二乗則）",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "luminous_intensity": {
+      "value": 2500,
+      "unit": "cd",
+      "realistic_range": [
+        10,
+        10000
+      ]
+    },
+    "distance_m": {
+      "value": 5,
+      "unit": "m",
+      "realistic_range": [
+        0.5,
+        20
+      ]
+    }
+  },
+  "statement": "光度 2500cd の点光源の直下 5m の水平面における法線照度 E〔lx〕は?",
+  "choices": [
+    "25",
+    "100",
+    "200",
+    "500"
+  ],
+  "answer": "100",
+  "solution": [
+    "逆二乗則 E = I/r²",
+    "= 2500/5²",
+    "E = 100 lx"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "500"
+  },
+  "status": "validated",
+  "tags": [
+    "機械",
+    "照明",
+    "照度",
+    "逆二乗則"
+  ],
+  "learning_objectives": [
+    "点光源の照度を距離の逆二乗則で求められる"
+  ],
+  "formulas": [
+    "E = I/r² 〔lx〕（法線照度）",
+    "E_h = (I/r²)·cosθ（水平面照度）"
+  ],
+  "hints": [
+    "照度は距離の二乗に反比例",
+    "距離2倍で照度1/4",
+    "光源直下は法線照度"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "25",
+      "correct": false,
+      "explanation": "誤り: 距離を 2 倍に読み違えた（E∝1/r² なので 1/4）"
+    },
+    {
+      "choice": "100",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "200",
+      "correct": false,
+      "explanation": "誤り: 係数を 2 倍にした"
+    },
+    {
+      "choice": "500",
+      "correct": false,
+      "explanation": "誤り: 距離の二乗を忘れ、r で割った（照度は距離の逆二乗）"
+    }
+  ],
+  "related_topics": [
+    "電界と電位",
+    "電熱（必要電力量）"
+  ],
+  "prerequisites": [
+    "逆二乗則"
+  ],
+  "estimated_time_sec": 90,
+  "cognitive_level": "apply"
+}

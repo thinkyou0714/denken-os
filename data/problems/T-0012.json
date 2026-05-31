@@ -1,0 +1,114 @@
+{
+  "id": "T-0012",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "電磁力",
+  "format": "multiple_choice",
+  "difficulty": 2,
+  "params": {
+    "flux_density": {
+      "value": 0.5,
+      "unit": "T",
+      "realistic_range": [
+        0.05,
+        3
+      ]
+    },
+    "current": {
+      "value": 4,
+      "unit": "A",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    },
+    "conductor_length": {
+      "value": 3,
+      "unit": "m",
+      "realistic_range": [
+        0.05,
+        10
+      ]
+    }
+  },
+  "statement": "磁束密度 0.5T の一様磁界中に、磁界と直角に置かれた長さ 3m の導体に電流 4A を流した。導体が受ける力 F〔N〕は?",
+  "choices": [
+    "1.5",
+    "2",
+    "6",
+    "12"
+  ],
+  "answer": "6",
+  "solution": [
+    "F = B·I·L",
+    "= 0.5 × 4 × 3",
+    "F = 6 N"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "2"
+  },
+  "status": "validated",
+  "tags": [
+    "理論",
+    "磁気",
+    "電磁力",
+    "フレミング左手の法則"
+  ],
+  "learning_objectives": [
+    "磁界中の通電導体が受ける力の大きさと向きを求められる"
+  ],
+  "formulas": [
+    "F = B·I·L 〔N〕",
+    "F = B·I·L·sinθ（一般）"
+  ],
+  "hints": [
+    "3 量の積 B·I·L",
+    "向きはフレミング左手の法則",
+    "磁界と直角なら sinθ=1"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "1.5",
+      "correct": false,
+      "explanation": "誤り: 電流 I を掛け忘れた"
+    },
+    {
+      "choice": "2",
+      "correct": false,
+      "explanation": "誤り: 導体長 L を掛け忘れた"
+    },
+    {
+      "choice": "6",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "12",
+      "correct": false,
+      "explanation": "誤り: 磁束密度 B を掛け忘れた"
+    }
+  ],
+  "related_topics": [
+    "電磁誘導",
+    "直流電動機の逆起電力"
+  ],
+  "prerequisites": [
+    "磁界（アンペアの法則）"
+  ],
+  "estimated_time_sec": 90,
+  "cognitive_level": "apply"
+}

@@ -1,0 +1,123 @@
+{
+  "id": "T-0011",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "キルヒホッフの法則",
+  "format": "multiple_choice",
+  "difficulty": 3,
+  "params": {
+    "emf1": {
+      "value": 18,
+      "unit": "V",
+      "realistic_range": [
+        1,
+        200
+      ]
+    },
+    "emf2": {
+      "value": 6,
+      "unit": "V",
+      "realistic_range": [
+        1,
+        200
+      ]
+    },
+    "R1": {
+      "value": 2,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    },
+    "R2": {
+      "value": 4,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        100
+      ]
+    }
+  },
+  "statement": "起電力 18V と 6V が互いに逆向きに、抵抗 2Ω と 4Ω とともに 1 つの閉ループを成す。キルヒホッフの電圧則により回路を流れる電流 I〔A〕は?",
+  "choices": [
+    "1",
+    "2",
+    "3",
+    "4"
+  ],
+  "answer": "2",
+  "solution": [
+    "KVL: E1 − E2 = I·(R1+R2)（起電力は逆向きなので差）",
+    "I = (18 − 6)/(2+4)",
+    "I = 2 A"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0,
+    "common_wrong_choice": "4"
+  },
+  "status": "validated",
+  "tags": [
+    "理論",
+    "直流回路",
+    "キルヒホッフの法則",
+    "回路方程式"
+  ],
+  "learning_objectives": [
+    "閉ループに電圧則を適用し、複数起電力回路の電流を求められる"
+  ],
+  "formulas": [
+    "ΣV = 0（電圧則）",
+    "I = (E1−E2)/(R1+R2)"
+  ],
+  "hints": [
+    "起電力の向き（極性）に注意",
+    "逆向きの起電力は差をとる",
+    "電圧則 ΣE = ΣIR"
+  ],
+  "choice_explanations": [
+    {
+      "choice": "1",
+      "correct": false,
+      "explanation": "誤り: もう一方の起電力 E1 を無視した"
+    },
+    {
+      "choice": "2",
+      "correct": true,
+      "explanation": "正解。"
+    },
+    {
+      "choice": "3",
+      "correct": false,
+      "explanation": "誤り: 一方の起電力 E2 を無視した"
+    },
+    {
+      "choice": "4",
+      "correct": false,
+      "explanation": "誤り: 起電力の向きを誤り、E1+E2 として加算した（逆向きなので差）"
+    }
+  ],
+  "related_topics": [
+    "重ね合わせの理",
+    "テブナンの定理"
+  ],
+  "prerequisites": [
+    "オームの法則",
+    "直並列合成抵抗"
+  ],
+  "estimated_time_sec": 150,
+  "cognitive_level": "apply"
+}

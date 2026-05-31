@@ -31,6 +31,30 @@ function makeId(prefix: string, n: number): string {
 }
 
 /**
+ * choices と distractors(reason 付き) から choice_explanations を組み立てる。
+ * 正解には「正解」、誤答にはテンプレートが与えた典型ミスの理由を割り当てる。
+ * multiple_choice 以外・選択肢が無い場合は undefined（付与しない）。
+ */
+function buildChoiceExplanations(
+  format: string,
+  choices: string[] | undefined,
+  answerText: string,
+  distractors: { text: string; reason: string }[] | undefined,
+): { choice: string; correct: boolean; explanation: string }[] | undefined {
+  if (format !== "multiple_choice" || !choices) return undefined;
+  const reasonByText = new Map((distractors ?? []).map((d) => [d.text, d.reason]));
+  return choices.map((c) => {
+    if (c === answerText) return { choice: c, correct: true, explanation: "正解。" };
+    const reason = reasonByText.get(c);
+    return {
+      choice: c,
+      correct: false,
+      explanation: reason ? `誤り: ${reason}` : "誤り（典型的な計算ミスによる値）。",
+    };
+  });
+}
+
+/**
  * テンプレートから1問を生成して Problem を組み立てる。
  * 汚い draw・narrate 数値不整合は null を返す（呼び出し側で再試行/スキップ）。
  */
@@ -67,6 +91,10 @@ export async function generateOne(
 
   const format = draw.format ?? "multiple_choice";
 
+  // [moat] 誤答解説を永続化（13-best-practices §18）: 算出済みの distractor.reason を捨てない。
+  const choiceExplanations = buildChoiceExplanations(format, draw.choices, draw.answerText, draw.distractors);
+  const meta = template.meta ?? {};
+
   const problem: Problem = {
     id: opts.id,
     exam: template.exam,
@@ -90,6 +118,21 @@ export async function generateOne(
     source: { type: opts.source, citation },
     stats: { answered: 0, correct_rate: 0, common_wrong_choice: draw.likelyWrongChoice },
     status: "draft", // human_checked=false のため validated にはできない
+    // --- 教育的メタデータ（存在するものだけ付与）---
+    ...(meta.tags ? { tags: meta.tags } : {}),
+    ...(meta.learningObjectives ? { learning_objectives: meta.learningObjectives } : {}),
+    ...(meta.formulas ? { formulas: meta.formulas } : {}),
+    ...(meta.hints ? { hints: meta.hints } : {}),
+    ...(choiceExplanations ? { choice_explanations: choiceExplanations } : {}),
+    ...(meta.relatedTopics ? { related_topics: meta.relatedTopics } : {}),
+    ...(meta.prerequisites ? { prerequisites: meta.prerequisites } : {}),
+    ...(meta.estimatedTimeSec ? { estimated_time_sec: meta.estimatedTimeSec } : {}),
+    ...(meta.cognitiveLevel ? { cognitive_level: meta.cognitiveLevel } : {}),
+    ...(format === "numeric" && draw.numericTolerance !== undefined
+      ? { numeric: { tolerance: draw.numericTolerance, unit: draw.answerUnit } }
+      : {}),
+    ...(meta.references ? { references: meta.references } : {}),
+    ...(meta.gradingPoints ? { grading_points: meta.gradingPoints } : {}),
   };
 
   // 仕上げに構造+不変条件を検証（answer∈choices 等）。落ちたら破棄。
@@ -108,6 +151,11 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
 
   const out: Problem[] = [];
   let n = start;
+  // 重複（同一 params/answer）を避けるためのベストエフォート de-dup。
+  // 14-best-practices §重複: 「15問」に同じ問題が混ざる品質劣化を防ぐ。
+  // 母集合を出し切ったら（staleTries が上限超）重複も許して count を満たす（件数は従来どおり）。
+  const seen = new Set<string>();
+  let staleTries = 0;
   // 全体としても上限を設け、無限ループを防ぐ。
   const globalCap = opts.count * maxAttempts;
   for (let tries = 0; out.length < opts.count && tries < globalCap; tries++) {
@@ -120,10 +168,17 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
       maxAttempts,
       minConfidence: opts.minConfidence,
     });
-    if (p) {
-      out.push(p);
-      n++;
+    if (!p) continue;
+    const sig = [p.topic, p.answer, JSON.stringify(p.params ?? {})].join("|");
+    const exhausted = staleTries >= maxAttempts; // 母集合を出し切ったとみなす
+    if (seen.has(sig) && !exhausted) {
+      staleTries++;
+      continue; // 重複はスキップして別の draw を試す
     }
+    seen.add(sig);
+    staleTries = 0;
+    out.push(p);
+    n++;
   }
   return out;
 }

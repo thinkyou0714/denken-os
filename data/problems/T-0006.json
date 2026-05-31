@@ -1,0 +1,47 @@
+{
+  "id": "T-0006",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "三相短絡容量",
+  "format": "descriptive",
+  "difficulty": 3,
+  "params": {
+    "base_capacity": { "value": 20, "unit": "MVA", "realistic_range": [1, 1000] },
+    "percent_impedance": { "value": 10, "unit": "%", "realistic_range": [1, 50] }
+  },
+  "statement": "基準容量20MV·A、その基準でのパーセントインピーダンスが %Z=10% の系統がある。この点における三相短絡容量 P_s〔MV·A〕を、導出過程とともに求めよ。",
+  "answer": "200",
+  "solution": [
+    "短絡容量は基準容量と %Z の関係 P_s = P_n × 100/%Z で表される",
+    "P_s = 20 × 100/10",
+    "P_s = 200 MV·A",
+    "（参考: 受電電圧が V のとき短絡電流は I_s = P_s/(√3·V) で換算できる）"
+  ],
+  "tags": ["電力管理", "二次試験", "短絡容量", "パーセントインピーダンス", "故障計算"],
+  "learning_objectives": ["基準容量法で短絡容量を求め、%Z の基準容量換算の意味を説明できる"],
+  "formulas": ["P_s = P_n × 100/%Z 〔MV·A〕", "I_s = P_s/(√3·V)"],
+  "hints": ["%Z は基準容量に対する値", "短絡容量は基準容量を %Z/100 で割る", "電流換算は √3V で割る"],
+  "grading_points": [
+    "短絡容量 P_s = P_n×100/%Z を正しく立式している（5点）",
+    "数値代入と計算が正しい（3点）",
+    "単位 MV·A を明記している（1点）",
+    "短絡電流への換算 I_s=P_s/(√3·V) に言及している（1点・加点）"
+  ],
+  "related_topics": ["%インピーダンスの基準容量換算", "遮断容量", "対称座標法による故障計算"],
+  "prerequisites": ["パーセントインピーダンスと短絡電流", "三相交流電力"],
+  "estimated_time_sec": 600,
+  "references": [
+    { "label": "発変電所の保護・短絡電流計算", "article": "電力・管理（二次）頻出テーマ" }
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.95
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0 },
+  "status": "validated"
+}

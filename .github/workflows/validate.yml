@@ -36,6 +36,12 @@ jobs:
       - name: Validate problem data against schema
         run: npm run validate:data
 
+      - name: Syllabus coverage gate (退行防止)
+        run: npm run coverage:syllabus
+
+      - name: Question quality sanity gate (誤答妥当性・重複)
+        run: npm run quality:problems
+
       - name: Run unit tests
         run: npm test
 

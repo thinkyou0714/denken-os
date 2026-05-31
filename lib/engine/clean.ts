@@ -24,3 +24,14 @@ export function formatKW(watts: number): string {
   if (s.endsWith("0")) s = s.slice(0, -1); // "4.0" / "3.2" / "2.56" / "9.6"
   return s;
 }
+
+/**
+ * 綺麗な数値を最短の小数表記に整形する（末尾0と小数点を落とす）。
+ * 例: 75 -> "75" / 4.60 -> "4.6" / 2.56 -> "2.56" / 0.90 -> "0.9"
+ * 整数なら整数、小数なら最大 maxDecimals 桁で四捨五入後にトリム。
+ */
+export function formatClean(value: number, maxDecimals = 2): string {
+  let s = value.toFixed(maxDecimals);
+  if (s.includes(".")) s = s.replace(/0+$/, "").replace(/\.$/, "");
+  return s;
+}

@@ -1,0 +1,45 @@
+{
+  "id": "T-0004",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "分圧の法則",
+  "format": "multiple_choice",
+  "difficulty": 1,
+  "params": {
+    "emf": { "value": 100, "unit": "V", "realistic_range": [10, 200] },
+    "R1": { "value": 2, "unit": "ohm", "realistic_range": [1, 100] },
+    "R2": { "value": 3, "unit": "ohm", "realistic_range": [1, 100] }
+  },
+  "statement": "起電力100Vの電源に抵抗R1=2Ω と R2=3Ω を直列接続した。R2 の両端電圧 V2〔V〕は?",
+  "choices": ["40", "60", "100", "150"],
+  "answer": "60",
+  "solution": [
+    "直列回路の電流 I=E/(R1+R2)=100/5=20A",
+    "V2=I·R2=E·R2/(R1+R2)=100·3/5",
+    "V2=60V"
+  ],
+  "tags": ["理論", "直流回路", "分圧", "オームの法則"],
+  "learning_objectives": ["直列回路で各抵抗にかかる電圧が抵抗比に比例することを説明できる"],
+  "formulas": ["V2 = E·R2/(R1+R2)", "I = E/(R1+R2)"],
+  "hints": ["まず直列合成抵抗 R1+R2 を求める", "回路電流 I は直列なら共通", "V2 = I·R2"],
+  "choice_explanations": [
+    { "choice": "40", "correct": false, "explanation": "誤り: R1 と R2 を取り違え、R1 側の分圧 E·R1/(R1+R2) を答えた" },
+    { "choice": "60", "correct": true, "explanation": "正解。V2 = E·R2/(R1+R2) = 100·3/5 = 60V" },
+    { "choice": "100", "correct": false, "explanation": "誤り: 分圧を忘れ、電源電圧 E をそのまま答えた" },
+    { "choice": "150", "correct": false, "explanation": "誤り: 直列合成 (R1+R2) でなく R1 で割ってしまった" }
+  ],
+  "related_topics": ["分流の法則", "ブリッジ回路の平衡条件"],
+  "prerequisites": ["オームの法則", "直並列合成抵抗"],
+  "estimated_time_sec": 90,
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.99
+  },
+  "source": { "type": "original", "citation": "DENKEN-OS オリジナル問題" },
+  "stats": { "answered": 0, "correct_rate": 0, "common_wrong_choice": "40" },
+  "status": "validated"
+}

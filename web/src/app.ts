@@ -44,6 +44,7 @@ function renderQuestion(): void {
   current = pickNext();
   $("feedback").textContent = "";
   $("solution").innerHTML = "";
+  $("hints").innerHTML = "";
   $("share").textContent = "";
   if (!current) {
     $("statement").textContent = "問題が読み込めませんでした。";
@@ -51,8 +52,9 @@ function renderQuestion(): void {
   }
   questionShownAt = Date.now();
   const p = current;
-  $("meta").textContent = `${p.topic}・難易度${"★".repeat(p.difficulty)}`;
+  $("meta").textContent = metaLine(p);
   $("statement").textContent = p.statement;
+  renderHints(p);
 
   const answers = $("answers");
   answers.innerHTML = "";
@@ -100,22 +102,104 @@ function renderQuestion(): void {
   }
 }
 
+const LEVEL_LABEL: Record<string, string> = {
+  remember: "記憶",
+  understand: "理解",
+  apply: "応用",
+  analyze: "分析",
+};
+
+/** メタ行: 論点・難易度・想定時間・認知レベル。 */
+function metaLine(p: Problem): string {
+  const parts = [`${p.topic}・難易度${"★".repeat(p.difficulty)}`];
+  if (p.estimated_time_sec) parts.push(`目安${Math.round(p.estimated_time_sec)}秒`);
+  if (p.cognitive_level) parts.push(LEVEL_LABEL[p.cognitive_level] ?? p.cognitive_level);
+  return parts.join("・");
+}
+
+/** 段階的ヒント（faded scaffolding）: ボタンで1つずつ開く。 */
+function renderHints(p: Problem): void {
+  const box = $("hints");
+  box.innerHTML = "";
+  const hints = p.hints;
+  if (!hints || hints.length === 0) return;
+  let shown = 0;
+  const btn = document.createElement("button");
+  btn.className = "hint-btn";
+  const list = document.createElement("ol");
+  list.className = "hint-list";
+  const update = () => {
+    btn.textContent = shown < hints.length ? `💡 ヒントを見る (${shown}/${hints.length})` : `ヒントは以上です`;
+    btn.disabled = shown >= hints.length;
+  };
+  btn.onclick = () => {
+    if (shown >= hints.length) return;
+    const li = document.createElement("li");
+    li.textContent = hints[shown]!;
+    list.appendChild(li);
+    shown += 1;
+    update();
+  };
+  update();
+  box.appendChild(btn);
+  box.appendChild(list);
+}
+
+/** 使う公式（暗記カード/逆引き）。 */
+function formulasHtml(p: Problem): string {
+  if (!p.formulas || p.formulas.length === 0) return "";
+  return `<p class="formula">使う公式: ${p.formulas.map(escapeHtml).join(" ／ ")}</p>`;
+}
+
+/** 誤答解説（最大の学習資産）: 各選択肢の正誤と理由。選んだ肢を強調。 */
+function explanationsHtml(p: Problem, given?: string): string {
+  if (!p.choice_explanations || p.choice_explanations.length === 0) return "";
+  const items = p.choice_explanations
+    .map((ce) => {
+      const mark = ce.correct ? "⭕" : "❌";
+      const you = ce.choice === given ? ' <span class="you">（あなたの解答）</span>' : "";
+      return `<li class="${ce.correct ? "ex-ok" : "ex-ng"}">${mark} <strong>${escapeHtml(ce.choice)}</strong> — ${escapeHtml(ce.explanation)}${you}</li>`;
+    })
+    .join("");
+  return `<div class="explain"><strong>選択肢の解説</strong><ul>${items}</ul></div>`;
+}
+
+/** 解説本体（解法ステップ＋公式＋誤答解説＋出典）をまとめて組む。 */
+function richSolutionHtml(p: Problem, title: string, given?: string): string {
+  const steps = `<ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>`;
+  return (
+    `<strong>${title}</strong>${steps}` +
+    formulasHtml(p) +
+    explanationsHtml(p, given) +
+    `<p class="src">${escapeHtml(sourceText(p))}</p>`
+  );
+}
+
 function showSolution(p: Problem): void {
-  $("solution").innerHTML =
-    `<strong>模範解答</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
+  $("solution").innerHTML = richSolutionHtml(p, "模範解答");
+}
+
+/** 採点: numeric は許容誤差(numeric.tolerance)内なら正解。それ以外は文字列一致。 */
+function isCorrect(p: Problem, given: string): boolean {
+  if ((p.format ?? "multiple_choice") === "numeric" && p.numeric) {
+    const g = Number(given);
+    const a = Number(p.answer);
+    if (Number.isFinite(g) && Number.isFinite(a)) return Math.abs(g - a) <= p.numeric.tolerance;
+  }
+  return given === p.answer;
 }
 
 function grade(given: string): void {
   if (!current) return;
   const p = current;
-  const correct = given === p.answer;
+  const correct = isCorrect(p, given);
   const timeMs = Date.now() - questionShownAt;
   progress.record(p.topic, correct, Date.now(), timeMs);
 
   $("feedback").textContent = correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`;
   $("feedback").className = correct ? "ok" : "ng";
-  $("solution").innerHTML =
-    `<strong>解説</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
+  $("hints").innerHTML = ""; // 採点後はヒントを畳む
+  $("solution").innerHTML = richSolutionHtml(p, "解説", given);
 
   // シェアテキスト（記録カードの文言。画像化は将来）。
   $("share").textContent = cardText("daily", {
