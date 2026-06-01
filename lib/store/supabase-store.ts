@@ -149,7 +149,8 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
     const { data, error } = await this.client
       .from("answer_logs")
       .select("topic, correct, time_ms, answered_at")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("answered_at", { ascending: true });
     if (error) throw new Error(`answer_logs byUser failed: ${error.message}`);
     return (data ?? []).map((r: Record<string, unknown>) => ({
       topic: r.topic as string,
