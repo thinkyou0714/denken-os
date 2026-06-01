@@ -19,7 +19,7 @@
 1. **ローカルとCIを同じコマンドに寄せる**
    - 入口は `npm run verify` に集約し、lint/typecheck/schema検証/test/buildを同じ順序で実行する。
    - 個別確認は `npm run lint`、`npm run typecheck`、`npm run typecheck:web`、`npm run validate:data`、`npm run audit:status`、`npm test`、`npm run build:web`。
-   - データ量・形式・監修状況の棚卸しは `npm run audit:status` で確認し、公開前判定では `npm run release:check`（= `verify` + strict audit）を使う。
+   - データ量・形式・監修状況の棚卸しは `npm run audit:status` で確認し、公開前判定では `npm run release:check`（= `verify` + strict audit）を使う。閾値調整は `npm run audit:status -- --min-validated=50 --min-descriptive=10` のように明示する。
 
 2. **型ゲートは「外部依存の取得成功」と分離する**
    - `@types/node` を取れる通常環境ではそれが最善。

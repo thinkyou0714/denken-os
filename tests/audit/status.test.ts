@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { auditStatus, formatAuditSummary } from "../../lib/audit/status.js";
+import { auditStatus, formatAuditSummary, parseAuditCliOptions } from "../../lib/audit/status.js";
 import type { Problem } from "../../lib/engine/schema.js";
 
 function problem(overrides: Partial<Problem> = {}): Problem {
@@ -68,5 +68,24 @@ describe("auditStatus", () => {
 
     expect(summary.problems.invalidSchema).toBe(2);
     expect(summary.recommendations[0]).toBe("2件の問題データがZod schemaを通過していません。");
+  });
+});
+
+describe("parseAuditCliOptions", () => {
+  it("json/strictフラグと閾値オプションを解釈する", () => {
+    expect(parseAuditCliOptions(["--json", "--strict", "--min-validated=3", "--min-descriptive=1"])).toEqual({
+      json: true,
+      strict: true,
+      thresholds: { minValidated: 3, minDescriptive: 1 },
+    });
+  });
+
+  it("不正な数値オプションを拒否する", () => {
+    expect(() => parseAuditCliOptions(["--min-validated=-1"])).toThrow(
+      "--min-validated=<non-negative-integer> を指定してください",
+    );
+    expect(() => parseAuditCliOptions(["--min-descriptive=1.5"])).toThrow(
+      "--min-descriptive=<non-negative-integer> を指定してください",
+    );
   });
 });

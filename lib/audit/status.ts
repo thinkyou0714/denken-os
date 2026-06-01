@@ -12,6 +12,12 @@ export interface AuditInput {
   thresholds?: Partial<AuditThresholds>;
 }
 
+export interface AuditCliOptions {
+  json: boolean;
+  strict: boolean;
+  thresholds: Partial<AuditThresholds>;
+}
+
 export interface AuditSummary {
   problems: {
     total: number;
@@ -29,10 +35,33 @@ export interface AuditSummary {
   recommendations: string[];
 }
 
-const DEFAULT_THRESHOLDS: AuditThresholds = {
+export const DEFAULT_THRESHOLDS: AuditThresholds = {
   minValidated: 50,
   minDescriptive: 10,
 };
+
+function numberOption(args: string[], name: string): number | undefined {
+  const prefix = `--${name}=`;
+  const raw = args.find((arg) => arg.startsWith(prefix))?.slice(prefix.length);
+  if (raw === undefined) return undefined;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < 0) throw new Error(`${prefix}<non-negative-integer> を指定してください`);
+  return value;
+}
+
+export function parseAuditCliOptions(args: string[]): AuditCliOptions {
+  const thresholds: Partial<AuditThresholds> = {};
+  const minValidated = numberOption(args, "min-validated");
+  const minDescriptive = numberOption(args, "min-descriptive");
+  if (minValidated !== undefined) thresholds.minValidated = minValidated;
+  if (minDescriptive !== undefined) thresholds.minDescriptive = minDescriptive;
+
+  return {
+    json: args.includes("--json"),
+    strict: args.includes("--strict"),
+    thresholds,
+  };
+}
 
 function increment(map: Record<string, number>, key: string | undefined): void {
   map[key ?? "(unset)"] = (map[key ?? "(unset)"] ?? 0) + 1;
