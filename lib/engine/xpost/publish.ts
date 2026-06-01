@@ -4,8 +4,8 @@
  * 朝（poll併設）→夜（朝を引用）の予約を作る。既定の XClient は下書きエクスポート。
  * 03 の正答率集計は poll を一次ソースにするため、朝に必ず poll を併設する。
  */
-import { DraftExportClient, type PostReceipt, type XClient } from "../clients/x-client.js";
-import type { Problem } from "./schema.js";
+import { DraftExportClient, type PostReceipt, type XClient } from "../../clients/x-client.js";
+import type { Problem } from "../schema.js";
 import { buildXPosts, morningPoll, scheduleFor } from "./toXPost.js";
 
 export interface PublishOptions {
