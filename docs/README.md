@@ -15,6 +15,7 @@ docs/
 │   ├── 00-overview.md        コンセプト（凡人成り上がり）＋成長ループ＋図解
 │   ├── 01-roadmap.md         マスターロードマップ＋90日ズーム＋週次エンジン
 │   ├── 02-evaluation.md      82/100の診断・スコアカード・構造的天井・90+への道
+│   ├── 03-quality-hardening-plan.md 品質ゲートの根本原因対策と次バックログ
 │   ├── human-tasks.md        人間タスク チェックリスト（締切/委任/承認ゲート）
 │   └── ideas/                深掘り調査:アイデア計400（4テーマ×100）
 │       ├── 01-branding-positioning.md   ブランド/発信の全体像 100
@@ -45,9 +46,10 @@ docs/
 1. `strategy/00-overview.md` … 何を目指すか（コンセプトと図解）
 2. `strategy/01-roadmap.md` … いつ何をやるか（行程）
 3. `strategy/02-evaluation.md` … どこに弱点があり、どう埋めるか（率直な評価）
-4. `x-strategy/README.md` … 実際の運用（コピペで動かせる）
-5. `automation/README.md` … 作るときの実装指示
-6. `strategy/ideas/` … 元になった調査の全アイデア（idea bank）
+4. `strategy/03-quality-hardening-plan.md` … リポジトリ品質ゲートの根本原因対策
+5. `x-strategy/README.md` … 実際の運用（コピペで動かせる）
+6. `automation/README.md` … 作るときの実装指示
+7. `strategy/ideas/` … 元になった調査の全アイデア（idea bank）
 
 ## 一行サマリ
 

@@ -4,7 +4,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": ["ES2022"],
-    "types": ["node"],
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -15,6 +14,6 @@
     "verbatimModuleSyntax": false,
     "noEmit": true
   },
-  "include": ["lib", "scripts", "tests"],
+  "include": ["lib", "scripts", "tests", "types"],
   "exclude": ["node_modules", "dist"]
 }
