@@ -1,0 +1,10 @@
+# コードオーナー — PR に自動でレビュアーをアサインする。
+# 構文: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-features/customizing-your-repository/about-code-owners
+
+# 既定オーナー（全ファイル）
+*                       @thinkyou0714
+
+# 中核ロジックとCI（変更時は特に注意）
+/lib/engine/            @thinkyou0714
+/.github/workflows/     @thinkyou0714
+/supabase/migrations/   @thinkyou0714
