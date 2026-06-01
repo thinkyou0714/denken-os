@@ -5,6 +5,7 @@
  * 03 の正答率集計は poll を一次ソースにするため、朝に必ず poll を併設する。
  */
 import { DraftExportClient, type PostReceipt, type XClient } from "../../clients/x-client.js";
+import { meetsValidationGate } from "../gate.js";
 import type { Problem } from "../schema.js";
 import { buildXPosts, morningPoll, scheduleFor } from "./toXPost.js";
 
@@ -28,6 +29,17 @@ export interface PublishResult {
  * - 夜スレッドの先頭は朝先頭ポストを引用（quoteOfId）してツリー化。
  */
 export async function scheduleProblem(p: Problem, opts: PublishOptions = {}): Promise<PublishResult> {
+  // 公開ゲート（最優先原則「間違った問題を絶対に出さない」/ 09-ci-quality-gate）。
+  // 検証4項目が揃わない、または取り下げ済みの問題は fail-closed で投稿させない。
+  if (p.status === "retracted") {
+    throw new Error(`公開ゲート不通過: ${p.id} は status=retracted のため投稿しません。`);
+  }
+  if (!meetsValidationGate(p.validation)) {
+    throw new Error(
+      `公開ゲート不通過: ${p.id} は検証4項目(solver_checked/human_checked/clean_answer/physically_valid)が揃っていません。`,
+    );
+  }
+
   const client = opts.client ?? new DraftExportClient();
   const rng = opts.rng ?? Math.random;
   const day = opts.day ?? new Date();

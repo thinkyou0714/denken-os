@@ -70,4 +70,14 @@ describe("scheduleProblem（02↔03↔x-client 配線）", () => {
     // 実投稿ではなくエクスポート
     expect(res.morning[0]!.exported).toBe(true);
   });
+
+  it("検証が揃わない問題は公開ゲートで弾く（fail-closed）", async () => {
+    const draft: Problem = { ...T0001, validation: { ...T0001.validation, human_checked: false }, status: "draft" };
+    await expect(scheduleProblem(draft, { client: new DraftExportClient() })).rejects.toThrow(/公開ゲート不通過/);
+  });
+
+  it("retracted は投稿しない", async () => {
+    const retracted: Problem = { ...T0001, status: "retracted" };
+    await expect(scheduleProblem(retracted, { client: new DraftExportClient() })).rejects.toThrow(/retracted/);
+  });
 });
