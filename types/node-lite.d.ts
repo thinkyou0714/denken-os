@@ -8,7 +8,12 @@
 declare module "node:fs" {
   export function readFileSync(path: string | URL, encoding: BufferEncoding): string;
   export function writeFileSync(path: string | URL, data: string, encoding?: BufferEncoding): void;
+  export interface Dirent {
+    name: string;
+    isDirectory(): boolean;
+  }
   export function readdirSync(path: string | URL): string[];
+  export function readdirSync(path: string | URL, options: { withFileTypes: true }): Dirent[];
   export function mkdirSync(path: string | URL, options?: { recursive?: boolean }): string | undefined;
   export function existsSync(path: string | URL): boolean;
   export function mkdtempSync(prefix: string): string;

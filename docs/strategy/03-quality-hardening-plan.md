@@ -10,8 +10,8 @@
 | P0 | `npm run typecheck` が Node 型不足で落ちる | `tsconfig.json` が Node 型を要求する一方、制限付きレジストリでは `@types/node` を取得できない | Node CLI/テストで使う最小APIだけを `types/node-lite.d.ts` に固定し、型ゲートを外部レジストリ可用性から切り離す | 通常のnpm環境では `@types/node` へ置換する判断を定期レビュー |
 | P0 | Zod v4で `z.record` の型が落ちる | Zod v3系の単引数記法が残り、v4系のkey/value指定に追随していない | `z.record(z.string(), paramField)` に変更し、schemaドリフト検知テストの対象に残す | 依存更新時は `npm run verify` を必須化 |
 | P0 | Biomeがテンプレート文字列化を指摘 | 文字列連結が残り、lint結果にノイズが出ていた | テンプレートリテラルへ統一 | `npm run format` 後に差分ゼロを確認 |
-| P1 | READMEの件数・ロードマップが古い | 実装の進捗にドキュメント更新が追随していない | READMEに「今できること / 未接続」を明記 | リリースごとにREADMEのStatus表を更新 |
-| P1 | validated問題が3件のみ | 生成エンジンMVPと学習プロダクト成立に必要な問題量の差が大きい | 現状を明示し、増量ゲートを定義 | 科目×形式ごとに最低10件ずつ増やす |
+| P1 | READMEの件数・ロードマップが古い | 実装の進捗にドキュメント更新が追随していない | READMEに「今できること / 未接続」を明記し、`npm run audit:status` で棚卸しできるようにした | リリースごとにREADMEのStatus表を更新 |
+| P1 | validated問題が3件のみ | 生成エンジンMVPと学習プロダクト成立に必要な問題量の差が大きい | 現状を明示し、`audit:status` と問題データレビューIssueテンプレートを追加 | 科目×形式ごとに最低10件ずつ増やす |
 | P2 | 実運用が重い | 学習・作問・検算・SNS・開発を1人に寄せすぎている | 週次バッチ、下書き運用、承認ゲートを明文化済み | 投稿頻度はKPIで増減し、監修者確保までは「検証中」表現を徹底 |
 
 ## 品質ゲートのベストプラクティス
@@ -19,6 +19,7 @@
 1. **ローカルとCIを同じコマンドに寄せる**
    - 入口は `npm run verify` に集約する。
    - 個別確認は `npm run lint`、`npm run typecheck`、`npm run typecheck:web`、`npm run validate:data`、`npm test`、`npm run build:web`。
+   - データ量・形式・監修状況の棚卸しは `npm run audit:status` で確認する。
 
 2. **型ゲートは「外部依存の取得成功」と分離する**
    - `@types/node` を取れる通常環境ではそれが最善。
@@ -44,8 +45,8 @@
 | 優先度 | バックログ | 完了条件 |
 |---|---|---|
 | P0 | `npm run verify` を常時グリーンに保つ | ローカル/CIで全ゲート成功 |
-| P1 | 問題データ増量のPRテンプレを追加 | 新規問題に検算・出典・監修チェック欄がある |
-| P1 | data coverageテスト追加 | 科目・形式・status件数を機械集計し閾値未満なら警告 |
-| P1 | README Statusの自動更新補助 | テスト件数やvalidated件数をスクリプトで出せる |
+| P1 | 問題データレビューIssueテンプレを運用する | 新規問題に検算・出典・監修チェック欄がある |
+| P1 | data coverage監査を定期実行する | `npm run audit:status` で科目・形式・status件数と推奨が見える |
+| P1 | README Statusの自動更新補助 | テスト件数やvalidated件数をスクリプト結果から反映できる |
 | P2 | 監修フローをIssueテンプレ化 | supervisor_checkedへ進むレビュー手順が明文化される |
 | P2 | Webアプリのデータ更新導線 | validated問題のみを `web/problems.json` に同期できる |
