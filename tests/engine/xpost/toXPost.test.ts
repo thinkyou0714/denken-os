@@ -2,12 +2,12 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import type { Problem } from "../../lib/engine/schema.js";
-import { buildXPosts, containsUrl, jitteredTime, scheduleFor } from "../../lib/engine/toXPost.js";
-import { xWeightedLength } from "../../lib/engine/xlength.js";
+import type { Problem } from "../../../lib/engine/schema.js";
+import { buildXPosts, containsUrl, jitteredTime, scheduleFor } from "../../../lib/engine/xpost/toXPost.js";
+import { xWeightedLength } from "../../../lib/engine/xpost/xlength.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../../data/problems/T-0001.json"), "utf8"));
 
 function rngFromSeq(seq: number[]): () => number {
   let i = 0;

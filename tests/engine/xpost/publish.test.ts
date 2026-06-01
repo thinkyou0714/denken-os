@@ -2,17 +2,17 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { DraftExportClient } from "../../lib/clients/x-client.js";
-import { generate } from "../../lib/engine/generate.js";
-import { StubNarrator } from "../../lib/engine/narrate.js";
-import { scheduleProblem } from "../../lib/engine/publish.js";
-import type { Problem } from "../../lib/engine/schema.js";
-import { capacitorEnergy } from "../../lib/engine/templates/index.js";
-import { morningPoll } from "../../lib/engine/toXPost.js";
-import { validateProblem } from "../../lib/engine/validate.js";
+import { DraftExportClient } from "../../../lib/clients/x-client.js";
+import { generate } from "../../../lib/engine/generate.js";
+import { StubNarrator } from "../../../lib/engine/narrate.js";
+import type { Problem } from "../../../lib/engine/schema.js";
+import { capacitorEnergy } from "../../../lib/engine/templates/index.js";
+import { validateProblem } from "../../../lib/engine/validate.js";
+import { scheduleProblem } from "../../../lib/engine/xpost/publish.js";
+import { morningPoll } from "../../../lib/engine/xpost/toXPost.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../../data/problems/T-0001.json"), "utf8"));
 
 function seededRng(seed: number): () => number {
   let s = seed >>> 0;
@@ -69,5 +69,15 @@ describe("scheduleProblem（02↔03↔x-client 配線）", () => {
     expect(eveningHead?.quoteOfId).toBe(res.morning[0]!.id);
     // 実投稿ではなくエクスポート
     expect(res.morning[0]!.exported).toBe(true);
+  });
+
+  it("検証が揃わない問題は公開ゲートで弾く（fail-closed）", async () => {
+    const draft: Problem = { ...T0001, validation: { ...T0001.validation, human_checked: false }, status: "draft" };
+    await expect(scheduleProblem(draft, { client: new DraftExportClient() })).rejects.toThrow(/公開ゲート不通過/);
+  });
+
+  it("retracted は投稿しない", async () => {
+    const retracted: Problem = { ...T0001, status: "retracted" };
+    await expect(scheduleProblem(retracted, { client: new DraftExportClient() })).rejects.toThrow(/retracted/);
   });
 });

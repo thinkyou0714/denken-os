@@ -1,0 +1,13 @@
+# 既定: テキストは自動判定し、チェックアウト時は LF に正規化（.editorconfig と整合）。
+* text=auto eol=lf
+
+# 言語統計・差分から除外したい生成物/同梱物（linguist）。
+package-lock.json   linguist-generated=true
+web/dist/**         linguist-generated=true
+web/problems.json   linguist-generated=true
+data/**             linguist-generated=true
+
+# バイナリ扱い（差分を取らない）。
+*.png  binary
+*.jpg  binary
+*.ico  binary

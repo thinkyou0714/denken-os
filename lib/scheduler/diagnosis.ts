@@ -26,7 +26,9 @@ export function aggregateByTopic(logs: AnswerLog[]): Map<string, TopicProgress> 
     const cur = m.get(log.topic) ?? { topic: log.topic, attempts: 0, correct: 0, dueMs: log.atMs };
     cur.attempts += 1;
     if (log.correct) cur.correct += 1;
-    cur.dueMs = log.atMs; // 最終解答時刻（スケジューラ未適用時の素朴な値）
+    // 最終解答時刻＝最新の atMs。ログの並び順に依存しないよう max を取る
+    // （Supabase 等は order 未指定だと順不同で返すため）。
+    cur.dueMs = Math.max(cur.dueMs, log.atMs);
     m.set(log.topic, cur);
   }
   return m;

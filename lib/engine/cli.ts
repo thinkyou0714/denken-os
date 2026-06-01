@@ -14,7 +14,7 @@ import { dirname } from "node:path";
 import { generate } from "./generate.js";
 import type { SourceType } from "./schema.js";
 import { getTemplate, listTopics } from "./templates/index.js";
-import { buildXPosts } from "./toXPost.js";
+import { buildXPosts } from "./xpost/index.js";
 
 interface Args {
   topic?: string;

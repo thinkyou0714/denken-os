@@ -1,7 +1,7 @@
 // Service Worker — app shell を cache-first でキャッシュし、オフラインで動かす。
 // 静的アセットは cache-first（調査の定石）。問題データもキャッシュして完全オフライン化。
-const CACHE = "denken-os-v1";
-const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest"];
+const CACHE = "denken-os-v2";
+const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { splitIntoThread, xWeightedLength } from "../../lib/engine/xlength.js";
+import { splitIntoThread, xWeightedLength } from "../../../lib/engine/xpost/xlength.js";
 
 describe("xWeightedLength", () => {
   it("ASCII は1カウント", () => {

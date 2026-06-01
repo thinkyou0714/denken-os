@@ -7,7 +7,7 @@
  * - 本文に URL を入れない（リンクはリプ/プロフ＝05-engagement）。
  * - 予約時刻にジッターを入れる（±分）。
  */
-import type { Problem } from "./schema.js";
+import type { Problem } from "../schema.js";
 import { splitIntoThread, xWeightedLength } from "./xlength.js";
 
 const URL_RE = /(https?:\/\/|www\.)\S+/i;

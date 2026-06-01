@@ -8,7 +8,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const sql = readFileSync(join(__dirname, "../../supabase/migrations/0001_init.sql"), "utf8").toLowerCase();
+const migDir = join(__dirname, "../../supabase/migrations");
+const sql = readFileSync(join(migDir, "0001_init.sql"), "utf8").toLowerCase();
+const sql0002 = readFileSync(join(migDir, "0002_problems_updated_at.sql"), "utf8").toLowerCase();
 
 describe("supabase 0001_init.sql", () => {
   it("主要テーブルを定義している", () => {
@@ -29,5 +31,16 @@ describe("supabase 0001_init.sql", () => {
   it("ポリシー列にインデックスがある（性能のベストプラクティス）", () => {
     expect(sql).toContain("answer_logs_user_idx");
     expect(sql).toContain("review_states_user_idx");
+  });
+});
+
+describe("supabase 0002_problems_updated_at.sql", () => {
+  it("updated_at を保つ BEFORE UPDATE トリガを張っている", () => {
+    expect(sql0002).toContain("before update on public.problems");
+    expect(sql0002).toContain("execute function public.set_updated_at()");
+  });
+
+  it("トリガ関数の search_path を固定している（関数の可変 search_path を塞ぐ）", () => {
+    expect(sql0002).toContain("set search_path = ''");
   });
 });

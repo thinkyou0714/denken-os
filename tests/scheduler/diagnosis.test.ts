@@ -18,4 +18,19 @@ describe("弱点診断", () => {
     const weak = weakestTopics(prog.values(), now, 2);
     expect(weak[0]).toBe("三相交流電力");
   });
+
+  it("dueMs は並び順に依存せず最新の解答時刻になる", () => {
+    const day = 86_400_000;
+    const t0 = Date.UTC(2026, 0, 1);
+    // わざと新しい→古い→中間の順（order 未指定の DB を模す）。
+    const logs: AnswerLog[] = [
+      { topic: "機械", correct: false, atMs: t0 + 2 * day },
+      { topic: "機械", correct: true, atMs: t0 },
+      { topic: "機械", correct: false, atMs: t0 + 1 * day },
+    ];
+    const prog = aggregateByTopic(logs);
+    const m = prog.get("機械")!;
+    expect(m.attempts).toBe(3);
+    expect(m.dueMs).toBe(t0 + 2 * day); // 配列末尾(t0+1day)ではなく最新
+  });
 });

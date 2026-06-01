@@ -2,7 +2,7 @@
  * supabase-store.ts — store インターフェースの Supabase 実装（05 / supabase/migrations の DDL に対応）。
  *
  * 既定はインメモリ/ファイル実装。本実装は認証取得後（human-tasks.md）に
- *   const stores = createSupabaseStores(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
+ *   const stores = createSupabaseStores(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!)
  * で差し込む。行⇔ドメインのマッピングは純関数として切り出し、テスト可能にしている
  * （実 I/O は薄いラッパ）。
  */
@@ -149,7 +149,8 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
     const { data, error } = await this.client
       .from("answer_logs")
       .select("topic, correct, time_ms, answered_at")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("answered_at", { ascending: true });
     if (error) throw new Error(`answer_logs byUser failed: ${error.message}`);
     return (data ?? []).map((r: Record<string, unknown>) => ({
       topic: r.topic as string,

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DENKEN-OS">
+  <!-- maskable 対応: 背景は端まで塗り、図形は中央の安全領域内に収める -->
+  <rect width="512" height="512" fill="#0b5394"/>
+  <path d="M296 96 L168 280 L240 280 L216 416 L344 232 L272 232 Z" fill="#ffffff"/>
+</svg>

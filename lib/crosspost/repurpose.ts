@@ -3,7 +3,7 @@
  * 媒体ごとに形式を変える（丸転載しない）。投稿自体はしない＝下書きのみ。
  */
 import type { Problem } from "../engine/schema.js";
-import { sourceFooter } from "../engine/toXPost.js";
+import { sourceFooter } from "../engine/xpost/toXPost.js";
 
 export interface RepurposeDrafts {
   note: string; // 長文記事
