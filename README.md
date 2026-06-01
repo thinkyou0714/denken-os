@@ -47,9 +47,9 @@ npm run export:vault -- --out out/vault                   # 問題を Obsidian M
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
 npm run typecheck && npm run typecheck:web               # 型チェック
-npm run verify                                            # CI相当の一括検証
+npm run verify                                            # CI相当の一括検証（audit:status含む）
 npm run audit:status                                      # 問題数・形式・監修状況の棚卸し
-npm test                                                  # ユニットテスト（99件）
+npm test                                                  # ユニットテスト（102件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。
