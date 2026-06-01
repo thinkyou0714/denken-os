@@ -31,6 +31,7 @@ describe("auditStatus", () => {
   it("問題数・形式・監修状況を集計して不足を推奨する", () => {
     const summary = auditStatus({ problems: [problem()], invalidSchema: 0, testFiles: 26 });
 
+    expect(summary.okForRelease).toBe(false);
     expect(summary.problems.total).toBe(1);
     expect(summary.problems.validated).toBe(1);
     expect(summary.problems.bySubject).toEqual({ 理論: 1 });
@@ -59,15 +60,25 @@ describe("auditStatus", () => {
       thresholds: { minValidated: 2, minDescriptive: 2 },
     });
 
+    expect(summary.okForRelease).toBe(true);
     expect(summary.recommendations).toEqual([]);
+    expect(formatAuditSummary(summary)).toContain("release-ready: yes");
     expect(formatAuditSummary(summary)).toContain("recommendations: none");
   });
 
-  it("schema不正件数を推奨に含める", () => {
-    const summary = auditStatus({ problems: [], invalidSchema: 2, testFiles: 0 });
+  it("schema不正件数と不正ファイル詳細を推奨と表示に含める", () => {
+    const summary = auditStatus({
+      problems: [],
+      invalidSchema: 1,
+      invalidFiles: [{ file: "broken.json", reason: "Unexpected token" }],
+      testFiles: 0,
+    });
 
-    expect(summary.problems.invalidSchema).toBe(2);
-    expect(summary.recommendations[0]).toBe("2件の問題データがZod schemaを通過していません。");
+    expect(summary.okForRelease).toBe(false);
+    expect(summary.problems.invalidSchema).toBe(1);
+    expect(summary.problems.invalidFiles).toEqual([{ file: "broken.json", reason: "Unexpected token" }]);
+    expect(summary.recommendations[0]).toBe("1件の問題データがZod schemaを通過していません。");
+    expect(formatAuditSummary(summary)).toContain("- broken.json: Unexpected token");
   });
 });
 

@@ -5,11 +5,17 @@ export interface AuditThresholds {
   minDescriptive: number;
 }
 
+export interface InvalidProblemFile {
+  file: string;
+  reason: string;
+}
+
 export interface AuditInput {
   problems: Problem[];
   invalidSchema: number;
   testFiles: number;
   thresholds?: Partial<AuditThresholds>;
+  invalidFiles?: InvalidProblemFile[];
 }
 
 export interface AuditCliOptions {
@@ -19,10 +25,12 @@ export interface AuditCliOptions {
 }
 
 export interface AuditSummary {
+  okForRelease: boolean;
   problems: {
     total: number;
     validSchema: number;
     invalidSchema: number;
+    invalidFiles: InvalidProblemFile[];
     byStatus: Record<string, number>;
     bySubject: Record<string, number>;
     byFormat: Record<string, number>;
@@ -81,11 +89,12 @@ export function auditStatus(input: AuditInput): AuditSummary {
     if (p.validation.supervisor_checked) supervisorChecked++;
   }
 
+  const invalidFiles = input.invalidFiles ?? [];
+  const invalidSchema = Math.max(input.invalidSchema, invalidFiles.length);
   const validated = input.problems.filter((p) => p.status === "validated" || p.status === "published").length;
   const recommendations: string[] = [];
 
-  if (input.invalidSchema > 0)
-    recommendations.push(`${input.invalidSchema}件の問題データがZod schemaを通過していません。`);
+  if (invalidSchema > 0) recommendations.push(`${invalidSchema}件の問題データがZod schemaを通過していません。`);
   if (validated < thresholds.minValidated)
     recommendations.push(
       `validated/published問題は${validated}件です。まず${thresholds.minValidated}件を目標に増やしてください。`,
@@ -98,10 +107,12 @@ export function auditStatus(input: AuditInput): AuditSummary {
     );
 
   return {
+    okForRelease: recommendations.length === 0,
     problems: {
-      total: input.problems.length + input.invalidSchema,
+      total: input.problems.length + invalidSchema,
       validSchema: input.problems.length,
-      invalidSchema: input.invalidSchema,
+      invalidSchema,
+      invalidFiles,
       byStatus,
       bySubject,
       byFormat,
@@ -116,12 +127,18 @@ export function auditStatus(input: AuditInput): AuditSummary {
 export function formatAuditSummary(summary: AuditSummary): string {
   const lines = [
     "DENKEN-OS status audit",
+    `- release-ready: ${summary.okForRelease ? "yes" : "no"}`,
     `- problems: ${summary.problems.total} total / ${summary.problems.validated} validated-or-published`,
     `- schema: ${summary.problems.validSchema} valid / ${summary.problems.invalidSchema} invalid`,
     `- subjects: ${JSON.stringify(summary.problems.bySubject)}`,
     `- formats: ${JSON.stringify(summary.problems.byFormat)}`,
     `- test files: ${summary.tests.files}`,
   ];
+
+  if (summary.problems.invalidFiles.length > 0) {
+    lines.push("invalid problem files:");
+    for (const f of summary.problems.invalidFiles) lines.push(`- ${f.file}: ${f.reason}`);
+  }
 
   if (summary.recommendations.length > 0) {
     lines.push("recommendations:");

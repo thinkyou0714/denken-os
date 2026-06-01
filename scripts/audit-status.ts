@@ -9,7 +9,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { auditStatus, formatAuditSummary, parseAuditCliOptions } from "../lib/audit/status.js";
+import { auditStatus, formatAuditSummary, type InvalidProblemFile, parseAuditCliOptions } from "../lib/audit/status.js";
 import { type Problem, problemSchema } from "../lib/engine/schema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,28 +27,34 @@ function walk(dir: string): string[] {
   return out;
 }
 
-function readProblems(): { parsed: Problem[]; invalid: number } {
+function readProblems(): { parsed: Problem[]; invalidFiles: InvalidProblemFile[] } {
   const parsed: Problem[] = [];
-  let invalid = 0;
+  const invalidFiles: InvalidProblemFile[] = [];
   for (const file of readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"))) {
+    const path = join(DATA_DIR, file);
     try {
-      const raw = JSON.parse(readFileSync(join(DATA_DIR, file), "utf8"));
+      const raw = JSON.parse(readFileSync(path, "utf8"));
       const result = problemSchema.safeParse(raw);
       if (result.success) parsed.push(result.data);
-      else invalid++;
-    } catch {
-      invalid++;
+      else
+        invalidFiles.push({
+          file,
+          reason: result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
+        });
+    } catch (error) {
+      invalidFiles.push({ file, reason: error instanceof Error ? error.message : String(error) });
     }
   }
-  return { parsed, invalid };
+  return { parsed, invalidFiles };
 }
 
 function main(): void {
   const options = parseAuditCliOptions(process.argv.slice(2));
-  const { parsed, invalid } = readProblems();
+  const { parsed, invalidFiles } = readProblems();
   const summary = auditStatus({
     problems: parsed,
-    invalidSchema: invalid,
+    invalidSchema: invalidFiles.length,
+    invalidFiles,
     testFiles: walk(TEST_DIR).filter((f) => f.endsWith(".test.ts")).length,
     thresholds: options.thresholds,
   });
@@ -56,7 +62,7 @@ function main(): void {
   if (options.json) console.log(JSON.stringify(summary, null, 2));
   else console.log(formatAuditSummary(summary));
 
-  if (options.strict && summary.recommendations.length > 0) process.exit(1);
+  if (options.strict && !summary.okForRelease) process.exit(1);
 }
 
 try {
