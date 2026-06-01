@@ -60,7 +60,7 @@ export const problemSchema = z
     topic: z.string().min(1),
     format: formatEnum.optional(),
     difficulty: z.number().int().min(1).max(5),
-    params: z.record(paramField).optional(),
+    params: z.record(z.string(), paramField).optional(),
     statement: z.string().min(1),
     figure: z.string().optional(),
     choices: z.array(z.string()).optional(),
