@@ -15,6 +15,8 @@
 - カバレッジ回帰ゲート（`vitest.config.ts` に閾値、CI で `test:coverage` を実行）。
 - PWA アプリアイコン（`web/icon.svg`、maskable 対応）でインストール可能に。
 - CI の最小権限化（`permissions: contents: read`）と `setup-node` の npm キャッシュ。
+- 公開ゲート(`engine/gate.ts`)のユニットテストと、公開境界の fail-closed テスト。
+- `.gitattributes`（LF 正規化 ＋ 生成物の linguist マーキング）。
 
 ### Changed
 - `lib/engine/` の X投稿関連を `lib/engine/xpost/`（`toXPost` / `xlength` / `publish` + barrel）に再編。
@@ -25,6 +27,9 @@
 - zod v4 移行漏れを修正（`z.record(paramField)` → `z.record(z.string(), paramField)`）。
 - 環境変数名の不一致を是正（`supabase-store.ts` の例を `.env.example` と同じ `SUPABASE_ANON_KEY` に統一）。
 - README のテスト件数表記がドリフトしていたのを解消（陳腐化する数値を撤去）。
+- **公開ゲートの未配線（安全ホール）を是正**: `engine/gate.ts` がどこからも呼ばれず、
+  `scheduleProblem` が検証状態に関わらず投稿予約できていた。`meetsValidationGate` を
+  公開境界に配線し、検証4項目未充足・`retracted` を fail-closed で拒否するようにした。
 
 ## [0.1.0] - 2026-05-29
 
