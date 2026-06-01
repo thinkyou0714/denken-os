@@ -17,6 +17,9 @@
 - CI の最小権限化（`permissions: contents: read`）と `setup-node` の npm キャッシュ。
 - 公開ゲート(`engine/gate.ts`)のユニットテストと、公開境界の fail-closed テスト。
 - `.gitattributes`（LF 正規化 ＋ 生成物の linguist マーキング）。
+- `supabase/migrations/0002_problems_updated_at.sql` — `updated_at` を保つ
+  BEFORE UPDATE トリガ（関数は `search_path` 固定）。SQL ガードテストも追加。
+- 弱点診断の順序非依存を保証する回帰テスト。
 
 ### Changed
 - `lib/engine/` の X投稿関連を `lib/engine/xpost/`（`toXPost` / `xlength` / `publish` + barrel）に再編。
@@ -30,6 +33,9 @@
 - **公開ゲートの未配線（安全ホール）を是正**: `engine/gate.ts` がどこからも呼ばれず、
   `scheduleProblem` が検証状態に関わらず投稿予約できていた。`meetsValidationGate` を
   公開境界に配線し、検証4項目未充足・`retracted` を fail-closed で拒否するようにした。
+- **弱点診断の順序依存バグ**: `aggregateByTopic` が `dueMs` にログ配列末尾の時刻を入れ、
+  順不同入力（`order` 未指定の Supabase 取得など）で最新時刻にならず弱点優先度が狂っていた。
+  `Math.max` で最新時刻を採用し、`answer_logs.byUser` に `order by answered_at` を追加。
 
 ## [0.1.0] - 2026-05-29
 
