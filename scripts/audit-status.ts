@@ -9,7 +9,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { auditStatus, formatAuditSummary } from "../lib/audit/status.js";
+import { type AuditThresholds, auditStatus, formatAuditSummary } from "../lib/audit/status.js";
 import { type Problem, problemSchema } from "../lib/engine/schema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -39,12 +39,31 @@ function readProblems(): { parsed: Problem[]; invalid: number } {
   return { parsed, invalid };
 }
 
+function numberOption(name: string): number | undefined {
+  const prefix = `--${name}=`;
+  const raw = process.argv.find((arg) => arg.startsWith(prefix))?.slice(prefix.length);
+  if (raw === undefined) return undefined;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < 0) throw new Error(`${prefix}<non-negative-integer> を指定してください`);
+  return value;
+}
+
+function thresholdsFromArgs(): Partial<AuditThresholds> {
+  const thresholds: Partial<AuditThresholds> = {};
+  const minValidated = numberOption("min-validated");
+  const minDescriptive = numberOption("min-descriptive");
+  if (minValidated !== undefined) thresholds.minValidated = minValidated;
+  if (minDescriptive !== undefined) thresholds.minDescriptive = minDescriptive;
+  return thresholds;
+}
+
 function main(): void {
   const { parsed, invalid } = readProblems();
   const summary = auditStatus({
     problems: parsed,
     invalidSchema: invalid,
     testFiles: walk(TEST_DIR).filter((f) => f.endsWith(".test.ts")).length,
+    thresholds: thresholdsFromArgs(),
   });
 
   if (process.argv.includes("--json")) console.log(JSON.stringify(summary, null, 2));
@@ -53,4 +72,9 @@ function main(): void {
   if (process.argv.includes("--strict") && summary.recommendations.length > 0) process.exit(1);
 }
 
-main();
+try {
+  main();
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+}

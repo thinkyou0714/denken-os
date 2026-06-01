@@ -17,9 +17,9 @@
 ## 品質ゲートのベストプラクティス
 
 1. **ローカルとCIを同じコマンドに寄せる**
-   - 入口は `npm run verify` に集約し、lint/typecheck/schema検証/audit/test/buildを同じ順序で実行する。
+   - 入口は `npm run verify` に集約し、lint/typecheck/schema検証/test/buildを同じ順序で実行する。
    - 個別確認は `npm run lint`、`npm run typecheck`、`npm run typecheck:web`、`npm run validate:data`、`npm run audit:status`、`npm test`、`npm run build:web`。
-   - データ量・形式・監修状況の棚卸しは `npm run audit:status` で確認し、リリース判定では `npm run audit:status -- --strict` を使う。
+   - データ量・形式・監修状況の棚卸しは `npm run audit:status` で確認し、公開前判定では `npm run release:check`（= `verify` + strict audit）を使う。
 
 2. **型ゲートは「外部依存の取得成功」と分離する**
    - `@types/node` を取れる通常環境ではそれが最善。
@@ -46,7 +46,7 @@
 |---|---|---|
 | P0 | `npm run verify` を常時グリーンに保つ | ローカル/CIで全ゲート成功 |
 | P1 | 問題データレビューIssueテンプレを運用する | 新規問題に検算・出典・監修チェック欄がある |
-| P1 | data coverage監査を定期実行する | `npm run verify` 内で `npm run audit:status` が走り、科目・形式・status件数と推奨が見える |
+| P1 | data coverage監査を定期実行する | `npm run audit:status` で科目・形式・status件数と推奨が見え、公開前は `npm run release:check` が不足を失敗扱いにする |
 | P1 | README Statusの自動更新補助 | テスト件数やvalidated件数をスクリプト結果から反映できる |
 | P2 | 監修フローをIssueテンプレ化 | supervisor_checkedへ進むレビュー手順が明文化される |
 | P2 | Webアプリのデータ更新導線 | validated問題のみを `web/problems.json` に同期できる |
