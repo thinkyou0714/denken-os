@@ -31,7 +31,10 @@ export function normalizeNumericInput(raw: string): string {
  */
 export function isAnswerCorrect(problem: Problem, given: string): boolean {
   if (problem.format === "numeric") {
-    const got = Number(normalizeNumericInput(given));
+    const normalized = normalizeNumericInput(given);
+    // 空入力を弾く: Number("") は 0 なので、答えが "0" の問題で空回答が正解扱いになるのを防ぐ。
+    if (normalized === "") return false;
+    const got = Number(normalized);
     const want = Number(problem.answer);
     if (!Number.isFinite(got) || !Number.isFinite(want)) return false;
     const tol = Math.max(1e-9, Math.abs(want) * 1e-6);

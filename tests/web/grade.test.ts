@@ -36,6 +36,15 @@ describe("isAnswerCorrect（numeric は数値比較）", () => {
     expect(isAnswerCorrect(numeric("50"), "")).toBe(false);
     expect(isAnswerCorrect(numeric("50"), "abc")).toBe(false);
   });
+
+  it('答えが "0" でも空/空白入力は正解にしない（Number("")===0 の罠）', () => {
+    expect(isAnswerCorrect(numeric("0"), "")).toBe(false);
+    expect(isAnswerCorrect(numeric("0"), "   ")).toBe(false);
+    expect(isAnswerCorrect(numeric("0"), "　")).toBe(false); // 全角空白
+    // 実際に 0 と入力したときだけ正解。
+    expect(isAnswerCorrect(numeric("0"), "0")).toBe(true);
+    expect(isAnswerCorrect(numeric("0"), "0.0")).toBe(true);
+  });
 });
 
 describe("isAnswerCorrect（その他は厳密一致）", () => {
