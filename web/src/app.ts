@@ -9,6 +9,7 @@
 import type { Problem } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { isAnswerCorrect } from "./grade.js";
 import { LocalProgress } from "./store.js";
 
 function weakTopics(): string[] {
@@ -86,15 +87,18 @@ function renderQuestion(): void {
     };
     answers.appendChild(reveal);
   } else {
-    // numeric: 入力欄
+    // numeric: 入力欄（Enter でも回答できる）
     const input = document.createElement("input");
     input.id = "numeric-input";
     input.inputMode = "decimal";
     input.placeholder = "答えを入力";
+    input.onkeydown = (e) => {
+      if (e.key === "Enter") grade(input.value);
+    };
     const btn = document.createElement("button");
     btn.className = "choice";
     btn.textContent = "回答";
-    btn.onclick = () => grade(input.value.trim());
+    btn.onclick = () => grade(input.value);
     answers.appendChild(input);
     answers.appendChild(btn);
   }
@@ -108,7 +112,7 @@ function showSolution(p: Problem): void {
 function grade(given: string): void {
   if (!current) return;
   const p = current;
-  const correct = given === p.answer;
+  const correct = isAnswerCorrect(p, given);
   const timeMs = Date.now() - questionShownAt;
   progress.record(p.topic, correct, Date.now(), timeMs);
 

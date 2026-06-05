@@ -15,10 +15,22 @@ export interface StorageLike {
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
 const DAY_MS = 86_400_000;
+/** 既定の「1日」境界は日本標準時(UTC+9)。電験は国内試験で受験者は JST 生活のため、
+ *  朝7時(JST)の学習が UTC では前日扱いになりストリークが途切れる不具合を避ける。 */
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 export class LocalProgress {
   private scheduler = new Sm2Scheduler();
-  constructor(private storage: StorageLike) {}
+  constructor(
+    private storage: StorageLike,
+    /** 日境界のタイムゾーンオフセット(ms)。既定 JST。テストで上書き可。 */
+    private dayOffsetMs: number = JST_OFFSET_MS,
+  ) {}
+
+  /** epoch ms をオフセット込みの「日番号」に落とす（同一日の判定・連続日数に使う）。 */
+  private dayIndex(ms: number): number {
+    return Math.floor((ms + this.dayOffsetMs) / DAY_MS);
+  }
 
   private read<T>(key: string, fallback: T): T {
     const raw = this.storage.getItem(key);
@@ -61,11 +73,11 @@ export class LocalProgress {
     return next;
   }
 
-  /** 今日まで連続して学習した日数（UTC 日基準）。 */
+  /** 今日まで連続して学習した日数（既定 JST 日基準）。 */
   streakDays(nowMs: number = Date.now()): number {
-    const days = new Set(this.logs().map((l) => Math.floor(l.atMs / DAY_MS)));
+    const days = new Set(this.logs().map((l) => this.dayIndex(l.atMs)));
     if (days.size === 0) return 0;
-    const today = Math.floor(nowMs / DAY_MS);
+    const today = this.dayIndex(nowMs);
     // 今日 or 昨日から遡って連続日数を数える（今日未学習でも昨日まで継続中なら維持）。
     let cursor = days.has(today) ? today : today - 1;
     if (!days.has(cursor)) return 0;
@@ -78,9 +90,9 @@ export class LocalProgress {
   }
 
   todayMinutes(nowMs: number = Date.now()): number {
-    const today = Math.floor(nowMs / DAY_MS);
+    const today = this.dayIndex(nowMs);
     const ms = this.logs()
-      .filter((l) => Math.floor(l.atMs / DAY_MS) === today)
+      .filter((l) => this.dayIndex(l.atMs) === today)
       .reduce((a, l) => a + (l.timeMs ?? 0), 0);
     return Math.round(ms / 60_000);
   }

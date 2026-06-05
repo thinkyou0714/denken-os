@@ -50,4 +50,17 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(b.logs().length).toBe(1);
     expect(b.getReview("機械")?.lapses).toBe(1);
   });
+
+  it("日境界は既定 JST（UTC 22時=JST翌07時の学習が『今日』に入る）", () => {
+    const p = new LocalProgress(new MemoryStorage()); // 既定 JST(+9h)
+    // 2026-01-10T22:00:00Z = JST 2026-01-11 07:00。JST では「11日」の学習。
+    p.record("理論", true, Date.UTC(2026, 0, 10, 22, 0), 10 * 60_000);
+    // now = JST 2026-01-11 09:00 → 同じ JST 日なので今日の学習時間に算入される。
+    const nowJst11 = Date.UTC(2026, 0, 11, 0, 0);
+    expect(p.todayMinutes(nowJst11)).toBe(10);
+    // 参考: UTC 日境界(offset=0)なら別日扱いで 0 分になる。
+    const utc = new LocalProgress(new MemoryStorage(), 0);
+    utc.record("理論", true, Date.UTC(2026, 0, 10, 22, 0), 10 * 60_000);
+    expect(utc.todayMinutes(nowJst11)).toBe(0);
+  });
 });
