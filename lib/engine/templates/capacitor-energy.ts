@@ -37,7 +37,7 @@ function buildFrom(C_uF: number, V: number): GenerationResult | null {
     answerUnit: "mJ",
     answerText: text,
     facts: { C_uF, V, W_joule: W },
-    defaultStatement: `静電容量${C_uF}μFのコンデンサに${V}Vの電圧を加えた。` + `蓄えられる静電エネルギーW〔mJ〕は?`,
+    defaultStatement: `静電容量${C_uF}μFのコンデンサに${V}Vの電圧を加えた。蓄えられる静電エネルギーW〔mJ〕は?`,
     defaultSolution: [`W=½·C·V² で算出する`, `W=0.5×${C_uF}×10⁻⁶×${V}²`, `W=${text}mJ`],
     physicallyValid: true,
   };

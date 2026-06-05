@@ -25,7 +25,7 @@ function frontmatter(p: Problem): string {
     `format: ${p.format ?? "multiple_choice"}`,
     `status: ${p.status ?? "draft"}`,
     `source_type: ${p.source.type}`,
-    "tags: [電験, " + p.subject + "]",
+    `tags: [電験, ${p.subject}]`,
     "---",
   ].filter((l): l is string => l !== null);
   return lines.join("\n");

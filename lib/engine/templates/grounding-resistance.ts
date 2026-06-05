@@ -26,8 +26,7 @@ function buildFrom(ig: number): GenerationResult | null {
     answerUnit: "Ω",
     answerText,
     facts: { Ig: ig, R },
-    defaultStatement:
-      `高圧電路の1線地絡電流が${ig}Aである。` + `B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。`,
+    defaultStatement: `高圧電路の1線地絡電流が${ig}Aである。B種接地工事の接地抵抗の最大値〔Ω〕を、基本式 R=150/Ig により求めよ。`,
     defaultSolution: [
       "B種接地抵抗の基本式: R = 150 / Ig",
       `R = 150 / ${ig} = ${answerText}Ω`,
