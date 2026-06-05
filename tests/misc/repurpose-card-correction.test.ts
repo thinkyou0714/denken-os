@@ -37,6 +37,15 @@ describe("share-card.cardText", () => {
     expect(hasPii("連絡は a@b.com まで")).toBe(true);
     expect(hasPii("学習30分")).toBe(false);
   });
+
+  it("本文に埋め込まれる nickname の PII も拒否する", () => {
+    expect(() =>
+      cardText("daily", { nickname: "a@b.com", streakDays: 1, todayMinutes: 30, weeklyMinutes: 30 }),
+    ).toThrow(/個人情報/);
+    expect(() =>
+      cardText("weekly", { nickname: "090-1234-5678", streakDays: 7, todayMinutes: 30, weeklyMinutes: 210 }),
+    ).toThrow(/個人情報/);
+  });
 });
 
 describe("correction.classify", () => {

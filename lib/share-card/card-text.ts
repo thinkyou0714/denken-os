@@ -33,6 +33,7 @@ export function cardText(kind: CardKind, r: StudyRecord): string {
   }
   const text = `${body}\n#今日のDENKEN #電験二種`;
   if (URL_RE.test(text)) throw new Error("シェアカード本文に URL を含めないでください");
+  if (hasPii(text)) throw new Error("シェアカード本文に個人情報を含めないでください");
   return text;
 }
 
