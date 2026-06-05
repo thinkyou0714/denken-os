@@ -28,6 +28,16 @@ describe("通知計画（12）", () => {
     expect(none.find((p) => p.kind === "streak_at_risk")).toBeUndefined();
   });
 
+  it("不正な reminderTime でも NaN 時刻にせず既定(20:00)へフォールバックする", () => {
+    const prefs: NotificationPrefs = { ...DEFAULT_PREFS, reminderTime: "20:xx", jitterMinutes: 0 };
+    const plan = planNotifications({ prefs, now, rng: () => 0.5 });
+    const r = plan.find((p) => p.kind === "study_reminder")!;
+    expect(Number.isNaN(r.atMs)).toBe(false);
+    const base = new Date(now);
+    base.setHours(20, 0, 0, 0); // 分が壊れていても 20:00 に落ちる
+    expect(r.atMs).toBe(base.getTime());
+  });
+
   it("試験カウントダウンは節目の日数でのみ出る", () => {
     const exam = new Date(now.getTime() + 7 * 86_400_000);
     const plan = planNotifications({ prefs: DEFAULT_PREFS, now, examDate: exam, rng: () => 0.5 });

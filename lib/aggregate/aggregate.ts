@@ -48,21 +48,26 @@ export function aggregate(p: Problem, poll: PollResult | null): AggregateOutput 
     };
   }
   const choices = p.choices ?? [];
-  const total = poll.votes.reduce((a, b) => a + b, 0);
+  // votes と choices の対応がずれた入力（X poll は最大4択で choices が5件以上だと末尾が
+  // poll に出ない等）でも、既知の選択肢に対応する票だけで集計する（防御）。
+  const n = Math.min(poll.votes.length, choices.length);
+  let total = 0;
+  for (let i = 0; i < n; i++) total += poll.votes[i] ?? 0;
   const answerIdx = choices.indexOf(p.answer);
-  const correct = answerIdx >= 0 ? (poll.votes[answerIdx] ?? 0) : 0;
+  const correct = answerIdx >= 0 && answerIdx < n ? (poll.votes[answerIdx] ?? 0) : 0;
   const correctRate = total > 0 ? clamp(correct / total, 0, 1) : 0;
 
   // 最頻誤答 = 正解以外で最多票の選択肢。
   let commonWrongChoice: string | null = null;
   let maxWrong = -1;
-  poll.votes.forEach((v, i) => {
-    if (i === answerIdx) return;
+  for (let i = 0; i < n; i++) {
+    if (i === answerIdx) continue;
+    const v = poll.votes[i] ?? 0;
     if (v > maxWrong) {
       maxWrong = v;
       commonWrongChoice = choices[i] ?? null;
     }
-  });
+  }
 
   return {
     answered: total,

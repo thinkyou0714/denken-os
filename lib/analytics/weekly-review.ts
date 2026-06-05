@@ -24,10 +24,6 @@ function movingAverage(values: number[], window = 4): number {
   return slice.reduce((a, b) => a + b, 0) / slice.length;
 }
 
-function topN<T>(arr: T[], n: number, key: (t: T) => number): T[] {
-  return [...arr].sort((a, b) => key(b) - key(a)).slice(0, n);
-}
-
 export interface WeeklyReviewInput {
   /** 直近週を末尾に並べた履歴（移動平均に使う）。 */
   history: WeeklyMetrics[];
@@ -45,8 +41,11 @@ export function renderWeeklyReview(input: WeeklyReviewInput): string {
   const repliesMA = movingAverage(history.map((h) => h.replyThreads));
   const followMA = movingAverage(history.map((h) => h.followConversions));
 
-  const top = topN(posts, 3, (p) => p.saves + p.replyThreads * 2 + p.followConversions * 3);
-  const flop = topN(posts, 3, (p) => -(p.saves + p.replyThreads * 2 + p.followConversions * 3));
+  const score = (p: PostMetric) => p.saves + p.replyThreads * 2 + p.followConversions * 3;
+  const ranked = [...posts].sort((a, b) => score(b) - score(a));
+  const top = ranked.slice(0, 3);
+  // TOP に出した投稿は flop に出さない（投稿数が少ないと同じ投稿が両方に並ぶ重複を防ぐ）。
+  const flop = ranked.slice(3).slice(-3);
 
   const lines: string[] = [];
   lines.push(`# 週次レビュー（${latest.weekLabel}）`);
@@ -66,6 +65,9 @@ export function renderWeeklyReview(input: WeeklyReviewInput): string {
   }
   lines.push("");
   lines.push("## 伸びなかった投稿");
+  if (flop.length === 0) {
+    lines.push("- （投稿数が少なく対象なし）");
+  }
   for (const p of flop) {
     lines.push(`- ${p.id}（保存${p.saves} / リプ${p.replyThreads} / フォロー${p.followConversions}）`);
   }

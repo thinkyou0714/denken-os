@@ -39,4 +39,18 @@ describe("aggregate", () => {
     const updated = applyStats(T0001, out);
     expect(updated.difficulty).toBe(T0001.difficulty);
   });
+
+  it("votes が choices より多くても既知選択肢ぶんだけで集計する（防御）", () => {
+    // choices は4件。余分な5件目の票は集計から除外され、答え(index1)の正答率は 50/100。
+    const out = aggregate(T0001, { votes: [10, 50, 5, 35, 999] });
+    expect(out.answered).toBe(100);
+    expect(out.correctRate).toBeCloseTo(0.5, 5);
+    expect(out.commonWrongChoice).toBe("9.6");
+  });
+
+  it("votes が choices より少なくても落ちない", () => {
+    const out = aggregate(T0001, { votes: [10, 50] }); // 先頭2件のみ
+    expect(out.answered).toBe(60);
+    expect(out.correctRate).toBeCloseTo(50 / 60, 5);
+  });
 });

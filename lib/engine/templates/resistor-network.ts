@@ -59,7 +59,7 @@ function buildFrom(R1: number, R2: number, R3: number): GenerationResult | null 
     ],
     likelyWrongChoice: String(seriesAll),
     facts: { R1, R2, R3, parallel, total },
-    defaultStatement: `抵抗R1=${R1}Ωに、R2=${R2}ΩとR3=${R3}Ωの並列回路を直列接続した。` + `合成抵抗R〔Ω〕は?`,
+    defaultStatement: `抵抗R1=${R1}Ωに、R2=${R2}ΩとR3=${R3}Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?`,
     defaultSolution: [
       `並列部 R2∥R3 = R2·R3/(R2+R3) = ${R2}·${R3}/(${R2}+${R3}) = ${parallel}Ω`,
       `直列なので R = R1 + (R2∥R3) = ${R1} + ${parallel}`,

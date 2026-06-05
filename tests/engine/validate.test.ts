@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { validateProblem } from "../../lib/engine/validate.js";
+import { narrationMatchesAnswer, validateProblem } from "../../lib/engine/validate.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001 = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
@@ -35,5 +35,21 @@ describe("validateProblem", () => {
     const bad = { ...T0001, source: { type: "past_exam_modified" } };
     const r = validateProblem(bad);
     expect(r.ok).toBe(false);
+  });
+});
+
+describe("narrationMatchesAnswer（解説の数値整合）", () => {
+  it("数値の答え: 解説のどこかに想定値が現れれば一致", () => {
+    expect(narrationMatchesAnswer(["|Z|=10", "P=3·I²·R=3.2kW", "別解…"], "3.2")).toBe(true);
+    expect(narrationMatchesAnswer(["3200W=3.2kW"], "3.2")).toBe(true);
+  });
+
+  it("想定値が現れなければ不一致（ハルシネーション破棄）", () => {
+    expect(narrationMatchesAnswer(["（途中式省略）", "P=999999kW"], "3.2")).toBe(false);
+  });
+
+  it("非数値の答え: 最終ステップに答え文字列が含まれることを要求", () => {
+    expect(narrationMatchesAnswer(["導出…", "よって 遅れ力率"], "遅れ力率")).toBe(true);
+    expect(narrationMatchesAnswer(["導出…"], "遅れ力率")).toBe(false);
   });
 });

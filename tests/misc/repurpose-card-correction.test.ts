@@ -37,6 +37,15 @@ describe("share-card.cardText", () => {
     expect(hasPii("連絡は a@b.com まで")).toBe(true);
     expect(hasPii("学習30分")).toBe(false);
   });
+
+  it("ニックネームにメール/電話が紛れたら cardText が拒否する", () => {
+    expect(() =>
+      cardText("streak", { nickname: "a@b.com", streakDays: 1, todayMinutes: 1, weeklyMinutes: 1 }),
+    ).toThrow();
+    expect(() =>
+      cardText("daily", { nickname: "090-1234-5678", streakDays: 1, todayMinutes: 1, weeklyMinutes: 1 }),
+    ).toThrow();
+  });
 });
 
 describe("correction.classify", () => {
@@ -59,5 +68,13 @@ describe("correction.classify", () => {
     const draft = draftCorrectionReply({ problemId: "T-0009", reporterHandle: "@a", correctAnswer: "3.2" });
     expect(draft).toContain("@a");
     expect(draft).toContain("削除せず");
+  });
+
+  it("判定閾値は引数で較正できる", () => {
+    // 弱い指摘（答え+単位+疑問符 ≈0.4）は既定0.5では拾わないが、閾値0.25なら拾う。
+    const reply = { id: "r3", authorHandle: "@c", text: "答えは3.2kWですよね？" };
+    expect(classifyReply(reply).isLikelyCorrection).toBe(false);
+    expect(classifyReply(reply, 0.25).isLikelyCorrection).toBe(true);
+    expect(flagCorrections([reply], 0.25).length).toBe(1);
   });
 });

@@ -32,9 +32,15 @@ export const DEFAULT_PREFS: NotificationPrefs = {
   jitterMinutes: 15,
 };
 
+/** "HH:MM" を解析する。不正・範囲外は安全な既定(20:00)へクランプ（NaN を時刻に渡さない）。 */
 function parseHHMM(s: string): { h: number; m: number } {
-  const [h, m] = s.split(":").map(Number);
-  return { h: h ?? 20, m: m ?? 0 };
+  const [hs, ms] = s.split(":");
+  const h = Number(hs);
+  const m = Number(ms);
+  return {
+    h: Number.isInteger(h) && h >= 0 && h <= 23 ? h : 20,
+    m: Number.isInteger(m) && m >= 0 && m <= 59 ? m : 0,
+  };
 }
 
 function jitter(baseMs: number, spreadMinutes: number, rng: () => number): number {

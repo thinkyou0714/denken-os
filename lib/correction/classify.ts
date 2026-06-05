@@ -26,9 +26,10 @@ const CUE_PATTERNS: { re: RegExp; weight: number }[] = [
   { re: /[?？]$/, weight: 0.1 },
 ];
 
-const THRESHOLD = 0.5;
+/** 既定の判定閾値。実データで再較正できるよう引数で上書き可能にしてある。 */
+export const DEFAULT_THRESHOLD = 0.5;
 
-export function classifyReply(reply: ReplyCandidate): CorrectionFlag {
+export function classifyReply(reply: ReplyCandidate, threshold: number = DEFAULT_THRESHOLD): CorrectionFlag {
   let score = 0;
   const matched: string[] = [];
   for (const { re, weight } of CUE_PATTERNS) {
@@ -42,14 +43,14 @@ export function classifyReply(reply: ReplyCandidate): CorrectionFlag {
     replyId: reply.id,
     authorHandle: reply.authorHandle,
     score,
-    isLikelyCorrection: score >= THRESHOLD,
+    isLikelyCorrection: score >= threshold,
     matched,
   };
 }
 
-/** 誤り指摘候補を抽出（人間にフラグを上げる対象）。 */
-export function flagCorrections(replies: ReplyCandidate[]): CorrectionFlag[] {
-  return replies.map(classifyReply).filter((f) => f.isLikelyCorrection);
+/** 誤り指摘候補を抽出（人間にフラグを上げる対象）。閾値は実データで較正可能。 */
+export function flagCorrections(replies: ReplyCandidate[], threshold: number = DEFAULT_THRESHOLD): CorrectionFlag[] {
+  return replies.map((r) => classifyReply(r, threshold)).filter((f) => f.isLikelyCorrection);
 }
 
 /** 訂正リプ下書き（消さない・指摘者クレジット欄あり・人間が承認して投稿）。 */

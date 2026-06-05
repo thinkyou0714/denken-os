@@ -136,7 +136,7 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
   async append(userId: string, log: AnswerLog): Promise<void> {
     const { error } = await this.client.from("answer_logs").insert({
       user_id: userId,
-      problem_id: null,
+      problem_id: log.problemId ?? null,
       topic: log.topic,
       correct: log.correct,
       time_ms: log.timeMs ?? null,
@@ -148,7 +148,7 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
   async byUser(userId: string): Promise<AnswerLog[]> {
     const { data, error } = await this.client
       .from("answer_logs")
-      .select("topic, correct, time_ms, answered_at")
+      .select("topic, correct, time_ms, answered_at, problem_id")
       .eq("user_id", userId)
       .order("answered_at", { ascending: true });
     if (error) throw new Error(`answer_logs byUser failed: ${error.message}`);
@@ -157,6 +157,7 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
       correct: r.correct as boolean,
       timeMs: (r.time_ms as number | null) ?? undefined,
       atMs: new Date(r.answered_at as string).getTime(),
+      problemId: (r.problem_id as string | null) ?? undefined,
     }));
   }
 }

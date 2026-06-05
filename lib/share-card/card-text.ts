@@ -33,6 +33,8 @@ export function cardText(kind: CardKind, r: StudyRecord): string {
   }
   const text = `${body}\n#今日のDENKEN #電験二種`;
   if (URL_RE.test(text)) throw new Error("シェアカード本文に URL を含めないでください");
+  // ニックネーム等に紛れたメール/電話の流出を投稿前に止める（06: 個人情報を載せない）。
+  if (hasPii(text)) throw new Error("シェアカード本文に個人情報（メール/電話）を含めないでください");
   return text;
 }
 

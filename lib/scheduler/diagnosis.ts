@@ -17,6 +17,8 @@ export interface AnswerLog {
   correct: boolean;
   timeMs?: number;
   atMs: number;
+  /** 任意: どの問題に対する解答か（問題単位の集計・誤答分析の素地）。 */
+  problemId?: string;
 }
 
 /** 解答ログから topic 別の集計を作る（dueMs は外部スケジューラで更新する前提の素地）。 */

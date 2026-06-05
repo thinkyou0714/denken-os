@@ -3,7 +3,7 @@
  * インメモリと違い再起動後も残るため、CLI 生成物の保管や小規模運用に使える
  * （Supabase 実装と同じインターフェース。supabase/migrations の DDL に対応）。
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { Problem } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
@@ -20,7 +20,11 @@ function readJson<T>(file: string, fallback: T): T {
 
 function writeJson(file: string, data: unknown): void {
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  // 原子的書き込み: 一時ファイルに書いてから rename で差し替える。
+  // 途中でクラッシュしても本体ファイルが半端な内容で壊れない（読み側の JSON.parse 失敗を防ぐ）。
+  const tmp = `${file}.${process.pid}.${Date.now()}.tmp`;
+  writeFileSync(tmp, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  renameSync(tmp, file);
 }
 
 export class FileProblemStore implements ProblemStore {

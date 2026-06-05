@@ -47,7 +47,7 @@ function buildFrom(f: number, p: number, s: number): GenerationResult | null {
     ],
     likelyWrongChoice: String(Ns),
     facts: { f, p, s, Ns, N },
-    defaultStatement: `周波数${f}Hz、極数${p}の三相誘導電動機が滑り${s}%で運転している。` + `回転速度N〔min⁻¹〕は?`,
+    defaultStatement: `周波数${f}Hz、極数${p}の三相誘導電動機が滑り${s}%で運転している。回転速度N〔min⁻¹〕は?`,
     defaultSolution: [
       `同期速度 Ns=120·f/p=120·${f}/${p}=${Ns} min⁻¹`,
       `滑り s=${s}% より N=Ns·(1−s/100)`,

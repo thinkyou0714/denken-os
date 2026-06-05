@@ -39,4 +39,16 @@ describe("renderWeeklyReview", () => {
     const md = renderWeeklyReview(input);
     expect(md).toContain("- [ ] ");
   });
+
+  it("投稿数が少ない週は同じ投稿が TOP と FLOP に重複しない", () => {
+    const md = renderWeeklyReview(input); // posts は3件
+    const flopSection = md.split("## 伸びなかった投稿")[1] ?? "";
+    // 3件すべて TOP3 に入るため flop には実投稿IDが出ない（重複回避）。
+    expect(flopSection).toContain("対象なし");
+    expect(flopSection).not.toContain("T-0007");
+  });
+
+  it("履歴が空ならデータなしを返す", () => {
+    expect(renderWeeklyReview({ history: [], posts: [] })).toContain("データなし");
+  });
 });
