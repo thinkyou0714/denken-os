@@ -59,7 +59,13 @@ export class LocalProgress {
   }
 
   /** 採点を記録し、SM-2 で記憶状態を更新する。 */
-  record(topic: string, correct: boolean, nowMs: number = Date.now(), timeMs?: number): ReviewState {
+  record(
+    topic: string,
+    correct: boolean,
+    nowMs: number = Date.now(),
+    timeMs?: number,
+    problemId?: string,
+  ): ReviewState {
     const prev = this.getReview(topic) ?? this.scheduler.init(nowMs);
     const next = this.scheduler.review(prev, correct ? "good" : "again", nowMs);
 
@@ -68,7 +74,7 @@ export class LocalProgress {
     this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
 
     const logs = this.logs();
-    logs.push({ topic, correct, atMs: nowMs, timeMs });
+    logs.push({ topic, correct, atMs: nowMs, timeMs, problemId });
     this.storage.setItem(LOG_KEY, JSON.stringify(logs));
     return next;
   }

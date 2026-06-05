@@ -123,16 +123,18 @@ describe("SupabaseProblemStore", () => {
 });
 
 describe("SupabaseAnswerLogStore", () => {
-  it("append → byUser で本人分のログを返す", async () => {
+  it("append → byUser で本人分のログを返す（problemId も往復）", async () => {
     const store = new SupabaseAnswerLogStore(client());
-    await store.append("u1", { topic: "理論", correct: true, atMs: 1000, timeMs: 5000 });
+    await store.append("u1", { topic: "理論", correct: true, atMs: 1000, timeMs: 5000, problemId: "T-0001" });
     await store.append("u1", { topic: "電力", correct: false, atMs: 2000 });
     await store.append("u2", { topic: "機械", correct: true, atMs: 3000 });
     const logs = await store.byUser("u1");
     expect(logs.length).toBe(2);
     expect(logs[0]?.topic).toBe("理論");
     expect(logs[0]?.timeMs).toBe(5000);
+    expect(logs[0]?.problemId).toBe("T-0001");
     expect(logs[1]?.timeMs).toBeUndefined();
+    expect(logs[1]?.problemId).toBeUndefined();
   });
 
   it("error は例外として伝播する", async () => {

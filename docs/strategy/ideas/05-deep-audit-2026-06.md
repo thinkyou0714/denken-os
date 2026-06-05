@@ -29,7 +29,8 @@
 8. 📋 **`weaknessScore` が試行回数に微加点**。練習量の多い論点をわずかに優先する設計意図だが、
    「弱点ほど優先」と整合させるなら符号反転や重みの再検討を推奨（影響は最大0.5と小）。
 9. ✅ **記述(descriptive)の自己採点**は `app.ts` のセンチネルで実装。`isAnswerCorrect` の厳密一致経路で回帰防止テスト追加。
-10. 📋 **直前の同一問題の連続出題**（`pickNext` の純ランダム）。直近出題の除外キューを推奨（MVPでは許容）。
+10. ✅ **直前の同一問題の連続出題**（`pickNext` の純ランダム）。選択ロジックを `web/src/select.ts` に分離し、
+    直近出題(`excludeId`)を他に候補があるかぎり避ける `pickNextProblem` に（テスト付き）。
 
 ## B. 生成エンジン（CLI・narrate・テンプレート）
 11. ✅ **CLI が import で `main()` 実行**（`lib/engine/cli.ts`）。テストが読み込むだけで `process.exit` する。
@@ -54,7 +55,8 @@
 24. ✓ **`source.type≠original` の citation 必須**は zod refine と ajv if/then と CLI で三重に担保。
 25. ✅ **export-vault が無検証出力**（`scripts/export-vault.ts`）。`validateProblem` で**不正をスキップ＋警告**。
 26. ✓ **検証済みサンプル T-0001〜0003** は ajv 通過・手検算済みと確認。
-27. 📋 **`params.realistic_range` と実際の draw レンジの突き合わせ**は未自動化。テンプレ単位の不変条件テストを推奨。
+27. ✅ **`params.realistic_range` と実際の draw レンジの突き合わせ**を自動化。全7テンプレを多数 seed で回し、
+    係数が宣言レンジ内・選択肢一意・綺麗な値・解説整合を検証する `template-invariants.test.ts` を追加。
 28. ✓ **numeric/descriptive は choices を持たない**分岐は generate/schema/mapper で一貫。
 29. 📋 **ID 連番の衝突回避**（`makeId` は prefix+連番）。複数バッチ統合時の重複検出を ingest 同様に推奨。
 30. ✓ **ingest の重複検出**（正規化キー）・出典メタ必須・要手修正フラグは妥当。
@@ -65,8 +67,9 @@
 32. ✅ **supabase-store の I/O ラッパ未テスト**（8%）。疑似 SupabaseClient で upsert/get/list/append/byUser/set と
     **error 伝播**を end-to-end 検証（93%超へ）。
 33. ✓ **行⇔ドメイン マッピング純関数**（`problemToRow` 等）は往復テスト済み。null↔undefined 変換も妥当。
-34. 📋 **`answer_logs.problem_id` を常に null 保存**（`SupabaseAnswerLogStore.append`）。
-    `AnswerLog` に任意 `problemId` を足し、問題単位の集計に備えるのを推奨（型が広域のため別PR）。
+34. ✅ **`answer_logs.problem_id` を常に null 保存**（`SupabaseAnswerLogStore.append`）。
+    `AnswerLog` に任意 `problemId` を追加し、web の `record`・supabase の append/byUser に配線
+    （問題単位の集計の素地。migration の列は既存）。テスト付き。
 35. ✓ **RLS 設計**（公開は published のみ read、所有データは `auth.uid()`、UPDATE は SELECT ポリシーと対）は堅牢。
 36. ✓ **`updated_at` トリガ**（0002 migration）と関数の `search_path` 固定は妥当。
 37. ✓ **インメモリ実装**（既定）でロジックを実DBなしにE2Eテストできる抽象は良い設計。
@@ -95,11 +98,11 @@
 52. ✓ **追う指標を3つに限定**（保存/リプ往復/フォロー転換）・4週移動平均・判断は人間（自動実行しない）は妥当。
 53. ✓ **集計の一次ソースは poll**（リプ番号解析は補助）。難易度は「提案」に留め自動上書きしない。
 54. ✓ **`applyStats` がスキーマ範囲（answered≥0, rate∈[0,1]）にクランプ**して返すのは安全。
-55. 📋 **`aggregate` の votes/choices 長不一致**は未ガード（システム内部入力のため低リスク）。防御的に min 長で集計するのを推奨。
+55. ✅ **`aggregate` の votes/choices 長不一致**を防御。既知選択肢に対応する票だけ（`min(len)`）で集計するよう是正（テスト付き）。
 56. ✓ **UTM 生成 `withUtm`**（既存クエリ保持）と `parseUtm` の往復は妥当。本文に貼らない注意書きも整合。
 57. ✓ **最頻誤答は正解以外の最多票**。全票0なら null を返す分岐も妥当。
 58. ✓ **難易度提案 `suggestDifficulty`**（正答率→★）の閾値設計は妥当。
-59. 📋 **誤り訂正 `classify` のヒューリスティック閾値0.5**は固定。実データで再較正できるよう係数を外出しするのを推奨。
+59. ✅ **誤り訂正 `classify` のヒューリスティック閾値0.5**を引数化（`DEFAULT_THRESHOLD`＋`classifyReply/flagCorrections` の閾値引数）。実データで較正可能に（テスト付き）。
 60. ✓ **訂正下書きは「消さない・指摘者クレジット・人間承認」**の方針をコード化（荒らし悪用防止）。
 
 ## G. セキュリティ・コンプラ
@@ -113,7 +116,7 @@
 67. ✓ **Supabase anon からの書き込み不可**（RLS）・サービスロール限定の方針は妥当。
 68. 📋 **`@anthropic-ai/sdk` の動的 import**で API 不使用経路の読み込みを回避。鍵未設定時のフォールバックは安全側（数値はコード算出）。
 69. ✓ **XSS 対策**（`web/src/app.ts` の `escapeHtml` で解説/出典をエスケープ、選択肢は textContent）は妥当。
-70. 📋 **依存の整合性**（lockfile・`npm ci`・Dependabot・dependency-review high）は整備済み。`fail-on-severity` を moderate に厳格化する選択肢を提示。
+70. ✅ **依存の整合性**（lockfile・`npm ci`・Dependabot）は整備済み。dependency-review の `fail-on-severity` を high→**moderate** に厳格化。
 
 ## H. テスト・カバレッジ
 71. ✅ **narrate.ts**（22%→）。Stub/Corrupting/`toNarrationInput`/`defaultNarrator`(env切替)/Anthropic コンストラクタをテスト。
@@ -125,7 +128,7 @@
 77. ✅ **回帰防止フロアの引き上げ**（`vitest.config.ts`）。stmts75→85 / branch65→76 / funcs80→92 / lines80→89。
 78. ✅ **web の採点・JST 境界**の新規テスト（`tests/web/grade.test.ts`、store のJST境界）。
 79. ✓ **テストは `tests/` に 1:1 ミラー**配置の規約を踏襲（新規 `tests/clients/` も同様）。
-80. 📋 **テンプレートの property-based テスト**（多数 seed で全件 clean/valid）を各テンプレに広げるのを推奨（現状は3相のみ100問）。
+80. ✅ **テンプレートの property-based テスト**を全7種に拡張（`template-invariants.test.ts`、多数 seed で不変条件を横断検証）。
 
 ## I. CI・ツール・サプライチェーン
 81. ✅ **`actions/checkout` のバージョン不統一**（v4 と v6 混在）を **v6 に統一**。

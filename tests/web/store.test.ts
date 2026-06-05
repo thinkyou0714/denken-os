@@ -25,6 +25,12 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(p.logs().length).toBe(2);
   });
 
+  it("problemId を記録できる（問題単位分析の素地）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    p.record("三相交流電力", true, Date.UTC(2026, 0, 10), 3000, "T-0001");
+    expect(p.logs()[0]?.problemId).toBe("T-0001");
+  });
+
   it("連続学習日数を数える（今日まで連続）", () => {
     const p = new LocalProgress(new MemoryStorage());
     const today = Date.UTC(2026, 0, 10);
