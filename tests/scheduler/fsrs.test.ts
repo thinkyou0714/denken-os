@@ -20,4 +20,25 @@ describe("FsrsScheduler", () => {
     // 保持率を上げるほど「忘れる前に」復習させるので間隔は短く（高々同じ）。
     expect(intervalHigh).toBeLessThanOrEqual(intervalLow);
   });
+
+  it("4段階すべての採点を反映でき、again は good より早い再出題になる", () => {
+    const s = new FsrsScheduler(0.9);
+    const card = s.init(now);
+    for (const r of ["again", "hard", "good", "easy"] as const) {
+      const view = s.view(s.review(card, r, now));
+      expect(view.dueMs).toBeGreaterThanOrEqual(now.getTime());
+    }
+    const againDue = s.view(s.review(card, "again", now)).dueMs;
+    const goodDue = s.view(s.review(card, "good", now)).dueMs;
+    expect(againDue).toBeLessThan(goodDue);
+  });
+
+  it("view は reps/lapses/stability を数値で射影する", () => {
+    const s = new FsrsScheduler();
+    const v = s.view(s.review(s.init(now), "again", now));
+    expect(v.reps).toBeGreaterThanOrEqual(1);
+    expect(v.lapses).toBeGreaterThanOrEqual(0);
+    expect(typeof v.stability).toBe("number");
+    expect(typeof v.difficulty).toBe("number");
+  });
 });
