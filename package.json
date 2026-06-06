@@ -38,7 +38,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check",
     "format": "biome check --write",
-    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm test && npm run build:web"
+    "verify": "npm run lint && npm run typecheck && npm run typecheck:web && npm run validate:data && npm test && npm run build:web",
+    "audit:status": "tsx scripts/audit-status.ts",
+    "audit:status:strict": "tsx scripts/audit-status.ts --strict",
+    "release:check": "npm run verify && npm run audit:status:strict"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
