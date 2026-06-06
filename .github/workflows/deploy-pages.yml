@@ -13,10 +13,10 @@ permissions:
   id-token: write
 
 # 同時デプロイは1本に直列化（実行中はキャンセルしない）。
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
