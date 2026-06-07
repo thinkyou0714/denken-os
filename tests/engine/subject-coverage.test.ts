@@ -56,7 +56,9 @@ describe("科目カバレッジ拡充（法規・電力）", () => {
   });
 
   it("逆起電力が非正（V≤Ia·Ra）の組は棄却される", () => {
-    expect(dcMotorBackEmf.generateFrom({ terminal_voltage: 5, armature_current: 50, armature_resistance: 0.5 })).toBeNull();
+    expect(
+      dcMotorBackEmf.generateFrom({ terminal_voltage: 5, armature_current: 50, armature_resistance: 0.5 }),
+    ).toBeNull();
   });
 
   it("三相線路の電力損失 3I²R を正しく算出（10A,0.5Ω → 150W）", () => {

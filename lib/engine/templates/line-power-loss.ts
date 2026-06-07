@@ -34,8 +34,7 @@ function buildFrom(i: number, r: number): GenerationResult | null {
     answerText,
     facts: { i, r, loss },
     defaultStatement:
-      `三相3線式送電線に線電流${i}A が流れている。1線あたりの抵抗が${r}Ω のとき、` +
-      `線路の電力損失〔W〕を求めよ。`,
+      `三相3線式送電線に線電流${i}A が流れている。1線あたりの抵抗が${r}Ω のとき、` + `線路の電力損失〔W〕を求めよ。`,
     defaultSolution: ["三相3線式の電力損失 = 3 × I² × R", `= 3 × ${i}² × ${r}`, `= ${answerText} W`],
     physicallyValid: true,
   };
