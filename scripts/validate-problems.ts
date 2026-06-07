@@ -50,6 +50,24 @@ function customChecks(file: string, p: any): Failure[] {
     failures.push({ file, rule: "citation_required", message: `source.type=${p.source.type} は citation 必須です` });
   }
 
+  // params.value は realistic_range 内（JSON Schema draft-07 では同一オブジェクト内の
+  // cross-field 算術を表現できないためコード化。範囲外データ + 範囲外入力起点の封鎖）。
+  if (p.params && typeof p.params === "object") {
+    for (const [name, param] of Object.entries<any>(p.params)) {
+      const r = param?.realistic_range;
+      if (Array.isArray(r) && r.length === 2 && typeof param.value === "number") {
+        const [min, max] = r;
+        if (param.value < min || param.value > max) {
+          failures.push({
+            file,
+            rule: "param_realistic_range",
+            message: `params.${name}.value=${param.value} が realistic_range [${min}, ${max}] の外です`,
+          });
+        }
+      }
+    }
+  }
+
   return failures;
 }
 

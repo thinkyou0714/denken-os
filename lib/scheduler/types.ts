@@ -10,6 +10,8 @@ export interface ReviewState {
   ease: number; // 易しさ係数（SM-2）
   dueMs: number; // 次回復習予定（epoch ms）
   lastReviewMs: number | null;
+  stability?: number; // FSRS の記憶安定性（日）。SM-2 では未使用。永続化往復で保持する。
+  difficulty?: number; // FSRS の難易度。SM-2 では未使用。永続化往復で保持する。
 }
 
 export interface Scheduler {

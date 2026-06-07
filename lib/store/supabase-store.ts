@@ -76,6 +76,9 @@ export interface ReviewStateRow {
   lapses: number;
   interval_days: number;
   ease: number;
+  // FSRS 用（任意。0001_init.sql の review_states.stability/difficulty 列に対応）。
+  stability: number | null;
+  difficulty: number | null;
   due_at: string; // ISO
   last_review_at: string | null;
 }
@@ -88,6 +91,9 @@ export function reviewStateToRow(userId: string, topic: string, s: ReviewState):
     lapses: s.lapses,
     interval_days: s.intervalDays,
     ease: s.ease,
+    // FSRS の記憶状態を永続化往復で失わない（列は存在するのに mapping で欠落していた）。
+    stability: s.stability ?? null,
+    difficulty: s.difficulty ?? null,
     due_at: new Date(s.dueMs).toISOString(),
     last_review_at: s.lastReviewMs === null ? null : new Date(s.lastReviewMs).toISOString(),
   };
@@ -101,6 +107,9 @@ export function rowToReviewState(r: ReviewStateRow): ReviewState {
     ease: r.ease,
     dueMs: new Date(r.due_at).getTime(),
     lastReviewMs: r.last_review_at === null ? null : new Date(r.last_review_at).getTime(),
+    // null（SM-2 など FSRS 非使用）のときはキーを省く（後方互換）。
+    ...(r.stability !== null && r.stability !== undefined ? { stability: r.stability } : {}),
+    ...(r.difficulty !== null && r.difficulty !== undefined ? { difficulty: r.difficulty } : {}),
   };
 }
 

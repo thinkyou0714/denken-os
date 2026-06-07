@@ -52,6 +52,12 @@ function renderQuestion(): void {
 
   const answers = $("answers");
   answers.innerHTML = "";
+  // 解答群を支援技術へ「ひとまとまりの操作群」として伝える（WCAG 4.1.2 / 1.3.1）。
+  answers.setAttribute("role", "group");
+  answers.setAttribute(
+    "aria-label",
+    p.choices && p.choices.length > 0 ? "選択肢" : p.format === "descriptive" ? "記述解答" : "数値解答",
+  );
   if (p.choices && p.choices.length > 0) {
     // multiple_choice: 選択肢ボタン
     for (const choice of p.choices) {
@@ -136,10 +142,16 @@ function escapeHtml(s: string): string {
 }
 
 async function main(): Promise<void> {
-  $("next").onclick = renderQuestion;
+  $("next").onclick = () => {
+    renderQuestion();
+    // キーボード/読み上げ利用者のため次問の最初の操作要素へフォーカスを移す（WCAG 2.4.3）。
+    ($("answers").querySelector("button, input, textarea") as HTMLElement | null)?.focus();
+  };
   try {
     const res = await fetch("./problems.json");
-    problems = (await res.json()) as Problem[];
+    if (!res.ok) throw new Error(`problems.json の取得に失敗（${res.status}）`);
+    const data: unknown = await res.json();
+    problems = Array.isArray(data) ? (data as Problem[]) : [];
   } catch {
     problems = [];
   }

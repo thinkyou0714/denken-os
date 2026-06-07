@@ -94,6 +94,21 @@ export const problemSchema = z
         });
       }
     }
+    // params.value は realistic_range 内（範囲外は出題前に弾く。範囲外入力起点の NaN/Infinity を恒久封鎖）
+    if (p.params) {
+      for (const [name, param] of Object.entries(p.params)) {
+        if (param.realistic_range) {
+          const [min, max] = param.realistic_range;
+          if (param.value < min || param.value > max) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["params", name, "value"],
+              message: `params.${name}.value=${param.value} は realistic_range [${min}, ${max}] の外です`,
+            });
+          }
+        }
+      }
+    }
   });
 
 export type Problem = z.infer<typeof problemSchema>;

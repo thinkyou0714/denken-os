@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- CSP: 同一オリジンのみ。外部 script/接続を禁止し XSS と第三者リソース混入を抑止する。
+         style は inline <style>/style 属性のため 'unsafe-inline' を許可（script は不許可）。 -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
     <title>DENKEN-OS — 今日の一問</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -21,6 +27,8 @@
       #answers { display: grid; gap: .5rem; }
       .choice { padding: .7rem 1rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; background: #88884011; cursor: pointer; text-align: left; }
       .choice:hover { background: #8888; }
+      /* キーボード操作時のフォーカス可視化（WCAG 2.4.7）。 */
+      .choice:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #0b5394; outline-offset: 2px; }
       input#numeric-input { padding: .7rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; }
       #feedback { font-weight: 700; margin: 1rem 0 .3rem; }
       .ok { color: #198754; } .ng { color: #dc3545; }
@@ -43,9 +51,9 @@
       <div id="meta"></div>
       <div id="statement">読み込み中…</div>
       <div id="answers"></div>
-      <div id="feedback"></div>
-      <div id="solution"></div>
-      <div id="share"></div>
+      <div id="feedback" role="status" aria-live="assertive"></div>
+      <div id="solution" aria-live="polite"></div>
+      <div id="share" aria-live="polite"></div>
       <button id="next">次の問題 →</button>
     </main>
 
