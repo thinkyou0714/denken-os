@@ -14,6 +14,8 @@ import { prioritizeFoundationFirst } from "../../lib/scheduler/prereq.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { nextAttemptState } from "./attempt.js";
 import { feedbackParts, isAnswerCorrect } from "./grade.js";
+import { openKv } from "./idb.js";
+import { IdbBackedStorage } from "./idb-storage.js";
 import { mathToSpeech } from "./math-speech.js";
 import { shouldRequestPersist } from "./persist.js";
 import { dueSummary } from "./queue.js";
@@ -37,7 +39,10 @@ function weakTopics(): string[] {
   return prioritizeFoundationFirst(active, subjectOf).slice(0, 3);
 }
 
-const progress = new LocalProgress(window.localStorage);
+// 進捗ストア。main() で IndexedDB を hydrate してから生成する（不可なら localStorage フォールバック）。
+let progress!: LocalProgress;
+/** IndexedDB を使えた場合のみ保持。pagehide 時の flush（取りこぼし軽減）に使う。 */
+let idbStorage: IdbBackedStorage | null = null;
 let problems: Problem[] = [];
 let current: Problem | null = null;
 let questionShownAt = 0;
@@ -212,7 +217,25 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
+/** IndexedDB 永続化を優先し、不可なら localStorage にフォールバックして進捗ストアを作る。 */
+async function createProgress(): Promise<LocalProgress> {
+  try {
+    const kv = await openKv("denken-os", "kv");
+    const storage = new IdbBackedStorage(kv, { migrationSource: window.localStorage });
+    await storage.hydrate(); // 既存 localStorage を一度だけ移行 + 版数 stamp
+    idbStorage = storage;
+    return new LocalProgress(storage);
+  } catch {
+    // IndexedDB 不可（Safari private 等）: localStorage 直結で従来動作。
+    return new LocalProgress(window.localStorage);
+  }
+}
+
 async function main(): Promise<void> {
+  // 永続層を先に用意（同期読み取り API を満たした状態で以降の render が走る）。
+  progress = await createProgress();
+  // タブ離脱時に未完了の write-through を待つ（IndexedDB 使用時のみ。fallback では no-op）。
+  addEventListener("pagehide", () => void idbStorage?.flush());
   $("next").onclick = () => {
     renderQuestion();
     // キーボード/読み上げ利用者のため次問の最初の操作要素へフォーカスを移す（WCAG 2.4.3）。
