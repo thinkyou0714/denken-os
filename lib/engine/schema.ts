@@ -86,7 +86,9 @@ export const problemSchema = z
     }
     // numeric は answer が単位なしの数値文字列であること（E4）。
     // web/grade.ts が Number(answer) で再パースするため、'4.6Ω' 等だと全回答が NaN=不正解化する。
-    if (p.format === "numeric" && !Number.isFinite(Number(p.answer))) {
+    // 空白のみは min(1) を通過するが Number("   ")===0（有限）で全回答が 0 と誤一致するため弾く
+    // （data-checks.numericAnswerIssue と同条件＝ ajv/zod 両ゲートの parity を保つ）。
+    if (p.format === "numeric" && (p.answer.trim().length === 0 || !Number.isFinite(Number(p.answer)))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["answer"],

@@ -36,3 +36,30 @@ describe("B2: params.value realistic_range 強制", () => {
     expect(problemSchema.safeParse(p).success).toBe(false);
   });
 });
+
+describe("E4: numeric answer の数値性（zod superRefine、ajv ゲートと parity）", () => {
+  function numericBase(answer: string): unknown {
+    const p = JSON.parse(readFileSync(T1, "utf8"));
+    p.format = "numeric";
+    // numeric は選択肢を持たない。
+    p.choices = undefined;
+    p.distractors = undefined;
+    p.answer = answer;
+    return p;
+  }
+
+  it('空文字/空白のみの numeric answer を弾く（Number("")===0 の罠）', () => {
+    expect(problemSchema.safeParse(numericBase("")).success).toBe(false);
+    expect(problemSchema.safeParse(numericBase("   ")).success).toBe(false); // min(1) は通るが trim で弾く
+    expect(problemSchema.safeParse(numericBase("　")).success).toBe(false); // 全角空白
+  });
+
+  it("単位付き/非数値の numeric answer を弾く", () => {
+    expect(problemSchema.safeParse(numericBase("4.6Ω")).success).toBe(false);
+  });
+
+  it("正当な数値文字列は通る（0 を含む）", () => {
+    expect(problemSchema.safeParse(numericBase("3.2")).success).toBe(true);
+    expect(problemSchema.safeParse(numericBase("0")).success).toBe(true);
+  });
+});
