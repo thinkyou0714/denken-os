@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
-import { isAnswerCorrect, normalizeNumericInput } from "../../web/src/grade.js";
+import { feedbackParts, isAnswerCorrect, normalizeNumericInput } from "../../web/src/grade.js";
 
 /** isAnswerCorrect は format と answer のみ参照するので最小構成で十分。 */
 function numeric(answer: string): Problem {
@@ -52,5 +52,19 @@ describe("isAnswerCorrect（その他は厳密一致）", () => {
     expect(isAnswerCorrect(mc("3.2"), "3.2")).toBe(true);
     // numeric と違い文字列一致なので "3.20" は別物（選択肢は固定テキスト）。
     expect(isAnswerCorrect(mc("3.2"), "3.20")).toBe(false);
+  });
+});
+
+describe("feedbackParts（A3: 視覚と読み上げの分離）", () => {
+  it("speech に絵文字を含めず、正解値を読み下す", () => {
+    const ok = feedbackParts(true, "3.2");
+    expect(ok.visual).toContain("⭕");
+    expect(ok.speech).toBe("正解です");
+
+    const ng = feedbackParts(false, "5Ω");
+    expect(ng.visual).toContain("❌");
+    expect(ng.speech).not.toMatch(/[⭕❌]/);
+    expect(ng.speech).toContain("オーム"); // mathToSpeech で Ω を読み下す
+    expect(ng.speech).toContain("不正解");
   });
 });

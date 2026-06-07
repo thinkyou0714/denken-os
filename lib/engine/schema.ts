@@ -27,6 +27,13 @@ const paramField = z.object({
   realistic_range: z.tuple([z.number(), z.number()]).optional(),
 });
 
+/** 検収来歴（誰が/いつ/方法）。status=published で必須。指定時は3項目とも非空。 */
+export const provenanceSchema = z.object({
+  validated_by: z.string().min(1),
+  validated_at: z.string().min(1),
+  method: z.string().min(1),
+});
+
 export const validationSchema = z.object({
   solver_checked: z.boolean(),
   human_checked: z.boolean(),
@@ -34,6 +41,7 @@ export const validationSchema = z.object({
   physically_valid: z.boolean(),
   supervisor_checked: z.boolean().optional(),
   confidence: z.number().min(0).max(1).optional(),
+  provenance: provenanceSchema.optional(),
 });
 
 export const sourceSchema = z
@@ -64,6 +72,8 @@ export const problemSchema = z
     statement: z.string().min(1),
     figure: z.string().optional(),
     choices: z.array(z.string()).optional(),
+    // 誤答の言語化（典型ミスの解説）。multiple_choice の各誤答に「なぜ間違うか」を持つ。
+    distractors: z.array(z.object({ choice: z.string().min(1), reason: z.string().min(1) })).optional(),
     answer: z.string().min(1),
     solution: z.array(z.string()).min(1),
     validation: validationSchema,
@@ -82,6 +92,36 @@ export const problemSchema = z
         });
       }
     }
+    // numeric は answer が単位なしの数値文字列であること（E4）。
+    // web/grade.ts が Number(answer) で再パースするため、'4.6Ω' 等だと全回答が NaN=不正解化する。
+    // 空白のみは min(1) を通過するが Number("   ")===0（有限）で全回答が 0 と誤一致するため弾く
+    // （data-checks.numericAnswerIssue と同条件＝ ajv/zod 両ゲートの parity を保つ）。
+    if (p.format === "numeric" && (p.answer.trim().length === 0 || !Number.isFinite(Number(p.answer)))) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["answer"],
+        message: `numeric の answer は単位なしの数値文字列である必要があります: "${p.answer}"`,
+      });
+    }
+    // distractors の choice は choices に含まれ、answer とは異なる（誤答の言語化・E1）。
+    if (p.distractors) {
+      for (const d of p.distractors) {
+        if (p.choices && !p.choices.includes(d.choice)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distractors"],
+            message: `distractor "${d.choice}" は choices に含まれていません`,
+          });
+        }
+        if (d.choice === p.answer) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distractors"],
+            message: `distractor "${d.choice}" は正解と一致しています`,
+          });
+        }
+      }
+    }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）
     if (p.status === "validated" || p.status === "published") {
       const v = p.validation;
@@ -92,6 +132,30 @@ export const problemSchema = z
           message:
             "status=validated|published は solver_checked/human_checked/clean_answer/physically_valid が全て true である必要があります",
         });
+      }
+    }
+    // status=published は検収来歴 provenance(validated_by/validated_at/method) が必須（DI-13/DI-5）。
+    // validated には課さない（前向き契約。既存 validated データの偽 backfill を避ける）。
+    if (p.status === "published" && !p.validation.provenance) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["validation", "provenance"],
+        message: "status=published は provenance(validated_by/validated_at/method) が必須です",
+      });
+    }
+    // params.value は realistic_range 内（範囲外は出題前に弾く。範囲外入力起点の NaN/Infinity を恒久封鎖）
+    if (p.params) {
+      for (const [name, param] of Object.entries(p.params)) {
+        if (param.realistic_range) {
+          const [min, max] = param.realistic_range;
+          if (param.value < min || param.value > max) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["params", name, "value"],
+              message: `params.${name}.value=${param.value} は realistic_range [${min}, ${max}] の外です`,
+            });
+          }
+        }
       }
     }
   });

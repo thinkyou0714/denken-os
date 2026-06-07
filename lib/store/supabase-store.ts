@@ -21,6 +21,9 @@ export interface ProblemRow {
   topic: string;
   format: string;
   difficulty: number;
+  // params（係数・realistic_range）。0003_problems_params.sql の params 列に対応。
+  // これを落とすと file ストアと parity が崩れ、再読込時に realistic_range 検証が不能になる。
+  params: Problem["params"] | null;
   statement: string;
   choices: string[] | null;
   answer: string;
@@ -39,6 +42,7 @@ export function problemToRow(p: Problem): ProblemRow {
     topic: p.topic,
     format: p.format ?? "multiple_choice",
     difficulty: p.difficulty,
+    params: p.params ?? null,
     statement: p.statement,
     choices: p.choices ?? null,
     answer: p.answer,
@@ -58,6 +62,7 @@ export function rowToProblem(r: ProblemRow): Problem {
     topic: r.topic,
     format: r.format as Problem["format"],
     difficulty: r.difficulty,
+    ...(r.params ? { params: r.params } : {}),
     statement: r.statement,
     choices: r.choices ?? undefined,
     answer: r.answer,
@@ -76,6 +81,11 @@ export interface ReviewStateRow {
   lapses: number;
   interval_days: number;
   ease: number;
+  // FSRS 用（任意。0001_init.sql の review_states.stability/difficulty 列に対応）。
+  stability: number | null;
+  difficulty: number | null;
+  // FSRS 学習状態（0004_review_state_fsrs_state.sql の state 列）。reps から復元すると誤分類するため永続化。
+  state: number | null;
   due_at: string; // ISO
   last_review_at: string | null;
 }
@@ -88,6 +98,10 @@ export function reviewStateToRow(userId: string, topic: string, s: ReviewState):
     lapses: s.lapses,
     interval_days: s.intervalDays,
     ease: s.ease,
+    // FSRS の記憶状態を永続化往復で失わない（列は存在するのに mapping で欠落していた）。
+    stability: s.stability ?? null,
+    difficulty: s.difficulty ?? null,
+    state: s.state ?? null,
     due_at: new Date(s.dueMs).toISOString(),
     last_review_at: s.lastReviewMs === null ? null : new Date(s.lastReviewMs).toISOString(),
   };
@@ -101,6 +115,10 @@ export function rowToReviewState(r: ReviewStateRow): ReviewState {
     ease: r.ease,
     dueMs: new Date(r.due_at).getTime(),
     lastReviewMs: r.last_review_at === null ? null : new Date(r.last_review_at).getTime(),
+    // null（SM-2 など FSRS 非使用）のときはキーを省く（後方互換）。
+    ...(r.stability !== null && r.stability !== undefined ? { stability: r.stability } : {}),
+    ...(r.difficulty !== null && r.difficulty !== undefined ? { difficulty: r.difficulty } : {}),
+    ...(r.state !== null && r.state !== undefined ? { state: r.state } : {}),
   };
 }
 

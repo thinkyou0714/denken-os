@@ -40,6 +40,8 @@ describe("テンプレート不変条件（全7種・多数 seed）", () => {
           const [lo, hi] = spec.realistic_range;
           expect(pv!.value).toBeGreaterThanOrEqual(lo);
           expect(pv!.value).toBeLessThanOrEqual(hi);
+          // DI-3: 出力 params の realistic_range は宣言 paramSpecs と一致（仕様/データのドリフト防止）。
+          expect(pv!.realistic_range).toEqual(spec.realistic_range);
         }
 
         const format = g.format ?? "multiple_choice";

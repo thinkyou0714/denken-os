@@ -10,6 +10,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import { citationIssue, numericAnswerIssue, paramIssues } from "../lib/engine/data-checks.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -45,9 +46,18 @@ function customChecks(file: string, p: any): Failure[] {
     }
   }
 
-  // original 以外は citation 必須（schema 済だが二重チェック）
-  if (p.source && p.source.type !== "original" && !p.source.citation) {
-    failures.push({ file, rule: "citation_required", message: `source.type=${p.source.type} は citation 必須です` });
+  // 出典 citation の必須 + 書式（DI-6。original は対象外）。
+  const cIssue = citationIssue(p.source);
+  if (cIssue) failures.push({ file, rule: "citation", message: cIssue });
+
+  // numeric の answer は数値文字列（E4）。
+  const nIssue = numericAnswerIssue(p);
+  if (nIssue) failures.push({ file, rule: "numeric_answer", message: nIssue });
+
+  // params の範囲(B2)＋離散ドメイン(DI-4: 極数=偶数 / 周波数∈{50,60})。
+  // JSON Schema draft-07 では同一オブジェクト内の cross-field/離散制約を表現できないためコード化。
+  for (const msg of paramIssues(p.params)) {
+    failures.push({ file, rule: "param_domain", message: msg });
   }
 
   return failures;

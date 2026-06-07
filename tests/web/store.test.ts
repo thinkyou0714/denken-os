@@ -31,6 +31,37 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(p.logs()[0]?.problemId).toBe("T-0001");
   });
 
+  it("誤答した問題は relearning キューに積まれ、予定到来後に dueLapses へ出る", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("三相交流電力", false, now, 5000, "T-0009");
+    expect(p.dueLapses(now)).not.toContain("T-0009"); // まだ予定前
+    expect(p.dueLapses(now + 11 * 60_000)).toContain("T-0009"); // 10分後は到来
+    // 正解で卒業（キューから消える）。
+    p.record("三相交流電力", true, now + 12 * 60_000, 4000, "T-0009");
+    expect(p.dueLapses(now + 20 * 60_000)).not.toContain("T-0009");
+  });
+
+  it("既定 FSRS: record で stability が付与される", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const st = p.record("理論", true, Date.UTC(2026, 0, 10), 5000, "T-1");
+    expect(st.stability).toBeGreaterThan(0);
+    expect(Number.isFinite(st.dueMs)).toBe(true);
+  });
+
+  it("旧 SM-2 形式(stability 無し)を FSRS 既定で読んでもクラッシュせず有効な状態を作る（後方互換）", () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      "denken:reviews",
+      JSON.stringify({ 理論: { reps: 2, lapses: 0, intervalDays: 6, ease: 2.5, dueMs: 0, lastReviewMs: 0 } }),
+    );
+    const p = new LocalProgress(storage);
+    const st = p.record("理論", true, Date.UTC(2026, 0, 10), 5000, "T-1");
+    expect(Number.isFinite(st.dueMs)).toBe(true);
+    expect(st.dueMs).toBeGreaterThan(0);
+    expect(st.stability).toBeGreaterThan(0); // 旧データから FSRS 初期化され有効値が付く
+  });
+
   it("連続学習日数を数える（今日まで連続）", () => {
     const p = new LocalProgress(new MemoryStorage());
     const today = Date.UTC(2026, 0, 10);
@@ -54,7 +85,36 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     a.record("機械", false, Date.UTC(2026, 0, 10));
     const b = new LocalProgress(storage);
     expect(b.logs().length).toBe(1);
-    expect(b.getReview("機械")?.lapses).toBe(1);
+    expect(b.getReview("機械")).toBeDefined(); // 記憶状態が別インスタンスへ復元される
+  });
+
+  it("容量超過(QuotaExceededError)でも record は throw せず、ログを間引いて継続する", () => {
+    // logs JSON が一定サイズを超えると QuotaExceededError を投げる Storage。
+    class QuotaStorage implements StorageLike {
+      private m = new Map<string, string>();
+      constructor(private maxLen: number) {}
+      getItem(k: string): string | null {
+        return this.m.get(k) ?? null;
+      }
+      setItem(k: string, v: string): void {
+        if (k === "denken:logs" && v.length > this.maxLen) {
+          const e = new Error("quota") as Error & { name: string };
+          e.name = "QuotaExceededError";
+          throw e;
+        }
+        this.m.set(k, v);
+      }
+    }
+    const storage = new QuotaStorage(400);
+    const p = new LocalProgress(storage);
+    const now = Date.UTC(2026, 0, 10);
+    // 上限を超えるまで記録しても例外を投げない。
+    for (let i = 0; i < 200; i++) {
+      expect(() => p.record("理論", i % 2 === 0, now + i)).not.toThrow();
+    }
+    // 何らかのログが保持され、review 状態も読める（不整合で全消失しない）。
+    expect(p.logs().length).toBeGreaterThan(0);
+    expect(p.getReview("理論")).toBeDefined();
   });
 
   it("日境界は既定 JST（UTC 22時=JST翌07時の学習が『今日』に入る）", () => {

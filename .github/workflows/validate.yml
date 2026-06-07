@@ -32,6 +32,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # 供給網: 利用者に届く本番依存の high/critical で公開を止める（lockfile pin と対）。
+      # dev ツール（vitest/esbuild 等）はバンドルに含まれず CI でしか動かないため gate には含めない。
+      - name: Audit production dependencies (high+, gate)
+        run: npm audit --audit-level=high --omit=dev
+
+      # dev 依存の脆弱性は可視化のみ（破壊的更新が必要な場合があり gate にはしない）。
+      - name: Audit all dependencies (visibility only)
+        run: npm audit --audit-level=moderate || true
+
       - name: Lint & format check (Biome)
         run: npm run lint
 

@@ -10,6 +10,14 @@ export interface ReviewState {
   ease: number; // 易しさ係数（SM-2）
   dueMs: number; // 次回復習予定（epoch ms）
   lastReviewMs: number | null;
+  stability?: number; // FSRS の記憶安定性（日）。SM-2 では未使用。永続化往復で保持する。
+  difficulty?: number; // FSRS の難易度。SM-2 では未使用。永続化往復で保持する。
+  /**
+   * FSRS の学習状態（ts-fsrs State enum: 0=New,1=Learning,2=Review,3=Relearning）。
+   * reps から復元すると Learning/Relearning を Review に誤分類し間隔が約10倍に膨らむため、
+   * 状態自体を永続化往復で保持する。SM-2 では未使用。
+   */
+  state?: number;
 }
 
 export interface Scheduler {

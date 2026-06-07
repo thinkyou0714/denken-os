@@ -12,11 +12,26 @@ export interface PickOptions {
   rng?: () => number;
   /** 直近に出した問題ID（可能なら避ける）。 */
   excludeId?: string;
+  /** 直近に出した topic 列（末尾が最新）。interleaving の連続抑制に使う。 */
+  recentTopics?: string[];
+  /** 同一 topic の最大連続数（既定2）。これ以上連続している topic は後回し。 */
+  maxSameTopicRun?: number;
+  /** 再出題予定が到来した問題ID（問題単位 relearning）。最優先で再出題する。 */
+  lapsedDueIds?: string[];
 }
 
 export function pickNextProblem(problems: Problem[], opts: PickOptions): Problem | null {
   if (problems.length === 0) return null;
   const rng = opts.rng ?? Math.random;
+  const recent = opts.recentTopics ?? [];
+  const maxRun = opts.maxSameTopicRun ?? 2;
+
+  // 末尾(最新)から同 topic が何連続しているか。
+  const trailingRun = (topic: string): number => {
+    let n = 0;
+    for (let i = recent.length - 1; i >= 0 && recent[i] === topic; i--) n += 1;
+    return n;
+  };
 
   const pickFrom = (pool: Problem[]): Problem | null => {
     if (pool.length === 0) return null;
@@ -26,8 +41,18 @@ export function pickNextProblem(problems: Problem[], opts: PickOptions): Problem
     return usable[Math.floor(rng() * usable.length)] ?? null;
   };
 
-  // 弱点 topic に該当する問題があればそこから（解答履歴があるとき）。
-  for (const topic of opts.weakTopics) {
+  // Relearning 最優先: 再出題予定が到来した「外した問題」があれば再出題（problem 単位 spaced retrieval）。
+  const lapsed = new Set((opts.lapsedDueIds ?? []).filter((id) => id !== opts.excludeId));
+  if (lapsed.size > 0) {
+    const chosen = pickFrom(problems.filter((p) => lapsed.has(p.id)));
+    if (chosen) return chosen;
+  }
+
+  // Interleaving: 連続上限に達していない弱点を優先し、達したものは後回し（転移と長期保持を上げる）。
+  // 候補が当該 topic しか無ければ妥協して出す（出題継続を優先）。
+  const fresh = opts.weakTopics.filter((t) => trailingRun(t) < maxRun);
+  const stale = opts.weakTopics.filter((t) => trailingRun(t) >= maxRun);
+  for (const topic of [...fresh, ...stale]) {
     const chosen = pickFrom(problems.filter((p) => p.topic === topic));
     if (chosen) return chosen;
   }

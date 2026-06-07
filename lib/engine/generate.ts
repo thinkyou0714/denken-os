@@ -10,7 +10,7 @@
 import { defaultNarrator, type Narrator, toNarrationInput } from "./narrate.js";
 import type { Problem, SourceType } from "./schema.js";
 import type { Template } from "./templates/types.js";
-import { narrationMatchesAnswer, validateProblem } from "./validate.js";
+import { narrationMatchesAnswer, narrationPreservesGivens, validateProblem } from "./validate.js";
 
 export interface GenerateOptions {
   count: number;
@@ -57,6 +57,9 @@ export async function generateOne(
 
   // [4] 整合確認: 解説の最終数値がコード正解と一致しなければ破棄。
   if (!narrationMatchesAnswer(narration.solution, draw.answerText)) return null;
+  // [4b] 与件保存: 言い換え後の問題文が既定文の数値（与件）を保存していなければ破棄
+  //      （LLM が statement の数値を改変すると答えと問題文が食い違い解けなくなる）。
+  if (!narrationPreservesGivens(draw.defaultStatement, narration.statement)) return null;
 
   const citation = opts.source === "original" ? "DENKEN-OS オリジナル問題" : opts.citation;
   if (opts.source !== "original" && !citation) return null; // 改題は citation 必須
@@ -78,6 +81,10 @@ export async function generateOne(
     statement: narration.statement,
     // numeric は選択肢なし。multiple_choice のみ choices を持つ。
     ...(format === "multiple_choice" ? { choices: draw.choices } : {}),
+    // 誤答の言語化（典型ミスの解説）を載せる（テンプレが算出済なら）。従来は破棄していた（E1）。
+    ...(format === "multiple_choice" && draw.distractors && draw.distractors.length > 0
+      ? { distractors: draw.distractors.map((d) => ({ choice: d.text, reason: d.reason })) }
+      : {}),
     answer: draw.answerText,
     solution: narration.solution,
     validation: {
