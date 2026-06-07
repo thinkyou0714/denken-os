@@ -8,7 +8,8 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "html"],
       // CI-2: 出荷される web ロジック(grade/select/store)も閾値で保護する。
-      // app.ts は DOM 配線で単体テスト対象外のため除外（bundle-smoke で結線を担保）。
+      // app.ts は DOM 配線で単体テスト対象外のため除外。結線は tests/web/app-wiring.test.ts の
+      // 静的スモーク（$() 参照 id ⊆ index.html / バンドル・SW 結線 / CSP）で依存なしに担保する。
       include: ["lib/**/*.ts", "web/src/**/*.ts"],
       exclude: ["web/src/app.ts"],
       // 現状(2026-06)の実測(stmts88/branch79/funcs94/lines91, lib全体)を下回らない

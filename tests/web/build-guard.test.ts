@@ -2,6 +2,9 @@
  * ビルド時のセキュリティガード（service_role 等サーバ専用シークレットの client 混入検知）。
  * scripts/build-web.ts の assertNoServerSecrets を直接検証する（純関数・I/O なし）。
  */
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { assertNoServerSecrets, computeCacheVersion, stampServiceWorker } from "../../scripts/build-web.js";
 
@@ -51,5 +54,16 @@ describe("stampServiceWorker（版数差し替え・idempotent）", () => {
     const out = stampServiceWorker(src, "denken-os-zzz999zzz999");
     expect(out).toContain("denken-os-zzz999zzz999"); // 先頭の出現を置換
     expect(out).toContain("denken-os-__BUILD_HASH__"); // 2 つ目は残る（非 /g）
+  });
+});
+
+describe("コミット済み sw.js のプレースホルダ不変条件", () => {
+  // build:web は web/sw.js を内容ハッシュで in-place stamp する（web/dist は gitignore＝CI で再生成）。
+  // コミット版は必ず __BUILD_HASH__ プレースホルダのままで、stamp 済みハッシュを誤って commit しない。
+  // verify は test→build:web 順なので test 実行時はプレースホルダ、CI も同順＝ハッシュ混入を検出できる。
+  it("web/sw.js は denken-os-__BUILD_HASH__ プレースホルダを保持する（ハッシュ混入を防ぐ）", () => {
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const sw = readFileSync(join(__dirname, "../../web/sw.js"), "utf8");
+    expect(sw).toContain('const CACHE = "denken-os-__BUILD_HASH__"');
   });
 });

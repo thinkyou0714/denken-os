@@ -67,6 +67,24 @@ export function validateProblem(input: unknown): ValidationResult {
 }
 
 /**
+ * 言い換え後の問題文が「与件（既定問題文の数値）」を保存しているか検証する。
+ * narrate の LLM が statement を言い換える際に与えられた数値（例 100kW→120kW）を
+ * 改変/欠落すると、答えはコード算出のまま統一文と食い違い、解けない/誤った問題になる。
+ * narrationMatchesAnswer は「解説の最終値」しか見ないためここを別に守る（反ハルシネーションの核）。
+ * 既定文に現れた各数値が、言い換え後の文にも（語境界で）現れることを要求する。
+ */
+export function narrationPreservesGivens(defaultStatement: string, statement: string): boolean {
+  const givens = defaultStatement.match(/-?\d+(?:\.\d+)?/g) ?? [];
+  for (const g of givens) {
+    const esc = g.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // 数字の一部（100 が 1000 に化ける等）を誤って一致とみなさないよう前後を非数字・非ドットに限定。
+    const boundaried = new RegExp(`(^|[^\\d.])${esc}([^\\d.]|$)`);
+    if (!boundaried.test(statement)) return false;
+  }
+  return true;
+}
+
+/**
  * 解説テキストから「最終的な答え」を取り出し、想定値と一致するか確認する。
  * narrate.ts が出した解説の数値整合チェック（不一致なら generate 側で破棄）。
  */

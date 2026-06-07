@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generate, generateOne } from "../../lib/engine/generate.js";
-import { CorruptingNarrator, StubNarrator } from "../../lib/engine/narrate.js";
+import { CorruptingNarrator, StatementCorruptingNarrator, StubNarrator } from "../../lib/engine/narrate.js";
 import { threePhasePower } from "../../lib/engine/templates/index.js";
 import { answerInChoices, answerIsClean, validateProblem } from "../../lib/engine/validate.js";
 
@@ -66,6 +66,17 @@ describe("generate パイプライン", () => {
       source: "original",
       narrator: new CorruptingNarrator(),
       rng: seededRng(7),
+      maxAttempts: 50,
+    });
+    expect(p).toBeNull();
+  });
+
+  it("問題文の与件(数値)を改ざんした言い換えを破棄する（statement 与件保存・負テスト）", async () => {
+    const p = await generateOne(threePhasePower, {
+      id: "X-0004",
+      source: "original",
+      narrator: new StatementCorruptingNarrator(),
+      rng: seededRng(11),
       maxAttempts: 50,
     });
     expect(p).toBeNull();

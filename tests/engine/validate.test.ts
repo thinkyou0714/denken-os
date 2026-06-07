@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { narrationMatchesAnswer, validateProblem } from "../../lib/engine/validate.js";
+import { narrationMatchesAnswer, narrationPreservesGivens, validateProblem } from "../../lib/engine/validate.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001 = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
@@ -80,5 +80,29 @@ describe("narrationMatchesAnswer（解説の数値整合）", () => {
     // 単一ステップの結果値（単位に / · あり）は素直に一致。
     expect(narrationMatchesAnswer(["T=9.55·P/N=12 N·m"], "12")).toBe(true);
     expect(narrationMatchesAnswer(["ω=2πf=314 rad/s"], "314")).toBe(true);
+  });
+});
+
+describe("narrationPreservesGivens（言い換えが与件の数値を保存するか）", () => {
+  const base = "設備容量が100kW、最大需要電力が75kWである。需要率〔%〕を求めよ。";
+
+  it("既定文の全数値が言い換え後にもあれば保存とみなす", () => {
+    expect(narrationPreservesGivens(base, "需要率を求めよ。設備容量は100kW、最大需要は75kWだ。")).toBe(true);
+  });
+
+  it("与件の数値を改ざんすると不保存（100→120）", () => {
+    expect(narrationPreservesGivens(base, "設備容量が120kW、最大需要電力が75kWである。")).toBe(false);
+  });
+
+  it("与件の数値を欠落させると不保存（75 が消える）", () => {
+    expect(narrationPreservesGivens(base, "設備容量が100kWである需要家。")).toBe(false);
+  });
+
+  it("数字の一部一致を保存と誤認しない（100 が 1000 に化けても不保存）", () => {
+    expect(narrationPreservesGivens(base, "設備容量が1000kW、最大需要電力が75kWである。")).toBe(false);
+  });
+
+  it("数値の無い既定文は常に保存（自由言い換え可）", () => {
+    expect(narrationPreservesGivens("力率の意味を答えよ。", "力率とは何か説明せよ。")).toBe(true);
   });
 });

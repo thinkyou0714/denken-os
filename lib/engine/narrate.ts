@@ -67,6 +67,20 @@ export class CorruptingNarrator implements Narrator {
   }
 }
 
+/**
+ * テスト用: 問題文の与件（数値）を壊す Narrator。
+ * 「言い換えで statement の数値を改変したら破棄する」(narrationPreservesGivens) の負テストに使う。
+ */
+export class StatementCorruptingNarrator implements Narrator {
+  async narrate(input: NarrationInput): Promise<Narration> {
+    return {
+      // 既定文の最初の数値を別の桁に改変（与件改ざん相当）。解説は正規のまま。
+      statement: input.defaultStatement.replace(/-?\d+(?:\.\d+)?/, (m) => `${Number(m) + 999}`),
+      solution: input.defaultSolution,
+    };
+  }
+}
+
 const NARRATION_SYSTEM = `あなたは電験(電気主任技術者試験)の問題文・解説のリライタです。
 与えられた既定の問題文と解法ステップを、より自然で読みやすい日本語に言い換えます。
 
