@@ -73,10 +73,25 @@ export function validateProblem(input: unknown): ValidationResult {
 export function narrationMatchesAnswer(solution: string[], answerText: string): boolean {
   const expected = Number(answerText);
   if (Number.isNaN(expected)) {
-    // 非数値の答えは、最終ステップに answerText が現れることを要求。
-    return solution.some((s) => s.includes(answerText));
+    // 非数値の答え: 部分文字列ではなく語境界で一致を要求（'4.6' が '14.65' に誤マッチしない。DI-2）。
+    const esc = answerText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const boundaried = new RegExp(`(^|[^\\w.])${esc}([^\\w.]|$)`);
+    return solution.some((s) => boundaried.test(s));
   }
-  // 解説全体から数値を抽出し、想定値に十分近いものが含まれるか。
+  // 数値の答え: 「途中に正解値が現れる」では不可。結論の最終値が一致するかを見る（F1/DI-1）。
+  // ハルシネーションで最終ステップだけ別値にすり替わる事故を、最終値アンカーで検出する。
+  // 各ステップの最後の "=" 以降が「数値+単位だけ（演算子を含まない＝計算式ではなく結果値）」のものを
+  // 結果値とみなし、その最後＝結論値が想定値に一致するかを判定する。
+  const OPERATORS = /[×·*+\-/√−]/; // 半角/全角の演算子（U+2212 マイナス・中点・√ を含む）
+  let finalResult: number | undefined;
+  for (const step of solution) {
+    if (!step.includes("=")) continue;
+    const tail = step.slice(step.lastIndexOf("=") + 1).trim();
+    const m = tail.match(/^(-?\d+(?:\.\d+)?)(.*)$/s);
+    if (m && !OPERATORS.test(m[2] ?? "")) finalResult = Number(m[1]); // 後勝ち＝最後の結果値が結論
+  }
+  if (finalResult !== undefined) return Math.abs(finalResult - expected) < 1e-6;
+  // 「=」純結果が無い異常系のみ、従来の全走査にフォールバック（弱い保証）。
   const nums =
     solution
       .join(" ")

@@ -35,8 +35,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build offline web app (web/dist/app.js)
-        run: npm run build:web
+      # SEC-1: 公開前に品質ゲートを通す。verify が lint/typecheck/validate:data/test を回し、
+      # 最後に build:web で web/dist/app.js を生成する。ゲートが落ちれば deploy ジョブは走らない
+      # （『CI が赤でも Pages に公開される』穴を塞ぐ。データ検証失敗時に誤問題を出さない）。
+      - name: Quality gate + build (npm run verify)
+        run: npm run verify
 
       - uses: actions/configure-pages@v6
         with:

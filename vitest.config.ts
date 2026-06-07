@@ -7,7 +7,10 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
-      include: ["lib/**/*.ts"],
+      // CI-2: 出荷される web ロジック(grade/select/store)も閾値で保護する。
+      // app.ts は DOM 配線で単体テスト対象外のため除外（bundle-smoke で結線を担保）。
+      include: ["lib/**/*.ts", "web/src/**/*.ts"],
+      exclude: ["web/src/app.ts"],
       // 現状(2026-06)の実測(stmts88/branch79/funcs94/lines91, lib全体)を下回らない
       // ための回帰防止フロア。値を上げるのは歓迎、下げる場合は理由をPRに記すこと。
       thresholds: {

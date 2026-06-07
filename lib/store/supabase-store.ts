@@ -21,6 +21,9 @@ export interface ProblemRow {
   topic: string;
   format: string;
   difficulty: number;
+  // params（係数・realistic_range）。0003_problems_params.sql の params 列に対応。
+  // これを落とすと file ストアと parity が崩れ、再読込時に realistic_range 検証が不能になる。
+  params: Problem["params"] | null;
   statement: string;
   choices: string[] | null;
   answer: string;
@@ -39,6 +42,7 @@ export function problemToRow(p: Problem): ProblemRow {
     topic: p.topic,
     format: p.format ?? "multiple_choice",
     difficulty: p.difficulty,
+    params: p.params ?? null,
     statement: p.statement,
     choices: p.choices ?? null,
     answer: p.answer,
@@ -58,6 +62,7 @@ export function rowToProblem(r: ProblemRow): Problem {
     topic: r.topic,
     format: r.format as Problem["format"],
     difficulty: r.difficulty,
+    ...(r.params ? { params: r.params } : {}),
     statement: r.statement,
     choices: r.choices ?? undefined,
     answer: r.answer,

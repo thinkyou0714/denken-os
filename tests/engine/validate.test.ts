@@ -52,4 +52,22 @@ describe("narrationMatchesAnswer（解説の数値整合）", () => {
     expect(narrationMatchesAnswer(["導出…", "よって 遅れ力率"], "遅れ力率")).toBe(true);
     expect(narrationMatchesAnswer(["導出…"], "遅れ力率")).toBe(false);
   });
+
+  // F1/DI-1: 途中に正解値が現れても、結論の最終値が誤りなら破棄する（アンカーを最終値に）。
+  it("正解値が途中に出ても最終値が誤りなら不一致（最終値アンカー）", () => {
+    expect(narrationMatchesAnswer(["P=3.2kW を計算", "最終 P=9.6kW"], "3.2")).toBe(false);
+  });
+
+  it("変圧器 cos=1.0 系の偽陽性: 入力 p が =p×… に出ても最終を誤れば破棄", () => {
+    // 入力 p=4 が中間式 ε≈p·cosθ+…=4×1+10×0 に現れるが、最終 ε=9% は誤り → false。
+    expect(narrationMatchesAnswer(["ε≈p·cosθ+q·sinθ=4×1+10×0", "ε=9%"], "4")).toBe(false);
+    // 正しい結論 ε=4% なら true。
+    expect(narrationMatchesAnswer(["ε≈p·cosθ+q·sinθ=4×1+10×0", "ε=4%"], "4")).toBe(true);
+  });
+
+  // DI-2: 非数値経路の部分文字列誤マッチを語境界で防ぐ。
+  it("非数値: '4.6' が '14.65' に誤マッチしない（語境界）", () => {
+    expect(narrationMatchesAnswer(["残差は14.65である"], "4.6")).toBe(false);
+    expect(narrationMatchesAnswer(["ε=4.6 と求まる"], "4.6")).toBe(true);
+  });
 });

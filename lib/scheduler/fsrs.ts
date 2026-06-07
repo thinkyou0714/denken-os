@@ -14,8 +14,9 @@ import {
   fsrs,
   type Grade,
   generatorParameters,
+  State,
 } from "ts-fsrs";
-import type { Rating } from "./types.js";
+import type { Rating, ReviewState, Scheduler } from "./types.js";
 
 export interface FsrsView {
   dueMs: number;
@@ -67,5 +68,59 @@ export class FsrsScheduler {
       lapses: card.lapses,
       scheduledDays: card.scheduled_days,
     };
+  }
+}
+
+// ── ReviewState ⇔ ts-fsrs Card 変換（SCHED-1: FSRS を永続化経路に乗せる）─────────
+// FSRS は ease を使わないため、ReviewState.ease は互換のための中立値(2.5)を入れる。
+// stability/difficulty は ReviewState に通し、行ストア(B3)経由で往復保持される。
+
+export function cardToReviewState(card: Card): ReviewState {
+  return {
+    reps: card.reps,
+    lapses: card.lapses,
+    intervalDays: card.scheduled_days,
+    ease: 2.5,
+    dueMs: new Date(card.due).getTime(),
+    lastReviewMs: card.last_review ? new Date(card.last_review).getTime() : null,
+    stability: card.stability,
+    difficulty: card.difficulty,
+  };
+}
+
+export function reviewStateToCard(s: ReviewState): Card {
+  // createEmptyCard で全フィールド(ts-fsrs の版差異も含む)を満たした土台を作り、永続値で上書きする。
+  const base = createEmptyCard(new Date(s.lastReviewMs ?? s.dueMs));
+  return {
+    ...base,
+    due: new Date(s.dueMs),
+    stability: s.stability ?? base.stability,
+    difficulty: s.difficulty ?? base.difficulty,
+    scheduled_days: s.intervalDays,
+    reps: s.reps,
+    lapses: s.lapses,
+    state: s.reps > 0 ? State.Review : State.New,
+    last_review: s.lastReviewMs === null ? undefined : new Date(s.lastReviewMs),
+  };
+}
+
+/**
+ * FSRS を Scheduler インターフェース(ReviewState in/out)として使えるアダプタ。
+ * これにより Sm2Scheduler と置換可能になり、FSRS の stability/difficulty が
+ * ReviewState 経由で永続化される（従来は Card 止まりで保存経路に乗らない dead code だった）。
+ */
+export class FsrsReviewScheduler implements Scheduler {
+  private readonly engine: FsrsScheduler;
+
+  constructor(desiredRetention = 0.9) {
+    this.engine = new FsrsScheduler(desiredRetention);
+  }
+
+  init(nowMs: number = Date.now()): ReviewState {
+    return cardToReviewState(this.engine.init(new Date(nowMs)));
+  }
+
+  review(state: ReviewState, rating: Rating, nowMs: number = Date.now()): ReviewState {
+    return cardToReviewState(this.engine.review(reviewStateToCard(state), rating, new Date(nowMs)));
   }
 }

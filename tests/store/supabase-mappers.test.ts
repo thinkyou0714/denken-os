@@ -30,6 +30,20 @@ describe("Supabase row mappers", () => {
     expect(rowToProblem(row).choices).toBeUndefined();
   });
 
+  it("params を往復で保持する（STORE-1: Supabase が params を捨てて parity が崩れていた）", () => {
+    expect(T0001.params).toBeTruthy();
+    const row = problemToRow(T0001);
+    expect(row.params).toEqual(T0001.params);
+    expect(rowToProblem(row).params).toEqual(T0001.params);
+  });
+
+  it("params なしの問題は row が null・往復でキーが付かない", () => {
+    const noParams: Problem = { ...T0001, id: "NP", params: undefined };
+    const row = problemToRow(noParams);
+    expect(row.params).toBeNull();
+    expect("params" in rowToProblem(row)).toBe(false);
+  });
+
   it("ReviewState ⇔ row 往復（due/last の epoch↔ISO 変換）", () => {
     const st: ReviewState = {
       reps: 2,

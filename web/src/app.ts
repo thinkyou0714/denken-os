@@ -14,7 +14,9 @@ import { pickNextProblem } from "./select.js";
 import { LocalProgress } from "./store.js";
 
 function weakTopics(): string[] {
-  return weakestTopics(aggregateByTopic(progress.logs()).values(), Date.now(), 3);
+  // スケジューラの実 due を渡し、「最近やった＝過去」で overdue が逆転する不具合を防ぐ（SCHED-2）。
+  const dueByTopic = new Map([...progress.allReviews()].map(([topic, rs]) => [topic, rs.dueMs]));
+  return weakestTopics(aggregateByTopic(progress.logs(), dueByTopic).values(), Date.now(), 3);
 }
 
 const progress = new LocalProgress(window.localStorage);
