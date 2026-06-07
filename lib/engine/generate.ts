@@ -78,6 +78,10 @@ export async function generateOne(
     statement: narration.statement,
     // numeric は選択肢なし。multiple_choice のみ choices を持つ。
     ...(format === "multiple_choice" ? { choices: draw.choices } : {}),
+    // 誤答の言語化（典型ミスの解説）を載せる（テンプレが算出済なら）。従来は破棄していた（E1）。
+    ...(format === "multiple_choice" && draw.distractors && draw.distractors.length > 0
+      ? { distractors: draw.distractors.map((d) => ({ choice: d.text, reason: d.reason })) }
+      : {}),
     answer: draw.answerText,
     solution: narration.solution,
     validation: {

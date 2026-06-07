@@ -139,8 +139,11 @@ function grade(given: string): void {
         : "";
   $("feedback").textContent = (correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`) + note;
   $("feedback").className = correct ? "ok" : "ng";
+  // 選んだ誤答が「なぜ間違いか」の言語化を先頭に出す（典型ミスの解説。E1）。
+  const missReason = !correct ? p.distractors?.find((d) => d.choice === given)?.reason : undefined;
+  const missHtml = missReason ? `<p class="src">💡 ${escapeHtml(missReason)}</p>` : "";
   $("solution").innerHTML =
-    `<strong>解説</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
+    `${missHtml}<strong>解説</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
 
   // シェアテキスト（記録カードの文言。画像化は将来）。
   $("share").textContent = cardText("daily", {

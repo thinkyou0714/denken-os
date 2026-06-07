@@ -64,6 +64,8 @@ export const problemSchema = z
     statement: z.string().min(1),
     figure: z.string().optional(),
     choices: z.array(z.string()).optional(),
+    // 誤答の言語化（典型ミスの解説）。multiple_choice の各誤答に「なぜ間違うか」を持つ。
+    distractors: z.array(z.object({ choice: z.string().min(1), reason: z.string().min(1) })).optional(),
     answer: z.string().min(1),
     solution: z.array(z.string()).min(1),
     validation: validationSchema,
@@ -90,6 +92,25 @@ export const problemSchema = z
         path: ["answer"],
         message: `numeric の answer は単位なしの数値文字列である必要があります: "${p.answer}"`,
       });
+    }
+    // distractors の choice は choices に含まれ、answer とは異なる（誤答の言語化・E1）。
+    if (p.distractors) {
+      for (const d of p.distractors) {
+        if (p.choices && !p.choices.includes(d.choice)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distractors"],
+            message: `distractor "${d.choice}" は choices に含まれていません`,
+          });
+        }
+        if (d.choice === p.answer) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distractors"],
+            message: `distractor "${d.choice}" は正解と一致しています`,
+          });
+        }
+      }
     }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）
     if (p.status === "validated" || p.status === "published") {
