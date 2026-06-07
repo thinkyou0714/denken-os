@@ -9,6 +9,8 @@
 import type { Problem } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { consecutiveFailures, intervention } from "../../lib/scheduler/intervention.js";
+import { masteryEWMA } from "../../lib/scheduler/mastery.js";
+import { prioritizeFoundationFirst } from "../../lib/scheduler/prereq.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { nextAttemptState } from "./attempt.js";
 import { isAnswerCorrect } from "./grade.js";
@@ -18,10 +20,21 @@ import { dueSummary } from "./queue.js";
 import { pickNextProblem } from "./select.js";
 import { LocalProgress } from "./store.js";
 
+/** topic → subject（読み込んだ問題から逆引き）。前提科目順(D3)に使う。 */
+function subjectOf(topic: string): string | undefined {
+  return problems.find((p) => p.topic === topic)?.subject;
+}
+
+const GRADUATED_MASTERY = 0.85; // D12: これ以上の習熟は卒業（弱点から外す）。
+
 function weakTopics(): string[] {
+  const logs = progress.logs();
   // スケジューラの実 due を渡し、「最近やった＝過去」で overdue が逆転する不具合を防ぐ（SCHED-2）。
   const dueByTopic = new Map([...progress.allReviews()].map(([topic, rs]) => [topic, rs.dueMs]));
-  return weakestTopics(aggregateByTopic(progress.logs(), dueByTopic).values(), Date.now(), 3);
+  const raw = weakestTopics(aggregateByTopic(logs, dueByTopic).values(), Date.now(), 5);
+  // 卒業済(高 mastery)を除外し再浮上を防ぐ（D12）→ 前提科目(理論)を優先（D3）→ 上位3。
+  const active = raw.filter((t) => masteryEWMA(logs, t) < GRADUATED_MASTERY);
+  return prioritizeFoundationFirst(active, subjectOf).slice(0, 3);
 }
 
 const progress = new LocalProgress(window.localStorage);
@@ -46,7 +59,13 @@ function renderStats(): void {
   // 本日の復習キュー（セッションのゴール提示。PEDX-06）。
   const { dueNow, overdue } = dueSummary(progress.allReviews(), Date.now());
   const dueLabel = dueNow > 0 ? `📚 復習 ${dueNow}件${overdue > 0 ? `（超過${overdue}）` : ""}` : "📚 ノルマ達成 ✅";
-  $("streak").textContent = `🔥 連続 ${streak} 日 ・ ${dueLabel}`;
+  // 克服(卒業)した topic 数を進捗の物語として見せる（D12）。
+  const logs = progress.logs();
+  const graduated = [...new Set(logs.map((l) => l.topic))].filter(
+    (t) => masteryEWMA(logs, t) >= GRADUATED_MASTERY,
+  ).length;
+  const gradLabel = graduated > 0 ? ` ・ 🎓 克服 ${graduated}` : "";
+  $("streak").textContent = `🔥 連続 ${streak} 日 ・ ${dueLabel}${gradLabel}`;
   const weak = weakTopics();
   $("weak").textContent = weak.length > 0 ? `弱点: ${weak.join(" / ")}` : "弱点: （まだデータなし）";
 }
