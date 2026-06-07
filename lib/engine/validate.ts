@@ -80,15 +80,16 @@ export function narrationMatchesAnswer(solution: string[], answerText: string): 
   }
   // 数値の答え: 「途中に正解値が現れる」では不可。結論の最終値が一致するかを見る（F1/DI-1）。
   // ハルシネーションで最終ステップだけ別値にすり替わる事故を、最終値アンカーで検出する。
-  // 各ステップの最後の "=" 以降が「数値+単位だけ（演算子を含まない＝計算式ではなく結果値）」のものを
-  // 結果値とみなし、その最後＝結論値が想定値に一致するかを判定する。
-  const OPERATORS = /[×·*+\-/√−]/; // 半角/全角の演算子（U+2212 マイナス・中点・√ を含む）
+  // 各ステップの最後の "=" 以降が「先頭が数値で、後続に別の数値を含まない（＝計算式ではなく結果値）」
+  // のものを結論値とみなし、その最後＝結論値が想定値に一致するかを判定する。
+  // 「式か否か」は第2オペランド（別の数字）の有無で見る。こうすると単位に演算子記号を含む
+  // 結果値（m/s・rad/s・A/m・N·m 等の 電験単位）を式と誤認して弱い全走査に落ちるのを防げる。
   let finalResult: number | undefined;
   for (const step of solution) {
     if (!step.includes("=")) continue;
     const tail = step.slice(step.lastIndexOf("=") + 1).trim();
     const m = tail.match(/^(-?\d+(?:\.\d+)?)(.*)$/s);
-    if (m && !OPERATORS.test(m[2] ?? "")) finalResult = Number(m[1]); // 後勝ち＝最後の結果値が結論
+    if (m && !/\d/.test(m[2] ?? "")) finalResult = Number(m[1]); // 後勝ち＝最後の結果値が結論
   }
   if (finalResult !== undefined) return Math.abs(finalResult - expected) < 1e-6;
   // 「=」純結果が無い異常系のみ、従来の全走査にフォールバック（弱い保証）。

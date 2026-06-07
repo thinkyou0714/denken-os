@@ -70,4 +70,15 @@ describe("narrationMatchesAnswer（解説の数値整合）", () => {
     expect(narrationMatchesAnswer(["残差は14.65である"], "4.6")).toBe(false);
     expect(narrationMatchesAnswer(["ε=4.6 と求まる"], "4.6")).toBe(true);
   });
+
+  // F1 強化: 単位に / や · を含む 電験単位（m/s, rad/s, A/m, N·m）でも最終値アンカーが効く。
+  // 「単位の演算子」を計算式と誤認すると弱い全走査に落ち、最終値が誤りでも中間の正解値で通ってしまう。
+  it("単位に演算子を含む最終値でもアンカーが機能する（m/s・N·m 等）", () => {
+    // 最終値8（誤り）。中間に正解5が出るが、最終値アンカーが効けば破棄される。
+    expect(narrationMatchesAnswer(["v=5 m/s で計算", "最終 v=8 m/s"], "5")).toBe(false);
+    expect(narrationMatchesAnswer(["v=5 m/s で計算", "最終 v=8 m/s"], "8")).toBe(true);
+    // 単一ステップの結果値（単位に / · あり）は素直に一致。
+    expect(narrationMatchesAnswer(["T=9.55·P/N=12 N·m"], "12")).toBe(true);
+    expect(narrationMatchesAnswer(["ω=2πf=314 rad/s"], "314")).toBe(true);
+  });
 });
