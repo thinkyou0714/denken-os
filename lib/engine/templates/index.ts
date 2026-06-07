@@ -7,6 +7,7 @@ import { resistorNetwork } from "./resistor-network.js";
 import { threePhasePower } from "./three-phase-power.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
 import type { Template } from "./types.js";
+import { unitConversion } from "./unit-conversion.js";
 
 const templates: Template[] = [
   threePhasePower,
@@ -16,6 +17,7 @@ const templates: Template[] = [
   transformerVoltageRegulation,
   groundingResistance,
   demandFactor,
+  unitConversion,
 ];
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
@@ -36,4 +38,5 @@ export {
   resistorNetwork,
   threePhasePower,
   transformerVoltageRegulation,
+  unitConversion,
 };

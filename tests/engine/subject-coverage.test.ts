@@ -20,7 +20,8 @@ describe("科目カバレッジ拡充（法規・電力）", () => {
     const topics = listTopics();
     expect(topics).toContain("B種接地抵抗"); // 法規
     expect(topics).toContain("需要率"); // 電力
-    expect(topics.length).toBe(7);
+    expect(topics).toContain("単位換算"); // 理論（接頭語換算ドリル）
+    expect(topics.length).toBe(8);
   });
 
   it("B種接地抵抗 R=150/Ig を正しく算出（Ig=3 → 50Ω, numeric）", () => {
