@@ -15,6 +15,8 @@ export interface StorageLike {
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
 const DAY_MS = 86_400_000;
+/** 解答ログの保持上限（リングバッファ）。診断は直近履歴で十分で、localStorage 5MiB 上限を守る。 */
+const MAX_LOGS = 5000;
 /** 既定の「1日」境界は日本標準時(UTC+9)。電験は国内試験で受験者は JST 生活のため、
  *  朝7時(JST)の学習が UTC では前日扱いになりストリークが途切れる不具合を避ける。 */
 const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
@@ -72,12 +74,34 @@ export class LocalProgress {
 
     const reviews = this.reviews();
     reviews[topic] = next;
-    this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
-
     const logs = this.logs();
     logs.push({ topic, correct, atMs: nowMs, timeMs, problemId });
-    this.storage.setItem(LOG_KEY, JSON.stringify(logs));
+    this.persist(reviews, logs);
     return next;
+  }
+
+  /**
+   * reviews/logs を localStorage に保存する。容量超過(QuotaExceededError)で例外を投げて
+   * 採点が黙って壊れる/部分書き込みで不整合になるのを防ぐ。logs を上限件数のリングに保ち、
+   * それでも溢れたら直近半分へ間引いて1回だけ再試行する（診断は直近履歴で十分）。
+   */
+  private persist(reviews: Record<string, ReviewState>, logs: AnswerLog[]): void {
+    const capped = logs.length > MAX_LOGS ? logs.slice(logs.length - MAX_LOGS) : logs;
+    if (this.trySetBoth(reviews, capped)) return;
+    // 容量超過: 古いログを半分捨てて 1 回だけ再試行。
+    const half = capped.slice(Math.floor(capped.length / 2));
+    this.trySetBoth(reviews, half);
+  }
+
+  /** logs を先に（大きい方）、reviews を後に書く。失敗は握り潰し false を返す（UI を壊さない）。 */
+  private trySetBoth(reviews: Record<string, ReviewState>, logs: AnswerLog[]): boolean {
+    try {
+      this.storage.setItem(LOG_KEY, JSON.stringify(logs));
+      this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /** 今日まで連続して学習した日数（既定 JST 日基準）。 */

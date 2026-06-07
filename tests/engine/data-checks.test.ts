@@ -2,7 +2,7 @@
  * data-checks: JSON Schema で表せないデータ不変条件（DI-4 離散ドメイン / DI-6 citation 書式 / B2 範囲）。
  */
 import { describe, expect, it } from "vitest";
-import { citationIssue, paramIssues } from "../../lib/engine/data-checks.js";
+import { citationIssue, numericAnswerIssue, paramIssues } from "../../lib/engine/data-checks.js";
 
 describe("paramIssues（範囲 + 離散ドメイン）", () => {
   it("妥当な params は問題なし", () => {
@@ -50,5 +50,22 @@ describe("citationIssue（出典書式 DI-6）", () => {
       citationIssue({ type: "past_exam_quoted", citation: "令和5年度 第二種電気主任技術者試験 一次 機械" }),
     ).toBeNull();
     expect(citationIssue({ type: "past_exam_modified", citation: "2019 第二種 一次 機械（一部改変）" })).toBeNull();
+  });
+});
+
+describe("numericAnswerIssue（E4: 採点 round-trip 保証）", () => {
+  it("numeric の単位なし数値は通る", () => {
+    expect(numericAnswerIssue({ format: "numeric", answer: "4.6" })).toBeNull();
+    expect(numericAnswerIssue({ format: "numeric", answer: "1306.8" })).toBeNull();
+  });
+
+  it("numeric の単位付き/非数値を弾く（Number() で NaN 化する）", () => {
+    expect(numericAnswerIssue({ format: "numeric", answer: "4.6Ω" })).toContain("数値");
+    expect(numericAnswerIssue({ format: "numeric", answer: "遅れ" })).toContain("数値");
+  });
+
+  it("numeric 以外は対象外", () => {
+    expect(numericAnswerIssue({ format: "multiple_choice", answer: "3.2" })).toBeNull();
+    expect(numericAnswerIssue({ format: "descriptive", answer: "遅れ力率" })).toBeNull();
   });
 });

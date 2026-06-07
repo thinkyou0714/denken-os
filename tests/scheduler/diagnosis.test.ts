@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { type AnswerLog, aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
+import { type AnswerLog, aggregateByTopic, weakestTopics, wilsonLowerBound } from "../../lib/scheduler/diagnosis.js";
 
 describe("弱点診断", () => {
   it("連続不正解の topic ほど優先度が上がる", () => {
@@ -64,5 +64,29 @@ describe("弱点診断", () => {
     ]);
     const weak = weakestTopics(aggregateByTopic(logs, dueByTopic).values(), now, 1);
     expect(weak[0]).toBe("weak");
+  });
+
+  // D2: Wilson 下側で少試行を過大評価しない（1/1 を満点扱いしない）。
+  it("wilsonLowerBound: 少試行は中央へ縮約し、n増で rate に収束", () => {
+    expect(wilsonLowerBound(0, 0)).toBe(0);
+    expect(wilsonLowerBound(1, 1)).toBeLessThan(1); // 1/1 でも 1.0 にしない
+    expect(wilsonLowerBound(50, 50)).toBeGreaterThan(wilsonLowerBound(1, 1)); // n大ほど高確信
+    const c = wilsonLowerBound(8, 10);
+    expect(c).toBeGreaterThanOrEqual(0);
+    expect(c).toBeLessThanOrEqual(1);
+  });
+
+  // D1: 旧『試行が多いほど弱点加点』の逆転を是正。同 rate/同 due なら試行が少ない方を優先。
+  it("同 rate(50%)・同 due なら試行が少ない(不確実な) topic を優先", () => {
+    const now = Date.UTC(2026, 0, 20);
+    const logs: AnswerLog[] = [
+      // few: 2試行1正解(50%)
+      { topic: "few", correct: true, atMs: now },
+      { topic: "few", correct: false, atMs: now },
+      // many: 8試行4正解(50%)
+      ...Array.from({ length: 8 }, (_, i) => ({ topic: "many", correct: i % 2 === 0, atMs: now })),
+    ];
+    const weak = weakestTopics(aggregateByTopic(logs).values(), now, 2);
+    expect(weak[0]).toBe("few");
   });
 });

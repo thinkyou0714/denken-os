@@ -82,6 +82,15 @@ export const problemSchema = z
         });
       }
     }
+    // numeric は answer が単位なしの数値文字列であること（E4）。
+    // web/grade.ts が Number(answer) で再パースするため、'4.6Ω' 等だと全回答が NaN=不正解化する。
+    if (p.format === "numeric" && !Number.isFinite(Number(p.answer))) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["answer"],
+        message: `numeric の answer は単位なしの数値文字列である必要があります: "${p.answer}"`,
+      });
+    }
     // status=validated|published は検証4項目すべて true（draft-07 の allOf と同じ）
     if (p.status === "validated" || p.status === "published") {
       const v = p.validation;
