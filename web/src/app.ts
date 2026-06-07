@@ -13,7 +13,7 @@ import { masteryEWMA } from "../../lib/scheduler/mastery.js";
 import { prioritizeFoundationFirst } from "../../lib/scheduler/prereq.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { nextAttemptState } from "./attempt.js";
-import { isAnswerCorrect } from "./grade.js";
+import { feedbackParts, isAnswerCorrect } from "./grade.js";
 import { mathToSpeech } from "./math-speech.js";
 import { shouldRequestPersist } from "./persist.js";
 import { dueSummary } from "./queue.js";
@@ -46,12 +46,17 @@ let attemptNo = 0; // 現在の問題への挑戦回数（PEDX-01: 初回誤答�
 const $ = (id: string) => document.getElementById(id)!;
 
 function pickNext(): Problem | null {
-  // 弱点優先＋直近問題回避＋直近 topic の連発抑制(interleaving)。
+  // relearning(外した問題の再出題)優先 ＋ 弱点優先 ＋ 直近回避 ＋ topic 連発抑制(interleaving)。
   const recentTopics = progress
     .logs()
     .slice(-3)
     .map((l) => l.topic);
-  return pickNextProblem(problems, { weakTopics: weakTopics(), excludeId: current?.id, recentTopics });
+  return pickNextProblem(problems, {
+    weakTopics: weakTopics(),
+    excludeId: current?.id,
+    recentTopics,
+    lapsedDueIds: progress.dueLapses(),
+  });
 }
 
 function renderStats(): void {
@@ -176,7 +181,11 @@ function grade(given: string): void {
       : act === "force_explanation"
         ? "（もう一度、解説の手順を一つずつ追ってみよう）"
         : "";
-  $("feedback").textContent = (correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`) + note;
+  // 視覚記号(aria-hidden)と読み上げ文(visually-hidden)を分離（A3）。
+  const fb = feedbackParts(correct, p.answer);
+  $("feedback").innerHTML =
+    `<span aria-hidden="true">${escapeHtml(fb.visual + note)}</span>` +
+    `<span class="visually-hidden">${escapeHtml(fb.speech + note)}</span>`;
   $("feedback").className = correct ? "ok" : "ng";
   // 選んだ誤答が「なぜ間違いか」の言語化を先頭に出す（典型ミスの解説。E1）。
   const missReason = !correct ? p.distractors?.find((d) => d.choice === given)?.reason : undefined;

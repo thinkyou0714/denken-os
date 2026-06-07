@@ -65,4 +65,15 @@ describe("pickNextProblem", () => {
     const chosen = pickNextProblem(pool, { weakTopics: ["機械"], rng: () => 0 });
     expect(chosen?.id).toBe("C");
   });
+
+  // SCHED-LAPSE-QUEUE: 再出題予定が到来した「外した問題」を弱点より優先する。
+  it("lapsedDueIds の問題を弱点 topic より最優先で再出題する", () => {
+    const chosen = pickNextProblem(pool, { weakTopics: ["機械"], rng: () => 0, lapsedDueIds: ["D"] });
+    expect(chosen?.id).toBe("D"); // 機械(C)より relearning(D)優先
+  });
+
+  it("lapsedDueIds が excludeId のみなら通常選択へフォールバック", () => {
+    const chosen = pickNextProblem(pool, { weakTopics: ["機械"], rng: () => 0, lapsedDueIds: ["D"], excludeId: "D" });
+    expect(chosen?.id).toBe("C");
+  });
 });

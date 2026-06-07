@@ -16,6 +16,8 @@ export interface PickOptions {
   recentTopics?: string[];
   /** 同一 topic の最大連続数（既定2）。これ以上連続している topic は後回し。 */
   maxSameTopicRun?: number;
+  /** 再出題予定が到来した問題ID（問題単位 relearning）。最優先で再出題する。 */
+  lapsedDueIds?: string[];
 }
 
 export function pickNextProblem(problems: Problem[], opts: PickOptions): Problem | null {
@@ -38,6 +40,13 @@ export function pickNextProblem(problems: Problem[], opts: PickOptions): Problem
     const usable = others.length > 0 ? others : pool;
     return usable[Math.floor(rng() * usable.length)] ?? null;
   };
+
+  // Relearning 最優先: 再出題予定が到来した「外した問題」があれば再出題（problem 単位 spaced retrieval）。
+  const lapsed = new Set((opts.lapsedDueIds ?? []).filter((id) => id !== opts.excludeId));
+  if (lapsed.size > 0) {
+    const chosen = pickFrom(problems.filter((p) => lapsed.has(p.id)));
+    if (chosen) return chosen;
+  }
 
   // Interleaving: 連続上限に達していない弱点を優先し、達したものは後回し（転移と長期保持を上げる）。
   // 候補が当該 topic しか無ければ妥協して出す（出題継続を優先）。

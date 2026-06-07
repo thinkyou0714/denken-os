@@ -8,6 +8,7 @@
  *   multiple_choice / descriptive は選択肢・センチネルの厳密一致でよい。
  */
 import type { Problem } from "../../lib/engine/schema.js";
+import { mathToSpeech } from "./math-speech.js";
 
 /**
  * ユーザー入力を数値文字列に正規化する。
@@ -42,4 +43,15 @@ export function isAnswerCorrect(problem: Problem, given: string): boolean {
   }
   // multiple_choice の選択肢、descriptive の自己採点センチネルは厳密一致。
   return given === problem.answer;
+}
+
+/**
+ * 正誤フィードバックの視覚記号(⭕/❌)と読み上げ文を分離する（A3）。
+ * 絵文字は環境依存の誤読(⭕→「大きな丸」/❌→「heavy multiplication x」等)があり、
+ * 正解値の数式記号も SR で誤読される。visual は aria-hidden、speech は数式を読み下して SR に渡す。
+ */
+export function feedbackParts(correct: boolean, answer: string): { visual: string; speech: string } {
+  return correct
+    ? { visual: "⭕ 正解！", speech: "正解です" }
+    : { visual: `❌ 不正解（正解: ${answer}）`, speech: `不正解です。正解は ${mathToSpeech(answer)}` };
 }

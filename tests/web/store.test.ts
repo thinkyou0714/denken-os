@@ -31,6 +31,17 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(p.logs()[0]?.problemId).toBe("T-0001");
   });
 
+  it("誤答した問題は relearning キューに積まれ、予定到来後に dueLapses へ出る", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("三相交流電力", false, now, 5000, "T-0009");
+    expect(p.dueLapses(now)).not.toContain("T-0009"); // まだ予定前
+    expect(p.dueLapses(now + 11 * 60_000)).toContain("T-0009"); // 10分後は到来
+    // 正解で卒業（キューから消える）。
+    p.record("三相交流電力", true, now + 12 * 60_000, 4000, "T-0009");
+    expect(p.dueLapses(now + 20 * 60_000)).not.toContain("T-0009");
+  });
+
   it("連続学習日数を数える（今日まで連続）", () => {
     const p = new LocalProgress(new MemoryStorage());
     const today = Date.UTC(2026, 0, 10);

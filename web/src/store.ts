@@ -4,6 +4,7 @@
  * Storage を注入可能にし、DOM 無しでもテストできる。
  */
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
+import { dueLapseIds, type LapseMap, updateLapse } from "../../lib/scheduler/lapse-queue.js";
 import { deriveRating } from "../../lib/scheduler/rating.js";
 import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import type { ReviewState, Scheduler } from "../../lib/scheduler/types.js";
@@ -16,6 +17,7 @@ export interface StorageLike {
 
 const REVIEW_KEY = "denken:reviews";
 const LOG_KEY = "denken:logs";
+const LAPSE_KEY = "denken:lapses";
 const DAY_MS = 86_400_000;
 /** 解答ログの保持上限（リングバッファ）。診断は直近履歴で十分で、localStorage 5MiB 上限を守る。 */
 const MAX_LOGS = 5000;
@@ -80,7 +82,24 @@ export class LocalProgress {
     const logs = this.logs();
     logs.push({ topic, correct, atMs: nowMs, timeMs, problemId });
     this.persist(reviews, logs);
+    // 問題単位の relearning キュー: 誤答は再出題予定に積み、正解で卒業（SCHED-LAPSE-QUEUE）。
+    if (problemId) {
+      try {
+        this.storage.setItem(LAPSE_KEY, JSON.stringify(updateLapse(this.lapses(), problemId, correct, nowMs)));
+      } catch {
+        /* lapse は補助情報。容量超過時は無視（採点本体は persist 済）。 */
+      }
+    }
     return next;
+  }
+
+  private lapses(): LapseMap {
+    return this.read<LapseMap>(LAPSE_KEY, {});
+  }
+
+  /** 再出題予定が到来した問題ID（問題単位 relearning。pickNext が優先する）。 */
+  dueLapses(nowMs: number = Date.now()): string[] {
+    return dueLapseIds(this.lapses(), nowMs);
   }
 
   /**
