@@ -57,8 +57,15 @@
       <button id="next">次の問題 →</button>
     </main>
 
+    <section class="backup" aria-label="学習データのバックアップ" style="margin-top:1.5rem; display:flex; gap:.5rem; flex-wrap:wrap;">
+      <button id="export-btn" class="choice" style="flex:0 0 auto;">📤 バックアップ書き出し</button>
+      <button id="import-btn" class="choice" style="flex:0 0 auto;">📥 取り込み</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden />
+    </section>
+
     <footer>
       オフライン対応 PWA。学習記録はこの端末内（localStorage）にのみ保存されます。<br />
+      端末移行やバックアップは上の「書き出し／取り込み」を使ってください。<br />
       コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 

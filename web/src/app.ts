@@ -11,6 +11,8 @@ import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.j
 import { consecutiveFailures, intervention } from "../../lib/scheduler/intervention.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { isAnswerCorrect } from "./grade.js";
+import { mathToSpeech } from "./math-speech.js";
+import { shouldRequestPersist } from "./persist.js";
 import { dueSummary } from "./queue.js";
 import { pickNextProblem } from "./select.js";
 import { LocalProgress } from "./store.js";
@@ -60,6 +62,8 @@ function renderQuestion(): void {
   const p = current;
   $("meta").textContent = `${p.topic}・難易度${"★".repeat(p.difficulty)}`;
   $("statement").textContent = p.statement;
+  // 数式記号をスクリーンリーダ向けに読み下す（視覚表示は維持。A1）。
+  $("statement").setAttribute("aria-label", mathToSpeech(p.statement));
 
   const answers = $("answers");
   answers.innerHTML = "";
@@ -75,6 +79,7 @@ function renderQuestion(): void {
       const btn = document.createElement("button");
       btn.className = "choice";
       btn.textContent = choice;
+      btn.setAttribute("aria-label", mathToSpeech(choice)); // 選択肢も読み下す（A1）。
       btn.onclick = () => grade(choice);
       answers.appendChild(btn);
     }
@@ -180,10 +185,46 @@ async function main(): Promise<void> {
   }
   renderStats();
   renderQuestion();
+  setupBackup();
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   }
+
+  // 学習記録を eviction から守る（意味あるデータがある時だけ persist を要求。persistent-storage）。
+  if (navigator.storage?.persist && navigator.storage?.persisted) {
+    navigator.storage
+      .persisted()
+      .then((persisted) => {
+        const hasMeaningfulData = progress.logs().length > 0 || progress.streakDays() > 0;
+        if (shouldRequestPersist({ persisted, hasMeaningfulData })) void navigator.storage.persist();
+      })
+      .catch(() => {});
+  }
+}
+
+/** 学習データの書き出し/取り込み UI（端末移行・バックアップ。export-import）。 */
+function setupBackup(): void {
+  $("export-btn").onclick = () => {
+    const blob = new Blob([progress.exportData()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `denken-os-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  $("import-btn").onclick = () => ($("import-file") as HTMLInputElement).click();
+  ($("import-file") as HTMLInputElement).onchange = (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    file.text().then((txt) => {
+      const ok = progress.importData(txt);
+      renderStats();
+      $("feedback").textContent = ok ? "✅ バックアップを取り込みました" : "❌ ファイルが不正です";
+      $("feedback").className = ok ? "ok" : "ng";
+    });
+  };
 }
 
 main();

@@ -4,8 +4,10 @@
  * Storage を注入可能にし、DOM 無しでもテストできる。
  */
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
+import { deriveRating } from "../../lib/scheduler/rating.js";
 import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import type { ReviewState, Scheduler } from "../../lib/scheduler/types.js";
+import { mergeBackup, parseBackup, serializeBackup } from "./backup.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -70,7 +72,8 @@ export class LocalProgress {
     problemId?: string,
   ): ReviewState {
     const prev = this.getReview(topic) ?? this.scheduler.init(nowMs);
-    const next = this.scheduler.review(prev, correct ? "good" : "again", nowMs);
+    // 解答時間から4段階 Rating を導く（速い正解=easy / 遅い正解=hard）。
+    const next = this.scheduler.review(prev, deriveRating(correct, timeMs), nowMs);
 
     const reviews = this.reviews();
     reviews[topic] = next;
@@ -102,6 +105,20 @@ export class LocalProgress {
     } catch {
       return false;
     }
+  }
+
+  /** 学習データを JSON 文字列で書き出す（バックアップ・端末移行）。 */
+  exportData(): string {
+    return serializeBackup(this.reviews(), this.logs());
+  }
+
+  /** JSON を取り込み既存とマージして保存する。壊れた JSON は false（無変更）。 */
+  importData(json: string): boolean {
+    const backup = parseBackup(json);
+    if (!backup) return false;
+    const merged = mergeBackup({ reviews: this.reviews(), logs: this.logs() }, backup);
+    this.persist(merged.reviews, merged.logs);
+    return true;
   }
 
   /** 今日まで連続して学習した日数（既定 JST 日基準）。 */
