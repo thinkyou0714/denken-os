@@ -1,0 +1,36 @@
+name: weekly-audit
+
+# CI-1: ロックファイルに固定済みの依存に後から CVE が公表されても、PR を出さない限り
+# 通常 CI では再監査されない。週次で pinned 依存を再監査し、PR 非依存で新規 CVE を検知する。
+on:
+  schedule:
+    - cron: "23 6 * * 1" # 毎週月曜 06:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 利用者に届く本番依存の high/critical で失敗（Actions に可視化）。
+      - name: Audit production dependencies (high+, gate)
+        run: npm audit --audit-level=high --omit=dev
+
+      # dev 依存は可視化のみ（破壊的更新が必要な場合があり gate にはしない）。
+      - name: Audit all dependencies (visibility only)
+        run: npm audit --audit-level=moderate || true
