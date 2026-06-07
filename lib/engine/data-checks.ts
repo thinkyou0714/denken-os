@@ -55,9 +55,12 @@ export function citationIssue(source: { type: string; citation?: string } | unde
 /**
  * numeric の answer は単位なしの数値文字列であること（E4）。
  * web/grade.ts が Number(answer) で採点するため、'4.6Ω' 等だと全回答が NaN=不正解化する潜在バグを防ぐ。
+ * 空文字/空白のみは Number("")===0（有限）になり、採点が全回答を 0 と一致＝誤って正解化するため弾く。
  */
 export function numericAnswerIssue(p: { format?: string; answer?: unknown }): string | null {
-  if (p.format === "numeric" && !Number.isFinite(Number(p.answer))) {
+  if (p.format !== "numeric") return null;
+  const raw = String(p.answer ?? "");
+  if (raw.trim().length === 0 || !Number.isFinite(Number(raw))) {
     return `numeric の answer は単位なしの数値文字列である必要があります: "${String(p.answer)}"`;
   }
   return null;

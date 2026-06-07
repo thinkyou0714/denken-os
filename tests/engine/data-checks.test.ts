@@ -64,6 +64,15 @@ describe("numericAnswerIssue（E4: 採点 round-trip 保証）", () => {
     expect(numericAnswerIssue({ format: "numeric", answer: "遅れ" })).toContain("数値");
   });
 
+  it('空文字/空白のみの answer を弾く（Number("")===0 で全回答が 0 と誤一致するのを防ぐ）', () => {
+    expect(numericAnswerIssue({ format: "numeric", answer: "" })).toContain("数値");
+    expect(numericAnswerIssue({ format: "numeric", answer: "   " })).toContain("数値");
+    expect(numericAnswerIssue({ format: "numeric", answer: "　" })).toContain("数値"); // 全角空白
+    expect(numericAnswerIssue({ format: "numeric", answer: undefined })).toContain("数値");
+    // 正当な "0" は通る（空入力とは区別する）。
+    expect(numericAnswerIssue({ format: "numeric", answer: "0" })).toBeNull();
+  });
+
   it("numeric 以外は対象外", () => {
     expect(numericAnswerIssue({ format: "multiple_choice", answer: "3.2" })).toBeNull();
     expect(numericAnswerIssue({ format: "descriptive", answer: "遅れ力率" })).toBeNull();

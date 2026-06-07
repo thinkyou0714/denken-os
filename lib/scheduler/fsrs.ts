@@ -85,6 +85,8 @@ export function cardToReviewState(card: Card): ReviewState {
     lastReviewMs: card.last_review ? new Date(card.last_review).getTime() : null,
     stability: card.stability,
     difficulty: card.difficulty,
+    // 学習状態を保持（reps からの復元は Learning/Relearning を Review に誤分類するため）。
+    state: card.state,
   };
 }
 
@@ -102,7 +104,8 @@ export function reviewStateToCard(s: ReviewState): Card {
     scheduled_days: s.intervalDays,
     reps: s.reps,
     lapses: s.lapses,
-    state: s.reps > 0 ? State.Review : State.New,
+    // 保持された state を復元。state 不在の旧 FSRS データのみ reps で近似（SM-2 は上で base 返却済）。
+    state: (s.state ?? (s.reps > 0 ? State.Review : State.New)) as State,
     last_review: s.lastReviewMs === null ? undefined : new Date(s.lastReviewMs),
   };
 }
