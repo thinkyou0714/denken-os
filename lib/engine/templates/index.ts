@@ -4,6 +4,7 @@ import { demandFactor } from "./demand-factor.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { resistorNetwork } from "./resistor-network.js";
+import { shortCircuitCapacity } from "./short-circuit-capacity.js";
 import { threePhasePower } from "./three-phase-power.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
 import type { Template } from "./types.js";
@@ -18,6 +19,7 @@ const templates: Template[] = [
   groundingResistance,
   demandFactor,
   unitConversion,
+  shortCircuitCapacity,
 ];
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
@@ -36,6 +38,7 @@ export {
   groundingResistance,
   inductionMotorSpeed,
   resistorNetwork,
+  shortCircuitCapacity,
   threePhasePower,
   transformerVoltageRegulation,
   unitConversion,
