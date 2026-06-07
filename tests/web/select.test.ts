@@ -37,4 +37,32 @@ describe("pickNextProblem", () => {
     const chosen = pickNextProblem(pool, { weakTopics: [], rng: () => 0 });
     expect(chosen).not.toBeNull();
   });
+
+  // SCHED-INTERLEAVE: 同 topic 連発を抑制し、別 topic を挟む（interleaving）。
+  it("同 topic が連続上限に達したら別の弱点 topic を挟む", () => {
+    // 理論が直近2連続(上限)。弱点は [理論, 機械] → 理論は後回しで機械(C)を返す。
+    const chosen = pickNextProblem(pool, {
+      weakTopics: ["理論", "機械"],
+      rng: () => 0,
+      recentTopics: ["理論", "理論"],
+      maxSameTopicRun: 2,
+    });
+    expect(chosen?.topic).toBe("機械");
+  });
+
+  it("連続上限でも当該 topic しか候補が無ければ妥協して出す（継続優先）", () => {
+    const onlyTheory = [p("A", "理論"), p("B", "理論")];
+    const chosen = pickNextProblem(onlyTheory, {
+      weakTopics: ["理論"],
+      rng: () => 0,
+      recentTopics: ["理論", "理論"],
+      maxSameTopicRun: 2,
+    });
+    expect(chosen?.topic).toBe("理論");
+  });
+
+  it("recentTopics 未指定なら従来挙動（回帰なし）", () => {
+    const chosen = pickNextProblem(pool, { weakTopics: ["機械"], rng: () => 0 });
+    expect(chosen?.id).toBe("C");
+  });
 });

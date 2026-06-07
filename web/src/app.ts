@@ -8,8 +8,10 @@
  */
 import type { Problem } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
+import { consecutiveFailures, intervention } from "../../lib/scheduler/intervention.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import { isAnswerCorrect } from "./grade.js";
+import { dueSummary } from "./queue.js";
 import { pickNextProblem } from "./select.js";
 import { LocalProgress } from "./store.js";
 
@@ -27,13 +29,20 @@ let questionShownAt = 0;
 const $ = (id: string) => document.getElementById(id)!;
 
 function pickNext(): Problem | null {
-  // 弱点 topic を優先（解答履歴があるとき）。直近の問題は可能なら避ける。
-  return pickNextProblem(problems, { weakTopics: weakTopics(), excludeId: current?.id });
+  // 弱点優先＋直近問題回避＋直近 topic の連発抑制(interleaving)。
+  const recentTopics = progress
+    .logs()
+    .slice(-3)
+    .map((l) => l.topic);
+  return pickNextProblem(problems, { weakTopics: weakTopics(), excludeId: current?.id, recentTopics });
 }
 
 function renderStats(): void {
   const streak = progress.streakDays();
-  $("streak").textContent = `🔥 連続 ${streak} 日`;
+  // 本日の復習キュー（セッションのゴール提示。PEDX-06）。
+  const { dueNow, overdue } = dueSummary(progress.allReviews(), Date.now());
+  const dueLabel = dueNow > 0 ? `📚 復習 ${dueNow}件${overdue > 0 ? `（超過${overdue}）` : ""}` : "📚 ノルマ達成 ✅";
+  $("streak").textContent = `🔥 連続 ${streak} 日 ・ ${dueLabel}`;
   const weak = weakTopics();
   $("weak").textContent = weak.length > 0 ? `弱点: ${weak.join(" / ")}` : "弱点: （まだデータなし）";
 }
@@ -119,7 +128,16 @@ function grade(given: string): void {
   const timeMs = Date.now() - questionShownAt;
   progress.record(p.topic, correct, Date.now(), timeMs, p.id);
 
-  $("feedback").textContent = correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`;
+  // 連続誤答の介入（負ループ抑制。D6）。同 topic を続けて外したら励まし/基礎回帰を促す。
+  const fails = correct ? 0 : consecutiveFailures(progress.logs(), p.topic);
+  const act = intervention(fails);
+  const note =
+    act === "ease_down"
+      ? `（${p.topic}が${fails}回連続。基礎に戻って解説をじっくり確認しよう）`
+      : act === "force_explanation"
+        ? "（もう一度、解説の手順を一つずつ追ってみよう）"
+        : "";
+  $("feedback").textContent = (correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`) + note;
   $("feedback").className = correct ? "ok" : "ng";
   $("solution").innerHTML =
     `<strong>解説</strong><ol>${p.solution.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol><p class="src">${escapeHtml(sourceText(p))}</p>`;
