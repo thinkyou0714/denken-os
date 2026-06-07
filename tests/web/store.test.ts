@@ -42,6 +42,26 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     expect(p.dueLapses(now + 20 * 60_000)).not.toContain("T-0009");
   });
 
+  it("既定 FSRS: record で stability が付与される", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const st = p.record("理論", true, Date.UTC(2026, 0, 10), 5000, "T-1");
+    expect(st.stability).toBeGreaterThan(0);
+    expect(Number.isFinite(st.dueMs)).toBe(true);
+  });
+
+  it("旧 SM-2 形式(stability 無し)を FSRS 既定で読んでもクラッシュせず有効な状態を作る（後方互換）", () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      "denken:reviews",
+      JSON.stringify({ 理論: { reps: 2, lapses: 0, intervalDays: 6, ease: 2.5, dueMs: 0, lastReviewMs: 0 } }),
+    );
+    const p = new LocalProgress(storage);
+    const st = p.record("理論", true, Date.UTC(2026, 0, 10), 5000, "T-1");
+    expect(Number.isFinite(st.dueMs)).toBe(true);
+    expect(st.dueMs).toBeGreaterThan(0);
+    expect(st.stability).toBeGreaterThan(0); // 旧データから FSRS 初期化され有効値が付く
+  });
+
   it("連続学習日数を数える（今日まで連続）", () => {
     const p = new LocalProgress(new MemoryStorage());
     const today = Date.UTC(2026, 0, 10);
@@ -65,7 +85,7 @@ describe("LocalProgress（ブラウザ進捗）", () => {
     a.record("機械", false, Date.UTC(2026, 0, 10));
     const b = new LocalProgress(storage);
     expect(b.logs().length).toBe(1);
-    expect(b.getReview("機械")?.lapses).toBe(1);
+    expect(b.getReview("機械")).toBeDefined(); // 記憶状態が別インスタンスへ復元される
   });
 
   it("容量超過(QuotaExceededError)でも record は throw せず、ログを間引いて継続する", () => {

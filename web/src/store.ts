@@ -4,9 +4,9 @@
  * Storage を注入可能にし、DOM 無しでもテストできる。
  */
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
+import { FsrsReviewScheduler } from "../../lib/scheduler/fsrs.js";
 import { dueLapseIds, type LapseMap, updateLapse } from "../../lib/scheduler/lapse-queue.js";
 import { deriveRating } from "../../lib/scheduler/rating.js";
-import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import type { ReviewState, Scheduler } from "../../lib/scheduler/types.js";
 import { mergeBackup, parseBackup, serializeBackup } from "./backup.js";
 
@@ -30,8 +30,9 @@ export class LocalProgress {
     private storage: StorageLike,
     /** 日境界のタイムゾーンオフセット(ms)。既定 JST。テストで上書き可。 */
     private dayOffsetMs: number = JST_OFFSET_MS,
-    /** 採点スケジューラ。既定 SM-2。FsrsReviewScheduler 等に差し替え可能（統一 Scheduler）。 */
-    private scheduler: Scheduler = new Sm2Scheduler(),
+    /** 採点スケジューラ。既定 FSRS（実績ある間隔反復。stability/difficulty を永続化）。
+     *  旧 SM-2 データ(stability 無し)は FSRS 側で安全に初期化される（reviewStateToCard）。 */
+    private scheduler: Scheduler = new FsrsReviewScheduler(0.9),
   ) {}
 
   /** epoch ms をオフセット込みの「日番号」に落とす（同一日の判定・連続日数に使う）。 */

@@ -91,10 +91,13 @@ export function cardToReviewState(card: Card): ReviewState {
 export function reviewStateToCard(s: ReviewState): Card {
   // createEmptyCard で全フィールド(ts-fsrs の版差異も含む)を満たした土台を作り、永続値で上書きする。
   const base = createEmptyCard(new Date(s.lastReviewMs ?? s.dueMs));
+  // 後方互換: FSRS の stability が無い（SM-2 由来の旧状態）場合は FSRS 未学習として初期化する。
+  // stability=0 のまま Review 状態で repeat すると NaN(stability/due null)を生むため。
+  if (s.stability === undefined) return base;
   return {
     ...base,
     due: new Date(s.dueMs),
-    stability: s.stability ?? base.stability,
+    stability: s.stability,
     difficulty: s.difficulty ?? base.difficulty,
     scheduled_days: s.intervalDays,
     reps: s.reps,
