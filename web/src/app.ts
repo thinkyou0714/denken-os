@@ -10,6 +10,7 @@ import type { Problem } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { consecutiveFailures, intervention } from "../../lib/scheduler/intervention.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { nextAttemptState } from "./attempt.js";
 import { isAnswerCorrect } from "./grade.js";
 import { mathToSpeech } from "./math-speech.js";
 import { shouldRequestPersist } from "./persist.js";
@@ -27,6 +28,7 @@ const progress = new LocalProgress(window.localStorage);
 let problems: Problem[] = [];
 let current: Problem | null = null;
 let questionShownAt = 0;
+let attemptNo = 0; // 現在の問題への挑戦回数（PEDX-01: 初回誤答は reveal せず再挑戦）。
 
 const $ = (id: string) => document.getElementById(id)!;
 
@@ -59,6 +61,7 @@ function renderQuestion(): void {
     return;
   }
   questionShownAt = Date.now();
+  attemptNo = 0;
   const p = current;
   $("meta").textContent = `${p.topic}・難易度${"★".repeat(p.difficulty)}`;
   $("statement").textContent = p.statement;
@@ -129,8 +132,20 @@ function showSolution(p: Problem): void {
 function grade(given: string): void {
   if (!current) return;
   const p = current;
-  const correct = isAnswerCorrect(p, given);
+  attemptNo += 1;
+  const correctThis = isAnswerCorrect(p, given);
+  const outcome = nextAttemptState({ format: p.format, correct: correctThis, attemptNo });
+
+  // PEDX-01: 初回誤答(択一/数値)は解説を出さず、もう一度想起させる（record はまだ呼ばない）。
+  if (outcome.kind === "retry") {
+    $("feedback").textContent = "❌ もう一度考えてみよう（残り1回）";
+    $("feedback").className = "ng";
+    return;
+  }
+
+  const correct = outcome.correct;
   const timeMs = Date.now() - questionShownAt;
+  // reveal 時に最終結果で1回だけ記録（二重計上を防ぐ）。
   progress.record(p.topic, correct, Date.now(), timeMs, p.id);
 
   // 連続誤答の介入（負ループ抑制。D6）。同 topic を続けて外したら励まし/基礎回帰を促す。
