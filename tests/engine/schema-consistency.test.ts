@@ -64,4 +64,10 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
     expect(r.ajv).toBe(false);
     expect(r.zod).toBe(false);
   });
+
+  it("status=published で provenance 欠落は両方が拒否する（gate parity）", () => {
+    const r = bothAccept({ ...T0001, status: "published" });
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
 });

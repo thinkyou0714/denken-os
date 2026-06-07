@@ -27,6 +27,13 @@ const paramField = z.object({
   realistic_range: z.tuple([z.number(), z.number()]).optional(),
 });
 
+/** 検収来歴（誰が/いつ/方法）。status=published で必須。指定時は3項目とも非空。 */
+export const provenanceSchema = z.object({
+  validated_by: z.string().min(1),
+  validated_at: z.string().min(1),
+  method: z.string().min(1),
+});
+
 export const validationSchema = z.object({
   solver_checked: z.boolean(),
   human_checked: z.boolean(),
@@ -34,6 +41,7 @@ export const validationSchema = z.object({
   physically_valid: z.boolean(),
   supervisor_checked: z.boolean().optional(),
   confidence: z.number().min(0).max(1).optional(),
+  provenance: provenanceSchema.optional(),
 });
 
 export const sourceSchema = z
@@ -125,6 +133,15 @@ export const problemSchema = z
             "status=validated|published は solver_checked/human_checked/clean_answer/physically_valid が全て true である必要があります",
         });
       }
+    }
+    // status=published は検収来歴 provenance(validated_by/validated_at/method) が必須（DI-13/DI-5）。
+    // validated には課さない（前向き契約。既存 validated データの偽 backfill を避ける）。
+    if (p.status === "published" && !p.validation.provenance) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["validation", "provenance"],
+        message: "status=published は provenance(validated_by/validated_at/method) が必須です",
+      });
     }
     // params.value は realistic_range 内（範囲外は出題前に弾く。範囲外入力起点の NaN/Infinity を恒久封鎖）
     if (p.params) {
