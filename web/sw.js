@@ -1,9 +1,9 @@
 // Service Worker — app shell を cache-first でキャッシュし、オフラインで動かす。
 // 静的アセットは cache-first（調査の定石）。問題データもキャッシュして完全オフライン化。
-// ★web/ のアセット(dist/app.js 等)を変更したらこの版数を必ず上げること。版数を上げると
-//   このファイルのバイトが変わり SW 更新が走り、activate で旧キャッシュを破棄して新バンドルを取り直す。
-//   (v3: numeric採点の空入力是正・数値比較・JST日境界・直近重複回避を配信)
-const CACHE = "denken-os-v3";
+// ★版数(CACHE)は build:web が配信アセットの内容ハッシュで自動更新する（手で上げる必要は無い）。
+//   コミット時のプレースホルダは __BUILD_HASH__。ビルドで denken-os-<hash> に置換され、
+//   アセットが変わった時だけ版が変わって SW 更新→旧キャッシュ破棄が走る（版上げ忘れ防止）。
+const CACHE = "denken-os-__BUILD_HASH__";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
