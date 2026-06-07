@@ -63,8 +63,13 @@ export const inductionMotorSpeed: Template = {
   exam: "denken3",
   difficulty: 2,
   paramSpecs: {
-    frequency: { unit: "Hz", realistic_range: [50, 60] },
-    poles: { unit: "pole", realistic_range: [2, 12] },
+    // DI-7: 離散ドメインを一級宣言（商用周波数は2値・極数は偶数）。生成不変条件とデータゲートの単一情報源。
+    frequency: {
+      unit: "Hz",
+      realistic_range: [50, 60],
+      domain: { kind: "enum", values: [50, 60], label: "商用周波数" },
+    },
+    poles: { unit: "pole", realistic_range: [2, 12], domain: { kind: "evenIntegerAtLeast", min: 2, label: "極数" } },
     slip: { unit: "%", realistic_range: [1, 10] },
   },
   generate(rng) {

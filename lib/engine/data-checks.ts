@@ -1,9 +1,10 @@
 /**
  * data-checks.ts — JSON Schema(draft-07) では表現できない「コード側のデータ不変条件」。
  * validate-problems.ts(CI ゲート) が使う純関数として切り出し、単体テスト可能にする。
- *   - paramIssues: params.value ∈ realistic_range（B2）+ 物理/制度的な離散ドメイン（DI-4）
+ *   - paramIssues: params.value ∈ realistic_range（B2）+ 物理/制度的な離散ドメイン（DI-4/DI-7）
  *   - citationIssue: 出典 citation の必須 + 書式（DI-6）
  */
+import { DEFAULT_PARAM_DOMAINS, domainIssue, type ParamDomain } from "./param-domain.js";
 
 export interface ParamLike {
   value: number;
@@ -12,17 +13,14 @@ export interface ParamLike {
 }
 
 /**
- * 連続レンジ(realistic_range)では表せない離散・列挙の制約。
- * 例: 誘導機の極数は2以上の偶数、商用周波数は50か60のみ（55Hz グリッドは無い）。
+ * params の範囲(B2)＋離散ドメイン(DI-4/DI-7)違反を列挙する。
+ * 離散ドメインは param-domain の宣言データ（既定 DEFAULT_PARAM_DOMAINS）で検査する。
+ * テンプレ paramSpec.domain が単一情報源で、本既定表との一致は param-domain.test.ts が担保する。
  */
-const PARAM_DOMAIN_RULES: Record<string, (v: number) => string | null> = {
-  poles: (v) =>
-    Number.isInteger(v) && v >= 2 && v % 2 === 0 ? null : `極数は2以上の偶数である必要があります（実在しない値: ${v}）`,
-  frequency: (v) => (v === 50 || v === 60 ? null : `商用周波数は50または60Hzです（不正: ${v}）`),
-};
-
-/** params の範囲(B2)＋離散ドメイン(DI-4)違反を列挙する。 */
-export function paramIssues(params: Record<string, ParamLike> | undefined): string[] {
+export function paramIssues(
+  params: Record<string, ParamLike> | undefined,
+  domains: Record<string, ParamDomain> = DEFAULT_PARAM_DOMAINS,
+): string[] {
   const issues: string[] = [];
   if (!params || typeof params !== "object") return issues;
   for (const [name, p] of Object.entries(params)) {
@@ -31,9 +29,9 @@ export function paramIssues(params: Record<string, ParamLike> | undefined): stri
     if (Array.isArray(r) && r.length === 2 && (p.value < r[0] || p.value > r[1])) {
       issues.push(`params.${name}.value=${p.value} が realistic_range [${r[0]}, ${r[1]}] の外です`);
     }
-    const rule = PARAM_DOMAIN_RULES[name];
-    if (rule) {
-      const msg = rule(p.value);
+    const domain = domains[name];
+    if (domain) {
+      const msg = domainIssue(p.value, domain);
       if (msg) issues.push(`params.${name}: ${msg}`);
     }
   }

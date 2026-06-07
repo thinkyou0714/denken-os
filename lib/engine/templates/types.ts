@@ -7,12 +7,19 @@
  *   { 正解, 各量, 誤答選択肢, 制約 }
  * を返す。LLM は narrate.ts で「言い回し」だけを担当する。
  */
+import type { ParamDomain } from "../param-domain.js";
 import type { Exam, ProblemFormat, Subject } from "../schema.js";
 
 export interface ParamSpec {
   unit?: string;
   /** 係数を振る現実的レンジ [min, max]（03-quality-pipeline の数値レンジルール）。 */
   realistic_range: [number, number];
+  /**
+   * 連続レンジでは表せない離散ドメイン（DI-7。極数=偶数 / 周波数∈{50,60} 等）。
+   * 宣言するとこのテンプレが当該パラメータ離散制約の単一情報源になり、
+   * 生成不変条件テストとデータゲート(DEFAULT_PARAM_DOMAINS)の整合が test で担保される。
+   */
+  domain?: ParamDomain;
 }
 
 export interface ParamValue {
