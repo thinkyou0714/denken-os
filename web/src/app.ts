@@ -74,6 +74,13 @@ interface ExamState {
 }
 let exam: ExamState | null = null;
 
+/** 模試を終了（タイマー解除）して模試タブの初期画面へ戻る。 */
+function endExam(): void {
+  if (exam?.timerId) clearInterval(exam.timerId);
+  exam = null;
+  switchView("exam");
+}
+
 function weakTopics(): string[] {
   return weakestTopics(aggregateByTopic(progress.logs()).values(), Date.now(), 3);
 }
@@ -490,10 +497,7 @@ function renderExamRunning(root: HTMLElement): void {
       {
         class: "chip",
         type: "button",
-        onclick: () => {
-          exam = null;
-          switchView("exam");
-        },
+        onclick: () => endExam(),
       },
       "中断",
     ),
@@ -609,10 +613,7 @@ function renderExamResult(root: HTMLElement): void {
       {
         class: "primary",
         type: "button",
-        onclick: () => {
-          exam = null;
-          switchView("exam");
-        },
+        onclick: () => endExam(),
       },
       "もう一度",
     ),
