@@ -5,12 +5,16 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  allowableTension,
+  boostChopper,
   buckChopper,
+  dcGeneratorEmf,
   dcMotorEmf,
   firstOrderControl,
   hydroPowerOutput,
   inductionPowerBalance,
   inductionProportionalShift,
+  inductorEnergy,
   insulationTestVoltage,
   lightingDesign,
   maxPowerTransfer,
@@ -32,7 +36,9 @@ import {
   transformerEfficiency,
   transformerTurnsRatio,
   transmissionLoss,
+  voltageDropRate,
   wheatstoneBridge,
+  windLoad,
 } from "../../lib/engine/templates/index.js";
 
 describe("拡充テンプレートの閉形式（固定値検算）", () => {
@@ -189,5 +195,34 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
       lightingDesign.generateFrom({ illuminance: 500, area: 100, lumen: 5000, utilization: 0.5, maintenance: 0.8 })!
         .answerText,
     ).toBe("25");
+  });
+
+  it("法規: 風圧荷重 P=qA（980Pa,2m² → 1960N）", () => {
+    expect(windLoad.generateFrom({ wind_pressure: 980, area: 2 })!.answerText).toBe("1960");
+  });
+
+  it("法規: 許容張力 Tb/f（10000N,2.5 → 4000N）", () => {
+    expect(allowableTension.generateFrom({ tensile_strength: 10000, safety_factor: 2.5 })!.answerText).toBe("4000");
+  });
+
+  it("電力: 電圧降下率 (Vs-Vr)/Vr×100（210,200 → 5%）", () => {
+    expect(voltageDropRate.generateFrom({ sending_voltage: 210, receiving_voltage: 200 })!.answerText).toBe("5");
+  });
+
+  it("機械: 直流発電機 E=V+IaRa（220,50,0.2 → 230V）", () => {
+    expect(
+      dcGeneratorEmf.generateFrom({ terminal_voltage: 220, armature_current: 50, armature_resistance: 0.2 })!
+        .answerText,
+    ).toBe("230");
+  });
+
+  it("理論: 磁気エネルギー W=½LI²（0.5H,4A → 4J）", () => {
+    expect(inductorEnergy.generateFrom({ inductance: 0.5, current: 4 })!.answerText).toBe("4");
+  });
+
+  it("二次機械制御: 昇圧チョッパ Vo=Vi/(1-D)（100V,D0.5 → 200V, descriptive）", () => {
+    const g = boostChopper.generateFrom({ input_voltage: 100, duty_ratio: 0.5 });
+    expect(g!.answerText).toBe("200");
+    expect(g!.format).toBe("descriptive");
   });
 });

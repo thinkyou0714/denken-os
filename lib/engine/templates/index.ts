@@ -1,6 +1,9 @@
 /** topic 名 → Template のレジストリ。 */
+import { allowableTension } from "./allowable-tension.js";
+import { boostChopper } from "./boost-chopper.js";
 import { buckChopper } from "./buck-chopper.js";
 import { capacitorEnergy } from "./capacitor-energy.js";
+import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
 import { demandFactor } from "./demand-factor.js";
 import { firstOrderControl } from "./first-order-control.js";
@@ -9,6 +12,7 @@ import { hydroPowerOutput } from "./hydro-power-output.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
 import { inductionProportionalShift } from "./induction-proportional-shift.js";
+import { inductorEnergy } from "./inductor-energy.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { lightingDesign } from "./lighting-design.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
@@ -34,7 +38,9 @@ import { transformerTurnsRatio } from "./transformer-turns-ratio.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
 import { transmissionLoss } from "./transmission-loss.js";
 import type { Template } from "./types.js";
+import { voltageDropRate } from "./voltage-drop-rate.js";
 import { wheatstoneBridge } from "./wheatstone-bridge.js";
+import { windLoad } from "./wind-load.js";
 
 const templates: Template[] = [
   // 理論
@@ -47,6 +53,7 @@ const templates: Template[] = [
   shuntResistor,
   multiplierResistor,
   parallelPlateField,
+  inductorEnergy,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -54,6 +61,7 @@ const templates: Template[] = [
   transmissionLoss,
   singlePhaseVoltageDrop,
   percentImpedanceConversion,
+  voltageDropRate,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -63,16 +71,20 @@ const templates: Template[] = [
   transformerTurnsRatio,
   pumpMotorInput,
   lightingDesign,
+  dcGeneratorEmf,
   // 法規
   groundingResistance,
   sagTension,
   insulationTestVoltage,
+  windLoad,
+  allowableTension,
   // 機械制御（二次）
   transformerVoltageRegulation,
   synchronousGeneratorOutput,
   buckChopper,
   firstOrderControl,
   inductionProportionalShift,
+  boostChopper,
   // 電力管理（二次）
   reactivePowerCompensation,
   hydroPowerOutput,
@@ -92,8 +104,11 @@ export function listTopics(): string[] {
 
 export type { Template };
 export {
+  allowableTension,
+  boostChopper,
   buckChopper,
   capacitorEnergy,
+  dcGeneratorEmf,
   dcMotorEmf,
   demandFactor,
   firstOrderControl,
@@ -102,6 +117,7 @@ export {
   inductionMotorSpeed,
   inductionPowerBalance,
   inductionProportionalShift,
+  inductorEnergy,
   insulationTestVoltage,
   lightingDesign,
   maxPowerTransfer,
@@ -126,5 +142,7 @@ export {
   transformerTurnsRatio,
   transformerVoltageRegulation,
   transmissionLoss,
+  voltageDropRate,
   wheatstoneBridge,
+  windLoad,
 };

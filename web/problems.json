@@ -3906,6 +3906,398 @@
   {
     "id": "D-0073",
     "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 0.2,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 10,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=0.2H のコイルに電流 I=10A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "10",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×0.2×10²",
+      "W=10J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0074",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 2,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 2,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=2H のコイルに電流 I=2A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "4",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×2×2²",
+      "W=4J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0075",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 0.2,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 2,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=0.2H のコイルに電流 I=2A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "0.4",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×0.2×2²",
+      "W=0.4J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0076",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 1,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 5,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=1H のコイルに電流 I=5A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "12.5",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×1×5²",
+      "W=12.5J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0077",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 1,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 10,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=1H のコイルに電流 I=10A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "50",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×1×10²",
+      "W=50J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0078",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 2,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 4,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=2H のコイルに電流 I=4A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "16",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×2×4²",
+      "W=16J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0079",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 1,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 20,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=1H のコイルに電流 I=20A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "200",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×1×20²",
+      "W=200J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0080",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "コイルの磁気エネルギー",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "inductance": {
+        "value": 0.1,
+        "unit": "H",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      },
+      "current": {
+        "value": 2,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L=0.1H のコイルに電流 I=2A が流れている。蓄えられる磁気エネルギー W〔J〕は?",
+    "answer": "0.2",
+    "solution": [
+      "磁気エネルギー W=(1/2)·L·I²",
+      "W=0.5×0.1×2²",
+      "W=0.2J"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0081",
+    "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
     "format": "numeric",
@@ -3953,7 +4345,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0074",
+    "id": "D-0082",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4002,7 +4394,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0075",
+    "id": "D-0083",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4051,7 +4443,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0076",
+    "id": "D-0084",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4100,7 +4492,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0077",
+    "id": "D-0085",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4149,7 +4541,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0078",
+    "id": "D-0086",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4198,7 +4590,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0079",
+    "id": "D-0087",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4247,7 +4639,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0080",
+    "id": "D-0088",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4296,7 +4688,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0081",
+    "id": "D-0089",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4356,7 +4748,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0082",
+    "id": "D-0090",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4416,7 +4808,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0083",
+    "id": "D-0091",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4476,7 +4868,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0084",
+    "id": "D-0092",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4536,7 +4928,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0085",
+    "id": "D-0093",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4596,7 +4988,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0086",
+    "id": "D-0094",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4656,7 +5048,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0087",
+    "id": "D-0095",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4716,7 +5108,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0088",
+    "id": "D-0096",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4776,7 +5168,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0089",
+    "id": "D-0097",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -4825,7 +5217,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0090",
+    "id": "D-0098",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -4874,7 +5266,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0091",
+    "id": "D-0099",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -4923,7 +5315,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0092",
+    "id": "D-0100",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -4972,7 +5364,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0093",
+    "id": "D-0101",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5021,7 +5413,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0094",
+    "id": "D-0102",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5070,7 +5462,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0095",
+    "id": "D-0103",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5119,7 +5511,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0096",
+    "id": "D-0104",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5168,7 +5560,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0097",
+    "id": "D-0105",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5217,7 +5609,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0098",
+    "id": "D-0106",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5266,7 +5658,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0099",
+    "id": "D-0107",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5315,7 +5707,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0100",
+    "id": "D-0108",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5364,7 +5756,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0101",
+    "id": "D-0109",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5413,7 +5805,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0102",
+    "id": "D-0110",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5462,7 +5854,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0103",
+    "id": "D-0111",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5511,7 +5903,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0104",
+    "id": "D-0112",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5560,7 +5952,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0105",
+    "id": "D-0113",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5626,7 +6018,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0106",
+    "id": "D-0114",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5692,7 +6084,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0107",
+    "id": "D-0115",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5758,7 +6150,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0108",
+    "id": "D-0116",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5824,7 +6216,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0109",
+    "id": "D-0117",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5890,7 +6282,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0110",
+    "id": "D-0118",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -5956,7 +6348,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0111",
+    "id": "D-0119",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6022,7 +6414,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0112",
+    "id": "D-0120",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6088,7 +6480,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0113",
+    "id": "D-0121",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6145,7 +6537,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0114",
+    "id": "D-0122",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6202,7 +6594,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0115",
+    "id": "D-0123",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6259,7 +6651,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0116",
+    "id": "D-0124",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6316,7 +6708,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0117",
+    "id": "D-0125",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6373,7 +6765,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0118",
+    "id": "D-0126",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6430,7 +6822,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0119",
+    "id": "D-0127",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6487,7 +6879,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0120",
+    "id": "D-0128",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6544,7 +6936,399 @@
     "status": "draft"
   },
   {
-    "id": "D-0121",
+    "id": "D-0129",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 6300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 6000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=6300V、受電端電圧 Vr=6000V である。電圧降下率 ε〔%〕は?",
+    "answer": "5",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(6300−6000)/6000×100",
+      "ε=5%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0130",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 105,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=105V、受電端電圧 Vr=100V である。電圧降下率 ε〔%〕は?",
+    "answer": "5",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(105−100)/100×100",
+      "ε=5%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0131",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 208,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=208V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "answer": "4",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(208−200)/200×100",
+      "ε=4%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0132",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 6600,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 6000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=6600V、受電端電圧 Vr=6000V である。電圧降下率 ε〔%〕は?",
+    "answer": "10",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(6600−6000)/6000×100",
+      "ε=10%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0133",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 210,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=210V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "answer": "5",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(210−200)/200×100",
+      "ε=5%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0134",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 216,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=216V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "answer": "8",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(216−200)/200×100",
+      "ε=8%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0135",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 220,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=220V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "answer": "10",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(220−200)/200×100",
+      "ε=10%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0136",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "電圧降下率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sending_voltage": {
+        "value": 3300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      },
+      "receiving_voltage": {
+        "value": 3000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6600
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=3300V、受電端電圧 Vr=3000V である。電圧降下率 ε〔%〕は?",
+    "answer": "10",
+    "solution": [
+      "電圧降下率 ε=(Vs−Vr)/Vr×100",
+      "ε=(3300−3000)/3000×100",
+      "ε=10%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0137",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6608,7 +7392,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0122",
+    "id": "D-0138",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6672,7 +7456,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0123",
+    "id": "D-0139",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6736,7 +7520,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0124",
+    "id": "D-0140",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6800,7 +7584,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0125",
+    "id": "D-0141",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6864,7 +7648,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0126",
+    "id": "D-0142",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6928,7 +7712,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0127",
+    "id": "D-0143",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -6992,7 +7776,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0128",
+    "id": "D-0144",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7056,7 +7840,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0129",
+    "id": "D-0145",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7113,7 +7897,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0130",
+    "id": "D-0146",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7170,7 +7954,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0131",
+    "id": "D-0147",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7227,7 +8011,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0132",
+    "id": "D-0148",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7284,7 +8068,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0133",
+    "id": "D-0149",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7341,7 +8125,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0134",
+    "id": "D-0150",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7398,7 +8182,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0135",
+    "id": "D-0151",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7455,7 +8239,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0136",
+    "id": "D-0152",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7512,7 +8296,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0137",
+    "id": "D-0153",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7569,7 +8353,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0138",
+    "id": "D-0154",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7626,7 +8410,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0139",
+    "id": "D-0155",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7683,7 +8467,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0140",
+    "id": "D-0156",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7740,7 +8524,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0141",
+    "id": "D-0157",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7797,7 +8581,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0142",
+    "id": "D-0158",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7854,7 +8638,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0143",
+    "id": "D-0159",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7911,7 +8695,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0144",
+    "id": "D-0160",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -7968,7 +8752,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0145",
+    "id": "D-0161",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8009,7 +8793,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0146",
+    "id": "D-0162",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8050,7 +8834,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0147",
+    "id": "D-0163",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8091,7 +8875,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0148",
+    "id": "D-0164",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8132,7 +8916,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0149",
+    "id": "D-0165",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8173,7 +8957,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0150",
+    "id": "D-0166",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8222,7 +9006,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0151",
+    "id": "D-0167",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8271,7 +9055,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0152",
+    "id": "D-0168",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8320,7 +9104,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0153",
+    "id": "D-0169",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8369,7 +9153,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0154",
+    "id": "D-0170",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8418,7 +9202,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0155",
+    "id": "D-0171",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8467,7 +9251,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0156",
+    "id": "D-0172",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8516,7 +9300,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0157",
+    "id": "D-0173",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -8565,7 +9349,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0158",
+    "id": "D-0174",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8623,7 +9407,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0159",
+    "id": "D-0175",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8681,7 +9465,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0160",
+    "id": "D-0176",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8739,7 +9523,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0161",
+    "id": "D-0177",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8797,7 +9581,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0162",
+    "id": "D-0178",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8855,7 +9639,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0163",
+    "id": "D-0179",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8913,7 +9697,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0164",
+    "id": "D-0180",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -8971,7 +9755,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0165",
+    "id": "D-0181",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9029,7 +9813,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0166",
+    "id": "D-0182",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9086,7 +9870,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0167",
+    "id": "D-0183",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9143,7 +9927,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0168",
+    "id": "D-0184",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9200,7 +9984,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0169",
+    "id": "D-0185",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9257,7 +10041,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0170",
+    "id": "D-0186",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9314,7 +10098,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0171",
+    "id": "D-0187",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9371,7 +10155,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0172",
+    "id": "D-0188",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9428,7 +10212,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0173",
+    "id": "D-0189",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9485,7 +10269,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0174",
+    "id": "D-0190",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9558,7 +10342,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0175",
+    "id": "D-0191",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9631,7 +10415,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0176",
+    "id": "D-0192",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9704,7 +10488,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0177",
+    "id": "D-0193",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9777,7 +10561,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0178",
+    "id": "D-0194",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9850,7 +10634,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0179",
+    "id": "D-0195",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9923,7 +10707,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0180",
+    "id": "D-0196",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -9996,7 +10780,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0181",
+    "id": "D-0197",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10069,7 +10853,463 @@
     "status": "draft"
   },
   {
-    "id": "D-0182",
+    "id": "D-0198",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 10,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=200V の直流発電機が電機子電流 Ia=10A を供給している。電機子抵抗 Ra=1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "210",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=200+10×1",
+      "E=210V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0199",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 40,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 0.1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=200V の直流発電機が電機子電流 Ia=40A を供給している。電機子抵抗 Ra=0.1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "204",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=200+40×0.1",
+      "E=204V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0200",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 220,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 50,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 0.5,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=220V の直流発電機が電機子電流 Ia=50A を供給している。電機子抵抗 Ra=0.5Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "245",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=220+50×0.5",
+      "E=245V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0201",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 40,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 0.1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=100V の直流発電機が電機子電流 Ia=40A を供給している。電機子抵抗 Ra=0.1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "104",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=100+40×0.1",
+      "E=104V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0202",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 110,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 25,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=110V の直流発電機が電機子電流 Ia=25A を供給している。電機子抵抗 Ra=1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "135",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=110+25×1",
+      "E=135V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0203",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 25,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=200V の直流発電機が電機子電流 Ia=25A を供給している。電機子抵抗 Ra=1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "225",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=200+25×1",
+      "E=225V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0204",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 20,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 0.4,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=200V の直流発電機が電機子電流 Ia=20A を供給している。電機子抵抗 Ra=0.4Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "208",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=200+20×0.4",
+      "E=208V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0205",
+    "exam": "denken3",
+    "subject": "機械",
+    "topic": "直流発電機の誘導起電力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "terminal_voltage": {
+        "value": 110,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          220
+        ]
+      },
+      "armature_current": {
+        "value": 20,
+        "unit": "A",
+        "realistic_range": [
+          10,
+          50
+        ]
+      },
+      "armature_resistance": {
+        "value": 0.1,
+        "unit": "ohm",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "端子電圧 V=110V の直流発電機が電機子電流 Ia=20A を供給している。電機子抵抗 Ra=0.1Ω のとき、誘導起電力 E〔V〕は?",
+    "answer": "112",
+    "solution": [
+      "発電機は E=V+Ia·Ra（電動機の E=V−Ia·Ra と符号が逆）",
+      "E=110+20×0.1",
+      "E=112V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0206",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10110,7 +11350,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0183",
+    "id": "D-0207",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10151,7 +11391,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0184",
+    "id": "D-0208",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10192,7 +11432,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0185",
+    "id": "D-0209",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10233,7 +11473,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0186",
+    "id": "D-0210",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10274,7 +11514,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0187",
+    "id": "D-0211",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10315,7 +11555,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0188",
+    "id": "D-0212",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10356,7 +11596,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0189",
+    "id": "D-0213",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -10397,7 +11637,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0190",
+    "id": "D-0214",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10454,7 +11694,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0191",
+    "id": "D-0215",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10511,7 +11751,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0192",
+    "id": "D-0216",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10568,7 +11808,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0193",
+    "id": "D-0217",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10625,7 +11865,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0194",
+    "id": "D-0218",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10682,7 +11922,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0195",
+    "id": "D-0219",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10739,7 +11979,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0196",
+    "id": "D-0220",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10796,7 +12036,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0197",
+    "id": "D-0221",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -10853,7 +12093,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0198",
+    "id": "D-0222",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
@@ -10894,7 +12134,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0199",
+    "id": "D-0223",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
@@ -10935,7 +12175,791 @@
     "status": "draft"
   },
   {
-    "id": "D-0200",
+    "id": "D-0224",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 490,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 1,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=490Pa が作用している。受圧面積 A=1m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "490",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=490×1",
+      "P=490N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0225",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 2940,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 5,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=2940Pa が作用している。受圧面積 A=5m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "14700",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=2940×5",
+      "P=14700N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0226",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 1000,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 1,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=1000Pa が作用している。受圧面積 A=1m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "1000",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=1000×1",
+      "P=1000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0227",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 980,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 0.5,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=980Pa が作用している。受圧面積 A=0.5m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "490",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=980×0.5",
+      "P=490N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0228",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 490,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 3,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=490Pa が作用している。受圧面積 A=3m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "1470",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=490×3",
+      "P=1470N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0229",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 2940,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 2,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=2940Pa が作用している。受圧面積 A=2m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "5880",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=2940×2",
+      "P=5880N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0230",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 2000,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 0.5,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=2000Pa が作用している。受圧面積 A=0.5m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "1000",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=2000×0.5",
+      "P=1000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0231",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "風圧荷重",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "wind_pressure": {
+        "value": 1230,
+        "unit": "Pa",
+        "realistic_range": [
+          400,
+          3000
+        ]
+      },
+      "area": {
+        "value": 3,
+        "unit": "m2",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      }
+    },
+    "statement": "架空電線に風圧 q=1230Pa が作用している。受圧面積 A=3m² のとき、電線に加わる風圧荷重 P〔N〕は?",
+    "answer": "3690",
+    "solution": [
+      "風圧荷重 P=q·A（Pa=N/m²）",
+      "P=1230×3",
+      "P=3690N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0232",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 9800,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 4,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=9800N の電線を安全率 f=4 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "2450",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=9800/4",
+      "T_a=2450N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0233",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 10000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 5,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=10000N の電線を安全率 f=5 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "2000",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=10000/5",
+      "T_a=2000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0234",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 4000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 2.5,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=4000N の電線を安全率 f=2.5 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "1600",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=4000/2.5",
+      "T_a=1600N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0235",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 10000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 2.5,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=10000N の電線を安全率 f=2.5 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "4000",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=10000/2.5",
+      "T_a=4000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0236",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 2000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 4,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=2000N の電線を安全率 f=4 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "500",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=2000/4",
+      "T_a=500N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0237",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 20000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 2.5,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=20000N の電線を安全率 f=2.5 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "8000",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=20000/2.5",
+      "T_a=8000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0238",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 8000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 2.5,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=8000N の電線を安全率 f=2.5 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "3200",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=8000/2.5",
+      "T_a=3200N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0239",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の許容張力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "tensile_strength": {
+        "value": 20000,
+        "unit": "N",
+        "realistic_range": [
+          2000,
+          20000
+        ]
+      },
+      "safety_factor": {
+        "value": 4,
+        "unit": "",
+        "realistic_range": [
+          2,
+          5
+        ]
+      }
+    },
+    "statement": "引張強さ T_b=20000N の電線を安全率 f=4 で使用する。許容引張荷重 T_a〔N〕は?",
+    "answer": "5000",
+    "solution": [
+      "許容張力 T_a=引張強さ/安全率=T_b/f",
+      "T_a=20000/4",
+      "T_a=5000N"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0240",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -10993,7 +13017,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0201",
+    "id": "D-0241",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11051,7 +13075,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0202",
+    "id": "D-0242",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11109,7 +13133,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0203",
+    "id": "D-0243",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11167,7 +13191,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0204",
+    "id": "D-0244",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11225,7 +13249,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0205",
+    "id": "D-0245",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11283,7 +13307,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0206",
+    "id": "D-0246",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11341,7 +13365,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0207",
+    "id": "D-0247",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -11399,7 +13423,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0208",
+    "id": "D-0248",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11467,7 +13491,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0209",
+    "id": "D-0249",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11535,7 +13559,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0210",
+    "id": "D-0250",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11603,7 +13627,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0211",
+    "id": "D-0251",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11671,7 +13695,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0212",
+    "id": "D-0252",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11739,7 +13763,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0213",
+    "id": "D-0253",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11807,7 +13831,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0214",
+    "id": "D-0254",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11875,7 +13899,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0215",
+    "id": "D-0255",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -11943,7 +13967,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0216",
+    "id": "D-0256",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -11992,7 +14016,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0217",
+    "id": "D-0257",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12041,7 +14065,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0218",
+    "id": "D-0258",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12090,7 +14114,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0219",
+    "id": "D-0259",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12139,7 +14163,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0220",
+    "id": "D-0260",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12188,7 +14212,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0221",
+    "id": "D-0261",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12237,7 +14261,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0222",
+    "id": "D-0262",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12286,7 +14310,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0223",
+    "id": "D-0263",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -12335,7 +14359,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0224",
+    "id": "D-0264",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12394,7 +14418,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0225",
+    "id": "D-0265",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12453,7 +14477,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0226",
+    "id": "D-0266",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12512,7 +14536,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0227",
+    "id": "D-0267",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12571,7 +14595,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0228",
+    "id": "D-0268",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12630,7 +14654,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0229",
+    "id": "D-0269",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12689,7 +14713,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0230",
+    "id": "D-0270",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12748,7 +14772,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0231",
+    "id": "D-0271",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -12807,7 +14831,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0232",
+    "id": "D-0272",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -12867,7 +14891,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0233",
+    "id": "D-0273",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -12927,7 +14951,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0234",
+    "id": "D-0274",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -12987,7 +15011,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0235",
+    "id": "D-0275",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -13047,7 +15071,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0236",
+    "id": "D-0276",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -13107,7 +15131,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0237",
+    "id": "D-0277",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -13167,7 +15191,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0238",
+    "id": "D-0278",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -13227,7 +15251,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0239",
+    "id": "D-0279",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -13287,7 +15311,399 @@
     "status": "draft"
   },
   {
-    "id": "D-0240",
+    "id": "D-0280",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.25,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=300V を昇圧チョッパで変換する。通流率 D=0.25（=25%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "400",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=300/(1−0.25)",
+      "Vo=400V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0281",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 120,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.5,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=120V を昇圧チョッパで変換する。通流率 D=0.5（=50%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "240",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=120/(1−0.5)",
+      "Vo=240V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0282",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 150,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.6,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=150V を昇圧チョッパで変換する。通流率 D=0.6（=60%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "375",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=150/(1−0.6)",
+      "Vo=375V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0283",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.5,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=200V を昇圧チョッパで変換する。通流率 D=0.5（=50%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "400",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=200/(1−0.5)",
+      "Vo=400V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0284",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.2,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=300V を昇圧チョッパで変換する。通流率 D=0.2（=20%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "375",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=300/(1−0.2)",
+      "Vo=375V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0285",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.4,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=300V を昇圧チョッパで変換する。通流率 D=0.4（=40%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "500",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=300/(1−0.4)",
+      "Vo=500V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0286",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.75,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=300V を昇圧チョッパで変換する。通流率 D=0.75（=75%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "1200",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=300/(1−0.75)",
+      "Vo=1200V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0287",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "昇圧チョッパの出力電圧",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "input_voltage": {
+        "value": 300,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "duty_ratio": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "statement": "直流 Vi=300V を昇圧チョッパで変換する。通流率 D=0.8（=80%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+    "answer": "1500",
+    "solution": [
+      "昇圧チョッパの出力平均電圧 Vo=Vi/(1−D)（降圧の Vo=D·Vi と対）",
+      "Vo=300/(1−0.8)",
+      "Vo=1500V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0288",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13345,7 +15761,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0241",
+    "id": "D-0289",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13403,7 +15819,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0242",
+    "id": "D-0290",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13461,7 +15877,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0243",
+    "id": "D-0291",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13519,7 +15935,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0244",
+    "id": "D-0292",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13577,7 +15993,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0245",
+    "id": "D-0293",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13635,7 +16051,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0246",
+    "id": "D-0294",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13693,7 +16109,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0247",
+    "id": "D-0295",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -13751,7 +16167,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0248",
+    "id": "D-0296",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -13808,7 +16224,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0249",
+    "id": "D-0297",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -13865,7 +16281,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0250",
+    "id": "D-0298",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -13922,7 +16338,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0251",
+    "id": "D-0299",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -13979,7 +16395,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0252",
+    "id": "D-0300",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -14036,7 +16452,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0253",
+    "id": "D-0301",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -14093,7 +16509,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0254",
+    "id": "D-0302",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -14150,7 +16566,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0255",
+    "id": "D-0303",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -14207,7 +16623,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0256",
+    "id": "D-0304",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -14248,7 +16664,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0257",
+    "id": "D-0305",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -14289,7 +16705,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0258",
+    "id": "D-0306",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -14330,7 +16746,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0259",
+    "id": "D-0307",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -14371,7 +16787,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0260",
+    "id": "D-0308",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -14412,7 +16828,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0261",
+    "id": "D-0309",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14461,7 +16877,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0262",
+    "id": "D-0310",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14510,7 +16926,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0263",
+    "id": "D-0311",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14559,7 +16975,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0264",
+    "id": "D-0312",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14608,7 +17024,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0265",
+    "id": "D-0313",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14657,7 +17073,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0266",
+    "id": "D-0314",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14706,7 +17122,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0267",
+    "id": "D-0315",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -14755,7 +17171,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0268",
+    "id": "D-0316",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
