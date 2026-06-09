@@ -202,6 +202,11 @@
       .solution ol { margin: .3rem 0; padding-left: 1.3rem; }
       .solution ol li { margin: .15rem 0; }
       .src { color: var(--muted); font-size: .78rem; margin-top: .4rem; }
+      /* 記述の採点ルーブリック（部分点チェックリスト） */
+      .rubric { display: grid; gap: .35rem; margin: .5rem 0; }
+      .rubric-item { display: flex; gap: .55rem; align-items: flex-start; padding: .5rem .6rem; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface-2); cursor: pointer; font-size: .92rem; transition: border-color .15s var(--ease), background .15s var(--ease); }
+      .rubric-item input { margin-top: .18rem; width: 1.1rem; height: 1.1rem; accent-color: var(--accent); flex: none; }
+      .rubric-item:has(input:checked) { border-color: var(--ok); background: var(--ok-soft); }
       .share {
         white-space: pre-wrap; background: var(--surface-2); color: var(--muted);
         padding: .7rem .85rem; border-radius: var(--r-md); font-size: .82rem; margin-top: .6rem;

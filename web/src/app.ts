@@ -23,7 +23,7 @@ import {
 } from "./dashboard.js";
 import { buildMockExam, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
 import { FORMULAS } from "./formulas.js";
-import { isAnswerCorrect } from "./grade.js";
+import { isAnswerCorrect, partialScore } from "./grade.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
@@ -376,20 +376,43 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
 }
 
 /** descriptive: 模範解答を見せて4段階自己採点。 */
+/** 記述(二次): 模範解答の各ステップを採点観点とし、書けた項目にチェック→部分点で自己採点。 */
 function revealDescriptive(host: HTMLElement, p: Problem): void {
   const answers = host.querySelector("#answers") as HTMLElement;
   answers.innerHTML = "";
   const result = host.querySelector("#result") as HTMLElement;
   result.innerHTML = "";
+  const steps = p.solution;
+  const checks: HTMLInputElement[] = [];
+  const list = h("div", { class: "rubric" });
+  steps.forEach((s, i) => {
+    const cb = h("input", { type: "checkbox", id: `rb${i}` }) as HTMLInputElement;
+    checks.push(cb);
+    list.append(h("label", { class: "rubric-item", for: `rb${i}` }, cb, h("span", { html: formatMath(s) })));
+  });
+  const grade = h(
+    "button",
+    {
+      class: "primary",
+      type: "button",
+      onclick: () => {
+        const checked = checks.filter((c) => c.checked).length;
+        const { pct, rating } = partialScore(checked, steps.length);
+        finalize(host, p, rating, { checked, total: steps.length, pct });
+      },
+    },
+    "採点する",
+  );
   result.append(
-    solutionNode(p, "模範解答"),
-    h("div", { class: "muted" }, "自分の解答と照合して自己採点:"),
-    ratingBar(host, p, [
-      ["again", "書けなかった"],
-      ["hard", "部分的"],
-      ["good", "書けた"],
-      ["easy", "完璧"],
-    ]),
+    h(
+      "div",
+      { class: "gradeui solution" },
+      h("strong", {}, "模範解答（採点観点）"),
+      h("p", { class: "muted" }, "各ステップを自分の解答と照合し、書けた項目にチェック → 採点する（部分点で評価）"),
+      list,
+      h("p", { class: "src" }, sourceText(p)),
+      grade,
+    ),
   );
 }
 
@@ -401,12 +424,30 @@ function ratingBar(host: HTMLElement, p: Problem, opts: ReadonlyArray<readonly [
   return bar;
 }
 
-function finalize(host: HTMLElement, p: Problem, rating: Rating): void {
+function finalize(
+  host: HTMLElement,
+  p: Problem,
+  rating: Rating,
+  score?: { checked: number; total: number; pct: number },
+): void {
   const timeMs = Date.now() - practice.shownAt;
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
   const result = host.querySelector("#result") as HTMLElement;
-  // 既存の評価バーを除去し、シェア文＋次へを出す。
-  for (const r of Array.from(result.querySelectorAll(".rate"))) r.remove();
+  // 既存の評価バー・採点UIを除去し、結果＋シェア文＋次へを出す。
+  for (const r of Array.from(result.querySelectorAll(".rate, .gradeui"))) r.remove();
+  if (score) {
+    // 記述: 採点UIを消した後に模範解答を残し、先頭に部分点フィードバックを置く。
+    result.append(solutionNode(p, "模範解答"));
+    const ok = score.pct >= 2 / 3;
+    result.insertBefore(
+      h(
+        "div",
+        { class: `feedback ${ok ? "ok" : "ng"}` },
+        `📝 部分点 ${score.checked}/${score.total}（${Math.round(score.pct * 100)}%）${ok ? "— 合格圏" : "— 要強化"}`,
+      ),
+      result.firstChild,
+    );
+  }
   result.append(
     h(
       "div",

@@ -9,7 +9,8 @@
 //   (v7: UI刷新 — デザインシステム/ダーク最適化/セグメントタブ/カード磨き/モーションを配信)
 //   (v8: テーマ切替/スパークライン/空状態/スケルトン/ヒートマップセル/目標リング/更新トースト)
 //   (v9: モバイル下部タブバー(親指リーチ)・タブアイコン・印刷スタイルを配信)
-const CACHE = "denken-os-v9";
+//   (v10: 二次記述の部分点ルーブリック自己採点を配信)
+const CACHE = "denken-os-v10";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

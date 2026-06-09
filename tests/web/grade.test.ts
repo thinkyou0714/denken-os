@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
-import { isAnswerCorrect, normalizeNumericInput } from "../../web/src/grade.js";
+import { isAnswerCorrect, normalizeNumericInput, partialScore } from "../../web/src/grade.js";
 
 /** isAnswerCorrect は format と answer のみ参照するので最小構成で十分。 */
 function numeric(answer: string): Problem {
@@ -52,5 +52,20 @@ describe("isAnswerCorrect（その他は厳密一致）", () => {
     expect(isAnswerCorrect(mc("3.2"), "3.2")).toBe(true);
     // numeric と違い文字列一致なので "3.20" は別物（選択肢は固定テキスト）。
     expect(isAnswerCorrect(mc("3.2"), "3.20")).toBe(false);
+  });
+});
+
+describe("partialScore（記述の部分点自己採点）", () => {
+  it("全項目で easy、達成度で good/hard/again に写像", () => {
+    expect(partialScore(4, 4)).toEqual({ pct: 1, rating: "easy" });
+    expect(partialScore(3, 4).rating).toBe("good"); // 0.75 ≥ 2/3
+    expect(partialScore(2, 4).rating).toBe("hard"); // 0.5 ≥ 1/3
+    expect(partialScore(1, 4).rating).toBe("again"); // 0.25 < 1/3
+    expect(partialScore(0, 4)).toEqual({ pct: 0, rating: "again" });
+  });
+
+  it("total=0 や範囲外入力を安全に扱う", () => {
+    expect(partialScore(3, 0)).toEqual({ pct: 0, rating: "again" });
+    expect(partialScore(9, 4).rating).toBe("easy"); // checked を total にクランプ
   });
 });
