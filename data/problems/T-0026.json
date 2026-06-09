@@ -1,0 +1,50 @@
+{
+  "id": "T-0026",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "三相短絡容量",
+  "format": "descriptive",
+  "difficulty": 3,
+  "params": {
+    "base_capacity": {
+      "value": 20,
+      "unit": "MVA",
+      "realistic_range": [
+        10,
+        100
+      ]
+    },
+    "percent_impedance": {
+      "value": 8,
+      "unit": "%",
+      "realistic_range": [
+        4,
+        25
+      ]
+    }
+  },
+  "statement": "基準容量 P_base=20MVA における系統のパーセントインピーダンスが %Z=8% である。この点での三相短絡容量 Ps〔MVA〕を導出過程とともに求めよ。",
+  "answer": "250",
+  "solution": [
+    "短絡容量 Ps=P_base×100/%Z",
+    "Ps=20×100/8",
+    "Ps=250MVA"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "T-0025",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "汽力発電の熱効率",
+  "format": "descriptive",
+  "difficulty": 4,
+  "params": {
+    "heat_rate": {
+      "value": 8000,
+      "unit": "kJ/kWh",
+      "realistic_range": [
+        7000,
+        10000
+      ]
+    }
+  },
+  "statement": "ある汽力発電所の発電端熱消費率が q=8000kJ/(kW·h) である。発電端熱効率 η〔%〕を導出過程とともに求めよ。",
+  "answer": "45",
+  "solution": [
+    "1kWh=3600kJ なので η=3600/q×100",
+    "η=3600/8000×100",
+    "η=45%"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

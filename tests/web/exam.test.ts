@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
-import { buildMockExam, PASS_THRESHOLD, scoreExam } from "../../web/src/exam.js";
+import { buildMockExam, isPrimaryPass, PASS_THRESHOLD, scoreExam, scoreExamBySubject } from "../../web/src/exam.js";
 
 function prob(id: string, subject: Problem["subject"]): Problem {
   return {
@@ -71,5 +71,21 @@ describe("exam（模試）", () => {
 
   it("scoreExam: 空は0%・不合格", () => {
     expect(scoreExam([])).toEqual({ total: 0, correct: 0, scorePct: 0, passed: false });
+  });
+
+  it("scoreExamBySubject: 出題順の results を科目で束ねて採点する", () => {
+    const set = [prob("a", "理論"), prob("b", "電力"), prob("c", "理論"), prob("d", "電力")];
+    const rows = scoreExamBySubject(set, [true, true, false, false]);
+    const riron = rows.find((r) => r.subject === "理論")!;
+    const denryoku = rows.find((r) => r.subject === "電力")!;
+    expect(riron.scorePct).toBe(50); // 1/2
+    expect(denryoku.scorePct).toBe(50); // 1/2
+  });
+
+  it("isPrimaryPass: 受験した全科目が60%以上なら一次合格", () => {
+    const set = [prob("a", "理論"), prob("b", "電力")];
+    expect(isPrimaryPass(scoreExamBySubject(set, [true, true]))).toBe(true);
+    expect(isPrimaryPass(scoreExamBySubject(set, [true, false]))).toBe(false); // 電力0%で足切り
+    expect(isPrimaryPass([])).toBe(false);
   });
 });

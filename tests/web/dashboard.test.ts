@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
-import { bySubject, byTopic, masteryLevel, overall, recentAccuracy, reviewForecast } from "../../web/src/dashboard.js";
+import {
+  bySubject,
+  byTopic,
+  dailyActivity,
+  masteryLevel,
+  overall,
+  recentAccuracy,
+  reviewForecast,
+} from "../../web/src/dashboard.js";
 import type { WebAnswerLog } from "../../web/src/store.js";
 
 function log(topic: string, correct: boolean, atMs = 0): WebAnswerLog {
@@ -92,5 +100,20 @@ describe("dashboard（進捗集計）", () => {
     const fc = reviewForecast(views, now, 7);
     expect(fc[0]).toBe(0); // 今日には入らない
     expect(fc[1]).toBe(1); // 翌日(+1)に入る
+  });
+
+  it("dailyActivity: 直近 days 日の日別学習量を古い順→今日で返す", () => {
+    const DAY = 86_400_000;
+    const now = Date.UTC(2026, 5, 9, 3, 0); // JST 正午相当
+    const logs = [
+      log("t", true, now), // 今日
+      log("t", true, now), // 今日（2件）
+      log("t", false, now - 2 * DAY), // 2日前
+    ];
+    const act = dailyActivity(logs, 3, now);
+    expect(act.map((a) => a.offset)).toEqual([-2, -1, 0]);
+    expect(act[0]?.count).toBe(1); // 2日前
+    expect(act[1]?.count).toBe(0); // 昨日
+    expect(act[2]?.count).toBe(2); // 今日
   });
 });

@@ -11,8 +11,16 @@ import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
-import { bySubject, byTopic, masteryLevel, overall, recentAccuracy, reviewForecast } from "./dashboard.js";
-import { buildMockExam, scoreExam } from "./exam.js";
+import {
+  bySubject,
+  byTopic,
+  dailyActivity,
+  masteryLevel,
+  overall,
+  recentAccuracy,
+  reviewForecast,
+} from "./dashboard.js";
+import { buildMockExam, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
 import { FORMULAS } from "./formulas.js";
 import { isAnswerCorrect } from "./grade.js";
 import { formatMath } from "./mathfmt.js";
@@ -65,12 +73,14 @@ const practice: { current: Problem | null; shownAt: number; pool: Problem[] | nu
 };
 
 // 模試タブの状態
+type ExamPreset = "all" | "primary" | "secondary";
 interface ExamState {
   set: Problem[];
   idx: number;
   results: boolean[];
   startedAt: number;
   timerId: number | null;
+  preset: ExamPreset;
 }
 let exam: ExamState | null = null;
 
@@ -464,7 +474,7 @@ function renderExam(root: HTMLElement): void {
   );
 }
 
-function startExam(count: number, preset: "all" | "primary" | "secondary"): void {
+function startExam(count: number, preset: ExamPreset): void {
   const subjects =
     preset === "primary"
       ? (["理論", "電力", "機械", "法規"] as Subject[])
@@ -476,7 +486,7 @@ function startExam(count: number, preset: "all" | "primary" | "secondary"): void
     switchView("exam");
     return;
   }
-  exam = { set, idx: 0, results: [], startedAt: Date.now(), timerId: null };
+  exam = { set, idx: 0, results: [], startedAt: Date.now(), timerId: null, preset };
   switchView("exam");
 }
 
@@ -583,14 +593,8 @@ function renderExamResult(root: HTMLElement): void {
   }
   const score = scoreExam(exam.results);
   const mins = Math.floor((Date.now() - exam.startedAt) / 60000);
-  // 科目別内訳
-  const perSubject = new Map<Subject, { c: number; n: number }>();
-  exam.set.forEach((p, i) => {
-    const cur = perSubject.get(p.subject) ?? { c: 0, n: 0 };
-    cur.n += 1;
-    if (exam!.results[i]) cur.c += 1;
-    perSubject.set(p.subject, cur);
-  });
+  // 科目別内訳（電験一次は科目ごとに合否＝各60%）
+  const subjectScores = scoreExamBySubject(exam.set, exam.results);
 
   root.append(
     h("h2", {}, "模試結果"),
@@ -601,10 +605,29 @@ function renderExamResult(root: HTMLElement): void {
     ),
     h("p", { class: "muted" }, `${score.correct} / ${score.total} 問正解 ・ 所要 ${mins} 分`),
   );
+  // 一次プリセットは「全科目60%以上」で本番合格判定。
+  if (exam.preset === "primary") {
+    const primaryPass = isPrimaryPass(subjectScores);
+    root.append(
+      h(
+        "div",
+        { class: "card", style: `border-color:${primaryPass ? "var(--ok)" : "var(--ng)"}` },
+        h("strong", {}, primaryPass ? "✅ 一次 合格判定（全科目60%以上）" : "✗ 一次 不合格（足切り科目あり）"),
+        h("div", { class: "muted" }, "本番は科目ごとに60%以上が必要。1科目でも下回ると不合格です。"),
+      ),
+    );
+  }
   const breakdown = h("div", {});
-  for (const [s, v] of perSubject) {
-    const pct = Math.round((v.c / v.n) * 100);
-    breakdown.append(h("div", { class: "row" }, h("span", {}, s), bar(pct), h("span", {}, `${v.c}/${v.n}`)));
+  for (const v of subjectScores) {
+    breakdown.append(
+      h(
+        "div",
+        { class: "row" },
+        h("span", {}, `${v.subject}${v.passed ? " ✅" : " ✗"}`),
+        bar(v.scorePct),
+        h("span", {}, `${v.correct}/${v.total}`),
+      ),
+    );
   }
   root.append(
     breakdown,
@@ -722,6 +745,25 @@ function renderDashboard(root: HTMLElement): void {
         ),
       ),
     ),
+  );
+
+  // 学習ヒートマップ（直近14日の解答数。継続の可視化）
+  const activity = dailyActivity(logs, 14, Date.now());
+  const maxCount = Math.max(1, ...activity.map((a) => a.count));
+  root.append(
+    h("h2", {}, "学習ヒートマップ（直近14日）"),
+    h(
+      "div",
+      { class: "toolbar", style: "gap:.2rem;align-items:flex-end" },
+      ...activity.map((a) => {
+        const intensity = a.count === 0 ? 0.08 : 0.25 + 0.75 * (a.count / maxCount);
+        return h("div", {
+          title: `${a.offset === 0 ? "今日" : `${a.offset}日`}: ${a.count}問`,
+          style: `flex:1;min-width:1rem;height:${8 + Math.round((a.count / maxCount) * 28)}px;border-radius:.2rem;background:var(--accent);opacity:${intensity}`,
+        });
+      }),
+    ),
+    h("p", { class: "muted" }, "毎日少しずつが最強。分散学習が忘却に勝ちます。"),
   );
 }
 

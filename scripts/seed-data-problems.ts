@@ -61,6 +61,39 @@ const SEEDS: Seed[] = [
     topic: "調相設備容量",
     params: { load_power: 1200, power_factor_before: 0.8, power_factor_after: 1.0 },
   },
+  // 二次（記述）追加 — 記述10件以上を確保
+  {
+    id: "T-0021",
+    topic: "同期発電機の出力",
+    params: { phase_voltage: 220, induced_emf: 440, synchronous_reactance: 10, load_angle: 30 },
+  },
+  { id: "T-0022", topic: "降圧チョッパの出力電圧", params: { input_voltage: 400, duty_ratio: 0.75 } },
+  {
+    id: "T-0023",
+    topic: "誘導電動機の比例推移",
+    params: { secondary_resistance: 0.3, slip_before: 0.03, slip_after: 0.12 },
+  },
+  { id: "T-0024", topic: "水力発電出力", params: { flow: 15, head: 100, efficiency: 0.85 } },
+  { id: "T-0025", topic: "汽力発電の熱効率", params: { heat_rate: 8000 } },
+  { id: "T-0026", topic: "三相短絡容量", params: { base_capacity: 20, percent_impedance: 8 } },
+  {
+    id: "T-0027",
+    topic: "調相設備容量",
+    params: { load_power: 1500, power_factor_before: 0.6, power_factor_after: 0.8 },
+  },
+  {
+    id: "T-0028",
+    topic: "変圧器の電圧変動率",
+    params: { percent_resistance: 3, percent_reactance: 6, power_factor: 0.8 },
+  },
+  // 一次（選択式・数値）追加 — 形式バランス
+  { id: "T-0029", topic: "三相交流電力", params: { line_voltage: 400, R: 8, X: 6 } },
+  { id: "T-0030", topic: "誘導電動機の回転速度", params: { frequency: 50, poles: 6, slip: 4 } },
+  {
+    id: "T-0031",
+    topic: "力率改善",
+    params: { load_power: 300, power_factor_before: 0.6, power_factor_after: 0.8 },
+  },
 ];
 
 function build(seed: Seed): Problem {

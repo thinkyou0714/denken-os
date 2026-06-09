@@ -69,3 +69,26 @@ export function scoreExam(results: boolean[]): ExamScore {
   const scorePct = total > 0 ? Math.round((correct / total) * 100) : 0;
   return { total, correct, scorePct, passed: scorePct >= PASS_THRESHOLD };
 }
+
+export interface SubjectScore extends ExamScore {
+  subject: Subject;
+}
+
+/**
+ * 科目別に採点する。電験一次は科目ごとに合否（各60%）が判定されるため、
+ * 出題と同じ並びの results を科目で束ねて各科目のスコアを返す。
+ */
+export function scoreExamBySubject(set: Problem[], results: boolean[]): SubjectScore[] {
+  const bySub = new Map<Subject, boolean[]>();
+  set.forEach((p, i) => {
+    const arr = bySub.get(p.subject) ?? [];
+    arr.push(results[i] ?? false);
+    bySub.set(p.subject, arr);
+  });
+  return [...bySub.entries()].map(([subject, rs]) => ({ subject, ...scoreExam(rs) }));
+}
+
+/** 一次本番の合格判定: 受験した全科目が合格ライン(60%)以上であること。 */
+export function isPrimaryPass(subjectScores: SubjectScore[]): boolean {
+  return subjectScores.length > 0 && subjectScores.every((s) => s.passed);
+}

@@ -109,3 +109,32 @@ export function reviewForecast(
   }
   return out;
 }
+
+export interface DayActivity {
+  /** 今日からの相対日（0=今日, -1=昨日 …）。 */
+  offset: number;
+  count: number;
+}
+
+/**
+ * 直近 days 日の日別学習量（解答数）。古い順→今日の配列。JST 日境界。
+ * 学習ヒートマップ（継続の可視化）に使う。
+ */
+export function dailyActivity(
+  logs: WebAnswerLog[],
+  days: number,
+  nowMs: number,
+  dayOffsetMs: number = JST_OFFSET_MS,
+): DayActivity[] {
+  const todayIdx = Math.floor((nowMs + dayOffsetMs) / DAY_MS);
+  const counts = new Map<number, number>();
+  for (const l of logs) {
+    const idx = Math.floor((l.atMs + dayOffsetMs) / DAY_MS);
+    counts.set(idx, (counts.get(idx) ?? 0) + 1);
+  }
+  const out: DayActivity[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    out.push({ offset: -i || 0, count: counts.get(todayIdx - i) ?? 0 }); // -0 を 0 に正規化
+  }
+  return out;
+}
