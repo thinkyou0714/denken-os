@@ -4,6 +4,7 @@
  *   （検流計に電流が流れない＝対辺の積が等しい）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { wheatstoneFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R1_SET: ReadonlyArray<number> = [10, 20, 50, 100, 200];
@@ -35,6 +36,7 @@ function buildFrom(R1: number, R2: number, R3: number): GenerationResult | null 
       `ホイートストンブリッジが平衡している。辺の抵抗が R1=${R1}Ω、R2=${R2}Ω、R3=${R3}Ω のとき、` +
       `未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）`,
     defaultSolution: [`平衡条件: 対辺の積が等しい R1·Rx=R2·R3`, `Rx=R2·R3/R1=${R2}×${R3}/${R1}`, `Rx=${answerText}Ω`],
+    figure: wheatstoneFigure(R1, R2, R3, Rx),
     physicallyValid: true,
   };
 }

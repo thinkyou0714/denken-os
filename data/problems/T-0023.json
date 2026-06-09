@@ -32,11 +32,14 @@
     }
   },
   "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.3Ω のとき、最大トルクを生じる滑りは s1=0.03 である。この滑りを s2=0.12 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+  "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.12 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.12 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 101.4 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 180.6 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"101.4\" y1=\"130\" x2=\"101.4\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"101.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.03</text><line x1=\"180.6\" y1=\"130\" x2=\"180.6\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"180.6\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.12</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
   "answer": "0.9",
   "solution": [
+    "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
     "比例推移: r2/s1=(r2+R)/s2",
     "R=r2·(s2−s1)/s1=0.3×(0.12−0.03)/0.03",
-    "R=0.9Ω"
+    "R=0.9Ω",
+    "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
   ],
   "validation": {
     "solver_checked": true,

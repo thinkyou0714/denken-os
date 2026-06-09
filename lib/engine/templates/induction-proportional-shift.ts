@@ -5,6 +5,7 @@
  *   （二次抵抗を R 追加すると、最大トルクを生じる滑りが s1→s2 に推移）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { torqueSlipFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R2_SET: ReadonlyArray<number> = [0.2, 0.3, 0.5, 1];
@@ -35,7 +36,14 @@ function buildFrom(r2: number, s1: number, s2: number): GenerationResult | null 
     defaultStatement:
       `巻線形三相誘導電動機の二次回路抵抗が r2=${r2}Ω のとき、最大トルクを生じる滑りは s1=${s1} である。` +
       `この滑りを s2=${s2} に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。`,
-    defaultSolution: [`比例推移: r2/s1=(r2+R)/s2`, `R=r2·(s2−s1)/s1=${r2}×(${s2}−${s1})/${s1}`, `R=${answerText}Ω`],
+    defaultSolution: [
+      `着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。`,
+      `比例推移: r2/s1=(r2+R)/s2`,
+      `R=r2·(s2−s1)/s1=${r2}×(${s2}−${s1})/${s1}`,
+      `R=${answerText}Ω`,
+      `ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。`,
+    ],
+    figure: torqueSlipFigure(s1, s2),
     physicallyValid: true,
   };
 }

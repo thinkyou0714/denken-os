@@ -115,6 +115,11 @@ function solutionNode(p: Problem, label: string): HTMLElement {
   );
 }
 
+/** 図（自前生成のインライン SVG・信頼済み）を表示するノード。 */
+function figureNode(svgStr: string): HTMLElement {
+  return h("figure", { class: "figure", html: svgStr });
+}
+
 // ---- ヘッダ / ナビ ----
 
 function renderHeader(): void {
@@ -227,9 +232,9 @@ function nextQuestion(root: HTMLElement): void {
   host.append(
     h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`),
     h("div", { class: "stmt", html: formatMath(p.statement) }),
-    h("div", { class: "answers", id: "answers" }),
-    h("div", { id: "result" }),
   );
+  if (p.figure) host.append(figureNode(p.figure));
+  host.append(h("div", { class: "answers", id: "answers" }), h("div", { id: "result" }));
   renderAnswerInputs(host, p);
 }
 
@@ -516,8 +521,9 @@ function renderExamRunning(root: HTMLElement): void {
   host.append(
     h("div", { id: "meta" }, `${p.subject}・難易度${difficultyStars(p.difficulty)}`),
     h("div", { class: "stmt", html: formatMath(p.statement) }),
-    h("div", { class: "answers", id: "eanswers" }),
   );
+  if (p.figure) host.append(figureNode(p.figure));
+  host.append(h("div", { class: "answers", id: "eanswers" }));
   root.append(header, host);
   startTimer();
 

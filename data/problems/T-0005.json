@@ -24,6 +24,7 @@
     }
   },
   "statement": "抵抗 R=10kΩ とコンデンサ C=4μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+  "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=10kΩとコンデンサC=4μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=10kΩとコンデンサC=4μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=10kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=4μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
   "answer": "40",
   "solution": [
     "時定数 τ=R·C",

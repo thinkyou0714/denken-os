@@ -7,6 +7,7 @@
  * 典型ミス: 単位換算（kΩ・μF を SI に直さず ms を s と取り違える）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { seriesRCFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10, 20, 47, 100];
@@ -38,6 +39,7 @@ function buildFrom(R: number, C: number): GenerationResult | null {
       `kΩ×μF=10³×10⁻⁶ s=10⁻³ s=1ms なので τ〔ms〕=R〔kΩ〕×C〔μF〕`,
       `τ=${R}×${C}=${answerText}ms`,
     ],
+    figure: seriesRCFigure(R, C),
     physicallyValid: true,
   };
 }

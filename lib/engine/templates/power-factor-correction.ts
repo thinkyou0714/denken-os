@@ -5,6 +5,7 @@
  *   tanθ = sinθ/cosθ。改善後は θ2<θ1（tan が減る）であることが条件。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { powerTriangleFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P_SET: ReadonlyArray<number> = [60, 120, 150, 180, 240, 300, 360, 480, 600];
@@ -49,7 +50,14 @@ function buildFrom(P: number, cos1: number, cos2: number): GenerationResult | nu
     defaultStatement:
       `有効電力 P=${P}kW の負荷の力率を ${cos1}（遅れ）から ${cos2} に改善したい。` +
       `必要な進相コンデンサの容量 Qc〔kvar〕は?`,
-    defaultSolution: [`Qc=P·(tanθ1−tanθ2)`, `tanθ1=${t1}、tanθ2=${t2}`, `Qc=${P}×(${t1}−${t2})=${answerText}kvar`],
+    defaultSolution: [
+      `着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。`,
+      `Qc=P·(tanθ1−tanθ2)`,
+      `tanθ1=${t1}、tanθ2=${t2}`,
+      `Qc=${P}×(${t1}−${t2})=${answerText}kvar`,
+      `ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。`,
+    ],
+    figure: powerTriangleFigure(P, P * tan1, P * tan2, "kvar"),
     physicallyValid: true,
   };
 }

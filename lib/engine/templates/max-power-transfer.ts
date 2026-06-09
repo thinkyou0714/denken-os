@@ -8,6 +8,7 @@
  *   ・E²/(2R) … 電源が供給する全電力（半分は内部で消費）と混同
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { maxPowerFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const E_SET: ReadonlyArray<number> = [20, 40, 60, 100, 120, 200];
@@ -42,6 +43,7 @@ function buildFrom(E: number, R: number): GenerationResult | null {
       `P_max=(E/2)²/R=E²/(4R)=${E}²/(4×${R})=${answerText}W`,
       `（参考: このとき電源の全供給電力 E²/(2R) の半分が負荷に伝わる）`,
     ],
+    figure: maxPowerFigure(E, R),
     physicallyValid: true,
   };
 }

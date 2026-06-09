@@ -112,6 +112,7 @@ function build(seed: Seed): Problem {
     difficulty: template.difficulty,
     params: g.params,
     statement: g.defaultStatement,
+    ...(g.figure ? { figure: g.figure } : {}),
     ...(format === "multiple_choice" ? { choices: g.choices } : {}),
     answer: g.answerText,
     solution: g.defaultSolution,

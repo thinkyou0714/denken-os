@@ -32,11 +32,14 @@
     }
   },
   "statement": "有効電力 P=300kW の負荷の力率を 0.6（遅れ）から 0.8 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+  "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=175kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=175kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=300</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.62500000000003\"/><polygon points=\"157.5,35.62500000000003 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.82500000000003\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.62500000000003\"/><polygon points=\"143.5,35.62500000000003 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000014\" fill=\"currentColor\" stroke=\"none\">Qc=175</text></g></svg>",
   "answer": "175",
   "solution": [
+    "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
     "Qc=P·(tanθ1−tanθ2)",
     "tanθ1=1.3333、tanθ2=0.75",
-    "Qc=300×(1.3333−0.75)=175kvar"
+    "Qc=300×(1.3333−0.75)=175kvar",
+    "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
   ],
   "validation": {
     "solver_checked": true,

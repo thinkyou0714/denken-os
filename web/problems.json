@@ -33,6 +33,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧400Vを加えた。1相のインピーダンスがZ=3+j4Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧400V、1相 Z=3+j4Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧400V、1相 Z=3+j4Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 400V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=3+j4</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "11.52",
       "19.2",
@@ -45,7 +46,8 @@
       "力率cosφ=R/|Z|=0.6",
       "相電圧V_p=400/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=19.2kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -99,6 +101,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧400Vを加えた。1相のインピーダンスがZ=12+j16Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧400V、1相 Z=12+j16Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧400V、1相 Z=12+j16Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 400V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=12+j16</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "2.88",
       "4.8",
@@ -111,7 +114,8 @@
       "力率cosφ=R/|Z|=0.6",
       "相電圧V_p=400/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=4.8kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -165,6 +169,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧6600Vを加えた。1相のインピーダンスがZ=12+j16Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧6600V、1相 Z=12+j16Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧6600V、1相 Z=12+j16Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 6600V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=12+j16</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "784.08",
       "1306.8",
@@ -177,7 +182,8 @@
       "力率cosφ=R/|Z|=0.6",
       "相電圧V_p=6600/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=1306.8kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -231,6 +237,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧6600Vを加えた。1相のインピーダンスがZ=3+j4Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧6600V、1相 Z=3+j4Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧6600V、1相 Z=3+j4Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 6600V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=3+j4</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "3136.32",
       "5227.2",
@@ -243,7 +250,8 @@
       "力率cosφ=R/|Z|=0.6",
       "相電圧V_p=6600/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=5227.2kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -297,6 +305,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=8+j6Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧3300V、1相 Z=8+j6Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧3300V、1相 Z=8+j6Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 3300V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=8+j6</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "696.96",
       "871.2",
@@ -309,7 +318,8 @@
       "力率cosφ=R/|Z|=0.8",
       "相電圧V_p=3300/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=871.2kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -363,6 +373,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=16+j12Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧3300V、1相 Z=16+j12Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧3300V、1相 Z=16+j12Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 3300V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=16+j12</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "348.48",
       "435.6",
@@ -375,7 +386,8 @@
       "力率cosφ=R/|Z|=0.8",
       "相電圧V_p=3300/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=435.6kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -429,6 +441,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧100Vを加えた。1相のインピーダンスがZ=6+j8Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧100V、1相 Z=6+j8Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧100V、1相 Z=6+j8Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 100V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=6+j8</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "0.36",
       "0.6",
@@ -441,7 +454,8 @@
       "力率cosφ=R/|Z|=0.6",
       "相電圧V_p=100/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=0.6kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -495,6 +509,7 @@
       }
     },
     "statement": "平衡三相Y結線の負荷に線間電圧6600Vを加えた。1相のインピーダンスがZ=8+j6Ωのとき三相有効電力P〔kW〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧6600V、1相 Z=8+j6Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧6600V、1相 Z=8+j6Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 6600V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=8+j6</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
       "2787.84",
       "3484.8",
@@ -507,7 +522,8 @@
       "力率cosφ=R/|Z|=0.8",
       "相電圧V_p=6600/√3、相電流I=V_p/|Z|",
       "P=3·I²·R=3484.8kW",
-      "別解 P=√3·V_l·I_l·cosφ でも一致"
+      "別解 P=√3·V_l·I_l·cosφ でも一致",
+      "ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。"
     ],
     "validation": {
       "solver_checked": true,
@@ -561,6 +577,7 @@
       }
     },
     "statement": "抵抗R1=5Ωに、R2=30ΩとR3=60Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=5Ω 直列 + R2=30Ω∥R3=60Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=5Ω 直列 + R2=30Ω∥R3=60Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=5</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=30</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=60</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "20",
       "25",
@@ -625,6 +642,7 @@
       }
     },
     "statement": "抵抗R1=30Ωに、R2=40ΩとR3=60Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=30Ω 直列 + R2=40Ω∥R3=60Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=30Ω 直列 + R2=40Ω∥R3=60Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=30</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=40</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=60</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "24",
       "54",
@@ -689,6 +707,7 @@
       }
     },
     "statement": "抵抗R1=20Ωに、R2=20ΩとR3=30Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=20Ω 直列 + R2=20Ω∥R3=30Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=20Ω 直列 + R2=20Ω∥R3=30Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=20</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=20</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=30</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "12",
       "32",
@@ -753,6 +772,7 @@
       }
     },
     "statement": "抵抗R1=30Ωに、R2=6ΩとR3=12Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=30Ω 直列 + R2=6Ω∥R3=12Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=30Ω 直列 + R2=6Ω∥R3=12Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=30</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=6</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=12</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "4",
       "34",
@@ -817,6 +837,7 @@
       }
     },
     "statement": "抵抗R1=30Ωに、R2=20ΩとR3=20Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=30Ω 直列 + R2=20Ω∥R3=20Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=30Ω 直列 + R2=20Ω∥R3=20Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=30</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=20</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=20</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "10",
       "40",
@@ -881,6 +902,7 @@
       }
     },
     "statement": "抵抗R1=30Ωに、R2=60ΩとR3=30Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=30Ω 直列 + R2=60Ω∥R3=30Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=30Ω 直列 + R2=60Ω∥R3=30Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=30</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=60</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=30</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "20",
       "50",
@@ -945,6 +967,7 @@
       }
     },
     "statement": "抵抗R1=5Ωに、R2=20ΩとR3=30Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=5Ω 直列 + R2=20Ω∥R3=30Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=5Ω 直列 + R2=20Ω∥R3=30Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=5</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=20</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=30</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "12",
       "17",
@@ -1009,6 +1032,7 @@
       }
     },
     "statement": "抵抗R1=15Ωに、R2=50ΩとR3=50Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"直並列抵抗 R1=15Ω 直列 + R2=50Ω∥R3=50Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>直並列抵抗 R1=15Ω 直列 + R2=50Ω∥R3=50Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"84.625\" y2=\"30\"/><rect x=\"84.625\" y=\"21\" width=\"35.75\" height=\"18\" fill=\"none\"/><line x1=\"120.375\" y1=\"30\" x2=\"135\" y2=\"30\"/><text x=\"102.5\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R1=15</text><line x1=\"135\" y1=\"30\" x2=\"175\" y2=\"30\"/><circle cx=\"175\" cy=\"30\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"40\" x2=\"175\" y2=\"53.5\"/><rect x=\"166\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"175\" y1=\"86.5\" x2=\"175\" y2=\"100\"/><text x=\"189\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R2=50</text><line x1=\"175\" y1=\"30\" x2=\"235\" y2=\"30\"/><line x1=\"235\" y1=\"40\" x2=\"235\" y2=\"53.5\"/><rect x=\"226\" y=\"53.5\" width=\"18\" height=\"33\" fill=\"none\"/><line x1=\"235\" y1=\"86.5\" x2=\"235\" y2=\"100\"/><text x=\"249\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R3=50</text><circle cx=\"175\" cy=\"100\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"175\" y1=\"100\" x2=\"235\" y2=\"100\"/><line x1=\"175\" y1=\"100\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"175\" y1=\"100\" x2=\"175\" y2=\"110\"/><line x1=\"235\" y1=\"100\" x2=\"235\" y2=\"30\"/><text x=\"110\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">合成 R=R1+(R2∥R3)</text></g></svg>",
     "choices": [
       "25",
       "40",
@@ -1457,6 +1481,7 @@
       }
     },
     "statement": "起電力 E=120V、内部抵抗 R=10Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=10Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=10Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "360",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1507,6 +1532,7 @@
       }
     },
     "statement": "起電力 E=200V、内部抵抗 R=10Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">200V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=10Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=10Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "1000",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1557,6 +1583,7 @@
       }
     },
     "statement": "起電力 E=40V、内部抵抗 R=4Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=4Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=4Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">40V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=4Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=4Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "100",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1607,6 +1634,7 @@
       }
     },
     "statement": "起電力 E=120V、内部抵抗 R=5Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=5Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=5Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=5Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=5Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "720",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1657,6 +1685,7 @@
       }
     },
     "statement": "起電力 E=120V、内部抵抗 R=8Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=8Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=8Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=8Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=8Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "450",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1707,6 +1736,7 @@
       }
     },
     "statement": "起電力 E=120V、内部抵抗 R=2Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=2Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=2Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=2Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=2Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "1800",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1757,6 +1787,7 @@
       }
     },
     "statement": "起電力 E=20V、内部抵抗 R=4Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=4Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=4Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">20V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=4Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=4Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "25",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1807,6 +1838,7 @@
       }
     },
     "statement": "起電力 E=100V、内部抵抗 R=10Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 270 140\" role=\"img\" aria-label=\"内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>内部抵抗R=10Ωの電源Eに整合負荷R_Lを接続</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">E</text><text x=\"40\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">100V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"230\" y2=\"110\"/><line x1=\"230\" y1=\"110\" x2=\"230\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=10Ω</text><line x1=\"230\" y1=\"35\" x2=\"230\" y2=\"50.75\"/><rect x=\"221\" y=\"50.75\" width=\"18\" height=\"38.5\" fill=\"none\"/><line x1=\"230\" y1=\"89.25\" x2=\"230\" y2=\"105\"/><text x=\"244\" y=\"74\" fill=\"currentColor\" stroke=\"none\">R_L=10Ω</text><text x=\"150\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">整合 R_L=R で最大電力 E²/(4R)</text></g></svg>",
     "answer": "250",
     "solution": [
       "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
@@ -1857,6 +1889,7 @@
       }
     },
     "statement": "抵抗 R=1kΩ とコンデンサ C=10μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=1kΩとコンデンサC=10μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=1kΩとコンデンサC=10μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=1kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=10μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "10",
     "solution": [
       "時定数 τ=R·C",
@@ -1906,6 +1939,7 @@
       }
     },
     "statement": "抵抗 R=47kΩ とコンデンサ C=2μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=47kΩとコンデンサC=2μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=47kΩとコンデンサC=2μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=47kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=2μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "94",
     "solution": [
       "時定数 τ=R·C",
@@ -1955,6 +1989,7 @@
       }
     },
     "statement": "抵抗 R=4kΩ とコンデンサ C=1μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=4kΩとコンデンサC=1μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=4kΩとコンデンサC=1μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=4kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=1μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "4",
     "solution": [
       "時定数 τ=R·C",
@@ -2004,6 +2039,7 @@
       }
     },
     "statement": "抵抗 R=5kΩ とコンデンサ C=5μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=5kΩとコンデンサC=5μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=5kΩとコンデンサC=5μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=5kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=5μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "25",
     "solution": [
       "時定数 τ=R·C",
@@ -2053,6 +2089,7 @@
       }
     },
     "statement": "抵抗 R=4kΩ とコンデンサ C=22μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=4kΩとコンデンサC=22μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=4kΩとコンデンサC=22μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=4kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=22μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "88",
     "solution": [
       "時定数 τ=R·C",
@@ -2102,6 +2139,7 @@
       }
     },
     "statement": "抵抗 R=4kΩ とコンデンサ C=2μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=4kΩとコンデンサC=2μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=4kΩとコンデンサC=2μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=4kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=2μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "8",
     "solution": [
       "時定数 τ=R·C",
@@ -2151,6 +2189,7 @@
       }
     },
     "statement": "抵抗 R=5kΩ とコンデンサ C=1μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=5kΩとコンデンサC=1μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=5kΩとコンデンサC=1μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=5kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=1μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "5",
     "solution": [
       "時定数 τ=R·C",
@@ -2200,6 +2239,7 @@
       }
     },
     "statement": "抵抗 R=2kΩ とコンデンサ C=1μF を直列に接続した RC 回路の時定数 τ〔ms〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 140\" role=\"img\" aria-label=\"抵抗R=2kΩとコンデンサC=1μFの直列RC回路\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>抵抗R=2kΩとコンデンサC=1μFの直列RC回路</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">V</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"40\" y1=\"110\" x2=\"190\" y2=\"110\"/><line x1=\"190\" y1=\"110\" x2=\"190\" y2=\"30\"/><line x1=\"70\" y1=\"30\" x2=\"90\" y2=\"30\"/><rect x=\"90\" y=\"21\" width=\"40\" height=\"18\" fill=\"none\"/><line x1=\"130\" y1=\"30\" x2=\"150\" y2=\"30\"/><text x=\"110\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=2kΩ</text><line x1=\"150\" y1=\"30\" x2=\"190\" y2=\"30\"/><line x1=\"190\" y1=\"30\" x2=\"190\" y2=\"60\"/><line x1=\"176\" y1=\"60\" x2=\"204\" y2=\"60\"/><line x1=\"176\" y1=\"68\" x2=\"204\" y2=\"68\"/><line x1=\"190\" y1=\"68\" x2=\"190\" y2=\"110\"/><text x=\"210\" y=\"66\" fill=\"currentColor\" stroke=\"none\">C=1μF</text><text x=\"115\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">τ=R·C</text></g></svg>",
     "answer": "2",
     "solution": [
       "時定数 τ=R·C",
@@ -2257,6 +2297,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=200Ω、R2=400Ω、R3=200Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=200,R2=400,R3=200,Rx=400（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=200,R2=400,R3=200,Rx=400（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=200</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=400</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=400</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=200</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "400",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2314,6 +2355,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=100Ω、R2=400Ω、R3=400Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=100,R2=400,R3=400,Rx=1600（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=100,R2=400,R3=400,Rx=1600（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=100</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=400</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=1600</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=400</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "1600",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2371,6 +2413,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=50Ω、R2=150Ω、R3=100Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=50,R2=150,R3=100,Rx=300（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=50,R2=150,R3=100,Rx=300（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=50</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=150</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=300</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=100</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "300",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2428,6 +2471,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=20Ω、R2=400Ω、R3=400Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=20,R2=400,R3=400,Rx=8000（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=20,R2=400,R3=400,Rx=8000（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=20</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=400</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=8000</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=400</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "8000",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2485,6 +2529,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=50Ω、R2=200Ω、R3=400Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=50,R2=200,R3=400,Rx=1600（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=50,R2=200,R3=400,Rx=1600（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=50</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=200</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=1600</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=400</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "1600",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2542,6 +2587,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=20Ω、R2=200Ω、R3=400Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=20,R2=200,R3=400,Rx=4000（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=20,R2=200,R3=400,Rx=4000（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=20</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=200</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=4000</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=400</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "4000",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2599,6 +2645,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=100Ω、R2=300Ω、R3=200Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=100,R2=300,R3=200,Rx=600（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=100,R2=300,R3=200,Rx=600（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=100</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=300</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=600</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=200</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "600",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -2656,6 +2703,7 @@
       }
     },
     "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=200Ω、R2=500Ω、R3=300Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 158\" role=\"img\" aria-label=\"ホイートストンブリッジ R1=200,R2=500,R3=300,Rx=750（平衡）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>ホイートストンブリッジ R1=200,R2=500,R3=300,Rx=750（平衡）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"25\"/><line x1=\"140\" y1=\"25\" x2=\"225\" y2=\"80\"/><line x1=\"55\" y1=\"80\" x2=\"140\" y2=\"135\"/><line x1=\"225\" y1=\"80\" x2=\"140\" y2=\"135\"/><text x=\"78\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R1=200</text><text x=\"185\" y=\"44\" fill=\"currentColor\" stroke=\"none\">R2=500</text><text x=\"74\" y=\"120\" fill=\"currentColor\" stroke=\"none\">Rx=750</text><text x=\"184\" y=\"120\" fill=\"currentColor\" stroke=\"none\">R3=300</text><line x1=\"55\" y1=\"80\" x2=\"225\" y2=\"80\"/><circle cx=\"140\" cy=\"80\" r=\"12\" fill=\"none\"/><text x=\"140\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">G</text><circle cx=\"140\" cy=\"25\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"140\" cy=\"135\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"140\" y1=\"25\" x2=\"140\" y2=\"10\"/><line x1=\"140\" y1=\"135\" x2=\"140\" y2=\"150\"/><text x=\"148\" y=\"16\" fill=\"currentColor\" stroke=\"none\">電源</text></g></svg>",
     "answer": "750",
     "solution": [
       "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
@@ -3105,11 +3153,14 @@
       }
     },
     "statement": "有効電力 P=120kW の負荷の力率を 0.6（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=160kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=160kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=120</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"120\"/><polygon points=\"143.5,120 139.6,111.9 147.4,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"45\" fill=\"currentColor\" stroke=\"none\">Qc=160</text></g></svg>",
     "answer": "160",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=1.3333、tanθ2=0",
-      "Qc=120×(1.3333−0)=160kvar"
+      "Qc=120×(1.3333−0)=160kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3162,11 +3213,14 @@
       }
     },
     "statement": "有効電力 P=600kW の負荷の力率を 0.6（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=800kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=800kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=600</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"120\"/><polygon points=\"143.5,120 139.6,111.9 147.4,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"45\" fill=\"currentColor\" stroke=\"none\">Qc=800</text></g></svg>",
     "answer": "800",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=1.3333、tanθ2=0",
-      "Qc=600×(1.3333−0)=800kvar"
+      "Qc=600×(1.3333−0)=800kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3219,11 +3273,14 @@
       }
     },
     "statement": "有効電力 P=180kW の負荷の力率を 0.6（遅れ）から 0.8 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=105kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=105kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=180</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.62500000000003\"/><polygon points=\"157.5,35.62500000000003 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.82500000000003\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.62500000000003\"/><polygon points=\"143.5,35.62500000000003 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000014\" fill=\"currentColor\" stroke=\"none\">Qc=105</text></g></svg>",
     "answer": "105",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=1.3333、tanθ2=0.75",
-      "Qc=180×(1.3333−0.75)=105kvar"
+      "Qc=180×(1.3333−0.75)=105kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3276,11 +3333,14 @@
       }
     },
     "statement": "有効電力 P=150kW の負荷の力率を 0.6（遅れ）から 0.8 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=87.5kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=87.5kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=150</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.62500000000003\"/><polygon points=\"157.5,35.62500000000003 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.82500000000003\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.62500000000003\"/><polygon points=\"143.5,35.62500000000003 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000014\" fill=\"currentColor\" stroke=\"none\">Qc=87.5</text></g></svg>",
     "answer": "87.5",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=1.3333、tanθ2=0.75",
-      "Qc=150×(1.3333−0.75)=87.5kvar"
+      "Qc=150×(1.3333−0.75)=87.5kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3333,11 +3393,14 @@
       }
     },
     "statement": "有効電力 P=150kW の負荷の力率を 0.8（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=112.5kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=112.5kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=150</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000028\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\"/><polygon points=\"195,7.500000000000028 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999705\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000028\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.750000000000014\" fill=\"currentColor\" stroke=\"none\">Qc=112.5</text></g></svg>",
     "answer": "112.5",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=0.75、tanθ2=0",
-      "Qc=150×(0.75−0)=112.5kvar"
+      "Qc=150×(0.75−0)=112.5kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3390,11 +3453,14 @@
       }
     },
     "statement": "有効電力 P=150kW の負荷の力率を 0.6（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=200kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=200kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=150</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"120\"/><polygon points=\"143.5,120 139.6,111.9 147.4,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"45\" fill=\"currentColor\" stroke=\"none\">Qc=200</text></g></svg>",
     "answer": "200",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=1.3333、tanθ2=0",
-      "Qc=150×(1.3333−0)=200kvar"
+      "Qc=150×(1.3333−0)=200kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3447,11 +3513,14 @@
       }
     },
     "statement": "有効電力 P=300kW の負荷の力率を 0.8（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=225kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=225kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=300</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000028\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\"/><polygon points=\"195,7.500000000000028 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999705\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000028\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.750000000000014\" fill=\"currentColor\" stroke=\"none\">Qc=225</text></g></svg>",
     "answer": "225",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=0.75、tanθ2=0",
-      "Qc=300×(0.75−0)=225kvar"
+      "Qc=300×(0.75−0)=225kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -3504,11 +3573,14 @@
       }
     },
     "statement": "有効電力 P=360kW の負荷の力率を 0.8（遅れ）から 1 に改善したい。必要な進相コンデンサの容量 Qc〔kvar〕は?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=270kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=270kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=360</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000014\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\"/><polygon points=\"195,7.500000000000014 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999847\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000014\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.75000000000001\" fill=\"currentColor\" stroke=\"none\">Qc=270</text></g></svg>",
     "answer": "270",
     "solution": [
+      "着眼点: 有効電力Pは一定で、無効電力QをQ1→Q2へ減らす差が必要容量。",
       "Qc=P·(tanθ1−tanθ2)",
       "tanθ1=0.75、tanθ2=0",
-      "Qc=360×(0.75−0)=270kvar"
+      "Qc=360×(0.75−0)=270kvar",
+      "ポイント: 図の電力三角形で、Sの傾き(力率)が立つほどQが減りQcは増える。"
     ],
     "validation": {
       "solver_checked": true,
@@ -4353,6 +4425,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=30A、1線の抵抗 R=0.6Ω、リアクタンス X=0.8Ω、負荷力率 cosθ=0.6（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=30A、R=0.6Ω、X=0.8Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=30A、R=0.6Ω、X=0.8Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.6</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.8</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.6</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=30A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "60",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4418,6 +4491,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=5A、1線の抵抗 R=0.6Ω、リアクタンス X=0.8Ω、負荷力率 cosθ=0.6（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=5A、R=0.6Ω、X=0.8Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=5A、R=0.6Ω、X=0.8Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.6</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.8</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.6</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=5A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "10",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4483,6 +4557,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=30A、1線の抵抗 R=0.5Ω、リアクタンス X=0.5Ω、負荷力率 cosθ=0.6（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=30A、R=0.5Ω、X=0.5Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=30A、R=0.5Ω、X=0.5Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.5</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.5</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.6</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=30A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "42",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4548,6 +4623,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=25A、1線の抵抗 R=0.3Ω、リアクタンス X=0.4Ω、負荷力率 cosθ=0.8（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=25A、R=0.3Ω、X=0.4Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=25A、R=0.3Ω、X=0.4Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.3</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.4</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.8</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=25A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "24",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4613,6 +4689,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=25A、1線の抵抗 R=0.6Ω、リアクタンス X=0.8Ω、負荷力率 cosθ=1（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=25A、R=0.6Ω、X=0.8Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=25A、R=0.6Ω、X=0.8Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.6</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.8</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=1</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=25A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "30",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4678,6 +4755,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=20A、1線の抵抗 R=0.5Ω、リアクタンス X=0.5Ω、負荷力率 cosθ=0.6（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=20A、R=0.5Ω、X=0.5Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=20A、R=0.5Ω、X=0.5Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.5</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.5</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.6</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=20A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "28",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4743,6 +4821,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=5A、1線の抵抗 R=0.4Ω、リアクタンス X=0.3Ω、負荷力率 cosθ=0.6（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=5A、R=0.4Ω、X=0.3Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=5A、R=0.4Ω、X=0.3Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.4</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.3</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.6</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=5A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "4.8",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -4808,6 +4887,7 @@
       }
     },
     "statement": "単相2線式の線路で、線電流 I=10A、1線の抵抗 R=0.5Ω、リアクタンス X=0.5Ω、負荷力率 cosθ=0.8（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=10A、R=0.5Ω、X=0.5Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=10A、R=0.5Ω、X=0.5Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.5</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.5</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=0.8</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=10A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "14",
     "solution": [
       "単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)",
@@ -6886,6 +6966,7 @@
       }
     },
     "statement": "一次電圧 V1=200V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=8A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次200V/二次100V、巻数比a=2\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次200V/二次100V、巻数比a=2</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">200</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=2</text></g></svg>",
     "answer": "16",
     "solution": [
       "巻数比 a=V1/V2=2",
@@ -6943,6 +7024,7 @@
       }
     },
     "statement": "一次電圧 V1=3300V、二次電圧 V2=110V の単相変圧器で、一次電流 I1=10A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次3300V/二次110V、巻数比a=30\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次3300V/二次110V、巻数比a=30</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">3300</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">110</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=30</text></g></svg>",
     "answer": "300",
     "solution": [
       "巻数比 a=V1/V2=30",
@@ -7000,6 +7082,7 @@
       }
     },
     "statement": "一次電圧 V1=200V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=10A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次200V/二次100V、巻数比a=2\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次200V/二次100V、巻数比a=2</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">200</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=2</text></g></svg>",
     "answer": "20",
     "solution": [
       "巻数比 a=V1/V2=2",
@@ -7057,6 +7140,7 @@
       }
     },
     "statement": "一次電圧 V1=3300V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=2A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次3300V/二次100V、巻数比a=33\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次3300V/二次100V、巻数比a=33</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">3300</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=33</text></g></svg>",
     "answer": "66",
     "solution": [
       "巻数比 a=V1/V2=33",
@@ -7114,6 +7198,7 @@
       }
     },
     "statement": "一次電圧 V1=200V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=3A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次200V/二次100V、巻数比a=2\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次200V/二次100V、巻数比a=2</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">200</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=2</text></g></svg>",
     "answer": "6",
     "solution": [
       "巻数比 a=V1/V2=2",
@@ -7171,6 +7256,7 @@
       }
     },
     "statement": "一次電圧 V1=6600V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=2A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次6600V/二次100V、巻数比a=66\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次6600V/二次100V、巻数比a=66</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">6600</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=66</text></g></svg>",
     "answer": "132",
     "solution": [
       "巻数比 a=V1/V2=66",
@@ -7228,6 +7314,7 @@
       }
     },
     "statement": "一次電圧 V1=440V、二次電圧 V2=110V の単相変圧器で、一次電流 I1=5A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次440V/二次110V、巻数比a=4\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次440V/二次110V、巻数比a=4</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">440</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">110</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=4</text></g></svg>",
     "answer": "20",
     "solution": [
       "巻数比 a=V1/V2=4",
@@ -7285,6 +7372,7 @@
       }
     },
     "statement": "一次電圧 V1=200V、二次電圧 V2=100V の単相変圧器で、一次電流 I1=2A が流れている。二次電流 I2〔A〕は?（損失は無視）",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 146\" role=\"img\" aria-label=\"変圧器 一次200V/二次100V、巻数比a=2\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>変圧器 一次200V/二次100V、巻数比a=2</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"42\" x2=\"45\" y2=\"35\"/><line x1=\"45\" y1=\"35\" x2=\"75\" y2=\"35\"/><line x1=\"75\" y1=\"35\" x2=\"75\" y2=\"42\"/><path d=\"M 75 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 75 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"75\" y1=\"98\" x2=\"75\" y2=\"105\"/><line x1=\"75\" y1=\"105\" x2=\"45\" y2=\"105\"/><line x1=\"45\" y1=\"105\" x2=\"45\" y2=\"98\"/><text x=\"33\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V1</text><text x=\"20\" y=\"90\" fill=\"currentColor\" stroke=\"none\">200</text><line x1=\"108\" y1=\"35\" x2=\"108\" y2=\"110\" stroke-width=\"3\"/><line x1=\"116\" y1=\"35\" x2=\"116\" y2=\"110\" stroke-width=\"3\"/><path d=\"M 150 42 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 56 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 70 a 7 7 0 0 1 0 14\" fill=\"none\"/><path d=\"M 150 84 a 7 7 0 0 1 0 14\" fill=\"none\"/><line x1=\"150\" y1=\"35\" x2=\"185\" y2=\"35\"/><line x1=\"185\" y1=\"35\" x2=\"185\" y2=\"42\"/><line x1=\"150\" y1=\"98\" x2=\"185\" y2=\"98\"/><line x1=\"185\" y1=\"98\" x2=\"185\" y2=\"105\"/><text x=\"192\" y=\"74\" fill=\"currentColor\" stroke=\"none\">V2</text><text x=\"192\" y=\"90\" fill=\"currentColor\" stroke=\"none\">100</text><text x=\"112\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">巻数比 a=V1/V2=2</text></g></svg>",
     "answer": "4",
     "solution": [
       "巻数比 a=V1/V2=2",
@@ -8680,12 +8768,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=220V、1相の誘導起電力 E=600V、同期リアクタンス Xs=5Ω、負荷角 δ=30° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=220V、E=600V、負荷角δ=30°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=220V、E=600V、負荷角δ=30°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"90.33333333333333\" y2=\"120\"/><polygon points=\"90.33333333333333,120 82.2,123.9 82.2,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"98.33333333333333\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=220</text><line x1=\"50\" y1=\"120\" x2=\"145.26279441628824\" y2=\"65.00000000000001\"/><polygon points=\"145.26279441628824,65.00000000000001 140.2,72.4 136.3,65.7\" fill=\"currentColor\" stroke=\"none\"/><text x=\"152.19099764656374\" y=\"57.000000000000014\" fill=\"currentColor\" stroke=\"none\">E=600</text><line x1=\"90.33333333333333\" y1=\"120\" x2=\"145.26279441628824\" y2=\"65.00000000000001\" stroke-dasharray=\"4 3\"/><text x=\"123.7980638748108\" y=\"92.5\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 79.4 103.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=30°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "39.6",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×220×600×0.5/5",
       "P=39600W=39.6kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -8746,12 +8836,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=440V、1相の誘導起電力 E=600V、同期リアクタンス Xs=5Ω、負荷角 δ=90° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=440V、E=600V、負荷角δ=90°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=440V、E=600V、負荷角δ=90°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"130.66666666666666\" y2=\"120\"/><polygon points=\"130.66666666666666,120 122.6,123.9 122.6,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"138.66666666666666\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=440</text><line x1=\"50\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\"/><polygon points=\"50.00000000000001,10.000000000000014 53.9,18.1 46.1,18.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50.00000000000001\" y=\"-1.9999999999999858\" fill=\"currentColor\" stroke=\"none\">E=600</text><line x1=\"130.66666666666666\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\" stroke-dasharray=\"4 3\"/><text x=\"96.33333333333333\" y=\"65\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 50.0 86.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=90°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "158.4",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×440×600×1/5",
       "P=158400W=158.4kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -8812,12 +8904,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=200V、1相の誘導起電力 E=200V、同期リアクタンス Xs=20Ω、負荷角 δ=30° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=200V、E=200V、負荷角δ=30°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=200V、E=200V、負荷角δ=30°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"160\" y2=\"120\"/><polygon points=\"160,120 151.9,123.9 151.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"168\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=200</text><line x1=\"50\" y1=\"120\" x2=\"145.26279441628827\" y2=\"65\"/><polygon points=\"145.26279441628827,65 140.2,72.4 136.3,65.7\" fill=\"currentColor\" stroke=\"none\"/><text x=\"152.19099764656377\" y=\"57\" fill=\"currentColor\" stroke=\"none\">E=200</text><line x1=\"160\" y1=\"120\" x2=\"145.26279441628827\" y2=\"65\" stroke-dasharray=\"4 3\"/><text x=\"158.63139720814414\" y=\"92.5\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 79.4 103.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=30°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "3",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×200×200×0.5/20",
       "P=3000W=3kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -8878,12 +8972,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=440V、1相の誘導起電力 E=200V、同期リアクタンス Xs=20Ω、負荷角 δ=90° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=440V、E=200V、負荷角δ=90°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=440V、E=200V、負荷角δ=90°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"160\" y2=\"120\"/><polygon points=\"160,120 151.9,123.9 151.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"168\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=440</text><line x1=\"50\" y1=\"120\" x2=\"50\" y2=\"70\"/><polygon points=\"50,70 53.9,78.1 46.1,78.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"58\" fill=\"currentColor\" stroke=\"none\">E=200</text><line x1=\"160\" y1=\"120\" x2=\"50\" y2=\"70\" stroke-dasharray=\"4 3\"/><text x=\"111\" y=\"95\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 50.0 86.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=90°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "13.2",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×440×200×1/20",
       "P=13200W=13.2kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -8944,12 +9040,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=200V、1相の誘導起電力 E=300V、同期リアクタンス Xs=5Ω、負荷角 δ=90° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=200V、E=300V、負荷角δ=90°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=200V、E=300V、負荷角δ=90°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"123.33333333333333\" y2=\"120\"/><polygon points=\"123.33333333333333,120 115.2,123.9 115.2,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"131.33333333333331\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=200</text><line x1=\"50\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\"/><polygon points=\"50.00000000000001,10.000000000000014 53.9,18.1 46.1,18.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50.00000000000001\" y=\"-1.9999999999999858\" fill=\"currentColor\" stroke=\"none\">E=300</text><line x1=\"123.33333333333333\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\" stroke-dasharray=\"4 3\"/><text x=\"92.66666666666667\" y=\"65\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 50.0 86.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=90°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "36",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×200×300×1/5",
       "P=36000W=36kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -9010,12 +9108,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=200V、1相の誘導起電力 E=200V、同期リアクタンス Xs=5Ω、負荷角 δ=90° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=200V、E=200V、負荷角δ=90°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=200V、E=200V、負荷角δ=90°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"160\" y2=\"120\"/><polygon points=\"160,120 151.9,123.9 151.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"168\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=200</text><line x1=\"50\" y1=\"120\" x2=\"50.00000000000001\" y2=\"9.999999999999986\"/><polygon points=\"50.00000000000001,9.999999999999986 53.9,18.1 46.1,18.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50.00000000000001\" y=\"-2.000000000000014\" fill=\"currentColor\" stroke=\"none\">E=200</text><line x1=\"160\" y1=\"120\" x2=\"50.00000000000001\" y2=\"9.999999999999986\" stroke-dasharray=\"4 3\"/><text x=\"111\" y=\"65\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 50.0 86.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=90°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "24",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×200×200×1/5",
       "P=24000W=24kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -9076,12 +9176,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=200V、1相の誘導起電力 E=300V、同期リアクタンス Xs=20Ω、負荷角 δ=30° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=200V、E=300V、負荷角δ=30°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=200V、E=300V、負荷角δ=30°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"123.33333333333333\" y2=\"120\"/><polygon points=\"123.33333333333333,120 115.2,123.9 115.2,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"131.33333333333331\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=200</text><line x1=\"50\" y1=\"120\" x2=\"145.26279441628824\" y2=\"65.00000000000001\"/><polygon points=\"145.26279441628824,65.00000000000001 140.2,72.4 136.3,65.7\" fill=\"currentColor\" stroke=\"none\"/><text x=\"152.19099764656374\" y=\"57.000000000000014\" fill=\"currentColor\" stroke=\"none\">E=300</text><line x1=\"123.33333333333333\" y1=\"120\" x2=\"145.26279441628824\" y2=\"65.00000000000001\" stroke-dasharray=\"4 3\"/><text x=\"140.2980638748108\" y=\"92.5\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 79.4 103.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=30°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "4.5",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×200×300×0.5/20",
       "P=4500W=4.5kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -9142,12 +9244,14 @@
       }
     },
     "statement": "三相同期発電機の端子相電圧 V=220V、1相の誘導起電力 E=400V、同期リアクタンス Xs=10Ω、負荷角 δ=30° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=220V、E=400V、負荷角δ=30°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=220V、E=400V、負荷角δ=30°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"110.5\" y2=\"120\"/><polygon points=\"110.5,120 102.4,123.9 102.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"118.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=220</text><line x1=\"50\" y1=\"120\" x2=\"145.26279441628827\" y2=\"65\"/><polygon points=\"145.26279441628827,65 140.2,72.4 136.3,65.7\" fill=\"currentColor\" stroke=\"none\"/><text x=\"152.19099764656377\" y=\"57\" fill=\"currentColor\" stroke=\"none\">E=400</text><line x1=\"110.5\" y1=\"120\" x2=\"145.26279441628827\" y2=\"65\" stroke-dasharray=\"4 3\"/><text x=\"133.88139720814414\" y=\"92.5\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 79.4 103.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=30°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
     "answer": "13.2",
     "solution": [
+      "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
       "1相あたり P1=V·E·sinδ/Xs",
       "3相出力 P=3·V·E·sinδ/Xs=3×220×400×0.5/10",
       "P=13200W=13.2kW",
-      "（δ=90°で最大出力となる。安定限界の指標）"
+      "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
     ],
     "validation": {
       "solver_checked": true,
@@ -9592,6 +9696,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=10、時定数 T=1s）に、大きさ A=1 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=10、T=1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=10、T=1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=10, T=1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "10",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9650,6 +9755,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=2、時定数 T=0.1s）に、大きさ A=10 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=0.1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=0.1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=2, T=0.1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "20",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9708,6 +9814,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=2、時定数 T=1s）に、大きさ A=10 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=2, T=1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "20",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9766,6 +9873,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=5、時定数 T=1s）に、大きさ A=1 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=5、T=1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=5、T=1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=5, T=1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "5",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9824,6 +9932,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=10、時定数 T=0.5s）に、大きさ A=4 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=10、T=0.5s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=10、T=0.5s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=10, T=0.5s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "40",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9882,6 +9991,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=5、時定数 T=1s）に、大きさ A=2 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=5、T=1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=5、T=1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=5, T=1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "10",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9940,6 +10050,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=3、時定数 T=0.1s）に、大きさ A=2 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=3、T=0.1s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=3、T=0.1s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=3, T=0.1s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "6",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -9998,6 +10109,7 @@
       }
     },
     "statement": "一次遅れ要素 G(s)=K/(1+Ts)（ゲイン K=2、時定数 T=0.5s）に、大きさ A=4 のステップ入力を加える。出力の定常値 y(∞) を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 100\" role=\"img\" aria-label=\"一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=0.5s\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>一次遅れ系ブロック線図 G(s)=K/(1+Ts)、K=2、T=0.5s</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"20\" y1=\"60\" x2=\"80\" y2=\"60\"/><polygon points=\"80,60 71.9,63.9 71.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><rect x=\"80\" y=\"38\" width=\"120\" height=\"44\" fill=\"none\"/><text x=\"140\" y=\"66\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K/(1+Ts)</text><text x=\"140\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">K=2, T=0.5s</text><line x1=\"200\" y1=\"60\" x2=\"268\" y2=\"60\"/><polygon points=\"268,60 259.9,63.9 259.9,56.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"236\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">y(∞)=KA</text></g></svg>",
     "answer": "8",
     "solution": [
       "最終値の定理 y(∞)=lim_{s→0} s·G(s)·(A/s)=K·A",
@@ -10056,11 +10168,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.5Ω のとき、最大トルクを生じる滑りは s1=0.03 である。この滑りを s2=0.12 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.12 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.12 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 101.4 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 180.6 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"101.4\" y1=\"130\" x2=\"101.4\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"101.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.03</text><line x1=\"180.6\" y1=\"130\" x2=\"180.6\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"180.6\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.12</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "1.5",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.5×(0.12−0.03)/0.03",
-      "R=1.5Ω"
+      "R=1.5Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10113,11 +10228,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.2Ω のとき、最大トルクを生じる滑りは s1=0.03 である。この滑りを s2=0.18 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.18 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.18 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 101.4 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 233.4 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"101.4\" y1=\"130\" x2=\"101.4\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"101.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.03</text><line x1=\"233.4\" y1=\"130\" x2=\"233.4\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"233.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.18</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "1",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.2×(0.18−0.03)/0.03",
-      "R=1Ω"
+      "R=1Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10170,11 +10288,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=1Ω のとき、最大トルクを生じる滑りは s1=0.03 である。この滑りを s2=0.15 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.15 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.03→s2=0.15 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 101.4 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 207 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"101.4\" y1=\"130\" x2=\"101.4\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"101.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.03</text><line x1=\"207\" y1=\"130\" x2=\"207\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"207\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.15</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "4",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=1×(0.15−0.03)/0.03",
-      "R=4Ω"
+      "R=4Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10227,11 +10348,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=1Ω のとき、最大トルクを生じる滑りは s1=0.05 である。この滑りを s2=0.12 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.12 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.12 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 119 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 180.6 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"119\" y1=\"130\" x2=\"119\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"119\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.05</text><line x1=\"180.6\" y1=\"130\" x2=\"180.6\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"180.6\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.12</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "1.4",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=1×(0.12−0.05)/0.05",
-      "R=1.4Ω"
+      "R=1.4Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10284,11 +10408,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.3Ω のとき、最大トルクを生じる滑りは s1=0.05 である。この滑りを s2=0.12 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.12 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.12 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 119 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 180.6 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"119\" y1=\"130\" x2=\"119\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"119\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.05</text><line x1=\"180.6\" y1=\"130\" x2=\"180.6\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"180.6\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.12</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "0.42",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.3×(0.12−0.05)/0.05",
-      "R=0.42Ω"
+      "R=0.42Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10341,11 +10468,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.3Ω のとき、最大トルクを生じる滑りは s1=0.05 である。この滑りを s2=0.18 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.18 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.05→s2=0.18 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 119 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 233.4 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"119\" y1=\"130\" x2=\"119\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"119\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.05</text><line x1=\"233.4\" y1=\"130\" x2=\"233.4\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"233.4\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.18</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "0.78",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.3×(0.18−0.05)/0.05",
-      "R=0.78Ω"
+      "R=0.78Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10398,11 +10528,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.3Ω のとき、最大トルクを生じる滑りは s1=0.06 である。この滑りを s2=0.1 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.06→s2=0.1 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.06→s2=0.1 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 127.8 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 163 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"127.8\" y1=\"130\" x2=\"127.8\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"127.8\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.06</text><line x1=\"163\" y1=\"130\" x2=\"163\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"163\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.1</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "0.2",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.3×(0.1−0.06)/0.06",
-      "R=0.2Ω"
+      "R=0.2Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10455,11 +10588,14 @@
       }
     },
     "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.5Ω のとき、最大トルクを生じる滑りは s1=0.04 である。この滑りを s2=0.2 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 162\" role=\"img\" aria-label=\"誘導電動機の比例推移 トルク-滑り曲線が s1=0.04→s2=0.2 へ移動\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>誘導電動機の比例推移 トルク-滑り曲線が s1=0.04→s2=0.2 へ移動</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"130\" x2=\"277\" y2=\"130\"/><polygon points=\"277,130 268.9,133.9 268.9,126.1\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"45\" y1=\"130\" x2=\"45\" y2=\"6\"/><polygon points=\"45,6 48.9,14.1 41.1,14.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"245\" y=\"148\" fill=\"currentColor\" stroke=\"none\">滑り s</text><text x=\"49\" y=\"12\" fill=\"currentColor\" stroke=\"none\">トルク T</text><path d=\"M 45 130 Q 110.2 12 265 114\" fill=\"none\"/><path d=\"M 45 130 Q 251 12 265 114\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"110.2\" y1=\"130\" x2=\"110.2\" y2=\"40\" stroke-dasharray=\"2 2\"/><text x=\"110.2\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s1=0.04</text><line x1=\"251\" y1=\"130\" x2=\"251\" y2=\"60\" stroke-dasharray=\"2 2\"/><text x=\"251\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">s2=0.2</text><text x=\"140\" y=\"24\" fill=\"currentColor\" stroke=\"none\">r2増 → 右へ推移</text></g></svg>",
     "answer": "2",
     "solution": [
+      "着眼点: 同一トルクを生む滑りは二次抵抗に比例（比例推移）。",
       "比例推移: r2/s1=(r2+R)/s2",
       "R=r2·(s2−s1)/s1=0.5×(0.2−0.04)/0.04",
-      "R=2Ω"
+      "R=2Ω",
+      "ポイント: 図のトルク-滑り曲線が右へ移り、始動トルクを大きくできる。"
     ],
     "validation": {
       "solver_checked": true,
@@ -10512,6 +10648,7 @@
       }
     },
     "statement": "有効電力 P=1200kW、力率 cosθ1=0.8（遅れ）の需要家が、力率を cosθ2=1 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=900kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=900kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=1200</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000028\" x2=\"195\" y2=\"7.500000000000028\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000028\"/><polygon points=\"195,7.500000000000028 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999705\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000028\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.750000000000014\" fill=\"currentColor\" stroke=\"none\">Qc=900</text></g></svg>",
     "answer": "900",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10569,6 +10706,7 @@
       }
     },
     "statement": "有効電力 P=1500kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=1 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=2000kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=2000kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=1500</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"120\"/><polygon points=\"143.5,120 139.6,111.9 147.4,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"45\" fill=\"currentColor\" stroke=\"none\">Qc=2000</text></g></svg>",
     "answer": "2000",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10626,6 +10764,7 @@
       }
     },
     "statement": "有効電力 P=1500kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=0.8 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=875kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=875kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=1500</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.625000000000014\"/><polygon points=\"157.5,35.625000000000014 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.825000000000017\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.625000000000014\"/><polygon points=\"143.5,35.625000000000014 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000007\" fill=\"currentColor\" stroke=\"none\">Qc=875</text></g></svg>",
     "answer": "875",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10683,6 +10822,7 @@
       }
     },
     "statement": "有効電力 P=1800kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=0.8 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=1050kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=1050kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.49999999999997\" y2=\"120\"/><polygon points=\"157.49999999999997,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.49999999999997\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=1800</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.49999999999997\" y1=\"120\" x2=\"157.49999999999997\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.49999999999997\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.49999999999997\" y2=\"-30\"/><polygon points=\"157.49999999999997,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.29999999999998\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.49999999999997\" y2=\"35.62500000000004\"/><polygon points=\"157.49999999999997,35.62500000000004 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.89999999999998\" y=\"26.825000000000045\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.49999999999997\" y1=\"-30\" x2=\"143.49999999999997\" y2=\"35.62500000000004\"/><polygon points=\"143.49999999999997,35.62500000000004 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.49999999999997\" y=\"2.8125000000000213\" fill=\"currentColor\" stroke=\"none\">Qc=1050</text></g></svg>",
     "answer": "1050",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10740,6 +10880,7 @@
       }
     },
     "statement": "有効電力 P=3000kW、力率 cosθ1=0.8（遅れ）の需要家が、力率を cosθ2=1 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=2250kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=2250kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=3000</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000014\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\"/><polygon points=\"195,7.500000000000014 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999847\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000014\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.75000000000001\" fill=\"currentColor\" stroke=\"none\">Qc=2250</text></g></svg>",
     "answer": "2250",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10797,6 +10938,7 @@
       }
     },
     "statement": "有効電力 P=600kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=0.8 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=350kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=350kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=600</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.62500000000003\"/><polygon points=\"157.5,35.62500000000003 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.82500000000003\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.62500000000003\"/><polygon points=\"143.5,35.62500000000003 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000014\" fill=\"currentColor\" stroke=\"none\">Qc=350</text></g></svg>",
     "answer": "350",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10854,6 +10996,7 @@
       }
     },
     "statement": "有効電力 P=1500kW、力率 cosθ1=0.8（遅れ）の需要家が、力率を cosθ2=1 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=1125kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=1125kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=1500</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"195\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"7.500000000000014\" x2=\"195\" y2=\"7.500000000000014\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"7.500000000000014\"/><polygon points=\"195,7.500000000000014 190.9,15.5 186.2,9.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"201.4\" y=\"-1.2999999999999847\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"195\" y2=\"120\"/><polygon points=\"195,120 186.9,123.9 186.9,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"203\" y=\"132\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"181\" y1=\"7.500000000000014\" x2=\"181\" y2=\"120\"/><polygon points=\"181,120 177.1,111.9 184.9,111.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"185\" y=\"63.75000000000001\" fill=\"currentColor\" stroke=\"none\">Qc=1125</text></g></svg>",
     "answer": "1125",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
@@ -10911,6 +11054,7 @@
       }
     },
     "statement": "有効電力 P=3000kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=0.8 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 150\" role=\"img\" aria-label=\"電力三角形: 進相容量Qc=1750kvarで無効電力を低減（力率改善）\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>電力三角形: 進相容量Qc=1750kvarで無効電力を低減（力率改善）</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"120\"/><polygon points=\"157.5,120 149.4,123.9 149.4,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"165.5\" y=\"132\" fill=\"currentColor\" stroke=\"none\">P=3000</text><line x1=\"45\" y1=\"120\" x2=\"45\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"157.5\" y1=\"120\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"-30\" x2=\"157.5\" y2=\"-30\" stroke-dasharray=\"3 3\"/><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"-30\"/><polygon points=\"157.5,-30 155.8,-21.2 149.5,-25.9\" fill=\"currentColor\" stroke=\"none\"/><text x=\"162.3\" y=\"-40.4\" fill=\"currentColor\" stroke=\"none\">S(前)</text><line x1=\"45\" y1=\"120\" x2=\"157.5\" y2=\"35.625000000000014\"/><polygon points=\"157.5,35.625000000000014 153.4,43.6 148.7,37.4\" fill=\"currentColor\" stroke=\"none\"/><text x=\"163.9\" y=\"26.825000000000017\" fill=\"currentColor\" stroke=\"none\">S(後)</text><line x1=\"143.5\" y1=\"-30\" x2=\"143.5\" y2=\"35.625000000000014\"/><polygon points=\"143.5,35.625000000000014 139.6,27.5 147.4,27.5\" fill=\"currentColor\" stroke=\"none\"/><text x=\"147.5\" y=\"2.812500000000007\" fill=\"currentColor\" stroke=\"none\">Qc=1750</text></g></svg>",
     "answer": "1750",
     "solution": [
       "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",

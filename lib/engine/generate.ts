@@ -76,6 +76,7 @@ export async function generateOne(
     difficulty: template.difficulty,
     params: draw.params,
     statement: narration.statement,
+    ...(draw.figure ? { figure: draw.figure } : {}),
     // numeric は選択肢なし。multiple_choice のみ choices を持つ。
     ...(format === "multiple_choice" ? { choices: draw.choices } : {}),
     answer: draw.answerText,
