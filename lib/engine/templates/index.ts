@@ -10,6 +10,7 @@ import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
 import { firstOrderControl } from "./first-order-control.js";
 import { fullWaveRectifier } from "./full-wave-rectifier.js";
+import { groundFaultSymmetrical } from "./ground-fault-symmetrical.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { hoistMotorOutput } from "./hoist-motor-output.js";
 import { hydroPowerOutput } from "./hydro-power-output.js";
@@ -23,6 +24,7 @@ import { loadFactor } from "./load-factor.js";
 import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
+import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
 import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
 import { percentImpedanceShortCircuit } from "./percent-impedance-short-circuit.js";
@@ -37,6 +39,7 @@ import { shortCircuitOhm } from "./short-circuit-ohm.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
 import { shuntResistor } from "./shunt-resistor.js";
 import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
+import { steadyStateError } from "./steady-state-error.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
 import { threePhasePower } from "./three-phase-power.js";
@@ -101,6 +104,7 @@ const templates: Template[] = [
   firstOrderControl,
   inductionProportionalShift,
   boostChopper,
+  steadyStateError,
   // 電力管理（二次）
   reactivePowerCompensation,
   hydroPowerOutput,
@@ -108,6 +112,8 @@ const templates: Template[] = [
   shortCircuitCapacity,
   transmissionPowerStability,
   shortCircuitOhm,
+  groundFaultSymmetrical,
+  parallelPercentImpedance,
 ];
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
@@ -133,6 +139,7 @@ export {
   electricEnergy,
   firstOrderControl,
   fullWaveRectifier,
+  groundFaultSymmetrical,
   groundingResistance,
   hoistMotorOutput,
   hydroPowerOutput,
@@ -146,6 +153,7 @@ export {
   maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
+  parallelPercentImpedance,
   parallelPlateField,
   percentImpedanceConversion,
   percentImpedanceShortCircuit,
@@ -160,6 +168,7 @@ export {
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
+  steadyStateError,
   synchronousGeneratorOutput,
   thermalEfficiency,
   threePhasePower,
