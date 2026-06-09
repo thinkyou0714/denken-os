@@ -4,6 +4,7 @@
  *   （三相3線式の √3 を避け、係数2で綺麗な値に収める一次の基本問題）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { singleLineDropFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const I_SET: ReadonlyArray<number> = [5, 10, 15, 20, 25, 30, 50];
@@ -51,6 +52,7 @@ function buildFrom(I: number, R: number, X: number, cos: number, sin: number): G
       `v=2×${I}×(${R}×${cos}+${X}×${sin})`,
       `v=${answerText}V`,
     ],
+    figure: singleLineDropFigure(I, R, X, cos),
     physicallyValid: true,
   };
 }

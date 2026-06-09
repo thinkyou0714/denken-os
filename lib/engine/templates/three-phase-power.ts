@@ -11,6 +11,7 @@
  *   ④ √3 忘れ       線間電圧を相電圧として計算 = 3·P
  */
 import { formatKW, isCleanAnswer } from "../clean.js";
+import { threePhaseYFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // 係数いじりの母集合（|Z| が整数になる Pythagorean ペア × round な電圧）。
@@ -97,7 +98,9 @@ function buildFrom(V: number, R: number, X: number): GenerationResult | null {
       `相電圧V_p=${V}/√3、相電流I=V_p/|Z|`,
       `P=3·I²·R=${answerText}kW`,
       `別解 P=√3·V_l·I_l·cosφ でも一致`,
+      `ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。`,
     ],
+    figure: threePhaseYFigure(V, R, X),
     physicallyValid: true,
   };
 }

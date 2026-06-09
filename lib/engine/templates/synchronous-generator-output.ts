@@ -5,6 +5,7 @@
  *   自動採点せず、導出過程を自己採点する（format=descriptive）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { syncPhasorFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const V_SET: ReadonlyArray<number> = [200, 220, 440];
@@ -43,11 +44,13 @@ function buildFrom(V: number, E: number, Xs: number, deg: number, sin: number): 
       `三相同期発電機の端子相電圧 V=${V}V、1相の誘導起電力 E=${E}V、同期リアクタンス Xs=${Xs}Ω、` +
       `負荷角 δ=${deg}° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。`,
     defaultSolution: [
+      `着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。`,
       `1相あたり P1=V·E·sinδ/Xs`,
       `3相出力 P=3·V·E·sinδ/Xs=3×${V}×${E}×${sin}/${Xs}`,
       `P=${formatClean(pW)}W=${answerText}kW`,
-      `（δ=90°で最大出力となる。安定限界の指標）`,
+      `ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。`,
     ],
+    figure: syncPhasorFigure(V, E, deg),
     physicallyValid: true,
   };
 }

@@ -5,6 +5,7 @@
  *   （時定数 T〔s〕で t=T のとき最終値の約63.2%に達する）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { firstOrderBlockFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const K_SET: ReadonlyArray<number> = [2, 3, 4, 5, 10];
@@ -41,6 +42,7 @@ function buildFrom(K: number, A: number, T: number): GenerationResult | null {
       `y(∞)=${answerText}`,
       `（t=T=${T}s で最終値の約63.2%に達する）`,
     ],
+    figure: firstOrderBlockFigure(K, T),
     physicallyValid: true,
   };
 }

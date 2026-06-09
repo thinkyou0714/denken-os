@@ -5,28 +5,49 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  allowableTension,
+  boostChopper,
   buckChopper,
+  dcGeneratorEmf,
   dcMotorEmf,
+  diversityFactor,
+  electricEnergy,
   firstOrderControl,
+  fullWaveRectifier,
+  hoistMotorOutput,
   hydroPowerOutput,
   inductionPowerBalance,
   inductionProportionalShift,
+  inductorEnergy,
   insulationTestVoltage,
+  lightingDesign,
+  loadFactor,
+  maxEfficiencyLoad,
   maxPowerTransfer,
+  multiplierResistor,
+  parallelPlateField,
+  percentImpedanceConversion,
   percentImpedanceShortCircuit,
   powerFactorCorrection,
+  pumpMotorInput,
   rcTimeConstant,
   reactivePowerCompensation,
   sagTension,
   shortCircuitCapacity,
+  shortCircuitOhm,
   shortCircuitRatio,
+  shuntResistor,
   singlePhaseVoltageDrop,
   synchronousGeneratorOutput,
   thermalEfficiency,
   transformerEfficiency,
   transformerTurnsRatio,
+  transmissionEfficiency,
   transmissionLoss,
+  transmissionPowerStability,
+  voltageDropRate,
   wheatstoneBridge,
+  windLoad,
 } from "../../lib/engine/templates/index.js";
 
 describe("拡充テンプレートの閉形式（固定値検算）", () => {
@@ -153,5 +174,107 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
 
   it("二次電力管理: 短絡容量 Pbase·100/%Z（10MVA,5% → 200MVA）", () => {
     expect(shortCircuitCapacity.generateFrom({ base_capacity: 10, percent_impedance: 5 })!.answerText).toBe("200");
+  });
+
+  it("理論: 分流器 R_s=r/(m-1)（r=9,m=10 → 1Ω）", () => {
+    expect(shuntResistor.generateFrom({ internal_resistance: 9, multiplier: 10 })!.answerText).toBe("1");
+  });
+
+  it("理論: 倍率器 R_m=r(m-1)（r=10,m=5 → 40Ω）", () => {
+    expect(multiplierResistor.generateFrom({ internal_resistance: 10, multiplier: 5 })!.answerText).toBe("40");
+  });
+
+  it("理論: 平行平板電界 E=V/d（200V,2mm → 100kV/m）", () => {
+    expect(parallelPlateField.generateFrom({ voltage: 200, gap: 2 })!.answerText).toBe("100");
+  });
+
+  it("電力: %Z容量換算 %Z2=%Z1(P2/P1)（5%,10→50MVA → 25%）", () => {
+    expect(
+      percentImpedanceConversion.generateFrom({ percent_impedance: 5, base_capacity: 10, target_capacity: 50 })!
+        .answerText,
+    ).toBe("25");
+  });
+
+  it("機械: 揚水動力 P=9.8QH/η（2,50,0.98 → 1000kW）", () => {
+    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.98 })!.answerText).toBe("1000");
+  });
+
+  it("機械: 照明灯数 N=EA/(FUM)（500,100,5000,0.5,0.8 → 25灯）", () => {
+    expect(
+      lightingDesign.generateFrom({ illuminance: 500, area: 100, lumen: 5000, utilization: 0.5, maintenance: 0.8 })!
+        .answerText,
+    ).toBe("25");
+  });
+
+  it("法規: 風圧荷重 P=qA（980Pa,2m² → 1960N）", () => {
+    expect(windLoad.generateFrom({ wind_pressure: 980, area: 2 })!.answerText).toBe("1960");
+  });
+
+  it("法規: 許容張力 Tb/f（10000N,2.5 → 4000N）", () => {
+    expect(allowableTension.generateFrom({ tensile_strength: 10000, safety_factor: 2.5 })!.answerText).toBe("4000");
+  });
+
+  it("電力: 電圧降下率 (Vs-Vr)/Vr×100（210,200 → 5%）", () => {
+    expect(voltageDropRate.generateFrom({ sending_voltage: 210, receiving_voltage: 200 })!.answerText).toBe("5");
+  });
+
+  it("機械: 直流発電機 E=V+IaRa（220,50,0.2 → 230V）", () => {
+    expect(
+      dcGeneratorEmf.generateFrom({ terminal_voltage: 220, armature_current: 50, armature_resistance: 0.2 })!
+        .answerText,
+    ).toBe("230");
+  });
+
+  it("理論: 磁気エネルギー W=½LI²（0.5H,4A → 4J）", () => {
+    expect(inductorEnergy.generateFrom({ inductance: 0.5, current: 4 })!.answerText).toBe("4");
+  });
+
+  it("二次機械制御: 昇圧チョッパ Vo=Vi/(1-D)（100V,D0.5 → 200V, descriptive）", () => {
+    const g = boostChopper.generateFrom({ input_voltage: 100, duty_ratio: 0.5 });
+    expect(g!.answerText).toBe("200");
+    expect(g!.format).toBe("descriptive");
+  });
+
+  it("二次電力管理: 送電電力 Vs·Vr·sinδ/X（100,100,X50,δ90 → 200MW, descriptive）", () => {
+    const g = transmissionPowerStability.generateFrom({
+      sending_voltage: 100,
+      receiving_voltage: 100,
+      reactance: 50,
+      phase_angle: 90,
+    });
+    expect(g!.answerText).toBe("200");
+    expect(g!.format).toBe("descriptive");
+  });
+
+  it("二次電力管理: 短絡電流(オーム法) E/Z（200V,5Ω → 40A）", () => {
+    expect(shortCircuitOhm.generateFrom({ phase_voltage: 200, impedance: 5 })!.answerText).toBe("40");
+  });
+
+  it("機械: 最大効率負荷率 √(Pi/Pc)（9,16 → 0.75）", () => {
+    expect(maxEfficiencyLoad.generateFrom({ iron_loss: 9, copper_loss: 16 })!.answerText).toBe("0.75");
+  });
+
+  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.98 → 10kW）", () => {
+    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.98 })!.answerText).toBe("10");
+  });
+
+  it("電力: 負荷率 平均/最大×100（100,60 → 60%）", () => {
+    expect(loadFactor.generateFrom({ max_demand: 100, avg_demand: 60 })!.answerText).toBe("60");
+  });
+
+  it("電力: 不等率 Σ最大/合成最大（150,100 → 1.5）", () => {
+    expect(diversityFactor.generateFrom({ sum_of_maxima: 150, composite_max: 100 })!.answerText).toBe("1.5");
+  });
+
+  it("理論: 電力量 W=Pt（10kW,8h → 80kWh）", () => {
+    expect(electricEnergy.generateFrom({ power: 10, hours: 8 })!.answerText).toBe("80");
+  });
+
+  it("機械: 全波整流 Vd=0.9V（200V → 180V）", () => {
+    expect(fullWaveRectifier.generateFrom({ ac_voltage: 200 })!.answerText).toBe("180");
+  });
+
+  it("電力: 送電効率 Pr/Ps×100（95,100 → 95%）", () => {
+    expect(transmissionEfficiency.generateFrom({ received_power: 95, sent_power: 100 })!.answerText).toBe("95");
   });
 });

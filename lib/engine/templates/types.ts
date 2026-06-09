@@ -48,6 +48,8 @@ export interface GenerationResult {
   defaultStatement: string;
   /** LLM 不在でも成立する既定の解法ステップ。 */
   defaultSolution: string[];
+  /** 図（インライン SVG 文字列・任意）。回路図/ベクトル図などを problem.figure に載せる。 */
+  figure?: string;
   /** 物理的に成立するか（力率<=1 等）。 */
   physicallyValid: boolean;
 }

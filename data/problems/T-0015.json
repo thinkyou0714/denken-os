@@ -40,12 +40,14 @@
     }
   },
   "statement": "三相同期発電機の端子相電圧 V=200V、1相の誘導起電力 E=300V、同期リアクタンス Xs=20Ω、負荷角 δ=90° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+  "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 150\" role=\"img\" aria-label=\"同期発電機ベクトル図 V=200V、E=300V、負荷角δ=90°\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>同期発電機ベクトル図 V=200V、E=300V、負荷角δ=90°</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"50\" y1=\"120\" x2=\"123.33333333333333\" y2=\"120\"/><polygon points=\"123.33333333333333,120 115.2,123.9 115.2,116.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"131.33333333333331\" y=\"132\" fill=\"currentColor\" stroke=\"none\">V=200</text><line x1=\"50\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\"/><polygon points=\"50.00000000000001,10.000000000000014 53.9,18.1 46.1,18.1\" fill=\"currentColor\" stroke=\"none\"/><text x=\"50.00000000000001\" y=\"-1.9999999999999858\" fill=\"currentColor\" stroke=\"none\">E=300</text><line x1=\"123.33333333333333\" y1=\"120\" x2=\"50.00000000000001\" y2=\"10.000000000000014\" stroke-dasharray=\"4 3\"/><text x=\"92.66666666666667\" y=\"65\" fill=\"currentColor\" stroke=\"none\">jIXs</text><path d=\"M 84 120 A 34 34 0 0 0 50.0 86.0\" fill=\"none\" stroke-dasharray=\"3 2\"/><text x=\"92\" y=\"108\" fill=\"currentColor\" stroke=\"none\">δ=90°</text><text x=\"50\" y=\"142\" fill=\"currentColor\" stroke=\"none\">P=3VEsinδ/Xs</text></g></svg>",
   "answer": "9",
   "solution": [
+    "着眼点: 端子電圧Vと誘導起電力Eの位相差δ（負荷角）が出力を決める。",
     "1相あたり P1=V·E·sinδ/Xs",
     "3相出力 P=3·V·E·sinδ/Xs=3×200×300×1/20",
     "P=9000W=9kW",
-    "（δ=90°で最大出力となる。安定限界の指標）"
+    "ポイント: 図のベクトルでjIXsがVとEを結ぶ。δ=90°で最大、安定限界の指標。"
   ],
   "validation": {
     "solver_checked": true,

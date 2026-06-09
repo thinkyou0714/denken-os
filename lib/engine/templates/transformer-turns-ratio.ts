@@ -4,6 +4,7 @@
  *   一次電流 I1 から二次電流  I2 = I1·(V1/V2)  〔A〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { transformerFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // [一次電圧 V1, 二次電圧 V2]（a=V1/V2 が綺麗）。
@@ -47,6 +48,7 @@ function buildFrom(V1: number, V2: number, I1: number): GenerationResult | null 
       `電流比は逆比 I2/I1=a なので I2=I1·a=${I1}×${formatClean(a)}`,
       `I2=${answerText}A`,
     ],
+    figure: transformerFigure(V1, V2, a),
     physicallyValid: true,
   };
 }

@@ -4,6 +4,7 @@
  *   力率改善（電力科目）と同式だが、二次は記述で導出過程を問う。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { powerTriangleFigure } from "../figures/index.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P_SET: ReadonlyArray<number> = [600, 1200, 1500, 1800, 2400, 3000];
@@ -50,6 +51,7 @@ function buildFrom(P: number, cos1: number, cos2: number): GenerationResult | nu
       `tanθ1=${t1}、tanθ2=${t2}`,
       `Qc=${P}×(${t1}−${t2})=${answerText}kvar`,
     ],
+    figure: powerTriangleFigure(P, P * tan1, P * tan2, "kvar"),
     physicallyValid: true,
   };
 }
