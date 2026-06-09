@@ -18,14 +18,15 @@ docs/
 │   ├── 03-quality-hardening-plan.md 品質ゲートの根本原因対策と次バックログ
 │   ├── exam-structure.md     ★試験構造（科目/配点/合格基準）＋学習科学に基づく学習法
 │   ├── human-tasks.md        人間タスク チェックリスト（締切/委任/承認ゲート）
-│   └── ideas/                深掘り調査:アイデア計700（7テーマ×100）
+│   └── ideas/                深掘り調査:アイデア計800（8テーマ×100）
 │       ├── 01-branding-positioning.md   ブランド/発信の全体像 100
 │       ├── 02-app-growth.md             学習アプリ成功のための発信 100
 │       ├── 03-x-tactics.md              X特化の攻略 100
 │       ├── 04-100point-fixes.md         100点化:問題点の根本原因＋100の対策
 │       ├── 05-deep-audit-2026-06.md     コードベース深掘り監査 100
 │       ├── 06-exam-mastery-100.md       ★合格力に直結する学習エンジン強化 100
-│       └── 07-figures-explanations-100.md ★図式と解説（電験王のような図解）100
+│       ├── 07-figures-explanations-100.md ★図式と解説（電験王のような図解）100
+│       └── 08-ui-design-100.md          ★UI/UXデザイン洗練 100
 │
 ├── x-strategy/   X発信の運用パッケージ（"どう動かすか"・コピペ可）
 │   ├── README.md             索引＋スコアカード＋5つの根本原因＋30日プラン

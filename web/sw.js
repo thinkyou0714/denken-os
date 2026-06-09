@@ -6,7 +6,8 @@
 //   (v4: タブ型SPA・FSRS・模試/復習/間違いノート/進捗/公式/設定・数式整形・220問を配信)
 //   (v5: 一次フル模試の科目別足切り判定・学習ヒートマップを配信)
 //   (v6: 図解(回路図/ベクトル図/ブロック図/特性曲線のインラインSVG)・構造化解説を配信)
-const CACHE = "denken-os-v6";
+//   (v7: UI刷新 — デザインシステム/ダーク最適化/セグメントタブ/カード磨き/モーションを配信)
+const CACHE = "denken-os-v7";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
