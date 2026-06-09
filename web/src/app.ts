@@ -12,6 +12,7 @@ import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.j
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import {
+  accuracyTrend,
   bySubject,
   byTopic,
   dailyActivity,
@@ -27,7 +28,15 @@ import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
-import { getDailyGoal, getExamDate, setDailyGoal, setExamDate } from "./settings.js";
+import {
+  getDailyGoal,
+  getExamDate,
+  getTheme,
+  setDailyGoal,
+  setExamDate,
+  setTheme,
+  type ThemePref,
+} from "./settings.js";
 import { LocalProgress } from "./store.js";
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
@@ -61,6 +70,14 @@ const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
 const storage = window.localStorage;
 const progress = new LocalProgress(storage);
+
+/** テーマ設定を解決して <html data-theme> に反映（system は OS 追従）。 */
+function applyTheme(): void {
+  const pref = getTheme(storage);
+  const dark = pref === "dark" || (pref === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+}
+
 let problems: Problem[] = [];
 let view = "practice";
 
@@ -118,6 +135,34 @@ function solutionNode(p: Problem, label: string): HTMLElement {
 /** 図（自前生成のインライン SVG・信頼済み）を表示するノード。 */
 function figureNode(svgStr: string): HTMLElement {
   return h("figure", { class: "figure", html: svgStr });
+}
+
+/** 空状態（履歴なし等）の上質な表示。 */
+function emptyState(emoji: string, title: string, msg: string): HTMLElement {
+  return h(
+    "div",
+    { class: "empty" },
+    h("span", { class: "emoji" }, emoji),
+    h("div", { class: "et" }, title),
+    h("div", {}, msg),
+  );
+}
+
+/** 0..1 の系列からスパークライン SVG を作る（2点以上のとき）。 */
+function sparklineNode(values: number[]): HTMLElement | null {
+  if (values.length < 2) return null;
+  const w = 320;
+  const hh = 40;
+  const pad = 3;
+  const n = values.length;
+  const x = (i: number) => pad + (i * (w - 2 * pad)) / (n - 1);
+  const y = (v: number) => pad + (1 - Math.max(0, Math.min(1, v))) * (hh - 2 * pad);
+  const line = values.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(n - 1).toFixed(1)} ${hh - pad} L${x(0).toFixed(1)} ${hh - pad} Z`;
+  const svg =
+    `<svg class="spark" viewBox="0 0 ${w} ${hh}" preserveAspectRatio="none" role="img" aria-label="正答率の推移">` +
+    `<path class="area" d="${area}"/><path class="line" d="${line}"/></svg>`;
+  return h("div", { html: svg });
 }
 
 // ---- ヘッダ / ナビ ----
@@ -367,7 +412,11 @@ function renderReview(root: HTMLElement): void {
   root.append(h("h2", {}, "復習キュー（期限到来）"));
   if (dueProblems.length === 0) {
     root.append(
-      h("p", { class: "muted" }, "いま復習期限が来ている論点はありません。学習タブで新しい問題に挑戦しましょう。"),
+      emptyState(
+        "✅",
+        "復習はすべて完了",
+        "いま期限が来ている論点はありません。学習タブで新しい問題に挑戦しましょう。",
+      ),
     );
   } else {
     root.append(
@@ -395,7 +444,7 @@ function renderReview(root: HTMLElement): void {
 
   root.append(h("h2", {}, "間違いノート"));
   if (notebook.length === 0) {
-    root.append(h("p", { class: "muted" }, "まだ誤答はありません（または誤答が記録された問題がありません）。"));
+    root.append(emptyState("📝", "間違いノートは空です", "誤答した問題がここに集まり、ワンタップで再演習できます。"));
   } else {
     root.append(
       h(
@@ -662,6 +711,17 @@ function masteryChip(level: string): HTMLElement {
 
 function renderDashboard(root: HTMLElement): void {
   const logs = progress.logs();
+  if (logs.length === 0) {
+    root.append(
+      emptyState(
+        "📊",
+        "まだ学習記録がありません",
+        "学習タブで問題を解くと、ここに到達度や正答率の推移が表示されます。",
+      ),
+      h("button", { class: "primary", type: "button", onclick: () => switchView("practice") }, "学習を始める →"),
+    );
+    return;
+  }
   const o = overall(logs);
   const plan = buildStudyPlan({
     examDateIso: getExamDate(storage),
@@ -709,6 +769,9 @@ function renderDashboard(root: HTMLElement): void {
       `総解答 ${o.attempts} 問 ・ 学習論点 ${o.topicsStudied} ・ 直近20問 ${Math.round(recentAccuracy(logs) * 100)}%`,
     ),
   );
+
+  const spark = sparklineNode(accuracyTrend(logs));
+  if (spark) root.append(h("h2", {}, "正答率の推移"), spark);
 
   root.append(h("h2", {}, "科目別 到達度"));
   for (const r of bySubject(logs, problems)) {
@@ -827,7 +890,22 @@ function renderSettings(root: HTMLElement): void {
   retSel.value = String(progress.desiredRetention());
   retSel.addEventListener("change", () => progress.setDesiredRetention(Number(retSel.value)));
 
+  const themeSel = h("select", {}) as HTMLSelectElement;
+  for (const [v, label] of [
+    ["system", "システムに合わせる"],
+    ["light", "ライト"],
+    ["dark", "ダーク"],
+  ] as const) {
+    themeSel.append(h("option", { value: v }, label));
+  }
+  themeSel.value = getTheme(storage);
+  themeSel.addEventListener("change", () => {
+    setTheme(storage, themeSel.value as ThemePref);
+    applyTheme();
+  });
+
   root.append(
+    h("div", { class: "card" }, h("label", {}, "テーマ "), themeSel),
     h("div", { class: "card" }, h("label", {}, "試験日 "), examInput),
     h("div", { class: "card" }, h("label", {}, "1日の目標問題数 "), goalInput),
     h(
@@ -872,7 +950,22 @@ function onKeydown(e: KeyboardEvent): void {
 
 // ---- 起動 ----
 
+/** 読込中のスケルトン（problems.json 取得まで）。 */
+function renderSkeleton(): void {
+  $("view").innerHTML =
+    '<div class="skel-line skeleton w40"></div><div class="skel-line skeleton big"></div>' +
+    '<div class="skel-line skeleton"></div><div class="skel-line skeleton w60"></div>' +
+    '<div class="skel-line skeleton"></div><div class="skel-line skeleton"></div>';
+}
+
 async function main(): Promise<void> {
+  applyTheme();
+  // system 設定時は OS のテーマ変更に追従。
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
+    if (getTheme(storage) === "system") applyTheme();
+  });
+  renderNav();
+  renderSkeleton();
   try {
     const res = await fetch("./problems.json");
     problems = (await res.json()) as Problem[];
@@ -880,7 +973,6 @@ async function main(): Promise<void> {
     problems = [];
   }
   document.addEventListener("keydown", onKeydown);
-  renderNav();
   render();
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});

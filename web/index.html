@@ -12,7 +12,7 @@
     <style>
       /* ===== デザイントークン（明/暗の2系統。色は意味で名付ける） ===== */
       :root {
-        color-scheme: light dark;
+        color-scheme: light;
         --bg: #f6f8fc;
         --surface: #ffffff;
         --surface-2: #eef1f7;
@@ -41,29 +41,29 @@
         --ease: cubic-bezier(.2, .7, .3, 1);
         --gap: 1rem;
       }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0d1017;
-          --surface: #161b25;
-          --surface-2: #1d2330;
-          --text: #e7eaf1;
-          --muted: #9aa4b6;
-          --border: #262d3b;
-          --border-strong: #38445a;
-          --accent: #5d83f7;
-          --accent-strong: #7596f9;
-          --accent-contrast: #0d1017;
-          --accent-soft: #5d83f722;
-          --ok: #34d399;
-          --ok-soft: #34d39920;
-          --ng: #f87171;
-          --ng-soft: #f8717120;
-          --warn-bg: #2a2410;
-          --warn-text: #f0cf7a;
-          --warn-border: #4a3e16;
-          --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
-          --shadow-md: 0 6px 20px rgba(0, 0, 0, .45);
-        }
+      /* 暗テーマは data-theme で適用（app.ts が system→light/dark を解決して設定）。 */
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0d1017;
+        --surface: #161b25;
+        --surface-2: #1d2330;
+        --text: #e7eaf1;
+        --muted: #9aa4b6;
+        --border: #262d3b;
+        --border-strong: #38445a;
+        --accent: #5d83f7;
+        --accent-strong: #7596f9;
+        --accent-contrast: #0d1017;
+        --accent-soft: #5d83f722;
+        --ok: #34d399;
+        --ok-soft: #34d39920;
+        --ng: #f87171;
+        --ng-soft: #f8717120;
+        --warn-bg: #2a2410;
+        --warn-text: #f0cf7a;
+        --warn-border: #4a3e16;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+        --shadow-md: 0 6px 20px rgba(0, 0, 0, .45);
       }
 
       /* ===== ベース ===== */
@@ -239,11 +239,31 @@
       footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .72rem; color: var(--muted); }
       sub, sup { font-size: .72em; }
 
+      /* スケルトン読込・空状態・スパークライン */
+      .skeleton { background: linear-gradient(100deg, var(--surface-2) 30%, var(--surface) 50%, var(--surface-2) 70%); background-size: 200% 100%; animation: shimmer 1.3s linear infinite; border-radius: var(--r-md); }
+      .skel-line { height: 1.1rem; margin: .55rem 0; }
+      .skel-line.w60 { width: 60%; } .skel-line.w40 { width: 40%; } .skel-line.big { height: 2.6rem; }
+      @keyframes shimmer { to { background-position: -200% 0; } }
+      .empty { text-align: center; color: var(--muted); padding: 2.2rem 1rem; }
+      .empty .emoji { font-size: 2rem; display: block; margin-bottom: .5rem; opacity: .85; }
+      .empty .et { font-weight: 700; color: var(--text); margin-bottom: .2rem; }
+      .spark { display: block; width: 100%; max-width: 340px; height: 46px; margin: .2rem 0 .4rem; }
+      .spark path.line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+      .spark path.area { fill: var(--accent-soft); stroke: none; }
       @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; }
       }
     </style>
+    <script>
+      // FOUC防止: 描画前にテーマを解決して data-theme を確定（app.ts が後で同期）。
+      try {
+        var t = localStorage.getItem("denken:theme");
+        if (t !== "light" && t !== "dark")
+          t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <header>
