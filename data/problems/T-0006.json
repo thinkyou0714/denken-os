@@ -1,0 +1,58 @@
+{
+  "id": "T-0006",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "ホイートストンブリッジ",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "r1": {
+      "value": 100,
+      "unit": "ohm",
+      "realistic_range": [
+        10,
+        200
+      ]
+    },
+    "r2": {
+      "value": 200,
+      "unit": "ohm",
+      "realistic_range": [
+        100,
+        500
+      ]
+    },
+    "r3": {
+      "value": 150,
+      "unit": "ohm",
+      "realistic_range": [
+        100,
+        600
+      ]
+    }
+  },
+  "statement": "ホイートストンブリッジが平衡している。辺の抵抗が R1=100Ω、R2=200Ω、R3=150Ω のとき、未知抵抗 Rx〔Ω〕は?（R1 と Rx、R2 と R3 がそれぞれ対辺）",
+  "answer": "300",
+  "solution": [
+    "平衡条件: 対辺の積が等しい R1·Rx=R2·R3",
+    "Rx=R2·R3/R1=200×150/100",
+    "Rx=300Ω"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

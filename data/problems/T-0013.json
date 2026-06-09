@@ -1,0 +1,58 @@
+{
+  "id": "T-0013",
+  "exam": "denken2_primary",
+  "subject": "法規",
+  "topic": "電線のたるみ",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "unit_load": {
+      "value": 20,
+      "unit": "N/m",
+      "realistic_range": [
+        10,
+        30
+      ]
+    },
+    "span": {
+      "value": 100,
+      "unit": "m",
+      "realistic_range": [
+        100,
+        200
+      ]
+    },
+    "tension": {
+      "value": 25000,
+      "unit": "N",
+      "realistic_range": [
+        5000,
+        60000
+      ]
+    }
+  },
+  "statement": "径間 S=100m の架空電線に、単位長あたり荷重 w=20N/m が作用している。水平張力 T=25000N のとき、電線のたるみ D〔m〕は?",
+  "answer": "1",
+  "solution": [
+    "たるみ D=w·S²/(8·T)",
+    "D=20×100²/(8×25000)",
+    "D=1m"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

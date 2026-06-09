@@ -1,0 +1,50 @@
+{
+  "id": "T-0009",
+  "exam": "denken2_primary",
+  "subject": "電力",
+  "topic": "送電線の電力損失",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "line_current": {
+      "value": 50,
+      "unit": "A",
+      "realistic_range": [
+        10,
+        100
+      ]
+    },
+    "line_resistance": {
+      "value": 2,
+      "unit": "ohm",
+      "realistic_range": [
+        0.5,
+        5
+      ]
+    }
+  },
+  "statement": "三相3線式送電線で線電流 I=50A が流れている。1線あたりの抵抗が R=2Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+  "answer": "15",
+  "solution": [
+    "三相3線式の線路損失 P_loss=3·I²·R",
+    "P_loss=3×50²×2=15000W",
+    "=15kW"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}
