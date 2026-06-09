@@ -165,6 +165,21 @@ function sparklineNode(values: number[]): HTMLElement | null {
   return h("div", { html: svg });
 }
 
+/** 達成率のリングプログレス（日次目標など）。 */
+function ringNode(value: number, max: number): HTMLElement {
+  const pct = max > 0 ? Math.min(1, value / max) : 0;
+  const r = 24;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - pct);
+  const svg =
+    `<svg width="58" height="58" viewBox="0 0 58 58" role="img" aria-label="今日の達成率 ${Math.round(pct * 100)}%">` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="6"/>` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" ` +
+    `stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 29 29)"/>` +
+    `<text x="29" y="34" text-anchor="middle" fill="currentColor" font-size="14" font-weight="700">${Math.round(pct * 100)}%</text></svg>`;
+  return h("div", { html: svg, style: "flex:none" });
+}
+
 // ---- ヘッダ / ナビ ----
 
 function renderHeader(): void {
@@ -752,9 +767,14 @@ function renderDashboard(root: HTMLElement): void {
       { class: "grid2" },
       h(
         "div",
-        { class: "card" },
-        h("div", { class: "muted" }, "今日の学習"),
-        h("div", {}, `${plan.todayCount} / ${plan.dailyGoal} 問 ${plan.metToday ? "✅" : ""}`),
+        { class: "card today" },
+        ringNode(plan.todayCount, plan.dailyGoal),
+        h(
+          "div",
+          {},
+          h("div", { class: "muted" }, "今日の学習"),
+          h("div", {}, `${plan.todayCount} / ${plan.dailyGoal} 問 ${plan.metToday ? "✅" : ""}`),
+        ),
       ),
       h(
         "div",
@@ -816,19 +836,19 @@ function renderDashboard(root: HTMLElement): void {
     ),
   );
 
-  // 学習ヒートマップ（直近14日の解答数。継続の可視化）
+  // 学習ヒートマップ（直近14日の解答数。GitHub風の強度セル）
   const activity = dailyActivity(logs, 14, Date.now());
   const maxCount = Math.max(1, ...activity.map((a) => a.count));
   root.append(
     h("h2", {}, "学習ヒートマップ（直近14日）"),
     h(
       "div",
-      { class: "toolbar", style: "gap:.2rem;align-items:flex-end" },
+      { class: "heat" },
       ...activity.map((a) => {
-        const intensity = a.count === 0 ? 0.08 : 0.25 + 0.75 * (a.count / maxCount);
+        const lv = a.count === 0 ? 0 : Math.min(4, 1 + Math.floor((a.count / maxCount) * 3.99));
         return h("div", {
-          title: `${a.offset === 0 ? "今日" : `${a.offset}日`}: ${a.count}問`,
-          style: `flex:1;min-width:1rem;height:${8 + Math.round((a.count / maxCount) * 28)}px;border-radius:.2rem;background:var(--accent);opacity:${intensity}`,
+          class: `cell lv${lv}`,
+          title: `${a.offset === 0 ? "今日" : `${a.offset}日前`}: ${a.count}問`,
         });
       }),
     ),
@@ -974,9 +994,49 @@ async function main(): Promise<void> {
   }
   document.addEventListener("keydown", onKeydown);
   render();
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  }
+  registerServiceWorker();
+}
+
+/** Service Worker 登録＋更新検知（新版があればトーストで再読込を案内）。 */
+function registerServiceWorker(): void {
+  if (!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then((reg) => {
+      reg.addEventListener("updatefound", () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener("statechange", () => {
+          // 既存コントローラがある状態で新版が installed = 更新あり。
+          if (sw.state === "installed" && navigator.serviceWorker.controller) {
+            showToast("新しいバージョンがあります", "更新", () => location.reload());
+          }
+        });
+      });
+    })
+    .catch(() => {});
+}
+
+/** 画面下中央のトースト（任意のアクションボタン付き）。 */
+function showToast(message: string, actionLabel: string, action: () => void): void {
+  document.querySelector(".toast")?.remove();
+  const toast = h(
+    "div",
+    { class: "toast", role: "status" },
+    h("span", {}, message),
+    h(
+      "button",
+      {
+        type: "button",
+        onclick: () => {
+          toast.remove();
+          action();
+        },
+      },
+      actionLabel,
+    ),
+  );
+  document.body.appendChild(toast);
 }
 
 main();

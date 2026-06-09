@@ -250,6 +250,26 @@
       .spark { display: block; width: 100%; max-width: 340px; height: 46px; margin: .2rem 0 .4rem; }
       .spark path.line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
       .spark path.area { fill: var(--accent-soft); stroke: none; }
+      /* 学習ヒートマップ（強度セル） */
+      .heat { display: flex; gap: 5px; margin: .3rem 0 .2rem; }
+      .heat .cell { flex: 1 1 0; aspect-ratio: 1 / 1; max-width: 28px; border-radius: 5px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--border); }
+      .heat .cell.lv1 { background: color-mix(in srgb, var(--accent) 26%, transparent); box-shadow: none; }
+      .heat .cell.lv2 { background: color-mix(in srgb, var(--accent) 48%, transparent); box-shadow: none; }
+      .heat .cell.lv3 { background: color-mix(in srgb, var(--accent) 72%, transparent); box-shadow: none; }
+      .heat .cell.lv4 { background: var(--accent); box-shadow: none; }
+      .card.today { display: flex; align-items: center; gap: .8rem; }
+      /* トースト（SW更新案内など） */
+      .toast {
+        position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%);
+        display: flex; gap: .8rem; align-items: center; z-index: 50;
+        background: var(--surface); color: var(--text); border: 1px solid var(--border-strong);
+        border-radius: var(--r-pill); padding: .55rem .65rem .55rem 1rem; box-shadow: var(--shadow-md);
+        font-size: .88rem; animation: fade .3s var(--ease) both; max-width: calc(100% - 2rem);
+      }
+      .toast button {
+        font: inherit; font-weight: 700; font-size: .85rem; border: none; cursor: pointer;
+        background: var(--accent); color: var(--accent-contrast); padding: .35rem .8rem; border-radius: var(--r-pill);
+      }
       @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; }
