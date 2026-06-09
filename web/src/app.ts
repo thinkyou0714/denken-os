@@ -40,13 +40,13 @@ import {
 import { LocalProgress } from "./store.js";
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
-const TABS: ReadonlyArray<readonly [string, string]> = [
-  ["practice", "学習"],
-  ["review", "復習"],
-  ["exam", "模試"],
-  ["dashboard", "進捗"],
-  ["formulas", "公式"],
-  ["settings", "設定"],
+const TABS: ReadonlyArray<readonly [string, string, string]> = [
+  ["practice", "学習", "✏️"],
+  ["review", "復習", "🔁"],
+  ["exam", "模試", "📝"],
+  ["dashboard", "進捗", "📊"],
+  ["formulas", "公式", "📐"],
+  ["settings", "設定", "⚙️"],
 ];
 
 type Children = (Node | string)[];
@@ -196,9 +196,15 @@ function renderHeader(): void {
 function renderNav(): void {
   const nav = $("nav");
   nav.innerHTML = "";
-  for (const [id, label] of TABS) {
+  for (const [id, label, icon] of TABS) {
     const due = id === "review" ? progress.dueTopics().length : 0;
-    const btn = h("button", { type: "button", onclick: () => switchView(id) }, due > 0 ? `${label}・${due}` : label);
+    const btn = h(
+      "button",
+      { type: "button", "aria-label": label, onclick: () => switchView(id) },
+      h("span", { class: "ti", "aria-hidden": "true" }, icon),
+      h("span", { class: "tl" }, label),
+    );
+    if (due > 0) btn.append(h("span", { class: "tb" }, String(due)));
     if (id === view) btn.setAttribute("aria-current", "true");
     nav.appendChild(btn);
   }

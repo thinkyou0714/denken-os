@@ -8,7 +8,8 @@
 //   (v6: 図解(回路図/ベクトル図/ブロック図/特性曲線のインラインSVG)・構造化解説を配信)
 //   (v7: UI刷新 — デザインシステム/ダーク最適化/セグメントタブ/カード磨き/モーションを配信)
 //   (v8: テーマ切替/スパークライン/空状態/スケルトン/ヒートマップセル/目標リング/更新トースト)
-const CACHE = "denken-os-v8";
+//   (v9: モバイル下部タブバー(親指リーチ)・タブアイコン・印刷スタイルを配信)
+const CACHE = "denken-os-v9";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
