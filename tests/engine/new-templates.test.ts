@@ -10,13 +10,19 @@ import {
   buckChopper,
   dcGeneratorEmf,
   dcMotorEmf,
+  diversityFactor,
+  electricEnergy,
   firstOrderControl,
+  fullWaveRectifier,
+  hoistMotorOutput,
   hydroPowerOutput,
   inductionPowerBalance,
   inductionProportionalShift,
   inductorEnergy,
   insulationTestVoltage,
   lightingDesign,
+  loadFactor,
+  maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
   parallelPlateField,
@@ -28,6 +34,7 @@ import {
   reactivePowerCompensation,
   sagTension,
   shortCircuitCapacity,
+  shortCircuitOhm,
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
@@ -35,7 +42,9 @@ import {
   thermalEfficiency,
   transformerEfficiency,
   transformerTurnsRatio,
+  transmissionEfficiency,
   transmissionLoss,
+  transmissionPowerStability,
   voltageDropRate,
   wheatstoneBridge,
   windLoad,
@@ -224,5 +233,48 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     const g = boostChopper.generateFrom({ input_voltage: 100, duty_ratio: 0.5 });
     expect(g!.answerText).toBe("200");
     expect(g!.format).toBe("descriptive");
+  });
+
+  it("二次電力管理: 送電電力 Vs·Vr·sinδ/X（100,100,X50,δ90 → 200MW, descriptive）", () => {
+    const g = transmissionPowerStability.generateFrom({
+      sending_voltage: 100,
+      receiving_voltage: 100,
+      reactance: 50,
+      phase_angle: 90,
+    });
+    expect(g!.answerText).toBe("200");
+    expect(g!.format).toBe("descriptive");
+  });
+
+  it("二次電力管理: 短絡電流(オーム法) E/Z（200V,5Ω → 40A）", () => {
+    expect(shortCircuitOhm.generateFrom({ phase_voltage: 200, impedance: 5 })!.answerText).toBe("40");
+  });
+
+  it("機械: 最大効率負荷率 √(Pi/Pc)（9,16 → 0.75）", () => {
+    expect(maxEfficiencyLoad.generateFrom({ iron_loss: 9, copper_loss: 16 })!.answerText).toBe("0.75");
+  });
+
+  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.98 → 10kW）", () => {
+    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.98 })!.answerText).toBe("10");
+  });
+
+  it("電力: 負荷率 平均/最大×100（100,60 → 60%）", () => {
+    expect(loadFactor.generateFrom({ max_demand: 100, avg_demand: 60 })!.answerText).toBe("60");
+  });
+
+  it("電力: 不等率 Σ最大/合成最大（150,100 → 1.5）", () => {
+    expect(diversityFactor.generateFrom({ sum_of_maxima: 150, composite_max: 100 })!.answerText).toBe("1.5");
+  });
+
+  it("理論: 電力量 W=Pt（10kW,8h → 80kWh）", () => {
+    expect(electricEnergy.generateFrom({ power: 10, hours: 8 })!.answerText).toBe("80");
+  });
+
+  it("機械: 全波整流 Vd=0.9V（200V → 180V）", () => {
+    expect(fullWaveRectifier.generateFrom({ ac_voltage: 200 })!.answerText).toBe("180");
+  });
+
+  it("電力: 送電効率 Pr/Ps×100（95,100 → 95%）", () => {
+    expect(transmissionEfficiency.generateFrom({ received_power: 95, sent_power: 100 })!.answerText).toBe("95");
   });
 });

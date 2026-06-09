@@ -4298,6 +4298,398 @@
   {
     "id": "D-0081",
     "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 3,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=5kW の機器を t=3時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "15",
+    "solution": [
+      "電力量 W=P·t",
+      "W=5×3",
+      "W=15kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0082",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 20,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 8,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=20kW の機器を t=8時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "160",
+    "solution": [
+      "電力量 W=P·t",
+      "W=20×8",
+      "W=160kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0083",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 20,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 24,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=20kW の機器を t=24時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "480",
+    "solution": [
+      "電力量 W=P·t",
+      "W=20×24",
+      "W=480kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0084",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 15,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 10,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=15kW の機器を t=10時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "150",
+    "solution": [
+      "電力量 W=P·t",
+      "W=15×10",
+      "W=150kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0085",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 50,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 10,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=50kW の機器を t=10時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "500",
+    "solution": [
+      "電力量 W=P·t",
+      "W=50×10",
+      "W=500kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0086",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 50,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 8,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=50kW の機器を t=8時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "400",
+    "solution": [
+      "電力量 W=P·t",
+      "W=50×8",
+      "W=400kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0087",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 10,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 24,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=10kW の機器を t=24時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "240",
+    "solution": [
+      "電力量 W=P·t",
+      "W=10×24",
+      "W=240kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0088",
+    "exam": "denken3",
+    "subject": "理論",
+    "topic": "電力量",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "power": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          2,
+          50
+        ]
+      },
+      "hours": {
+        "value": 8,
+        "unit": "h",
+        "realistic_range": [
+          3,
+          24
+        ]
+      }
+    },
+    "statement": "消費電力 P=5kW の機器を t=8時間 使用した。消費電力量 W〔kWh〕は?",
+    "answer": "40",
+    "solution": [
+      "電力量 W=P·t",
+      "W=5×8",
+      "W=40kWh"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0089",
+    "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
     "format": "numeric",
@@ -4345,7 +4737,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0082",
+    "id": "D-0090",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4394,7 +4786,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0083",
+    "id": "D-0091",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4443,7 +4835,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0084",
+    "id": "D-0092",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4492,7 +4884,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0085",
+    "id": "D-0093",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4541,7 +4933,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0086",
+    "id": "D-0094",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4590,7 +4982,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0087",
+    "id": "D-0095",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4639,7 +5031,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0088",
+    "id": "D-0096",
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
@@ -4688,7 +5080,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0089",
+    "id": "D-0097",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4748,7 +5140,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0090",
+    "id": "D-0098",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4808,7 +5200,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0091",
+    "id": "D-0099",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4868,7 +5260,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0092",
+    "id": "D-0100",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4928,7 +5320,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0093",
+    "id": "D-0101",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -4988,7 +5380,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0094",
+    "id": "D-0102",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -5048,7 +5440,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0095",
+    "id": "D-0103",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -5108,7 +5500,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0096",
+    "id": "D-0104",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "力率改善",
@@ -5168,7 +5560,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0097",
+    "id": "D-0105",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5217,7 +5609,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0098",
+    "id": "D-0106",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5266,7 +5658,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0099",
+    "id": "D-0107",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5315,7 +5707,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0100",
+    "id": "D-0108",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5364,7 +5756,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0101",
+    "id": "D-0109",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5413,7 +5805,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0102",
+    "id": "D-0110",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5462,7 +5854,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0103",
+    "id": "D-0111",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5511,7 +5903,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0104",
+    "id": "D-0112",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
@@ -5560,7 +5952,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0105",
+    "id": "D-0113",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5609,7 +6001,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0106",
+    "id": "D-0114",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5658,7 +6050,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0107",
+    "id": "D-0115",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5707,7 +6099,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0108",
+    "id": "D-0116",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5756,7 +6148,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0109",
+    "id": "D-0117",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5805,7 +6197,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0110",
+    "id": "D-0118",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5854,7 +6246,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0111",
+    "id": "D-0119",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5903,7 +6295,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0112",
+    "id": "D-0120",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
@@ -5952,7 +6344,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0113",
+    "id": "D-0121",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6018,7 +6410,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0114",
+    "id": "D-0122",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6084,7 +6476,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0115",
+    "id": "D-0123",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6150,7 +6542,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0116",
+    "id": "D-0124",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6216,7 +6608,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0117",
+    "id": "D-0125",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6282,7 +6674,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0118",
+    "id": "D-0126",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6348,7 +6740,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0119",
+    "id": "D-0127",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6414,7 +6806,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0120",
+    "id": "D-0128",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "単相2線式の電圧降下",
@@ -6480,7 +6872,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0121",
+    "id": "D-0129",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6537,7 +6929,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0122",
+    "id": "D-0130",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6594,7 +6986,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0123",
+    "id": "D-0131",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6651,7 +7043,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0124",
+    "id": "D-0132",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6708,7 +7100,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0125",
+    "id": "D-0133",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6765,7 +7157,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0126",
+    "id": "D-0134",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6822,7 +7214,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0127",
+    "id": "D-0135",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6879,7 +7271,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0128",
+    "id": "D-0136",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスの容量換算",
@@ -6936,7 +7328,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0129",
+    "id": "D-0137",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -6985,7 +7377,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0130",
+    "id": "D-0138",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7034,7 +7426,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0131",
+    "id": "D-0139",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7083,7 +7475,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0132",
+    "id": "D-0140",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7132,7 +7524,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0133",
+    "id": "D-0141",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7181,7 +7573,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0134",
+    "id": "D-0142",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7230,7 +7622,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0135",
+    "id": "D-0143",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7279,7 +7671,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0136",
+    "id": "D-0144",
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
@@ -7328,7 +7720,1134 @@
     "status": "draft"
   },
   {
-    "id": "D-0137",
+    "id": "D-0145",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 375,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 500kW、平均需要電力 375kW である。負荷率〔%〕は?",
+    "answer": "75",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=375/500×100",
+      "=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0146",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 500kW、平均需要電力 250kW である。負荷率〔%〕は?",
+    "answer": "50",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=250/500×100",
+      "=50%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0147",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 200kW、平均需要電力 100kW である。負荷率〔%〕は?",
+    "answer": "50",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=100/200×100",
+      "=50%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0148",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 80,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 100kW、平均需要電力 80kW である。負荷率〔%〕は?",
+    "answer": "80",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=80/100×100",
+      "=80%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0149",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 125,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 250kW、平均需要電力 125kW である。負荷率〔%〕は?",
+    "answer": "50",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=125/250×100",
+      "=50%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0150",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 500kW、平均需要電力 200kW である。負荷率〔%〕は?",
+    "answer": "40",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=200/500×100",
+      "=40%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0151",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 400,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 300,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 400kW、平均需要電力 300kW である。負荷率〔%〕は?",
+    "answer": "75",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=300/400×100",
+      "=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0152",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "負荷率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "max_demand": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      },
+      "avg_demand": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          40,
+          1000
+        ]
+      }
+    },
+    "statement": "ある需要家の最大需要電力 200kW、平均需要電力 150kW である。負荷率〔%〕は?",
+    "answer": "75",
+    "solution": [
+      "負荷率=平均需要/最大需要×100",
+      "=150/200×100",
+      "=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0153",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 240,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 120,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 240kW、合成最大需要電力が 120kW である。不等率は?",
+    "answer": "2",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=240/120",
+      "=2"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0154",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 240,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 240kW、合成最大需要電力が 150kW である。不等率は?",
+    "answer": "1.6",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=240/150",
+      "=1.6"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0155",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 200kW、合成最大需要電力が 100kW である。不等率は?",
+    "answer": "2",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=200/100",
+      "=2"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0156",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 200kW、合成最大需要電力が 200kW である。不等率は?",
+    "answer": "1",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=200/200",
+      "=1"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0157",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 150kW、合成最大需要電力が 150kW である。不等率は?",
+    "answer": "1",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=150/150",
+      "=1"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0158",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 150kW、合成最大需要電力が 100kW である。不等率は?",
+    "answer": "1.5",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=150/100",
+      "=1.5"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0159",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 120,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 120,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 120kW、合成最大需要電力が 120kW である。不等率は?",
+    "answer": "1",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=120/120",
+      "=1"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0160",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "不等率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "sum_of_maxima": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          300
+        ]
+      },
+      "composite_max": {
+        "value": 120,
+        "unit": "kW",
+        "realistic_range": [
+          80,
+          200
+        ]
+      }
+    },
+    "statement": "各需要家の最大需要電力の総和が 150kW、合成最大需要電力が 120kW である。不等率は?",
+    "answer": "1.25",
+    "solution": [
+      "不等率=各最大需要の総和/合成最大需要（≧1）",
+      "=150/120",
+      "=1.25"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0161",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 1900,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 2000,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=2000kW に対し、受電電力 Pr=1900kW であった（線路損失 100kW）。送電効率 η〔%〕は?",
+    "answer": "95",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=1900/2000×100",
+      "η=95%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0162",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 96,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=96kW であった（線路損失 4kW）。送電効率 η〔%〕は?",
+    "answer": "96",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=96/100×100",
+      "η=96%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0163",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 180,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=200kW に対し、受電電力 Pr=180kW であった（線路損失 20kW）。送電効率 η〔%〕は?",
+    "answer": "90",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=180/200×100",
+      "η=90%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0164",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 950,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 1000,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=1000kW に対し、受電電力 Pr=950kW であった（線路損失 50kW）。送電効率 η〔%〕は?",
+    "answer": "95",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=950/1000×100",
+      "η=95%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0165",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 95,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=95kW であった（線路損失 5kW）。送電効率 η〔%〕は?",
+    "answer": "95",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=95/100×100",
+      "η=95%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0166",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 90,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 100,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=90kW であった（線路損失 10kW）。送電効率 η〔%〕は?",
+    "answer": "90",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=90/100×100",
+      "η=90%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0167",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "送電効率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "received_power": {
+        "value": 475,
+        "unit": "kW",
+        "realistic_range": [
+          90,
+          2000
+        ]
+      },
+      "sent_power": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          100,
+          2000
+        ]
+      }
+    },
+    "statement": "送電電力 Ps=500kW に対し、受電電力 Pr=475kW であった（線路損失 25kW）。送電効率 η〔%〕は?",
+    "answer": "95",
+    "solution": [
+      "送電効率 η=受電電力/送電電力×100",
+      "η=475/500×100",
+      "η=95%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0168",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7392,7 +8911,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0138",
+    "id": "D-0169",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7456,7 +8975,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0139",
+    "id": "D-0170",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7520,7 +9039,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0140",
+    "id": "D-0171",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7584,7 +9103,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0141",
+    "id": "D-0172",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7648,7 +9167,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0142",
+    "id": "D-0173",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7712,7 +9231,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0143",
+    "id": "D-0174",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7776,7 +9295,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0144",
+    "id": "D-0175",
     "exam": "denken3",
     "subject": "機械",
     "topic": "誘導電動機の回転速度",
@@ -7840,7 +9359,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0145",
+    "id": "D-0176",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7897,7 +9416,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0146",
+    "id": "D-0177",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -7954,7 +9473,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0147",
+    "id": "D-0178",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8011,7 +9530,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0148",
+    "id": "D-0179",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8068,7 +9587,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0149",
+    "id": "D-0180",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8125,7 +9644,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0150",
+    "id": "D-0181",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8182,7 +9701,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0151",
+    "id": "D-0182",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8239,7 +9758,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0152",
+    "id": "D-0183",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "変圧器の効率",
@@ -8296,7 +9815,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0153",
+    "id": "D-0184",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8353,7 +9872,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0154",
+    "id": "D-0185",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8410,7 +9929,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0155",
+    "id": "D-0186",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8467,7 +9986,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0156",
+    "id": "D-0187",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8524,7 +10043,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0157",
+    "id": "D-0188",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8581,7 +10100,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0158",
+    "id": "D-0189",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8638,7 +10157,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0159",
+    "id": "D-0190",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8695,7 +10214,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0160",
+    "id": "D-0191",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流電動機の逆起電力",
@@ -8752,7 +10271,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0161",
+    "id": "D-0192",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8793,7 +10312,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0162",
+    "id": "D-0193",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8834,7 +10353,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0163",
+    "id": "D-0194",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8875,7 +10394,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0164",
+    "id": "D-0195",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8916,7 +10435,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0165",
+    "id": "D-0196",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "同期発電機の短絡比",
@@ -8957,7 +10476,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0166",
+    "id": "D-0197",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9006,7 +10525,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0167",
+    "id": "D-0198",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9055,7 +10574,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0168",
+    "id": "D-0199",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9104,7 +10623,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0169",
+    "id": "D-0200",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9153,7 +10672,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0170",
+    "id": "D-0201",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9202,7 +10721,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0171",
+    "id": "D-0202",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9251,7 +10770,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0172",
+    "id": "D-0203",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9300,7 +10819,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0173",
+    "id": "D-0204",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "誘導電動機の二次効率",
@@ -9349,7 +10868,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0174",
+    "id": "D-0205",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9407,7 +10926,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0175",
+    "id": "D-0206",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9465,7 +10984,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0176",
+    "id": "D-0207",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9523,7 +11042,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0177",
+    "id": "D-0208",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9581,7 +11100,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0178",
+    "id": "D-0209",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9639,7 +11158,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0179",
+    "id": "D-0210",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9697,7 +11216,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0180",
+    "id": "D-0211",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9755,7 +11274,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0181",
+    "id": "D-0212",
     "exam": "denken3",
     "subject": "機械",
     "topic": "変圧器の巻数比",
@@ -9813,7 +11332,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0182",
+    "id": "D-0213",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9870,7 +11389,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0183",
+    "id": "D-0214",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9927,7 +11446,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0184",
+    "id": "D-0215",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -9984,7 +11503,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0185",
+    "id": "D-0216",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -10041,7 +11560,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0186",
+    "id": "D-0217",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -10098,7 +11617,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0187",
+    "id": "D-0218",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -10155,7 +11674,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0188",
+    "id": "D-0219",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -10212,7 +11731,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0189",
+    "id": "D-0220",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "揚水ポンプの電動機入力",
@@ -10269,7 +11788,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0190",
+    "id": "D-0221",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10342,7 +11861,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0191",
+    "id": "D-0222",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10415,7 +11934,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0192",
+    "id": "D-0223",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10488,7 +12007,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0193",
+    "id": "D-0224",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10561,7 +12080,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0194",
+    "id": "D-0225",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10634,7 +12153,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0195",
+    "id": "D-0226",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10707,7 +12226,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0196",
+    "id": "D-0227",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10780,7 +12299,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0197",
+    "id": "D-0228",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "照明設計（光束法）",
@@ -10853,7 +12372,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0198",
+    "id": "D-0229",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -10910,7 +12429,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0199",
+    "id": "D-0230",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -10967,7 +12486,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0200",
+    "id": "D-0231",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11024,7 +12543,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0201",
+    "id": "D-0232",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11081,7 +12600,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0202",
+    "id": "D-0233",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11138,7 +12657,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0203",
+    "id": "D-0234",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11195,7 +12714,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0204",
+    "id": "D-0235",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11252,7 +12771,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0205",
+    "id": "D-0236",
     "exam": "denken3",
     "subject": "機械",
     "topic": "直流発電機の誘導起電力",
@@ -11309,7 +12828,1003 @@
     "status": "draft"
   },
   {
-    "id": "D-0206",
+    "id": "D-0237",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 4,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 25,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=4kW、全負荷銅損 P_c=25kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.4",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(4/25)",
+      "α=0.4"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0238",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 1,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 4,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=1kW、全負荷銅損 P_c=4kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.5",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(1/4)",
+      "α=0.5"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0239",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 16,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 25,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=16kW、全負荷銅損 P_c=25kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.8",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(16/25)",
+      "α=0.8"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0240",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 9,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 25,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=9kW、全負荷銅損 P_c=25kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.6",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(9/25)",
+      "α=0.6"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0241",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 1,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 16,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=1kW、全負荷銅損 P_c=16kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.25",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(1/16)",
+      "α=0.25"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0242",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "変圧器の最大効率負荷率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "iron_loss": {
+        "value": 9,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          50
+        ]
+      },
+      "copper_loss": {
+        "value": 16,
+        "unit": "kW",
+        "realistic_range": [
+          1,
+          60
+        ]
+      }
+    },
+    "statement": "変圧器の鉄損 P_i=9kW、全負荷銅損 P_c=16kW である。最大効率を与える負荷率 α は?",
+    "answer": "0.75",
+    "solution": [
+      "銅損は負荷率の2乗に比例: P_c'=α²·P_c。鉄損=銅損 で最大効率",
+      "α²·P_c=P_i → α=√(P_i/P_c)=√(9/16)",
+      "α=0.75"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0243",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 1000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 2,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=1000N を速度 v=2m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "2.5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=1000×2/0.8=2500W",
+      "=2.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0244",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 5000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 2,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=5000N を速度 v=2m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "12.5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=5000×2/0.8=12500W",
+      "=12.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0245",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 4900,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 4,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=4900N を速度 v=4m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "24.5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=4900×4/0.8=24500W",
+      "=24.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0246",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 2000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 5,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=2000N を速度 v=5m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "12.5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=2000×5/0.8=12500W",
+      "=12.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0247",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 9800,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 5,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.7,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=9800N を速度 v=5m/s で巻き上げる。機構効率 η=0.7 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "70",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=9800×5/0.7=70000W",
+      "=70kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0248",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 4900,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 5,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.98,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=4900N を速度 v=5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "25",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=4900×5/0.98=25000W",
+      "=25kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0249",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 9800,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 0.5,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.98,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=9800N を速度 v=0.5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=9800×0.5/0.98=5000W",
+      "=5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0250",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 9800,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 1,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.98,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "statement": "荷重 W=9800N を速度 v=1m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "10",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=9800×1/0.98=10000W",
+      "=10kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0251",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 1000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=1000V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "900",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×1000",
+      "Vd=900V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0252",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 220,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=220V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "198",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×220",
+      "Vd=198V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0253",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 110,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=110V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "99",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×110",
+      "Vd=99V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0254",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 400,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=400V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "360",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×400",
+      "Vd=360V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0255",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=200V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "180",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×200",
+      "Vd=180V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0256",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "単相全波整流の直流電圧",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "ac_voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          1000
+        ]
+      }
+    },
+    "statement": "実効値 V=100V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+    "answer": "90",
+    "solution": [
+      "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+      "Vd=0.9×100",
+      "Vd=90V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0257",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11350,7 +13865,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0207",
+    "id": "D-0258",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11391,7 +13906,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0208",
+    "id": "D-0259",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11432,7 +13947,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0209",
+    "id": "D-0260",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11473,7 +13988,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0210",
+    "id": "D-0261",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11514,7 +14029,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0211",
+    "id": "D-0262",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11555,7 +14070,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0212",
+    "id": "D-0263",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11596,7 +14111,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0213",
+    "id": "D-0264",
     "exam": "denken3",
     "subject": "法規",
     "topic": "B種接地抵抗",
@@ -11637,7 +14152,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0214",
+    "id": "D-0265",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11694,7 +14209,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0215",
+    "id": "D-0266",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11751,7 +14266,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0216",
+    "id": "D-0267",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11808,7 +14323,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0217",
+    "id": "D-0268",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11865,7 +14380,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0218",
+    "id": "D-0269",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11922,7 +14437,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0219",
+    "id": "D-0270",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -11979,7 +14494,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0220",
+    "id": "D-0271",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -12036,7 +14551,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0221",
+    "id": "D-0272",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線のたるみ",
@@ -12093,7 +14608,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0222",
+    "id": "D-0273",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
@@ -12134,7 +14649,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0223",
+    "id": "D-0274",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
@@ -12175,7 +14690,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0224",
+    "id": "D-0275",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12224,7 +14739,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0225",
+    "id": "D-0276",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12273,7 +14788,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0226",
+    "id": "D-0277",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12322,7 +14837,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0227",
+    "id": "D-0278",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12371,7 +14886,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0228",
+    "id": "D-0279",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12420,7 +14935,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0229",
+    "id": "D-0280",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12469,7 +14984,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0230",
+    "id": "D-0281",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12518,7 +15033,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0231",
+    "id": "D-0282",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "風圧荷重",
@@ -12567,7 +15082,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0232",
+    "id": "D-0283",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12616,7 +15131,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0233",
+    "id": "D-0284",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12665,7 +15180,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0234",
+    "id": "D-0285",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12714,7 +15229,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0235",
+    "id": "D-0286",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12763,7 +15278,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0236",
+    "id": "D-0287",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12812,7 +15327,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0237",
+    "id": "D-0288",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12861,7 +15376,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0238",
+    "id": "D-0289",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12910,7 +15425,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0239",
+    "id": "D-0290",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の許容張力",
@@ -12959,7 +15474,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0240",
+    "id": "D-0291",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13017,7 +15532,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0241",
+    "id": "D-0292",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13075,7 +15590,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0242",
+    "id": "D-0293",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13133,7 +15648,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0243",
+    "id": "D-0294",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13191,7 +15706,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0244",
+    "id": "D-0295",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13249,7 +15764,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0245",
+    "id": "D-0296",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13307,7 +15822,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0246",
+    "id": "D-0297",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13365,7 +15880,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0247",
+    "id": "D-0298",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "変圧器の電圧変動率",
@@ -13423,7 +15938,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0248",
+    "id": "D-0299",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13491,7 +16006,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0249",
+    "id": "D-0300",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13559,7 +16074,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0250",
+    "id": "D-0301",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13627,7 +16142,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0251",
+    "id": "D-0302",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13695,7 +16210,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0252",
+    "id": "D-0303",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13763,7 +16278,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0253",
+    "id": "D-0304",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13831,7 +16346,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0254",
+    "id": "D-0305",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13899,7 +16414,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0255",
+    "id": "D-0306",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "同期発電機の出力",
@@ -13967,7 +16482,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0256",
+    "id": "D-0307",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14016,7 +16531,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0257",
+    "id": "D-0308",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14065,7 +16580,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0258",
+    "id": "D-0309",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14114,7 +16629,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0259",
+    "id": "D-0310",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14163,7 +16678,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0260",
+    "id": "D-0311",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14212,7 +16727,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0261",
+    "id": "D-0312",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14261,7 +16776,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0262",
+    "id": "D-0313",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14310,7 +16825,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0263",
+    "id": "D-0314",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "降圧チョッパの出力電圧",
@@ -14359,7 +16874,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0264",
+    "id": "D-0315",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14418,7 +16933,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0265",
+    "id": "D-0316",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14477,7 +16992,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0266",
+    "id": "D-0317",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14536,7 +17051,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0267",
+    "id": "D-0318",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14595,7 +17110,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0268",
+    "id": "D-0319",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14654,7 +17169,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0269",
+    "id": "D-0320",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14713,7 +17228,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0270",
+    "id": "D-0321",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14772,7 +17287,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0271",
+    "id": "D-0322",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "一次遅れ系のステップ応答",
@@ -14831,7 +17346,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0272",
+    "id": "D-0323",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -14891,7 +17406,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0273",
+    "id": "D-0324",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -14951,7 +17466,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0274",
+    "id": "D-0325",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15011,7 +17526,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0275",
+    "id": "D-0326",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15071,7 +17586,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0276",
+    "id": "D-0327",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15131,7 +17646,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0277",
+    "id": "D-0328",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15191,7 +17706,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0278",
+    "id": "D-0329",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15251,7 +17766,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0279",
+    "id": "D-0330",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "誘導電動機の比例推移",
@@ -15311,7 +17826,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0280",
+    "id": "D-0331",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15360,7 +17875,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0281",
+    "id": "D-0332",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15409,7 +17924,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0282",
+    "id": "D-0333",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15458,7 +17973,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0283",
+    "id": "D-0334",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15507,7 +18022,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0284",
+    "id": "D-0335",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15556,7 +18071,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0285",
+    "id": "D-0336",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15605,7 +18120,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0286",
+    "id": "D-0337",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15654,7 +18169,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0287",
+    "id": "D-0338",
     "exam": "denken2_secondary",
     "subject": "機械制御",
     "topic": "昇圧チョッパの出力電圧",
@@ -15703,7 +18218,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0288",
+    "id": "D-0339",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -15761,7 +18276,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0289",
+    "id": "D-0340",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -15819,7 +18334,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0290",
+    "id": "D-0341",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -15877,7 +18392,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0291",
+    "id": "D-0342",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -15935,7 +18450,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0292",
+    "id": "D-0343",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -15993,7 +18508,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0293",
+    "id": "D-0344",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -16051,7 +18566,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0294",
+    "id": "D-0345",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -16109,7 +18624,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0295",
+    "id": "D-0346",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -16167,7 +18682,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0296",
+    "id": "D-0347",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16224,7 +18739,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0297",
+    "id": "D-0348",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16281,7 +18796,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0298",
+    "id": "D-0349",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16338,7 +18853,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0299",
+    "id": "D-0350",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16395,7 +18910,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0300",
+    "id": "D-0351",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16452,7 +18967,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0301",
+    "id": "D-0352",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16509,7 +19024,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0302",
+    "id": "D-0353",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16566,7 +19081,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0303",
+    "id": "D-0354",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -16623,7 +19138,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0304",
+    "id": "D-0355",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -16664,7 +19179,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0305",
+    "id": "D-0356",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -16705,7 +19220,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0306",
+    "id": "D-0357",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -16746,7 +19261,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0307",
+    "id": "D-0358",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -16787,7 +19302,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0308",
+    "id": "D-0359",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -16828,7 +19343,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0309",
+    "id": "D-0360",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -16877,7 +19392,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0310",
+    "id": "D-0361",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -16926,7 +19441,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0311",
+    "id": "D-0362",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -16975,7 +19490,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0312",
+    "id": "D-0363",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -17024,7 +19539,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0313",
+    "id": "D-0364",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -17073,7 +19588,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0314",
+    "id": "D-0365",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -17122,7 +19637,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0315",
+    "id": "D-0366",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -17171,7 +19686,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0316",
+    "id": "D-0367",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -17201,6 +19716,926 @@
       "短絡容量 Ps=P_base×100/%Z",
       "Ps=50×100/5",
       "Ps=1000MVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0368",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 40,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 90,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=66kV、受電端電圧 Vr=100kV、線路リアクタンス X=40Ω、相差角 δ=90° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "165",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=66×100×1/40",
+      "P=165MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0369",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 50,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 90,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=100kV、受電端電圧 Vr=66kV、線路リアクタンス X=50Ω、相差角 δ=90° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "132",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=100×66×1/50",
+      "P=132MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0370",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 100,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 90,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=66kV、受電端電圧 Vr=66kV、線路リアクタンス X=100Ω、相差角 δ=90° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "43.56",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=66×66×1/100",
+      "P=43.56MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0371",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 100,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 30,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=100kV、受電端電圧 Vr=66kV、線路リアクタンス X=100Ω、相差角 δ=30° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "33",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=100×66×0.5/100",
+      "P=33MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0372",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 60,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 50,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 90,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=66kV、受電端電圧 Vr=60kV、線路リアクタンス X=50Ω、相差角 δ=90° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "79.2",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=66×60×1/50",
+      "P=79.2MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0373",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 66,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 30,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=100kV、受電端電圧 Vr=66kV、線路リアクタンス X=66Ω、相差角 δ=30° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "50",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=100×66×0.5/66",
+      "P=50MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0374",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 100,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 90,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=100kV、受電端電圧 Vr=66kV、線路リアクタンス X=100Ω、相差角 δ=90° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "66",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=100×66×1/100",
+      "P=66MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0375",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "送電電力（安定度）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "sending_voltage": {
+        "value": 66,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "receiving_voltage": {
+        "value": 100,
+        "unit": "kV",
+        "realistic_range": [
+          60,
+          110
+        ]
+      },
+      "reactance": {
+        "value": 60,
+        "unit": "ohm",
+        "realistic_range": [
+          40,
+          100
+        ]
+      },
+      "phase_angle": {
+        "value": 30,
+        "unit": "deg",
+        "realistic_range": [
+          0,
+          90
+        ]
+      }
+    },
+    "statement": "送電端電圧 Vs=66kV、受電端電圧 Vr=100kV、線路リアクタンス X=60Ω、相差角 δ=30° である。送電電力 P〔MW〕を P=Vs·Vr·sinδ/X により導出過程とともに求めよ。",
+    "answer": "55",
+    "solution": [
+      "送電電力 P=Vs·Vr·sinδ/X（Vs,Vr は kV、X は Ω）",
+      "P=66×100×0.5/60",
+      "P=55MW",
+      "ポイント: δ=90°で最大（定態安定極限）。Xを小さくすると送電容量が増える。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0376",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 25,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=100V、故障点までの合成インピーダンス Z=25Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "4",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=100/25",
+      "Is=4A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0377",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 6350,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=6350V、故障点までの合成インピーダンス Z=2Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "3175",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=6350/2",
+      "Is=3175A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0378",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 1000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 4,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=1000V、故障点までの合成インピーダンス Z=4Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "250",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=1000/4",
+      "Is=250A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0379",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 1000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=1000V、故障点までの合成インピーダンス Z=2Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "500",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=1000/2",
+      "Is=500A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0380",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=200V、故障点までの合成インピーダンス Z=2Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "100",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=200/2",
+      "Is=100A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0381",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 2000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=2000V、故障点までの合成インピーダンス Z=5Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "400",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=2000/5",
+      "Is=400A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0382",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 3810,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 25,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=3810V、故障点までの合成インピーダンス Z=25Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "152.4",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=3810/25",
+      "Is=152.4A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0383",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "短絡電流（オーム法）",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "phase_voltage": {
+        "value": 2000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "impedance": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          25
+        ]
+      }
+    },
+    "statement": "相電圧 E=2000V、故障点までの合成インピーダンス Z=20Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+    "answer": "100",
+    "solution": [
+      "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+      "Is=2000/20",
+      "Is=100A"
     ],
     "validation": {
       "solver_checked": true,

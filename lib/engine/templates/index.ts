@@ -6,8 +6,12 @@ import { capacitorEnergy } from "./capacitor-energy.js";
 import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
 import { demandFactor } from "./demand-factor.js";
+import { diversityFactor } from "./diversity-factor.js";
+import { electricEnergy } from "./electric-energy.js";
 import { firstOrderControl } from "./first-order-control.js";
+import { fullWaveRectifier } from "./full-wave-rectifier.js";
 import { groundingResistance } from "./grounding-resistance.js";
+import { hoistMotorOutput } from "./hoist-motor-output.js";
 import { hydroPowerOutput } from "./hydro-power-output.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
@@ -15,6 +19,8 @@ import { inductionProportionalShift } from "./induction-proportional-shift.js";
 import { inductorEnergy } from "./inductor-energy.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { lightingDesign } from "./lighting-design.js";
+import { loadFactor } from "./load-factor.js";
+import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
@@ -27,6 +33,7 @@ import { reactivePowerCompensation } from "./reactive-power-compensation.js";
 import { resistorNetwork } from "./resistor-network.js";
 import { sagTension } from "./sag-tension.js";
 import { shortCircuitCapacity } from "./short-circuit-capacity.js";
+import { shortCircuitOhm } from "./short-circuit-ohm.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
 import { shuntResistor } from "./shunt-resistor.js";
 import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
@@ -36,7 +43,9 @@ import { threePhasePower } from "./three-phase-power.js";
 import { transformerEfficiency } from "./transformer-efficiency.js";
 import { transformerTurnsRatio } from "./transformer-turns-ratio.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
+import { transmissionEfficiency } from "./transmission-efficiency.js";
 import { transmissionLoss } from "./transmission-loss.js";
+import { transmissionPowerStability } from "./transmission-power-stability.js";
 import type { Template } from "./types.js";
 import { voltageDropRate } from "./voltage-drop-rate.js";
 import { wheatstoneBridge } from "./wheatstone-bridge.js";
@@ -54,6 +63,7 @@ const templates: Template[] = [
   multiplierResistor,
   parallelPlateField,
   inductorEnergy,
+  electricEnergy,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -62,6 +72,9 @@ const templates: Template[] = [
   singlePhaseVoltageDrop,
   percentImpedanceConversion,
   voltageDropRate,
+  loadFactor,
+  diversityFactor,
+  transmissionEfficiency,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -72,6 +85,9 @@ const templates: Template[] = [
   pumpMotorInput,
   lightingDesign,
   dcGeneratorEmf,
+  maxEfficiencyLoad,
+  hoistMotorOutput,
+  fullWaveRectifier,
   // 法規
   groundingResistance,
   sagTension,
@@ -90,6 +106,8 @@ const templates: Template[] = [
   hydroPowerOutput,
   thermalEfficiency,
   shortCircuitCapacity,
+  transmissionPowerStability,
+  shortCircuitOhm,
 ];
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
@@ -111,8 +129,12 @@ export {
   dcGeneratorEmf,
   dcMotorEmf,
   demandFactor,
+  diversityFactor,
+  electricEnergy,
   firstOrderControl,
+  fullWaveRectifier,
   groundingResistance,
+  hoistMotorOutput,
   hydroPowerOutput,
   inductionMotorSpeed,
   inductionPowerBalance,
@@ -120,6 +142,8 @@ export {
   inductorEnergy,
   insulationTestVoltage,
   lightingDesign,
+  loadFactor,
+  maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
   parallelPlateField,
@@ -132,6 +156,7 @@ export {
   resistorNetwork,
   sagTension,
   shortCircuitCapacity,
+  shortCircuitOhm,
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
@@ -141,7 +166,9 @@ export {
   transformerEfficiency,
   transformerTurnsRatio,
   transformerVoltageRegulation,
+  transmissionEfficiency,
   transmissionLoss,
+  transmissionPowerStability,
   voltageDropRate,
   wheatstoneBridge,
   windLoad,

@@ -15,7 +15,7 @@
 
 | 領域 | 実装 | 仕様 |
 |---|---|---|
-| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、**テンプレ29種＝全6科目**: 一次 理論/電力/機械/法規＋二次 電力管理/機械制御。MC＋numeric＋descriptive形式） | `docs/automation/01` |
+| 問題生成＆検証エンジン | `lib/engine/`（決定論ソルバ＋検算＋出典＋CLI、**テンプレ50種＝全6科目**: 一次 理論/電力/機械/法規＋二次 電力管理/機械制御。過去問頻出テーマを網羅。MC＋numeric＋descriptive形式＋図解SVG） | `docs/automation/01` |
 | CI品質ゲート | `.github/workflows/validate.yml` ＋ `scripts/validate-problems.ts`（ajv）＋ Biome ＋ 型チェック ＋ `npm run verify` | `docs/automation/09` |
 | アプリのデプロイ | `.github/workflows/deploy-pages.yml`（main マージで `web/` を GitHub Pages へ自動公開） | README ビジョン |
 | X投稿生成＋予約 | `lib/engine/toXPost.ts`＋`xlength.ts`（重み付き280字・自動スレッド）＋`publish.ts`（poll併設・朝→夜引用） | `docs/automation/02` |
