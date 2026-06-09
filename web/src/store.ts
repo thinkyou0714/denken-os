@@ -2,30 +2,60 @@
  * store.ts — ブラウザのローカル進捗（localStorage）。
  * offline-first の小さな key/value 状態は localStorage で十分（調査の定石）。
  * Storage を注入可能にし、DOM 無しでもテストできる。
+ *
+ * スケジューラは FSRS（Free Spaced Repetition Scheduler）を採用する。
+ * 研究上 FSRS は SM-2 比で同じ保持率を 20〜30% 少ない復習で達成でき、
+ * 4段階評価（again/hard/good/easy）で記憶状態（安定度・難易度）を分離管理する。
+ * 互換のため record() は boolean（正誤）も受け付け、true→good / false→again に写像する。
  */
+import type { Card } from "ts-fsrs";
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
-import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
-import type { ReviewState } from "../../lib/scheduler/types.js";
+import { FsrsScheduler, type FsrsView } from "../../lib/scheduler/fsrs.js";
+import type { Rating } from "../../lib/scheduler/types.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
 }
 
-const REVIEW_KEY = "denken:reviews";
+/** localStorage に保存する Card（Date を ISO 文字列にしたもの）。 */
+type StoredCard = Omit<Card, "due" | "last_review"> & { due: string; last_review?: string };
+
+/** 解答ログ（AnswerLog に4段階評価を添える）。 */
+export interface WebAnswerLog extends AnswerLog {
+  rating?: Rating;
+}
+
+const CARD_KEY = "denken:cards";
 const LOG_KEY = "denken:logs";
+const RETENTION_KEY = "denken:retention";
 const DAY_MS = 86_400_000;
 /** 既定の「1日」境界は日本標準時(UTC+9)。電験は国内試験で受験者は JST 生活のため、
  *  朝7時(JST)の学習が UTC では前日扱いになりストリークが途切れる不具合を避ける。 */
 const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
+function ratingOf(x: Rating | boolean): Rating {
+  if (typeof x === "boolean") return x ? "good" : "again";
+  return x;
+}
+
+function reviveCard(s: StoredCard): Card {
+  return {
+    ...s,
+    due: new Date(s.due),
+    last_review: s.last_review ? new Date(s.last_review) : undefined,
+  } as Card;
+}
+
 export class LocalProgress {
-  private scheduler = new Sm2Scheduler();
+  private scheduler: FsrsScheduler;
   constructor(
     private storage: StorageLike,
     /** 日境界のタイムゾーンオフセット(ms)。既定 JST。テストで上書き可。 */
     private dayOffsetMs: number = JST_OFFSET_MS,
-  ) {}
+  ) {
+    this.scheduler = new FsrsScheduler(this.desiredRetention());
+  }
 
   /** epoch ms をオフセット込みの「日番号」に落とす（同一日の判定・連続日数に使う）。 */
   private dayIndex(ms: number): number {
@@ -42,41 +72,71 @@ export class LocalProgress {
     }
   }
 
-  private reviews(): Record<string, ReviewState> {
-    return this.read<Record<string, ReviewState>>(REVIEW_KEY, {});
+  private cards(): Record<string, StoredCard> {
+    return this.read<Record<string, StoredCard>>(CARD_KEY, {});
   }
 
-  logs(): AnswerLog[] {
-    return this.read<AnswerLog[]>(LOG_KEY, []);
+  /** 目標保持率（FSRS の最重要設定）。設定タブから変更可能（既定0.9）。 */
+  desiredRetention(): number {
+    const raw = this.storage.getItem(RETENTION_KEY);
+    const n = raw ? Number(raw) : Number.NaN;
+    return Number.isFinite(n) && n >= 0.7 && n <= 0.97 ? n : 0.9;
   }
 
-  getReview(topic: string): ReviewState | undefined {
-    return this.reviews()[topic];
+  setDesiredRetention(value: number): void {
+    const clamped = Math.min(0.97, Math.max(0.7, value));
+    this.storage.setItem(RETENTION_KEY, String(clamped));
+    this.scheduler = new FsrsScheduler(clamped);
   }
 
-  allReviews(): Map<string, ReviewState> {
-    return new Map(Object.entries(this.reviews()));
+  logs(): WebAnswerLog[] {
+    return this.read<WebAnswerLog[]>(LOG_KEY, []);
   }
 
-  /** 採点を記録し、SM-2 で記憶状態を更新する。 */
+  /** topic の記憶状態ビュー（次回復習予定・安定度など）。 */
+  getCardView(topic: string): FsrsView | undefined {
+    const c = this.cards()[topic];
+    return c ? this.scheduler.view(reviveCard(c)) : undefined;
+  }
+
+  allCardViews(): Map<string, FsrsView> {
+    const out = new Map<string, FsrsView>();
+    for (const [topic, c] of Object.entries(this.cards())) {
+      out.set(topic, this.scheduler.view(reviveCard(c)));
+    }
+    return out;
+  }
+
+  /** 復習期限が来ている topic を期限の早い順に返す。 */
+  dueTopics(nowMs: number = Date.now()): string[] {
+    return [...this.allCardViews().entries()]
+      .filter(([, v]) => v.dueMs <= nowMs)
+      .sort((a, b) => a[1].dueMs - b[1].dueMs)
+      .map(([topic]) => topic);
+  }
+
+  /** 採点を記録し、FSRS で記憶状態を更新する。rating は4段階 or 正誤boolean。 */
   record(
     topic: string,
-    correct: boolean,
+    ratingOrCorrect: Rating | boolean,
     nowMs: number = Date.now(),
     timeMs?: number,
     problemId?: string,
-  ): ReviewState {
-    const prev = this.getReview(topic) ?? this.scheduler.init(nowMs);
-    const next = this.scheduler.review(prev, correct ? "good" : "again", nowMs);
+  ): FsrsView {
+    const rating = ratingOf(ratingOrCorrect);
+    const now = new Date(nowMs);
+    const stored = this.cards()[topic];
+    const prev = stored ? reviveCard(stored) : this.scheduler.init(now);
+    const next = this.scheduler.review(prev, rating, now);
 
-    const reviews = this.reviews();
-    reviews[topic] = next;
-    this.storage.setItem(REVIEW_KEY, JSON.stringify(reviews));
+    const cards = this.cards();
+    cards[topic] = next as unknown as StoredCard; // Date は JSON で ISO 文字列化される
+    this.storage.setItem(CARD_KEY, JSON.stringify(cards));
 
     const logs = this.logs();
-    logs.push({ topic, correct, atMs: nowMs, timeMs, problemId });
+    logs.push({ topic, correct: rating !== "again", atMs: nowMs, timeMs, problemId, rating });
     this.storage.setItem(LOG_KEY, JSON.stringify(logs));
-    return next;
+    return this.scheduler.view(next);
   }
 
   /** 今日まで連続して学習した日数（既定 JST 日基準）。 */
