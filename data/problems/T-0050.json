@@ -1,0 +1,50 @@
+{
+  "id": "T-0050",
+  "exam": "denken3",
+  "subject": "理論",
+  "topic": "電力量",
+  "format": "numeric",
+  "difficulty": 1,
+  "params": {
+    "power": {
+      "value": 10,
+      "unit": "kW",
+      "realistic_range": [
+        2,
+        50
+      ]
+    },
+    "hours": {
+      "value": 8,
+      "unit": "h",
+      "realistic_range": [
+        3,
+        24
+      ]
+    }
+  },
+  "statement": "消費電力 P=10kW の機器を t=8時間 使用した。消費電力量 W〔kWh〕は?",
+  "answer": "80",
+  "solution": [
+    "電力量 W=P·t",
+    "W=10×8",
+    "W=80kWh"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

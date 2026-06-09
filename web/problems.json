@@ -11360,7 +11360,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -11413,20 +11413,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=1m³/s、全揚程 H=150m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "1500",
+    "statement": "揚水量 Q=1m³/s、全揚程 H=150m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "1837.5",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×1×150/0.98",
-      "P=1500kW"
+      "P=9.8×1×150/0.8",
+      "P=1837.5kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11470,20 +11470,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.8,
+        "value": 0.7,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=1m³/s、全揚程 H=200m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "2450",
+    "statement": "揚水量 Q=1m³/s、全揚程 H=200m、総合効率 η=0.7 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "2800",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×1×200/0.8",
-      "P=2450kW"
+      "P=9.8×1×200/0.7",
+      "P=2800kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11527,20 +11527,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=20m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "400",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=20m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "490",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×20/0.98",
-      "P=400kW"
+      "P=9.8×2×20/0.8",
+      "P=490kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11584,20 +11584,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=100m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "2000",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=100m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "2450",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×100/0.98",
-      "P=2000kW"
+      "P=9.8×2×100/0.8",
+      "P=2450kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11641,20 +11641,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=150m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "3000",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=150m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "3675",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×150/0.98",
-      "P=3000kW"
+      "P=9.8×2×150/0.8",
+      "P=3675kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11702,7 +11702,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -11755,20 +11755,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=5m³/s、全揚程 H=200m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "10000",
+    "statement": "揚水量 Q=5m³/s、全揚程 H=200m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "12250",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×5×200/0.98",
-      "P=10000kW"
+      "P=9.8×5×200/0.8",
+      "P=12250kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13130,6 +13130,63 @@
     "difficulty": 3,
     "params": {
       "load": {
+        "value": 2000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 2,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          0.9
+        ]
+      }
+    },
+    "statement": "荷重 W=2000N を速度 v=2m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=2000×2/0.8=5000W",
+      "=5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0244",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
         "value": 1000,
         "unit": "N",
         "realistic_range": [
@@ -13150,7 +13207,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13179,7 +13236,64 @@
     "status": "draft"
   },
   {
-    "id": "D-0244",
+    "id": "D-0245",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 5000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 1,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          0.9
+        ]
+      }
+    },
+    "statement": "荷重 W=5000N を速度 v=1m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "6.25",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=5000×1/0.8=6250W",
+      "=6.25kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0246",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13207,7 +13321,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13236,7 +13350,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0245",
+    "id": "D-0247",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13264,7 +13378,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13293,7 +13407,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0246",
+    "id": "D-0248",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13321,7 +13435,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13331,120 +13445,6 @@
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
       "P=2000×5/0.8=12500W",
       "=12.5kW"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0247",
-    "exam": "denken2_primary",
-    "subject": "機械",
-    "topic": "巻上機の所要出力",
-    "format": "numeric",
-    "difficulty": 3,
-    "params": {
-      "load": {
-        "value": 9800,
-        "unit": "N",
-        "realistic_range": [
-          1000,
-          9800
-        ]
-      },
-      "speed": {
-        "value": 5,
-        "unit": "m/s",
-        "realistic_range": [
-          0.5,
-          5
-        ]
-      },
-      "efficiency": {
-        "value": 0.7,
-        "unit": "",
-        "realistic_range": [
-          0.6,
-          1
-        ]
-      }
-    },
-    "statement": "荷重 W=9800N を速度 v=5m/s で巻き上げる。機構効率 η=0.7 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "70",
-    "solution": [
-      "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×5/0.7=70000W",
-      "=70kW"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0248",
-    "exam": "denken2_primary",
-    "subject": "機械",
-    "topic": "巻上機の所要出力",
-    "format": "numeric",
-    "difficulty": 3,
-    "params": {
-      "load": {
-        "value": 4900,
-        "unit": "N",
-        "realistic_range": [
-          1000,
-          9800
-        ]
-      },
-      "speed": {
-        "value": 5,
-        "unit": "m/s",
-        "realistic_range": [
-          0.5,
-          5
-        ]
-      },
-      "efficiency": {
-        "value": 0.98,
-        "unit": "",
-        "realistic_range": [
-          0.6,
-          1
-        ]
-      }
-    },
-    "statement": "荷重 W=4900N を速度 v=5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "25",
-    "solution": [
-      "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=4900×5/0.98=25000W",
-      "=25kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13480,7 +13480,7 @@
         ]
       },
       "speed": {
-        "value": 0.5,
+        "value": 5,
         "unit": "m/s",
         "realistic_range": [
           0.5,
@@ -13488,20 +13488,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.7,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "荷重 W=9800N を速度 v=0.5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "5",
+    "statement": "荷重 W=9800N を速度 v=5m/s で巻き上げる。機構効率 η=0.7 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "70",
     "solution": [
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×0.5/0.98=5000W",
-      "=5kW"
+      "P=9800×5/0.7=70000W",
+      "=70kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13545,20 +13545,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "荷重 W=9800N を速度 v=1m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "10",
+    "statement": "荷重 W=9800N を速度 v=1m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "12.25",
     "solution": [
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×1/0.98=10000W",
-      "=10kW"
+      "P=9800×1/0.8=12250W",
+      "=12.25kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -18220,6 +18220,258 @@
   {
     "id": "D-0339",
     "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 1,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=1 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.5",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+1)",
+      "ess=0.5",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0340",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 9,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=9 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.1",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+9)",
+      "ess=0.1",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0341",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 4,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=4 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.2",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+4)",
+      "ess=0.2",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0342",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 3,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=3 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.25",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+3)",
+      "ess=0.25",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0343",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 24,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=24 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.04",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+24)",
+      "ess=0.04",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0344",
+    "exam": "denken2_secondary",
+    "subject": "機械制御",
+    "topic": "制御系の定常偏差",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "gain": {
+        "value": 19,
+        "unit": "",
+        "realistic_range": [
+          1,
+          50
+        ]
+      }
+    },
+    "statement": "位置偏差定数 Kp=19 の単位フィードバック制御系に、単位ステップ入力を加える。定常位置偏差 ess を ess=1/(1+Kp) により導出過程とともに求めよ。",
+    "answer": "0.05",
+    "solution": [
+      "最終値の定理より定常位置偏差 ess=1/(1+Kp)",
+      "ess=1/(1+19)",
+      "ess=0.05",
+      "ポイント: Kp を大きくすると定常偏差は小さくなる（精度向上）。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0345",
+    "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
     "format": "descriptive",
@@ -18276,7 +18528,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0340",
+    "id": "D-0346",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18334,7 +18586,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0341",
+    "id": "D-0347",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18392,7 +18644,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0342",
+    "id": "D-0348",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18450,7 +18702,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0343",
+    "id": "D-0349",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18508,7 +18760,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0344",
+    "id": "D-0350",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18566,7 +18818,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0345",
+    "id": "D-0351",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18624,7 +18876,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0346",
+    "id": "D-0352",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "調相設備容量",
@@ -18682,7 +18934,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0347",
+    "id": "D-0353",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -18739,7 +18991,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0348",
+    "id": "D-0354",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -18796,7 +19048,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0349",
+    "id": "D-0355",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -18853,7 +19105,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0350",
+    "id": "D-0356",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -18910,7 +19162,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0351",
+    "id": "D-0357",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -18967,7 +19219,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0352",
+    "id": "D-0358",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -19024,7 +19276,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0353",
+    "id": "D-0359",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -19081,7 +19333,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0354",
+    "id": "D-0360",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "水力発電出力",
@@ -19138,7 +19390,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0355",
+    "id": "D-0361",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -19179,7 +19431,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0356",
+    "id": "D-0362",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -19220,7 +19472,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0357",
+    "id": "D-0363",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -19261,7 +19513,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0358",
+    "id": "D-0364",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -19302,7 +19554,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0359",
+    "id": "D-0365",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "汽力発電の熱効率",
@@ -19343,7 +19595,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0360",
+    "id": "D-0366",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19392,7 +19644,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0361",
+    "id": "D-0367",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19441,7 +19693,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0362",
+    "id": "D-0368",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19490,7 +19742,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0363",
+    "id": "D-0369",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19539,7 +19791,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0364",
+    "id": "D-0370",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19588,7 +19840,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0365",
+    "id": "D-0371",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19637,7 +19889,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0366",
+    "id": "D-0372",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19686,7 +19938,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0367",
+    "id": "D-0373",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "三相短絡容量",
@@ -19735,7 +19987,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0368",
+    "id": "D-0374",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -19801,7 +20053,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0369",
+    "id": "D-0375",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -19867,7 +20119,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0370",
+    "id": "D-0376",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -19933,7 +20185,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0371",
+    "id": "D-0377",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -19999,7 +20251,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0372",
+    "id": "D-0378",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -20065,7 +20317,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0373",
+    "id": "D-0379",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -20131,7 +20383,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0374",
+    "id": "D-0380",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -20197,7 +20449,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0375",
+    "id": "D-0381",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "送電電力（安定度）",
@@ -20263,7 +20515,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0376",
+    "id": "D-0382",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20312,7 +20564,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0377",
+    "id": "D-0383",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20361,7 +20613,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0378",
+    "id": "D-0384",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20410,7 +20662,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0379",
+    "id": "D-0385",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20459,7 +20711,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0380",
+    "id": "D-0386",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20508,7 +20760,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0381",
+    "id": "D-0387",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20557,7 +20809,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0382",
+    "id": "D-0388",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20606,7 +20858,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0383",
+    "id": "D-0389",
     "exam": "denken2_secondary",
     "subject": "電力管理",
     "topic": "短絡電流（オーム法）",
@@ -20636,6 +20888,870 @@
       "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
       "Is=2000/20",
       "Is=100A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0390",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 6350,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 4,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=6350V、正相=逆相インピーダンス Z1=Z2=2Ω、零相インピーダンス Z0=4Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "2381.25",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=4+2+2=8Ω",
+      "Ig=3×6350/8",
+      "Ig=2381.25A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0391",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=200V、正相=逆相インピーダンス Z1=Z2=5Ω、零相インピーダンス Z0=5Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "40",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=5+5+5=15Ω",
+      "Ig=3×200/15",
+      "Ig=40A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0392",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 6350,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=6350V、正相=逆相インピーダンス Z1=Z2=10Ω、零相インピーダンス Z0=10Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "635",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=10+10+10=30Ω",
+      "Ig=3×6350/30",
+      "Ig=635A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0393",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 1000,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=1000V、正相=逆相インピーダンス Z1=Z2=10Ω、零相インピーダンス Z0=20Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "75",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=20+10+10=40Ω",
+      "Ig=3×1000/40",
+      "Ig=75A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0394",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 6350,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=6350V、正相=逆相インピーダンス Z1=Z2=5Ω、零相インピーダンス Z0=5Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "1270",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=5+5+5=15Ω",
+      "Ig=3×6350/15",
+      "Ig=1270A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0395",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 3810,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 4,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=3810V、正相=逆相インピーダンス Z1=Z2=2Ω、零相インピーダンス Z0=4Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "1428.75",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=4+2+2=8Ω",
+      "Ig=3×3810/8",
+      "Ig=1428.75A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0396",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=200V、正相=逆相インピーダンス Z1=Z2=10Ω、零相インピーダンス Z0=20Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "15",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=20+10+10=40Ω",
+      "Ig=3×200/40",
+      "Ig=15A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0397",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "一線地絡電流（対称座標法）",
+    "format": "descriptive",
+    "difficulty": 4,
+    "params": {
+      "phase_voltage": {
+        "value": 3810,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          6350
+        ]
+      },
+      "positive_seq": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "zero_seq": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          1,
+          20
+        ]
+      }
+    },
+    "statement": "相電圧 E=3810V、正相=逆相インピーダンス Z1=Z2=10Ω、零相インピーダンス Z0=20Ω である。一線地絡電流 Ig〔A〕を対称座標法 Ig=3E/(Z0+Z1+Z2) により導出過程とともに求めよ。",
+    "answer": "285.75",
+    "solution": [
+      "対称座標法: 一線地絡では Ig=3E/(Z0+Z1+Z2)",
+      "Z0+Z1+Z2=20+10+10=40Ω",
+      "Ig=3×3810/40",
+      "Ig=285.75A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0398",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 5,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 20,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=5%、%Zb=20% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "4",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=5×20/(5+20)",
+      "%Z=4%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0399",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 6,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 12,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=6%、%Zb=12% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "4",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=6×12/(6+12)",
+      "%Z=4%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0400",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 4,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 4,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=4%、%Zb=4% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "2",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=4×4/(4+4)",
+      "%Z=2%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0401",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 6,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 6,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=6%、%Zb=6% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "3",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=6×6/(6+6)",
+      "%Z=3%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0402",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 10,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 10,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=10%、%Zb=10% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "5",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=10×10/(10+10)",
+      "%Z=5%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0403",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 12,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 4,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=12%、%Zb=4% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "3",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=12×4/(12+4)",
+      "%Z=3%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0404",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 12,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 8,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=12%、%Zb=8% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "4.8",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=12×8/(12+8)",
+      "%Z=4.8%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0405",
+    "exam": "denken2_secondary",
+    "subject": "電力管理",
+    "topic": "並列電源の合成％インピーダンス",
+    "format": "descriptive",
+    "difficulty": 3,
+    "params": {
+      "percent_z_a": {
+        "value": 4,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      },
+      "percent_z_b": {
+        "value": 12,
+        "unit": "%",
+        "realistic_range": [
+          4,
+          20
+        ]
+      }
+    },
+    "statement": "同一基準容量で %Za=4%、%Zb=12% の2電源が母線に並列接続されている。母線から見た合成パーセントインピーダンス %Z〔%〕を導出過程とともに求めよ。",
+    "answer": "3",
+    "solution": [
+      "並列なので %Z=%Za·%Zb/(%Za+%Zb)",
+      "%Z=4×12/(4+12)",
+      "%Z=3%",
+      "ポイント: この %Z から短絡容量 Ps=P_base×100/%Z が求まる。"
     ],
     "validation": {
       "solver_checked": true,

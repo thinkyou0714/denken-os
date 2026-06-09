@@ -14,6 +14,7 @@ import {
   electricEnergy,
   firstOrderControl,
   fullWaveRectifier,
+  groundFaultSymmetrical,
   hoistMotorOutput,
   hydroPowerOutput,
   inductionPowerBalance,
@@ -25,6 +26,7 @@ import {
   maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
+  parallelPercentImpedance,
   parallelPlateField,
   percentImpedanceConversion,
   percentImpedanceShortCircuit,
@@ -38,6 +40,7 @@ import {
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
+  steadyStateError,
   synchronousGeneratorOutput,
   thermalEfficiency,
   transformerEfficiency,
@@ -195,8 +198,8 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     ).toBe("25");
   });
 
-  it("機械: 揚水動力 P=9.8QH/η（2,50,0.98 → 1000kW）", () => {
-    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.98 })!.answerText).toBe("1000");
+  it("機械: 揚水動力 P=9.8QH/η（2,50,0.8 → 1225kW）", () => {
+    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.8 })!.answerText).toBe("1225");
   });
 
   it("機械: 照明灯数 N=EA/(FUM)（500,100,5000,0.5,0.8 → 25灯）", () => {
@@ -254,8 +257,8 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     expect(maxEfficiencyLoad.generateFrom({ iron_loss: 9, copper_loss: 16 })!.answerText).toBe("0.75");
   });
 
-  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.98 → 10kW）", () => {
-    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.98 })!.answerText).toBe("10");
+  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.7 → 14kW）", () => {
+    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.7 })!.answerText).toBe("14");
   });
 
   it("電力: 負荷率 平均/最大×100（100,60 → 60%）", () => {
@@ -276,5 +279,21 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
 
   it("電力: 送電効率 Pr/Ps×100（95,100 → 95%）", () => {
     expect(transmissionEfficiency.generateFrom({ received_power: 95, sent_power: 100 })!.answerText).toBe("95");
+  });
+
+  it("二次電力管理: 一線地絡 Ig=3E/(Z0+Z1+Z2)（E1000,Z1=5,Z0=5 → 200A, descriptive）", () => {
+    const g = groundFaultSymmetrical.generateFrom({ phase_voltage: 1000, positive_seq: 5, zero_seq: 5 });
+    expect(g!.answerText).toBe("200");
+    expect(g!.format).toBe("descriptive");
+  });
+
+  it("二次電力管理: 並列%Z = ZaZb/(Za+Zb)（5,20 → 4%, descriptive）", () => {
+    expect(parallelPercentImpedance.generateFrom({ percent_z_a: 5, percent_z_b: 20 })!.answerText).toBe("4");
+  });
+
+  it("二次機械制御: 定常偏差 ess=1/(1+Kp)（Kp3 → 0.25, descriptive）", () => {
+    const g = steadyStateError.generateFrom({ gain: 3 });
+    expect(g!.answerText).toBe("0.25");
+    expect(g!.format).toBe("descriptive");
   });
 });

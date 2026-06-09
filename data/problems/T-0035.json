@@ -1,0 +1,58 @@
+{
+  "id": "T-0035",
+  "exam": "denken2_primary",
+  "subject": "電力",
+  "topic": "％インピーダンスの容量換算",
+  "format": "numeric",
+  "difficulty": 3,
+  "params": {
+    "percent_impedance": {
+      "value": 5,
+      "unit": "%",
+      "realistic_range": [
+        4,
+        12.5
+      ]
+    },
+    "base_capacity": {
+      "value": 10,
+      "unit": "MVA",
+      "realistic_range": [
+        5,
+        100
+      ]
+    },
+    "target_capacity": {
+      "value": 50,
+      "unit": "MVA",
+      "realistic_range": [
+        5,
+        100
+      ]
+    }
+  },
+  "statement": "基準容量 10MVA で %Z=5% のインピーダンスを、基準容量 50MVA に換算した %Z〔%〕は?",
+  "answer": "25",
+  "solution": [
+    "%Z は基準容量に比例: %Z2=%Z1×(P2/P1)",
+    "%Z2=5×(50/10)",
+    "%Z2=25%"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

@@ -94,6 +94,44 @@ const SEEDS: Seed[] = [
     topic: "力率改善",
     params: { load_power: 300, power_factor_before: 0.6, power_factor_after: 0.8 },
   },
+  // 検証済みを50件超へ（ループで追加した21テンプレを固定値検算済みの係数で収録。法規も補強）
+  { id: "T-0032", topic: "分流器", params: { internal_resistance: 9, multiplier: 10 } },
+  { id: "T-0033", topic: "倍率器", params: { internal_resistance: 10, multiplier: 5 } },
+  { id: "T-0034", topic: "平行平板コンデンサの電界", params: { voltage: 200, gap: 2 } },
+  {
+    id: "T-0035",
+    topic: "％インピーダンスの容量換算",
+    params: { percent_impedance: 5, base_capacity: 10, target_capacity: 50 },
+  },
+  { id: "T-0036", topic: "揚水ポンプの電動機入力", params: { flow: 2, head: 50, efficiency: 0.8 } },
+  {
+    id: "T-0037",
+    topic: "照明設計（光束法）",
+    params: { illuminance: 500, area: 100, lumen: 5000, utilization: 0.5, maintenance: 0.8 },
+  },
+  { id: "T-0038", topic: "風圧荷重", params: { wind_pressure: 980, area: 2 } },
+  { id: "T-0039", topic: "電線の許容張力", params: { tensile_strength: 10000, safety_factor: 2.5 } },
+  { id: "T-0040", topic: "電圧降下率", params: { sending_voltage: 210, receiving_voltage: 200 } },
+  {
+    id: "T-0041",
+    topic: "直流発電機の誘導起電力",
+    params: { terminal_voltage: 220, armature_current: 50, armature_resistance: 0.2 },
+  },
+  { id: "T-0042", topic: "コイルの磁気エネルギー", params: { inductance: 0.5, current: 4 } },
+  { id: "T-0043", topic: "昇圧チョッパの出力電圧", params: { input_voltage: 100, duty_ratio: 0.5 } },
+  {
+    id: "T-0044",
+    topic: "送電電力（安定度）",
+    params: { sending_voltage: 100, receiving_voltage: 100, reactance: 50, phase_angle: 90 },
+  },
+  { id: "T-0045", topic: "短絡電流（オーム法）", params: { phase_voltage: 200, impedance: 5 } },
+  { id: "T-0046", topic: "変圧器の最大効率負荷率", params: { iron_loss: 9, copper_loss: 16 } },
+  { id: "T-0047", topic: "巻上機の所要出力", params: { load: 9800, speed: 1, efficiency: 0.7 } },
+  { id: "T-0048", topic: "負荷率", params: { max_demand: 100, avg_demand: 60 } },
+  { id: "T-0049", topic: "不等率", params: { sum_of_maxima: 150, composite_max: 100 } },
+  { id: "T-0050", topic: "電力量", params: { power: 10, hours: 8 } },
+  { id: "T-0051", topic: "単相全波整流の直流電圧", params: { ac_voltage: 200 } },
+  { id: "T-0052", topic: "送電効率", params: { received_power: 95, sent_power: 100 } },
 ];
 
 function build(seed: Seed): Problem {

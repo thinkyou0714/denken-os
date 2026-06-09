@@ -1,0 +1,50 @@
+{
+  "id": "T-0034",
+  "exam": "denken2_primary",
+  "subject": "理論",
+  "topic": "平行平板コンデンサの電界",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "voltage": {
+      "value": 200,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        6000
+      ]
+    },
+    "gap": {
+      "value": 2,
+      "unit": "mm",
+      "realistic_range": [
+        1,
+        10
+      ]
+    }
+  },
+  "statement": "平行平板コンデンサの極板間隔 d=2mm に電圧 V=200V を加えた。極板間の電界の強さ E〔kV/m〕は?",
+  "answer": "100",
+  "solution": [
+    "一様電界 E=V/d",
+    "単位を揃える: V〔V〕/d〔mm〕=E〔kV/m〕（10⁻³ の相殺）",
+    "E=200/2=100kV/m"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}
