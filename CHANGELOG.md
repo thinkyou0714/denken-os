@@ -6,6 +6,20 @@
 ## [Unreleased]
 
 ### Added
+- **学習エンジンの大幅強化（電験二種 合格力に直結する深掘り100の実装）**:
+  - エンジン: 決定論テンプレートを **7→29種** に拡充（全6科目・**二次=記述8種**）。
+    閉形式の固定値検算テスト22件＋科目カバレッジ検証。
+  - データ: `scripts/build-problems.ts`（`npm run build:problems`）で全テンプレから
+    **220問**を決定論生成し `web/problems.json` を再構築（記述69問・全件 validate 通過）。
+  - 記憶: Web の復習を **SM-2→FSRS** に移行し、**4段階自己評価**（again/hard/good/easy）と
+    目標保持率設定を導入。FSRS Card を localStorage に永続化（Date 復元込み）。
+  - 学習機能: タブ型SPA（**学習/復習/模試/進捗/公式/設定**）。時間制限模試（合格ライン60%・
+    科目別内訳）、復習キュー、**間違いノート**、科目別到達度ダッシュボード、試験カウントダウン、
+    日次目標、公式集、科目ドリル、**数式の軽量整形**（KaTeX非依存）、キーボード操作、aria-live。
+  - 純ロジック（`web/src/{dashboard,exam,review,plan,settings,mathfmt}.ts`）に**ユニットテスト49件**。
+  - ドキュメント: `docs/strategy/exam-structure.md`（試験構造＋学習科学に基づく学習法）と
+    `docs/strategy/ideas/06-exam-mastery-100.md`（学習エンジン強化の深掘り100）。
+  - Service Worker を v4 に更新。`npm run verify` 緑（255テスト）。
 - `docs/strategy/ideas/05-deep-audit-2026-06.md` — コードベース深掘り監査100（根本原因×ベストプラクティス、対応状況付き）。
 - `web/src/grade.ts` — 採点の純ロジック（DOM から分離してテスト可能化）。numeric は数値比較、選択式/記述は厳密一致。
 - `web/src/select.ts` — 出題選択の純ロジック（弱点 topic 優先＋直近出題の重複回避）。テスト付き。
