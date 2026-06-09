@@ -8,7 +8,8 @@ import type { GenerationResult, Template } from "./types.js";
 
 const Q_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10];
 const H_SET: ReadonlyArray<number> = [20, 50, 100, 150, 200];
-const ETA_SET: ReadonlyArray<number> = [0.7, 0.8, 0.98];
+// 総合効率は現実的な範囲のみ（0.98 は綺麗な答えになるが物理的に非現実的なので除外）。
+const ETA_SET: ReadonlyArray<number> = [0.7, 0.8];
 
 function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
   return arr[Math.floor(rng() * arr.length)]!;
@@ -24,7 +25,7 @@ function buildFrom(Q: number, H: number, eta: number): GenerationResult | null {
     params: {
       flow: { value: Q, unit: "m3/s", realistic_range: [1, 10] },
       head: { value: H, unit: "m", realistic_range: [20, 200] },
-      efficiency: { value: eta, unit: "", realistic_range: [0.6, 1] },
+      efficiency: { value: eta, unit: "", realistic_range: [0.6, 0.9] },
     },
     answerValue: P,
     answerUnit: "kW",
@@ -50,7 +51,7 @@ export const pumpMotorInput: Template = {
   paramSpecs: {
     flow: { unit: "m3/s", realistic_range: [1, 10] },
     head: { unit: "m", realistic_range: [20, 200] },
-    efficiency: { unit: "", realistic_range: [0.6, 1] },
+    efficiency: { unit: "", realistic_range: [0.6, 0.9] },
   },
   generate(rng) {
     return buildFrom(pick(Q_SET, rng), pick(H_SET, rng), pick(ETA_SET, rng));

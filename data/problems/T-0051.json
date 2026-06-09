@@ -1,0 +1,42 @@
+{
+  "id": "T-0051",
+  "exam": "denken2_primary",
+  "subject": "機械",
+  "topic": "単相全波整流の直流電圧",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "ac_voltage": {
+      "value": 200,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        1000
+      ]
+    }
+  },
+  "statement": "実効値 V=200V の交流を単相全波整流する。平均直流電圧 Vd〔V〕を近似式 Vd≈0.9V により求めよ。",
+  "answer": "180",
+  "solution": [
+    "単相全波整流の平均直流電圧 Vd=2√2·V/π≈0.9·V",
+    "Vd=0.9×200",
+    "Vd=180V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

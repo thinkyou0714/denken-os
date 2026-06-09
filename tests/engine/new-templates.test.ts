@@ -195,8 +195,8 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     ).toBe("25");
   });
 
-  it("機械: 揚水動力 P=9.8QH/η（2,50,0.98 → 1000kW）", () => {
-    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.98 })!.answerText).toBe("1000");
+  it("機械: 揚水動力 P=9.8QH/η（2,50,0.8 → 1225kW）", () => {
+    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.8 })!.answerText).toBe("1225");
   });
 
   it("機械: 照明灯数 N=EA/(FUM)（500,100,5000,0.5,0.8 → 25灯）", () => {
@@ -254,8 +254,8 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     expect(maxEfficiencyLoad.generateFrom({ iron_loss: 9, copper_loss: 16 })!.answerText).toBe("0.75");
   });
 
-  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.98 → 10kW）", () => {
-    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.98 })!.answerText).toBe("10");
+  it("機械: 巻上機出力 Wv/η（9800N,1m/s,0.7 → 14kW）", () => {
+    expect(hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.7 })!.answerText).toBe("14");
   });
 
   it("電力: 負荷率 平均/最大×100（100,60 → 60%）", () => {

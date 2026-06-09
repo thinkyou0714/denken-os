@@ -1,0 +1,58 @@
+{
+  "id": "T-0036",
+  "exam": "denken2_primary",
+  "subject": "機械",
+  "topic": "揚水ポンプの電動機入力",
+  "format": "numeric",
+  "difficulty": 3,
+  "params": {
+    "flow": {
+      "value": 2,
+      "unit": "m3/s",
+      "realistic_range": [
+        1,
+        10
+      ]
+    },
+    "head": {
+      "value": 50,
+      "unit": "m",
+      "realistic_range": [
+        20,
+        200
+      ]
+    },
+    "efficiency": {
+      "value": 0.8,
+      "unit": "",
+      "realistic_range": [
+        0.6,
+        0.9
+      ]
+    }
+  },
+  "statement": "揚水量 Q=2m³/s、全揚程 H=50m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+  "answer": "1225",
+  "solution": [
+    "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
+    "P=9.8×2×50/0.8",
+    "P=1225kW"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

@@ -7,7 +7,8 @@ import type { GenerationResult, Template } from "./types.js";
 
 const W_SET: ReadonlyArray<number> = [1000, 2000, 4900, 5000, 9800];
 const V_SET: ReadonlyArray<number> = [0.5, 1, 2, 4, 5];
-const ETA_SET: ReadonlyArray<number> = [0.7, 0.8, 0.98];
+// 機構効率は現実的な範囲のみ（0.98 は綺麗な答えになるが物理的に非現実的なので除外）。
+const ETA_SET: ReadonlyArray<number> = [0.7, 0.8];
 
 function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
   return arr[Math.floor(rng() * arr.length)]!;
@@ -23,7 +24,7 @@ function buildFrom(W: number, v: number, eta: number): GenerationResult | null {
     params: {
       load: { value: W, unit: "N", realistic_range: [1000, 9800] },
       speed: { value: v, unit: "m/s", realistic_range: [0.5, 5] },
-      efficiency: { value: eta, unit: "", realistic_range: [0.6, 1] },
+      efficiency: { value: eta, unit: "", realistic_range: [0.6, 0.9] },
     },
     answerValue: P,
     answerUnit: "kW",
@@ -47,7 +48,7 @@ export const hoistMotorOutput: Template = {
   paramSpecs: {
     load: { unit: "N", realistic_range: [1000, 9800] },
     speed: { unit: "m/s", realistic_range: [0.5, 5] },
-    efficiency: { unit: "", realistic_range: [0.6, 1] },
+    efficiency: { unit: "", realistic_range: [0.6, 0.9] },
   },
   generate(rng) {
     return buildFrom(pick(W_SET, rng), pick(V_SET, rng), pick(ETA_SET, rng));

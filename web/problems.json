@@ -11360,7 +11360,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -11413,20 +11413,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=1m³/s、全揚程 H=150m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "1500",
+    "statement": "揚水量 Q=1m³/s、全揚程 H=150m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "1837.5",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×1×150/0.98",
-      "P=1500kW"
+      "P=9.8×1×150/0.8",
+      "P=1837.5kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11470,20 +11470,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.8,
+        "value": 0.7,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=1m³/s、全揚程 H=200m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "2450",
+    "statement": "揚水量 Q=1m³/s、全揚程 H=200m、総合効率 η=0.7 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "2800",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×1×200/0.8",
-      "P=2450kW"
+      "P=9.8×1×200/0.7",
+      "P=2800kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11527,20 +11527,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=20m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "400",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=20m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "490",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×20/0.98",
-      "P=400kW"
+      "P=9.8×2×20/0.8",
+      "P=490kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11584,20 +11584,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=100m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "2000",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=100m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "2450",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×100/0.98",
-      "P=2000kW"
+      "P=9.8×2×100/0.8",
+      "P=2450kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11641,20 +11641,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=2m³/s、全揚程 H=150m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "3000",
+    "statement": "揚水量 Q=2m³/s、全揚程 H=150m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "3675",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×2×150/0.98",
-      "P=3000kW"
+      "P=9.8×2×150/0.8",
+      "P=3675kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -11702,7 +11702,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -11755,20 +11755,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "揚水量 Q=5m³/s、全揚程 H=200m、総合効率 η=0.98 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
-    "answer": "10000",
+    "statement": "揚水量 Q=5m³/s、全揚程 H=200m、総合効率 η=0.8 の揚水ポンプを駆動する。電動機の入力 P〔kW〕を P=9.8QH/η により求めよ。",
+    "answer": "12250",
     "solution": [
       "水動力 9.8QH を効率で割る（損失分だけ入力が増える）: P=9.8·Q·H/η",
-      "P=9.8×5×200/0.98",
-      "P=10000kW"
+      "P=9.8×5×200/0.8",
+      "P=12250kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13130,6 +13130,63 @@
     "difficulty": 3,
     "params": {
       "load": {
+        "value": 2000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 2,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          0.9
+        ]
+      }
+    },
+    "statement": "荷重 W=2000N を速度 v=2m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "5",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=2000×2/0.8=5000W",
+      "=5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0244",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
         "value": 1000,
         "unit": "N",
         "realistic_range": [
@@ -13150,7 +13207,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13179,7 +13236,64 @@
     "status": "draft"
   },
   {
-    "id": "D-0244",
+    "id": "D-0245",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "巻上機の所要出力",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "load": {
+        "value": 5000,
+        "unit": "N",
+        "realistic_range": [
+          1000,
+          9800
+        ]
+      },
+      "speed": {
+        "value": 1,
+        "unit": "m/s",
+        "realistic_range": [
+          0.5,
+          5
+        ]
+      },
+      "efficiency": {
+        "value": 0.8,
+        "unit": "",
+        "realistic_range": [
+          0.6,
+          0.9
+        ]
+      }
+    },
+    "statement": "荷重 W=5000N を速度 v=1m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "6.25",
+    "solution": [
+      "巻上仕事率 W·v を効率で割る: P=W·v/η",
+      "P=5000×1/0.8=6250W",
+      "=6.25kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "D-0246",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13207,7 +13321,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13236,7 +13350,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0245",
+    "id": "D-0247",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13264,7 +13378,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13293,7 +13407,7 @@
     "status": "draft"
   },
   {
-    "id": "D-0246",
+    "id": "D-0248",
     "exam": "denken2_primary",
     "subject": "機械",
     "topic": "巻上機の所要出力",
@@ -13321,7 +13435,7 @@
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
@@ -13331,120 +13445,6 @@
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
       "P=2000×5/0.8=12500W",
       "=12.5kW"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0247",
-    "exam": "denken2_primary",
-    "subject": "機械",
-    "topic": "巻上機の所要出力",
-    "format": "numeric",
-    "difficulty": 3,
-    "params": {
-      "load": {
-        "value": 9800,
-        "unit": "N",
-        "realistic_range": [
-          1000,
-          9800
-        ]
-      },
-      "speed": {
-        "value": 5,
-        "unit": "m/s",
-        "realistic_range": [
-          0.5,
-          5
-        ]
-      },
-      "efficiency": {
-        "value": 0.7,
-        "unit": "",
-        "realistic_range": [
-          0.6,
-          1
-        ]
-      }
-    },
-    "statement": "荷重 W=9800N を速度 v=5m/s で巻き上げる。機構効率 η=0.7 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "70",
-    "solution": [
-      "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×5/0.7=70000W",
-      "=70kW"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "D-0248",
-    "exam": "denken2_primary",
-    "subject": "機械",
-    "topic": "巻上機の所要出力",
-    "format": "numeric",
-    "difficulty": 3,
-    "params": {
-      "load": {
-        "value": 4900,
-        "unit": "N",
-        "realistic_range": [
-          1000,
-          9800
-        ]
-      },
-      "speed": {
-        "value": 5,
-        "unit": "m/s",
-        "realistic_range": [
-          0.5,
-          5
-        ]
-      },
-      "efficiency": {
-        "value": 0.98,
-        "unit": "",
-        "realistic_range": [
-          0.6,
-          1
-        ]
-      }
-    },
-    "statement": "荷重 W=4900N を速度 v=5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "25",
-    "solution": [
-      "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=4900×5/0.98=25000W",
-      "=25kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13480,7 +13480,7 @@
         ]
       },
       "speed": {
-        "value": 0.5,
+        "value": 5,
         "unit": "m/s",
         "realistic_range": [
           0.5,
@@ -13488,20 +13488,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.7,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "荷重 W=9800N を速度 v=0.5m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "5",
+    "statement": "荷重 W=9800N を速度 v=5m/s で巻き上げる。機構効率 η=0.7 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "70",
     "solution": [
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×0.5/0.98=5000W",
-      "=5kW"
+      "P=9800×5/0.7=70000W",
+      "=70kW"
     ],
     "validation": {
       "solver_checked": true,
@@ -13545,20 +13545,20 @@
         ]
       },
       "efficiency": {
-        "value": 0.98,
+        "value": 0.8,
         "unit": "",
         "realistic_range": [
           0.6,
-          1
+          0.9
         ]
       }
     },
-    "statement": "荷重 W=9800N を速度 v=1m/s で巻き上げる。機構効率 η=0.98 のとき、電動機の所要出力 P〔kW〕は?",
-    "answer": "10",
+    "statement": "荷重 W=9800N を速度 v=1m/s で巻き上げる。機構効率 η=0.8 のとき、電動機の所要出力 P〔kW〕は?",
+    "answer": "12.25",
     "solution": [
       "巻上仕事率 W·v を効率で割る: P=W·v/η",
-      "P=9800×1/0.98=10000W",
-      "=10kW"
+      "P=9800×1/0.8=12250W",
+      "=12.25kW"
     ],
     "validation": {
       "solver_checked": true,

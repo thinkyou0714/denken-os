@@ -1,0 +1,50 @@
+{
+  "id": "T-0045",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "短絡電流（オーム法）",
+  "format": "descriptive",
+  "difficulty": 3,
+  "params": {
+    "phase_voltage": {
+      "value": 200,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        6350
+      ]
+    },
+    "impedance": {
+      "value": 5,
+      "unit": "ohm",
+      "realistic_range": [
+        2,
+        25
+      ]
+    }
+  },
+  "statement": "相電圧 E=200V、故障点までの合成インピーダンス Z=5Ω である。三相短絡電流 Is〔A〕をオーム法により導出過程とともに求めよ。",
+  "answer": "40",
+  "solution": [
+    "オーム法: Is=E/Z（E=相電圧、Z=合成インピーダンス）",
+    "Is=200/5",
+    "Is=40A"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}
