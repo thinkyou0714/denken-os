@@ -84,4 +84,13 @@ describe("dashboard（進捗集計）", () => {
     expect(fc[2]).toBe(1);
     expect(fc.reduce((a, b) => a + b, 0)).toBe(2); // 範囲外は除外
   });
+
+  it("reviewForecast: JST 日境界で集計する（23時JSTの翌0時JST due は『今日』でなく+1）", () => {
+    const now = Date.UTC(2026, 5, 9, 14, 0); // 2026-06-09 23:00 JST
+    const due = Date.UTC(2026, 5, 9, 15, 0); // 2026-06-10 00:00 JST（翌JST日）
+    const views: FsrsView[] = [{ dueMs: due, stability: 1, difficulty: 1, reps: 1, lapses: 0, scheduledDays: 1 }];
+    const fc = reviewForecast(views, now, 7);
+    expect(fc[0]).toBe(0); // 今日には入らない
+    expect(fc[1]).toBe(1); // 翌日(+1)に入る
+  });
 });
