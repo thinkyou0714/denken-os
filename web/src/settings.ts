@@ -6,10 +6,23 @@ import type { StorageLike } from "./store.js";
 
 const EXAM_DATE_KEY = "denken:examDate";
 const DAILY_GOAL_KEY = "denken:dailyGoal";
+const THEME_KEY = "denken:theme";
 
 /** 既定の試験日（2026年度 電験二種 一次試験の目安）。設定で上書き可。 */
 export const DEFAULT_EXAM_DATE = "2026-08-30";
 export const DEFAULT_DAILY_GOAL = 10;
+
+/** テーマ設定。system=OS追従。 */
+export type ThemePref = "system" | "light" | "dark";
+
+export function getTheme(storage: StorageLike): ThemePref {
+  const raw = storage.getItem(THEME_KEY);
+  return raw === "light" || raw === "dark" ? raw : "system";
+}
+
+export function setTheme(storage: StorageLike, t: ThemePref): void {
+  storage.setItem(THEME_KEY, t);
+}
 
 export function getExamDate(storage: StorageLike): string {
   const raw = storage.getItem(EXAM_DATE_KEY);

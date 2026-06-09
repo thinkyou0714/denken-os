@@ -12,6 +12,7 @@ import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.j
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
 import {
+  accuracyTrend,
   bySubject,
   byTopic,
   dailyActivity,
@@ -22,22 +23,30 @@ import {
 } from "./dashboard.js";
 import { buildMockExam, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
 import { FORMULAS } from "./formulas.js";
-import { isAnswerCorrect } from "./grade.js";
+import { isAnswerCorrect, partialScore } from "./grade.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
-import { getDailyGoal, getExamDate, setDailyGoal, setExamDate } from "./settings.js";
+import {
+  getDailyGoal,
+  getExamDate,
+  getTheme,
+  setDailyGoal,
+  setExamDate,
+  setTheme,
+  type ThemePref,
+} from "./settings.js";
 import { LocalProgress } from "./store.js";
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
-const TABS: ReadonlyArray<readonly [string, string]> = [
-  ["practice", "学習"],
-  ["review", "復習"],
-  ["exam", "模試"],
-  ["dashboard", "進捗"],
-  ["formulas", "公式"],
-  ["settings", "設定"],
+const TABS: ReadonlyArray<readonly [string, string, string]> = [
+  ["practice", "学習", "✏️"],
+  ["review", "復習", "🔁"],
+  ["exam", "模試", "📝"],
+  ["dashboard", "進捗", "📊"],
+  ["formulas", "公式", "📐"],
+  ["settings", "設定", "⚙️"],
 ];
 
 type Children = (Node | string)[];
@@ -61,6 +70,14 @@ const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
 const storage = window.localStorage;
 const progress = new LocalProgress(storage);
+
+/** テーマ設定を解決して <html data-theme> に反映（system は OS 追従）。 */
+function applyTheme(): void {
+  const pref = getTheme(storage);
+  const dark = pref === "dark" || (pref === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+}
+
 let problems: Problem[] = [];
 let view = "practice";
 
@@ -120,6 +137,49 @@ function figureNode(svgStr: string): HTMLElement {
   return h("figure", { class: "figure", html: svgStr });
 }
 
+/** 空状態（履歴なし等）の上質な表示。 */
+function emptyState(emoji: string, title: string, msg: string): HTMLElement {
+  return h(
+    "div",
+    { class: "empty" },
+    h("span", { class: "emoji" }, emoji),
+    h("div", { class: "et" }, title),
+    h("div", {}, msg),
+  );
+}
+
+/** 0..1 の系列からスパークライン SVG を作る（2点以上のとき）。 */
+function sparklineNode(values: number[]): HTMLElement | null {
+  if (values.length < 2) return null;
+  const w = 320;
+  const hh = 40;
+  const pad = 3;
+  const n = values.length;
+  const x = (i: number) => pad + (i * (w - 2 * pad)) / (n - 1);
+  const y = (v: number) => pad + (1 - Math.max(0, Math.min(1, v))) * (hh - 2 * pad);
+  const line = values.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(n - 1).toFixed(1)} ${hh - pad} L${x(0).toFixed(1)} ${hh - pad} Z`;
+  const svg =
+    `<svg class="spark" viewBox="0 0 ${w} ${hh}" preserveAspectRatio="none" role="img" aria-label="正答率の推移">` +
+    `<path class="area" d="${area}"/><path class="line" d="${line}"/></svg>`;
+  return h("div", { html: svg });
+}
+
+/** 達成率のリングプログレス（日次目標など）。 */
+function ringNode(value: number, max: number): HTMLElement {
+  const pct = max > 0 ? Math.min(1, value / max) : 0;
+  const r = 24;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - pct);
+  const svg =
+    `<svg width="58" height="58" viewBox="0 0 58 58" role="img" aria-label="今日の達成率 ${Math.round(pct * 100)}%">` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="6"/>` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" ` +
+    `stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 29 29)"/>` +
+    `<text x="29" y="34" text-anchor="middle" fill="currentColor" font-size="14" font-weight="700">${Math.round(pct * 100)}%</text></svg>`;
+  return h("div", { html: svg, style: "flex:none" });
+}
+
 // ---- ヘッダ / ナビ ----
 
 function renderHeader(): void {
@@ -136,9 +196,15 @@ function renderHeader(): void {
 function renderNav(): void {
   const nav = $("nav");
   nav.innerHTML = "";
-  for (const [id, label] of TABS) {
+  for (const [id, label, icon] of TABS) {
     const due = id === "review" ? progress.dueTopics().length : 0;
-    const btn = h("button", { type: "button", onclick: () => switchView(id) }, due > 0 ? `${label}・${due}` : label);
+    const btn = h(
+      "button",
+      { type: "button", "aria-label": label, onclick: () => switchView(id) },
+      h("span", { class: "ti", "aria-hidden": "true" }, icon),
+      h("span", { class: "tl" }, label),
+    );
+    if (due > 0) btn.append(h("span", { class: "tb" }, String(due)));
     if (id === view) btn.setAttribute("aria-current", "true");
     nav.appendChild(btn);
   }
@@ -310,20 +376,43 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
 }
 
 /** descriptive: 模範解答を見せて4段階自己採点。 */
+/** 記述(二次): 模範解答の各ステップを採点観点とし、書けた項目にチェック→部分点で自己採点。 */
 function revealDescriptive(host: HTMLElement, p: Problem): void {
   const answers = host.querySelector("#answers") as HTMLElement;
   answers.innerHTML = "";
   const result = host.querySelector("#result") as HTMLElement;
   result.innerHTML = "";
+  const steps = p.solution;
+  const checks: HTMLInputElement[] = [];
+  const list = h("div", { class: "rubric" });
+  steps.forEach((s, i) => {
+    const cb = h("input", { type: "checkbox", id: `rb${i}` }) as HTMLInputElement;
+    checks.push(cb);
+    list.append(h("label", { class: "rubric-item", for: `rb${i}` }, cb, h("span", { html: formatMath(s) })));
+  });
+  const grade = h(
+    "button",
+    {
+      class: "primary",
+      type: "button",
+      onclick: () => {
+        const checked = checks.filter((c) => c.checked).length;
+        const { pct, rating } = partialScore(checked, steps.length);
+        finalize(host, p, rating, { checked, total: steps.length, pct });
+      },
+    },
+    "採点する",
+  );
   result.append(
-    solutionNode(p, "模範解答"),
-    h("div", { class: "muted" }, "自分の解答と照合して自己採点:"),
-    ratingBar(host, p, [
-      ["again", "書けなかった"],
-      ["hard", "部分的"],
-      ["good", "書けた"],
-      ["easy", "完璧"],
-    ]),
+    h(
+      "div",
+      { class: "gradeui solution" },
+      h("strong", {}, "模範解答（採点観点）"),
+      h("p", { class: "muted" }, "各ステップを自分の解答と照合し、書けた項目にチェック → 採点する（部分点で評価）"),
+      list,
+      h("p", { class: "src" }, sourceText(p)),
+      grade,
+    ),
   );
 }
 
@@ -335,12 +424,30 @@ function ratingBar(host: HTMLElement, p: Problem, opts: ReadonlyArray<readonly [
   return bar;
 }
 
-function finalize(host: HTMLElement, p: Problem, rating: Rating): void {
+function finalize(
+  host: HTMLElement,
+  p: Problem,
+  rating: Rating,
+  score?: { checked: number; total: number; pct: number },
+): void {
   const timeMs = Date.now() - practice.shownAt;
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
   const result = host.querySelector("#result") as HTMLElement;
-  // 既存の評価バーを除去し、シェア文＋次へを出す。
-  for (const r of Array.from(result.querySelectorAll(".rate"))) r.remove();
+  // 既存の評価バー・採点UIを除去し、結果＋シェア文＋次へを出す。
+  for (const r of Array.from(result.querySelectorAll(".rate, .gradeui"))) r.remove();
+  if (score) {
+    // 記述: 採点UIを消した後に模範解答を残し、先頭に部分点フィードバックを置く。
+    result.append(solutionNode(p, "模範解答"));
+    const ok = score.pct >= 2 / 3;
+    result.insertBefore(
+      h(
+        "div",
+        { class: `feedback ${ok ? "ok" : "ng"}` },
+        `📝 部分点 ${score.checked}/${score.total}（${Math.round(score.pct * 100)}%）${ok ? "— 合格圏" : "— 要強化"}`,
+      ),
+      result.firstChild,
+    );
+  }
   result.append(
     h(
       "div",
@@ -367,7 +474,11 @@ function renderReview(root: HTMLElement): void {
   root.append(h("h2", {}, "復習キュー（期限到来）"));
   if (dueProblems.length === 0) {
     root.append(
-      h("p", { class: "muted" }, "いま復習期限が来ている論点はありません。学習タブで新しい問題に挑戦しましょう。"),
+      emptyState(
+        "✅",
+        "復習はすべて完了",
+        "いま期限が来ている論点はありません。学習タブで新しい問題に挑戦しましょう。",
+      ),
     );
   } else {
     root.append(
@@ -395,7 +506,7 @@ function renderReview(root: HTMLElement): void {
 
   root.append(h("h2", {}, "間違いノート"));
   if (notebook.length === 0) {
-    root.append(h("p", { class: "muted" }, "まだ誤答はありません（または誤答が記録された問題がありません）。"));
+    root.append(emptyState("📝", "間違いノートは空です", "誤答した問題がここに集まり、ワンタップで再演習できます。"));
   } else {
     root.append(
       h(
@@ -662,6 +773,17 @@ function masteryChip(level: string): HTMLElement {
 
 function renderDashboard(root: HTMLElement): void {
   const logs = progress.logs();
+  if (logs.length === 0) {
+    root.append(
+      emptyState(
+        "📊",
+        "まだ学習記録がありません",
+        "学習タブで問題を解くと、ここに到達度や正答率の推移が表示されます。",
+      ),
+      h("button", { class: "primary", type: "button", onclick: () => switchView("practice") }, "学習を始める →"),
+    );
+    return;
+  }
   const o = overall(logs);
   const plan = buildStudyPlan({
     examDateIso: getExamDate(storage),
@@ -692,9 +814,14 @@ function renderDashboard(root: HTMLElement): void {
       { class: "grid2" },
       h(
         "div",
-        { class: "card" },
-        h("div", { class: "muted" }, "今日の学習"),
-        h("div", {}, `${plan.todayCount} / ${plan.dailyGoal} 問 ${plan.metToday ? "✅" : ""}`),
+        { class: "card today" },
+        ringNode(plan.todayCount, plan.dailyGoal),
+        h(
+          "div",
+          {},
+          h("div", { class: "muted" }, "今日の学習"),
+          h("div", {}, `${plan.todayCount} / ${plan.dailyGoal} 問 ${plan.metToday ? "✅" : ""}`),
+        ),
       ),
       h(
         "div",
@@ -709,6 +836,9 @@ function renderDashboard(root: HTMLElement): void {
       `総解答 ${o.attempts} 問 ・ 学習論点 ${o.topicsStudied} ・ 直近20問 ${Math.round(recentAccuracy(logs) * 100)}%`,
     ),
   );
+
+  const spark = sparklineNode(accuracyTrend(logs));
+  if (spark) root.append(h("h2", {}, "正答率の推移"), spark);
 
   root.append(h("h2", {}, "科目別 到達度"));
   for (const r of bySubject(logs, problems)) {
@@ -753,19 +883,19 @@ function renderDashboard(root: HTMLElement): void {
     ),
   );
 
-  // 学習ヒートマップ（直近14日の解答数。継続の可視化）
+  // 学習ヒートマップ（直近14日の解答数。GitHub風の強度セル）
   const activity = dailyActivity(logs, 14, Date.now());
   const maxCount = Math.max(1, ...activity.map((a) => a.count));
   root.append(
     h("h2", {}, "学習ヒートマップ（直近14日）"),
     h(
       "div",
-      { class: "toolbar", style: "gap:.2rem;align-items:flex-end" },
+      { class: "heat" },
       ...activity.map((a) => {
-        const intensity = a.count === 0 ? 0.08 : 0.25 + 0.75 * (a.count / maxCount);
+        const lv = a.count === 0 ? 0 : Math.min(4, 1 + Math.floor((a.count / maxCount) * 3.99));
         return h("div", {
-          title: `${a.offset === 0 ? "今日" : `${a.offset}日`}: ${a.count}問`,
-          style: `flex:1;min-width:1rem;height:${8 + Math.round((a.count / maxCount) * 28)}px;border-radius:.2rem;background:var(--accent);opacity:${intensity}`,
+          class: `cell lv${lv}`,
+          title: `${a.offset === 0 ? "今日" : `${a.offset}日前`}: ${a.count}問`,
         });
       }),
     ),
@@ -827,7 +957,22 @@ function renderSettings(root: HTMLElement): void {
   retSel.value = String(progress.desiredRetention());
   retSel.addEventListener("change", () => progress.setDesiredRetention(Number(retSel.value)));
 
+  const themeSel = h("select", {}) as HTMLSelectElement;
+  for (const [v, label] of [
+    ["system", "システムに合わせる"],
+    ["light", "ライト"],
+    ["dark", "ダーク"],
+  ] as const) {
+    themeSel.append(h("option", { value: v }, label));
+  }
+  themeSel.value = getTheme(storage);
+  themeSel.addEventListener("change", () => {
+    setTheme(storage, themeSel.value as ThemePref);
+    applyTheme();
+  });
+
   root.append(
+    h("div", { class: "card" }, h("label", {}, "テーマ "), themeSel),
     h("div", { class: "card" }, h("label", {}, "試験日 "), examInput),
     h("div", { class: "card" }, h("label", {}, "1日の目標問題数 "), goalInput),
     h(
@@ -872,7 +1017,22 @@ function onKeydown(e: KeyboardEvent): void {
 
 // ---- 起動 ----
 
+/** 読込中のスケルトン（problems.json 取得まで）。 */
+function renderSkeleton(): void {
+  $("view").innerHTML =
+    '<div class="skel-line skeleton w40"></div><div class="skel-line skeleton big"></div>' +
+    '<div class="skel-line skeleton"></div><div class="skel-line skeleton w60"></div>' +
+    '<div class="skel-line skeleton"></div><div class="skel-line skeleton"></div>';
+}
+
 async function main(): Promise<void> {
+  applyTheme();
+  // system 設定時は OS のテーマ変更に追従。
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
+    if (getTheme(storage) === "system") applyTheme();
+  });
+  renderNav();
+  renderSkeleton();
   try {
     const res = await fetch("./problems.json");
     problems = (await res.json()) as Problem[];
@@ -880,11 +1040,50 @@ async function main(): Promise<void> {
     problems = [];
   }
   document.addEventListener("keydown", onKeydown);
-  renderNav();
   render();
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  }
+  registerServiceWorker();
+}
+
+/** Service Worker 登録＋更新検知（新版があればトーストで再読込を案内）。 */
+function registerServiceWorker(): void {
+  if (!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then((reg) => {
+      reg.addEventListener("updatefound", () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener("statechange", () => {
+          // 既存コントローラがある状態で新版が installed = 更新あり。
+          if (sw.state === "installed" && navigator.serviceWorker.controller) {
+            showToast("新しいバージョンがあります", "更新", () => location.reload());
+          }
+        });
+      });
+    })
+    .catch(() => {});
+}
+
+/** 画面下中央のトースト（任意のアクションボタン付き）。 */
+function showToast(message: string, actionLabel: string, action: () => void): void {
+  document.querySelector(".toast")?.remove();
+  const toast = h(
+    "div",
+    { class: "toast", role: "status" },
+    h("span", {}, message),
+    h(
+      "button",
+      {
+        type: "button",
+        onclick: () => {
+          toast.remove();
+          action();
+        },
+      },
+      actionLabel,
+    ),
+  );
+  document.body.appendChild(toast);
 }
 
 main();

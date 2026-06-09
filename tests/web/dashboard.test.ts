@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
 import {
+  accuracyTrend,
   bySubject,
   byTopic,
   dailyActivity,
@@ -100,6 +101,15 @@ describe("dashboard（進捗集計）", () => {
     const fc = reviewForecast(views, now, 7);
     expect(fc[0]).toBe(0); // 今日には入らない
     expect(fc[1]).toBe(1); // 翌日(+1)に入る
+  });
+
+  it("accuracyTrend: 時系列チャンクごとの正答率（0..1）を返す", () => {
+    const logs = [log("t", false, 1), log("t", true, 2), log("t", true, 3), log("t", false, 4)];
+    expect(accuracyTrend(logs, 4)).toEqual([0, 1, 1, 0]);
+    expect(accuracyTrend([], 8)).toEqual([]);
+    // 8件・segments4 → 2件ずつ4チャンク
+    const eight = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => log("t", i % 2 === 0, i));
+    expect(accuracyTrend(eight, 4).length).toBe(4);
   });
 
   it("dailyActivity: 直近 days 日の日別学習量を古い順→今日で返す", () => {

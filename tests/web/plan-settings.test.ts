@@ -5,8 +5,10 @@ import {
   DEFAULT_EXAM_DATE,
   getDailyGoal,
   getExamDate,
+  getTheme,
   setDailyGoal,
   setExamDate,
+  setTheme,
 } from "../../web/src/settings.js";
 import type { StorageLike } from "../../web/src/store.js";
 
@@ -77,5 +79,16 @@ describe("settings（試験日・1日目標の永続化）", () => {
     expect(getDailyGoal(s)).toBe(200);
     setDailyGoal(s, 0);
     expect(getDailyGoal(s)).toBe(1);
+  });
+
+  it("テーマ設定: 既定system、light/darkを永続化、不正はsystem", () => {
+    const s = new MemoryStorage();
+    expect(getTheme(s)).toBe("system");
+    setTheme(s, "dark");
+    expect(getTheme(s)).toBe("dark");
+    setTheme(s, "light");
+    expect(getTheme(s)).toBe("light");
+    s.setItem("denken:theme", "weird");
+    expect(getTheme(s)).toBe("system");
   });
 });

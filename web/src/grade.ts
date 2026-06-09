@@ -8,6 +8,7 @@
  *   multiple_choice / descriptive は選択肢・センチネルの厳密一致でよい。
  */
 import type { Problem } from "../../lib/engine/schema.js";
+import type { Rating } from "../../lib/scheduler/types.js";
 
 /**
  * ユーザー入力を数値文字列に正規化する。
@@ -42,4 +43,18 @@ export function isAnswerCorrect(problem: Problem, given: string): boolean {
   }
   // multiple_choice の選択肢、descriptive の自己採点センチネルは厳密一致。
   return given === problem.answer;
+}
+
+/**
+ * 記述(二次)の部分点自己採点。模範解答の各ステップ（採点観点）のうち
+ * 自分が書けた数 checked / 全 total から達成率と FSRS 評価を導く。
+ *   全部=easy / 2/3以上=good / 1/3以上=hard / それ未満=again（やり直し）
+ * 部分点の感覚を養い、二次の「途中点を確実に取る」戦略に繋げる。
+ */
+export function partialScore(checked: number, total: number): { pct: number; rating: Rating } {
+  if (total <= 0) return { pct: 0, rating: "again" };
+  const c = Math.max(0, Math.min(total, checked));
+  const pct = c / total;
+  const rating: Rating = c === total ? "easy" : pct >= 2 / 3 ? "good" : pct >= 1 / 3 ? "hard" : "again";
+  return { pct, rating };
 }

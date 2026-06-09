@@ -110,6 +110,22 @@ export function reviewForecast(
   return out;
 }
 
+/**
+ * 正答率の推移（スパークライン用）。解答ログを時系列で segments 個のチャンクに分け、
+ * 各チャンクの正答率（0..1）を返す。データが少ないときは要素数も少なくなる。
+ */
+export function accuracyTrend(logs: WebAnswerLog[], segments = 8): number[] {
+  if (logs.length === 0) return [];
+  const sorted = [...logs].sort((a, b) => a.atMs - b.atMs);
+  const size = Math.max(1, Math.ceil(sorted.length / segments));
+  const out: number[] = [];
+  for (let i = 0; i < sorted.length; i += size) {
+    const chunk = sorted.slice(i, i + size);
+    out.push(chunk.filter((l) => l.correct).length / chunk.length);
+  }
+  return out;
+}
+
 export interface DayActivity {
   /** 今日からの相対日（0=今日, -1=昨日 …）。 */
   offset: number;
