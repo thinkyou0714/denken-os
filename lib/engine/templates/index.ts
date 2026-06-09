@@ -10,15 +10,21 @@ import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
 import { inductionProportionalShift } from "./induction-proportional-shift.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
+import { lightingDesign } from "./lighting-design.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
+import { multiplierResistor } from "./multiplier-resistor.js";
+import { parallelPlateField } from "./parallel-plate-field.js";
+import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
 import { percentImpedanceShortCircuit } from "./percent-impedance-short-circuit.js";
 import { powerFactorCorrection } from "./power-factor-correction.js";
+import { pumpMotorInput } from "./pump-motor-input.js";
 import { rcTimeConstant } from "./rc-time-constant.js";
 import { reactivePowerCompensation } from "./reactive-power-compensation.js";
 import { resistorNetwork } from "./resistor-network.js";
 import { sagTension } from "./sag-tension.js";
 import { shortCircuitCapacity } from "./short-circuit-capacity.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
+import { shuntResistor } from "./shunt-resistor.js";
 import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
@@ -38,12 +44,16 @@ const templates: Template[] = [
   maxPowerTransfer,
   rcTimeConstant,
   wheatstoneBridge,
+  shuntResistor,
+  multiplierResistor,
+  parallelPlateField,
   // 電力
   demandFactor,
   powerFactorCorrection,
   percentImpedanceShortCircuit,
   transmissionLoss,
   singlePhaseVoltageDrop,
+  percentImpedanceConversion,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -51,6 +61,8 @@ const templates: Template[] = [
   shortCircuitRatio,
   inductionPowerBalance,
   transformerTurnsRatio,
+  pumpMotorInput,
+  lightingDesign,
   // 法規
   groundingResistance,
   sagTension,
@@ -91,15 +103,21 @@ export {
   inductionPowerBalance,
   inductionProportionalShift,
   insulationTestVoltage,
+  lightingDesign,
   maxPowerTransfer,
+  multiplierResistor,
+  parallelPlateField,
+  percentImpedanceConversion,
   percentImpedanceShortCircuit,
   powerFactorCorrection,
+  pumpMotorInput,
   rcTimeConstant,
   reactivePowerCompensation,
   resistorNetwork,
   sagTension,
   shortCircuitCapacity,
   shortCircuitRatio,
+  shuntResistor,
   singlePhaseVoltageDrop,
   synchronousGeneratorOutput,
   thermalEfficiency,

@@ -12,14 +12,20 @@ import {
   inductionPowerBalance,
   inductionProportionalShift,
   insulationTestVoltage,
+  lightingDesign,
   maxPowerTransfer,
+  multiplierResistor,
+  parallelPlateField,
+  percentImpedanceConversion,
   percentImpedanceShortCircuit,
   powerFactorCorrection,
+  pumpMotorInput,
   rcTimeConstant,
   reactivePowerCompensation,
   sagTension,
   shortCircuitCapacity,
   shortCircuitRatio,
+  shuntResistor,
   singlePhaseVoltageDrop,
   synchronousGeneratorOutput,
   thermalEfficiency,
@@ -153,5 +159,35 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
 
   it("二次電力管理: 短絡容量 Pbase·100/%Z（10MVA,5% → 200MVA）", () => {
     expect(shortCircuitCapacity.generateFrom({ base_capacity: 10, percent_impedance: 5 })!.answerText).toBe("200");
+  });
+
+  it("理論: 分流器 R_s=r/(m-1)（r=9,m=10 → 1Ω）", () => {
+    expect(shuntResistor.generateFrom({ internal_resistance: 9, multiplier: 10 })!.answerText).toBe("1");
+  });
+
+  it("理論: 倍率器 R_m=r(m-1)（r=10,m=5 → 40Ω）", () => {
+    expect(multiplierResistor.generateFrom({ internal_resistance: 10, multiplier: 5 })!.answerText).toBe("40");
+  });
+
+  it("理論: 平行平板電界 E=V/d（200V,2mm → 100kV/m）", () => {
+    expect(parallelPlateField.generateFrom({ voltage: 200, gap: 2 })!.answerText).toBe("100");
+  });
+
+  it("電力: %Z容量換算 %Z2=%Z1(P2/P1)（5%,10→50MVA → 25%）", () => {
+    expect(
+      percentImpedanceConversion.generateFrom({ percent_impedance: 5, base_capacity: 10, target_capacity: 50 })!
+        .answerText,
+    ).toBe("25");
+  });
+
+  it("機械: 揚水動力 P=9.8QH/η（2,50,0.98 → 1000kW）", () => {
+    expect(pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.98 })!.answerText).toBe("1000");
+  });
+
+  it("機械: 照明灯数 N=EA/(FUM)（500,100,5000,0.5,0.8 → 25灯）", () => {
+    expect(
+      lightingDesign.generateFrom({ illuminance: 500, area: 100, lumen: 5000, utilization: 0.5, maintenance: 0.8 })!
+        .answerText,
+    ).toBe("25");
   });
 });
