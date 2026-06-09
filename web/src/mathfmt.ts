@@ -1,0 +1,35 @@
+/**
+ * mathfmt.ts — 数式の軽量フォーマッタ（純ロジック）。
+ *
+ * 方針: 電験の解説は電気量（V_p, I_l, R²）を多用するが、プレーンテキストでは
+ *   下付き・上付きが潰れて読みにくい。オフライン/最小依存の方針を守るため
+ *   KaTeX 等は使わず、HTML エスケープ後に下付き(_)・上付き(^)だけを安全に整形する。
+ *   Unicode の上付き(²³⁻)・√・ギリシャ文字はそのまま表示する。
+ */
+
+const ESCAPE: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+};
+
+export function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ESCAPE[c]!);
+}
+
+/**
+ * テキストを安全な HTML に整形する。
+ *  - まず HTML エスケープ（XSS 防止）
+ *  - `^{...}` / `^x` → <sup>、`_{...}` / `_x` → <sub>
+ *  下付き/上付きの対象は英数字（V_p, P_out, x^2 等）に限定し、誤変換を避ける。
+ */
+export function formatMath(raw: string): string {
+  let s = escapeHtml(raw);
+  s = s.replace(/\^\{([^}]+)\}/g, "<sup>$1</sup>");
+  s = s.replace(/\^([0-9A-Za-z]+)/g, "<sup>$1</sup>");
+  s = s.replace(/_\{([^}]+)\}/g, "<sub>$1</sub>");
+  s = s.replace(/_([0-9A-Za-z]+)/g, "<sub>$1</sub>");
+  return s;
+}

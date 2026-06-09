@@ -1,0 +1,58 @@
+{
+  "id": "T-0017",
+  "exam": "denken2_secondary",
+  "subject": "機械制御",
+  "topic": "誘導電動機の比例推移",
+  "format": "descriptive",
+  "difficulty": 4,
+  "params": {
+    "secondary_resistance": {
+      "value": 0.5,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        1
+      ]
+    },
+    "slip_before": {
+      "value": 0.05,
+      "unit": "",
+      "realistic_range": [
+        0.02,
+        0.08
+      ]
+    },
+    "slip_after": {
+      "value": 0.15,
+      "unit": "",
+      "realistic_range": [
+        0.1,
+        0.2
+      ]
+    }
+  },
+  "statement": "巻線形三相誘導電動機の二次回路抵抗が r2=0.5Ω のとき、最大トルクを生じる滑りは s1=0.05 である。この滑りを s2=0.15 に推移させるために二次回路へ直列挿入する抵抗 R〔Ω〕を、比例推移の関係から求めよ。",
+  "answer": "1",
+  "solution": [
+    "比例推移: r2/s1=(r2+R)/s2",
+    "R=r2·(s2−s1)/s1=0.5×(0.15−0.05)/0.05",
+    "R=1Ω"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

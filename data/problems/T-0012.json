@@ -1,0 +1,42 @@
+{
+  "id": "T-0012",
+  "exam": "denken2_primary",
+  "subject": "機械",
+  "topic": "同期発電機の短絡比",
+  "format": "numeric",
+  "difficulty": 3,
+  "params": {
+    "percent_synchronous_impedance": {
+      "value": 125,
+      "unit": "%",
+      "realistic_range": [
+        50,
+        300
+      ]
+    }
+  },
+  "statement": "ある三相同期発電機のパーセント同期インピーダンスが %Zs=125% である。この発電機の短絡比 Ks は?",
+  "answer": "0.8",
+  "solution": [
+    "短絡比 Ks=1/(%Zs/100)=100/%Zs",
+    "Ks=100/125",
+    "Ks=0.8"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

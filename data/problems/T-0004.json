@@ -1,0 +1,51 @@
+{
+  "id": "T-0004",
+  "exam": "denken2_primary",
+  "subject": "理論",
+  "topic": "最大電力伝送",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "emf": {
+      "value": 100,
+      "unit": "V",
+      "realistic_range": [
+        10,
+        200
+      ]
+    },
+    "internal_resistance": {
+      "value": 5,
+      "unit": "ohm",
+      "realistic_range": [
+        1,
+        20
+      ]
+    }
+  },
+  "statement": "起電力 E=100V、内部抵抗 R=5Ω のテブナン等価電源に可変抵抗負荷を接続する。負荷で消費する電力が最大となるときの最大電力 P_max〔W〕は?",
+  "answer": "500",
+  "solution": [
+    "最大電力伝送は負荷抵抗 R_L=R（内部抵抗に整合）のとき",
+    "このとき I=E/(2R)、負荷電圧=E/2",
+    "P_max=(E/2)²/R=E²/(4R)=100²/(4×5)=500W",
+    "（参考: このとき電源の全供給電力 E²/(2R) の半分が負荷に伝わる）"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

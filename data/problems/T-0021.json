@@ -1,0 +1,67 @@
+{
+  "id": "T-0021",
+  "exam": "denken2_secondary",
+  "subject": "機械制御",
+  "topic": "同期発電機の出力",
+  "format": "descriptive",
+  "difficulty": 4,
+  "params": {
+    "phase_voltage": {
+      "value": 220,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        500
+      ]
+    },
+    "induced_emf": {
+      "value": 440,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        600
+      ]
+    },
+    "synchronous_reactance": {
+      "value": 10,
+      "unit": "ohm",
+      "realistic_range": [
+        1,
+        30
+      ]
+    },
+    "load_angle": {
+      "value": 30,
+      "unit": "deg",
+      "realistic_range": [
+        0,
+        90
+      ]
+    }
+  },
+  "statement": "三相同期発電機の端子相電圧 V=220V、1相の誘導起電力 E=440V、同期リアクタンス Xs=10Ω、負荷角 δ=30° である。3相出力 P〔kW〕を P=3VEsinδ/Xs により導出過程とともに求めよ。",
+  "answer": "14.52",
+  "solution": [
+    "1相あたり P1=V·E·sinδ/Xs",
+    "3相出力 P=3·V·E·sinδ/Xs=3×220×440×0.5/10",
+    "P=14520W=14.52kW",
+    "（δ=90°で最大出力となる。安定限界の指標）"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

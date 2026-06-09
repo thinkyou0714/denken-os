@@ -24,3 +24,12 @@ export function formatKW(watts: number): string {
   if (s.endsWith("0")) s = s.slice(0, -1); // "4.0" / "3.2" / "2.56" / "9.6"
   return s;
 }
+
+/**
+ * 「綺麗な値」を末尾ゼロを落とした最短表記の文字列にする（numeric/descriptive 用）。
+ * 例: 50 -> "50" / 9.5 -> "9.5" / 10.35 -> "10.35" / 1.0 -> "1"
+ * 表記揺れを避けるため、答え・選択肢・解説の数値はこの関数で統一する。
+ */
+export function formatClean(value: number, maxDecimals = 2): string {
+  return String(Number(value.toFixed(maxDecimals)));
+}

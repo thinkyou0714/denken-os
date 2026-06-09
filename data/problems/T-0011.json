@@ -1,0 +1,58 @@
+{
+  "id": "T-0011",
+  "exam": "denken3",
+  "subject": "機械",
+  "topic": "直流電動機の逆起電力",
+  "format": "numeric",
+  "difficulty": 2,
+  "params": {
+    "terminal_voltage": {
+      "value": 200,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        220
+      ]
+    },
+    "armature_current": {
+      "value": 50,
+      "unit": "A",
+      "realistic_range": [
+        10,
+        50
+      ]
+    },
+    "armature_resistance": {
+      "value": 0.2,
+      "unit": "ohm",
+      "realistic_range": [
+        0.1,
+        1
+      ]
+    }
+  },
+  "statement": "端子電圧 V=200V の直流分巻電動機が電機子電流 Ia=50A で運転している。電機子抵抗 Ra=0.2Ω のとき、逆起電力 E〔V〕は?",
+  "answer": "190",
+  "solution": [
+    "逆起電力 E=V−Ia·Ra",
+    "E=200−50×0.2",
+    "E=190V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

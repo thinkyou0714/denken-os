@@ -3,55 +3,82 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DENKEN-OS — 今日の一問</title>
+    <title>DENKEN-OS — 電験二種 学習</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
     <link rel="apple-touch-icon" href="./icon.svg" />
     <meta name="theme-color" content="#0b5394" />
     <style>
-      :root { color-scheme: light dark; }
+      :root {
+        color-scheme: light dark;
+        --accent: #0b5394;
+        --ok: #198754;
+        --ng: #dc3545;
+        --line: #8884;
+        --soft: #88884011;
+      }
       * { box-sizing: border-box; }
-      body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; max-width: 720px; margin-inline: auto; line-height: 1.6; }
-      header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
-      h1 { font-size: 1.1rem; margin: 0; }
-      .stats { font-size: .9rem; opacity: .85; }
-      .demo { background: #fff3cd; color: #664d03; padding: .4rem .6rem; border-radius: .4rem; font-size: .8rem; margin: .6rem 0; }
-      #meta { opacity: .7; font-size: .85rem; margin-top: 1rem; }
-      #statement { font-size: 1.1rem; margin: .4rem 0 1rem; }
-      #answers { display: grid; gap: .5rem; }
-      .choice { padding: .7rem 1rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; background: #88884011; cursor: pointer; text-align: left; }
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 0 1rem 3rem; max-width: 760px; margin-inline: auto; line-height: 1.6; }
+      header { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem 1rem; flex-wrap: wrap; padding-top: 1rem; }
+      h1 { font-size: 1.05rem; margin: 0; }
+      h2 { font-size: 1rem; margin: 1.2rem 0 .4rem; }
+      .stats { font-size: .85rem; opacity: .85; }
+      .demo { background: #fff3cd; color: #664d03; padding: .4rem .6rem; border-radius: .4rem; font-size: .78rem; margin: .6rem 0; }
+      nav { display: flex; gap: .3rem; flex-wrap: wrap; position: sticky; top: 0; background: Canvas; padding: .5rem 0; border-bottom: 1px solid var(--line); z-index: 5; }
+      nav button { padding: .4rem .7rem; font-size: .85rem; border: 1px solid var(--line); border-radius: 999px; background: var(--soft); cursor: pointer; }
+      nav button[aria-current="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+      main { margin-top: .8rem; }
+      #meta { opacity: .7; font-size: .85rem; margin-top: .4rem; }
+      .stmt { font-size: 1.1rem; margin: .4rem 0 1rem; }
+      .answers { display: grid; gap: .5rem; }
+      .choice { padding: .7rem 1rem; font-size: 1rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--soft); cursor: pointer; text-align: left; }
       .choice:hover { background: #8888; }
-      input#numeric-input { padding: .7rem; font-size: 1rem; border: 1px solid #8884; border-radius: .5rem; }
-      #feedback { font-weight: 700; margin: 1rem 0 .3rem; }
-      .ok { color: #198754; } .ng { color: #dc3545; }
-      #solution ol { margin: .3rem 0; padding-left: 1.2rem; }
+      .choice:disabled { cursor: default; opacity: .9; }
+      .choice.correct { border-color: var(--ok); background: #19875422; }
+      .choice.wrong { border-color: var(--ng); background: #dc354522; }
+      input.num { padding: .7rem; font-size: 1rem; border: 1px solid var(--line); border-radius: .5rem; width: 100%; }
+      .feedback { font-weight: 700; margin: 1rem 0 .3rem; }
+      .ok { color: var(--ok); } .ng { color: var(--ng); }
+      .rate { display: flex; gap: .4rem; flex-wrap: wrap; margin: .6rem 0; }
+      .rate button { flex: 1 1 auto; padding: .55rem .5rem; font-size: .9rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--soft); cursor: pointer; }
+      .solution ol { margin: .3rem 0; padding-left: 1.2rem; }
       .src { opacity: .65; font-size: .8rem; }
-      #share { white-space: pre-wrap; background: #88884011; padding: .6rem; border-radius: .5rem; font-size: .85rem; min-height: 1px; }
-      #next { margin-top: 1rem; padding: .6rem 1.2rem; font-size: 1rem; border-radius: .5rem; border: none; background: #0b5394; color: #fff; cursor: pointer; }
-      footer { margin-top: 2rem; font-size: .75rem; opacity: .6; }
+      .share { white-space: pre-wrap; background: var(--soft); padding: .6rem; border-radius: .5rem; font-size: .82rem; }
+      .primary { margin-top: 1rem; padding: .6rem 1.2rem; font-size: 1rem; border-radius: .5rem; border: none; background: var(--accent); color: #fff; cursor: pointer; }
+      .toolbar { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin: .4rem 0; }
+      select, input[type="date"], input[type="number"] { padding: .45rem; font-size: .9rem; border: 1px solid var(--line); border-radius: .4rem; background: Canvas; color: CanvasText; }
+      .bar { background: var(--soft); border-radius: 999px; height: .55rem; overflow: hidden; }
+      .bar > span { display: block; height: 100%; background: var(--accent); }
+      .row { display: grid; grid-template-columns: 5.5rem 1fr 4.5rem; gap: .5rem; align-items: center; margin: .35rem 0; font-size: .85rem; }
+      .chip { font-size: .72rem; padding: .05rem .45rem; border-radius: 999px; border: 1px solid var(--line); }
+      .chip.m0 { color: #999; } .chip.m1 { color: var(--ng); border-color: var(--ng); }
+      .chip.m2 { color: #b8860b; border-color: #b8860b; } .chip.m3 { color: var(--ok); border-color: var(--ok); }
+      .card { border: 1px solid var(--line); border-radius: .5rem; padding: .6rem .7rem; margin: .4rem 0; }
+      .muted { opacity: .7; font-size: .85rem; }
+      .big { font-size: 1.8rem; font-weight: 700; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+      table.fx { width: 100%; border-collapse: collapse; font-size: .85rem; }
+      table.fx td { border-bottom: 1px solid var(--line); padding: .3rem .2rem; vertical-align: top; }
+      table.fx td:first-child { white-space: nowrap; opacity: .8; padding-right: .6rem; }
+      footer { margin-top: 2rem; font-size: .72rem; opacity: .6; }
+      sub, sup { font-size: .72em; }
     </style>
   </head>
   <body>
     <header>
-      <h1>DENKEN-OS — 今日の一問</h1>
-      <div class="stats"><span id="streak"></span> ／ <span id="weak"></span></div>
+      <h1>DENKEN-OS <span class="muted">電験二種 学習OS</span></h1>
+      <div class="stats"><span id="streak"></span> ／ <span id="countdown"></span></div>
     </header>
 
-    <p class="demo">⚠️ デモ版：問題は自動生成（未監修）です。学習の目安に。正解はコードで検算済みですが、本番運用では人の目チェックを通します。</p>
+    <nav id="nav" aria-label="メニュー"></nav>
 
-    <main>
-      <div id="meta"></div>
-      <div id="statement">読み込み中…</div>
-      <div id="answers"></div>
-      <div id="feedback"></div>
-      <div id="solution"></div>
-      <div id="share"></div>
-      <button id="next">次の問題 →</button>
-    </main>
+    <p class="demo">⚠️ 問題は自動生成（コードで検算済み・未監修のデモ）。正解の数値はコード算出ですが、本番運用前に人の目チェックを通します。</p>
+
+    <main id="view" aria-live="polite"></main>
 
     <footer>
       オフライン対応 PWA。学習記録はこの端末内（localStorage）にのみ保存されます。<br />
-      コード=MIT / 問題データ=CC-BY-SA-4.0。
+      復習は FSRS（最新の間隔反復アルゴリズム）。コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 
     <script type="module" src="./dist/app.js"></script>

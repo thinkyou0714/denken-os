@@ -1,0 +1,58 @@
+{
+  "id": "T-0027",
+  "exam": "denken2_secondary",
+  "subject": "電力管理",
+  "topic": "調相設備容量",
+  "format": "descriptive",
+  "difficulty": 4,
+  "params": {
+    "load_power": {
+      "value": 1500,
+      "unit": "kW",
+      "realistic_range": [
+        500,
+        3000
+      ]
+    },
+    "power_factor_before": {
+      "value": 0.6,
+      "unit": "",
+      "realistic_range": [
+        0.5,
+        1
+      ]
+    },
+    "power_factor_after": {
+      "value": 0.8,
+      "unit": "",
+      "realistic_range": [
+        0.5,
+        1
+      ]
+    }
+  },
+  "statement": "有効電力 P=1500kW、力率 cosθ1=0.6（遅れ）の需要家が、力率を cosθ2=0.8 に改善する。必要な電力用コンデンサ（調相設備）容量 Qc〔kvar〕を導出過程とともに求めよ。",
+  "answer": "875",
+  "solution": [
+    "改善前後の無効電力差が必要容量: Qc=P(tanθ1−tanθ2)",
+    "tanθ1=1.3333、tanθ2=0.75",
+    "Qc=1500×(1.3333−0.75)=875kvar"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

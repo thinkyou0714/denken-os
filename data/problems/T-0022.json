@@ -1,0 +1,50 @@
+{
+  "id": "T-0022",
+  "exam": "denken2_secondary",
+  "subject": "機械制御",
+  "topic": "降圧チョッパの出力電圧",
+  "format": "descriptive",
+  "difficulty": 3,
+  "params": {
+    "input_voltage": {
+      "value": 400,
+      "unit": "V",
+      "realistic_range": [
+        100,
+        600
+      ]
+    },
+    "duty_ratio": {
+      "value": 0.75,
+      "unit": "",
+      "realistic_range": [
+        0.1,
+        0.9
+      ]
+    }
+  },
+  "statement": "直流 Vi=400V を降圧チョッパで変換する。通流率（デューティ比）D=0.75（=75%）のとき、出力平均電圧 Vo〔V〕を導出過程とともに求めよ。",
+  "answer": "300",
+  "solution": [
+    "降圧チョッパの出力平均電圧 Vo=D·Vi",
+    "Vo=0.75×400",
+    "Vo=300V"
+  ],
+  "validation": {
+    "solver_checked": true,
+    "human_checked": true,
+    "clean_answer": true,
+    "physically_valid": true,
+    "supervisor_checked": false,
+    "confidence": 0.97
+  },
+  "source": {
+    "type": "original",
+    "citation": "DENKEN-OS オリジナル問題"
+  },
+  "stats": {
+    "answered": 0,
+    "correct_rate": 0
+  },
+  "status": "validated"
+}

@@ -3,7 +3,9 @@
 // ★web/ のアセット(dist/app.js 等)を変更したらこの版数を必ず上げること。版数を上げると
 //   このファイルのバイトが変わり SW 更新が走り、activate で旧キャッシュを破棄して新バンドルを取り直す。
 //   (v3: numeric採点の空入力是正・数値比較・JST日境界・直近重複回避を配信)
-const CACHE = "denken-os-v3";
+//   (v4: タブ型SPA・FSRS・模試/復習/間違いノート/進捗/公式/設定・数式整形・220問を配信)
+//   (v5: 一次フル模試の科目別足切り判定・学習ヒートマップを配信)
+const CACHE = "denken-os-v5";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
