@@ -82,3 +82,23 @@ export const FORMULAS: FormulaGroup[] = [
     ],
   },
 ];
+
+/** 検索向け正規化（NFKC・小文字化・空白除去）。公式56件を目視スキャンさせない。 */
+function norm(s: string): string {
+  return s.normalize("NFKC").toLowerCase().replace(/\s+/g, "");
+}
+
+/**
+ * 公式集をクエリで絞り込む。名前・式・補足のいずれかに部分一致した項目だけを残し、
+ * 空になったグループは落とす。空クエリは全件を返す。
+ */
+export function filterFormulas(groups: FormulaGroup[], query: string): FormulaGroup[] {
+  const q = norm(query);
+  if (q.length === 0) return groups;
+  return groups
+    .map((g) => ({
+      subject: g.subject,
+      items: g.items.filter((i) => norm(`${i.name}${i.formula}${i.note ?? ""}`).includes(q)),
+    }))
+    .filter((g) => g.items.length > 0);
+}

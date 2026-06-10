@@ -21,6 +21,25 @@ export interface ExamScore {
 /** 合格ライン（電験は各科目おおむね60%）。 */
 export const PASS_THRESHOLD = 60;
 
+/** 1問あたりの持ち時間。一次（択一/数値）は本番の問題数と試験時間から約3分/問、
+ *  二次（記述）は1問を書き切る時間として10分/問を割り当てる。 */
+export const PRIMARY_PER_PROBLEM_MS = 3 * 60_000;
+export const DESCRIPTIVE_PER_PROBLEM_MS = 10 * 60_000;
+/** 模試全体の上限（だらだら防止。本番1科目の試験時間に相当）。 */
+export const EXAM_TIME_CAP_MS = 120 * 60_000;
+
+/**
+ * 出題セットから模試の制限時間を算出する（時間制限の本実装）。
+ * 形式ごとの持ち時間の合計を上限つきで返す。
+ */
+export function examTimeLimitMs(set: Problem[]): number {
+  const total = set.reduce(
+    (acc, p) => acc + (p.format === "descriptive" ? DESCRIPTIVE_PER_PROBLEM_MS : PRIMARY_PER_PROBLEM_MS),
+    0,
+  );
+  return Math.min(EXAM_TIME_CAP_MS, total);
+}
+
 function shuffle<T>(arr: T[], rng: () => number): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
