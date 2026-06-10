@@ -1,12 +1,15 @@
 /**
- * settings.ts — ユーザー設定（試験日・1日の目標問題数）の永続化（純ロジック）。
+ * settings.ts — ユーザー設定（試験日・1日の目標問題数・AIチャット）の永続化（純ロジック）。
  * FSRS の目標保持率は store.ts 側で管理する。
  */
+import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from "../../lib/chat/prompt.js";
 import type { StorageLike } from "./store.js";
 
 const EXAM_DATE_KEY = "denken:examDate";
 const DAILY_GOAL_KEY = "denken:dailyGoal";
 const THEME_KEY = "denken:theme";
+const API_KEY_KEY = "denken:apiKey";
+const CHAT_MODEL_KEY = "denken:chatModel";
 
 /** 既定の試験日（2026年度 電験二種 一次試験の目安）。設定で上書き可。 */
 export const DEFAULT_EXAM_DATE = "2026-08-30";
@@ -41,4 +44,26 @@ export function getDailyGoal(storage: StorageLike): number {
 export function setDailyGoal(storage: StorageLike, n: number): void {
   const clamped = Math.min(200, Math.max(1, Math.round(n)));
   storage.setItem(DAILY_GOAL_KEY, String(clamped));
+}
+
+// ---- AIチャット（BYOK: ユーザー自身の Anthropic API キー）----
+// キーはこの端末の localStorage のみに保存し、送信先は api.anthropic.com のみ。
+// リポジトリ・サーバには一切送らない（.env と同じく秘匿情報の扱い）。
+
+export function getApiKey(storage: StorageLike): string {
+  return storage.getItem(API_KEY_KEY)?.trim() ?? "";
+}
+
+/** 空文字で実質削除（StorageLike に removeItem が無いため）。 */
+export function setApiKey(storage: StorageLike, key: string): void {
+  storage.setItem(API_KEY_KEY, key.trim());
+}
+
+export function getChatModel(storage: StorageLike): string {
+  const raw = storage.getItem(CHAT_MODEL_KEY);
+  return CHAT_MODELS.some((m) => m.id === raw) ? (raw as string) : DEFAULT_CHAT_MODEL;
+}
+
+export function setChatModel(storage: StorageLike, id: string): void {
+  if (CHAT_MODELS.some((m) => m.id === id)) storage.setItem(CHAT_MODEL_KEY, id);
 }

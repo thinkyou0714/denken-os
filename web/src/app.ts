@@ -1,16 +1,24 @@
 /**
  * app.ts — 電験二種 学習OS（オフライン PWA）のエントリ。
- * タブ型 SPA: 学習 / 復習 / 模試 / 進捗 / 公式 / 設定。
+ * タブ型 SPA: 学習 / 復習 / 模試 / 質問 / 進捗 / 公式 / 設定。
  *  - 学習: 弱点優先 or 科目ドリル。解答→即解説（数式整形）→FSRS 4段階評価。
  *  - 復習: 期限が来た論点＋間違いノートを再演習（想起練習）。
  *  - 模試: 時間制限・合格ライン(60%)判定で本番を再現。
+ *  - 質問: AIチャット。既定は内蔵ナレッジ（オフライン・出典付き）、
+ *          APIキー設定時は Claude にローカル検索結果を注入して回答（RAG・BYOK）。
  *  - 進捗: 科目別到達度・弱点・復習見込み・試験カウントダウン。
  * バックエンド不要・完全オフライン（Service Worker で app shell をキャッシュ）。
  */
+import { answerLocally, SUGGESTED_QUESTIONS } from "../../lib/chat/answer.js";
+import { KNOWLEDGE } from "../../lib/chat/knowledge.js";
+import { buildApiMessages, buildSystemPrompt, CHAT_MODELS } from "../../lib/chat/prompt.js";
+import { retrieve } from "../../lib/chat/retrieve.js";
+import type { ChatMessage } from "../../lib/chat/types.js";
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { appendChatMessage, clearChat, loadChat, streamClaude } from "./chat.js";
 import {
   accuracyTrend,
   bySubject,
@@ -29,9 +37,13 @@ import { buildStudyPlan } from "./plan.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
 import {
+  getApiKey,
+  getChatModel,
   getDailyGoal,
   getExamDate,
   getTheme,
+  setApiKey,
+  setChatModel,
   setDailyGoal,
   setExamDate,
   setTheme,
@@ -44,6 +56,7 @@ const TABS: ReadonlyArray<readonly [string, string, string]> = [
   ["practice", "学習", "✏️"],
   ["review", "復習", "🔁"],
   ["exam", "模試", "📝"],
+  ["chat", "質問", "💬"],
   ["dashboard", "進捗", "📊"],
   ["formulas", "公式", "📐"],
   ["settings", "設定", "⚙️"],
@@ -227,6 +240,7 @@ function render(): void {
   if (view === "practice") renderPractice(root);
   else if (view === "review") renderReview(root);
   else if (view === "exam") renderExam(root);
+  else if (view === "chat") renderChat(root);
   else if (view === "dashboard") renderDashboard(root);
   else if (view === "formulas") renderFormulas(root);
   else if (view === "settings") renderSettings(root);
@@ -760,6 +774,201 @@ function renderExamResult(root: HTMLElement): void {
   );
 }
 
+// ---- 質問タブ（AIチャット）----
+
+/** 送信中フラグ（多重送信の防止）。 */
+const chatState = { busy: false };
+
+/** チャット1件の吹き出しノード。assistant は数式整形（HTMLエスケープ込み）して表示。 */
+function bubbleNode(msg: ChatMessage): HTMLElement {
+  if (msg.role === "user") {
+    const b = h("div", { class: "msg user" });
+    b.textContent = msg.content;
+    return b;
+  }
+  const b = h("div", { class: "msg bot", html: formatMath(msg.content) });
+  if (msg.citations && msg.citations.length > 0) {
+    b.append(h("div", { class: "src" }, `出典: ${msg.citations.join(" ／ ")}`));
+  }
+  return b;
+}
+
+function chatLogNode(messages: ChatMessage[]): HTMLElement {
+  const log = h("div", { class: "chat", id: "chatlog" });
+  if (messages.length === 0) {
+    log.append(
+      emptyState("💬", "電験のことなら何でも聞いてください", "用語・公式・試験制度・勉強法に、出典付きで答えます。"),
+    );
+  }
+  for (const m of messages) log.append(bubbleNode(m));
+  return log;
+}
+
+function scrollChatToBottom(): void {
+  const log = document.getElementById("chatlog");
+  if (log) log.scrollTop = log.scrollHeight;
+}
+
+/** おすすめ質問チップ。クリックで即送信。 */
+function chatChips(questions: readonly string[]): HTMLElement {
+  const wrap = h("div", { class: "chips" });
+  for (const q of questions) {
+    wrap.append(h("button", { class: "chip", type: "button", onclick: () => void sendChat(q) }, q));
+  }
+  return wrap;
+}
+
+async function sendChat(question: string): Promise<void> {
+  const q = question.trim();
+  if (chatState.busy || q.length === 0) return;
+  chatState.busy = true;
+  appendChatMessage(storage, { role: "user", content: q, atMs: Date.now() });
+  renderChatLogOnly();
+
+  const apiKey = getApiKey(storage);
+  // どちらのモードでもまずローカル検索（API モードではグラウンディング文脈に流用）。
+  const hits = retrieve(q, KNOWLEDGE, { k: 4 });
+
+  if (!apiKey) {
+    const a = answerLocally(q);
+    appendChatMessage(storage, {
+      role: "assistant",
+      content: a.text,
+      citations: a.citations,
+      mode: "local",
+      atMs: Date.now(),
+    });
+    chatState.busy = false;
+    renderChatLogOnly(a.suggestions);
+    return;
+  }
+
+  // API モード: ストリーミング表示。失敗時はローカル回答へフォールバック（沈黙させない）。
+  const log = document.getElementById("chatlog");
+  const live = h("div", { class: "msg bot streaming" }, "…");
+  log?.append(live);
+  scrollChatToBottom();
+  let acc = "";
+  try {
+    const history = loadChat(storage);
+    const stream = streamClaude({
+      apiKey,
+      model: getChatModel(storage),
+      system: buildSystemPrompt(hits.map((hit) => hit.entry)),
+      messages: buildApiMessages(history),
+    });
+    for await (const chunk of stream) {
+      acc += chunk;
+      live.innerHTML = formatMath(acc);
+      scrollChatToBottom();
+    }
+    appendChatMessage(storage, {
+      role: "assistant",
+      content: acc,
+      citations: hits.map((hit) => hit.entry.citation),
+      mode: "api",
+      atMs: Date.now(),
+    });
+  } catch (e) {
+    const local = answerLocally(q);
+    const note = e instanceof Error ? e.message : "APIに接続できませんでした。";
+    appendChatMessage(storage, {
+      role: "assistant",
+      content: `⚠️ ${note}\n（内蔵ナレッジで回答します）\n\n${local.text}`,
+      citations: local.citations,
+      mode: "local",
+      atMs: Date.now(),
+    });
+  } finally {
+    chatState.busy = false;
+    renderChatLogOnly();
+  }
+}
+
+/** 入力欄を保ったままログ部分だけ再描画する（入力中テキストを失わせない）。 */
+function renderChatLogOnly(suggestions?: readonly string[]): void {
+  if (view !== "chat") return;
+  const host = document.getElementById("chathost");
+  if (!host) return;
+  host.innerHTML = "";
+  host.append(chatLogNode(loadChat(storage)));
+  if (suggestions && suggestions.length > 0) host.append(chatChips(suggestions));
+  scrollChatToBottom();
+  const btn = document.getElementById("chatsend") as HTMLButtonElement | null;
+  if (btn) btn.disabled = chatState.busy;
+}
+
+function renderChat(root: HTMLElement): void {
+  const apiKey = getApiKey(storage);
+  const history = loadChat(storage);
+  const toolbar = h(
+    "div",
+    { class: "toolbar" },
+    h("span", { class: "pill" }, apiKey ? "✨ Claude API（ローカル検索で接地）" : "📚 内蔵ナレッジ（オフライン）"),
+    h(
+      "button",
+      {
+        class: "chip",
+        type: "button",
+        onclick: () => {
+          if (!window.confirm("チャット履歴を消去します。よろしいですか？")) return;
+          clearChat(storage);
+          switchView("chat");
+        },
+      },
+      "履歴を消去",
+    ),
+  );
+
+  const host = h("div", { id: "chathost" });
+  host.append(chatLogNode(history));
+  if (history.length === 0) host.append(chatChips(SUGGESTED_QUESTIONS));
+
+  const input = h("textarea", {
+    id: "chatin",
+    rows: "2",
+    placeholder: "電験の質問を入力（Enterで送信 / Shift+Enterで改行）",
+    "aria-label": "質問を入力",
+  }) as HTMLTextAreaElement;
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      const q = input.value;
+      input.value = "";
+      void sendChat(q);
+    }
+  });
+  const send = h(
+    "button",
+    {
+      class: "primary",
+      id: "chatsend",
+      type: "button",
+      onclick: () => {
+        const q = input.value;
+        input.value = "";
+        void sendChat(q);
+      },
+    },
+    "送信",
+  ) as HTMLButtonElement;
+  send.disabled = chatState.busy;
+
+  root.append(
+    toolbar,
+    host,
+    h("div", { class: "composer" }, input, send),
+    h(
+      "p",
+      { class: "muted" },
+      apiKey
+        ? "AI回答は誤りを含む可能性があります。数値は学習タブの検算済み問題で確認を。法令は最新の条文を確認してください。"
+        : "内蔵ナレッジから出典付きで回答します。設定タブで Anthropic API キーを登録すると、Claude による自由質問に切り替わります。",
+    ),
+  );
+  scrollChatToBottom();
+}
+
 // ---- 進捗タブ ----
 
 function bar(pct: number): HTMLElement {
@@ -971,6 +1180,20 @@ function renderSettings(root: HTMLElement): void {
     applyTheme();
   });
 
+  // AIチャット（BYOK）: キーは端末内 localStorage のみ・送信先は Anthropic のみ。
+  const keyInput = h("input", {
+    type: "password",
+    placeholder: "sk-ant-...",
+    autocomplete: "off",
+    value: getApiKey(storage),
+    "aria-label": "Anthropic API キー",
+  }) as HTMLInputElement;
+  keyInput.addEventListener("change", () => setApiKey(storage, keyInput.value));
+  const modelSel = h("select", {}) as HTMLSelectElement;
+  for (const m of CHAT_MODELS) modelSel.append(h("option", { value: m.id }, m.label));
+  modelSel.value = getChatModel(storage);
+  modelSel.addEventListener("change", () => setChatModel(storage, modelSel.value));
+
   root.append(
     h("div", { class: "card" }, h("label", {}, "テーマ "), themeSel),
     h("div", { class: "card" }, h("label", {}, "試験日 "), examInput),
@@ -982,6 +1205,32 @@ function renderSettings(root: HTMLElement): void {
       retSel,
       h("div", { class: "muted" }, "高いほど復習間隔が短く、定着重視になります（既定90%）。"),
     ),
+    h("h2", {}, "AIチャット（質問タブ）"),
+    h(
+      "div",
+      { class: "card" },
+      h("label", {}, "Anthropic API キー（任意） "),
+      keyInput,
+      h(
+        "div",
+        { class: "muted" },
+        "未設定でも内蔵ナレッジで動作します。キーはこの端末の localStorage にのみ保存され、" +
+          "送信先は api.anthropic.com のみです。共有端末では設定しないでください。",
+      ),
+      h(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          onclick: () => {
+            setApiKey(storage, "");
+            keyInput.value = "";
+          },
+        },
+        "キーを削除",
+      ),
+    ),
+    h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
     h("h2", {}, "データ"),
     h(
       "button",
