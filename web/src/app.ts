@@ -18,6 +18,7 @@ import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { exportBackup, importBackup } from "./backup.js";
 import { appendChatMessage, clearChat, loadChat, streamClaude } from "./chat.js";
 import {
   accuracyTrend,
@@ -29,8 +30,9 @@ import {
   recentAccuracy,
   reviewForecast,
 } from "./dashboard.js";
-import { buildMockExam, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
-import { FORMULAS } from "./formulas.js";
+import { buildMockExam, examTimeLimitMs, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
+import { formatElapsed, formatRemaining } from "./format.js";
+import { FORMULAS, filterFormulas } from "./formulas.js";
 import { isAnswerCorrect, partialScore } from "./grade.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
@@ -42,10 +44,12 @@ import {
   getDailyGoal,
   getExamDate,
   getTheme,
+  isOnboarded,
   setApiKey,
   setChatModel,
   setDailyGoal,
   setExamDate,
+  setOnboarded,
   setTheme,
   type ThemePref,
 } from "./settings.js";
@@ -95,12 +99,23 @@ let problems: Problem[] = [];
 let view = "practice";
 
 // 学習タブの状態
-const practice: { current: Problem | null; shownAt: number; pool: Problem[] | null; subject: Subject | "all" } = {
+const practice: {
+  current: Problem | null;
+  shownAt: number;
+  pool: Problem[] | null;
+  subject: Subject | "all";
+  /** 現在の問題で開示したヒント段数（0=未使用）。 */
+  hintsShown: number;
+} = {
   current: null,
   shownAt: 0,
   pool: null,
   subject: "all",
+  hintsShown: 0,
 };
+
+/** problems.json の読込に失敗したか（オフライン初回起動など）。リトライ導線を出す。 */
+let loadFailed = false;
 
 // 模試タブの状態
 type ExamPreset = "all" | "primary" | "secondary";
@@ -111,6 +126,10 @@ interface ExamState {
   startedAt: number;
   timerId: number | null;
   preset: ExamPreset;
+  /** 制限時間（ms）。形式別の持ち時間合計（examTimeLimitMs）。 */
+  limitMs: number;
+  /** 時間切れで強制終了したか（結果画面で明示する）。 */
+  timedOut: boolean;
 }
 let exam: ExamState | null = null;
 
@@ -123,6 +142,11 @@ function endExam(): void {
 
 function weakTopics(): string[] {
   return weakestTopics(aggregateByTopic(progress.logs()).values(), Date.now(), 3);
+}
+
+/** 今日（JST日基準）の解答数。日次目標の達成判定に使う。 */
+function todayCount(): number {
+  return progress.logs().filter((l) => sameJstDay(l.atMs, Date.now())).length;
 }
 
 function difficultyStars(n: number): string {
@@ -254,7 +278,37 @@ function practicePool(): Problem[] {
   return problems.filter((p) => p.subject === practice.subject);
 }
 
+/** 初回オンボーディング（学習記録ゼロのときだけ表示。既読で消える）。 */
+function onboardingCard(root: HTMLElement): HTMLElement {
+  return h(
+    "div",
+    { class: "card onboard" },
+    h("strong", {}, "👋 はじめまして！3ステップで始められます"),
+    h(
+      "ol",
+      {},
+      h("li", {}, "問題を解く（選択肢はキーボード 1〜9 でも答えられます）"),
+      h("li", {}, "正解したら「むずかしい/できた/余裕」で自己評価 → 復習間隔が自動調整されます"),
+      h("li", {}, "復習タブに出た問題を毎日消化 → 忘れる直前の復習で定着します"),
+    ),
+    h(
+      "button",
+      {
+        class: "chip",
+        type: "button",
+        onclick: (e) => {
+          setOnboarded(storage);
+          ((e.target as HTMLElement).closest(".onboard") as HTMLElement | null)?.remove();
+          root.focus?.();
+        },
+      },
+      "了解、始める",
+    ),
+  );
+}
+
 function renderPractice(root: HTMLElement): void {
+  if (!isOnboarded(storage) && progress.logs().length === 0) root.append(onboardingCard(root));
   const toolbar = h(
     "div",
     { class: "toolbar" },
@@ -305,31 +359,65 @@ function nextQuestion(root: HTMLElement): void {
   host.innerHTML = "";
   const p = practice.current;
   if (!p) {
-    host.append(h("p", {}, "この分野の問題がありません。"));
+    if (loadFailed && problems.length === 0) {
+      // 読込失敗を行き止まりにしない（リトライ導線）。
+      host.append(
+        emptyState("📡", "問題データを読み込めませんでした", "通信状況を確認して、もう一度お試しください。"),
+        h("button", { class: "primary", type: "button", onclick: () => void reloadProblems() }, "再読み込み"),
+      );
+    } else {
+      host.append(emptyState("🔍", "この分野の問題がありません", "別の分野を選ぶか、復習ドリルを解除してください。"));
+    }
     return;
   }
   practice.shownAt = Date.now();
-  host.append(
-    h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`),
-    h("div", { class: "stmt", html: formatMath(p.statement) }),
-  );
+  practice.hintsShown = 0;
+  const stmt = h("div", { class: "stmt", tabindex: "-1", html: formatMath(p.statement) });
+  host.append(h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`), stmt);
   if (p.figure) host.append(figureNode(p.figure));
+  // ヒント段階開示: 解答前に解説の先頭ステップ（着眼点）だけ覗ける（最大2段）。
+  // 「すぐ答えを見る」より一段粘る足場を作り、想起練習の質を上げる。
+  const maxHints = Math.min(2, p.solution.length - 1);
+  if (maxHints > 0) {
+    const hintHost = h("div", { id: "hints" });
+    const hintBtn = h(
+      "button",
+      {
+        class: "chip hintbtn",
+        type: "button",
+        onclick: () => {
+          if (practice.hintsShown >= maxHints) return;
+          const step = p.solution[practice.hintsShown]!;
+          practice.hintsShown += 1;
+          hintHost.append(h("div", { class: "hint", html: `💡 ヒント${practice.hintsShown}: ${formatMath(step)}` }));
+          if (practice.hintsShown >= maxHints) (hintBtn as HTMLButtonElement).disabled = true;
+          hintBtn.textContent = `💡 ヒントを見る（${practice.hintsShown}/${maxHints}）`;
+        },
+      },
+      `💡 ヒントを見る（0/${maxHints}）`,
+    );
+    host.append(hintBtn, hintHost);
+  }
   host.append(h("div", { class: "answers", id: "answers" }), h("div", { id: "result" }));
   renderAnswerInputs(host, p);
+  // 次の問題へ進んだことをスクリーンリーダー/キーボード利用者に伝える。
+  stmt.focus({ preventScroll: true });
 }
 
 function renderAnswerInputs(host: HTMLElement, p: Problem): void {
   const answers = host.querySelector("#answers") as HTMLElement;
   answers.innerHTML = "";
   if (p.choices && p.choices.length > 0) {
-    for (const choice of p.choices) {
+    p.choices.forEach((choice, i) => {
+      // 番号バッジ: キーボード 1〜9 ショートカットとの対応を可視化する。
       const btn = h(
         "button",
         { class: "choice", type: "button", onclick: () => gradeObjective(host, p, choice, btn) },
+        h("span", { class: "kbd", "aria-hidden": "true" }, String(i + 1)),
         choice,
       );
       answers.append(btn);
-    }
+    });
   } else if (p.format === "descriptive") {
     const reveal = h(
       "button",
@@ -370,8 +458,18 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
 
   const result = host.querySelector("#result") as HTMLElement;
   result.innerHTML = "";
+  const elapsed = formatElapsed(Date.now() - practice.shownAt);
   result.append(
-    h("div", { class: `feedback ${correct ? "ok" : "ng"}` }, correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`),
+    h(
+      "div",
+      { class: `feedback ${correct ? "ok" : "ng"}` },
+      correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`,
+      h(
+        "span",
+        { class: "elapsed" },
+        `⏱ ${elapsed}${practice.hintsShown > 0 ? ` ・ ヒント${practice.hintsShown}` : ""}`,
+      ),
+    ),
     solutionNode(p, "解説"),
   );
   if (correct) {
@@ -445,7 +543,13 @@ function finalize(
   score?: { checked: number; total: number; pct: number },
 ): void {
   const timeMs = Date.now() - practice.shownAt;
+  const before = todayCount();
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
+  // 日次目標の達成瞬間を祝う（達成に気づけないと目標の駆動力が出ない）。
+  const goal = getDailyGoal(storage);
+  if (before < goal && todayCount() >= goal) {
+    showToast(`🎉 今日の目標 ${goal} 問を達成！この調子！`, "OK", () => {});
+  }
   const result = host.querySelector("#result") as HTMLElement;
   // 既存の評価バー・採点UIを除去し、結果＋シェア文＋次へを出す。
   for (const r of Array.from(result.querySelectorAll(".rate, .gradeui"))) r.remove();
@@ -616,7 +720,26 @@ function startExam(count: number, preset: ExamPreset): void {
     switchView("exam");
     return;
   }
-  exam = { set, idx: 0, results: [], startedAt: Date.now(), timerId: null, preset };
+  exam = {
+    set,
+    idx: 0,
+    results: [],
+    startedAt: Date.now(),
+    timerId: null,
+    preset,
+    limitMs: examTimeLimitMs(set),
+    timedOut: false,
+  };
+  switchView("exam");
+}
+
+/** 時間切れ: 未解答の残り問題は本番同様 0 点（不正解）として結果へ。
+ *  ただし出題されていない問題なので FSRS 記録は付けない（記憶状態を汚さない）。 */
+function timeoutExam(): void {
+  if (!exam) return;
+  while (exam.results.length < exam.set.length) exam.results.push(false);
+  exam.idx = exam.set.length;
+  exam.timedOut = true;
   switchView("exam");
 }
 
@@ -631,7 +754,11 @@ function renderExamRunning(root: HTMLElement): void {
     "div",
     { class: "toolbar" },
     h("strong", {}, `第 ${exam.idx + 1} / ${exam.set.length} 問`),
-    h("span", { class: "muted", id: "timer" }, "0:00"),
+    h(
+      "span",
+      { class: "muted", id: "timer", "aria-label": "残り時間" },
+      `残り ${formatRemaining(exam.limitMs - (Date.now() - exam.startedAt))}`,
+    ),
     h(
       "button",
       {
@@ -705,14 +832,20 @@ function renderExamRunning(root: HTMLElement): void {
   }
 }
 
+/** 残り時間のカウントダウン（時間制限の本実装）。0 で自動終了し本番を再現する。 */
 function startTimer(): void {
   if (!exam) return;
   if (exam.timerId) clearInterval(exam.timerId);
   exam.timerId = window.setInterval(() => {
     const t = $("timer");
     if (!t || !exam) return;
-    const s = Math.floor((Date.now() - exam.startedAt) / 1000);
-    t.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+    const remaining = exam.limitMs - (Date.now() - exam.startedAt);
+    if (remaining <= 0) {
+      timeoutExam();
+      return;
+    }
+    t.textContent = `残り ${formatRemaining(remaining)}`;
+    t.classList.toggle("timer-warn", remaining <= 60_000); // ラスト1分は警告色
   }, 1000);
 }
 
@@ -734,8 +867,22 @@ function renderExamResult(root: HTMLElement): void {
       { class: "big", style: `color:${score.passed ? "var(--ok)" : "var(--ng)"}` },
       `${score.scorePct}点 ${score.passed ? "🎉 合格ライン突破" : "✊ あと一歩"}`,
     ),
-    h("p", { class: "muted" }, `${score.correct} / ${score.total} 問正解 ・ 所要 ${mins} 分`),
+    h(
+      "p",
+      { class: "muted" },
+      `${score.correct} / ${score.total} 問正解 ・ 所要 ${mins} 分（制限 ${Math.round(exam.limitMs / 60_000)} 分）`,
+    ),
   );
+  if (exam.timedOut) {
+    root.append(
+      h(
+        "div",
+        { class: "card", style: "border-color:var(--ng)" },
+        h("strong", {}, "⏰ 時間切れ"),
+        h("div", { class: "muted" }, "未解答の問題は本番同様 0 点で採点しました。時間配分も実力のうちです。"),
+      ),
+    );
+  }
   // 一次プリセットは「全科目60%以上」で本番合格判定。
   if (exam.preset === "primary") {
     const primaryPass = isPrimaryPass(subjectScores);
@@ -760,8 +907,40 @@ function renderExamResult(root: HTMLElement): void {
       ),
     );
   }
+  root.append(breakdown);
+
+  // 見直し: 模試をスコアで終わらせず学習に繋げる（テスト効果の回収）。
+  // 各問題の○×一覧＋タップで問題文と解説を展開。間違いだけの再演習ドリルも起動できる。
+  const wrong = exam.set.filter((_, i) => !exam!.results[i]);
+  root.append(h("h2", {}, "見直し（問題別の結果）"));
+  if (wrong.length > 0) {
+    root.append(
+      h(
+        "button",
+        { class: "primary", type: "button", onclick: () => startDrill(wrong) },
+        `▶ 間違いだけ再演習（${wrong.length}問）`,
+      ),
+    );
+  }
+  const reviewList = h("div", { class: "exam-review" });
+  exam.set.forEach((p, i) => {
+    const ok = exam!.results[i] === true;
+    const details = h(
+      "details",
+      {},
+      h(
+        "summary",
+        {},
+        h("span", { class: ok ? "ok" : "ng" }, ok ? "⭕" : "❌"),
+        h("span", { class: "qtitle" }, ` 第${i + 1}問 ${p.subject}・${p.topic}`),
+      ),
+      h("div", { class: "stmt-sm", html: formatMath(p.statement) }),
+      solutionNode(p, "解説"),
+    );
+    reviewList.append(details);
+  });
   root.append(
-    breakdown,
+    reviewList,
     h(
       "button",
       {
@@ -1119,12 +1298,17 @@ function sameJstDay(a: number, b: number): boolean {
 
 // ---- 公式タブ ----
 
-function renderFormulas(root: HTMLElement): void {
-  root.append(
-    h("h2", {}, "公式集"),
-    h("p", { class: "muted" }, "暗記だけでなく導出の足がかりに。出題テンプレートと対応しています。"),
-  );
-  for (const group of FORMULAS) {
+/** 公式タブの検索クエリ（タブ滞在中は保持）。 */
+let formulasQuery = "";
+
+function renderFormulaList(host: HTMLElement): void {
+  host.innerHTML = "";
+  const groups = filterFormulas(FORMULAS, formulasQuery);
+  if (groups.length === 0) {
+    host.append(emptyState("🔍", "見つかりませんでした", "別のキーワードでお試しください（例: 力率 / %Z / すべり）。"));
+    return;
+  }
+  for (const group of groups) {
     const table = h("table", { class: "fx" });
     for (const item of group.items) {
       table.append(
@@ -1141,8 +1325,30 @@ function renderFormulas(root: HTMLElement): void {
         ),
       );
     }
-    root.append(h("h2", {}, group.subject), table);
+    host.append(h("h2", {}, group.subject), table);
   }
+}
+
+function renderFormulas(root: HTMLElement): void {
+  root.append(
+    h("h2", {}, "公式集"),
+    h("p", { class: "muted" }, "暗記だけでなく導出の足がかりに。出題テンプレートと対応しています。"),
+  );
+  // 検索: 56件の公式を目視スキャンさせない（部分一致・入力フォーカスを保ったままリストのみ更新）。
+  const list = h("div", { id: "fxlist" });
+  const search = h("input", {
+    type: "search",
+    class: "num",
+    placeholder: "公式を検索（例: 力率 / %Z / たるみ）",
+    "aria-label": "公式を検索",
+    value: formulasQuery,
+  }) as HTMLInputElement;
+  search.addEventListener("input", () => {
+    formulasQuery = search.value;
+    renderFormulaList(list);
+  });
+  root.append(search, list);
+  renderFormulaList(list);
 }
 
 // ---- 設定タブ ----
@@ -1232,11 +1438,64 @@ function renderSettings(root: HTMLElement): void {
     ),
     h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
     h("h2", {}, "データ"),
+    backupCard(),
     h(
       "button",
       { class: "choice", type: "button", style: "border-color:var(--ng);color:var(--ng)", onclick: resetData },
       "学習記録をリセット",
     ),
+  );
+}
+
+/** バックアップ: localStorage 単一保存の単一障害点対策（書き出し/読み込み）。 */
+function backupCard(): HTMLElement {
+  const exportBtn = h(
+    "button",
+    {
+      class: "choice",
+      type: "button",
+      onclick: () => {
+        const json = exportBackup(storage);
+        const a = document.createElement("a");
+        const date = new Date().toISOString().slice(0, 10);
+        a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+        a.download = `denken-backup-${date}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      },
+    },
+    "⬇ 学習データを書き出す（バックアップ）",
+  );
+  const fileInput = h("input", { type: "file", accept: "application/json,.json", hidden: true }) as HTMLInputElement;
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files?.[0];
+    fileInput.value = "";
+    if (!file) return;
+    if (!window.confirm("バックアップを読み込みます。現在の学習データは上書きされます。よろしいですか？")) return;
+    const result = importBackup(storage, await file.text());
+    if (result.ok) {
+      showToast(`✅ ${result.restoredKeys.length} 項目を復元しました`, "再読込", () => location.reload());
+    } else {
+      showToast(`⚠️ 復元できませんでした: ${result.reason}`, "OK", () => {});
+    }
+  });
+  const importBtn = h(
+    "button",
+    { class: "choice", type: "button", onclick: () => fileInput.click() },
+    "⬆ バックアップを読み込む（復元）",
+  );
+  return h(
+    "div",
+    { class: "card" },
+    h("label", {}, "バックアップ "),
+    h(
+      "div",
+      { class: "muted" },
+      "学習記録はこの端末にのみ保存されます。ブラウザのデータ削除や機種変更で消えるため、定期的に書き出してください（APIキーは含まれません）。",
+    ),
+    exportBtn,
+    importBtn,
+    fileInput,
   );
 }
 
@@ -1274,6 +1533,20 @@ function renderSkeleton(): void {
     '<div class="skel-line skeleton"></div><div class="skel-line skeleton"></div>';
 }
 
+/** 問題データの取得。失敗してもアプリは起動し、学習タブにリトライ導線を出す。 */
+async function reloadProblems(): Promise<void> {
+  try {
+    const res = await fetch("./problems.json");
+    if (!res.ok) throw new Error(String(res.status));
+    problems = (await res.json()) as Problem[];
+    loadFailed = false;
+  } catch {
+    problems = [];
+    loadFailed = true;
+  }
+  render();
+}
+
 async function main(): Promise<void> {
   applyTheme();
   // system 設定時は OS のテーマ変更に追従。
@@ -1282,14 +1555,8 @@ async function main(): Promise<void> {
   });
   renderNav();
   renderSkeleton();
-  try {
-    const res = await fetch("./problems.json");
-    problems = (await res.json()) as Problem[];
-  } catch {
-    problems = [];
-  }
+  await reloadProblems();
   document.addEventListener("keydown", onKeydown);
-  render();
   registerServiceWorker();
 }
 

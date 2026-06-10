@@ -297,6 +297,44 @@
         font: inherit; font-weight: 700; font-size: .85rem; border: none; cursor: pointer;
         background: var(--accent); color: var(--accent-contrast); padding: .35rem .8rem; border-radius: var(--r-pill);
       }
+      /* ===== 学習体験（番号バッジ・ヒント・経過時間・オンボーディング） ===== */
+      .choice .kbd {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 1.35rem; height: 1.35rem; margin-right: .55rem; padding: 0 .25rem;
+        font-size: .72rem; font-weight: 700; color: var(--muted);
+        border: 1px solid var(--border-strong); border-radius: 5px; background: var(--surface-2);
+        vertical-align: .08em;
+      }
+      .choice.correct .kbd { color: var(--ok); border-color: var(--ok); }
+      .choice.wrong .kbd { color: var(--ng); border-color: var(--ng); }
+      .hintbtn { font: inherit; font-size: .8rem; cursor: pointer; background: var(--surface); margin: .2rem 0 .6rem; }
+      .hintbtn:disabled { opacity: .55; cursor: default; }
+      .hint {
+        background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border);
+        border-radius: var(--r-md); padding: .5rem .7rem; font-size: .88rem; margin: 0 0 .6rem;
+        animation: fade .25s var(--ease) both;
+      }
+      .feedback .elapsed { font-size: .76rem; font-weight: 600; color: var(--muted); margin-left: .5rem; }
+      .onboard ol { margin: .4rem 0 .6rem; padding-left: 1.3rem; }
+      .onboard ol li { margin: .25rem 0; font-size: .9rem; }
+      .onboard .chip { cursor: pointer; font: inherit; font-size: .8rem; font-weight: 700; background: var(--surface); }
+
+      /* ===== 模試（残り時間・見直し） ===== */
+      #timer.timer-warn { color: var(--ng); font-weight: 800; }
+      .exam-review details {
+        border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface);
+        margin: .4rem 0; box-shadow: var(--shadow-sm);
+      }
+      .exam-review summary {
+        cursor: pointer; padding: .6rem .8rem; font-size: .9rem; font-weight: 600;
+        display: flex; align-items: center; gap: .2rem; list-style: none;
+      }
+      .exam-review summary::-webkit-details-marker { display: none; }
+      .exam-review summary .qtitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .exam-review details[open] summary { border-bottom: 1px solid var(--border); }
+      .exam-review .stmt-sm { padding: .6rem .8rem 0; font-size: .92rem; }
+      .exam-review .solution { margin: .6rem .8rem .8rem; }
+
       /* ===== 質問タブ（AIチャット） ===== */
       .chat {
         display: flex; flex-direction: column; gap: .55rem; margin: .4rem 0 .8rem;

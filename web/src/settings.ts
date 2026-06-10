@@ -10,6 +10,7 @@ const DAILY_GOAL_KEY = "denken:dailyGoal";
 const THEME_KEY = "denken:theme";
 const API_KEY_KEY = "denken:apiKey";
 const CHAT_MODEL_KEY = "denken:chatModel";
+const ONBOARDED_KEY = "denken:onboarded";
 
 /** 既定の試験日（2026年度 電験二種 一次試験の目安）。設定で上書き可。 */
 export const DEFAULT_EXAM_DATE = "2026-08-30";
@@ -66,4 +67,14 @@ export function getChatModel(storage: StorageLike): string {
 
 export function setChatModel(storage: StorageLike, id: string): void {
   if (CHAT_MODELS.some((m) => m.id === id)) storage.setItem(CHAT_MODEL_KEY, id);
+}
+
+// ---- オンボーディング（初回ガイドの既読管理）----
+
+export function isOnboarded(storage: StorageLike): boolean {
+  return storage.getItem(ONBOARDED_KEY) === "1";
+}
+
+export function setOnboarded(storage: StorageLike): void {
+  storage.setItem(ONBOARDED_KEY, "1");
 }

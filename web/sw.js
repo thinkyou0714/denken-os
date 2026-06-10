@@ -11,7 +11,9 @@
 //   (v9: モバイル下部タブバー(親指リーチ)・タブアイコン・印刷スタイルを配信)
 //   (v10: 二次記述の部分点ルーブリック自己採点を配信)
 //   (v11: 質問タブ＝AIチャット（内蔵ナレッジ＋BYOK Claude・RAG接地・出典付き）を配信)
-const CACHE = "denken-os-v11";
+//   (v12: 品質向上 — 模試時間制限の本実装＋見直し・バックアップ・ヒント開示・公式検索・
+//         番号バッジ・経過時間・目標達成トースト・オンボーディング・読込リトライ・保存安全化)
+const CACHE = "denken-os-v12";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
