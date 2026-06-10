@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FORMULAS, filterFormulas } from "../../web/src/formulas.js";
-import { isOnboarded, setOnboarded } from "../../web/src/settings.js";
+import { DEFAULT_REVIEW_CAP, getReviewCap, isOnboarded, setOnboarded, setReviewCap } from "../../web/src/settings.js";
 import { LOG_CAP, LocalProgress, type StorageLike } from "../../web/src/store.js";
 
 class MemoryStorage implements StorageLike {
@@ -69,5 +69,20 @@ describe("オンボーディングの既読管理", () => {
     expect(isOnboarded(s)).toBe(false);
     setOnboarded(s);
     expect(isOnboarded(s)).toBe(true);
+  });
+});
+
+describe("復習1日上限の設定", () => {
+  it("既定は 30、未設定時は既定を返す", () => {
+    expect(getReviewCap(new MemoryStorage())).toBe(DEFAULT_REVIEW_CAP);
+  });
+  it("範囲[5,200]にクランプして保存する", () => {
+    const s = new MemoryStorage();
+    setReviewCap(s, 1);
+    expect(getReviewCap(s)).toBe(5);
+    setReviewCap(s, 999);
+    expect(getReviewCap(s)).toBe(200);
+    setReviewCap(s, 40);
+    expect(getReviewCap(s)).toBe(40);
   });
 });

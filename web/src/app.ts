@@ -30,12 +30,14 @@ import {
   recentAccuracy,
   reviewForecast,
 } from "./dashboard.js";
+import { recoveryView } from "./errors.js";
 import { buildMockExam, examTimeLimitMs, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
 import { formatElapsed, formatRemaining } from "./format.js";
 import { FORMULAS, filterFormulas } from "./formulas.js";
 import { isAnswerCorrect, partialScore } from "./grade.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
+import { dailyReviewBatch, offlineLabel, streakStatus } from "./retention.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
 import {
@@ -43,6 +45,7 @@ import {
   getChatModel,
   getDailyGoal,
   getExamDate,
+  getReviewCap,
   getTheme,
   isOnboarded,
   setApiKey,
@@ -50,6 +53,7 @@ import {
   setDailyGoal,
   setExamDate,
   setOnboarded,
+  setReviewCap,
   setTheme,
   type ThemePref,
 } from "./settings.js";
@@ -228,21 +232,43 @@ function renderHeader(): void {
     dailyGoal: getDailyGoal(storage),
   }).daysLeft;
   $("countdown").textContent = `試験まで ${days} 日`;
+  updateNetStatus();
+}
+
+/** オフライン表示の更新（オンライン時は隠す）。完全オフライン動作なので障害ではなく状態通知。 */
+function updateNetStatus(): void {
+  const el = document.getElementById("netstatus");
+  if (!el) return;
+  const label = offlineLabel(navigator.onLine);
+  el.textContent = label;
+  el.hidden = label === "";
 }
 
 function renderNav(): void {
   const nav = $("nav");
   nav.innerHTML = "";
+  // 復習バッジは「今日出す分」（上限でバッチ化）の件数に合わせ、過大表示で圧迫しない。
+  // 完了した復習は FSRS が due から外すため、ここでは上限キャップのみ適用する。
+  const dueCount = dailyReviewBatch(progress.dueTopics(), getReviewCap(storage)).batch.length;
   for (const [id, label, icon] of TABS) {
-    const due = id === "review" ? progress.dueTopics().length : 0;
+    const due = id === "review" ? dueCount : 0;
+    const selected = id === view;
     const btn = h(
       "button",
-      { type: "button", "aria-label": label, onclick: () => switchView(id) },
+      {
+        type: "button",
+        role: "tab",
+        id: `tab-${id}`,
+        "aria-label": label,
+        "aria-selected": selected ? "true" : "false",
+        tabindex: selected ? "0" : "-1",
+        onclick: () => switchView(id),
+      },
       h("span", { class: "ti", "aria-hidden": "true" }, icon),
       h("span", { class: "tl" }, label),
     );
     if (due > 0) btn.append(h("span", { class: "tb" }, String(due)));
-    if (id === view) btn.setAttribute("aria-current", "true");
+    if (selected) btn.setAttribute("aria-current", "true");
     nav.appendChild(btn);
   }
 }
@@ -258,16 +284,47 @@ function switchView(id: string): void {
 }
 
 function render(): void {
-  renderHeader();
   const root = $("view");
   root.innerHTML = "";
-  if (view === "practice") renderPractice(root);
-  else if (view === "review") renderReview(root);
-  else if (view === "exam") renderExam(root);
-  else if (view === "chat") renderChat(root);
-  else if (view === "dashboard") renderDashboard(root);
-  else if (view === "formulas") renderFormulas(root);
-  else if (view === "settings") renderSettings(root);
+  // エラーバウンダリ: 描画例外でSPA全体が白画面になり「壊れた」と離脱されるのを防ぐ。
+  // 例外時は安心メッセージ＋復旧導線を出し、学習記録が無事であることを伝える。
+  try {
+    renderHeader();
+    if (view === "practice") renderPractice(root);
+    else if (view === "review") renderReview(root);
+    else if (view === "exam") renderExam(root);
+    else if (view === "chat") renderChat(root);
+    else if (view === "dashboard") renderDashboard(root);
+    else if (view === "formulas") renderFormulas(root);
+    else if (view === "settings") renderSettings(root);
+  } catch (err) {
+    renderErrorBoundary(root, err);
+  }
+}
+
+/** 描画例外時の復旧画面。 */
+function renderErrorBoundary(root: HTMLElement, err: unknown): void {
+  const rv = recoveryView(err);
+  root.innerHTML = "";
+  root.append(
+    h(
+      "div",
+      { class: "card errbound", role: "alert" },
+      h("strong", {}, `⚠️ ${rv.title}`),
+      h("p", {}, rv.reassurance),
+      h("button", { class: "primary", type: "button", onclick: () => location.reload() }, "再読み込み"),
+      h(
+        "details",
+        {},
+        h("summary", {}, "エラーの詳細"),
+        (() => {
+          const pre = h("pre", { class: "errdetail" });
+          pre.textContent = rv.detail; // textContent で安全に（XSS 回避）
+          return pre;
+        })(),
+      ),
+    ),
+  );
 }
 
 // ---- 学習タブ ----
@@ -585,12 +642,21 @@ function finalize(
 // ---- 復習タブ ----
 
 function renderReview(root: HTMLElement): void {
-  const due = progress.dueTopics();
-  const dueProblems = dueReviewProblems(problems, due);
+  // ストリーク予兆ナッジ（崩れる前に背中を押す）。
+  const ss = streakStatus(progress.logs());
+  if (ss.state === "at-risk" || ss.state === "broken") {
+    root.append(h("div", { class: `card nudge ${ss.state}` }, h("span", {}, ss.message)));
+  }
+
+  // 1日上限でバッチ化（大量の復習による離脱を防ぐ）。
+  const allDue = progress.dueTopics();
+  const cap = getReviewCap(storage);
+  const { batch, overflow, capped } = dailyReviewBatch(allDue, cap);
+  const dueProblems = dueReviewProblems(problems, batch);
   const notebook = mistakeNotebook(progress.logs(), problems, 30);
 
   root.append(h("h2", {}, "復習キュー（期限到来）"));
-  if (dueProblems.length === 0) {
+  if (allDue.length === 0) {
     root.append(
       emptyState(
         "✅",
@@ -598,17 +664,34 @@ function renderReview(root: HTMLElement): void {
         "いま期限が来ている論点はありません。学習タブで新しい問題に挑戦しましょう。",
       ),
     );
+  } else if (dueProblems.length === 0) {
+    // due はあるが対応する問題が手元に無い（topic に問題が紐づかない）レアケース。
+    root.append(emptyState("📭", "今日の復習対象の問題が見つかりません", "学習タブで新しい問題に挑戦しましょう。"));
   } else {
     root.append(
-      h("p", { class: "muted" }, `${due.length} 論点・${dueProblems.length} 問が復習対象です。`),
+      h(
+        "p",
+        { class: "muted" },
+        `今日の復習 ${batch.length} 論点・${dueProblems.length} 問` +
+          (capped ? `（期限到来は計 ${allDue.length} 論点。残り ${overflow} は明日以降に回します）` : ""),
+      ),
       h(
         "button",
         { class: "primary", type: "button", onclick: () => startDrill(dueProblems) },
         `▶ 復習ドリルを開始（${dueProblems.length}問）`,
       ),
     );
+    if (capped) {
+      root.append(
+        h(
+          "p",
+          { class: "muted small" },
+          `1日の復習上限は ${cap} 件です（設定で変更可）。少しずつ確実に消化するのが定着への近道です。`,
+        ),
+      );
+    }
     const list = h("div", {});
-    for (const topic of due.slice(0, 12)) {
+    for (const topic of batch.slice(0, 12)) {
       const v = progress.getCardView(topic);
       list.append(
         h(
@@ -1367,6 +1450,17 @@ function renderSettings(root: HTMLElement): void {
     value: String(getDailyGoal(storage)),
   }) as HTMLInputElement;
   goalInput.addEventListener("change", () => setDailyGoal(storage, Number(goalInput.value)));
+  const capInput = h("input", {
+    type: "number",
+    min: "5",
+    max: "200",
+    value: String(getReviewCap(storage)),
+  }) as HTMLInputElement;
+  capInput.addEventListener("change", () => {
+    setReviewCap(storage, Number(capInput.value));
+    capInput.value = String(getReviewCap(storage));
+    renderNav();
+  });
   const retSel = h("select", {}) as HTMLSelectElement;
   for (const r of [0.8, 0.85, 0.9, 0.95]) retSel.append(h("option", { value: r }, `${Math.round(r * 100)}%`));
   retSel.value = String(progress.desiredRetention());
@@ -1404,6 +1498,13 @@ function renderSettings(root: HTMLElement): void {
     h("div", { class: "card" }, h("label", {}, "テーマ "), themeSel),
     h("div", { class: "card" }, h("label", {}, "試験日 "), examInput),
     h("div", { class: "card" }, h("label", {}, "1日の目標問題数 "), goalInput),
+    h(
+      "div",
+      { class: "card" },
+      h("label", {}, "1日の復習上限 "),
+      capInput,
+      h("div", { class: "muted" }, "復習が多すぎると挫折しやすいため、1日に出す復習件数の上限です（既定30）。"),
+    ),
     h(
       "div",
       { class: "card" },
@@ -1508,9 +1609,21 @@ function resetData(): void {
 // ---- キーボード操作 ----
 
 function onKeydown(e: KeyboardEvent): void {
+  // タブ（role=tab）にフォーカスがある間は左右矢印でタブ移動（WAI-ARIA tablist の定石）。
+  const active = document.activeElement as HTMLElement | null;
+  if (active?.getAttribute("role") === "tab" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+    e.preventDefault();
+    const ids = TABS.map(([id]) => id);
+    const cur = ids.indexOf(view);
+    const next = e.key === "ArrowRight" ? (cur + 1) % ids.length : (cur - 1 + ids.length) % ids.length;
+    switchView(ids[next]!);
+    document.getElementById(`tab-${ids[next]}`)?.focus();
+    return;
+  }
+
   if (view !== "practice" && view !== "exam") return;
   const tag = (e.target as HTMLElement)?.tagName;
-  if (tag === "INPUT" || tag === "SELECT") return;
+  if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
   const root = $("view");
   if (e.key === "Enter") {
     (root.querySelector("#next") as HTMLButtonElement | null)?.click();
@@ -1557,6 +1670,9 @@ async function main(): Promise<void> {
   renderSkeleton();
   await reloadProblems();
   document.addEventListener("keydown", onKeydown);
+  // オフライン状態の変化をヘッダに反映（完全オフライン動作だが状態は明示する）。
+  window.addEventListener("online", updateNetStatus);
+  window.addEventListener("offline", updateNetStatus);
   registerServiceWorker();
 }
 

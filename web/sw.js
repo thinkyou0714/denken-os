@@ -13,7 +13,9 @@
 //   (v11: 質問タブ＝AIチャット（内蔵ナレッジ＋BYOK Claude・RAG接地・出典付き）を配信)
 //   (v12: 品質向上 — 模試時間制限の本実装＋見直し・バックアップ・ヒント開示・公式検索・
 //         番号バッジ・経過時間・目標達成トースト・オンボーディング・読込リトライ・保存安全化)
-const CACHE = "denken-os-v12";
+//   (v13: 信頼性/a11y/リテンション — エラーバウンダリ・オフライン表示・復習1日上限バッチ化・
+//         ストリーク予兆ナッジ・タブのrole=tab/矢印キー操作)
+const CACHE = "denken-os-v13";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

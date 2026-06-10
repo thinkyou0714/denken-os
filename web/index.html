@@ -335,6 +335,20 @@
       .exam-review .stmt-sm { padding: .6rem .8rem 0; font-size: .92rem; }
       .exam-review .solution { margin: .6rem .8rem .8rem; }
 
+      /* ===== 信頼性・リテンション（エラー境界・ナッジ・オフライン） ===== */
+      .pill.net { color: var(--warn-text); background: var(--warn-bg); border-color: var(--warn-border); }
+      .nudge { border-left: 3px solid var(--accent); font-size: .9rem; }
+      .nudge.at-risk { border-left-color: var(--warn-border); background: var(--warn-bg); color: var(--warn-text); }
+      .nudge.broken { border-left-color: var(--muted); }
+      .muted.small { font-size: .78rem; }
+      .errbound strong { display: block; font-size: 1rem; margin-bottom: .4rem; }
+      .errbound details { margin-top: .6rem; }
+      .errbound summary { cursor: pointer; font-size: .82rem; color: var(--muted); }
+      .errdetail {
+        white-space: pre-wrap; overflow-wrap: anywhere; font-size: .78rem; color: var(--muted);
+        background: var(--surface-2); border-radius: var(--r-sm); padding: .5rem .6rem; margin: .4rem 0 0;
+      }
+
       /* ===== 質問タブ（AIチャット） ===== */
       .chat {
         display: flex; flex-direction: column; gap: .55rem; margin: .4rem 0 .8rem;
@@ -398,10 +412,13 @@
           <div class="tagline">電験二種 学習OS</div>
         </div>
       </div>
-      <div class="stats"><span id="streak" class="pill"></span><span id="countdown" class="pill"></span></div>
+      <div class="stats">
+        <span id="netstatus" class="pill net" role="status" hidden></span>
+        <span id="streak" class="pill"></span><span id="countdown" class="pill"></span>
+      </div>
     </header>
 
-    <nav id="nav" aria-label="メニュー"></nav>
+    <nav id="nav" role="tablist" aria-label="メニュー"></nav>
 
     <p class="demo"><span aria-hidden="true">⚠️</span><span>問題は自動生成（コードで検算済み・未監修のデモ）。正解の数値はコード算出ですが、本番運用前に人の目チェックを通します。</span></p>
 

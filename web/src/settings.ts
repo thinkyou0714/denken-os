@@ -11,10 +11,13 @@ const THEME_KEY = "denken:theme";
 const API_KEY_KEY = "denken:apiKey";
 const CHAT_MODEL_KEY = "denken:chatModel";
 const ONBOARDED_KEY = "denken:onboarded";
+const REVIEW_CAP_KEY = "denken:reviewCap";
 
 /** 既定の試験日（2026年度 電験二種 一次試験の目安）。設定で上書き可。 */
 export const DEFAULT_EXAM_DATE = "2026-08-30";
 export const DEFAULT_DAILY_GOAL = 10;
+/** 1日に出す復習の上限（retention.ts の既定と揃える）。 */
+export const DEFAULT_REVIEW_CAP = 30;
 
 /** テーマ設定。system=OS追従。 */
 export type ThemePref = "system" | "light" | "dark";
@@ -67,6 +70,18 @@ export function getChatModel(storage: StorageLike): string {
 
 export function setChatModel(storage: StorageLike, id: string): void {
   if (CHAT_MODELS.some((m) => m.id === id)) storage.setItem(CHAT_MODEL_KEY, id);
+}
+
+// ---- 復習の1日上限（リテンション: 多すぎる復習による離脱を防ぐ）----
+
+export function getReviewCap(storage: StorageLike): number {
+  const n = Number(storage.getItem(REVIEW_CAP_KEY));
+  return Number.isFinite(n) && n >= 5 && n <= 200 ? n : DEFAULT_REVIEW_CAP;
+}
+
+export function setReviewCap(storage: StorageLike, n: number): void {
+  const clamped = Math.min(200, Math.max(5, Math.round(n)));
+  storage.setItem(REVIEW_CAP_KEY, String(clamped));
 }
 
 // ---- オンボーディング（初回ガイドの既読管理）----
