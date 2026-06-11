@@ -1,7 +1,8 @@
 /**
- * テンプレート: 低高圧架空電線の高さ（法規・multiple_choice）。
- *   電技解釈 第68条: 道路横断=6m以上 / 鉄道・軌道横断=レール面上5.5m以上 /
- *   横断歩道橋の上（高圧）=路面上3.5m以上 / その他=地表上5m以上。
+ * テンプレート: 高圧架空電線の高さ（法規・multiple_choice）。
+ *   電技解釈 第68条（高圧架空電線）: 道路横断=6m以上 / 鉄道・軌道横断=レール面上5.5m以上 /
+ *   横断歩道橋の上=路面上3.5m以上 / その他=地表上5m以上。
+ *   ※ 低圧には道路以外で4m等の例外があるため、曖昧さを避けて高圧に限定して出題する。
  */
 import { formatClean } from "../clean.js";
 import type { GenerationResult, Template } from "./types.js";
@@ -15,8 +16,8 @@ interface Case {
 const CASES: ReadonlyArray<Case> = [
   { place: "道路（車道）を横断する場合の路面上の高さ", answer: 6, pool: [4, 5, 5.5, 6] },
   { place: "鉄道または軌道を横断する場合のレール面上の高さ", answer: 5.5, pool: [4.5, 5, 5.5, 6] },
-  { place: "高圧架空電線が横断歩道橋の上に施設される場合の路面上の高さ", answer: 3.5, pool: [3, 3.5, 4, 5] },
-  { place: "上記以外の場所（原則）の地表上の高さ", answer: 5, pool: [4, 4.5, 5, 6] },
+  { place: "横断歩道橋の上に施設される場合の路面上の高さ", answer: 3.5, pool: [3, 3.5, 4, 5] },
+  { place: "上記以外の場所（その他の原則）の地表上の高さ", answer: 5, pool: [4, 4.5, 5, 6] },
 ];
 
 function buildFrom(caseIndex: number): GenerationResult | null {
@@ -36,9 +37,9 @@ function buildFrom(caseIndex: number): GenerationResult | null {
     choices,
     distractors,
     facts: { caseIndex, answer: c.answer },
-    defaultStatement: `低高圧架空電線を施設する場合、${c.place}の最小値〔m〕として定められている値は?`,
+    defaultStatement: `高圧架空電線を施設する場合、${c.place}の最小値〔m〕として定められている値は?`,
     defaultSolution: [
-      `電技解釈第68条: 道路横断6m / 鉄道横断5.5m / 横断歩道橋上(高圧)3.5m / その他5m`,
+      `電技解釈第68条（高圧架空電線）: 道路横断6m / 鉄道横断5.5m / 横断歩道橋上3.5m / その他5m`,
       `本問は「${c.place}」`,
       `=${answerText}m`,
     ],
@@ -47,7 +48,7 @@ function buildFrom(caseIndex: number): GenerationResult | null {
 }
 
 export const overheadClearance: Template = {
-  topic: "架空電線の高さ",
+  topic: "高圧架空電線の高さ",
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
