@@ -25,13 +25,13 @@ class MemoryStorage implements StorageLike {
 describe("loadFreezeState / saveFreezeState", () => {
   it("未保存は初期状態（0個・消費なし）", () => {
     const s = loadFreezeState(new MemoryStorage());
-    expect(s).toEqual({ count: 0, usedDays: [], lastAwardStreak: 0 });
+    expect(s).toEqual({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] });
   });
 
   it("ラウンドトリップで保存・復元できる", () => {
     const storage = new MemoryStorage();
-    saveFreezeState(storage, { count: 2, usedDays: [100, 101], lastAwardStreak: 14 });
-    expect(loadFreezeState(storage)).toEqual({ count: 2, usedDays: [100, 101], lastAwardStreak: 14 });
+    saveFreezeState(storage, { count: 2, usedDays: [100, 101], lastAwardStreak: 14, restDays: [] });
+    expect(loadFreezeState(storage)).toEqual({ count: 2, usedDays: [100, 101], lastAwardStreak: 14, restDays: [] });
   });
 
   it("壊れたJSON・型不一致は初期状態へフォールバック", () => {
@@ -39,7 +39,7 @@ describe("loadFreezeState / saveFreezeState", () => {
     storage.setItem(FREEZE_KEY, "{broken");
     expect(loadFreezeState(storage).count).toBe(0);
     storage.setItem(FREEZE_KEY, JSON.stringify({ count: "many", usedDays: "x", lastAwardStreak: null }));
-    expect(loadFreezeState(storage)).toEqual({ count: 0, usedDays: [], lastAwardStreak: 0 });
+    expect(loadFreezeState(storage)).toEqual({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] });
   });
 
   it("count は上限でクランプされる", () => {
@@ -65,7 +65,7 @@ describe("streakWithFreezes", () => {
 
 describe("bridgeWithFreezes（欠席日の自動肩代わり）", () => {
   it("欠席1日を1個で繋ぐ", () => {
-    const state = { count: 1, usedDays: [], lastAwardStreak: 7 };
+    const state = { count: 1, usedDays: [], lastAwardStreak: 7, restDays: [] };
     const r = bridgeWithFreezes(state, new Set([100, 101]), 103); // 102 欠席
     expect(r.bridgedDays).toEqual([102]);
     expect(r.state.count).toBe(0);
@@ -75,23 +75,23 @@ describe("bridgeWithFreezes（欠席日の自動肩代わり）", () => {
 
   it("欠席2日は2個あれば繋ぐ・1個では繋がない（温存）", () => {
     const days = new Set([100]);
-    const r2 = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0 }, days, 103);
+    const r2 = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0, restDays: [] }, days, 103);
     expect(r2.bridgedDays).toEqual([101, 102]);
-    const r1 = bridgeWithFreezes({ count: 1, usedDays: [], lastAwardStreak: 0 }, days, 103);
+    const r1 = bridgeWithFreezes({ count: 1, usedDays: [], lastAwardStreak: 0, restDays: [] }, days, 103);
     expect(r1.bridgedDays).toEqual([]);
     expect(r1.state.count).toBe(1); // 消費されない
   });
 
   it("欠席なし・履歴なしでは何もしない", () => {
-    const none = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0 }, new Set(), 103);
+    const none = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0, restDays: [] }, new Set(), 103);
     expect(none.bridgedDays).toEqual([]);
-    const cont = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0 }, new Set([102]), 103);
+    const cont = bridgeWithFreezes({ count: 2, usedDays: [], lastAwardStreak: 0, restDays: [] }, new Set([102]), 103);
     expect(cont.bridgedDays).toEqual([]);
   });
 
   it("過去の消費日も「継続日」として起点に使う", () => {
     // 101 はお守り消費済み、102 を欠席 → 残り1個で繋がる。
-    const state = { count: 1, usedDays: [101], lastAwardStreak: 0 };
+    const state = { count: 1, usedDays: [101], lastAwardStreak: 0, restDays: [] };
     const r = bridgeWithFreezes(state, new Set([100]), 103);
     expect(r.bridgedDays).toEqual([102]);
   });
@@ -99,7 +99,7 @@ describe("bridgeWithFreezes（欠席日の自動肩代わり）", () => {
 
 describe("maybeAwardFreeze（7日ごとの獲得）", () => {
   it("7の倍数の節目で1個獲得し、同じ節目では二重獲得しない", () => {
-    const a = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0 }, FREEZE_AWARD_EVERY);
+    const a = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] }, FREEZE_AWARD_EVERY);
     expect(a.awarded).toBe(true);
     expect(a.state.count).toBe(1);
     const b = maybeAwardFreeze(a.state, FREEZE_AWARD_EVERY);
@@ -107,12 +107,12 @@ describe("maybeAwardFreeze（7日ごとの獲得）", () => {
   });
 
   it("節目以外では獲得しない", () => {
-    expect(maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0 }, 6).awarded).toBe(false);
-    expect(maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0 }, 0).awarded).toBe(false);
+    expect(maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] }, 6).awarded).toBe(false);
+    expect(maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] }, 0).awarded).toBe(false);
   });
 
   it("上限（FREEZE_CAP）を超えて保持できない・枠が空けば次の節目で受け取れる", () => {
-    const full = { count: FREEZE_CAP, usedDays: [], lastAwardStreak: 7 };
+    const full = { count: FREEZE_CAP, usedDays: [], lastAwardStreak: 7, restDays: [] };
     const r = maybeAwardFreeze(full, 14);
     expect(r.awarded).toBe(false);
     expect(r.state.lastAwardStreak).toBe(7); // 進めない＝後で受け取れる
@@ -122,7 +122,7 @@ describe("maybeAwardFreeze（7日ごとの獲得）", () => {
 
   it("節目を過ぎてからでも取りこぼさない（既存の長期継続ユーザーへのキャッチアップ）", () => {
     // ストリーク30で初めて機能に触れた場合: 最後に通過した節目(28)分として1個受け取れる。
-    const r = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0 }, 30);
+    const r = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] }, 30);
     expect(r.awarded).toBe(true);
     expect(r.state.lastAwardStreak).toBe(28);
     // 同じストリークのうちは二重獲得しない。

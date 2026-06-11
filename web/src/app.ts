@@ -38,16 +38,19 @@ import { formatElapsed, formatRemaining } from "./format.js";
 import { FORMULAS, filterFormulas } from "./formulas.js";
 import {
   bridgeWithFreezes,
+  canReserveRest,
+  coveredDays,
   type FreezeState,
   loadFreezeState,
   maybeAwardFreeze,
   saveFreezeState,
   streakWithFreezes,
   studiedDays,
+  toggleRestReservation,
 } from "./freeze.js";
 import { confettiBurst, playTone, vibrate, xpFloat } from "./fx.js";
 import { isAnswerCorrect, normalizeNumericInput, partialScore } from "./grade.js";
-import { mascotCheer, mascotHome, mascotSvg } from "./mascot.js";
+import { mascotCheer, mascotHome, mascotSvg, mascotTip, tierForLevel } from "./mascot.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
 import {
@@ -74,9 +77,10 @@ import {
   getExamDate,
   getMascotEnabled,
   getReviewCap,
-  getSound,
+  getSoundLevel,
   getTheme,
   isOnboarded,
+  type SoundLevel,
   setApiKey,
   setChatModel,
   setDailyGoal,
@@ -84,13 +88,13 @@ import {
   setMascotEnabled,
   setOnboarded,
   setReviewCap,
-  setSound,
+  setSoundLevel,
   setTheme,
   type ThemePref,
 } from "./settings.js";
 import { ghostRace, masteredTopics, myStats } from "./stats.js";
 import { LocalProgress } from "./store.js";
-import { type LevelInfo, levelInfo, totalXp, xpByDay, xpBySubject } from "./xp.js";
+import { type LevelInfo, levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay, xpBySubject } from "./xp.js";
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
 const TABS: ReadonlyArray<readonly [string, string, string]> = [
@@ -200,16 +204,16 @@ function currentLevel(): LevelInfo {
   return levelInfo(totalXp(progress.logs()));
 }
 
-/** お守り込みの実効ストリークと手持ち状態。 */
+/** お守り・おやすみ予約込みの実効ストリークと手持ち状態。 */
 function freezeInfo(): { state: FreezeState; streak: number } {
   const state = loadFreezeState(storage);
-  const streak = streakWithFreezes(studiedDays(progress.logs()), state.usedDays, dayIndexOf(Date.now()));
+  const streak = streakWithFreezes(studiedDays(progress.logs()), coveredDays(state), dayIndexOf(Date.now()));
   return { state, streak };
 }
 
-/** お守りで肩代わりした日の集合（streakStatus に学習日として渡す）。 */
+/** 学習日扱いにする日の集合（お守り消費日＋おやすみ予約日。streakStatus に渡す）。 */
 function usedFreezeDays(): Set<number> {
-  return new Set(loadFreezeState(storage).usedDays);
+  return new Set(coveredDays(loadFreezeState(storage)));
 }
 
 /** 欠席日をお守りで自動カバーする（冪等。カバーが発生したときだけ通知）。 */
@@ -490,6 +494,9 @@ function onboardingCard(root: HTMLElement): HTMLElement {
   );
 }
 
+/** まめ知識の表示位置（セッション内で順繰り。日替わりの開始位置で毎日違う話から始まる）。 */
+let tipIndex = -1;
+
 /** マスコット「デンタマ」のカード（状況に応じた表情と一言で導線をつくる）。 */
 function mascotCard(): HTMLElement {
   const fi = freezeInfo();
@@ -502,11 +509,26 @@ function mascotCard(): HTMLElement {
     dueCount: dailyReviewBatch(progress.dueTopics(), getReviewCap(storage)).batch.length,
     dayIndex: dayIndexOf(Date.now()),
   });
+  // レベルが上がるとデンタマも成長する（Lv10+ 星バッジ / Lv20+ ヘルメット / Lv40+ 王冠）。
+  const tier = tierForLevel(currentLevel().level);
+  const bubble = h("div", { class: "mbubble" }, mv.message);
+  const tipBtn = h(
+    "button",
+    {
+      class: "chip tipbtn",
+      type: "button",
+      onclick: () => {
+        tipIndex = tipIndex < 0 ? dayIndexOf(Date.now()) : tipIndex + 1;
+        bubble.textContent = `💡 ${mascotTip(tipIndex)}`;
+      },
+    },
+    "💡 まめ知識",
+  );
   return h(
     "div",
     { class: "card mascot" },
-    h("div", { class: "mface", html: mascotSvg(mv.mood, 64) }),
-    h("div", { class: "mbubble" }, mv.message),
+    h("div", { class: "mface", html: mascotSvg(mv.mood, 64, tier) }),
+    h("div", { class: "mcol" }, bubble, tipBtn),
   );
 }
 
@@ -525,7 +547,9 @@ function questsCard(): HTMLElement {
       h(
         "span",
         { class: allDone ? "qbonus done" : "qbonus" },
-        allDone ? `✅ 全達成 +${QUEST_CLEAR_BONUS_XP} XP` : `全達成で +${QUEST_CLEAR_BONUS_XP} XP`,
+        allDone
+          ? `✅ 全達成 +${QUEST_CLEAR_BONUS_XP} XP ・ 正解XP×${QUEST_BOOST_MULT}中`
+          : `全達成で +${QUEST_CLEAR_BONUS_XP} XP＆正解XP×${QUEST_BOOST_MULT}`,
       ),
     ),
   );
@@ -777,7 +801,7 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
   }
   const correct = isAnswerCorrect(p, given);
   practice.combo = correct ? practice.combo + 1 : 0;
-  playTone(correct ? "correct" : "wrong", getSound(storage));
+  playTone(correct ? "correct" : "wrong", getSoundLevel(storage));
   vibrate(correct ? 18 : [40, 50, 40]);
   const answers = host.querySelector("#answers") as HTMLElement;
   for (const b of Array.from(answers.querySelectorAll("button"))) (b as HTMLButtonElement).disabled = true;
@@ -894,7 +918,7 @@ function finalize(
   if (score) {
     const ok = score.pct >= 2 / 3;
     practice.combo = ok ? practice.combo + 1 : 0;
-    playTone(ok ? "correct" : "wrong", getSound(storage));
+    playTone(ok ? "correct" : "wrong", getSoundLevel(storage));
     vibrate(ok ? 18 : [40, 50, 40]);
   }
 
@@ -982,7 +1006,7 @@ function finalize(
   if (celebrations.length > 0) {
     showToast(celebrations[0]!, "OK", () => {});
     confettiBurst(bigConfetti ? 64 : 28);
-    if (fanfare) playTone(fanfare, getSound(storage));
+    if (fanfare) playTone(fanfare, getSoundLevel(storage));
   } else if (installPrompt && fiAfter.streak >= 3 && storage.getItem("denken:a2hsNudged") !== "1") {
     // A2HS は3日続いた頃＝価値を実感したタイミングで一度だけ提案する（初回に出すと断られる）。
     try {
@@ -1370,7 +1394,7 @@ function renderExamResult(root: HTMLElement): void {
     exam.celebrated = true;
     if (score.passed) {
       confettiBurst();
-      playTone("clear", getSound(storage));
+      playTone("clear", getSoundLevel(storage));
     }
     const todayIdx = dayIndexOf(Date.now());
     if (!exam.questsClearAtStart && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
@@ -1932,17 +1956,34 @@ function renderDashboard(root: HTMLElement): void {
   const unlockedCount = badges.filter((b) => b.unlocked).length;
   const grid = h("div", { class: "badges" });
   for (const b of badges) {
-    grid.append(
-      h(
-        "div",
-        { class: b.unlocked ? "badge on" : "badge off", title: b.desc },
-        h("span", { class: "bi", "aria-hidden": "true" }, b.unlocked ? b.icon : "🔒"),
-        h("span", { class: "bt" }, b.title),
-        h("span", { class: "bd" }, b.desc),
-      ),
+    const node = h(
+      b.unlocked ? "button" : "div",
+      {
+        class: b.unlocked ? "badge on" : "badge off",
+        title: b.unlocked ? `${b.desc}（タップでシェア）` : b.desc,
+        ...(b.unlocked ? { type: "button", onclick: () => shareBadge(b.title, b.icon, b.desc) } : {}),
+      },
+      h("span", { class: "bi", "aria-hidden": "true" }, b.unlocked ? b.icon : "🔒"),
+      h("span", { class: "bt" }, b.title),
+      h("span", { class: "bd" }, b.desc),
     );
+    grid.append(node);
   }
-  root.append(h("h2", {}, `実績バッジ（${unlockedCount}/${badges.length}）`), grid);
+  root.append(h("h2", {}, `実績バッジ（${unlockedCount}/${badges.length}・タップでシェア）`), grid);
+}
+
+/** 実績のシェア（Web Share API、無ければクリップボード）。学習の誇りを外へ＝自然な口コミ。 */
+function shareBadge(title: string, icon: string, desc: string): void {
+  const text = `🏅 電験学習アプリ DENKEN-OS で実績「${icon}${title}」を解除！（${desc}） #電験 #デンタマ`;
+  try {
+    if (typeof navigator.share === "function") {
+      void navigator.share({ text }).catch(() => {});
+      return;
+    }
+    void navigator.clipboard?.writeText(text).then(() => showToast("📋 シェア文をコピーしました", "OK", () => {}));
+  } catch {
+    // シェア不能でも学習は続行。
+  }
 }
 
 function sameJstDay(a: number, b: number): boolean {
@@ -2052,9 +2093,19 @@ function renderSettings(root: HTMLElement): void {
   });
 
   const soundSel = h("select", {}) as HTMLSelectElement;
-  soundSel.append(h("option", { value: "1" }, "オン"), h("option", { value: "0" }, "オフ"));
-  soundSel.value = getSound(storage) ? "1" : "0";
-  soundSel.addEventListener("change", () => setSound(storage, soundSel.value === "1"));
+  for (const [v, label] of [
+    ["off", "オフ"],
+    ["low", "小"],
+    ["mid", "中"],
+    ["high", "大"],
+  ] as const) {
+    soundSel.append(h("option", { value: v }, label));
+  }
+  soundSel.value = getSoundLevel(storage);
+  soundSel.addEventListener("change", () => {
+    setSoundLevel(storage, soundSel.value as SoundLevel);
+    playTone("correct", getSoundLevel(storage)); // 選んだ音量をその場で試聴できる
+  });
 
   const mascotSel = h("select", {}) as HTMLSelectElement;
   mascotSel.append(h("option", { value: "1" }, "表示する"), h("option", { value: "0" }, "表示しない"));
@@ -2107,6 +2158,7 @@ function renderSettings(root: HTMLElement): void {
       retSel,
       h("div", { class: "muted" }, "高いほど復習間隔が短く、定着重視になります（既定90%）。"),
     ),
+    restDayCard(),
     h("h2", {}, "AIチャット（質問タブ）"),
     h(
       "div",
@@ -2157,6 +2209,40 @@ function renderSettings(root: HTMLElement): void {
       "button",
       { class: "choice", type: "button", style: "border-color:var(--ng);color:var(--ng)", onclick: resetData },
       "学習記録をリセット",
+    ),
+  );
+}
+
+/** おやすみ予約: 休む勇気をストリークの罰にしない（健全性）。予約できるのは「今日学習済み」のときの明日だけ。 */
+function restDayCard(): HTMLElement {
+  const state = loadFreezeState(storage);
+  const todayIdx = dayIndexOf(Date.now());
+  const reserved = state.restDays.includes(todayIdx + 1);
+  const can = canReserveRest(state, studiedDays(progress.logs()), todayIdx);
+  const btn = h(
+    "button",
+    {
+      class: "choice",
+      type: "button",
+      onclick: () => {
+        saveFreezeState(storage, toggleRestReservation(loadFreezeState(storage), dayIndexOf(Date.now())));
+        renderHeader();
+        switchView("settings");
+      },
+    },
+    reserved ? "😴 明日はおやすみ予約済み（タップで取消）" : "😴 明日をおやすみ予約（🔥は維持）",
+  ) as HTMLButtonElement;
+  if (!reserved && !can) btn.disabled = true;
+  return h(
+    "div",
+    { class: "card" },
+    h("label", {}, "おやすみ予約 "),
+    btn,
+    h(
+      "div",
+      { class: "muted" },
+      "休むのも実力のうち。予約した日は学習しなくてもストリークが続きます。" +
+        "予約できるのは「今日すでに学習した日」の明日だけ（連続のおやすみはできません）。",
     ),
   );
 }
@@ -2246,10 +2332,11 @@ function toggleKeyboardHelp(): void {
     { class: "kbdhelp", role: "dialog", "aria-label": "キーボードショートカット", onclick: () => overlay.remove() },
     h(
       "div",
-      { class: "card" },
+      // カード内クリックでは閉じない（背景クリック/Escのみ）。
+      { class: "card", onclick: (e) => e.stopPropagation() },
       h("strong", {}, "⌨️ キーボードショートカット"),
       ...rows.map(([key, desc]) => h("div", { class: "krow" }, h("span", { class: "kbd" }, key), h("span", {}, desc))),
-      h("div", { class: "muted small" }, "クリック / Esc で閉じる"),
+      h("div", { class: "muted small" }, "背景クリック / Esc で閉じる"),
     ),
   );
   document.body.append(overlay);

@@ -25,14 +25,20 @@ export interface FreezeState {
   usedDays: number[];
   /** 最後に獲得判定した時点のストリーク（同じ節目での二重獲得を防ぐ）。 */
   lastAwardStreak: number;
+  /** おやすみ予約した日（JST 日番号）。休む勇気をストリークの罰にしない（健全性）。 */
+  restDays: number[];
 }
 
-const EMPTY: FreezeState = { count: 0, usedDays: [], lastAwardStreak: 0 };
+const EMPTY: FreezeState = { count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] };
 
-/** 保存値を安全に読み出す（壊れた JSON・型不一致は初期状態へフォールバック）。 */
+function emptyState(): FreezeState {
+  return { ...EMPTY, usedDays: [], restDays: [] };
+}
+
+/** 保存値を安全に読み出す（壊れた JSON・型不一致は初期状態へフォールバック。restDays は後方互換で省略可）。 */
 export function loadFreezeState(storage: StorageLike): FreezeState {
   const raw = storage.getItem(FREEZE_KEY);
-  if (!raw) return { ...EMPTY, usedDays: [] };
+  if (!raw) return emptyState();
   try {
     const p = JSON.parse(raw) as Partial<FreezeState>;
     const count =
@@ -42,9 +48,10 @@ export function loadFreezeState(storage: StorageLike): FreezeState {
     const usedDays = Array.isArray(p.usedDays) ? p.usedDays.filter((d): d is number => typeof d === "number") : [];
     const lastAwardStreak =
       typeof p.lastAwardStreak === "number" && Number.isFinite(p.lastAwardStreak) ? Math.max(0, p.lastAwardStreak) : 0;
-    return { count, usedDays, lastAwardStreak };
+    const restDays = Array.isArray(p.restDays) ? p.restDays.filter((d): d is number => typeof d === "number") : [];
+    return { count, usedDays, lastAwardStreak, restDays };
   } catch {
-    return { ...EMPTY, usedDays: [] };
+    return emptyState();
   }
 }
 
@@ -90,6 +97,7 @@ export interface BridgeResult {
 export function bridgeWithFreezes(state: FreezeState, days: ReadonlySet<number>, todayIdx: number): BridgeResult {
   const all = new Set(days);
   for (const d of state.usedDays) all.add(d);
+  for (const d of state.restDays) all.add(d); // おやすみ予約日は欠席ではない（お守りを消費しない）
   if (all.size === 0) return { state, bridgedDays: [] };
   // 今日より前で最後に「継続していた」日を探す。
   let last = Number.NEGATIVE_INFINITY;
@@ -105,6 +113,7 @@ export function bridgeWithFreezes(state: FreezeState, days: ReadonlySet<number>,
       count: state.count - missed.length,
       usedDays: [...state.usedDays, ...missed],
       lastAwardStreak: state.lastAwardStreak,
+      restDays: state.restDays,
     },
     bridgedDays: missed,
   };
@@ -128,7 +137,37 @@ export function maybeAwardFreeze(state: FreezeState, streak: number): AwardResul
     return { state, awarded: false };
   }
   return {
-    state: { count: state.count + 1, usedDays: state.usedDays, lastAwardStreak: passedMilestone },
+    state: {
+      count: state.count + 1,
+      usedDays: state.usedDays,
+      lastAwardStreak: passedMilestone,
+      restDays: state.restDays,
+    },
     awarded: true,
   };
+}
+
+// ---- おやすみ予約（休む勇気をストリークの罰にしない） ----
+
+/**
+ * 明日をおやすみ予約できるか。条件は「今日すでに学習済み」。
+ * これにより休みを連鎖できず（休んだ翌日は学習しないと次を予約できない）、
+ * 最大でも学習日と休息日の交互にしかならない＝乱用を構造的に防ぐ。
+ */
+export function canReserveRest(state: FreezeState, studied: ReadonlySet<number>, todayIdx: number): boolean {
+  return studied.has(todayIdx) && !state.restDays.includes(todayIdx + 1);
+}
+
+/** 明日のおやすみ予約をトグルする（予約済みなら取消）。 */
+export function toggleRestReservation(state: FreezeState, todayIdx: number): FreezeState {
+  const tomorrow = todayIdx + 1;
+  const restDays = state.restDays.includes(tomorrow)
+    ? state.restDays.filter((d) => d !== tomorrow)
+    : [...state.restDays, tomorrow];
+  return { ...state, restDays };
+}
+
+/** ストリーク計算で「学習日扱い」にする日（お守り消費日＋おやすみ予約日）。 */
+export function coveredDays(state: FreezeState): number[] {
+  return [...state.usedDays, ...state.restDays];
 }

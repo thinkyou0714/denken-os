@@ -60,6 +60,10 @@ export function xpFloat(host: HTMLElement, text: string): void {
 // ---- 効果音（WebAudio 合成。アセット不要） ----
 
 type ToneKind = "correct" | "wrong" | "levelup" | "clear";
+type Volume = "off" | "low" | "mid" | "high";
+
+/** 音量レベル → ゲイン。控えめな上限（high でも BGM 程度）。 */
+const VOLUME_GAIN: Record<Exclude<Volume, "off">, number> = { low: 0.028, mid: 0.06, high: 0.12 };
 
 let audioCtx: AudioContext | null = null;
 
@@ -96,27 +100,30 @@ function beep(
   osc.stop(startAt + dur + 0.02);
 }
 
-/** 効果音を鳴らす（enabled=false なら無音）。短い合成音のみ・音量控えめ。 */
-export function playTone(kind: ToneKind, enabled: boolean): void {
-  if (!enabled) return;
+/** 効果音を鳴らす。volume には設定の SoundLevel をそのまま渡す（"off" なら無音）。 */
+export function playTone(kind: ToneKind, volume: Volume | boolean): void {
+  // 後方互換: boolean は on=mid / off に写像する。
+  const level: Volume = typeof volume === "boolean" ? (volume ? "mid" : "off") : volume;
+  if (level === "off") return;
   const c = ctx();
   if (!c) return;
   try {
+    const g = VOLUME_GAIN[level];
     const t = c.currentTime;
     if (kind === "correct") {
-      beep(c, 660, t, 0.09);
-      beep(c, 880, t + 0.09, 0.12);
+      beep(c, 660, t, 0.09, g);
+      beep(c, 880, t + 0.09, 0.12, g);
     } else if (kind === "wrong") {
-      beep(c, 196, t, 0.18, 0.05, "triangle");
+      beep(c, 196, t, 0.18, g * 0.85, "triangle");
     } else if (kind === "levelup") {
-      beep(c, 523, t, 0.1);
-      beep(c, 659, t + 0.1, 0.1);
-      beep(c, 784, t + 0.2, 0.16);
-      beep(c, 1047, t + 0.32, 0.22);
+      beep(c, 523, t, 0.1, g);
+      beep(c, 659, t + 0.1, 0.1, g);
+      beep(c, 784, t + 0.2, 0.16, g);
+      beep(c, 1047, t + 0.32, 0.22, g);
     } else {
       // clear: クエスト/目標達成のファンファーレ（短め）。
-      beep(c, 784, t, 0.1);
-      beep(c, 988, t + 0.1, 0.18);
+      beep(c, 784, t, 0.1, g);
+      beep(c, 988, t + 0.1, 0.18, g);
     }
   } catch {
     // noop

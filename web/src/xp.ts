@@ -15,6 +15,7 @@ import type { Rating } from "../../lib/scheduler/types.js";
 import {
   allQuestsClear,
   allWeeklyQuestsClear,
+  dailyQuests,
   dayIndexOf,
   JST_OFFSET_MS,
   QUEST_CLEAR_BONUS_XP,
@@ -37,20 +38,66 @@ export function comboBonus(runLength: number): number {
   return runLength >= 2 ? Math.min(5, runLength - 1) : 0;
 }
 
-/** 基礎XP＋コンボボーナスの合計（クエストボーナスは含まない）。 */
+/** クエスト全達成後、その日の残りの正解XPに掛かる倍率（時間限定ブーストの決定論版）。 */
+export const QUEST_BOOST_MULT = 1.5;
+
+/** 1日分のXP（基礎＋コンボ＋クエスト全達成後の×1.5ブースト）。dayLogs は時系列順。 */
+function xpOfDay(dayLogs: readonly WebAnswerLog[], dayIndex: number): number {
+  const quests = dailyQuests(dayIndex);
+  let total = 0;
+  let run = 0;
+  let cleared = false;
+  // クエスト進捗を増分更新する（全種とも単調増加なので一度クリアしたら戻らない）。
+  let count = 0;
+  let correct = 0;
+  let maxRun = 0;
+  let easy = 0;
+  const topics = new Set<string>();
+  for (const l of dayLogs) {
+    run = l.correct ? run + 1 : 0;
+    const base = xpForLog(l) + (l.correct ? comboBonus(run) : 0);
+    // ブーストは「クリアを確定させた解答の次」から。挑戦(不正解)の参加報酬には掛けない。
+    total += cleared && l.correct ? Math.round(base * QUEST_BOOST_MULT) : base;
+    count += 1;
+    if (l.correct) correct += 1;
+    if (run > maxRun) maxRun = run;
+    if (l.rating === "easy") easy += 1;
+    topics.add(l.topic);
+    if (!cleared) {
+      cleared = quests.every((q) => {
+        switch (q.kind) {
+          case "solve":
+            return count >= q.target;
+          case "correct":
+            return correct >= q.target;
+          case "combo":
+            return maxRun >= q.target;
+          case "topics":
+            return topics.size >= q.target;
+          case "easy":
+            return easy >= q.target;
+          default:
+            return false;
+        }
+      });
+    }
+  }
+  return total;
+}
+
+/** 基礎XP＋コンボ＋ブーストの合計（クエスト達成ボーナス自体は含まない）。 */
 export function xpFromLogs(logs: readonly WebAnswerLog[], dayOffsetMs: number = JST_OFFSET_MS): number {
   const sorted = [...logs].sort((a, b) => a.atMs - b.atMs);
   let total = 0;
-  let run = 0;
-  let day = Number.NaN;
-  for (const l of sorted) {
-    const d = dayIndexOf(l.atMs, dayOffsetMs);
-    if (d !== day) {
-      day = d;
-      run = 0; // コンボは日をまたがない
+  let i = 0;
+  while (i < sorted.length) {
+    const day = dayIndexOf(sorted[i]!.atMs, dayOffsetMs);
+    const dayLogs: WebAnswerLog[] = [];
+    while (i < sorted.length && dayIndexOf(sorted[i]!.atMs, dayOffsetMs) === day) {
+      dayLogs.push(sorted[i]!);
+      i += 1;
     }
-    run = l.correct ? run + 1 : 0;
-    total += xpForLog(l) + (l.correct ? comboBonus(run) : 0);
+    total += xpOfDay(dayLogs, day);
   }
   return total;
 }

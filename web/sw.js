@@ -24,7 +24,10 @@
 //   (v16: 節目と導線 — 目標設定ウィザード・セッション終了サマリー(明日のクエスト予告)・
 //         ストリーク大台祝賀(30/50/100…)・実績3種追加(初マスター/無傷の三十日/月間皆勤賞)・
 //         マスター論点チップ・ゴーストレース・ショートカットヘルプ(?)・A2HS導線・コンボ発光)
-const CACHE = "denken-os-v16";
+//   (v17: 報酬と健全性 — クエスト全達成後の正解XP×1.5ブースト・おやすみ予約(🔥維持)・
+//         デンタマ成長(Lv10星/Lv20ヘルメット/Lv40王冠)＋まめ知識12種・効果音音量4段階・
+//         実績タップでシェア・ヘルプのカード内クリック誤閉じ修正)
+const CACHE = "denken-os-v17";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

@@ -74,21 +74,63 @@ function arms(mood: MascotMood): string {
   );
 }
 
+/** レベル帯（成長段階）。0=ノーマル / 1=Lv10+ / 2=Lv20+ / 3=Lv40+。 */
+export type MascotTier = 0 | 1 | 2 | 3;
+
+/** レベル → 成長段階。レベルが上がるとデンタマの見た目が変わる（収集・成長の楽しみ）。 */
+export function tierForLevel(level: number): MascotTier {
+  if (level >= 40) return 3;
+  if (level >= 20) return 2;
+  if (level >= 10) return 1;
+  return 0;
+}
+
+/** 成長段階のアクセサリー（胸の星 → 安全ヘルメット → 金の王冠）。 */
+function accessory(tier: MascotTier): string {
+  if (tier === 1) {
+    // 胸の星バッジ（Lv10+。口元と重ならない下寄せ）。
+    return `<path d="M32 47.5 l1.4 2.8 3.1.4 -2.2 2.2 .5 3.1 -2.8-1.5 -2.8 1.5 .5-3.1 -2.2-2.2 3.1-.4 Z" fill="#ff8e3c" stroke="#d96b14" stroke-width="1"/>`;
+  }
+  if (tier === 2) {
+    // 安全ヘルメット（Lv20+。電気工事の現場感）。
+    return (
+      `<path d="M14 24 a18 13 0 0 1 36 0 l0 3 -36 0 Z" fill="#fffbe8" stroke="#cdb96a" stroke-width="1.6"/>` +
+      `<rect x="29" y="11" width="6" height="9" rx="2" fill="#ffd23e" stroke="#cdb96a" stroke-width="1.2"/>`
+    );
+  }
+  if (tier === 3) {
+    // 金の王冠（Lv40+ 電験マイスター）。
+    return (
+      `<path d="M20 19 l4 -8 5 6 3 -8 3 8 5 -6 4 8 Z" fill="#ffc62e" stroke="#d99a00" stroke-width="1.4" stroke-linejoin="round"/>` +
+      `<circle cx="24.5" cy="12.5" r="1.6" fill="#ff5d5d"/><circle cx="32" cy="10" r="1.6" fill="#5d83f7"/>` +
+      `<circle cx="39.5" cy="12.5" r="1.6" fill="#34d399"/>`
+    );
+  }
+  return "";
+}
+
 /**
  * デンタマのSVG（電気の玉の妖精。稲妻のアホ毛がトレードマーク）。
  * 文字列を `figure`/`div` の innerHTML として使う（自前生成・信頼済み）。
+ * @param tier 成長段階（レベル帯でアクセサリーが付く）
  */
-export function mascotSvg(mood: MascotMood, size = 72): string {
+export function mascotSvg(mood: MascotMood, size = 72, tier: MascotTier = 0): string {
+  // ヘルメット/王冠（tier2/3）はアホ毛と干渉するため、アホ毛は tier0/1 のみ描く。
+  const ahoge =
+    tier <= 1
+      ? `<path d="M34 4 L27 17 L32 17 L29 27 L40 13 L34.5 13 Z" fill="#ffb300" stroke="#e3a400" stroke-width="1.4" stroke-linejoin="round"/>`
+      : "";
   return (
     `<svg viewBox="0 0 64 64" width="${size}" height="${size}" role="img" ` +
     `aria-label="${MASCOT_NAME}（${MOOD_LABEL[mood]}）">` +
     arms(mood) +
     `<circle cx="32" cy="36" r="21" fill="#ffd645" stroke="#e3a400" stroke-width="2"/>` +
-    `<path d="M34 4 L27 17 L32 17 L29 27 L40 13 L34.5 13 Z" fill="#ffb300" stroke="#e3a400" stroke-width="1.4" stroke-linejoin="round"/>` +
+    ahoge +
     `<ellipse cx="24" cy="27" rx="5" ry="2.6" fill="#fff" opacity=".55"/>` +
     `<ellipse cx="19.5" cy="40" rx="3.2" ry="2" fill="#ff9d9d" opacity=".75"/>` +
     `<ellipse cx="44.5" cy="40" rx="3.2" ry="2" fill="#ff9d9d" opacity=".75"/>` +
     face(mood) +
+    accessory(tier) +
     `<ellipse cx="25" cy="56.5" rx="4" ry="2" fill="#e3a400"/>` +
     `<ellipse cx="39" cy="56.5" rx="4" ry="2" fill="#e3a400"/>` +
     `</svg>`
@@ -189,6 +231,27 @@ export function mascotHome(ctx: MascotContext): MascotView {
       dayIndex,
     ),
   };
+}
+
+/** 電験まめ知識（タップで聞ける小ネタ。教科書レベルの定番事実のみ＝検証可能）。 */
+export const MASCOT_TRIVIA: readonly string[] = [
+  "「電験」の正式名称は電気主任技術者試験。経済産業省所管の国家資格だよ⚡",
+  "オームの法則 V=RI は1827年発表。当時はなかなか認められなかったんだって",
+  "単位のボルトはイタリアのボルタ、アンペアはフランスのアンペールが由来だよ",
+  "日本の商用周波数は東日本50Hz・西日本60Hz。明治期に輸入した発電機の違いの名残なんだ",
+  "電験二種があれば17万V未満の事業用電気工作物の主任技術者になれるよ",
+  "キルヒホッフの法則は電流則(KCL)と電圧則(KVL)。回路解析の二本柱だね",
+  "変圧器の原理は電磁誘導。ファラデーが1831年に発見した現象だよ",
+  "送電線が3本セットなのは三相交流だから。少ない導体で大きな電力を送れるんだ",
+  "%Z（パーセントインピーダンス）は基準容量を揃えれば足し算できる優れものだよ",
+  "同期機の回転速度は N=120f/p。周波数と極数で決まるんだ",
+  "電験は三種→二種→一種の順に扱える電圧が広がるよ。一種は無制限！",
+  "力率を改善すると同じ有効電力でも電流が減って、線路損失が下がるんだ",
+];
+
+/** まめ知識を順繰りに返す（インデックスは呼び出し側が保持。範囲外は巡回）。 */
+export function mascotTip(index: number): string {
+  return MASCOT_TRIVIA[((index % MASCOT_TRIVIA.length) + MASCOT_TRIVIA.length) % MASCOT_TRIVIA.length]!;
 }
 
 /** 解答直後のリアクション（正誤とコンボで変わる短い一言）。 */

@@ -391,6 +391,12 @@
         content: ""; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
         border: 6px solid transparent; border-right-color: var(--surface-2); border-left: 0;
       }
+      .card.mascot .mcol { flex: 1; display: flex; flex-direction: column; gap: .4rem; align-items: flex-start; }
+      .card.mascot .mcol .mbubble { width: 100%; }
+      .tipbtn { cursor: pointer; font: inherit; font-size: .74rem; font-weight: 700; background: var(--surface); }
+      button.badge { font: inherit; cursor: pointer; transition: border-color .15s var(--ease), transform .1s var(--ease); }
+      button.badge:hover { border-color: var(--accent); }
+      button.badge:active { transform: scale(.97); }
       .card.quests .qhead { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .35rem; }
       .qbonus { font-size: .72rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
       .qbonus.done { color: var(--ok); }
