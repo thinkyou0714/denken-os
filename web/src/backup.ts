@@ -23,6 +23,7 @@ export const BACKUP_KEYS: readonly string[] = [
   "denken:freeze",
   "denken:badges",
   "denken:sound",
+  "denken:mascot",
 ];
 
 export const BACKUP_VERSION = 1;

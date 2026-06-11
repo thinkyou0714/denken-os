@@ -136,3 +136,130 @@ export function allQuestsClear(dayLogs: readonly WebAnswerLog[], dayIndex: numbe
   if (dayLogs.length === 0) return false;
   return questStatuses(dailyQuests(dayIndex), dayLogs).every((s) => s.done);
 }
+
+// ---- ウィークリークエスト（長周期の目標。日次の「今日できた」に「今週の積み上げ」を重ねる） ----
+
+/**
+ * JST 週番号（月曜はじまり）。epoch 日番号 0 = 1970-01-01(木) なので +3 で月曜起点に揃う。
+ */
+export function weekIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): number {
+  return Math.floor((dayIndexOf(ms, dayOffsetMs) + 3) / 7);
+}
+
+export type WeeklyQuestKind = "wsolve" | "wcorrect" | "wdays" | "wtopics" | "wperfect";
+
+export interface WeeklyQuest {
+  /** `${weekIndex}-${kind}` 形式。 */
+  id: string;
+  kind: WeeklyQuestKind;
+  target: number;
+  icon: string;
+  label: string;
+}
+
+interface WeeklyTemplate {
+  kind: WeeklyQuestKind;
+  icon: string;
+  targets: readonly number[];
+  label: (t: number) => string;
+}
+
+/** 週次も「その週のログだけ」で判定できる種類に限定する（XP導出の決定論を守る）。 */
+const WEEKLY_TEMPLATES: readonly WeeklyTemplate[] = [
+  { kind: "wsolve", icon: "📚", targets: [30, 40, 50], label: (t) => `今週 合計 ${t} 問解く` },
+  { kind: "wcorrect", icon: "🎯", targets: [20, 28, 35], label: (t) => `今週 合計 ${t} 問正解する` },
+  { kind: "wdays", icon: "📅", targets: [4, 5, 6], label: (t) => `今週 ${t} 日学習する` },
+  { kind: "wtopics", icon: "🧭", targets: [8, 10, 12], label: (t) => `今週 ${t} 種類の論点に挑戦する` },
+  {
+    kind: "wperfect",
+    icon: "✨",
+    targets: [1, 2],
+    label: (t) => `パーフェクトデーを ${t} 回つくる（5問以上全問正解）`,
+  },
+];
+
+export const WEEKLY_QUEST_COUNT = 3;
+/** 週次クエスト全達成のボーナスXP（日次より大きな節目報酬）。 */
+export const WEEKLY_CLEAR_BONUS_XP = 50;
+
+/** その週のウィークリークエスト3件（決定論）。 */
+export function weeklyQuests(weekIndex: number): WeeklyQuest[] {
+  const rng = mulberry32((weekIndex * 7 + 1) ^ 0x85ebca6b);
+  const order = WEEKLY_TEMPLATES.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [order[i], order[j]] = [order[j]!, order[i]!];
+  }
+  return order.slice(0, WEEKLY_QUEST_COUNT).map((idx) => {
+    const tpl = WEEKLY_TEMPLATES[idx]!;
+    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)]!;
+    return { id: `${weekIndex}-${tpl.kind}`, kind: tpl.kind, target, icon: tpl.icon, label: tpl.label(target) };
+  });
+}
+
+/** 指定週のログだけを時系列順で取り出す。 */
+export function logsOfWeek(
+  logs: readonly WebAnswerLog[],
+  weekIndex: number,
+  dayOffsetMs: number = JST_OFFSET_MS,
+): WebAnswerLog[] {
+  return logs.filter((l) => weekIndexOf(l.atMs, dayOffsetMs) === weekIndex).sort((a, b) => a.atMs - b.atMs);
+}
+
+/** パーフェクトデー（5問以上を全問正解した日）の数。 */
+export function perfectDayCount(logs: readonly WebAnswerLog[], dayOffsetMs: number = JST_OFFSET_MS): number {
+  const byDay = new Map<number, { count: number; correct: number }>();
+  for (const l of logs) {
+    const d = dayIndexOf(l.atMs, dayOffsetMs);
+    const cur = byDay.get(d) ?? { count: 0, correct: 0 };
+    cur.count += 1;
+    if (l.correct) cur.correct += 1;
+    byDay.set(d, cur);
+  }
+  let n = 0;
+  for (const v of byDay.values()) if (v.count >= 5 && v.correct === v.count) n += 1;
+  return n;
+}
+
+function weeklyQuestValue(quest: WeeklyQuest, weekLogs: readonly WebAnswerLog[], dayOffsetMs: number): number {
+  switch (quest.kind) {
+    case "wsolve":
+      return weekLogs.length;
+    case "wcorrect":
+      return weekLogs.filter((l) => l.correct).length;
+    case "wdays":
+      return new Set(weekLogs.map((l) => dayIndexOf(l.atMs, dayOffsetMs))).size;
+    case "wtopics":
+      return new Set(weekLogs.map((l) => l.topic)).size;
+    case "wperfect":
+      return perfectDayCount(weekLogs, dayOffsetMs);
+  }
+}
+
+export interface WeeklyQuestStatus {
+  quest: WeeklyQuest;
+  value: number;
+  done: boolean;
+}
+
+/** 今週クエストの進捗一覧。 */
+export function weeklyQuestStatuses(
+  quests: readonly WeeklyQuest[],
+  weekLogs: readonly WebAnswerLog[],
+  dayOffsetMs: number = JST_OFFSET_MS,
+): WeeklyQuestStatus[] {
+  return quests.map((quest) => {
+    const value = weeklyQuestValue(quest, weekLogs, dayOffsetMs);
+    return { quest, value, done: value >= quest.target };
+  });
+}
+
+/** その週の3クエストをすべて達成したか。 */
+export function allWeeklyQuestsClear(
+  weekLogs: readonly WebAnswerLog[],
+  weekIndex: number,
+  dayOffsetMs: number = JST_OFFSET_MS,
+): boolean {
+  if (weekLogs.length === 0) return false;
+  return weeklyQuestStatuses(weeklyQuests(weekIndex), weekLogs, dayOffsetMs).every((s) => s.done);
+}

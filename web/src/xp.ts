@@ -12,7 +12,15 @@
  * DOM 非依存でテスト可能。日境界は store.ts と同じ JST(UTC+9)。
  */
 import type { Rating } from "../../lib/scheduler/types.js";
-import { allQuestsClear, dayIndexOf, JST_OFFSET_MS, QUEST_CLEAR_BONUS_XP } from "./quests.js";
+import {
+  allQuestsClear,
+  allWeeklyQuestsClear,
+  dayIndexOf,
+  JST_OFFSET_MS,
+  QUEST_CLEAR_BONUS_XP,
+  WEEKLY_CLEAR_BONUS_XP,
+  weekIndexOf,
+} from "./quests.js";
 import type { WebAnswerLog } from "./store.js";
 
 /** 評価別の基礎XP。不正解(again)にも参加報酬を与える（挑戦を罰しない）。 */
@@ -64,9 +72,40 @@ export function questBonusXp(logs: readonly WebAnswerLog[], dayOffsetMs: number 
   return total;
 }
 
-/** 累計XP（基礎＋コンボ＋クエストボーナス）。 */
+/** ウィークリークエスト全達成ボーナスの合計（達成した週ごとに +50）。 */
+export function weeklyBonusXp(logs: readonly WebAnswerLog[], dayOffsetMs: number = JST_OFFSET_MS): number {
+  const byWeek = new Map<number, WebAnswerLog[]>();
+  for (const l of logs) {
+    const w = weekIndexOf(l.atMs, dayOffsetMs);
+    const arr = byWeek.get(w) ?? [];
+    arr.push(l);
+    byWeek.set(w, arr);
+  }
+  let total = 0;
+  for (const [weekIndex, weekLogs] of byWeek) {
+    weekLogs.sort((a, b) => a.atMs - b.atMs);
+    if (allWeeklyQuestsClear(weekLogs, weekIndex, dayOffsetMs)) total += WEEKLY_CLEAR_BONUS_XP;
+  }
+  return total;
+}
+
+/** 累計XP（基礎＋コンボ＋日次クエスト＋週次クエストボーナス）。 */
 export function totalXp(logs: readonly WebAnswerLog[], dayOffsetMs: number = JST_OFFSET_MS): number {
-  return xpFromLogs(logs, dayOffsetMs) + questBonusXp(logs, dayOffsetMs);
+  return xpFromLogs(logs, dayOffsetMs) + questBonusXp(logs, dayOffsetMs) + weeklyBonusXp(logs, dayOffsetMs);
+}
+
+/** 科目別の累計XP（基礎XPのみ。topic→科目の対応が無いログは「その他」に集計しない＝除外）。 */
+export function xpBySubject(
+  logs: readonly WebAnswerLog[],
+  subjectOf: ReadonlyMap<string, string>,
+): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const l of logs) {
+    const s = subjectOf.get(l.topic);
+    if (!s) continue;
+    out.set(s, (out.get(s) ?? 0) + xpForLog(l));
+  }
+  return out;
 }
 
 /** レベル n → n+1 に必要なXP。序盤は速く上がり（即時の達成感）、後半は緩やかに。 */
@@ -113,6 +152,16 @@ export interface LevelInfo {
   /** 0..1 の進捗（レベル上限では 1）。 */
   progress: number;
   totalXp: number;
+  /** 次に解放される称号（目標勾配のティーザー。最上位到達後は null）。 */
+  nextTitle: { level: number; title: string } | null;
+}
+
+/** 現在レベルの次に控える称号（しきい値表の次エントリ）。 */
+export function nextTitleFor(level: number): { level: number; title: string } | null {
+  for (const [lv, title] of TITLES) {
+    if (lv > level) return { level: lv, title };
+  }
+  return null;
 }
 
 /** 累計XPからレベル・称号・次レベルへの進捗を求める。 */
@@ -133,6 +182,7 @@ export function levelInfo(xp: number): LevelInfo {
     xpNeed: need,
     progress: capped ? 1 : Math.min(1, rest / need),
     totalXp: total,
+    nextTitle: nextTitleFor(level),
   };
 }
 

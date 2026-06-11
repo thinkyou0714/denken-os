@@ -435,6 +435,30 @@
         animation-name: confall; animation-timing-function: linear; animation-fill-mode: both;
       }
       @keyframes confall { to { transform: translateY(105vh) rotate(540deg); opacity: .65; } }
+      /* デンタマの呼吸（ゆっくり上下。reduced-motion では全アニメ停止に従う） */
+      .mface svg { animation: mbob 3.4s ease-in-out infinite; }
+      @keyframes mbob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+      /* 解答のマイクロモーション（正解=ポップ・不正解=シェイク） */
+      .choice.correct { animation: cpop .32s var(--ease); }
+      @keyframes cpop { 0% { transform: scale(1); } 45% { transform: scale(1.025); } 100% { transform: scale(1); } }
+      .choice.wrong { animation: cshake .3s var(--ease); }
+      @keyframes cshake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+      /* FSRS評価ボタンの番号バッジ（1〜3キー対応の可視化） */
+      .rate button .kbd {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 1.2rem; height: 1.2rem; margin-right: .4rem; padding: 0 .2rem;
+        font-size: .68rem; font-weight: 700; color: var(--muted);
+        border: 1px solid var(--border-strong); border-radius: 5px; background: var(--surface-2);
+      }
+      /* 自分の記録（自己ベスト統計グリッド） */
+      .mystats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: .4rem 0; }
+      .mystats .stat {
+        border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface);
+        padding: .5rem .4rem; text-align: center; box-shadow: var(--shadow-sm);
+      }
+      .mystats .sn { font-size: 1.3rem; font-weight: 800; letter-spacing: -.01em; }
+      .mystats .sl { font-size: .68rem; color: var(--muted); margin-top: .1rem; }
+      .almost { margin: .5rem 0 0; }
 
       @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) {

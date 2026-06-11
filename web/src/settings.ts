@@ -96,6 +96,18 @@ export function setSound(storage: StorageLike, on: boolean): void {
   storage.setItem(SOUND_KEY, on ? "1" : "0");
 }
 
+// ---- マスコット表示（キャラ演出が不要な学習者向けに切れる。既定オン）----
+
+const MASCOT_KEY = "denken:mascot";
+
+export function getMascotEnabled(storage: StorageLike): boolean {
+  return storage.getItem(MASCOT_KEY) !== "0";
+}
+
+export function setMascotEnabled(storage: StorageLike, on: boolean): void {
+  storage.setItem(MASCOT_KEY, on ? "1" : "0");
+}
+
 // ---- オンボーディング（初回ガイドの既読管理）----
 
 export function isOnboarded(storage: StorageLike): boolean {
