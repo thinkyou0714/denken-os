@@ -84,6 +84,46 @@ export function setReviewCap(storage: StorageLike, n: number): void {
   storage.setItem(REVIEW_CAP_KEY, String(clamped));
 }
 
+// ---- 効果音（正解音・ファンファーレ等。既定オン(中)・音量3段階＋オフ）----
+
+const SOUND_KEY = "denken:sound";
+
+/** 効果音の音量。off=無音。保存値 "1"（旧オン）と未設定は mid に写像する。 */
+export type SoundLevel = "off" | "low" | "mid" | "high";
+
+export function getSoundLevel(storage: StorageLike): SoundLevel {
+  const raw = storage.getItem(SOUND_KEY);
+  if (raw === "0") return "off";
+  if (raw === "low" || raw === "mid" || raw === "high") return raw;
+  return "mid";
+}
+
+/** off は旧形式の "0" で保存し、旧バージョンとの互換を保つ。 */
+export function setSoundLevel(storage: StorageLike, level: SoundLevel): void {
+  storage.setItem(SOUND_KEY, level === "off" ? "0" : level);
+}
+
+/** 後方互換ラッパ（オン/オフだけ知りたい呼び出し向け）。 */
+export function getSound(storage: StorageLike): boolean {
+  return getSoundLevel(storage) !== "off";
+}
+
+export function setSound(storage: StorageLike, on: boolean): void {
+  setSoundLevel(storage, on ? "mid" : "off");
+}
+
+// ---- マスコット表示（キャラ演出が不要な学習者向けに切れる。既定オン）----
+
+const MASCOT_KEY = "denken:mascot";
+
+export function getMascotEnabled(storage: StorageLike): boolean {
+  return storage.getItem(MASCOT_KEY) !== "0";
+}
+
+export function setMascotEnabled(storage: StorageLike, on: boolean): void {
+  storage.setItem(MASCOT_KEY, on ? "1" : "0");
+}
+
 // ---- オンボーディング（初回ガイドの既読管理）----
 
 export function isOnboarded(storage: StorageLike): boolean {

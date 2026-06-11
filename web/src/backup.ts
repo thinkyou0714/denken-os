@@ -20,6 +20,10 @@ export const BACKUP_KEYS: readonly string[] = [
   "denken:chatModel",
   "denken:onboarded",
   "denken:reviewCap",
+  "denken:freeze",
+  "denken:badges",
+  "denken:sound",
+  "denken:mascot",
 ];
 
 export const BACKUP_VERSION = 1;

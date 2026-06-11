@@ -72,10 +72,14 @@ export function streakStatus(
   logs: WebAnswerLog[],
   nowMs: number = Date.now(),
   dayOffsetMs: number = JST_OFFSET_MS,
+  /** 学習日として追加で数える日（ストリークお守りで肩代わりした JST 日番号）。 */
+  extraDays: ReadonlySet<number> = new Set(),
 ): StreakStatus {
-  if (logs.length === 0) return { state: "none", days: 0, message: "今日から始めましょう。まずは1問！" };
+  if (logs.length === 0 && extraDays.size === 0)
+    return { state: "none", days: 0, message: "今日から始めましょう。まずは1問！" };
 
   const days = new Set(logs.map((l) => dayIndex(l.atMs, dayOffsetMs)));
+  for (const d of extraDays) days.add(d);
   const today = dayIndex(nowMs, dayOffsetMs);
 
   // 連続日数を、今日 or 昨日を起点に遡って数える。
@@ -105,4 +109,22 @@ export function streakStatus(
 /** オフライン表示のラベル（純関数化してテスト可能に）。 */
 export function offlineLabel(online: boolean): string {
   return online ? "" : "📴 オフライン";
+}
+
+// ---- ストリーク節目（大台のスペシャル祝賀） ----
+
+/** 特別祝賀するストリークの大台。7日は週次（お守り獲得）が担うため除外。 */
+export const STREAK_MILESTONES: readonly number[] = [30, 50, 100, 200, 365];
+
+/**
+ * 祝賀すべき新しい大台を返す（無ければ null）。
+ * 「ちょうどの日」を逃しても取りこぼさないよう、seen を超えた最大の通過済み大台を返す
+ * （お守りブリッジでストリークが一気に伸びるケースに対応）。
+ */
+export function passedStreakMilestone(streak: number, seen: number): number | null {
+  let hit: number | null = null;
+  for (const m of STREAK_MILESTONES) {
+    if (streak >= m && m > seen) hit = m;
+  }
+  return hit;
 }
