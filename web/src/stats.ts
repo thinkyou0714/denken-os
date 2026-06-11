@@ -27,14 +27,32 @@ export interface MyStats {
   perfectDays: number;
   /** これまでに挑戦した論点の種類。 */
   topicsStudied: number;
-  /** お守りが欠席をカバーした回数。 */
+  /** お守り・おやすみ予約が欠席をカバーした回数。 */
   freezeSaves: number;
   /** 1日の最多解答数（自己ベスト）。 */
   bestDayCount: number;
+  /** 歴代最長ストリーク（現在途切れていても過去のベストを称える）。 */
+  bestStreakEver: number;
 }
 
-/** 解答ログ（とお守り消費履歴）から自己ベスト統計を導出する。 */
-export function myStats(logs: readonly WebAnswerLog[], usedFreezeDays: readonly number[]): MyStats {
+/** 日集合の中の最長連続日数（歴代最長ストリーク）。 */
+export function longestStreak(days: ReadonlySet<number>): number {
+  let best = 0;
+  for (const d of days) {
+    if (days.has(d - 1)) continue; // 連続の先頭だけから数える（O(n)）
+    let len = 1;
+    while (days.has(d + len)) len += 1;
+    if (len > best) best = len;
+  }
+  return best;
+}
+
+/** 解答ログ（とお守り消費日・おやすみ予約日）から自己ベスト統計を導出する。 */
+export function myStats(
+  logs: readonly WebAnswerLog[],
+  usedFreezeDays: readonly number[],
+  restDays: readonly number[] = [],
+): MyStats {
   const dayIdxs = [...new Set(logs.map((l) => dayIndexOf(l.atMs, JST_OFFSET_MS)))];
   let questClearDays = 0;
   let bestCombo = 0;
@@ -45,6 +63,10 @@ export function myStats(logs: readonly WebAnswerLog[], usedFreezeDays: readonly 
     bestCombo = Math.max(bestCombo, maxConsecutiveCorrect(dayLogs));
     bestDayCount = Math.max(bestDayCount, dayLogs.length);
   }
+  // 歴代最長ストリークは肩代わり日（お守り・おやすみ）も連続として数える。
+  const allDays = new Set(dayIdxs);
+  for (const d of usedFreezeDays) allDays.add(d);
+  for (const d of restDays) allDays.add(d);
   return {
     studyDays: dayIdxs.length,
     questClearDays,
@@ -53,6 +75,7 @@ export function myStats(logs: readonly WebAnswerLog[], usedFreezeDays: readonly 
     topicsStudied: new Set(logs.map((l) => l.topic)).size,
     freezeSaves: usedFreezeDays.length,
     bestDayCount,
+    bestStreakEver: longestStreak(allDays),
   };
 }
 

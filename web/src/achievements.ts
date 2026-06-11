@@ -65,6 +65,8 @@ interface Stats {
   hasMorning: boolean;
   hasNight: boolean;
   hasComeback: boolean;
+  /** ブランク復帰後に7日連続を達成した経験（復帰を「続く力」へ繋げた証）。 */
+  hasComebackRun7: boolean;
   hasPerfectDay: boolean;
   /** ストリークがお守り消費なしか（無傷系実績）。 */
   noFreezeStreak: boolean;
@@ -100,10 +102,18 @@ function buildStats(input: AchievementInput): Stats {
     byDay.set(d, cur);
   }
   // 不死鳥: 3日以上の空白（連続4日番号差）を挟んで学習を再開した経験。
+  // 不死鳥・改: その復帰後に7日連続を積み上げた経験（復帰を継続へ繋げた）。
   const dayList = [...byDay.keys()].sort((a, b) => a - b);
+  const daySet = new Set(dayList);
   let hasComeback = false;
+  let hasComebackRun7 = false;
   for (let i = 1; i < dayList.length; i++) {
-    if (dayList[i]! - dayList[i - 1]! >= 4) hasComeback = true;
+    if (dayList[i]! - dayList[i - 1]! >= 4) {
+      hasComeback = true;
+      let run = 1;
+      while (daySet.has(dayList[i]! + run)) run += 1;
+      if (run >= 7) hasComebackRun7 = true;
+    }
   }
   // パーフェクトデー: 1日5問以上を全問正解。
   let hasPerfectDay = false;
@@ -131,6 +141,7 @@ function buildStats(input: AchievementInput): Stats {
     hasMorning,
     hasNight,
     hasComeback,
+    hasComebackRun7,
     hasPerfectDay,
     noFreezeStreak: (input.usedFreezeDays ?? []).length === 0,
     maxMonthDays,
@@ -210,6 +221,13 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     title: "月間皆勤賞",
     desc: "ひと月に20日学習",
     check: (s) => s.maxMonthDays >= 20,
+  },
+  {
+    id: "phoenix7",
+    icon: "🦅",
+    title: "不死鳥・改",
+    desc: "ブランク復帰後に7日連続",
+    check: (s) => s.hasComebackRun7,
   },
 ];
 

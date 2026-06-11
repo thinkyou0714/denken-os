@@ -561,7 +561,7 @@ function questsCard(): HTMLElement {
         { class: s.done ? "quest done" : "quest" },
         h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
         h("span", { class: "ql" }, s.quest.label),
-        bar(pct),
+        bar(pct, `${s.quest.label} の進捗`),
         h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
       ),
     );
@@ -596,7 +596,7 @@ function weeklyQuestsCard(): HTMLElement {
         { class: s.done ? "quest done" : "quest" },
         h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
         h("span", { class: "ql" }, s.quest.label),
-        bar(pct),
+        bar(pct, `${s.quest.label} の進捗`),
         h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
       ),
     );
@@ -1692,8 +1692,18 @@ function renderChat(root: HTMLElement): void {
 
 // ---- 進捗タブ ----
 
-function bar(pct: number): HTMLElement {
-  return h("div", { class: "bar" }, h("span", { style: `width:${Math.max(0, Math.min(100, pct))}%` }));
+/** 進捗バー。label を渡すと支援技術に進捗として伝わる（role=progressbar）。 */
+function bar(pct: number, label?: string): HTMLElement {
+  const clamped = Math.max(0, Math.min(100, pct));
+  const attrs: Record<string, string> = { class: "bar" };
+  if (label) {
+    attrs.role = "progressbar";
+    attrs["aria-label"] = label;
+    attrs["aria-valuenow"] = String(Math.round(clamped));
+    attrs["aria-valuemin"] = "0";
+    attrs["aria-valuemax"] = "100";
+  }
+  return h("div", attrs, h("span", { style: `width:${clamped}%` }));
 }
 
 function masteryChip(level: string): HTMLElement {
@@ -1744,7 +1754,7 @@ function renderDashboard(root: HTMLElement): void {
           ),
         ),
       ),
-      bar(Math.round(lv.progress * 100)),
+      bar(Math.round(lv.progress * 100), "次のレベルへの進捗"),
     ),
     h(
       "div",
@@ -1841,20 +1851,32 @@ function renderDashboard(root: HTMLElement): void {
   }
 
   // 自分の記録（他人とのランキングではなく自己ベスト＝オフラインで成立する健全な競争）。
-  const st = myStats(logs, loadFreezeState(storage).usedDays);
+  const fzStat = loadFreezeState(storage);
+  const st = myStats(logs, fzStat.usedDays, fzStat.restDays);
+  const xpPerDay = st.studyDays > 0 ? Math.round(lv.totalXp / st.studyDays) : 0;
   root.append(
     h("h2", {}, "自分の記録"),
+    // これまでのあゆみ（累計の一行サマリー。続けてきた事実そのものを称える）。
+    h(
+      "p",
+      { class: "muted" },
+      `📖 これまでに ${o.attempts.toLocaleString("ja-JP")} 問・${lv.totalXp.toLocaleString("ja-JP")} XP・` +
+        `${st.studyDays} 日間 学習してきました`,
+    ),
     h(
       "div",
       { class: "mystats" },
       ...(
         [
           [String(st.studyDays), "学習日数"],
+          [`${st.bestStreakEver}日`, "歴代最長🔥"],
+          [String(xpPerDay), "XP/学習日"],
           [String(st.bestCombo), "最高コンボ"],
           [String(st.bestDayCount), "1日最多解答"],
           [String(st.questClearDays), "クエスト全達成日"],
           [String(st.perfectDays), "パーフェクトデー"],
           [String(st.freezeSaves), "お守りの救援"],
+          [String(masteredTopics(logs).length), "マスター論点"],
         ] as const
       ).map(([num, label]) =>
         h("div", { class: "stat" }, h("div", { class: "sn" }, num), h("div", { class: "sl" }, label)),

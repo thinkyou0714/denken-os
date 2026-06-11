@@ -102,3 +102,33 @@ describe("新実績（初マスター・無傷の三十日・月間皆勤賞）"
     expect(got.has("month20")).toBe(false);
   });
 });
+
+describe("longestStreak / bestStreakEver（歴代最長）", () => {
+  it("最長の連続日数を返す（現在途切れていても過去ベストを保持）", async () => {
+    const { longestStreak, myStats } = await import("../../web/src/stats.js");
+    expect(longestStreak(new Set([1, 2, 3, 10, 11, 12, 13, 20]))).toBe(4);
+    expect(longestStreak(new Set())).toBe(0);
+    const logs = [0, 1, 2, 10].map((d) => log({ atMs: DAY0 + d * DAY_MS }));
+    expect(myStats(logs, []).bestStreakEver).toBe(3);
+  });
+
+  it("お守り・おやすみの肩代わり日も連続として数える", async () => {
+    const { myStats } = await import("../../web/src/stats.js");
+    const base = Math.floor((DAY0 + 9 * 3600_000) / DAY_MS);
+    const logs = [0, 2].map((d) => log({ atMs: DAY0 + d * DAY_MS }));
+    expect(myStats(logs, [base + 1]).bestStreakEver).toBe(3); // お守りで橋渡し
+    expect(myStats(logs, [], [base + 1]).bestStreakEver).toBe(3); // おやすみでも同様
+    expect(myStats(logs, [], [base + 1]).freezeSaves).toBe(0); // 救援回数はお守りのみ
+  });
+});
+
+describe("不死鳥・改（復帰後7日連続）", () => {
+  it("ブランク復帰後に7日連続で解除・6日では未解除", () => {
+    const run7 = [0, 5, 6, 7, 8, 9, 10, 11].map((d) => log({ atMs: DAY0 + d * DAY_MS }));
+    expect(unlockedIds(evaluateAchievements({ logs: run7, streakDays: 1, level: 1 })).has("phoenix7")).toBe(true);
+    const run6 = [0, 5, 6, 7, 8, 9, 10].map((d) => log({ atMs: DAY0 + d * DAY_MS }));
+    const got6 = unlockedIds(evaluateAchievements({ logs: run6, streakDays: 1, level: 1 }));
+    expect(got6.has("phoenix7")).toBe(false);
+    expect(got6.has("phoenix")).toBe(true); // 復帰自体は不死鳥
+  });
+});
