@@ -120,6 +120,15 @@ describe("maybeAwardFreeze（7日ごとの獲得）", () => {
     expect(maybeAwardFreeze(spent, 14).awarded).toBe(true);
   });
 
+  it("ストリークが途切れて作り直したら、過去の節目記録に縛られず7日で再獲得できる", () => {
+    // 以前 28 日まで到達 → 途切れて新ストリーク 7 日目: 旧記録(28)は現在と無関係なので付与する。
+    const r = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 28, restDays: [] }, 7);
+    expect(r.awarded).toBe(true);
+    expect(r.state.lastAwardStreak).toBe(7);
+    // 同じ新ストリーク内での二重獲得はしない。
+    expect(maybeAwardFreeze(r.state, 7).awarded).toBe(false);
+  });
+
   it("節目を過ぎてからでも取りこぼさない（既存の長期継続ユーザーへのキャッチアップ）", () => {
     // ストリーク30で初めて機能に触れた場合: 最後に通過した節目(28)分として1個受け取れる。
     const r = maybeAwardFreeze({ count: 0, usedDays: [], lastAwardStreak: 0, restDays: [] }, 30);

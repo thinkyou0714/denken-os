@@ -130,10 +130,13 @@ export interface AwardResult {
  *    次の解答で1個受け取れる（節目ちょうどの日を逃しても取りこぼさない）。
  *  - 上限で受け取れなかった節目は lastAwardStreak を進めない＝枠が空き次第、
  *    次の機会に受け取れる。
+ *  - ストリークが途切れて作り直した場合（現在の streak < 記録済み節目）、過去の節目は
+ *    現在のストリークと無関係なので無視する＝新しいストリークでも7日で再び獲得できる。
  */
 export function maybeAwardFreeze(state: FreezeState, streak: number): AwardResult {
   const passedMilestone = Math.floor(Math.max(0, streak) / FREEZE_AWARD_EVERY) * FREEZE_AWARD_EVERY;
-  if (passedMilestone <= 0 || passedMilestone <= state.lastAwardStreak || state.count >= FREEZE_CAP) {
+  const effectiveLast = state.lastAwardStreak > streak ? 0 : state.lastAwardStreak;
+  if (passedMilestone <= 0 || passedMilestone <= effectiveLast || state.count >= FREEZE_CAP) {
     return { state, awarded: false };
   }
   return {

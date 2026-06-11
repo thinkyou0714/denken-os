@@ -176,6 +176,10 @@ interface ExamState {
   timedOut: boolean;
   /** 開始時点でクエスト全達成済みだったか（結果画面での達成祝賀の判定）。 */
   questsClearAtStart: boolean;
+  /** 開始時点で週次クエスト全達成済みだったか。 */
+  weeklyClearAtStart: boolean;
+  /** 開始時点の今日の解答数（模試中の日次目標達成を祝うため）。 */
+  todayCountAtStart: number;
   /** 結果画面の祝賀（紙吹雪等）を実行済みか（タブ再描画での再発火を防ぐ）。 */
   celebrated: boolean;
 }
@@ -394,6 +398,9 @@ function render(): void {
   // エラーバウンダリ: 描画例外でSPA全体が白画面になり「壊れた」と離脱されるのを防ぐ。
   // 例外時は安心メッセージ＋復旧導線を出し、学習記録が無事であることを伝える。
   try {
+    // 開きっぱなしのタブ（visibilitychange が発火しない常時表示）で日をまたいだ場合に備え、
+    // 描画のたびに欠席日のお守りカバーを確認する（冪等・通常は何もしない）。
+    runFreezeBridge();
     renderHeader();
     if (view === "practice") renderPractice(root);
     else if (view === "review") renderReview(root);
@@ -898,35 +905,27 @@ function ratingBar(host: HTMLElement, p: Problem, opts: ReadonlyArray<readonly [
   return bar;
 }
 
-function finalize(
-  host: HTMLElement,
-  p: Problem,
-  rating: Rating,
-  score?: { checked: number; total: number; pct: number },
-): void {
-  const timeMs = Date.now() - practice.shownAt;
-  const before = todayCount();
-  const xpBefore = totalXp(progress.logs());
+interface RewardOutcome {
+  /** 重要度順の祝賀メッセージ（先頭をトーストに使う）。 */
+  celebrations: string[];
+  fanfare: "levelup" | "clear" | null;
+  /** 大台達成など特別な節目（紙吹雪を増量する）。 */
+  bigConfetti: boolean;
+}
+
+/**
+ * 解答記録後の報酬処理（お守り獲得/大台/レベル/日次・週次クエスト/実績）。
+ * 学習（finalize）と模試（結果画面）の両経路で共有する — 模試だけで学ぶ人も
+ * レベルアップやお守りを取りこぼさない。
+ */
+function processRewards(beforeRecord: { questsClear: boolean; weeklyClear: boolean }): RewardOutcome {
+  // 開きっぱなしのタブで日をまたいだ直後でも、先に欠席日をお守りでカバーしてから集計する。
+  runFreezeBridge();
   const todayIdx = dayIndexOf(Date.now());
   const weekIdx = weekIndexOf(Date.now());
-  const questsBefore = allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx);
-  const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
-
-  progress.record(p.topic, rating, Date.now(), timeMs, p.id);
-
-  // 記述(二次)はここで初めて正誤相当が確定する（客観式は gradeObjective で演出済み）。
-  if (score) {
-    const ok = score.pct >= 2 / 3;
-    practice.combo = ok ? practice.combo + 1 : 0;
-    playTone(ok ? "correct" : "wrong", getSoundLevel(storage));
-    vibrate(ok ? 18 : [40, 50, 40]);
-  }
-
-  const xpGained = Math.max(0, totalXp(progress.logs()) - xpBefore);
-
-  // 祝賀は重要度順に1つだけトーストし、紙吹雪は1回（乱発すると報酬価値が下がる）。
   const celebrations: string[] = [];
   let fanfare: "levelup" | "clear" | null = null;
+  let bigConfetti = false;
 
   // 1) ストリークお守りの獲得（7日継続ごと・上限2）。
   const fiAfter = freezeInfo();
@@ -937,7 +936,6 @@ function finalize(
   }
 
   // 1b) ストリーク大台（30/50/100…日）のスペシャル祝賀（最優先・紙吹雪は増量）。
-  let bigConfetti = false;
   const milestone = passedStreakMilestone(fiAfter.streak, seenStreakMilestone());
   if (milestone) {
     try {
@@ -950,7 +948,7 @@ function finalize(
     bigConfetti = true;
   }
 
-  // 2) レベルアップ（模試中の上昇も取りこぼさないよう保存値と比較）。
+  // 2) レベルアップ（保存値と比較するため、どの経路の上昇も取りこぼさない）。
   const lv = currentLevel();
   if (lv.level > seenLevel()) {
     try {
@@ -963,13 +961,13 @@ function finalize(
   }
 
   // 3) 今日のクエスト全達成。
-  if (!questsBefore && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
+  if (!beforeRecord.questsClear && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
     celebrations.push(`📋 今日のクエスト全達成！ +${QUEST_CLEAR_BONUS_XP} XP`);
     fanfare = fanfare ?? "clear";
   }
 
   // 3b) 今週のクエスト全達成（週に1度の大きめの節目）。
-  if (!weeklyBefore && allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx)) {
+  if (!beforeRecord.weeklyClear && allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx)) {
     celebrations.push(`🗓️ 今週のクエスト全達成！ +${WEEKLY_CLEAR_BONUS_XP} XP`);
     fanfare = fanfare ?? "clear";
   }
@@ -995,19 +993,57 @@ function finalize(
     celebrations.push(`🏅 実績解除: ${names}${fresh.length > 2 ? ` ほか${fresh.length - 2}件` : ""}`);
   }
 
-  // 5) 日次目標の達成瞬間（達成に気づけないと目標の駆動力が出ない）。
+  return { celebrations, fanfare, bigConfetti };
+}
+
+function finalize(
+  host: HTMLElement,
+  p: Problem,
+  rating: Rating,
+  score?: { checked: number; total: number; pct: number },
+): void {
+  const timeMs = Date.now() - practice.shownAt;
+  // 開きっぱなしのタブで日をまたいでいた場合、記録前に欠席日をカバーしておく
+  // （ストリークが誤って1にリセットされたまま集計されるのを防ぐ）。
+  runFreezeBridge();
+  const before = todayCount();
+  const xpBefore = totalXp(progress.logs());
+  const todayIdx = dayIndexOf(Date.now());
+  const weekIdx = weekIndexOf(Date.now());
+  const questsBefore = allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx);
+  const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
+
+  progress.record(p.topic, rating, Date.now(), timeMs, p.id);
+
+  // 記述(二次)はここで初めて正誤相当が確定する（客観式は gradeObjective で演出済み）。
+  if (score) {
+    const ok = score.pct >= 2 / 3;
+    practice.combo = ok ? practice.combo + 1 : 0;
+    playTone(ok ? "correct" : "wrong", getSoundLevel(storage));
+    vibrate(ok ? 18 : [40, 50, 40]);
+  }
+
+  const xpGained = Math.max(0, totalXp(progress.logs()) - xpBefore);
+
+  // 祝賀は重要度順に1つだけトーストし、紙吹雪は1回（乱発すると報酬価値が下がる）。
+  const { celebrations, fanfare, bigConfetti } = processRewards({
+    questsClear: questsBefore,
+    weeklyClear: weeklyBefore,
+  });
+
+  // 日次目標の達成瞬間（達成に気づけないと目標の駆動力が出ない）。
   const goal = getDailyGoal(storage);
   const goalJustMet = before < goal && todayCount() >= goal;
+  const toneKind = fanfare ?? (goalJustMet ? "clear" : null);
   if (goalJustMet) {
     celebrations.push(`🎉 今日の目標 ${goal} 問を達成！この調子！`);
-    fanfare = fanfare ?? "clear";
   }
 
   if (celebrations.length > 0) {
     showToast(celebrations[0]!, "OK", () => {});
     confettiBurst(bigConfetti ? 64 : 28);
-    if (fanfare) playTone(fanfare, getSoundLevel(storage));
-  } else if (installPrompt && fiAfter.streak >= 3 && storage.getItem("denken:a2hsNudged") !== "1") {
+    if (toneKind) playTone(toneKind, getSoundLevel(storage));
+  } else if (installPrompt && freezeInfo().streak >= 3 && storage.getItem("denken:a2hsNudged") !== "1") {
     // A2HS は3日続いた頃＝価値を実感したタイミングで一度だけ提案する（初回に出すと断られる）。
     try {
       storage.setItem("denken:a2hsNudged", "1");
@@ -1238,6 +1274,7 @@ function startExam(count: number, preset: ExamPreset): void {
     return;
   }
   const todayIdx = dayIndexOf(Date.now());
+  const weekIdx = weekIndexOf(Date.now());
   exam = {
     set,
     idx: 0,
@@ -1248,6 +1285,8 @@ function startExam(count: number, preset: ExamPreset): void {
     limitMs: examTimeLimitMs(set),
     timedOut: false,
     questsClearAtStart: allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx),
+    weeklyClearAtStart: allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx),
+    todayCountAtStart: todayCount(),
     celebrated: false,
   };
   switchView("exam");
@@ -1390,16 +1429,27 @@ function renderExamResult(root: HTMLElement): void {
   const subjectScores = scoreExamBySubject(exam.set, exam.results);
 
   // 祝賀は初回表示の1回だけ（タブ往復での再発火を防ぐ）。
+  // 模試の解答もXP/クエスト/お守りに算入されるため、学習タブと同じ報酬処理を必ず通す
+  // （模試だけで学ぶ人もレベルアップや週次達成・お守り獲得を取りこぼさない）。
   if (!exam.celebrated) {
     exam.celebrated = true;
-    if (score.passed) {
-      confettiBurst();
-      playTone("clear", getSoundLevel(storage));
+    const reward = processRewards({
+      questsClear: exam.questsClearAtStart,
+      weeklyClear: exam.weeklyClearAtStart,
+    });
+    const goal = getDailyGoal(storage);
+    if (exam.todayCountAtStart < goal && todayCount() >= goal) {
+      reward.celebrations.push(`🎉 模試で今日の目標 ${goal} 問を達成！`);
+      reward.fanfare = reward.fanfare ?? "clear";
     }
-    const todayIdx = dayIndexOf(Date.now());
-    if (!exam.questsClearAtStart && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
-      showToast(`📋 模試で今日のクエスト全達成！ +${QUEST_CLEAR_BONUS_XP} XP`, "OK", () => {});
+    if (score.passed || reward.celebrations.length > 0) {
+      confettiBurst(reward.bigConfetti ? 64 : 32);
+      playTone(reward.fanfare ?? "clear", getSoundLevel(storage));
     }
+    if (reward.celebrations.length > 0) {
+      showToast(reward.celebrations[0]!, "OK", () => {});
+    }
+    renderHeader();
   }
 
   root.append(

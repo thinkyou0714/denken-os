@@ -44,6 +44,8 @@ export interface AchievementInput {
   subjectOf?: ReadonlyMap<string, string>;
   /** お守りで肩代わりした日（「無傷」系実績の判定に使う）。 */
   usedFreezeDays?: readonly number[];
+  /** 現在時刻（「現在のストリーク窓」の判定に使う。テストで固定可能）。 */
+  nowMs?: number;
   dayOffsetMs?: number;
 }
 
@@ -68,7 +70,7 @@ interface Stats {
   /** ブランク復帰後に7日連続を達成した経験（復帰を「続く力」へ繋げた証）。 */
   hasComebackRun7: boolean;
   hasPerfectDay: boolean;
-  /** ストリークがお守り消費なしか（無傷系実績）。 */
+  /** 現在のストリーク期間中にお守り消費が無いか（無傷系実績）。 */
   noFreezeStreak: boolean;
   /** ひと月（暦月・JST）の最多学習日数。 */
   maxMonthDays: number;
@@ -131,6 +133,12 @@ function buildStats(input: AchievementInput): Stats {
   }
   let maxMonthDays = 0;
   for (const set of byMonth.values()) maxMonthDays = Math.max(maxMonthDays, set.size);
+  // 無傷判定は「現在のストリーク窓」のみを見る。過去に一度お守りを使っただけで
+  // 永久に取得不能になってはいけない（新しいストリークはまっさらから評価する）。
+  const todayIdx = dayIndexOf(input.nowMs ?? Date.now(), offset);
+  const anchor = byDay.has(todayIdx) ? todayIdx : todayIdx - 1;
+  const windowStart = anchor - Math.max(0, input.streakDays) + 1;
+  const freezeInStreak = (input.usedFreezeDays ?? []).some((d) => d >= windowStart && d <= anchor);
   return {
     total: logs.length,
     streak: input.streakDays,
@@ -143,7 +151,7 @@ function buildStats(input: AchievementInput): Stats {
     hasComeback,
     hasComebackRun7,
     hasPerfectDay,
-    noFreezeStreak: (input.usedFreezeDays ?? []).length === 0,
+    noFreezeStreak: !freezeInStreak,
     maxMonthDays,
     masteredCount: masteredTopics(logs).length,
   };

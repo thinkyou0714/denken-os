@@ -79,13 +79,17 @@ describe("新実績（初マスター・無傷の三十日・月間皆勤賞）"
     expect(got.has("master1")).toBe(true);
   });
 
-  it("無傷の三十日: ストリーク30以上かつお守り未消費で解除、消費があれば未解除", () => {
-    const clean = unlockedIds(evaluateAchievements({ logs: [log()], streakDays: 30, level: 1, usedFreezeDays: [] }));
+  it("無傷の三十日: 現在のストリーク窓にお守り消費が無ければ解除", () => {
+    const todayIdx = Math.floor((DAY0 + 9 * 3600_000) / DAY_MS);
+    const base = { logs: [log()], streakDays: 30, level: 1, nowMs: DAY0 } as const;
+    const clean = unlockedIds(evaluateAchievements({ ...base, usedFreezeDays: [] }));
     expect(clean.has("nofreeze30")).toBe(true);
-    const saved = unlockedIds(
-      evaluateAchievements({ logs: [log()], streakDays: 30, level: 1, usedFreezeDays: [20000] }),
-    );
-    expect(saved.has("nofreeze30")).toBe(false);
+    // 現在のストリーク窓内（5日前）の消費 → 未解除。
+    const inWindow = unlockedIds(evaluateAchievements({ ...base, usedFreezeDays: [todayIdx - 5] }));
+    expect(inWindow.has("nofreeze30")).toBe(false);
+    // 過去の別ストリークでの消費（100日前・窓の外）は妨げない（永久に取得不能にしない）。
+    const oldSave = unlockedIds(evaluateAchievements({ ...base, usedFreezeDays: [todayIdx - 100] }));
+    expect(oldSave.has("nofreeze30")).toBe(true);
   });
 
   it("月間皆勤賞: 同じ暦月に20日学習で解除", () => {
