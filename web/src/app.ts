@@ -18,6 +18,7 @@ import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import type { Rating } from "../../lib/scheduler/types.js";
 import { cardText } from "../../lib/share-card/card-text.js";
+import { evaluateAchievements, loadSeenBadges, newlyUnlocked, saveSeenBadges } from "./achievements.js";
 import { exportBackup, importBackup } from "./backup.js";
 import { appendChatMessage, clearChat, loadChat, streamClaude } from "./chat.js";
 import {
@@ -29,15 +30,28 @@ import {
   overall,
   recentAccuracy,
   reviewForecast,
+  topicSubjectMap,
 } from "./dashboard.js";
 import { recoveryView } from "./errors.js";
 import { buildMockExam, examTimeLimitMs, isPrimaryPass, scoreExam, scoreExamBySubject } from "./exam.js";
 import { formatElapsed, formatRemaining } from "./format.js";
 import { FORMULAS, filterFormulas } from "./formulas.js";
-import { isAnswerCorrect, partialScore } from "./grade.js";
+import {
+  bridgeWithFreezes,
+  type FreezeState,
+  loadFreezeState,
+  maybeAwardFreeze,
+  saveFreezeState,
+  streakWithFreezes,
+  studiedDays,
+} from "./freeze.js";
+import { confettiBurst, playTone, vibrate, xpFloat } from "./fx.js";
+import { isAnswerCorrect, normalizeNumericInput, partialScore } from "./grade.js";
+import { mascotCheer, mascotHome, mascotSvg } from "./mascot.js";
 import { formatMath } from "./mathfmt.js";
 import { buildStudyPlan } from "./plan.js";
-import { dailyReviewBatch, offlineLabel, streakStatus } from "./retention.js";
+import { allQuestsClear, dailyQuests, dayIndexOf, logsOfDay, QUEST_CLEAR_BONUS_XP, questStatuses } from "./quests.js";
+import { dailyReviewBatch, JST_OFFSET_MS, offlineLabel, streakStatus } from "./retention.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
 import {
@@ -46,6 +60,7 @@ import {
   getDailyGoal,
   getExamDate,
   getReviewCap,
+  getSound,
   getTheme,
   isOnboarded,
   setApiKey,
@@ -54,10 +69,12 @@ import {
   setExamDate,
   setOnboarded,
   setReviewCap,
+  setSound,
   setTheme,
   type ThemePref,
 } from "./settings.js";
 import { LocalProgress } from "./store.js";
+import { type LevelInfo, levelInfo, totalXp, xpByDay } from "./xp.js";
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
 const TABS: ReadonlyArray<readonly [string, string, string]> = [
@@ -110,12 +127,15 @@ const practice: {
   subject: Subject | "all";
   /** 現在の問題で開示したヒント段数（0=未使用）。 */
   hintsShown: number;
+  /** セッション内の連続正解数（不正解・ドリル開始でリセット）。 */
+  combo: number;
 } = {
   current: null,
   shownAt: 0,
   pool: null,
   subject: "all",
   hintsShown: 0,
+  combo: 0,
 };
 
 /** problems.json の読込に失敗したか（オフライン初回起動など）。リトライ導線を出す。 */
@@ -134,6 +154,10 @@ interface ExamState {
   limitMs: number;
   /** 時間切れで強制終了したか（結果画面で明示する）。 */
   timedOut: boolean;
+  /** 開始時点でクエスト全達成済みだったか（結果画面での達成祝賀の判定）。 */
+  questsClearAtStart: boolean;
+  /** 結果画面の祝賀（紙吹雪等）を実行済みか（タブ再描画での再発火を防ぐ）。 */
+  celebrated: boolean;
 }
 let exam: ExamState | null = null;
 
@@ -151,6 +175,33 @@ function weakTopics(): string[] {
 /** 今日（JST日基準）の解答数。日次目標の達成判定に使う。 */
 function todayCount(): number {
   return progress.logs().filter((l) => sameJstDay(l.atMs, Date.now())).length;
+}
+
+// ---- ゲーミフィケーション（XP・ストリークお守り・クエスト・実績）----
+
+/** 現在のレベル情報（XPは解答ログから完全導出＝保存キー不要）。 */
+function currentLevel(): LevelInfo {
+  return levelInfo(totalXp(progress.logs()));
+}
+
+/** お守り込みの実効ストリークと手持ち状態。 */
+function freezeInfo(): { state: FreezeState; streak: number } {
+  const state = loadFreezeState(storage);
+  const streak = streakWithFreezes(studiedDays(progress.logs()), state.usedDays, dayIndexOf(Date.now()));
+  return { state, streak };
+}
+
+/** お守りで肩代わりした日の集合（streakStatus に学習日として渡す）。 */
+function usedFreezeDays(): Set<number> {
+  return new Set(loadFreezeState(storage).usedDays);
+}
+
+const SEEN_LEVEL_KEY = "denken:seenLevel";
+
+/** 祝賀済みのレベル（模試中のレベルアップも取りこぼさないため保存で管理）。 */
+function seenLevel(): number {
+  const n = Number(storage.getItem(SEEN_LEVEL_KEY));
+  return Number.isFinite(n) && n >= 1 ? n : 1;
 }
 
 function difficultyStars(n: number): string {
@@ -224,7 +275,17 @@ function ringNode(value: number, max: number): HTMLElement {
 // ---- ヘッダ / ナビ ----
 
 function renderHeader(): void {
-  $("streak").textContent = `🔥 連続 ${progress.streakDays()} 日`;
+  const lv = currentLevel();
+  $("xp").textContent = `Lv.${lv.level} ⚡${lv.totalXp.toLocaleString("ja-JP")}`;
+  $("xp").setAttribute("title", `${lv.title} ・ 次のレベルまで ${lv.xpNeed - lv.xpInto} XP`);
+  const fi = freezeInfo();
+  $("streak").textContent = `🔥 ${fi.streak}日${fi.state.count > 0 ? ` 🧊×${fi.state.count}` : ""}`;
+  $("streak").setAttribute(
+    "title",
+    fi.state.count > 0
+      ? `連続学習${fi.streak}日 ・ お守り${fi.state.count}個（欠席日を自動カバー）`
+      : `連続学習${fi.streak}日`,
+  );
   const days = buildStudyPlan({
     examDateIso: getExamDate(storage),
     totalProblems: problems.length,
@@ -364,8 +425,72 @@ function onboardingCard(root: HTMLElement): HTMLElement {
   );
 }
 
+/** マスコット「デンタマ」のカード（状況に応じた表情と一言で導線をつくる）。 */
+function mascotCard(): HTMLElement {
+  const fi = freezeInfo();
+  const ss = streakStatus(progress.logs(), Date.now(), JST_OFFSET_MS, usedFreezeDays());
+  const mv = mascotHome({
+    streakState: ss.state,
+    streakDays: fi.streak,
+    todayCount: todayCount(),
+    dailyGoal: getDailyGoal(storage),
+    dueCount: dailyReviewBatch(progress.dueTopics(), getReviewCap(storage)).batch.length,
+    dayIndex: dayIndexOf(Date.now()),
+  });
+  return h(
+    "div",
+    { class: "card mascot" },
+    h("div", { class: "mface", html: mascotSvg(mv.mood, 64) }),
+    h("div", { class: "mbubble" }, mv.message),
+  );
+}
+
+/** 今日のクエストカード（3つの小目標＋全達成ボーナス表示）。 */
+function questsCard(): HTMLElement {
+  const todayIdx = dayIndexOf(Date.now());
+  const statuses = questStatuses(dailyQuests(todayIdx), logsOfDay(progress.logs(), todayIdx));
+  const allDone = statuses.every((s) => s.done);
+  const card = h(
+    "div",
+    { class: "card quests" },
+    h(
+      "div",
+      { class: "qhead" },
+      h("strong", {}, "📋 今日のクエスト"),
+      h(
+        "span",
+        { class: allDone ? "qbonus done" : "qbonus" },
+        allDone ? `✅ 全達成 +${QUEST_CLEAR_BONUS_XP} XP` : `全達成で +${QUEST_CLEAR_BONUS_XP} XP`,
+      ),
+    ),
+  );
+  for (const s of statuses) {
+    const pct = Math.min(100, Math.round((s.value / s.quest.target) * 100));
+    card.append(
+      h(
+        "div",
+        { class: s.done ? "quest done" : "quest" },
+        h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
+        h("span", { class: "ql" }, s.quest.label),
+        bar(pct),
+        h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
+      ),
+    );
+  }
+  return card;
+}
+
+/** 学習タブ先頭のマスコット/クエストを解答のたびに差し替える（全再描画せず入力を保つ）。 */
+function refreshPracticeCards(): void {
+  if (view !== "practice") return;
+  const root = $("view");
+  root.querySelector(".mascot")?.replaceWith(mascotCard());
+  root.querySelector(".quests")?.replaceWith(questsCard());
+}
+
 function renderPractice(root: HTMLElement): void {
   if (!isOnboarded(storage) && progress.logs().length === 0) root.append(onboardingCard(root));
+  root.append(mascotCard(), questsCard());
   const toolbar = h(
     "div",
     { class: "toolbar" },
@@ -506,7 +631,15 @@ function renderAnswerInputs(host: HTMLElement, p: Problem): void {
 
 /** MC / numeric: 客観採点（正誤を自動判定）→ 解説 → FSRS評価。 */
 function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: HTMLElement | null): void {
+  // 空入力は採点しない（誤タップ・キー操作ミスを「不正解」として FSRS に記録しない）。
+  if (p.format === "numeric" && normalizeNumericInput(given) === "") {
+    (host.querySelector("#num") as HTMLInputElement | null)?.focus();
+    return;
+  }
   const correct = isAnswerCorrect(p, given);
+  practice.combo = correct ? practice.combo + 1 : 0;
+  playTone(correct ? "correct" : "wrong", getSound(storage));
+  vibrate(correct ? 18 : [40, 50, 40]);
   const answers = host.querySelector("#answers") as HTMLElement;
   for (const b of Array.from(answers.querySelectorAll("button"))) (b as HTMLButtonElement).disabled = true;
   const input = answers.querySelector("#num") as HTMLInputElement | null;
@@ -516,19 +649,17 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
   const result = host.querySelector("#result") as HTMLElement;
   result.innerHTML = "";
   const elapsed = formatElapsed(Date.now() - practice.shownAt);
-  result.append(
-    h(
-      "div",
-      { class: `feedback ${correct ? "ok" : "ng"}` },
-      correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`,
-      h(
-        "span",
-        { class: "elapsed" },
-        `⏱ ${elapsed}${practice.hintsShown > 0 ? ` ・ ヒント${practice.hintsShown}` : ""}`,
-      ),
-    ),
-    solutionNode(p, "解説"),
+  const feedback = h(
+    "div",
+    { class: `feedback ${correct ? "ok" : "ng"}` },
+    correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`,
   );
+  if (correct && practice.combo >= 2) feedback.append(h("span", { class: "combo" }, `⚡${practice.combo}連続`));
+  feedback.append(
+    h("span", { class: "elapsed" }, `⏱ ${elapsed}${practice.hintsShown > 0 ? ` ・ ヒント${practice.hintsShown}` : ""}`),
+    h("span", { class: "cheer" }, mascotCheer(correct, practice.combo, dayIndexOf(Date.now()))),
+  );
+  result.append(feedback, solutionNode(p, "解説"));
   if (correct) {
     // 正解 → 想起の難易度を自己申告（FSRS）。
     result.append(
@@ -601,12 +732,84 @@ function finalize(
 ): void {
   const timeMs = Date.now() - practice.shownAt;
   const before = todayCount();
+  const xpBefore = totalXp(progress.logs());
+  const todayIdx = dayIndexOf(Date.now());
+  const questsBefore = allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx);
+
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
-  // 日次目標の達成瞬間を祝う（達成に気づけないと目標の駆動力が出ない）。
+
+  // 記述(二次)はここで初めて正誤相当が確定する（客観式は gradeObjective で演出済み）。
+  if (score) {
+    const ok = score.pct >= 2 / 3;
+    practice.combo = ok ? practice.combo + 1 : 0;
+    playTone(ok ? "correct" : "wrong", getSound(storage));
+  }
+
+  const xpGained = Math.max(0, totalXp(progress.logs()) - xpBefore);
+
+  // 祝賀は重要度順に1つだけトーストし、紙吹雪は1回（乱発すると報酬価値が下がる）。
+  const celebrations: string[] = [];
+  let fanfare: "levelup" | "clear" | null = null;
+
+  // 1) ストリークお守りの獲得（7日継続ごと・上限2）。
+  const fiAfter = freezeInfo();
+  const award = maybeAwardFreeze(fiAfter.state, fiAfter.streak);
+  if (award.awarded) {
+    saveFreezeState(storage, award.state);
+    celebrations.push(`🧊 ${fiAfter.streak}日継続ボーナス！ストリークお守りを獲得（欠席日を自動カバー）`);
+  }
+
+  // 2) レベルアップ（模試中の上昇も取りこぼさないよう保存値と比較）。
+  const lv = currentLevel();
+  if (lv.level > seenLevel()) {
+    try {
+      storage.setItem(SEEN_LEVEL_KEY, String(lv.level));
+    } catch {
+      // 保存不能でも続行。
+    }
+    celebrations.unshift(`🎉 レベルアップ！ Lv.${lv.level}「${lv.title}」`);
+    fanfare = "levelup";
+  }
+
+  // 3) 今日のクエスト全達成。
+  if (!questsBefore && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
+    celebrations.push(`📋 今日のクエスト全達成！ +${QUEST_CLEAR_BONUS_XP} XP`);
+    fanfare = fanfare ?? "clear";
+  }
+
+  // 4) 実績バッジの新規解除。
+  const badgeViews = evaluateAchievements({
+    logs: progress.logs(),
+    streakDays: fiAfter.streak,
+    level: lv.level,
+    subjectOf: topicSubjectMap(problems),
+  });
+  const seen = loadSeenBadges(storage);
+  const fresh = newlyUnlocked(badgeViews, seen);
+  if (fresh.length > 0) {
+    for (const b of fresh) seen.add(b.id);
+    saveSeenBadges(storage, seen);
+    // 遡及判定の導入直後は一度に多数解除されうるため、トーストは2件＋残数に要約する。
+    const names = fresh
+      .slice(0, 2)
+      .map((b) => `${b.icon}${b.title}`)
+      .join("、");
+    celebrations.push(`🏅 実績解除: ${names}${fresh.length > 2 ? ` ほか${fresh.length - 2}件` : ""}`);
+  }
+
+  // 5) 日次目標の達成瞬間（達成に気づけないと目標の駆動力が出ない）。
   const goal = getDailyGoal(storage);
   if (before < goal && todayCount() >= goal) {
-    showToast(`🎉 今日の目標 ${goal} 問を達成！この調子！`, "OK", () => {});
+    celebrations.push(`🎉 今日の目標 ${goal} 問を達成！この調子！`);
+    fanfare = fanfare ?? "clear";
   }
+
+  if (celebrations.length > 0) {
+    showToast(celebrations[0]!, "OK", () => {});
+    confettiBurst();
+    if (fanfare) playTone(fanfare, getSound(storage));
+  }
+
   const result = host.querySelector("#result") as HTMLElement;
   // 既存の評価バー・採点UIを除去し、結果＋シェア文＋次へを出す。
   for (const r of Array.from(result.querySelectorAll(".rate, .gradeui"))) r.remove();
@@ -628,13 +831,15 @@ function finalize(
       "div",
       { class: "share" },
       cardText("daily", {
-        streakDays: progress.streakDays(),
+        streakDays: freezeInfo().streak,
         todayMinutes: progress.todayMinutes(),
         weeklyMinutes: 0,
       }),
     ),
     h("button", { class: "primary", id: "next", type: "button", onclick: () => nextQuestion($("view")) }, "次の問題 →"),
   );
+  if (xpGained > 0) xpFloat(result, `+${xpGained} XP`);
+  refreshPracticeCards();
   renderHeader();
   renderNav();
 }
@@ -642,10 +847,17 @@ function finalize(
 // ---- 復習タブ ----
 
 function renderReview(root: HTMLElement): void {
-  // ストリーク予兆ナッジ（崩れる前に背中を押す）。
-  const ss = streakStatus(progress.logs());
+  // ストリーク予兆ナッジ（崩れる前に背中を押す）。デンタマの表情つきで届きやすく。
+  const ss = streakStatus(progress.logs(), Date.now(), JST_OFFSET_MS, usedFreezeDays());
   if (ss.state === "at-risk" || ss.state === "broken") {
-    root.append(h("div", { class: `card nudge ${ss.state}` }, h("span", {}, ss.message)));
+    root.append(
+      h(
+        "div",
+        { class: `card nudge ${ss.state} mascot` },
+        h("div", { class: "mface", html: mascotSvg(ss.state === "at-risk" ? "worried" : "sad", 48) }),
+        h("div", { class: "mbubble" }, ss.message),
+      ),
+    );
   }
 
   // 1日上限でバッチ化（大量の復習による離脱を防ぐ）。
@@ -738,6 +950,7 @@ function renderReview(root: HTMLElement): void {
 function startDrill(pool: Problem[]): void {
   practice.pool = pool;
   practice.current = null;
+  practice.combo = 0; // 新しいセッションとして仕切り直す
   switchView("practice");
 }
 
@@ -803,6 +1016,7 @@ function startExam(count: number, preset: ExamPreset): void {
     switchView("exam");
     return;
   }
+  const todayIdx = dayIndexOf(Date.now());
   exam = {
     set,
     idx: 0,
@@ -812,6 +1026,8 @@ function startExam(count: number, preset: ExamPreset): void {
     preset,
     limitMs: examTimeLimitMs(set),
     timedOut: false,
+    questsClearAtStart: allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx),
+    celebrated: false,
   };
   switchView("exam");
 }
@@ -847,7 +1063,11 @@ function renderExamRunning(root: HTMLElement): void {
       {
         class: "chip",
         type: "button",
-        onclick: () => endExam(),
+        onclick: () => {
+          // 誤タップで途中経過が消えるのを防ぐ（取り返しのつかない操作には確認を挟む）。
+          if (!window.confirm("模試を中断して最初に戻りますか？（途中経過は破棄されます）")) return;
+          endExam();
+        },
       },
       "中断",
     ),
@@ -905,13 +1125,18 @@ function renderExamRunning(root: HTMLElement): void {
       placeholder: "答えを入力",
       "aria-label": "数値の答え",
     }) as HTMLInputElement;
+    // 空入力は受け付けない（誤タップを0点扱いにしない。スキップは中断/時間切れで明示的に）。
+    const submit = () => {
+      if (normalizeNumericInput(input.value) === "") {
+        input.focus();
+        return;
+      }
+      advance(isAnswerCorrect(p, input.value));
+    };
     input.addEventListener("keydown", (e) => {
-      if ((e as KeyboardEvent).key === "Enter") advance(isAnswerCorrect(p, input.value));
+      if ((e as KeyboardEvent).key === "Enter") submit();
     });
-    answers.append(
-      input,
-      h("button", { class: "choice", type: "button", onclick: () => advance(isAnswerCorrect(p, input.value)) }, "回答"),
-    );
+    answers.append(input, h("button", { class: "choice", type: "button", onclick: submit }, "回答"));
   }
 }
 
@@ -942,6 +1167,19 @@ function renderExamResult(root: HTMLElement): void {
   const mins = Math.floor((Date.now() - exam.startedAt) / 60000);
   // 科目別内訳（電験一次は科目ごとに合否＝各60%）
   const subjectScores = scoreExamBySubject(exam.set, exam.results);
+
+  // 祝賀は初回表示の1回だけ（タブ往復での再発火を防ぐ）。
+  if (!exam.celebrated) {
+    exam.celebrated = true;
+    if (score.passed) {
+      confettiBurst();
+      playTone("clear", getSound(storage));
+    }
+    const todayIdx = dayIndexOf(Date.now());
+    if (!exam.questsClearAtStart && allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx)) {
+      showToast(`📋 模試で今日のクエスト全達成！ +${QUEST_CLEAR_BONUS_XP} XP`, "OK", () => {});
+    }
+  }
 
   root.append(
     h("h2", {}, "模試結果"),
@@ -1263,7 +1501,29 @@ function renderDashboard(root: HTMLElement): void {
     dailyGoal: getDailyGoal(storage),
   });
 
+  // レベルカード（XP・称号・次レベルへの進捗）— 成長の実感を最上段に。
+  const lv = currentLevel();
   root.append(
+    h(
+      "div",
+      { class: "card lvlcard" },
+      h(
+        "div",
+        { class: "lvlrow" },
+        h("span", { class: "lvlbadge" }, `Lv.${lv.level}`),
+        h(
+          "div",
+          {},
+          h("div", { class: "lvltitle" }, lv.title),
+          h(
+            "div",
+            { class: "muted small" },
+            `次のレベルまで ${lv.xpNeed - lv.xpInto} XP ・ 累計 ${lv.totalXp.toLocaleString("ja-JP")} XP`,
+          ),
+        ),
+      ),
+      bar(Math.round(lv.progress * 100)),
+    ),
     h(
       "div",
       { class: "grid2" },
@@ -1306,7 +1566,29 @@ function renderDashboard(root: HTMLElement): void {
       { class: "muted" },
       `総解答 ${o.attempts} 問 ・ 学習論点 ${o.topicsStudied} ・ 直近20問 ${Math.round(recentAccuracy(logs) * 100)}%`,
     ),
+    questsCard(),
   );
+
+  // 週間XPチャート（「昨日の自分」との比較は他人比較より健全な競争心を生む）。
+  const weekly = xpByDay(logs, 7, Date.now());
+  if (weekly.some((v) => v > 0)) {
+    const max = Math.max(1, ...weekly);
+    const fmt = new Intl.DateTimeFormat("ja-JP", { weekday: "narrow", timeZone: "Asia/Tokyo" });
+    const chart = h("div", { class: "xpweek" });
+    weekly.forEach((v, i) => {
+      const dayLabel = i === 6 ? "今日" : fmt.format(new Date(Date.now() - (6 - i) * 86_400_000));
+      chart.append(
+        h(
+          "div",
+          { class: "xpcol" },
+          h("div", { class: "xpval" }, v > 0 ? String(v) : ""),
+          h("div", { class: "xpbar", style: `height:${Math.max(4, Math.round((v / max) * 64))}px` }),
+          h("div", { class: "xplabel" }, dayLabel),
+        ),
+      );
+    });
+    root.append(h("h2", {}, "今週の獲得XP"), chart);
+  }
 
   const spark = sparklineNode(accuracyTrend(logs));
   if (spark) root.append(h("h2", {}, "正答率の推移"), spark);
@@ -1372,6 +1654,28 @@ function renderDashboard(root: HTMLElement): void {
     ),
     h("p", { class: "muted" }, "毎日少しずつが最強。分散学習が忘却に勝ちます。"),
   );
+
+  // 実績バッジ（節目の大きな報酬。ロック中も見せて「次の目標」を提示する）。
+  const badges = evaluateAchievements({
+    logs,
+    streakDays: freezeInfo().streak,
+    level: lv.level,
+    subjectOf: topicSubjectMap(problems),
+  });
+  const unlockedCount = badges.filter((b) => b.unlocked).length;
+  const grid = h("div", { class: "badges" });
+  for (const b of badges) {
+    grid.append(
+      h(
+        "div",
+        { class: b.unlocked ? "badge on" : "badge off", title: b.desc },
+        h("span", { class: "bi", "aria-hidden": "true" }, b.unlocked ? b.icon : "🔒"),
+        h("span", { class: "bt" }, b.title),
+        h("span", { class: "bd" }, b.desc),
+      ),
+    );
+  }
+  root.append(h("h2", {}, `実績バッジ（${unlockedCount}/${badges.length}）`), grid);
 }
 
 function sameJstDay(a: number, b: number): boolean {
@@ -1480,6 +1784,11 @@ function renderSettings(root: HTMLElement): void {
     applyTheme();
   });
 
+  const soundSel = h("select", {}) as HTMLSelectElement;
+  soundSel.append(h("option", { value: "1" }, "オン"), h("option", { value: "0" }, "オフ"));
+  soundSel.value = getSound(storage) ? "1" : "0";
+  soundSel.addEventListener("change", () => setSound(storage, soundSel.value === "1"));
+
   // AIチャット（BYOK）: キーは端末内 localStorage のみ・送信先は Anthropic のみ。
   const keyInput = h("input", {
     type: "password",
@@ -1496,6 +1805,13 @@ function renderSettings(root: HTMLElement): void {
 
   root.append(
     h("div", { class: "card" }, h("label", {}, "テーマ "), themeSel),
+    h(
+      "div",
+      { class: "card" },
+      h("label", {}, "効果音 "),
+      soundSel,
+      h("div", { class: "muted" }, "正解音・レベルアップなどの演出音（端末のマナーモードにも従います）。"),
+    ),
     h("div", { class: "card" }, h("label", {}, "試験日 "), examInput),
     h("div", { class: "card" }, h("label", {}, "1日の目標問題数 "), goalInput),
     h(
@@ -1601,8 +1917,13 @@ function backupCard(): HTMLElement {
 }
 
 function resetData(): void {
-  if (!window.confirm("学習記録（解答ログ・記憶状態）を全て削除します。よろしいですか？")) return;
-  for (const k of ["denken:cards", "denken:logs"]) storage.setItem(k, JSON.stringify(k === "denken:logs" ? [] : {}));
+  if (!window.confirm("学習記録（解答ログ・記憶状態・XP/実績・お守り）を全て削除します。よろしいですか？")) return;
+  // XP/レベル/実績はログから導出するため、ログのリセットと整合する付随キーも初期化する。
+  storage.setItem("denken:cards", "{}");
+  storage.setItem("denken:logs", "[]");
+  storage.setItem("denken:freeze", "");
+  storage.setItem("denken:badges", "[]");
+  storage.setItem(SEEN_LEVEL_KEY, "1");
   switchView("dashboard");
 }
 
@@ -1666,6 +1987,13 @@ async function main(): Promise<void> {
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
     if (getTheme(storage) === "system") applyTheme();
   });
+  // ストリークお守り: 欠席日があれば自動で肩代わりして連続を守る（起動時に1回）。
+  const fz = loadFreezeState(storage);
+  const bridged = bridgeWithFreezes(fz, studiedDays(progress.logs()), dayIndexOf(Date.now()));
+  if (bridged.bridgedDays.length > 0) {
+    saveFreezeState(storage, bridged.state);
+    showToast(`🧊 お守りが欠席 ${bridged.bridgedDays.length} 日分をカバー！ストリーク継続中`, "OK", () => {});
+  }
   renderNav();
   renderSkeleton();
   await reloadProblems();

@@ -15,7 +15,10 @@
 //         番号バッジ・経過時間・目標達成トースト・オンボーディング・読込リトライ・保存安全化)
 //   (v13: 信頼性/a11y/リテンション — エラーバウンダリ・オフライン表示・復習1日上限バッチ化・
 //         ストリーク予兆ナッジ・タブのrole=tab/矢印キー操作)
-const CACHE = "denken-os-v13";
+//   (v14: ゲーミフィケーション基盤 — XP/レベル/称号・デイリークエスト・ストリークお守り・
+//         実績バッジ・マスコット「デンタマ」・紙吹雪/効果音/XPフロート・週間XP・
+//         数値空入力ガード・模試中断確認)
+const CACHE = "denken-os-v14";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

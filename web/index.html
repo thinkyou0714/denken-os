@@ -379,6 +379,63 @@
       .composer .primary { margin-top: 0; padding: .6rem 1rem; }
       .composer .primary:disabled { opacity: .6; cursor: default; }
 
+      /* ===== ゲーミフィケーション（XP・マスコット・クエスト・実績・祝賀） ===== */
+      .pill.xp { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+      .card.mascot { display: flex; gap: .7rem; align-items: center; }
+      .mface { flex: none; line-height: 0; }
+      .mbubble {
+        position: relative; flex: 1; background: var(--surface-2); border-radius: var(--r-md);
+        padding: .55rem .75rem; font-size: .92rem;
+      }
+      .mbubble::before {
+        content: ""; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
+        border: 6px solid transparent; border-right-color: var(--surface-2); border-left: 0;
+      }
+      .card.quests .qhead { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .35rem; }
+      .qbonus { font-size: .72rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+      .qbonus.done { color: var(--ok); }
+      .quest { display: grid; grid-template-columns: 1.4rem 1fr 4.6rem 2.8rem; gap: .5rem; align-items: center; margin: .32rem 0; font-size: .85rem; }
+      .quest.done .ql { color: var(--muted); text-decoration: line-through; }
+      .quest .qv { text-align: right; font-weight: 700; font-size: .78rem; color: var(--muted); }
+      .feedback .cheer { font-size: .8rem; font-weight: 600; color: var(--muted); }
+      .feedback .combo {
+        font-size: .76rem; font-weight: 800; color: #b8860b; background: #b8860b14;
+        border: 1px solid #d7b45e; border-radius: var(--r-pill); padding: .05rem .5rem; white-space: nowrap;
+      }
+      .lvlcard .lvlrow { display: flex; gap: .7rem; align-items: center; margin-bottom: .45rem; }
+      .lvlbadge {
+        font-size: 1.05rem; font-weight: 800; color: var(--accent-contrast); white-space: nowrap;
+        background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+        border-radius: var(--r-md); padding: .35rem .6rem; box-shadow: var(--shadow-sm);
+      }
+      .lvltitle { font-weight: 800; }
+      .xpweek { display: flex; gap: .45rem; align-items: flex-end; margin: .4rem 0; }
+      .xpcol { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+      .xpbar { width: 100%; max-width: 34px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, var(--accent), var(--accent-strong)); }
+      .xpval { font-size: .68rem; font-weight: 700; color: var(--muted); min-height: .9rem; }
+      .xplabel { font-size: .7rem; color: var(--muted); }
+      .badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: .5rem; margin: .4rem 0; }
+      .badge {
+        border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface);
+        padding: .55rem .4rem; text-align: center; box-shadow: var(--shadow-sm);
+      }
+      .badge .bi { display: block; font-size: 1.5rem; line-height: 1.2; }
+      .badge .bt { display: block; font-size: .74rem; font-weight: 700; margin-top: .15rem; }
+      .badge .bd { display: block; font-size: .64rem; color: var(--muted); margin-top: .1rem; }
+      .badge.off { opacity: .5; filter: grayscale(.7); }
+      #result { position: relative; }
+      .xpfloat {
+        position: absolute; right: .4rem; top: -.2rem; font-weight: 800; color: var(--ok); font-size: 1rem;
+        animation: xprise 1.3s var(--ease) both; pointer-events: none;
+      }
+      @keyframes xprise { from { opacity: 0; transform: translateY(8px); } 20% { opacity: 1; } to { opacity: 0; transform: translateY(-26px); } }
+      .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+      .confetti span {
+        position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px; opacity: .92;
+        animation-name: confall; animation-timing-function: linear; animation-fill-mode: both;
+      }
+      @keyframes confall { to { transform: translateY(105vh) rotate(540deg); opacity: .65; } }
+
       @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; }
@@ -386,7 +443,8 @@
 
       /* 印刷: 操作系を隠し、問題文・図・解説をきれいに出力 */
       @media print {
-        nav, header .stats, .demo, footer, .primary, .rate, .answers, .toast, .toolbar, .composer, .chips { display: none !important; }
+        nav, header .stats, .demo, footer, .primary, .rate, .answers, .toast, .toolbar, .composer, .chips,
+        .mascot, .quests, .confetti, .xpfloat { display: none !important; }
         body { max-width: none; padding: 0; color: #000; background: #fff; }
         .card, .solution, figure.figure { box-shadow: none; break-inside: avoid; }
         .stmt { font-size: 12pt; }
@@ -414,7 +472,7 @@
       </div>
       <div class="stats">
         <span id="netstatus" class="pill net" role="status" hidden></span>
-        <span id="streak" class="pill"></span><span id="countdown" class="pill"></span>
+        <span id="xp" class="pill xp"></span><span id="streak" class="pill"></span><span id="countdown" class="pill"></span>
       </div>
     </header>
 

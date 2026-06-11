@@ -1,0 +1,187 @@
+/**
+ * achievements.ts — 実績バッジ（純ロジック）。
+ *
+ * 継続設計: ストリークやXPが「毎日の小さな報酬」なら、実績は「節目の大きな報酬」。
+ * 蓄積型（解答数）・継続型（ストリーク）・行動の幅（科目/論点）・復帰（不死鳥）など
+ * 多様な軸を用意し、どんな学習スタイルでも何かが進むようにする（万人に達成経路を残す）。
+ *  - 判定はすべて解答ログ＋導出値から計算する（専用の保存キーなし＝遡及・整合・復元が無料）。
+ *  - 「新規解除の祝賀」のみ表示済みIDを denken:badges に持つ（app.ts 側）。
+ * DOM 非依存でテスト可能。日境界・時刻は JST。
+ */
+import { dayIndexOf, JST_OFFSET_MS, maxConsecutiveCorrect } from "./quests.js";
+import type { StorageLike, WebAnswerLog } from "./store.js";
+
+/** 祝賀表示済みの実績ID（再表示を防ぐ）。実績の解除判定そのものはログから導出する。 */
+export const BADGES_KEY = "denken:badges";
+
+export function loadSeenBadges(storage: StorageLike): Set<string> {
+  const raw = storage.getItem(BADGES_KEY);
+  if (!raw) return new Set();
+  try {
+    const arr = JSON.parse(raw) as unknown;
+    return new Set(Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
+
+export function saveSeenBadges(storage: StorageLike, ids: ReadonlySet<string>): void {
+  try {
+    storage.setItem(BADGES_KEY, JSON.stringify([...ids]));
+  } catch {
+    // 保存不能でも学習は継続させる。
+  }
+}
+
+export interface AchievementInput {
+  logs: readonly WebAnswerLog[];
+  /** お守り込みの実効ストリーク（freeze.ts で算出して渡す）。 */
+  streakDays: number;
+  /** 現在のレベル（xp.ts の levelInfo で算出して渡す）。 */
+  level: number;
+  /** topic → 科目の対応（problems から topicSubjectMap で作る）。 */
+  subjectOf?: ReadonlyMap<string, string>;
+  dayOffsetMs?: number;
+}
+
+export interface AchievementView {
+  id: string;
+  icon: string;
+  title: string;
+  desc: string;
+  unlocked: boolean;
+}
+
+interface Stats {
+  total: number;
+  streak: number;
+  level: number;
+  maxCombo: number;
+  distinctTopics: number;
+  distinctSubjects: number;
+  hasMorning: boolean;
+  hasNight: boolean;
+  hasComeback: boolean;
+  hasPerfectDay: boolean;
+}
+
+function jstHour(ms: number, dayOffsetMs: number): number {
+  return new Date(ms + dayOffsetMs).getUTCHours();
+}
+
+function buildStats(input: AchievementInput): Stats {
+  const offset = input.dayOffsetMs ?? JST_OFFSET_MS;
+  const logs = [...input.logs].sort((a, b) => a.atMs - b.atMs);
+  const topics = new Set<string>();
+  const subjects = new Set<string>();
+  const byDay = new Map<number, { count: number; correct: number }>();
+  let hasMorning = false;
+  let hasNight = false;
+  for (const l of logs) {
+    topics.add(l.topic);
+    const s = input.subjectOf?.get(l.topic);
+    if (s) subjects.add(s);
+    const hour = jstHour(l.atMs, offset);
+    if (hour < 7) hasMorning = true;
+    if (hour >= 22) hasNight = true;
+    const d = dayIndexOf(l.atMs, offset);
+    const cur = byDay.get(d) ?? { count: 0, correct: 0 };
+    cur.count += 1;
+    if (l.correct) cur.correct += 1;
+    byDay.set(d, cur);
+  }
+  // 不死鳥: 3日以上の空白（連続4日番号差）を挟んで学習を再開した経験。
+  const dayList = [...byDay.keys()].sort((a, b) => a - b);
+  let hasComeback = false;
+  for (let i = 1; i < dayList.length; i++) {
+    if (dayList[i]! - dayList[i - 1]! >= 4) hasComeback = true;
+  }
+  // パーフェクトデー: 1日5問以上を全問正解。
+  let hasPerfectDay = false;
+  for (const v of byDay.values()) {
+    if (v.count >= 5 && v.correct === v.count) hasPerfectDay = true;
+  }
+  return {
+    total: logs.length,
+    streak: input.streakDays,
+    level: input.level,
+    maxCombo: maxConsecutiveCorrect(logs),
+    distinctTopics: topics.size,
+    distinctSubjects: subjects.size,
+    hasMorning,
+    hasNight,
+    hasComeback,
+    hasPerfectDay,
+  };
+}
+
+interface AchievementDef {
+  id: string;
+  icon: string;
+  title: string;
+  desc: string;
+  check: (s: Stats) => boolean;
+}
+
+/** 実績カタログ。id は保存（表示済み管理）に使うため変更しない。 */
+export const ACHIEVEMENTS: readonly AchievementDef[] = [
+  { id: "first", icon: "⚡", title: "はじめの一歩", desc: "はじめて問題を解いた", check: (s) => s.total >= 1 },
+  { id: "solve10", icon: "🔟", title: "ウォームアップ", desc: "通算10問に到達", check: (s) => s.total >= 10 },
+  { id: "solve50", icon: "💪", title: "五十問の壁", desc: "通算50問に到達", check: (s) => s.total >= 50 },
+  { id: "solve100", icon: "💯", title: "百戦錬磨", desc: "通算100問に到達", check: (s) => s.total >= 100 },
+  { id: "solve500", icon: "🏔️", title: "五百問登頂", desc: "通算500問に到達", check: (s) => s.total >= 500 },
+  { id: "streak7", icon: "🔥", title: "一週間の炎", desc: "7日連続で学習", check: (s) => s.streak >= 7 },
+  { id: "streak30", icon: "🌋", title: "一ヶ月の炎", desc: "30日連続で学習", check: (s) => s.streak >= 30 },
+  { id: "streak100", icon: "☄️", title: "百日の炎", desc: "100日連続で学習", check: (s) => s.streak >= 100 },
+  { id: "combo3", icon: "🎯", title: "三連撃", desc: "3問連続で正解", check: (s) => s.maxCombo >= 3 },
+  { id: "combo7", icon: "🏹", title: "七連撃", desc: "7問連続で正解", check: (s) => s.maxCombo >= 7 },
+  {
+    id: "allsubjects",
+    icon: "🌈",
+    title: "全科目踏破",
+    desc: "6科目すべてで解答",
+    check: (s) => s.distinctSubjects >= 6,
+  },
+  {
+    id: "topics30",
+    icon: "🗺️",
+    title: "論点コレクター",
+    desc: "30種類の論点に挑戦",
+    check: (s) => s.distinctTopics >= 30,
+  },
+  { id: "morning", icon: "🌅", title: "朝活マスター", desc: "朝7時前に学習", check: (s) => s.hasMorning },
+  { id: "night", icon: "🦉", title: "夜ふくろう", desc: "22時以降に学習", check: (s) => s.hasNight },
+  {
+    id: "phoenix",
+    icon: "🐦‍🔥",
+    title: "不死鳥",
+    desc: "3日以上のブランクから復帰",
+    check: (s) => s.hasComeback,
+  },
+  {
+    id: "perfectday",
+    icon: "✨",
+    title: "パーフェクトデー",
+    desc: "1日5問以上を全問正解",
+    check: (s) => s.hasPerfectDay,
+  },
+  { id: "level10", icon: "🥇", title: "レベル10", desc: "Lv.10 に到達", check: (s) => s.level >= 10 },
+  { id: "level40", icon: "👑", title: "電験マイスター", desc: "Lv.40 に到達", check: (s) => s.level >= 40 },
+];
+
+/** 全実績の解除状況を評価する。 */
+export function evaluateAchievements(input: AchievementInput): AchievementView[] {
+  const stats = buildStats(input);
+  return ACHIEVEMENTS.map((d) => ({
+    id: d.id,
+    icon: d.icon,
+    title: d.title,
+    desc: d.desc,
+    unlocked: d.check(stats),
+  }));
+}
+
+/** 解除済みのうち、まだ祝賀していない実績（app.ts が表示済みIDと突き合わせる）。 */
+export function newlyUnlocked(views: readonly AchievementView[], seenIds: ReadonlySet<string>): AchievementView[] {
+  return views.filter((v) => v.unlocked && !seenIds.has(v.id));
+}

@@ -84,6 +84,18 @@ export function setReviewCap(storage: StorageLike, n: number): void {
   storage.setItem(REVIEW_CAP_KEY, String(clamped));
 }
 
+// ---- 効果音（正解音・ファンファーレ等。既定オン・いつでもオフにできる）----
+
+const SOUND_KEY = "denken:sound";
+
+export function getSound(storage: StorageLike): boolean {
+  return storage.getItem(SOUND_KEY) !== "0";
+}
+
+export function setSound(storage: StorageLike, on: boolean): void {
+  storage.setItem(SOUND_KEY, on ? "1" : "0");
+}
+
 // ---- オンボーディング（初回ガイドの既読管理）----
 
 export function isOnboarded(storage: StorageLike): boolean {

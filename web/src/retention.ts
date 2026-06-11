@@ -72,10 +72,14 @@ export function streakStatus(
   logs: WebAnswerLog[],
   nowMs: number = Date.now(),
   dayOffsetMs: number = JST_OFFSET_MS,
+  /** 学習日として追加で数える日（ストリークお守りで肩代わりした JST 日番号）。 */
+  extraDays: ReadonlySet<number> = new Set(),
 ): StreakStatus {
-  if (logs.length === 0) return { state: "none", days: 0, message: "今日から始めましょう。まずは1問！" };
+  if (logs.length === 0 && extraDays.size === 0)
+    return { state: "none", days: 0, message: "今日から始めましょう。まずは1問！" };
 
   const days = new Set(logs.map((l) => dayIndex(l.atMs, dayOffsetMs)));
+  for (const d of extraDays) days.add(d);
   const today = dayIndex(nowMs, dayOffsetMs);
 
   // 連続日数を、今日 or 昨日を起点に遡って数える。

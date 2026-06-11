@@ -5,9 +5,11 @@ import {
   DEFAULT_EXAM_DATE,
   getDailyGoal,
   getExamDate,
+  getSound,
   getTheme,
   setDailyGoal,
   setExamDate,
+  setSound,
   setTheme,
 } from "../../web/src/settings.js";
 import type { StorageLike } from "../../web/src/store.js";
@@ -90,5 +92,14 @@ describe("settings（試験日・1日目標の永続化）", () => {
     expect(getTheme(s)).toBe("light");
     s.setItem("denken:theme", "weird");
     expect(getTheme(s)).toBe("system");
+  });
+
+  it("効果音設定: 既定オン、オフ/オンを永続化", () => {
+    const s = new MemoryStorage();
+    expect(getSound(s)).toBe(true);
+    setSound(s, false);
+    expect(getSound(s)).toBe(false);
+    setSound(s, true);
+    expect(getSound(s)).toBe(true);
   });
 });

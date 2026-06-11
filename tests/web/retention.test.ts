@@ -77,6 +77,16 @@ describe("streakStatus（ストリーク状態判定）", () => {
     expect(s.state).toBe("broken");
     expect(s.days).toBe(0);
   });
+
+  it("お守りで肩代わりした日（extraDays）を学習日として連続に数える", () => {
+    // 昨日(today-1)を欠席したがお守りでカバー → at-risk のまま連続日数は維持される。
+    const logs = [today - 2, today - 3].map((d) => log(jstNoon(d)));
+    const noFreeze = streakStatus(logs, jstNoon(today));
+    expect(noFreeze.state).toBe("broken");
+    const withFreeze = streakStatus(logs, jstNoon(today), JST_OFFSET_MS, new Set([today - 1]));
+    expect(withFreeze.state).toBe("at-risk");
+    expect(withFreeze.days).toBe(3);
+  });
 });
 
 describe("offlineLabel", () => {
