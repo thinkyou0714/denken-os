@@ -17,7 +17,7 @@ import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
 import { electricHeating } from "./electric-heating.js";
 import { firstOrderControl } from "./first-order-control.js";
-import { flywheelAcceleration } from "./flywheel-acceleration.js";
+import { rotorAcceleration } from "./flywheel-acceleration.js";
 import { fullWaveRectifier } from "./full-wave-rectifier.js";
 import { groundFaultSymmetrical } from "./ground-fault-symmetrical.js";
 import { groundingResistance } from "./grounding-resistance.js";
@@ -147,7 +147,7 @@ const templates: Template[] = [
   rotationalPower,
   batteryCapacity,
   transformerExcitingCurrent,
-  flywheelAcceleration,
+  rotorAcceleration,
   inverseSquareIlluminance,
   // 法規
   groundingResistance,
@@ -216,7 +216,6 @@ export {
   electricEnergy,
   electricHeating,
   firstOrderControl,
-  flywheelAcceleration,
   fullWaveRectifier,
   groundFaultSymmetrical,
   groundingResistance,
@@ -256,6 +255,7 @@ export {
   rlcResonance,
   rlTimeConstant,
   rotationalPower,
+  rotorAcceleration,
   sagTension,
   secondOrderResponse,
   seriesCapacitance,

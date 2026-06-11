@@ -10,7 +10,7 @@
  *
  * 使い方: npm run build:problems  （既定で web/problems.json を上書き）
  */
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate } from "../lib/engine/generate.js";
@@ -83,8 +83,20 @@ function paramsSignature(p: Problem): string {
  * 通し番号と違い、テンプレ追加・並び替えで既存問題のIDが変わらないため、
  * 学習者の解答ログ（problemId）や間違いノートが将来の再生成後も正しく紐づく。
  */
+/** 旧・連番ID時代（mainに出荷済みの405問）の署名→ID対応。
+ *  既存ユーザーの解答ログ・間違いノート（problemId参照）を壊さないため、
+ *  内容が同一の問題には出荷済みのIDをそのまま使い続ける（Codexレビュー対応）。 */
+const LEGACY_IDS: Record<string, string> = JSON.parse(
+  readFileSync(join(dirname(fileURLToPath(import.meta.url)), "legacy-ids.json"), "utf8"),
+) as Record<string, string>;
+
 function stableId(p: Problem, taken: Set<string>): string {
   const base = `${p.topic}|${paramsSignature(p)}`;
+  const legacy = LEGACY_IDS[base];
+  if (legacy && !taken.has(legacy)) {
+    taken.add(legacy);
+    return legacy;
+  }
   let h = hashSeed(base);
   let id = `G-${h.toString(16).padStart(8, "0").toUpperCase()}`;
   // 万一の衝突は再ハッシュで回避（決定論を保つ）。

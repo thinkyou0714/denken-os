@@ -8,7 +8,6 @@ import {
   blockDiagramGain,
   conductorLength,
   coulombForce,
-  flywheelAcceleration,
   groundingTypes,
   guyWireSafety,
   indoorVoltageLimit,
@@ -21,6 +20,7 @@ import {
   resistanceTemperature,
   rlTimeConstant,
   rotationalPower,
+  rotorAcceleration,
   seriesCapacitance,
   seriesRlCurrent,
   specificSpeed,
@@ -110,11 +110,11 @@ describe("機械（固定値検算）", () => {
     expect(g.facts.iw).toBe(3);
   });
 
-  it("はずみ車: GD²=750, N=1500, T=300 → 10s", () => {
-    // 750×1500/(375×300)=10
-    expect(flywheelAcceleration.generateFrom({ flywheel_effect: 750, speed: 1500, torque: 300 })!.answerText).toBe(
-      "10",
-    );
+  it("回転体の加速時間: J=20kg·m², ω=150rad/s, T=100N·m → 30s（SI厳密式 t=Jω/T）", () => {
+    const g = rotorAcceleration.generateFrom({ inertia: 20, omega: 150, torque: 100 })!;
+    expect(g.answerText).toBe("30");
+    // GD²換算の注記が解説に含まれる（kgf·m系375式の誤用を防ぐ学習導線）。
+    expect(g.defaultSolution.join("")).toContain("GD²");
   });
 
   it("逆二乗則: I=400cd, r=2m → 100lx", () => {
@@ -129,9 +129,10 @@ describe("法規（固定値検算）", () => {
     expect(groundingTypes.generateFrom({ case_index: 2 })!.answerText).toBe("100");
   });
 
-  it("支線: 想定最大張力8kN×安全率2.5 → 20kN（木柱は1.5 → 12kN）", () => {
-    expect(guyWireSafety.generateFrom({ max_tension: 8, safety_factor: 2.5 })!.answerText).toBe("20");
-    expect(guyWireSafety.generateFrom({ max_tension: 8, safety_factor: 1.5 })!.answerText).toBe("12");
+  it("支線: 想定最大張力8kN×原則の安全率2.5 → 20kN（1.5緩和は条件不備のため出題しない）", () => {
+    const g = guyWireSafety.generateFrom({ max_tension: 8 })!;
+    expect(g.answerText).toBe("20");
+    expect(g.defaultSolution.join("")).toContain("原則2.5");
   });
 
   it("屋内対地電圧: 原則150V・2kW以上の専用回路で300V", () => {

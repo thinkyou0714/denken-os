@@ -15,7 +15,9 @@ interface Case {
 const CASES: ReadonlyArray<Case> = [
   { cond: "住宅の屋内電路（原則）", answer: 150, pool: [100, 150, 200, 300] },
   {
-    cond: "定格消費電力2kW以上の機器を専用の開閉器・過電流遮断器を持つ回路で施設する場合",
+    cond:
+      "定格消費電力2kW以上の機器を、専用の開閉器・過電流遮断器と漏電遮断器を施設した専用回路で、" +
+      "電線を機器に直接接続して施設する場合",
     answer: 300,
     pool: [150, 200, 300, 600],
   },
@@ -40,7 +42,7 @@ function buildFrom(caseIndex: number): GenerationResult | null {
     facts: { caseIndex, answer: c.answer },
     defaultStatement: `${c.cond}における対地電圧の上限〔V〕として定められている値は?`,
     defaultSolution: [
-      `電技解釈第143条: 住宅の屋内電路の対地電圧は原則150V以下（2kW以上の機器＋専用回路等の条件で300V以下）`,
+      `電技解釈第143条: 住宅の屋内電路の対地電圧は原則150V以下。2kW以上の機器を専用回路（専用の開閉器・過電流遮断器＋漏電遮断器・電線直接接続）で施設する等の条件を満たすと300V以下にできる`,
       `本問は「${c.cond}」`,
       `=${answerText}V`,
     ],
