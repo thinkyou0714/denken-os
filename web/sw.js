@@ -27,7 +27,8 @@
 //   (v17: 報酬と健全性 — クエスト全達成後の正解XP×1.5ブースト・おやすみ予約(🔥維持)・
 //         デンタマ成長(Lv10星/Lv20ヘルメット/Lv40王冠)＋まめ知識12種・効果音音量4段階・
 //         実績タップでシェア・ヘルプのカード内クリック誤閉じ修正)
-const CACHE = "denken-os-v17";
+//   (v18: 問題データ拡充 — テンプレ65種・589問(法規60/MC40へ増強)を配信)
+const CACHE = "denken-os-v18";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

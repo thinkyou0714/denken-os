@@ -19,7 +19,7 @@ import type { Problem } from "../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import { validateProblem } from "../lib/engine/validate.js";
 
-const PER_TOPIC = 8;
+const PER_TOPIC = 10;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** 決定論 RNG（テストと同じ実装）。topic ごとに別 seed を与える。 */

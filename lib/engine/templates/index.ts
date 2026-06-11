@@ -1,29 +1,36 @@
 /** topic 名 → Template のレジストリ。 */
 import { allowableTension } from "./allowable-tension.js";
+import { bTypeGrounding } from "./b-type-grounding.js";
 import { boostChopper } from "./boost-chopper.js";
 import { buckChopper } from "./buck-chopper.js";
 import { capacitorEnergy } from "./capacitor-energy.js";
+import { capacityFactor } from "./capacity-factor.js";
+import { combinedCycleEfficiency } from "./combined-cycle-efficiency.js";
 import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
 import { demandFactor } from "./demand-factor.js";
 import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
+import { electricHeating } from "./electric-heating.js";
 import { firstOrderControl } from "./first-order-control.js";
 import { fullWaveRectifier } from "./full-wave-rectifier.js";
 import { groundFaultSymmetrical } from "./ground-fault-symmetrical.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { hoistMotorOutput } from "./hoist-motor-output.js";
 import { hydroPowerOutput } from "./hydro-power-output.js";
+import { inducedEmf } from "./induced-emf.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
 import { inductionProportionalShift } from "./induction-proportional-shift.js";
 import { inductorEnergy } from "./inductor-energy.js";
+import { insulationResistance } from "./insulation-resistance.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { lightingDesign } from "./lighting-design.js";
 import { loadFactor } from "./load-factor.js";
 import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
+import { overheadClearance } from "./overhead-clearance.js";
 import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
 import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
@@ -33,7 +40,9 @@ import { pumpMotorInput } from "./pump-motor-input.js";
 import { rcTimeConstant } from "./rc-time-constant.js";
 import { reactivePowerCompensation } from "./reactive-power-compensation.js";
 import { resistorNetwork } from "./resistor-network.js";
+import { rlcResonance } from "./rlc-resonance.js";
 import { sagTension } from "./sag-tension.js";
+import { secondOrderResponse } from "./second-order-response.js";
 import { shortCircuitCapacity } from "./short-circuit-capacity.js";
 import { shortCircuitOhm } from "./short-circuit-ohm.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
@@ -42,14 +51,17 @@ import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
 import { steadyStateError } from "./steady-state-error.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
+import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
 import { threePhasePower } from "./three-phase-power.js";
 import { transformerEfficiency } from "./transformer-efficiency.js";
+import { transformerParallelLoad } from "./transformer-parallel-load.js";
 import { transformerTurnsRatio } from "./transformer-turns-ratio.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
 import { transmissionEfficiency } from "./transmission-efficiency.js";
 import { transmissionLoss } from "./transmission-loss.js";
 import { transmissionPowerStability } from "./transmission-power-stability.js";
 import type { Template } from "./types.js";
+import { voltageClassification } from "./voltage-classification.js";
 import { voltageDropRate } from "./voltage-drop-rate.js";
 import { wheatstoneBridge } from "./wheatstone-bridge.js";
 import { windLoad } from "./wind-load.js";
@@ -67,6 +79,8 @@ const templates: Template[] = [
   parallelPlateField,
   inductorEnergy,
   electricEnergy,
+  rlcResonance,
+  inducedEmf,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -78,6 +92,9 @@ const templates: Template[] = [
   loadFactor,
   diversityFactor,
   transmissionEfficiency,
+  combinedCycleEfficiency,
+  thermalFuelConsumption,
+  capacityFactor,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -91,12 +108,18 @@ const templates: Template[] = [
   maxEfficiencyLoad,
   hoistMotorOutput,
   fullWaveRectifier,
+  electricHeating,
+  transformerParallelLoad,
   // 法規
   groundingResistance,
   sagTension,
   insulationTestVoltage,
   windLoad,
   allowableTension,
+  bTypeGrounding,
+  insulationResistance,
+  voltageClassification,
+  overheadClearance,
   // 機械制御（二次）
   transformerVoltageRegulation,
   synchronousGeneratorOutput,
@@ -105,6 +128,7 @@ const templates: Template[] = [
   inductionProportionalShift,
   boostChopper,
   steadyStateError,
+  secondOrderResponse,
   // 電力管理（二次）
   reactivePowerCompensation,
   hydroPowerOutput,
@@ -130,29 +154,36 @@ export type { Template };
 export {
   allowableTension,
   boostChopper,
+  bTypeGrounding,
   buckChopper,
   capacitorEnergy,
+  capacityFactor,
+  combinedCycleEfficiency,
   dcGeneratorEmf,
   dcMotorEmf,
   demandFactor,
   diversityFactor,
   electricEnergy,
+  electricHeating,
   firstOrderControl,
   fullWaveRectifier,
   groundFaultSymmetrical,
   groundingResistance,
   hoistMotorOutput,
   hydroPowerOutput,
+  inducedEmf,
   inductionMotorSpeed,
   inductionPowerBalance,
   inductionProportionalShift,
   inductorEnergy,
+  insulationResistance,
   insulationTestVoltage,
   lightingDesign,
   loadFactor,
   maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
+  overheadClearance,
   parallelPercentImpedance,
   parallelPlateField,
   percentImpedanceConversion,
@@ -162,7 +193,9 @@ export {
   rcTimeConstant,
   reactivePowerCompensation,
   resistorNetwork,
+  rlcResonance,
   sagTension,
+  secondOrderResponse,
   shortCircuitCapacity,
   shortCircuitOhm,
   shortCircuitRatio,
@@ -171,13 +204,16 @@ export {
   steadyStateError,
   synchronousGeneratorOutput,
   thermalEfficiency,
+  thermalFuelConsumption,
   threePhasePower,
   transformerEfficiency,
+  transformerParallelLoad,
   transformerTurnsRatio,
   transformerVoltageRegulation,
   transmissionEfficiency,
   transmissionLoss,
   transmissionPowerStability,
+  voltageClassification,
   voltageDropRate,
   wheatstoneBridge,
   windLoad,
