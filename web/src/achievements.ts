@@ -9,6 +9,7 @@
  * DOM 非依存でテスト可能。日境界・時刻は JST。
  */
 import { dayIndexOf, JST_OFFSET_MS, maxConsecutiveCorrect } from "./quests.js";
+import { masteredTopics } from "./stats.js";
 import type { StorageLike, WebAnswerLog } from "./store.js";
 
 /** 祝賀表示済みの実績ID（再表示を防ぐ）。実績の解除判定そのものはログから導出する。 */
@@ -41,6 +42,8 @@ export interface AchievementInput {
   level: number;
   /** topic → 科目の対応（problems から topicSubjectMap で作る）。 */
   subjectOf?: ReadonlyMap<string, string>;
+  /** お守りで肩代わりした日（「無傷」系実績の判定に使う）。 */
+  usedFreezeDays?: readonly number[];
   dayOffsetMs?: number;
 }
 
@@ -63,6 +66,12 @@ interface Stats {
   hasNight: boolean;
   hasComeback: boolean;
   hasPerfectDay: boolean;
+  /** ストリークがお守り消費なしか（無傷系実績）。 */
+  noFreezeStreak: boolean;
+  /** ひと月（暦月・JST）の最多学習日数。 */
+  maxMonthDays: number;
+  /** マスター済み論点の数（easy×3）。 */
+  masteredCount: number;
 }
 
 function jstHour(ms: number, dayOffsetMs: number): number {
@@ -101,6 +110,17 @@ function buildStats(input: AchievementInput): Stats {
   for (const v of byDay.values()) {
     if (v.count >= 5 && v.correct === v.count) hasPerfectDay = true;
   }
+  // 月間皆勤: 暦月（JST）ごとの学習日数の最大値。
+  const byMonth = new Map<string, Set<number>>();
+  for (const d of dayList) {
+    const date = new Date(d * 86_400_000); // 日番号→その日のUTC0時（月の判定にはこれで十分）
+    const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+    const set = byMonth.get(key) ?? new Set<number>();
+    set.add(d);
+    byMonth.set(key, set);
+  }
+  let maxMonthDays = 0;
+  for (const set of byMonth.values()) maxMonthDays = Math.max(maxMonthDays, set.size);
   return {
     total: logs.length,
     streak: input.streakDays,
@@ -112,6 +132,9 @@ function buildStats(input: AchievementInput): Stats {
     hasNight,
     hasComeback,
     hasPerfectDay,
+    noFreezeStreak: (input.usedFreezeDays ?? []).length === 0,
+    maxMonthDays,
+    masteredCount: masteredTopics(logs).length,
   };
 }
 
@@ -167,6 +190,27 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   { id: "level10", icon: "🥇", title: "レベル10", desc: "Lv.10 に到達", check: (s) => s.level >= 10 },
   { id: "level40", icon: "👑", title: "電験マイスター", desc: "Lv.40 に到達", check: (s) => s.level >= 40 },
+  {
+    id: "master1",
+    icon: "🎓",
+    title: "初マスター",
+    desc: "論点を1つマスター（余裕×3）",
+    check: (s) => s.masteredCount >= 1,
+  },
+  {
+    id: "nofreeze30",
+    icon: "🛡️",
+    title: "無傷の三十日",
+    desc: "お守りに頼らず30日連続",
+    check: (s) => s.streak >= 30 && s.noFreezeStreak,
+  },
+  {
+    id: "month20",
+    icon: "📆",
+    title: "月間皆勤賞",
+    desc: "ひと月に20日学習",
+    check: (s) => s.maxMonthDays >= 20,
+  },
 ];
 
 /** 全実績の解除状況を評価する。 */

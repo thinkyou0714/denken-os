@@ -55,3 +55,43 @@ export function myStats(logs: readonly WebAnswerLog[], usedFreezeDays: readonly 
     bestDayCount,
   };
 }
+
+/** 論点マスターの既定条件: 「余裕（easy）」評価をこの回数つけたらマスター。 */
+export const MASTER_EASY_COUNT = 3;
+
+/**
+ * マスター済み論点（easy 評価が規定回数に達した topic）。
+ * 「覚えた」をユーザー自身の自己評価から認定する＝学習の質に直結する誇り。
+ */
+export function masteredTopics(logs: readonly WebAnswerLog[], minEasy: number = MASTER_EASY_COUNT): string[] {
+  const easyCount = new Map<string, number>();
+  for (const l of logs) {
+    if (l.rating === "easy") easyCount.set(l.topic, (easyCount.get(l.topic) ?? 0) + 1);
+  }
+  return [...easyCount.entries()]
+    .filter(([, n]) => n >= minEasy)
+    .sort((a, b) => b[1] - a[1])
+    .map(([topic]) => topic);
+}
+
+export interface GhostRace {
+  /** 今日の獲得XP。 */
+  today: number;
+  /** 直近7日（今日を除く）の平均XP（学習しなかった日も0として含む）。 */
+  avg: number;
+  /** 今日が自己平均を超えているか。 */
+  beat: boolean;
+}
+
+/**
+ * ゴーストレース: 「過去7日の自分」と今日のXPで競う。
+ * 他人とのリーグはサーバ必須だが、自己平均超えはオフラインで成立する競争。
+ * @param xpDays xpByDay(logs, 8, now) の結果（古い順8要素・最後が今日）
+ */
+export function ghostRace(xpDays: readonly number[]): GhostRace {
+  if (xpDays.length === 0) return { today: 0, avg: 0, beat: false };
+  const today = xpDays[xpDays.length - 1]!;
+  const past = xpDays.slice(0, -1);
+  const avg = past.length > 0 ? past.reduce((a, b) => a + b, 0) / past.length : 0;
+  return { today, avg: Math.round(avg), beat: today > avg && avg >= 0 && today > 0 };
+}

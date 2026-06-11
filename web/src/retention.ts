@@ -110,3 +110,21 @@ export function streakStatus(
 export function offlineLabel(online: boolean): string {
   return online ? "" : "📴 オフライン";
 }
+
+// ---- ストリーク節目（大台のスペシャル祝賀） ----
+
+/** 特別祝賀するストリークの大台。7日は週次（お守り獲得）が担うため除外。 */
+export const STREAK_MILESTONES: readonly number[] = [30, 50, 100, 200, 365];
+
+/**
+ * 祝賀すべき新しい大台を返す（無ければ null）。
+ * 「ちょうどの日」を逃しても取りこぼさないよう、seen を超えた最大の通過済み大台を返す
+ * （お守りブリッジでストリークが一気に伸びるケースに対応）。
+ */
+export function passedStreakMilestone(streak: number, seen: number): number | null {
+  let hit: number | null = null;
+  for (const m of STREAK_MILESTONES) {
+    if (streak >= m && m > seen) hit = m;
+  }
+  return hit;
+}

@@ -64,7 +64,7 @@ import {
   weeklyQuestStatuses,
   weeklyQuests,
 } from "./quests.js";
-import { dailyReviewBatch, JST_OFFSET_MS, offlineLabel, streakStatus } from "./retention.js";
+import { dailyReviewBatch, JST_OFFSET_MS, offlineLabel, passedStreakMilestone, streakStatus } from "./retention.js";
 import { dueReviewProblems, mistakeNotebook } from "./review.js";
 import { pickNextProblem } from "./select.js";
 import {
@@ -88,7 +88,7 @@ import {
   setTheme,
   type ThemePref,
 } from "./settings.js";
-import { myStats } from "./stats.js";
+import { ghostRace, masteredTopics, myStats } from "./stats.js";
 import { LocalProgress } from "./store.js";
 import { type LevelInfo, levelInfo, totalXp, xpByDay, xpBySubject } from "./xp.js";
 
@@ -229,6 +229,20 @@ function seenLevel(): number {
   const n = Number(storage.getItem(SEEN_LEVEL_KEY));
   return Number.isFinite(n) && n >= 1 ? n : 1;
 }
+
+const SEEN_STREAK_MILESTONE_KEY = "denken:seenStreakMilestone";
+
+/** 祝賀済みのストリーク大台（30/50/100…のスペシャル演出を1回だけにする）。 */
+function seenStreakMilestone(): number {
+  const n = Number(storage.getItem(SEEN_STREAK_MILESTONE_KEY));
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
+/** A2HS（ホーム画面追加）のプロンプト。対応ブラウザが発火したときだけ保持される。 */
+interface InstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+}
+let installPrompt: InstallPromptEvent | null = null;
 
 function difficultyStars(n: number): string {
   return "★".repeat(Math.max(1, Math.min(5, n)));
@@ -422,31 +436,56 @@ function practicePool(): Problem[] {
   return problems.filter((p) => p.subject === practice.subject);
 }
 
-/** 初回オンボーディング（学習記録ゼロのときだけ表示。既読で消える）。 */
+/** 初回オンボーディング＝目標設定ウィザード（学習記録ゼロのときだけ。30秒で完了）。
+ *  目標（試験日・1日の問題数）を最初に自分で決めると、その後の継続率が上がる
+ *  （コミットメントと一貫性）。設定はあとから設定タブで変更できる。 */
 function onboardingCard(root: HTMLElement): HTMLElement {
+  const dateInput = h("input", { type: "date", value: getExamDate(storage) }) as HTMLInputElement;
+  const goalSel = h("select", {}) as HTMLSelectElement;
+  for (const [v, label] of [
+    ["5", "ゆるく 5問/日"],
+    ["10", "標準 10問/日"],
+    ["20", "本気 20問/日"],
+  ] as const) {
+    goalSel.append(h("option", { value: v }, label));
+  }
+  goalSel.value = String(getDailyGoal(storage));
+  if (goalSel.selectedIndex < 0) goalSel.value = "10";
   return h(
     "div",
     { class: "card onboard" },
-    h("strong", {}, "👋 はじめまして！3ステップで始められます"),
+    h(
+      "div",
+      { class: "obhead" },
+      h("span", { class: "mface", html: mascotSvg("happy", 52) }),
+      h("strong", {}, "👋 はじめまして！デンタマです。30秒だけ目標を決めよう"),
+    ),
+    h("div", { class: "wizrow" }, h("label", {}, "試験日"), dateInput),
+    h("div", { class: "wizrow" }, h("label", {}, "1日の目標"), goalSel),
     h(
       "ol",
       {},
       h("li", {}, "問題を解く（選択肢はキーボード 1〜9 でも答えられます）"),
-      h("li", {}, "正解したら「むずかしい/できた/余裕」で自己評価 → 復習間隔が自動調整されます"),
-      h("li", {}, "復習タブに出た問題を毎日消化 → 忘れる直前の復習で定着します"),
+      h("li", {}, "正解したら「むずかしい/できた/余裕」で自己評価 → 復習間隔が自動調整"),
+      h("li", {}, "毎日続けると 🔥ストリーク と ⚡XP が育ちます（7日ごとにお守りも）"),
     ),
     h(
       "button",
       {
-        class: "chip",
+        class: "primary",
         type: "button",
         onclick: (e) => {
+          setExamDate(storage, dateInput.value);
+          setDailyGoal(storage, Number(goalSel.value));
           setOnboarded(storage);
           ((e.target as HTMLElement).closest(".onboard") as HTMLElement | null)?.remove();
+          renderHeader();
+          refreshPracticeCards();
+          showToast("⚡ 目標を設定しました。さっそく1問いってみよう！", "OK", () => {});
           root.focus?.();
         },
       },
-      "了解、始める",
+      "⚡ この目標ではじめる",
     ),
   );
 }
@@ -539,6 +578,44 @@ function weeklyQuestsCard(): HTMLElement {
     );
   }
   return card;
+}
+
+/** 日次目標を達成した瞬間に出す「今日のまとめ」。やり切った感＋明日への予告で締める。
+ *  （セッションを気持ちよく終える設計。だらだら防止と翌日の再訪フックを兼ねる） */
+function sessionSummaryCard(): HTMLElement {
+  const todayIdx = dayIndexOf(Date.now());
+  const todayLogs = logsOfDay(progress.logs(), todayIdx);
+  const correct = todayLogs.filter((l) => l.correct).length;
+  const accuracy = todayLogs.length > 0 ? Math.round((correct / todayLogs.length) * 100) : 0;
+  const xpToday = xpByDay(progress.logs(), 1, Date.now())[0] ?? 0;
+  const fi = freezeInfo();
+  // クエストは日番号から決定論で引けるため「明日の予告」が出せる（翌日の再訪フック）。
+  const tomorrow = dailyQuests(todayIdx + 1);
+  return h(
+    "div",
+    { class: "card summary" },
+    h("strong", {}, "🎉 今日の目標達成！おつかれさま"),
+    h(
+      "div",
+      { class: "mystats sumgrid" },
+      ...(
+        [
+          [`${xpToday}`, "獲得XP"],
+          [String(todayLogs.length), "解答"],
+          [`${accuracy}%`, "正答率"],
+          [`${fi.streak}日`, "連続"],
+        ] as const
+      ).map(([num, label]) =>
+        h("div", { class: "stat" }, h("div", { class: "sn" }, num), h("div", { class: "sl" }, label)),
+      ),
+    ),
+    h(
+      "div",
+      { class: "muted small" },
+      `明日のクエスト予告: ${tomorrow.map((q) => `${q.icon}${q.label}`).join(" ／ ")}`,
+    ),
+    h("div", { class: "muted small" }, "このあと続けてもOK。でも、休むのも実力のうち！"),
+  );
 }
 
 /** 学習タブ先頭のマスコット/クエストを解答のたびに差し替える（全再描画せず入力を保つ）。 */
@@ -716,7 +793,10 @@ function gradeObjective(host: HTMLElement, p: Problem, given: string, clicked: H
     { class: `feedback ${correct ? "ok" : "ng"}` },
     correct ? "⭕ 正解！" : `❌ 不正解（正解: ${p.answer}）`,
   );
-  if (correct && practice.combo >= 2) feedback.append(h("span", { class: "combo" }, `⚡${practice.combo}連続`));
+  if (correct && practice.combo >= 2) {
+    // コンボ5以上は発光して「ノっている」ことを体感させる。
+    feedback.append(h("span", { class: practice.combo >= 5 ? "combo hot" : "combo" }, `⚡${practice.combo}連続`));
+  }
   feedback.append(
     h("span", { class: "elapsed" }, `⏱ ${elapsed}${practice.hintsShown > 0 ? ` ・ ヒント${practice.hintsShown}` : ""}`),
     h("span", { class: "cheer" }, mascotCheer(correct, practice.combo, dayIndexOf(Date.now()))),
@@ -815,6 +895,7 @@ function finalize(
     const ok = score.pct >= 2 / 3;
     practice.combo = ok ? practice.combo + 1 : 0;
     playTone(ok ? "correct" : "wrong", getSound(storage));
+    vibrate(ok ? 18 : [40, 50, 40]);
   }
 
   const xpGained = Math.max(0, totalXp(progress.logs()) - xpBefore);
@@ -829,6 +910,20 @@ function finalize(
   if (award.awarded) {
     saveFreezeState(storage, award.state);
     celebrations.push(`🧊 ${fiAfter.streak}日継続ボーナス！ストリークお守りを獲得（欠席日を自動カバー）`);
+  }
+
+  // 1b) ストリーク大台（30/50/100…日）のスペシャル祝賀（最優先・紙吹雪は増量）。
+  let bigConfetti = false;
+  const milestone = passedStreakMilestone(fiAfter.streak, seenStreakMilestone());
+  if (milestone) {
+    try {
+      storage.setItem(SEEN_STREAK_MILESTONE_KEY, String(milestone));
+    } catch {
+      // 保存不能でも続行。
+    }
+    celebrations.unshift(`🏆 ストリーク ${milestone} 日達成！これはもう本物の継続力です`);
+    fanfare = "levelup";
+    bigConfetti = true;
   }
 
   // 2) レベルアップ（模試中の上昇も取りこぼさないよう保存値と比較）。
@@ -861,6 +956,7 @@ function finalize(
     streakDays: fiAfter.streak,
     level: lv.level,
     subjectOf: topicSubjectMap(problems),
+    usedFreezeDays: fiAfter.state.usedDays,
   });
   const seen = loadSeenBadges(storage);
   const fresh = newlyUnlocked(badgeViews, seen);
@@ -877,15 +973,25 @@ function finalize(
 
   // 5) 日次目標の達成瞬間（達成に気づけないと目標の駆動力が出ない）。
   const goal = getDailyGoal(storage);
-  if (before < goal && todayCount() >= goal) {
+  const goalJustMet = before < goal && todayCount() >= goal;
+  if (goalJustMet) {
     celebrations.push(`🎉 今日の目標 ${goal} 問を達成！この調子！`);
     fanfare = fanfare ?? "clear";
   }
 
   if (celebrations.length > 0) {
     showToast(celebrations[0]!, "OK", () => {});
-    confettiBurst();
+    confettiBurst(bigConfetti ? 64 : 28);
     if (fanfare) playTone(fanfare, getSound(storage));
+  } else if (installPrompt && fiAfter.streak >= 3 && storage.getItem("denken:a2hsNudged") !== "1") {
+    // A2HS は3日続いた頃＝価値を実感したタイミングで一度だけ提案する（初回に出すと断られる）。
+    try {
+      storage.setItem("denken:a2hsNudged", "1");
+    } catch {
+      // 保存不能でも続行。
+    }
+    const prompt = installPrompt;
+    showToast("📲 毎日開くなら、ホーム画面に追加すると1タップで起動できます", "追加", () => void prompt.prompt());
   }
 
   const result = host.querySelector("#result") as HTMLElement;
@@ -923,6 +1029,8 @@ function finalize(
   if (almost) {
     result.append(h("p", { class: "muted almost" }, `✨ あと1問で「${almost.quest.label}」を達成！`));
   }
+  // 目標達成の瞬間は「今日のまとめ」で気持ちよく締める（明日のクエスト予告つき）。
+  if (goalJustMet) result.append(sessionSummaryCard());
   if (xpGained > 0) xpFloat(result, `+${xpGained} XP`);
   refreshPracticeCards();
   renderHeader();
@@ -1730,6 +1838,25 @@ function renderDashboard(root: HTMLElement): void {
     ),
   );
 
+  // ゴーストレース: 「過去7日の自分」と今日のXPで競う（オフラインで成立する健全な競争）。
+  const race = ghostRace(xpByDay(logs, 8, Date.now()));
+  if (race.today > 0 || race.avg > 0) {
+    root.append(
+      h(
+        "div",
+        { class: "card race" },
+        h(
+          "span",
+          {},
+          race.beat
+            ? "🏁 今日は「過去7日の自分」を超えています！"
+            : `🏃 7日平均の自分まで あと ${Math.max(1, race.avg - race.today + 1)} XP`,
+        ),
+        h("span", { class: "muted small" }, `今日 ${race.today} XP ／ 7日平均 ${race.avg} XP`),
+      ),
+    );
+  }
+
   const weak = byTopic(logs)
     .filter((t) => t.attempts > 0)
     .slice(0, 5);
@@ -1746,6 +1873,15 @@ function renderDashboard(root: HTMLElement): void {
         ),
       );
     }
+  }
+
+  // マスター済み論点（「余裕」評価×3。弱点の隣に「できるようになったこと」も見せる）。
+  const mastered = masteredTopics(logs);
+  if (mastered.length > 0) {
+    const chips = h("div", { class: "mchips" });
+    for (const t of mastered.slice(0, 12)) chips.append(h("span", { class: "mchip" }, `🎓 ${t}`));
+    if (mastered.length > 12) chips.append(h("span", { class: "mchip more" }, `ほか ${mastered.length - 12} 論点`));
+    root.append(h("h2", {}, `マスター済み論点（${mastered.length}）`), chips);
   }
 
   const fc = reviewForecast(progress.allCardViews().values(), Date.now(), 7);
@@ -1785,11 +1921,13 @@ function renderDashboard(root: HTMLElement): void {
   );
 
   // 実績バッジ（節目の大きな報酬。ロック中も見せて「次の目標」を提示する）。
+  const fiBadge = freezeInfo();
   const badges = evaluateAchievements({
     logs,
-    streakDays: freezeInfo().streak,
+    streakDays: fiBadge.streak,
     level: lv.level,
     subjectOf: topicSubjectMap(problems),
+    usedFreezeDays: fiBadge.state.usedDays,
   });
   const unlockedCount = badges.filter((b) => b.unlocked).length;
   const grid = h("div", { class: "badges" });
@@ -1997,6 +2135,24 @@ function renderSettings(root: HTMLElement): void {
     h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
     h("h2", {}, "データ"),
     backupCard(),
+    ...(installPrompt
+      ? [
+          h(
+            "div",
+            { class: "card" },
+            h("label", {}, "アプリとして使う "),
+            h(
+              "button",
+              {
+                class: "choice",
+                type: "button",
+                onclick: () => void installPrompt?.prompt(),
+              },
+              "📲 ホーム画面に追加（1タップで起動）",
+            ),
+          ),
+        ]
+      : []),
     h(
       "button",
       { class: "choice", type: "button", style: "border-color:var(--ng);color:var(--ng)", onclick: resetData },
@@ -2065,12 +2221,46 @@ function resetData(): void {
   storage.setItem("denken:freeze", "");
   storage.setItem("denken:badges", "[]");
   storage.setItem(SEEN_LEVEL_KEY, "1");
+  storage.setItem(SEEN_STREAK_MILESTONE_KEY, "0");
   switchView("dashboard");
 }
 
 // ---- キーボード操作 ----
 
+/** キーボードショートカット一覧（?キー）。学習をキーボードだけで回せることを学習者に伝える。 */
+function toggleKeyboardHelp(): void {
+  const existing = document.querySelector(".kbdhelp");
+  if (existing) {
+    existing.remove();
+    return;
+  }
+  const rows: ReadonlyArray<readonly [string, string]> = [
+    ["1〜9", "選択肢を解答（学習・模試）"],
+    ["1〜3", "自己評価（むずかしい/できた/余裕）"],
+    ["Enter", "数値の回答 ／ 次の問題へ"],
+    ["← →", "タブ移動（タブにフォーカス中）"],
+    ["?", "このヘルプを開閉"],
+  ];
+  const overlay = h(
+    "div",
+    { class: "kbdhelp", role: "dialog", "aria-label": "キーボードショートカット", onclick: () => overlay.remove() },
+    h(
+      "div",
+      { class: "card" },
+      h("strong", {}, "⌨️ キーボードショートカット"),
+      ...rows.map(([key, desc]) => h("div", { class: "krow" }, h("span", { class: "kbd" }, key), h("span", {}, desc))),
+      h("div", { class: "muted small" }, "クリック / Esc で閉じる"),
+    ),
+  );
+  document.body.append(overlay);
+}
+
 function onKeydown(e: KeyboardEvent): void {
+  // Esc はヘルプを閉じる（開いていれば）。
+  if (e.key === "Escape") {
+    document.querySelector(".kbdhelp")?.remove();
+    return;
+  }
   // タブ（role=tab）にフォーカスがある間は左右矢印でタブ移動（WAI-ARIA tablist の定石）。
   const active = document.activeElement as HTMLElement | null;
   if (active?.getAttribute("role") === "tab" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
@@ -2083,9 +2273,15 @@ function onKeydown(e: KeyboardEvent): void {
     return;
   }
 
-  if (view !== "practice" && view !== "exam") return;
   const tag = (e.target as HTMLElement)?.tagName;
   if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+  if (e.key === "?") {
+    e.preventDefault();
+    toggleKeyboardHelp();
+    return;
+  }
+
+  if (view !== "practice" && view !== "exam") return;
   const root = $("view");
   if (e.key === "Enter") {
     (root.querySelector("#next") as HTMLButtonElement | null)?.click();
@@ -2142,6 +2338,14 @@ async function main(): Promise<void> {
       runFreezeBridge();
       renderHeader();
     }
+  });
+  // A2HS: ブラウザのインストール提案を横取りして、価値実感後（ストリーク3日）に自分のタイミングで出す。
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    installPrompt = e as InstallPromptEvent;
+  });
+  window.addEventListener("appinstalled", () => {
+    installPrompt = null;
   });
   // 想定外の実行時エラーでも「壊れた」と思わせない（学習記録の安全を伝える。1セッション1回）。
   let errorToastShown = false;
