@@ -1,27 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { FORMULAS, filterFormulas } from "../../web/src/formulas.js";
 import { DEFAULT_REVIEW_CAP, getReviewCap, isOnboarded, setOnboarded, setReviewCap } from "../../web/src/settings.js";
-import { LOG_CAP, LocalProgress, type StorageLike } from "../../web/src/store.js";
-
-class MemoryStorage implements StorageLike {
-  m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
-
-/** setItem が必ず throw する Storage（iOS プライベートモード/quota 超過の再現）。 */
-class ThrowingStorage implements StorageLike {
-  getItem(): string | null {
-    return null;
-  }
-  setItem(): void {
-    throw new DOMException("QuotaExceededError");
-  }
-}
+import { LOG_CAP, LocalProgress } from "../../web/src/store.js";
+import { MemoryStorage, ThrowingStorage } from "../helpers/storage.js";
 
 describe("filterFormulas（公式検索）", () => {
   it("空クエリは全グループを返す", () => {

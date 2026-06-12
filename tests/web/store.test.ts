@@ -1,16 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { LocalProgress, type StorageLike } from "../../web/src/store.js";
-
-/** DOM 無しでテストするためのメモリ Storage。 */
-class MemoryStorage implements StorageLike {
-  private m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
+import { LocalProgress } from "../../web/src/store.js";
+import { MemoryStorage } from "../helpers/storage.js";
 
 const DAY = 86_400_000;
 

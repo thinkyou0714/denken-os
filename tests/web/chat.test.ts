@@ -8,17 +8,7 @@ import {
   extractTextDelta,
   loadChat,
 } from "../../web/src/chat.js";
-import type { StorageLike } from "../../web/src/store.js";
-
-class MemoryStorage implements StorageLike {
-  private m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
+import { MemoryStorage } from "../helpers/storage.js";
 
 const msg = (role: "user" | "assistant", content: string): ChatMessage => ({ role, content, atMs: 1 });
 

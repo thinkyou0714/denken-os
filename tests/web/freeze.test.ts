@@ -10,17 +10,7 @@ import {
   streakWithFreezes,
   studiedDays,
 } from "../../web/src/freeze.js";
-import type { StorageLike } from "../../web/src/store.js";
-
-class MemoryStorage implements StorageLike {
-  m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
+import { MemoryStorage } from "../helpers/storage.js";
 
 describe("loadFreezeState / saveFreezeState", () => {
   it("未保存は初期状態（0個・消費なし）", () => {

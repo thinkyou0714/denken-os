@@ -136,4 +136,42 @@ describe("clean.ts 境界（I-006/I-007）", () => {
     expect(isCleanAnswer(0.125, 2)).toBe(false);
     expect(isCleanAnswer(123456, 2)).toBe(true);
   });
+
+  // I-068: スケール別（0.01〜10^6）の受理/拒否回帰テスト（浮動小数点精度の安定確認）
+  it("isCleanAnswer I-068: 小さいスケール（0.01付近）の受理", () => {
+    expect(isCleanAnswer(0.01)).toBe(true);
+    expect(isCleanAnswer(0.05)).toBe(true);
+    expect(isCleanAnswer(0.1)).toBe(true);
+    expect(isCleanAnswer(0.99)).toBe(true);
+  });
+
+  it("isCleanAnswer I-068: 小さいスケール（0.01付近）の拒否", () => {
+    // 0.3 は 2進数では無限小数（0.29999... ≠ 0.30000... で浮動小数誤差が出やすい）
+    // isCleanAnswer は EPS 許容があるため、正確に割り切れるかを確認
+    expect(isCleanAnswer(1 / 300)).toBe(false); // 0.00333...
+    expect(isCleanAnswer(0.003)).toBe(false); // 3桁小数（maxDecimals=2 では不可）
+  });
+
+  it("isCleanAnswer I-068: 中スケール（100付近）の受理", () => {
+    expect(isCleanAnswer(100)).toBe(true);
+    expect(isCleanAnswer(1500)).toBe(true);
+    expect(isCleanAnswer(99.5)).toBe(true);
+    expect(isCleanAnswer(0.5)).toBe(true);
+  });
+
+  it("isCleanAnswer I-068: 大スケール（10^4）の受理/拒否", () => {
+    expect(isCleanAnswer(10000)).toBe(true);
+    expect(isCleanAnswer(12500)).toBe(true);
+    expect(isCleanAnswer(10000.5)).toBe(true);
+    // 無理数的な値は拒否
+    expect(isCleanAnswer(10000 / 3)).toBe(false);
+  });
+
+  it("isCleanAnswer I-068: 大スケール（10^6）の受理/拒否", () => {
+    expect(isCleanAnswer(1_000_000)).toBe(true);
+    expect(isCleanAnswer(500_000)).toBe(true);
+    expect(isCleanAnswer(750_000.5)).toBe(true);
+    // 非常に大きな非整数は浮動小数精度の問題で判定注意（ここでは整数のみ検証）
+    expect(isCleanAnswer(1_000_000 / 3)).toBe(false);
+  });
 });

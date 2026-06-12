@@ -3,17 +3,7 @@ import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
 import { inductionMotorSpeed, listTopics, resistorNetwork } from "../../lib/engine/templates/index.js";
 import { validateProblem } from "../../lib/engine/validate.js";
-
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+import { seededRng } from "../helpers/rng.js";
 
 describe("追加テンプレート（無限生成エンジンのmoat強化）", () => {
   it("レジストリに3テンプレ（理論/機械含む）が登録されている", () => {

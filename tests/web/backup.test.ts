@@ -1,16 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { BACKUP_KEYS, exportBackup, importBackup } from "../../web/src/backup.js";
-import type { StorageLike } from "../../web/src/store.js";
-
-class MemoryStorage implements StorageLike {
-  m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
+import { MemoryStorage } from "../helpers/storage.js";
 
 describe("バックアップ（エクスポート/インポート）", () => {
   it("ラウンドトリップで学習データが復元される", () => {

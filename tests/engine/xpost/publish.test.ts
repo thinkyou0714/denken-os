@@ -1,6 +1,3 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { DraftExportClient } from "../../../lib/clients/x-client.js";
 import { generate } from "../../../lib/engine/generate.js";
@@ -10,20 +7,10 @@ import { capacitorEnergy } from "../../../lib/engine/templates/index.js";
 import { validateProblem } from "../../../lib/engine/validate.js";
 import { scheduleProblem } from "../../../lib/engine/xpost/publish.js";
 import { morningPoll } from "../../../lib/engine/xpost/toXPost.js";
+import { loadProblemFixture } from "../../helpers/fixtures.js";
+import { seededRng } from "../../helpers/rng.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../../data/problems/T-0001.json"), "utf8"));
-
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+const T0001: Problem = loadProblemFixture("T-0001");
 
 describe("numeric 形式テンプレート（二次=計算の布石）", () => {
   it("コンデンサ静電エネルギー W=½CV² を numeric で算出（選択肢なし）", () => {

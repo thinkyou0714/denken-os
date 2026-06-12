@@ -12,17 +12,7 @@ import {
   setSound,
   setTheme,
 } from "../../web/src/settings.js";
-import type { StorageLike } from "../../web/src/store.js";
-
-class MemoryStorage implements StorageLike {
-  private m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
-}
+import { MemoryStorage } from "../helpers/storage.js";
 
 describe("plan（試験カウントダウン・日次計画）", () => {
   it("daysUntil: 未来の試験日まで残り日数（JST暦日）", () => {

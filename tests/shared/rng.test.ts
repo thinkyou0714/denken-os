@@ -13,7 +13,7 @@
  * Node.js で直接実行して取得。アルゴリズムは xorshift 系 MurmurHash3 finalizer。
  */
 import { describe, expect, it } from "vitest";
-import { seededRng } from "../../lib/shared/rng.js";
+import { hashSeed, seededRng } from "../../lib/shared/rng.js";
 
 /**
  * seed=1 の先頭10値（2026-06 時点の参照実装から生成）。
@@ -99,5 +99,40 @@ describe("lib/shared/rng - seededRng", () => {
     expect(v).toBeLessThan(1);
     // 再実行で同じ値
     expect(seededRng(-1)()).toBe(v);
+  });
+});
+
+// I-072: hashSeed のテスト補完（G3 が新設した関数のテスト）
+describe("lib/shared/rng - hashSeed", () => {
+  it("同じ文字列は常に同じ seed を返す（決定論）", () => {
+    expect(hashSeed("三相交流電力")).toBe(hashSeed("三相交流電力"));
+    expect(hashSeed("")).toBe(hashSeed(""));
+  });
+
+  it("異なる文字列は異なる seed を返す", () => {
+    expect(hashSeed("三相交流電力")).not.toBe(hashSeed("誘導電動機の回転速度"));
+    expect(hashSeed("a")).not.toBe(hashSeed("b"));
+  });
+
+  it("戻り値は 32bit 符号なし整数（0 ≤ h < 2^32）", () => {
+    for (const text of ["", "a", "三相交流電力", "very long string with many characters"]) {
+      const h = hashSeed(text);
+      expect(h).toBeGreaterThanOrEqual(0);
+      expect(h).toBeLessThan(2 ** 32);
+      expect(Number.isInteger(h)).toBe(true);
+    }
+  });
+
+  it("空文字列も確定値を返す（FNV-1a 初期値の >>> 0）", () => {
+    // 空文字列: h=2166136261 >>> 0 = 2166136261
+    expect(hashSeed("")).toBe(2166136261);
+  });
+
+  it("seededRng(hashSeed(text)) が決定論的に動作する（topic→seed→rng のパイプライン）", () => {
+    const rng1 = seededRng(hashSeed("三相交流電力"));
+    const rng2 = seededRng(hashSeed("三相交流電力"));
+    for (let i = 0; i < 10; i++) {
+      expect(rng1()).toBe(rng2());
+    }
   });
 });
