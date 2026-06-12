@@ -7,27 +7,49 @@
 ## レイヤ構成
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  入口 (entrypoints)                                          │
-│  scripts/ … gen / export:vault / validate:data / build:web   │
-│  web/src/ … オフライン学習アプリ (PWA)                       │
-└───────────────┬─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│  入口 (entrypoints)                                                  │
+│  scripts/ … gen / export:vault / validate:data / build:web / 他     │
+│  web/src/ … オフライン学習アプリ (PWA)                               │
+└───────────────┬─────────────────────────────────────────────────────┘
                 │ import
-┌───────────────▼─────────────────────────────────────────────┐
-│  ドメインロジック (lib/)                                     │
-│                                                              │
-│   engine/ ── 問題生成 & 検証の中核                           │
-│     ├ schema.ts ……… Problem 型 = 全モジュール共通言語        │
-│     ├ generate / narrate / validate / gate / clean           │
-│     ├ templates/ … 科目別の決定論ソルバ                      │
-│     └ xpost/ … X投稿パイプライン (toXPost / xlength / publish)│
-│                                                              │
-│   scheduler/ … SM-2 + FSRS + 弱点診断 (独立)                 │
-│   store/ ……… 永続化 (memory / file / Supabase)              │
-│   aggregate / ingest / export / crosspost /                  │
-│   correction / notify / analytics / community / share-card   │
-│   clients/ … 外部I/O境界 (X API は既定で下書きエクスポート)  │
-└──────────────────────────────────────────────────────────────┘
+┌───────────────▼─────────────────────────────────────────────────────┐
+│  共有ユーティリティ (lib/shared/)                                    │
+│    time.ts … DAY_MS / JST_OFFSET_MS（lib 全体・web 双方で共有）     │
+│    rng.ts  … seededRng / hashSeed（決定論 RNG・ビット互換）          │
+└───────────────┬─────────────────────────────────────────────────────┘
+                │ import
+┌───────────────▼─────────────────────────────────────────────────────┐
+│  ドメインロジック (lib/)                                             │
+│                                                                      │
+│   engine/ ── 問題生成 & 検証の中核                                   │
+│     ├ schema.ts ……… Problem 型 = 全モジュール共通言語               │
+│     ├ generate / narrate / validate / gate / clean                   │
+│     ├ templates/                                                      │
+│     │   ├ helpers.ts … 共有ヘルパー（pick / buildChoices /           │
+│     │   │               percentage / ensureRange / defineTemplate）   │
+│     │   └ <topic>.ts … 科目別の決定論ソルバ（88テンプレ）            │
+│     └ xpost/ … X投稿パイプライン (toXPost / xlength / publish)       │
+│   engine/index.ts … barrel（単一入口）                               │
+│                                                                      │
+│   scheduler/ … SM-2 + FSRS + 弱点診断 (独立)                        │
+│   store/ ……… 永続化 (memory / file / Supabase)                     │
+│   aggregate / ingest / export / crosspost /                          │
+│   correction / notify / analytics / community / share-card           │
+│   clients/ … 外部I/O境界 (X API は既定で下書きエクスポート)          │
+└──────────────────────────────────────────────────────────────────────┘
+
+web/src/ の構成（G6 リファクタ後）:
+
+    app.ts          — エントリポイント（90行）
+    app-init.ts     — problems.json 読込
+    keyboard.ts     — グローバルキーボードハンドラ
+    ui/             — DOM ヘルパー・トースト・共通ウィジェット
+    views/          — タブ別画面（router + practice/review/exam/chat/dashboard/formulas/settings）
+    state/          — 画面別 typed 状態（app/exam/practice）
+    dates.ts        — JST 日付ユーティリティ（lib/shared/time.ts の web 側対応）
+    sanitize.ts     — SVG サニタイザ
+    その他ロジック: xp / quests / freeze / achievements / grade / select / mathfmt 等
 ```
 
 ## モジュール依存グラフ
@@ -36,11 +58,19 @@
 ほとんどのモジュールはこれに依存する。逆に `engine` は外部I/O境界の `clients` 以外の
 ドメインモジュールには依存しない（依存の向きが一方向＝循環なし）。
 
+`lib/shared/` は `lib/` 全体と `web/src/` の双方が参照する共有層。
+依存の向きは常に「入口 → shared/ドメイン → engine/schema」であり循環はない。
+
 ```mermaid
 graph TD
     subgraph entry["入口"]
         scripts[scripts/]
-        web[web/src/]
+        web["web/src/<br/>(ui/ · views/ · state/)"]
+    end
+
+    subgraph shared["lib/shared"]
+        time[time.ts<br/>DAY_MS/JST_OFFSET_MS]
+        rng[rng.ts<br/>seededRng/hashSeed]
     end
 
     subgraph engine["lib/engine"]
@@ -48,8 +78,10 @@ graph TD
         generate[generate.ts]
         narrate[narrate.ts]
         validate[validate.ts]
-        templates[templates/]
+        helpers["templates/helpers.ts<br/>pick/buildChoices/defineTemplate"]
+        templates[templates/*.ts<br/>88テンプレ]
         xpost[xpost/]
+        barrel[index.ts barrel]
     end
 
     clients[lib/clients<br/>X API境界]
@@ -62,23 +94,31 @@ graph TD
     generate --> validate
     generate --> templates
     generate --> schema
+    templates --> helpers
+    barrel --> generate
+    barrel --> validate
+    barrel --> schema
     xpost --> schema
     xpost --> clients
 
-    scripts --> generate
+    scripts --> barrel
+    scripts --> shared
     scripts --> export2[lib/export]
-    scripts --> validate
 
     web --> schema
     web --> scheduler
     web --> sharecard
+    web --> shared
 
     store --> schema
     store --> scheduler
     others --> schema
+    scheduler --> shared
 
     classDef core fill:#e6f0ff,stroke:#4a78c8;
+    classDef sharedStyle fill:#fff8e6,stroke:#c8a84a;
     class schema core;
+    class time,rng sharedStyle;
 ```
 
 ## 設計上の不変条件
@@ -93,7 +133,8 @@ graph TD
 2. **スキーマの二重定義はドリフトをテストで検知する。**
    実行時検証は `engine/schema.ts`（zod）、CI/外部配布用は
    `docs/x-strategy/templates/problem-schema.json`（JSON Schema / ajv）。
-   両者の乖離は `tests/engine/schema-consistency.test.ts` で検出する。
+   両者の乖離は `tests/engine/schema-drift.test.ts` で検出する
+   （設計判断の詳細は [`docs/adr/0001-dual-schema-validation.md`](adr/0001-dual-schema-validation.md) を参照）。
 
 3. **外部への副作用は境界(`clients/`)に隔離し、既定は下書きエクスポート。**
    X実投稿は無料API枠廃止・凍結回避のため `DraftExportClient` が既定。
@@ -112,9 +153,31 @@ graph TD
 
 ## 検証パイプライン
 
-`npm run verify`（= CI `.github/workflows/validate.yml` と同一手順）:
+`npm run verify`（= CI `.github/workflows/validate.yml` と同一手順。プリプッシュ確認に使う）:
 
 ```
 lint (Biome) → typecheck (lib/scripts/tests) → typecheck:web
-  → validate:data (ajv) → test (vitest) → build:web (esbuild)
+  → validate:data (ajv + JSON Schema) → test (vitest 851件・カバレッジ閾値 stmts85/branch76/funcs92/lines89)
+  → build:web (esbuild → web/dist/)
 ```
+
+CI はアーティファクトとして `coverage/`（7日保存）と `web/dist/`（成功時のみ）を保存する。
+カバレッジサマリーは `GITHUB_STEP_SUMMARY` にも出力される。
+
+タグ (`v*`) push 時は `release.yml` が `release:check`（verify + audit strict）を実行し、
+GitHub Release 草稿を自動作成する（`gh release create --draft`）。
+
+## スクリプトフラグ
+
+主なスクリプトは `--help` で使用方法を表示できる:
+
+| スクリプト | 主なフラグ |
+|---|---|
+| `npm run build:problems` | `--per-topic <N>`（1トピック当たり問題数・既定10）, `--help` |
+| `npm run gen` | `--topic`, `--count`, `--seed`, `--xpost`, `--help` |
+| `npm run validate:data` | `--help` |
+| `npm run audit:status` | `--strict`, `--help` |
+| `npm run export:vault` | `--out <dir>`, `--help` |
+
+スクリプト間共通の原子的書き込み（tmp+rename）は `scripts/shared.ts` の
+`atomicWriteFileSync` が担い、途中クラッシュによる半端ファイルを防止する。
