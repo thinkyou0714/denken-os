@@ -50,36 +50,36 @@ export function customChecks(file: string, p: unknown): Failure[] {
   const pr = p as Record<string, unknown>;
 
   // answer ∈ choices（draft-07 では表現不可。03-quality-pipeline をコード化）
-  if (pr["format"] === "multiple_choice") {
-    if (!Array.isArray(pr["choices"]) || !(pr["choices"] as string[]).includes(pr["answer"] as string)) {
+  if (pr.format === "multiple_choice") {
+    if (!Array.isArray(pr.choices) || !(pr.choices as string[]).includes(pr.answer as string)) {
       failures.push({
         file,
         rule: "answer_in_choices",
-        message: `${file}: answer "${String(pr["answer"])}" が choices に含まれていません`,
+        message: `${file}: answer "${String(pr.answer)}" が choices に含まれていません`,
       });
     }
   }
 
   // status=validated|published は検証4項目すべて true
-  if (pr["status"] === "validated" || pr["status"] === "published") {
-    const v = (pr["validation"] ?? {}) as Record<string, unknown>;
-    const ok = v["solver_checked"] && v["human_checked"] && v["clean_answer"] && v["physically_valid"];
+  if (pr.status === "validated" || pr.status === "published") {
+    const v = (pr.validation ?? {}) as Record<string, unknown>;
+    const ok = v.solver_checked && v.human_checked && v.clean_answer && v.physically_valid;
     if (!ok) {
       failures.push({
         file,
         rule: "validation_gate",
-        message: `${file}: status=${String(pr["status"])} だが検証4項目が揃っていません`,
+        message: `${file}: status=${String(pr.status)} だが検証4項目が揃っていません`,
       });
     }
   }
 
   // original 以外は citation 必須（schema 済だが二重チェック）
-  const src = pr["source"] as Record<string, unknown> | undefined;
-  if (src && src["type"] !== "original" && !src["citation"]) {
+  const src = pr.source as Record<string, unknown> | undefined;
+  if (src && src.type !== "original" && !src.citation) {
     failures.push({
       file,
       rule: "citation_required",
-      message: `${file}: source.type=${String(src["type"])} は citation 必須です`,
+      message: `${file}: source.type=${String(src.type)} は citation 必須です`,
     });
   }
 
@@ -100,7 +100,11 @@ export function validateFiles(
     try {
       data = JSON.parse(readFileSync(full, "utf8"));
     } catch (e) {
-      failures.push({ file: full, rule: "json_parse", message: `${full}: ${String(e)}` });
+      failures.push({
+        file: full,
+        rule: "json_parse",
+        message: `${full}: ${String(e)}`,
+      });
       continue;
     }
     const items = Array.isArray(data) ? (data as unknown[]) : [data];
@@ -108,7 +112,11 @@ export function validateFiles(
       const label = Array.isArray(data) ? `${full}[${idx}]` : full;
       if (!validate(p)) {
         for (const err of getErrors()) {
-          failures.push({ file: label, rule: "schema", message: `${label}: ${err.instancePath} ${err.message ?? ""}` });
+          failures.push({
+            file: label,
+            rule: "schema",
+            message: `${label}: ${err.instancePath} ${err.message ?? ""}`,
+          });
         }
       }
       failures.push(...customChecks(label, p));

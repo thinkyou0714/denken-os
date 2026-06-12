@@ -372,9 +372,10 @@ export function renderPractice(root: HTMLElement): void {
 export function nextQuestion(root: HTMLElement): void {
   const host = root.querySelector("#q") as HTMLElement | null;
   if (!host) return;
+  const excludeId = practice.current?.id;
   practice.current = pickNextProblem(practicePool(), {
     weakTopics: weakTopics(),
-    excludeId: practice.current?.id,
+    ...(excludeId !== undefined ? { excludeId } : {}),
   });
   host.innerHTML = "";
   const p = practice.current;
@@ -406,7 +407,8 @@ export function nextQuestion(root: HTMLElement): void {
         type: "button",
         onclick: () => {
           if (practice.hintsShown >= maxHints) return;
-          const step = p.solution[practice.hintsShown]!;
+          // hintsShown < maxHints ≤ p.solution.length - 1 を保証済みのため安全。
+          const step = p.solution[practice.hintsShown] as string;
           practice.hintsShown += 1;
           hintHost.append(h("div", { class: "hint", html: `💡 ヒント${practice.hintsShown}: ${formatMath(step)}` }));
           if (practice.hintsShown >= maxHints) (hintBtn as HTMLButtonElement).disabled = true;

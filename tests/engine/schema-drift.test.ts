@@ -30,24 +30,24 @@ function customChecks(p: unknown): string[] {
   const pr = p as Record<string, unknown>;
 
   // answer ∈ choices（multiple_choice のみ）
-  if (pr["format"] === "multiple_choice") {
-    if (!Array.isArray(pr["choices"]) || !(pr["choices"] as string[]).includes(pr["answer"] as string)) {
-      errors.push(`answer "${String(pr["answer"])}" が choices に含まれていません`);
+  if (pr.format === "multiple_choice") {
+    if (!Array.isArray(pr.choices) || !(pr.choices as string[]).includes(pr.answer as string)) {
+      errors.push(`answer "${String(pr.answer)}" が choices に含まれていません`);
     }
   }
 
   // status=validated|published は検証4項目すべて true
-  if (pr["status"] === "validated" || pr["status"] === "published") {
-    const v = (pr["validation"] ?? {}) as Record<string, unknown>;
-    if (!(v["solver_checked"] && v["human_checked"] && v["clean_answer"] && v["physically_valid"])) {
-      errors.push(`status=${String(pr["status"])} だが検証4項目が揃っていません`);
+  if (pr.status === "validated" || pr.status === "published") {
+    const v = (pr.validation ?? {}) as Record<string, unknown>;
+    if (!(v.solver_checked && v.human_checked && v.clean_answer && v.physically_valid)) {
+      errors.push(`status=${String(pr.status)} だが検証4項目が揃っていません`);
     }
   }
 
   // original 以外は citation 必須
-  const src = pr["source"] as Record<string, unknown> | undefined;
-  if (src && src["type"] !== "original" && !src["citation"]) {
-    errors.push(`source.type=${String(src["type"])} だが citation がありません`);
+  const src = pr.source as Record<string, unknown> | undefined;
+  if (src && src.type !== "original" && !src.citation) {
+    errors.push(`source.type=${String(src.type)} だが citation がありません`);
   }
 
   return errors;

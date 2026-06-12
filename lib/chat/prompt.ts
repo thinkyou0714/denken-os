@@ -69,6 +69,7 @@ export interface ApiMessage {
  */
 export function buildApiMessages(history: ChatMessage[], maxTurns: number = MAX_HISTORY_TURNS): ApiMessage[] {
   const recent = history.slice(-maxTurns);
-  while (recent.length > 0 && recent[0]!.role !== "user") recent.shift();
+  // while の条件で recent.length > 0 を確認済みのため recent[0] は存在する。
+  while (recent.length > 0 && (recent[0] as (typeof recent)[number]).role !== "user") recent.shift();
   return recent.map((m) => ({ role: m.role, content: m.content }));
 }

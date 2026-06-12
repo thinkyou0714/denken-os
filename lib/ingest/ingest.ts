@@ -66,7 +66,8 @@ export function ingest(raws: RawPastExam[]): IngestResult {
       rejected.push({ raw: r, reason: missing });
       continue;
     }
-    const key = normalize(r.statement!);
+    // missingMeta(r) が null を返した場合は statement/subject/year/examType の存在が保証される。
+    const key = normalize(r.statement as string);
     if (seen.has(key)) {
       duplicates += 1;
       continue;
@@ -79,9 +80,9 @@ export function ingest(raws: RawPastExam[]): IngestResult {
     accepted.push({
       citation: `${r.year} ${r.examType} ${r.subject}`,
       sourceType: "past_exam_quoted",
-      subject: r.subject!,
-      statement: r.statement!,
-      figureRef: r.figureRef,
+      subject: r.subject as Subject,
+      statement: r.statement as string,
+      ...(r.figureRef !== undefined && { figureRef: r.figureRef }),
       needsManualFix,
     });
   }

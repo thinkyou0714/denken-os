@@ -17,15 +17,18 @@ function buildFrom(luminous: number, r: number): GenerationResult | null {
   return {
     format: "numeric",
     params: {
-      luminous_intensity: { value: luminous, unit: "cd", realistic_range: [50, 5000] },
+      luminous_intensity: {
+        value: luminous,
+        unit: "cd",
+        realistic_range: [50, 5000],
+      },
       distance: { value: r, unit: "m", realistic_range: [0.5, 20] },
     },
     answerValue: e,
     answerUnit: "lx",
     answerText,
     facts: { luminous, r, e },
-    defaultStatement:
-      `光度 ${formatClean(luminous)}cd の点光源の直下 ${formatClean(r)}m における、` + `光に垂直な面の照度〔lx〕は?`,
+    defaultStatement: `光度 ${formatClean(luminous)}cd の点光源の直下 ${formatClean(r)}m における、光に垂直な面の照度〔lx〕は?`,
     defaultSolution: [
       `距離の逆二乗の法則 E=I/r²`,
       `=${formatClean(luminous)}/${formatClean(r * r)}`,

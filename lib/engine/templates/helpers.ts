@@ -18,7 +18,8 @@ import type { ParamSpec, Template } from "./types.js";
  */
 export function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
   if (arr.length === 0) throw new Error("pick: empty array");
-  return arr[Math.floor(rng() * arr.length)]!;
+  // arr.length > 0 を上で保証済みのため index は必ず範囲内。
+  return arr[Math.floor(rng() * arr.length)] as T;
 }
 
 // ---------------------------------------------------------------------------
@@ -119,7 +120,8 @@ export function defineTemplate<P extends Record<string, number>>(spec: TemplateS
       for (const key of spec.paramOrder) {
         if (rawParams[key] === undefined) return null;
       }
-      const params = Object.fromEntries(spec.paramOrder.map((k) => [k, rawParams[k]!])) as P;
+      // 直前の for-of ループで全キーの存在を確認済み。undefined でないことが保証される。
+      const params = Object.fromEntries(spec.paramOrder.map((k) => [k, rawParams[k] as number])) as P;
       return spec.buildFrom(params);
     },
   };

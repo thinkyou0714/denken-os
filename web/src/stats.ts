@@ -113,7 +113,8 @@ export interface GhostRace {
  */
 export function ghostRace(xpDays: readonly number[]): GhostRace {
   if (xpDays.length === 0) return { today: 0, avg: 0, beat: false };
-  const today = xpDays[xpDays.length - 1]!;
+  // xpDays.length === 0 を直前でチェック済みのため xpDays[length - 1] は存在する。
+  const today = xpDays[xpDays.length - 1] as number;
   const past = xpDays.slice(0, -1);
   const avg = past.length > 0 ? past.reduce((a, b) => a + b, 0) / past.length : 0;
   return { today, avg: Math.round(avg), beat: today > avg && avg >= 0 && today > 0 };

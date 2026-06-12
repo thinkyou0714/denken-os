@@ -161,7 +161,14 @@ export class LocalProgress {
     this.safeSet(CARD_KEY, JSON.stringify(cards));
 
     const logs = this.logs();
-    logs.push({ topic, correct: rating !== "again", atMs: nowMs, timeMs, problemId, rating });
+    logs.push({
+      topic,
+      correct: rating !== "again",
+      atMs: nowMs,
+      rating,
+      ...(timeMs !== undefined ? { timeMs } : {}),
+      ...(problemId !== undefined ? { problemId } : {}),
+    });
     if (logs.length > LOG_CAP) logs.splice(0, logs.length - LOG_CAP); // 古い順に間引く
     this.safeSet(LOG_KEY, JSON.stringify(logs));
     return this.scheduler.view(next);

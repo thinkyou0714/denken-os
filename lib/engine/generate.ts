@@ -128,11 +128,11 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
     const p = await generateOne(template, {
       id: makeId(idPrefix, n),
       source,
-      citation: opts.citation,
+      ...(opts.citation !== undefined && { citation: opts.citation }),
       narrator,
       rng,
       maxAttempts,
-      minConfidence: opts.minConfidence,
+      ...(opts.minConfidence !== undefined && { minConfidence: opts.minConfidence }),
     });
     if (p) {
       out.push(p);

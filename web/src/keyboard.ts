@@ -64,7 +64,8 @@ export function onKeydown(e: KeyboardEvent): void {
     const ids = TABS.map(([id]) => id);
     const cur = ids.indexOf(view);
     const next = e.key === "ArrowRight" ? (cur + 1) % ids.length : (cur - 1 + ids.length) % ids.length;
-    switchView(ids[next]!);
+    // next はモジュロ演算で [0, ids.length) の範囲内のため安全。
+    switchView(ids[next] as string);
     document.getElementById(`tab-${ids[next]}`)?.focus();
     return;
   }

@@ -43,8 +43,7 @@ export const thermalEfficiency = defineTemplate<Params>({
       answerUnit: "%",
       answerText,
       facts: { q, eta },
-      defaultStatement:
-        `ある汽力発電所の発電端熱消費率が q=${q}kJ/(kW·h) である。` + `発電端熱効率 η〔%〕を導出過程とともに求めよ。`,
+      defaultStatement: `ある汽力発電所の発電端熱消費率が q=${q}kJ/(kW·h) である。発電端熱効率 η〔%〕を導出過程とともに求めよ。`,
       defaultSolution: [`1kWh=3600kJ なので η=3600/q×100`, `η=3600/${q}×100`, `η=${answerText}%`],
       physicallyValid: true,
     };

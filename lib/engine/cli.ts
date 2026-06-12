@@ -34,23 +34,32 @@ export function parseArgs(argv: string[]): Args {
   const args: Args = { count: 5, source: "original", xpost: false, help: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    const next = () => argv[++i];
+    const next = () => {
+      const v = argv[++i];
+      return v !== undefined ? v : undefined;
+    };
     switch (a) {
-      case "--topic":
-        args.topic = next();
+      case "--topic": {
+        const v = next();
+        if (v !== undefined) args.topic = v;
         break;
+      }
       case "--count":
         args.count = Number(next());
         break;
       case "--source":
         args.source = next() as SourceType;
         break;
-      case "--citation":
-        args.citation = next();
+      case "--citation": {
+        const v = next();
+        if (v !== undefined) args.citation = v;
         break;
-      case "--out":
-        args.out = next();
+      }
+      case "--out": {
+        const v = next();
+        if (v !== undefined) args.out = v;
         break;
+      }
       case "--xpost":
         args.xpost = true;
         break;
@@ -144,11 +153,12 @@ async function main() {
 
   let problems: Awaited<ReturnType<typeof generate>>;
   try {
+    const rng = makeRng(args.seed);
     problems = await generate(template, {
       count: args.count,
       source: args.source,
-      citation: args.citation,
-      rng: makeRng(args.seed),
+      ...(args.citation !== undefined && { citation: args.citation }),
+      ...(rng !== undefined && { rng }),
     });
   } catch (e) {
     // draw/narrate/validate 段階のエラーに topic 文脈を付与（I-020）。
@@ -176,7 +186,8 @@ async function main() {
     console.error("\n--- X 投稿プレビュー（朝/夜スレッド） ---");
     for (const p of problems) {
       try {
-        const posts = buildXPosts(p, { rng: makeRng(args.seed) });
+        const xpostRng = makeRng(args.seed);
+        const posts = buildXPosts(p, { ...(xpostRng !== undefined && { rng: xpostRng }) });
         const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
         console.error(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
       } catch (e) {

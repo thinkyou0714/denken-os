@@ -16,7 +16,8 @@ const ESCAPE: Record<string, string> = {
 };
 
 export function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ESCAPE[c]!);
+  // regex が ESCAPE のキー集合 /[&<>"']/ に完全一致するため ESCAPE[c] は常に存在する。
+  return s.replace(/[&<>"']/g, (c) => ESCAPE[c] as string);
 }
 
 /**

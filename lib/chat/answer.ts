@@ -118,7 +118,8 @@ export function answerLocally(query: string, kb: KnowledgeEntry[] = KNOWLEDGE): 
   const hits: RetrievalHit[] = retrieve(query, kb);
   if (hits.length === 0) return fallbackAnswer();
 
-  const top = hits[0]!.entry;
+  // hits.length === 0 のケースは直前で return 済みのため hits[0] は存在する。
+  const top = (hits[0] as (typeof hits)[number]).entry;
   const text = formatEntry(top, { leadWithFormula: intent === "formula" });
   const others = hits.slice(1).map((h) => h.entry.term);
   const extra = others.length > 0 ? `\n\nもしかして: ${others.join(" / ")}` : "";

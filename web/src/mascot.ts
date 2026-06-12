@@ -157,7 +157,8 @@ export interface MascotView {
 
 /** 配列から日替わりで1つ選ぶ（同じ日は同じ文言＝安定、翌日は変わる＝慣れ防止）。 */
 function pick(variants: readonly string[], seed: number): string {
-  return variants[Math.abs(seed) % variants.length]!;
+  // モジュロ演算で [0, variants.length) の範囲内のため安全。
+  return variants[Math.abs(seed) % variants.length] as string;
 }
 
 /** ホーム（学習タブ）でのデンタマの一言。状況に応じて表情と台詞が変わる。 */
@@ -253,7 +254,8 @@ export const MASCOT_TRIVIA: readonly string[] = [
 
 /** まめ知識を順繰りに返す（インデックスは呼び出し側が保持。範囲外は巡回）。 */
 export function mascotTip(index: number): string {
-  return MASCOT_TRIVIA[((index % MASCOT_TRIVIA.length) + MASCOT_TRIVIA.length) % MASCOT_TRIVIA.length]!;
+  // モジュロ演算で [0, MASCOT_TRIVIA.length) の範囲内のため安全。
+  return MASCOT_TRIVIA[((index % MASCOT_TRIVIA.length) + MASCOT_TRIVIA.length) % MASCOT_TRIVIA.length] as string;
 }
 
 /** 解答直後のリアクション（正誤とコンボで変わる短い一言）。 */

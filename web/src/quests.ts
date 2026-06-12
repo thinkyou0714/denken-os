@@ -79,11 +79,14 @@ export function dailyQuests(dayIndex: number): Quest[] {
   const order = TEMPLATES.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [order[i], order[j]] = [order[j]!, order[i]!];
+    // Fisher–Yates: i, j は常に order の有効な添字。
+    [order[i], order[j]] = [order[j] as number, order[i] as number];
   }
   return order.slice(0, DAILY_QUEST_COUNT).map((idx) => {
-    const tpl = TEMPLATES[idx]!;
-    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)]!;
+    // order は TEMPLATES のインデックス列なので idx は有効範囲内。
+    const tpl = TEMPLATES[idx] as (typeof TEMPLATES)[number];
+    // rng() は [0,1) のためインデックスは targets の範囲内。
+    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)] as number;
     return { id: `${dayIndex}-${tpl.kind}`, kind: tpl.kind, target, icon: tpl.icon, label: tpl.label(target) };
   });
 }
@@ -189,11 +192,14 @@ export function weeklyQuests(weekIndex: number): WeeklyQuest[] {
   const order = WEEKLY_TEMPLATES.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [order[i], order[j]] = [order[j]!, order[i]!];
+    // Fisher–Yates: i, j は常に order の有効な添字。
+    [order[i], order[j]] = [order[j] as number, order[i] as number];
   }
   return order.slice(0, WEEKLY_QUEST_COUNT).map((idx) => {
-    const tpl = WEEKLY_TEMPLATES[idx]!;
-    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)]!;
+    // order は WEEKLY_TEMPLATES のインデックス列なので idx は有効範囲内。
+    const tpl = WEEKLY_TEMPLATES[idx] as (typeof WEEKLY_TEMPLATES)[number];
+    // rng() は [0,1) のためインデックスは targets の範囲内。
+    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)] as number;
     return { id: `${weekIndex}-${tpl.kind}`, kind: tpl.kind, target, icon: tpl.icon, label: tpl.label(target) };
   });
 }

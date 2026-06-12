@@ -99,7 +99,7 @@ export async function* streamClaude(opts: StreamClaudeOptions): AsyncGenerator<s
   const fetchFn = opts.fetchFn ?? fetch;
   const res = await fetchFn("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    signal: opts.signal,
+    ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     headers: {
       "content-type": "application/json",
       "x-api-key": opts.apiKey,

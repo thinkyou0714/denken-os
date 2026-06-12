@@ -44,7 +44,7 @@ export async function scheduleProblem(p: Problem, opts: PublishOptions = {}): Pr
   const rng = opts.rng ?? Math.random;
   const day = opts.day ?? new Date();
 
-  const posts = buildXPosts(p, { rng, correctRate: opts.correctRate });
+  const posts = buildXPosts(p, { rng, ...(opts.correctRate !== undefined && { correctRate: opts.correctRate }) });
   const times = scheduleFor(day, rng);
   const poll = morningPoll(p);
 
@@ -52,10 +52,11 @@ export async function scheduleProblem(p: Problem, opts: PublishOptions = {}): Pr
   for (let i = 0; i < posts.morning.length; i++) {
     try {
       const r = await client.schedule({
-        text: posts.morning[i]!,
+        // for ループで i < posts.morning.length を確認済みのため安全。
+        text: posts.morning[i] as string,
         scheduledAt: times.morning,
         // poll は先頭ポストにのみ併設。
-        poll: i === 0 && poll ? poll : undefined,
+        ...(i === 0 && poll ? { poll } : {}),
       });
       morning.push(r);
     } catch (e) {
@@ -71,10 +72,11 @@ export async function scheduleProblem(p: Problem, opts: PublishOptions = {}): Pr
   for (let i = 0; i < posts.evening.length; i++) {
     try {
       const r = await client.schedule({
-        text: posts.evening[i]!,
+        // for ループで i < posts.evening.length を確認済みのため安全。
+        text: posts.evening[i] as string,
         scheduledAt: times.evening,
         // 夜の先頭は朝の先頭を引用してツリー化（遡れる＋滞在時間）。
-        quoteOfId: i === 0 ? morningHeadId : undefined,
+        ...(i === 0 && morningHeadId !== undefined ? { quoteOfId: morningHeadId } : {}),
       });
       evening.push(r);
     } catch (e) {

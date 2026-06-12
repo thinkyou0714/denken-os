@@ -84,7 +84,7 @@ export function startExam(count: number, preset: ExamPreset): void {
       : preset === "secondary"
         ? (["電力管理", "機械制御"] as Subject[])
         : undefined;
-  const set = buildMockExam(problems, { count, subjects });
+  const set = buildMockExam(problems, { count, ...(subjects !== undefined ? { subjects } : {}) });
   if (set.length === 0) {
     switchView("exam");
     return;
@@ -124,7 +124,8 @@ export function renderExamRunning(root: HTMLElement): void {
     renderExamResult(root);
     return;
   }
-  const p = exam.set[exam.idx]!;
+  // exam.idx < exam.set.length を直前でチェック済みのため安全。
+  const p = exam.set[exam.idx] as (typeof exam.set)[number];
   const header = h(
     "div",
     { class: "toolbar" },
@@ -160,9 +161,10 @@ export function renderExamRunning(root: HTMLElement): void {
 
   const answers = host.querySelector("#eanswers") as HTMLElement;
   const advance = (correct: boolean) => {
-    exam!.results.push(correct);
+    if (!exam) return;
+    exam.results.push(correct);
     progress.record(p.topic, correct ? "good" : "again", Date.now(), undefined, p.id);
-    exam!.idx += 1;
+    exam.idx += 1;
     switchView("exam");
   };
   if (p.choices && p.choices.length > 0) {
@@ -246,9 +248,11 @@ function examScoreSection(root: HTMLElement, score: ReturnType<typeof scoreExam>
     h(
       "p",
       { class: "muted" },
+      // biome-ignore lint/style/noNonNullAssertion: renderExamResult の `if (!exam) return` 後に呼ばれるため exam は非 null。
       `${score.correct} / ${score.total} 問正解 ・ 所要 ${mins} 分（制限 ${Math.round(exam!.limitMs / 60_000)} 分）`,
     ),
   );
+  // biome-ignore lint/style/noNonNullAssertion: 同上 — renderExamResult でガード済み。
   if (exam!.timedOut) {
     root.append(
       h(
@@ -263,6 +267,7 @@ function examScoreSection(root: HTMLElement, score: ReturnType<typeof scoreExam>
 
 function examSubjectSection(root: HTMLElement, subjectScores: ReturnType<typeof scoreExamBySubject>): void {
   // 一次プリセットは「全科目60%以上」で本番合格判定。
+  // biome-ignore lint/style/noNonNullAssertion: renderExamResult の `if (!exam) return` 後に呼ばれるため exam は非 null。
   if (exam!.preset === "primary") {
     const primaryPass = isPrimaryPass(subjectScores);
     root.append(
@@ -291,6 +296,7 @@ function examSubjectSection(root: HTMLElement, subjectScores: ReturnType<typeof 
 
 function examReviewSection(root: HTMLElement): void {
   // 見直し: 模試をスコアで終わらせず学習に繋げる（テスト効果の回収）。
+  // biome-ignore lint/style/noNonNullAssertion: renderExamResult の `if (!exam) return` 後に呼ばれるため exam は非 null。
   const wrong = exam!.set.filter((_, i) => !exam!.results[i]);
   root.append(h("h2", {}, "見直し（問題別の結果）"));
   if (wrong.length > 0) {
@@ -303,7 +309,9 @@ function examReviewSection(root: HTMLElement): void {
     );
   }
   const reviewList = h("div", { class: "exam-review" });
+  // biome-ignore lint/style/noNonNullAssertion: 同上 — renderExamResult でガード済み。
   exam!.set.forEach((p, i) => {
+    // biome-ignore lint/style/noNonNullAssertion: 同上 — renderExamResult でガード済み。
     const ok = exam!.results[i] === true;
     const details = h(
       "details",
@@ -361,7 +369,8 @@ export function renderExamResult(root: HTMLElement): void {
       playTone(reward.fanfare ?? "clear", getSoundLevel(storage));
     }
     if (reward.celebrations.length > 0) {
-      showToast(reward.celebrations[0]!, "OK", () => {});
+      // celebrations.length > 0 を直前でチェック済みのため安全。
+      showToast(reward.celebrations[0] as string, "OK", () => {});
     }
     renderHeader();
   }

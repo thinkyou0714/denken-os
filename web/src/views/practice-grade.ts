@@ -185,7 +185,8 @@ export function finalize(
   }
 
   if (celebrations.length > 0) {
-    showToast(celebrations[0]!, "OK", () => {});
+    // celebrations.length > 0 を直前でチェック済みのため安全。
+    showToast(celebrations[0] as string, "OK", () => {});
     confettiBurst(bigConfetti ? 64 : 28);
     if (toneKind) playTone(toneKind, getSoundLevel(storage));
   } else if (installPrompt && freezeInfo().streak >= 3 && storage.getItem("denken:a2hsNudged") !== "1") {

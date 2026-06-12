@@ -176,9 +176,9 @@ function rowToAnswerLog(r: Record<string, unknown>, userId: string): AnswerLog {
   return {
     topic: d.topic,
     correct: d.correct,
-    timeMs: d.time_ms ?? undefined,
     atMs: new Date(d.answered_at).getTime(),
-    problemId: d.problem_id ?? undefined,
+    ...(d.time_ms !== null && d.time_ms !== undefined ? { timeMs: d.time_ms } : {}),
+    ...(d.problem_id !== null && d.problem_id !== undefined ? { problemId: d.problem_id } : {}),
   };
 }
 

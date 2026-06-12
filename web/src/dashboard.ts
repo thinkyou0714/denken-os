@@ -63,7 +63,10 @@ export function bySubject(logs: WebAnswerLog[], problems: Problem[]): SubjectRow
     cur.attempts += 1;
     if (l.correct) cur.correct += 1;
   }
-  return order.map((subject) => ({ subject, ...tally(acc.get(subject)!.attempts, acc.get(subject)!.correct) }));
+  return order.map((subject) => {
+    const t = acc.get(subject) ?? { attempts: 0, correct: 0 }; // order 全件を上で seed 済み
+    return { subject, ...tally(t.attempts, t.correct) };
+  });
 }
 
 /** 論点別集計（正答率の低い順 = 弱点順）。 */

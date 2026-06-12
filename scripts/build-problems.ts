@@ -45,9 +45,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 /** 係数の値だけを並べた署名（キー順固定）。 */
 function paramsSignature(p: Problem): string {
   const params = p.params ?? {};
+  // Object.keys(params) で取得したキーは params 内に必ず存在する。
   return Object.keys(params)
     .sort()
-    .map((k) => `${k}=${params[k]!.value}`)
+    .map((k) => `${k}=${(params[k] as { value: number }).value}`)
     .join("|");
 }
 

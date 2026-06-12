@@ -19,14 +19,17 @@ function buildFrom(pz: number): GenerationResult | null {
   return {
     format: "numeric",
     params: {
-      percent_synchronous_impedance: { value: pz, unit: "%", realistic_range: [50, 300] },
+      percent_synchronous_impedance: {
+        value: pz,
+        unit: "%",
+        realistic_range: [50, 300],
+      },
     },
     answerValue: Ks,
     answerUnit: "",
     answerText,
     facts: { pz, Ks },
-    defaultStatement:
-      `ある三相同期発電機のパーセント同期インピーダンスが %Zs=${pz}% である。` + `この発電機の短絡比 Ks は?`,
+    defaultStatement: `ある三相同期発電機のパーセント同期インピーダンスが %Zs=${pz}% である。この発電機の短絡比 Ks は?`,
     defaultSolution: [`短絡比 Ks=1/(%Zs/100)=100/%Zs`, `Ks=100/${pz}`, `Ks=${answerText}`],
     physicallyValid: true,
   };

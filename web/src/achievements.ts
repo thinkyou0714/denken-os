@@ -111,10 +111,13 @@ function buildStats(input: AchievementInput): Stats {
   let hasComeback = false;
   let hasComebackRun7 = false;
   for (let i = 1; i < dayList.length; i++) {
-    if (dayList[i]! - dayList[i - 1]! >= 4) {
+    const cur = dayList[i];
+    const prev = dayList[i - 1];
+    if (cur === undefined || prev === undefined) continue; // ループ境界上、到達しない
+    if (cur - prev >= 4) {
       hasComeback = true;
       let run = 1;
-      while (daySet.has(dayList[i]! + run)) run += 1;
+      while (daySet.has(cur + run)) run += 1;
       if (run >= 7) hasComebackRun7 = true;
     }
   }

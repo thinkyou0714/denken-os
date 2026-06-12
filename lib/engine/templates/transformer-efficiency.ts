@@ -37,8 +37,7 @@ function buildFrom(pout: number, pi: number, pc: number): GenerationResult | nul
     answerUnit: "%",
     answerText,
     facts: { pout, pi, pc, eta },
-    defaultStatement:
-      `ある変圧器が出力 P_out=${pout}kW で運転している。鉄損 P_i=${pi}kW、銅損 P_c=${pc}kW のとき、` + `効率 η〔%〕は?`,
+    defaultStatement: `ある変圧器が出力 P_out=${pout}kW で運転している。鉄損 P_i=${pi}kW、銅損 P_c=${pc}kW のとき、効率 η〔%〕は?`,
     defaultSolution: [`η=P_out/(P_out+P_i+P_c)×100`, `η=${pout}/(${pout}+${pi}+${pc})×100`, `η=${answerText}%`],
     physicallyValid: true,
   };

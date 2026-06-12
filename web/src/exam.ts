@@ -44,7 +44,10 @@ function shuffle<T>(arr: T[], rng: () => number): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [a[i], a[j]] = [a[j]!, a[i]!];
+    // 0 <= j <= i < length なので両添字とも常に在中（cast は型上の明示のみ）。
+    const tmp = a[i] as T;
+    a[i] = a[j] as T;
+    a[j] = tmp;
   }
   return a;
 }
@@ -54,7 +57,8 @@ function shuffle<T>(arr: T[], rng: () => number): T[] {
  */
 export function buildMockExam(problems: Problem[], opts: ExamOptions): Problem[] {
   const rng = opts.rng ?? Math.random;
-  const pool = opts.subjects?.length ? problems.filter((p) => opts.subjects!.includes(p.subject)) : [...problems];
+  const subjects = opts.subjects;
+  const pool = subjects?.length ? problems.filter((p) => subjects.includes(p.subject)) : [...problems];
   if (pool.length === 0) return [];
 
   // 科目ごとに分け、ラウンドロビンで均等に取り出す（偏り防止）。

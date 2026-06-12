@@ -35,8 +35,13 @@ describe("xpForLog（評価別の基礎XP）", () => {
   });
 
   it("旧ログ（rating なし）は correct から good/again に写像する", () => {
-    expect(xpForLog(log({ rating: undefined, correct: true }))).toBe(XP_BY_RATING.good);
-    expect(xpForLog(log({ rating: undefined, correct: false }))).toBe(XP_BY_RATING.again);
+    const withoutRating = (correct: boolean): WebAnswerLog => {
+      const l = log({ correct });
+      delete (l as Partial<WebAnswerLog>).rating;
+      return l;
+    };
+    expect(xpForLog(withoutRating(true))).toBe(XP_BY_RATING.good);
+    expect(xpForLog(withoutRating(false))).toBe(XP_BY_RATING.again);
   });
 });
 
