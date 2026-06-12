@@ -3,6 +3,7 @@
  * topic 単位の「正答率」＋「次回復習が来ているか(due)」の二層で
  * 今日やるべき弱点 topic を優先度順に返す。スケジューラ実装に依存しない。
  */
+import { DAY_MS } from "../shared/time.js";
 
 export interface TopicProgress {
   topic: string;
@@ -39,7 +40,7 @@ export function aggregateByTopic(logs: AnswerLog[]): Map<string, TopicProgress> 
 /** 弱点優先度スコア（高いほど優先）。正答率が低く、due 超過が大きいほど高い。 */
 export function weaknessScore(p: TopicProgress, nowMs: number): number {
   const rate = p.attempts > 0 ? p.correct / p.attempts : 0;
-  const overdueDays = Math.max(0, (nowMs - p.dueMs) / 86_400_000);
+  const overdueDays = Math.max(0, (nowMs - p.dueMs) / DAY_MS);
   // 正答率が低いほど (1-rate) が大きい。due 超過も加点。試行回数で軽く重み付け。
   return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(p.attempts, 5) * 0.1;
 }

@@ -5,14 +5,11 @@
  * 正解はコードで算出（出典: 電気設備技術基準・電験法規の標準式）。
  */
 import { isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // 150/Ig が綺麗な値になる 1線地絡電流〔A〕。
 const IG_SET = [2, 3, 5, 6, 10, 15, 25, 30];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(ig: number): GenerationResult | null {
   if (ig <= 0) return null;

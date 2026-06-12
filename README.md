@@ -49,20 +49,62 @@ npm run export:vault -- --out out/vault                   # 問題を Obsidian M
 npm run build:problems                                    # 全88テンプレから web/problems.json を再生成（788問・出荷済みIDは温存＋新規は内容由来の安定ID）
 npm run build:web                                         # オフライン学習アプリをバンドル → web/dist/
 npm run lint                                              # Biome（lint + format チェック）
-npm run typecheck && npm run typecheck:web               # 型チェック
-npm run verify                                            # CI相当の一括検証
+npm run typecheck && npm run typecheck:web               # 型チェック（lib/scripts/tests + web）
+npm run verify                                            # CI と同一のプリプッシュ確認（lint+型+データ検証+テスト+ビルドを一括実行）
 npm run audit:status                                      # 問題数・形式・監修状況の棚卸し
 npm run release:check                                     # 公開前の厳格チェック（audit strict含む）
-npm test                                                  # ユニットテスト（604件）
+npm test                                                  # ユニットテスト（851件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。
 
-`ANTHROPIC_API_KEY` があれば解説文を Claude で言い回し生成、無ければ決定論スタブで動作（数値はどちらもコード算出で同一）。
+`build:problems` には `--per-topic <N>`（既定 10）フラグで1トピックあたりの生成数を変更できる。
+`gen` / `build:problems` / `validate:data` / `export:vault` / `audit:status` はいずれも `--help` で使用方法を表示する。
+
+**環境変数**（`.env.example` 参照）:
+- `ANTHROPIC_API_KEY` — 解説文の言い回し生成（未設定時は決定論スタブで動作。数値はどちらもコード算出で同一）。
+- `DENKEN_NARRATOR_MODE` — `auto`（既定）| `stub` | `api`。`auto` は API キーがあれば `api`、なければ `stub`。
+- `DENKEN_NARRATE_MODEL` — ナレーターモデル名（既定 `claude-haiku-4-5`）。
+
+**Node バージョン要件**: `.nvmrc` = 22、`package.json` の `engines` = `>=20`、`.npmrc` で `engine-strict=true`。
+Node 20 未満では `npm install` / `npm ci` が即失敗する（不整合の早期検出）。
 
 ### オフライン学習アプリ（`web/`）
 
-`npm run build:web` 後、`web/` を静的配信（例 `npx serve web`）すると、ブラウザで学習できます。
+`npm run build:web` 後（`web/src/` を編集した場合は毎回実行）、
+`web/` を静的配信（例 `npx serve web`）すると、ブラウザで学習できます。
+
+**`web/src/` の構成（G6 リファクタ後）:**
+
+```
+web/src/
+  app.ts            — エントリポイント（90行。初期化・SW登録のみ）
+  app-init.ts       — problems.json 読込
+  keyboard.ts       — グローバルキーボードハンドラ
+  ui/
+    dom.ts          — DOM ヘルパー・h() タグビルダー
+    toast.ts        — トースト通知
+    widgets.ts      — 共通ウィジェット
+  views/
+    router.ts       — タブ型ルーティング・ヘッダ・ナビ
+    practice.ts     — 学習タブ
+    practice-grade.ts
+    practice-rewards.ts
+    review.ts       — 復習タブ
+    exam.ts         — 模試タブ
+    chat.ts         — 質問タブ
+    dashboard.ts    — 進捗タブ
+    formulas.ts     — 公式タブ
+    settings.ts     — 設定タブ
+  state/
+    app.ts          — アプリ全体の状態（テーマ・インストールプロンプト等）
+    exam.ts         — 模試セッション状態
+    practice.ts     — 学習セッション状態
+  dates.ts          — JST 日付ユーティリティ（shared）
+  sanitize.ts       — SVG サニタイザ
+  （その他ロジックモジュール: xp/quests/freeze/achievements/fsrs/grade/select 等）
+```
+
 タブ型の学習OS（**学習 / 復習 / 模試 / 質問 / 進捗 / 公式 / 設定**）:
 
 - **学習**: 弱点優先 or 科目ドリル。**図解（回路図・ベクトル図・ブロック図・特性曲線のインラインSVG）**＋

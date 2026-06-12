@@ -8,9 +8,12 @@
  *  - statement 重複は除去し、topic ごとに最大 PER_TOPIC 件を採用。
  *  - 生成物は status="draft"（未監修）。アプリ側はデモ注記を表示する。
  *
- * 使い方: npm run build:problems  （既定で web/problems.json を上書き）
+ * 使い方:
+ *   npm run build:problems              （既定で web/problems.json を上書き）
+ *   npm run build:problems -- --per-topic 5
+ *   npm run build:problems -- --help
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate } from "../lib/engine/generate.js";
@@ -18,37 +21,43 @@ import { StubNarrator } from "../lib/engine/narrate.js";
 import type { Problem } from "../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import { validateProblem } from "../lib/engine/validate.js";
+// G3 が lib/shared/rng.ts を新設予定。同一 xorshift 出力を保証。
+import { hashSeed, seededRng } from "../lib/shared/rng.js";
+import { atomicWriteFileSync, printHelp, validateOrExit } from "./shared.js";
 
-const PER_TOPIC = 10;
+const HELP = `\
+build-problems — web/problems.json を全テンプレートから決定論的に生成する
+
+使い方:
+  npm run build:problems [-- オプション]
+
+オプション:
+  --per-topic <n>  topic ごとの採用問題数（既定: 10）
+  --help, -h       このヘルプを表示して終了
+
+例:
+  npm run build:problems
+  npm run build:problems -- --per-topic 5
+`;
+
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-/** 決定論 RNG（テストと同じ実装）。topic ごとに別 seed を与える。 */
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+/** 係数の値だけを並べた署名（キー順固定）。 */
+function paramsSignature(p: Problem): string {
+  const params = p.params ?? {};
+  // Object.keys(params) で取得したキーは params 内に必ず存在する。
+  return Object.keys(params)
+    .sort()
+    .map((k) => `${k}=${(params[k] as { value: number }).value}`)
+    .join("|");
 }
 
-function hashSeed(text: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-}
-
-async function buildForTopic(topic: string): Promise<Problem[]> {
+async function buildForTopic(topic: string, perTopic: number): Promise<Problem[]> {
   const template = getTemplate(topic);
   if (!template) return [];
   // 多めに生成 → statement 重複を除去 → 上限まで採用（綺麗な draw の枯渇に強い）。
   const candidates = await generate(template, {
-    count: PER_TOPIC * 6,
+    count: perTopic * 6,
     narrator: new StubNarrator(),
     rng: seededRng(hashSeed(topic)),
     idPrefix: "TMP",
@@ -64,25 +73,11 @@ async function buildForTopic(topic: string): Promise<Problem[]> {
     seen.add(p.statement);
     seenParams.add(sig);
     unique.push(p);
-    if (unique.length >= PER_TOPIC) break;
+    if (unique.length >= perTopic) break;
   }
   return unique;
 }
 
-/** 係数の値だけを並べた署名（キー順固定）。 */
-function paramsSignature(p: Problem): string {
-  const params = p.params ?? {};
-  return Object.keys(params)
-    .sort()
-    .map((k) => `${k}=${params[k]!.value}`)
-    .join("|");
-}
-
-/**
- * 内容由来の安定ID。topic＋係数署名の FNV-1a ハッシュから生成する。
- * 通し番号と違い、テンプレ追加・並び替えで既存問題のIDが変わらないため、
- * 学習者の解答ログ（problemId）や間違いノートが将来の再生成後も正しく紐づく。
- */
 /** 旧・連番ID時代（mainに出荷済みの405問）の署名→ID対応。
  *  既存ユーザーの解答ログ・間違いノート（problemId参照）を壊さないため、
  *  内容が同一の問題には出荷済みのIDをそのまま使い続ける（Codexレビュー対応）。 */
@@ -108,10 +103,30 @@ function stableId(p: Problem, taken: Set<string>): string {
   return id;
 }
 
+/** CLI 引数をパースする純関数（テスト可能）。 */
+export function parseCliOptions(argv: string[]): { perTopic: number } {
+  if (argv.includes("--help") || argv.includes("-h")) {
+    printHelp(HELP);
+  }
+  let perTopic = 10;
+  const idx = argv.indexOf("--per-topic");
+  if (idx >= 0) {
+    const val = argv[idx + 1];
+    if (!val || !/^\d+$/.test(val) || Number(val) < 1) {
+      process.stderr.write(`エラー: --per-topic には正の整数を指定してください\n`);
+      process.exit(1);
+    }
+    perTopic = Number(val);
+  }
+  return { perTopic };
+}
+
 async function main(): Promise<void> {
+  const { perTopic } = parseCliOptions(process.argv.slice(2));
+
   const all: Problem[] = [];
   for (const topic of listTopics()) {
-    const items = await buildForTopic(topic);
+    const items = await buildForTopic(topic, perTopic);
     all.push(...items);
   }
 
@@ -121,15 +136,17 @@ async function main(): Promise<void> {
   const problems = all.map((p) => ({ ...p, id: stableId(p, taken) }));
 
   // 念のため全件 validate（壊れた問題を web に出さない）。
+  const errors: string[] = [];
   for (const p of problems) {
     const r = validateProblem(p);
     if (!r.ok) {
-      throw new Error(`生成問題が検証に失敗: ${p.id} (${p.topic}) — ${r.issues.map((i) => i.message).join("; ")}`);
+      errors.push(`${p.id} (${p.topic}) — ${r.issues.map((i) => i.message).join("; ")}`);
     }
   }
+  validateOrExit(errors, "生成問題の検証");
 
   const out = join(ROOT, "web", "problems.json");
-  writeFileSync(out, `${JSON.stringify(problems, null, 2)}\n`);
+  atomicWriteFileSync(out, `${JSON.stringify(problems, null, 2)}\n`);
 
   const byFormat = problems.reduce<Record<string, number>>((acc, p) => {
     const f = p.format ?? "multiple_choice";

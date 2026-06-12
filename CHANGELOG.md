@@ -5,6 +5,58 @@
 
 ## [Unreleased]
 
+### Changed — コードベース大規模リファクタ（Wave 1〜3: G1〜G9）
+
+本リファクタは**外部挙動を変えない**（生成問題データ・保存データ形式・UI文言・採点結果は不変）。
+
+**変更なし**: `data/problems/*.json` / `web/problems.json` のバイト列、localStorage キー、
+Supabase テーブル構造、既存ユーザーの間違いノート・解答ログ・FSRS 状態。
+
+#### Wave 1: 基盤リファクタ（G1〜G5 並列）
+
+- **G1 テンプレヘルパー層新設** (`lib/engine/templates/helpers.ts`):
+  82テンプレートにコピペされていた `pick()` を一元化（空配列ガード付き）。
+  `buildChoices()`・`percentage()`・`ensureRange()`・`defineTemplate()` ファクトリを追加。
+  `ε=1e-6` を `ANSWER_EPSILON` として `clean.ts` から一元提供。
+- **G2 エンジンコア強化** (`lib/engine/`):
+  `DENKEN_NARRATOR_MODE=auto|stub|api` で明示制御可能に。
+  `DENKEN_NARRATE_MODEL` 定数抽出と `.env.example` への記載。
+  `lib/engine/index.ts` barrel 新設（単一入口）。
+- **G3 lib 堅牢化** (`lib/shared/`, `lib/store/`, `lib/`):
+  `lib/shared/time.ts` に `DAY_MS`/`JST_OFFSET_MS` を一元化。
+  `lib/shared/rng.ts` に `seededRng`/`hashSeed` を一元化。
+  Supabase 行→ドメイン変換を zod で検証（無検証キャスト8箇所を是正）。
+- **G4 web モジュール** (`web/src/`):
+  `dates.ts` 新設（JST日付ユーティリティ）。`sanitize.ts` 新設（SVGサニタイザ）。
+  SW: `addAll` 失敗時の `skipWaiting` 競合を修正・未キャッシュオフライン時のフォールバック追加。
+- **G5 スクリプト・CI・設定**:
+  `scripts/shared.ts` 新設（原子的書き込み `atomicWriteFileSync`・`printHelp`・`validateOrExit`）。
+  全スクリプトに `--help` 対応。`build:problems` に `--per-topic` フラグ。
+  `validate.yml`: push は main のみ・アーティファクト保存（coverage/dist）・`GITHUB_STEP_SUMMARY` 出力。
+  `release.yml` 新設（タグ push で `release:check` → GitHub Release 草稿）。
+  renovate に `helpers:pinGitHubActionDigests`。`.npmrc` に `engine-strict=true`。
+  `supabase/migrations/0003_indexes.sql` 追加。
+
+#### Wave 2: 構造リファクタ（G6〜G7 並列）
+
+- **G6 app.ts モノリス分割** (`web/src/`):
+  2,570行のモノリスを `app.ts`（90行エントリポイント）＋19モジュールに分割。
+  `ui/`（dom/toast/widgets）・`views/`（router + 7画面）・`state/`（app/exam/practice）を新設。
+  挙動・文言・DOM構造・保存データは不変。
+- **G7 テスト基盤強化** (`tests/`):
+  `tests/helpers/storage.ts`・`rng.ts`・`fixtures.ts` に共有ヘルパーを集約。
+  `schema-drift.test.ts`（I-069）・`generate-from-roundtrip.test.ts`（I-067）を新設。
+  テスト総数 851件（Wave 1 開始時から増加）。
+  カバレッジ閾値: stmts85 / branch76 / funcs92 / lines89。
+
+#### Wave 3: 仕上げ（G8〜G9 並列）
+
+- **G8 ドキュメント整合** (`README.md`, `CONTRIBUTING.md`, `docs/`): 本エントリ参照。
+  `docs/adr/0001-dual-schema-validation.md` 新設（二重スキーマ設計判断の記録）。
+- **G9 lint/型設定厳格化** (`tsconfig*.json`, `biome.json`): `noExplicitAny`/`noNonNullAssertion` 解除・全違反修正。
+
+---
+
 ### Added
 - **問題データ拡充（深掘り100）**: `docs/strategy/ideas/14-problem-data-100.md`。
   - **テンプレート 53→65種（+12）**: 法規4種（B種接地抵抗=解釈17条・低圧絶縁抵抗=省令58条・

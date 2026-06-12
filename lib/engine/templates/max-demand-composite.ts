@@ -4,15 +4,12 @@
  *   需要率・不等率・負荷率の複合運用（変圧器容量選定の実務計算）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const CAPA_SET: ReadonlyArray<number> = [200, 300, 400, 500, 600, 800];
 const DF_SET: ReadonlyArray<number> = [0.4, 0.5, 0.6, 0.75, 0.8];
 const DIV_SET: ReadonlyArray<number> = [1.2, 1.25, 1.5, 2];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(capA: number, dfA: number, capB: number, dfB: number, div: number): GenerationResult | null {
   if (capA <= 0 || capB <= 0 || dfA <= 0 || dfA > 1 || dfB <= 0 || dfB > 1 || div < 1) return null;

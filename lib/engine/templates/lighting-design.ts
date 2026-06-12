@@ -4,6 +4,7 @@
  *     E=所要照度〔lx〕, A=面積〔m²〕, F=1灯の光束〔lm〕, U=照明率, M=保守率
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const E_SET: ReadonlyArray<number> = [100, 200, 300, 500, 750, 1000];
@@ -11,10 +12,6 @@ const A_SET: ReadonlyArray<number> = [50, 100, 200];
 const F_SET: ReadonlyArray<number> = [2000, 3000, 5000, 10000];
 const U_SET: ReadonlyArray<number> = [0.4, 0.5, 0.6];
 const M_SET: ReadonlyArray<number> = [0.7, 0.8];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(E: number, A: number, F: number, U: number, M: number): GenerationResult | null {
   if (E <= 0 || A <= 0 || F <= 0 || U <= 0 || U > 1 || M <= 0 || M > 1) return null;

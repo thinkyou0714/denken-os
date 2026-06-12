@@ -22,6 +22,7 @@ export function loadSeenBadges(storage: StorageLike): Set<string> {
     const arr = JSON.parse(raw) as unknown;
     return new Set(Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : []);
   } catch {
+    console.warn(`[achievements] JSON.parse 失敗: key=${BADGES_KEY}`);
     return new Set();
   }
 }
@@ -110,10 +111,13 @@ function buildStats(input: AchievementInput): Stats {
   let hasComeback = false;
   let hasComebackRun7 = false;
   for (let i = 1; i < dayList.length; i++) {
-    if (dayList[i]! - dayList[i - 1]! >= 4) {
+    const cur = dayList[i];
+    const prev = dayList[i - 1];
+    if (cur === undefined || prev === undefined) continue; // ループ境界上、到達しない
+    if (cur - prev >= 4) {
       hasComeback = true;
       let run = 1;
-      while (daySet.has(dayList[i]! + run)) run += 1;
+      while (daySet.has(cur + run)) run += 1;
       if (run >= 7) hasComebackRun7 = true;
     }
   }

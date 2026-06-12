@@ -3,15 +3,12 @@
  *   同期速度 Ns = 120·f / p 〔min⁻¹〕,  回転速度 N = Ns·(1 − s/100)
  * 正解はコードで算出。誤答は典型ミス（滑り忘れ・符号ミス・滑り二重適用）。
  */
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const FREQ = [50, 60];
 const POLES = [2, 4, 6, 8, 10, 12];
 const SLIP = [2, 3, 4, 5];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(f: number, p: number, s: number): GenerationResult | null {
   if (f <= 0 || p <= 0 || s <= 0) return null;

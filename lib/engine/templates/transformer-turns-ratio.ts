@@ -5,6 +5,7 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { transformerFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // [一次電圧 V1, 二次電圧 V2]（a=V1/V2 が綺麗）。
@@ -17,10 +18,6 @@ const VV_SET: ReadonlyArray<readonly [number, number]> = [
   [440, 110],
 ];
 const I1_SET: ReadonlyArray<number> = [2, 3, 5, 8, 10];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(V1: number, V2: number, I1: number): GenerationResult | null {
   if (V1 <= 0 || V2 <= 0 || I1 <= 0) return null;

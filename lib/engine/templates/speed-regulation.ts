@@ -3,14 +3,11 @@
  *   速度調定率 δ = (無負荷時回転速度 N0 − 定格回転速度 Nn) / Nn × 100〔%〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const NN_SET: ReadonlyArray<number> = [300, 360, 400, 500, 600, 750, 1000, 1500];
 const DELTA_SET: ReadonlyArray<number> = [2, 2.5, 3, 4, 5];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(n0: number, nn: number): GenerationResult | null {
   if (nn <= 0 || n0 <= nn) return null;

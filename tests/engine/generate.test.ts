@@ -3,17 +3,7 @@ import { generate, generateOne } from "../../lib/engine/generate.js";
 import { CorruptingNarrator, StubNarrator } from "../../lib/engine/narrate.js";
 import { threePhasePower } from "../../lib/engine/templates/index.js";
 import { answerInChoices, answerIsClean, validateProblem } from "../../lib/engine/validate.js";
-
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+import { seededRng } from "../helpers/rng.js";
 
 describe("generate パイプライン", () => {
   it("100問生成 → 全件 validate 通過 / answer∈choices / clean / physically_valid", async () => {

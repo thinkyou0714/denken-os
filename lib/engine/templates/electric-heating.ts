@@ -4,6 +4,7 @@
  *   投入熱量 = P〔kW〕× t〔s〕× η  ⇒  t = c·m·Δθ/(P·η)〔s〕 → 分に換算
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const C_WATER = 4.2; // kJ/(kg·K)
@@ -11,10 +12,6 @@ const M_SET: ReadonlyArray<number> = [20, 50, 100, 200];
 const DT_SET: ReadonlyArray<number> = [10, 20, 30, 40, 50, 60];
 const P_SET: ReadonlyArray<number> = [2, 3.5, 4.2, 7, 10.5, 14];
 const ETA_SET: ReadonlyArray<number> = [0.7, 0.75, 0.8, 0.84, 0.9];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(mass: number, dTheta: number, power: number, eta: number): GenerationResult | null {
   if (mass <= 0 || dTheta <= 0 || power <= 0 || eta <= 0 || eta > 1) return null;

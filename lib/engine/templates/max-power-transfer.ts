@@ -9,14 +9,11 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { maxPowerFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const E_SET: ReadonlyArray<number> = [20, 40, 60, 100, 120, 200];
 const R_SET: ReadonlyArray<number> = [2, 4, 5, 8, 10];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(E: number, R: number): GenerationResult | null {
   if (E <= 0 || R <= 0) return null;

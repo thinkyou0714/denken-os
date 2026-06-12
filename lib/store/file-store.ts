@@ -13,7 +13,12 @@ import type { AnswerLogStore, ProblemStore, ReviewStateStore } from "./index.js"
 function readJson<T>(file: string, fallback: T): T {
   try {
     return JSON.parse(readFileSync(file, "utf8")) as T;
-  } catch {
+  } catch (err) {
+    // SyntaxError = JSON 破損 → 診断可能なように warn を出してから fallback（I-025）。
+    // ENOENT（ファイル未作成）等は無音で fallback（従来どおり）。
+    if (err instanceof SyntaxError) {
+      console.warn(`file-store: JSON 破損を検出、fallback を返します (${file}):`, err.message);
+    }
     return fallback;
   }
 }

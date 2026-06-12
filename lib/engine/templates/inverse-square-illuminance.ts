@@ -3,14 +3,11 @@
  *   E = I / r²〔lx〕（I: 光度cd, r: 距離m。光に垂直な面の直下照度）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const I_SET: ReadonlyArray<number> = [100, 160, 200, 400, 500, 800, 1000, 2000];
 const R_SET: ReadonlyArray<number> = [1, 2, 2.5, 4, 5, 10];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(luminous: number, r: number): GenerationResult | null {
   if (luminous <= 0 || r <= 0) return null;
@@ -20,15 +17,18 @@ function buildFrom(luminous: number, r: number): GenerationResult | null {
   return {
     format: "numeric",
     params: {
-      luminous_intensity: { value: luminous, unit: "cd", realistic_range: [50, 5000] },
+      luminous_intensity: {
+        value: luminous,
+        unit: "cd",
+        realistic_range: [50, 5000],
+      },
       distance: { value: r, unit: "m", realistic_range: [0.5, 20] },
     },
     answerValue: e,
     answerUnit: "lx",
     answerText,
     facts: { luminous, r, e },
-    defaultStatement:
-      `光度 ${formatClean(luminous)}cd の点光源の直下 ${formatClean(r)}m における、` + `光に垂直な面の照度〔lx〕は?`,
+    defaultStatement: `光度 ${formatClean(luminous)}cd の点光源の直下 ${formatClean(r)}m における、光に垂直な面の照度〔lx〕は?`,
     defaultSolution: [
       `距離の逆二乗の法則 E=I/r²`,
       `=${formatClean(luminous)}/${formatClean(r * r)}`,

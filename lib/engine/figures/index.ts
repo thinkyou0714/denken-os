@@ -5,6 +5,18 @@
  */
 import { arrow, circle, dot, line, polyline, rect, resistorH, resistorV, source, svg, text } from "./svg.js";
 
+/**
+ * SVG ラベル用の数値整形関数（I-019 — SVG 内表記専用）。
+ *
+ * 用途の違い（clean.ts 系との使い分け）:
+ *  - fmt(): SVG 図内の軸ラベル・寸法表示専用。toFixed(2) で2桁揃え、末尾ゼロは
+ *    Number() で除去する。ビジュアル表示の都合で小数点以下2桁以内に丸める。
+ *  - formatClean() (clean.ts): 問題の答え・選択肢・解説テキスト内の数値整形に使用。
+ *    ルールは同様だが、文脈は「問題データ」。
+ *  - formatKW() (clean.ts): 電力(W) を kW 表記に変換する特定用途の整形。
+ *
+ * SVG ラベル以外の数値整形には formatClean/formatKW を使うこと。
+ */
 const fmt = (n: number): string => String(Number(n.toFixed(2)));
 const TC = 'text-anchor="middle"';
 

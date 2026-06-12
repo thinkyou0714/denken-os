@@ -3,14 +3,11 @@
  *   出力平均電圧  Vo = Vi / (1 − D)   〔V〕（D=通流率）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const VI_SET: ReadonlyArray<number> = [100, 120, 150, 200, 300];
 const D_SET: ReadonlyArray<number> = [0.2, 0.25, 0.4, 0.5, 0.6, 0.75, 0.8];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(Vi: number, D: number): GenerationResult | null {
   if (Vi <= 0 || D <= 0 || D >= 1) return null;

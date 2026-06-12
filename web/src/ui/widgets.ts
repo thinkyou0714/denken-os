@@ -1,0 +1,100 @@
+/**
+ * ui/widgets.ts — 再利用可能なUIウィジェット群。
+ * 複数の views から参照される共通部品。
+ */
+import type { Problem } from "../../../lib/engine/schema.js";
+import { formatMath } from "../mathfmt.js";
+import { sanitizeSvg } from "../sanitize.js";
+import { h } from "./dom.js";
+
+/** 難易度を星で表示。 */
+export function difficultyStars(n: number): string {
+  return "★".repeat(Math.max(1, Math.min(5, n)));
+}
+
+/** 問題の出典テキスト。 */
+export function sourceText(p: Problem): string {
+  return p.source.type === "original"
+    ? `出典: ${p.source.citation ?? "DENKEN-OS オリジナル問題"}`
+    : `出典: ${p.source.citation}`;
+}
+
+/** 解説ノード（ステップ付き）。 */
+export function solutionNode(p: Problem, label: string): HTMLElement {
+  return h(
+    "div",
+    { class: "solution" },
+    h("strong", {}, label),
+    h("ol", {}, ...p.solution.map((s) => h("li", { html: formatMath(s) }))),
+    h("p", { class: "src" }, sourceText(p)),
+  );
+}
+
+/** 図（インライン SVG）を表示するノード。sanitizeSvg でサニタイズ済み（I-037）。 */
+export function figureNode(svgStr: string): HTMLElement {
+  const safe = sanitizeSvg(svgStr);
+  return h("figure", { class: "figure", html: safe });
+}
+
+/** 空状態（履歴なし等）の上質な表示。 */
+export function emptyState(emoji: string, title: string, msg: string): HTMLElement {
+  return h(
+    "div",
+    { class: "empty" },
+    h("span", { class: "emoji" }, emoji),
+    h("div", { class: "et" }, title),
+    h("div", {}, msg),
+  );
+}
+
+/** 0..1 の系列からスパークライン SVG を作る（2点以上のとき）。 */
+export function sparklineNode(values: number[]): HTMLElement | null {
+  if (values.length < 2) return null;
+  const w = 320;
+  const hh = 40;
+  const pad = 3;
+  const n = values.length;
+  const x = (i: number) => pad + (i * (w - 2 * pad)) / (n - 1);
+  const y = (v: number) => pad + (1 - Math.max(0, Math.min(1, v))) * (hh - 2 * pad);
+  const line = values.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(n - 1).toFixed(1)} ${hh - pad} L${x(0).toFixed(1)} ${hh - pad} Z`;
+  const svg =
+    `<svg class="spark" viewBox="0 0 ${w} ${hh}" preserveAspectRatio="none" role="img" aria-label="正答率の推移">` +
+    `<path class="area" d="${area}"/><path class="line" d="${line}"/></svg>`;
+  return h("div", { html: svg });
+}
+
+/** 達成率のリングプログレス（日次目標など）。 */
+export function ringNode(value: number, max: number): HTMLElement {
+  const pct = max > 0 ? Math.min(1, value / max) : 0;
+  const r = 24;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - pct);
+  const svg =
+    `<svg width="58" height="58" viewBox="0 0 58 58" role="img" aria-label="今日の達成率 ${Math.round(pct * 100)}%">` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="6"/>` +
+    `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" ` +
+    `stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 29 29)"/>` +
+    `<text x="29" y="34" text-anchor="middle" fill="currentColor" font-size="14" font-weight="700">${Math.round(pct * 100)}%</text></svg>`;
+  return h("div", { html: svg, style: "flex:none" });
+}
+
+/** 進捗バー。label を渡すと支援技術に進捗として伝わる（role=progressbar）。 */
+export function bar(pct: number, label?: string): HTMLElement {
+  const clamped = Math.max(0, Math.min(100, pct));
+  const attrs: Record<string, string> = { class: "bar" };
+  if (label) {
+    attrs.role = "progressbar";
+    attrs["aria-label"] = label;
+    attrs["aria-valuenow"] = String(Math.round(clamped));
+    attrs["aria-valuemin"] = "0";
+    attrs["aria-valuemax"] = "100";
+  }
+  return h("div", attrs, h("span", { style: `width:${clamped}%` }));
+}
+
+/** 習得度チップ。 */
+export function masteryChip(level: string): HTMLElement {
+  const cls = level === "習得" ? "m3" : level === "習得中" ? "m2" : level === "要復習" ? "m1" : "m0";
+  return h("span", { class: `chip ${cls}` }, level);
+}

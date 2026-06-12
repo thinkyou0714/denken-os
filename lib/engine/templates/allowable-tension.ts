@@ -3,14 +3,11 @@
  *   許容張力  T_a = T_b / f   〔N〕（T_b=引張強さ, f=安全率）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const TB_SET: ReadonlyArray<number> = [2000, 4000, 8000, 9800, 10000, 20000];
 const F_SET: ReadonlyArray<number> = [2, 2.5, 4, 5];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(Tb: number, f: number): GenerationResult | null {
   if (Tb <= 0 || f <= 0) return null;

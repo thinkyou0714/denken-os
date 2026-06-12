@@ -8,19 +8,15 @@
  *    状態を active / at-risk / broken に分類し、背中を押すメッセージを返す。
  * DOM 非依存でテスト可能。日境界は store.ts / plan.ts と同じ JST(UTC+9)。
  */
+
+import { dayIndex, JST_OFFSET_MS } from "./dates.js";
 import type { WebAnswerLog } from "./store.js";
 
-const DAY_MS = 86_400_000;
-/** 既定の日境界は日本標準時。国内試験の受験者は JST 生活のため。 */
-export const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+// dates.ts から再エクスポート（後方互換維持）。
+export { JST_OFFSET_MS } from "./dates.js";
 
 /** 1日に出す復習の既定上限。多すぎる復習による離脱を防ぐ（設定で変更可）。 */
 export const DEFAULT_DAILY_REVIEW_CAP = 30;
-
-/** epoch ms を JST 日番号へ。 */
-function dayIndex(ms: number, offset: number): number {
-  return Math.floor((ms + offset) / DAY_MS);
-}
 
 export interface ReviewBatch {
   /** 今日出す分（due 順を尊重して上限で切る）。 */

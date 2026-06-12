@@ -8,14 +8,11 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { seriesRCFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10, 20, 47, 100];
 const C_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10, 22, 47];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(R: number, C: number): GenerationResult | null {
   if (R <= 0 || C <= 0) return null;

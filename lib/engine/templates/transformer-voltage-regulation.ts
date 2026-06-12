@@ -5,6 +5,7 @@
  * 二次は自動採点しない（format=descriptive・自己採点）。正解値はコードで算出。
  */
 import { isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P_SET = [1, 2, 3, 4];
@@ -15,10 +16,6 @@ const PF: ReadonlyArray<readonly [number, number]> = [
   [0.6, 0.8],
   [1.0, 0.0],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(p: number, q: number, cos: number, sin: number): GenerationResult | null {
   if (p <= 0 || q <= 0 || cos <= 0 || cos > 1) return null;

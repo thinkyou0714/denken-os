@@ -8,15 +8,16 @@
  *    これにより XP のクエストボーナスも完全に決定論で導出できる。
  * DOM 非依存でテスト可能。日境界は store.ts / retention.ts と同じ JST(UTC+9)。
  */
+
+import { dayIndex as _dayIndex, JST_OFFSET_MS } from "./dates.js";
 import type { WebAnswerLog } from "./store.js";
 
-const DAY_MS = 86_400_000;
-/** 既定の日境界は日本標準時(UTC+9)。store.ts / retention.ts と揃える。 */
-export const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+// dates.ts から再エクスポート（後方互換維持）。
+export { JST_OFFSET_MS } from "./dates.js";
 
 /** epoch ms を JST 日番号へ（クエストの抽選種・当日判定に使う）。 */
 export function dayIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): number {
-  return Math.floor((ms + dayOffsetMs) / DAY_MS);
+  return _dayIndex(ms, dayOffsetMs);
 }
 
 export type QuestKind = "solve" | "correct" | "combo" | "topics" | "easy";
@@ -78,11 +79,14 @@ export function dailyQuests(dayIndex: number): Quest[] {
   const order = TEMPLATES.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [order[i], order[j]] = [order[j]!, order[i]!];
+    // Fisher–Yates: i, j は常に order の有効な添字。
+    [order[i], order[j]] = [order[j] as number, order[i] as number];
   }
   return order.slice(0, DAILY_QUEST_COUNT).map((idx) => {
-    const tpl = TEMPLATES[idx]!;
-    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)]!;
+    // order は TEMPLATES のインデックス列なので idx は有効範囲内。
+    const tpl = TEMPLATES[idx] as (typeof TEMPLATES)[number];
+    // rng() は [0,1) のためインデックスは targets の範囲内。
+    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)] as number;
     return { id: `${dayIndex}-${tpl.kind}`, kind: tpl.kind, target, icon: tpl.icon, label: tpl.label(target) };
   });
 }
@@ -143,7 +147,7 @@ export function allQuestsClear(dayLogs: readonly WebAnswerLog[], dayIndex: numbe
  * JST 週番号（月曜はじまり）。epoch 日番号 0 = 1970-01-01(木) なので +3 で月曜起点に揃う。
  */
 export function weekIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): number {
-  return Math.floor((dayIndexOf(ms, dayOffsetMs) + 3) / 7);
+  return Math.floor((_dayIndex(ms, dayOffsetMs) + 3) / 7);
 }
 
 export type WeeklyQuestKind = "wsolve" | "wcorrect" | "wdays" | "wtopics" | "wperfect";
@@ -188,11 +192,14 @@ export function weeklyQuests(weekIndex: number): WeeklyQuest[] {
   const order = WEEKLY_TEMPLATES.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [order[i], order[j]] = [order[j]!, order[i]!];
+    // Fisher–Yates: i, j は常に order の有効な添字。
+    [order[i], order[j]] = [order[j] as number, order[i] as number];
   }
   return order.slice(0, WEEKLY_QUEST_COUNT).map((idx) => {
-    const tpl = WEEKLY_TEMPLATES[idx]!;
-    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)]!;
+    // order は WEEKLY_TEMPLATES のインデックス列なので idx は有効範囲内。
+    const tpl = WEEKLY_TEMPLATES[idx] as (typeof WEEKLY_TEMPLATES)[number];
+    // rng() は [0,1) のためインデックスは targets の範囲内。
+    const target = tpl.targets[Math.floor(rng() * tpl.targets.length)] as number;
     return { id: `${weekIndex}-${tpl.kind}`, kind: tpl.kind, target, icon: tpl.icon, label: tpl.label(target) };
   });
 }

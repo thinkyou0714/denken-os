@@ -1,16 +1,41 @@
 #!/usr/bin/env tsx
 /**
- * Repository status audit.
+ * audit-status.ts — リポジトリのステータス監査。
  *
- * Default mode is advisory (exit 0): it turns README/status drift and
- * problem-data scarcity into a repeatable report without blocking small fixes.
- * Use --strict when a release gate should fail on recommendations.
+ * Default mode は advisory（exit 0）: README/status のズレと問題データ不足を
+ * ブロックせずに繰り返し可能なレポートに変換する。
+ * リリースゲートで失敗させたい場合は --strict を使う。
+ *
+ * 使い方:
+ *   npm run audit:status
+ *   npm run audit:status -- --strict
+ *   npm run audit:status -- --json
+ *   npm run audit:status -- --help
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { auditStatus, formatAuditSummary, type InvalidProblemFile, parseAuditCliOptions } from "../lib/audit/status.js";
 import { type Problem, problemSchema } from "../lib/engine/schema.js";
+import { printHelp } from "./shared.js";
+
+const HELP = `\
+audit-status — リポジトリの品質ステータスを監査する
+
+使い方:
+  npm run audit:status [-- オプション]
+
+オプション:
+  --strict        推奨事項があれば exit 1（リリースゲート用）
+  --json          結果を JSON 形式で出力
+  --help, -h      このヘルプを表示して終了
+
+例:
+  npm run audit:status
+  npm run audit:status -- --strict
+  npm run audit:status -- --json
+  npm run audit:status:strict    # package.json の短縮形（--strict 相当）
+`;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -27,11 +52,12 @@ function walk(dir: string): string[] {
   return out;
 }
 
-function readProblems(): { parsed: Problem[]; invalidFiles: InvalidProblemFile[] } {
+/** 問題データを読み込む純関数（テスト可能）。 */
+export function readProblems(dataDir: string): { parsed: Problem[]; invalidFiles: InvalidProblemFile[] } {
   const parsed: Problem[] = [];
   const invalidFiles: InvalidProblemFile[] = [];
-  for (const file of readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"))) {
-    const path = join(DATA_DIR, file);
+  for (const file of readdirSync(dataDir).filter((f) => f.endsWith(".json"))) {
+    const path = join(dataDir, file);
     try {
       const raw = JSON.parse(readFileSync(path, "utf8"));
       const result = problemSchema.safeParse(raw);
@@ -49,8 +75,13 @@ function readProblems(): { parsed: Problem[]; invalidFiles: InvalidProblemFile[]
 }
 
 function main(): void {
-  const options = parseAuditCliOptions(process.argv.slice(2));
-  const { parsed, invalidFiles } = readProblems();
+  const argv = process.argv.slice(2);
+  if (argv.includes("--help") || argv.includes("-h")) {
+    printHelp(HELP);
+  }
+
+  const options = parseAuditCliOptions(argv);
+  const { parsed, invalidFiles } = readProblems(DATA_DIR);
   const summary = auditStatus({
     problems: parsed,
     invalidSchema: invalidFiles.length,

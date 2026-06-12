@@ -4,13 +4,10 @@
  *   交流試験電圧 = 最大使用電圧 × 1.5   〔V〕（最大使用電圧 7000V 以下の場合）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const NOMINAL_SET: ReadonlyArray<number> = [3300, 6600];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(nominal: number): GenerationResult | null {
   if (nominal <= 0) return null;

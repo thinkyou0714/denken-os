@@ -4,6 +4,7 @@
  *   ブロック線図の等価変換の最初の一歩（二次・機械制御の頻出基礎）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (G, H) — W=G/(1+GH) が綺麗になる組。 */
@@ -19,10 +20,6 @@ const GH_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [20, 0.2],
   [15, 0.2],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(g: number, hh: number): GenerationResult | null {
   if (g <= 0 || hh <= 0) return null;

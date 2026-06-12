@@ -4,6 +4,7 @@
  *   L〔mH〕×C〔μF〕の積が「平方数×10^偶数」になる組だけ採用し、ω0 を綺麗な値にする。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (L mH, C μF) — L·C ∈ {250, 1000, 4000, 16000} ⇒ ω0 ∈ {2000, 1000, 500, 250} rad/s。 */
@@ -24,10 +25,6 @@ const LC_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [400, 40],
   [200, 80],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(lMilliH: number, cMicroF: number): GenerationResult | null {
   if (lMilliH <= 0 || cMicroF <= 0) return null;

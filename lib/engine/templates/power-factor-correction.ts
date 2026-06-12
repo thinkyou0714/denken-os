@@ -6,6 +6,7 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { powerTriangleFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P_SET: ReadonlyArray<number> = [60, 120, 150, 180, 240, 300, 360, 480, 600];
@@ -15,10 +16,6 @@ const PF_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [0.8, 1.0],
   [0.6, 0.8],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function tanOf(cos: number): number {
   const sin = Math.sqrt(1 - cos * cos);

@@ -297,3 +297,77 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     expect(g!.format).toBe("descriptive");
   });
 });
+
+// I-074: 物理不変条件の追加アサーション（既存の厳密一致は残す）
+describe("物理不変条件（I-074）", () => {
+  it("変圧器効率 η は 0 < η ≤ 100% の範囲内", () => {
+    const g = transformerEfficiency.generateFrom({ output_power: 900, iron_loss: 40, copper_loss: 60 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.answerValue).toBeLessThanOrEqual(100);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("水力出力 P は正（流量・水頭・効率がすべて正のとき）", () => {
+    const g = hydroPowerOutput.generateFrom({ flow: 10, head: 100, efficiency: 0.9 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("熱効率は 0 < η ≤ 100%", () => {
+    const g = thermalEfficiency.generateFrom({ heat_rate: 7200 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.answerValue).toBeLessThanOrEqual(100);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("力率改善の補償容量 Qc は非負（power_factor が改善されるとき）", () => {
+    const g = powerFactorCorrection.generateFrom({
+      load_power: 240,
+      power_factor_before: 0.8,
+      power_factor_after: 1.0,
+    });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThanOrEqual(0);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("送電効率は 0 < η ≤ 100%", () => {
+    const g = transmissionEfficiency.generateFrom({ received_power: 95, sent_power: 100 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.answerValue).toBeLessThanOrEqual(100);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("揚水動力 P は正（流量・水頭・効率がすべて正のとき）", () => {
+    const g = pumpMotorInput.generateFrom({ flow: 2, head: 50, efficiency: 0.8 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("巻上機出力 P は正（荷重・速度・効率がすべて正のとき）", () => {
+    const g = hoistMotorOutput.generateFrom({ load: 9800, speed: 1, efficiency: 0.7 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("最大効率負荷率は 0 < m ≤ 1（鉄損 < 銅損 のとき）", () => {
+    const g = maxEfficiencyLoad.generateFrom({ iron_loss: 9, copper_loss: 16 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.answerValue).toBeLessThanOrEqual(1);
+    expect(g!.physicallyValid).toBe(true);
+  });
+
+  it("短絡容量は正（base_capacity, percent_impedance が正のとき）", () => {
+    const g = shortCircuitCapacity.generateFrom({ base_capacity: 10, percent_impedance: 5 });
+    expect(g).not.toBeNull();
+    expect(g!.answerValue).toBeGreaterThan(0);
+    expect(g!.physicallyValid).toBe(true);
+  });
+});

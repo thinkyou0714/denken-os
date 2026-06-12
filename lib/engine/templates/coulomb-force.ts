@@ -4,14 +4,11 @@
  *   q を μC で与えると F = 9×10⁻³·q1·q2/r²〔N〕。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const Q_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 8, 10];
 const R_SET: ReadonlyArray<number> = [0.1, 0.2, 0.3, 0.5, 1];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(q1: number, q2: number, r: number): GenerationResult | null {
   if (q1 <= 0 || q2 <= 0 || r <= 0) return null;

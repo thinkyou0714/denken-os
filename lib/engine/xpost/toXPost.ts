@@ -95,7 +95,8 @@ const EVENING_TEMPLATES = [
 ];
 
 function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
+  // 呼び出し元では常に非空配列を渡しているため index は有効。
+  return arr[Math.floor(rng() * arr.length)] as T;
 }
 
 export interface XPosts {

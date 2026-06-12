@@ -3,14 +3,11 @@
  *   電界の強さ  E = V / d   〔kV/m〕（V〔V〕, d〔mm〕のとき E〔kV/m〕=V/d）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const V_SET: ReadonlyArray<number> = [100, 200, 300, 500, 1000, 2000, 3000, 6000];
 const D_SET: ReadonlyArray<number> = [1, 2, 3, 5, 10];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(V: number, d: number): GenerationResult | null {
   if (V <= 0 || d <= 0) return null;

@@ -38,7 +38,8 @@ function buildFrom(caseIndex: number): GenerationResult | null {
     answerText,
     choices,
     distractors,
-    likelyWrongChoice: formatClean(CASES[(caseIndex + 1) % CASES.length]!.answer),
+    // CASES の長さは 3 固定のため (caseIndex + 1) % 3 は必ず有効なインデックス。
+    likelyWrongChoice: formatClean((CASES[(caseIndex + 1) % CASES.length] as (typeof CASES)[number]).answer),
     facts: { caseIndex, answer: c.answer },
     defaultStatement:
       `${c.cond}低圧電路において、電線相互間および電路と大地との間の絶縁抵抗の最低値〔MΩ〕として、` +

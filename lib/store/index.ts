@@ -9,17 +9,46 @@ import type { Problem } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
 import type { ReviewState } from "../scheduler/types.js";
 
+/**
+ * 問題データの永続化インターフェース。
+ *
+ * 契約:
+ * - `upsert`: 同じ id のエントリが存在すれば上書き、なければ新規作成。
+ * - `get`: 存在しない id は `undefined` を返す（例外は投げない）。
+ * - `list`: filter 省略 = 全件。複数フィルタは AND で絞る。
+ * - いずれも DB エラー等の IO 失敗時は `Error` を throw する。
+ * - 実装: `InMemoryProblemStore`（テスト用）/ `FileProblemStore`（CLI用）/ `SupabaseProblemStore`（本番）。
+ */
 export interface ProblemStore {
   upsert(p: Problem): Promise<void>;
   get(id: string): Promise<Problem | undefined>;
   list(filter?: { status?: Problem["status"]; topic?: string }): Promise<Problem[]>;
 }
 
+/**
+ * 解答ログの永続化インターフェース。
+ *
+ * 契約:
+ * - `append`: ログを末尾追記する（既存ログは変更しない）。
+ * - `byUser`: 指定ユーザーの全ログを atMs 昇順で返す。ユーザーがいない場合は空配列。
+ * - IO 失敗時は `Error` を throw する。
+ * - 実装: `InMemoryAnswerLogStore` / `FileAnswerLogStore` / `SupabaseAnswerLogStore`。
+ */
 export interface AnswerLogStore {
   append(userId: string, log: AnswerLog): Promise<void>;
   byUser(userId: string): Promise<AnswerLog[]>;
 }
 
+/**
+ * 記憶状態（スペーシング情報）の永続化インターフェース。
+ *
+ * 契約:
+ * - `get`: ユーザー×論点の記憶状態を返す。未登録なら `undefined`（例外は投げない）。
+ * - `set`: 同じ userId × topic があれば上書き、なければ新規作成。
+ * - `byUser`: 指定ユーザーの全論点→状態 Map を返す。ユーザーがいない場合は空 Map。
+ * - IO 失敗時は `Error` を throw する。
+ * - 実装: `InMemoryReviewStateStore` / `FileReviewStateStore` / `SupabaseReviewStateStore`。
+ */
 export interface ReviewStateStore {
   /** ユーザー×論点の記憶状態を取得（無ければ undefined）。 */
   get(userId: string, topic: string): Promise<ReviewState | undefined>;

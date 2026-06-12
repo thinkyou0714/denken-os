@@ -3,15 +3,12 @@
  *   誘導起電力  E = V + Ia·Ra   〔V〕（端子電圧Vに電機子抵抗降下を足す）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const V_SET: ReadonlyArray<number> = [100, 110, 200, 220];
 const IA_SET: ReadonlyArray<number> = [10, 20, 25, 40, 50];
 const RA_SET: ReadonlyArray<number> = [0.1, 0.2, 0.4, 0.5, 1];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(V: number, Ia: number, Ra: number): GenerationResult | null {
   if (V <= 0 || Ia <= 0 || Ra <= 0) return null;

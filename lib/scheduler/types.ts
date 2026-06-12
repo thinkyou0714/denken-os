@@ -2,6 +2,9 @@
 
 export type Rating = "again" | "hard" | "good" | "easy";
 
+// DAY_MS は lib/shared/time.ts に一元化。後方互換のため re-export する。
+export { DAY_MS } from "../shared/time.js";
+
 /** 1カード（=1論点/問題）の記憶状態。 */
 export interface ReviewState {
   reps: number; // 連続正解回数
@@ -18,5 +21,3 @@ export interface Scheduler {
   /** 採点を反映して次回状態を返す。 */
   review(state: ReviewState, rating: Rating, nowMs?: number): ReviewState;
 }
-
-export const DAY_MS = 86_400_000;

@@ -4,17 +4,7 @@ import { StubNarrator } from "../../lib/engine/narrate.js";
 import type { Subject } from "../../lib/engine/schema.js";
 import { demandFactor, getTemplate, groundingResistance, listTopics } from "../../lib/engine/templates/index.js";
 import { validateProblem } from "../../lib/engine/validate.js";
-
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+import { seededRng } from "../helpers/rng.js";
 
 describe("科目カバレッジ拡充（全6科目・一次/二次）", () => {
   it("一次4科目(理論/電力/機械/法規)＋二次2科目(電力管理/機械制御)を全てカバーする", () => {

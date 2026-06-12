@@ -10,11 +10,11 @@ on:
 permissions:
   contents: read
 
-# 同時デプロイは1本に直列化（実行中はキャンセルしない）。
-
+# 同時デプロイは1本に直列化（実行中はキャンセルしない。I-084）。
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest

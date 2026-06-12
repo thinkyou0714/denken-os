@@ -12,6 +12,19 @@ import type { Problem, SourceType } from "./schema.js";
 import type { Template } from "./templates/types.js";
 import { narrationMatchesAnswer, validateProblem } from "./validate.js";
 
+/**
+ * 自動生成問題に付与するデフォルト信頼度。
+ *
+ * 0.9 に設定した根拠:
+ *  - [3] solver_checked=true: 純関数によるコードで正解を算出しているため数値精度は高い。
+ *  - しかし human_checked=false の段階では問題文・解法の自然さ・物理的妥当性の
+ *    人間的チェックが未了のため 1.0 にはしない。
+ *  - minConfidence（generate オプション）との関係: デフォルト minConfidence は 0=無効。
+ *    明示的に閾値を設けた場合（例: 0.95）は、この 0.9 では足切りされる。
+ *    人間チェック済み問題（human_checked=true）では confidence=1.0 へ更新することを想定。
+ */
+const DEFAULT_CONFIDENCE = 0.9;
+
 export interface GenerateOptions {
   count: number;
   source?: SourceType;
@@ -61,7 +74,7 @@ export async function generateOne(
   const citation = opts.source === "original" ? "DENKEN-OS オリジナル問題" : opts.citation;
   if (opts.source !== "original" && !citation) return null; // 改題は citation 必須
 
-  const confidence = 0.9;
+  const confidence = DEFAULT_CONFIDENCE;
   // confidence 足切り（怪しいものは出さない閾値, 03-quality-pipeline）。
   if (opts.minConfidence !== undefined && confidence < opts.minConfidence) return null;
 
@@ -115,11 +128,11 @@ export async function generate(template: Template, opts: GenerateOptions): Promi
     const p = await generateOne(template, {
       id: makeId(idPrefix, n),
       source,
-      citation: opts.citation,
+      ...(opts.citation !== undefined && { citation: opts.citation }),
       narrator,
       rng,
       maxAttempts,
-      minConfidence: opts.minConfidence,
+      ...(opts.minConfidence !== undefined && { minConfidence: opts.minConfidence }),
     });
     if (p) {
       out.push(p);

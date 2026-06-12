@@ -7,17 +7,7 @@ import { describe, expect, it } from "vitest";
 import { isCleanAnswer } from "../../lib/engine/clean.js";
 import { getTemplate, listTopics } from "../../lib/engine/templates/index.js";
 import { narrationMatchesAnswer } from "../../lib/engine/validate.js";
-
-function seededRng(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s |= 0;
-    s = (s + 0x6d2b79f5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+import { seededRng } from "../helpers/rng.js";
 
 describe("テンプレート不変条件（全7種・多数 seed）", () => {
   for (const topic of listTopics()) {

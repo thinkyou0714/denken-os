@@ -4,6 +4,7 @@
  *     P_i=鉄損（無負荷損・一定）, P_c=全負荷銅損
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // [P_i, P_c]（比が完全平方 → √ が綺麗）。
@@ -16,10 +17,6 @@ const PAIRS: ReadonlyArray<readonly [number, number]> = [
   [1, 16],
   [36, 49],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(pi: number, pc: number): GenerationResult | null {
   if (pi <= 0 || pc <= 0 || pi >= pc) return null;

@@ -3,6 +3,7 @@
  * 自動化するのは儀式（チェックイン/もくもく会リマインド/出戻り歓迎/卒業ロール）。
  * 関係性（個別の励まし・深い相談）は人間。実 Bot(discord.js) はこの純関数を呼ぶアダプタ。
  */
+import { DAY_MS } from "../shared/time.js";
 
 export interface MemberActivity {
   handle: string;
@@ -33,7 +34,7 @@ export function returningWelcome(handle: string): string {
 
 /** 出戻り歓迎の対象を選ぶ（罪悪感ナッジではなく歓迎）。 */
 export function selectReturningMembers(members: MemberActivity[], nowMs: number, thresholdDays = 7): string[] {
-  const threshold = thresholdDays * 86_400_000;
+  const threshold = thresholdDays * DAY_MS;
   return members.filter((m) => !m.passed && nowMs - m.lastSeenMs >= threshold).map((m) => m.handle);
 }
 

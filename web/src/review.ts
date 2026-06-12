@@ -43,7 +43,8 @@ export function mistakeNotebook(logs: WebAnswerLog[], problems: Problem[], limit
   return [...stat.entries()]
     .filter(([, v]) => v.miss > 0)
     .map(([id, v]) => ({
-      problem: byId.get(id)!,
+      // line 33 の `!byId.has(l.problemId)` で byId にないログはスキップ済みのため、id は byId に存在する。
+      problem: byId.get(id) as Problem,
       missCount: v.miss,
       attempts: v.attempts,
       lastMissMs: v.lastMiss,

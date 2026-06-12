@@ -6,15 +6,12 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { torqueSlipFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R2_SET: ReadonlyArray<number> = [0.2, 0.3, 0.5, 1];
 const S1_SET: ReadonlyArray<number> = [0.03, 0.04, 0.05, 0.06];
 const S2_SET: ReadonlyArray<number> = [0.1, 0.12, 0.15, 0.18, 0.2];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(r2: number, s1: number, s2: number): GenerationResult | null {
   if (r2 <= 0 || s1 <= 0 || s2 <= 0 || s2 <= s1) return null;

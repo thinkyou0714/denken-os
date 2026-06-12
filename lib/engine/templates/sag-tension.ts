@@ -4,22 +4,19 @@
  *     w=単位長あたり荷重〔N/m〕, S=径間〔m〕, T=水平張力〔N〕
  *   綺麗な D になるよう、目標 D から T を逆算して整数張力の組だけ採用する。
  */
-import { formatClean, isCleanAnswer } from "../clean.js";
+import { ANSWER_EPSILON, formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const W_SET: ReadonlyArray<number> = [10, 15, 20, 30];
 const S_SET: ReadonlyArray<number> = [100, 120, 150, 200];
 const D_SET: ReadonlyArray<number> = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5];
 
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
-
 function buildFrom(w: number, S: number, D: number): GenerationResult | null {
   if (w <= 0 || S <= 0 || D <= 0) return null;
   // 目標 D から張力 T を逆算（T が整数・現実的レンジに入る組のみ採用）。
   const T = (w * S * S) / (8 * D);
-  if (Math.abs(T - Math.round(T)) > 1e-6) return null;
+  if (Math.abs(T - Math.round(T)) > ANSWER_EPSILON) return null;
   const Tint = Math.round(T);
   if (Tint < 5000 || Tint > 60000) return null;
   if (!isCleanAnswer(D)) return null;

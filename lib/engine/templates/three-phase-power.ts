@@ -12,6 +12,7 @@
  */
 import { formatKW, isCleanAnswer } from "../clean.js";
 import { threePhaseYFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // 係数いじりの母集合（|Z| が整数になる Pythagorean ペア × round な電圧）。
@@ -35,10 +36,6 @@ const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [24, 7],
 ];
 const VOLTAGES: ReadonlyArray<number> = [100, 200, 400, 440, 3300, 6600];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 /** V,R,X から決定論的に1問分を組み立てる。綺麗でない/選択肢が衝突する場合は null。 */
 function buildFrom(V: number, R: number, X: number): GenerationResult | null {

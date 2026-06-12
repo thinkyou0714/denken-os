@@ -7,6 +7,11 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
+    // G9: 2026-06 追加。noImplicitReturns / noFallthroughCasesInSwitch は違反ゼロで即採用。
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    // G9: 2026-06 試行。影響 20 件（lib:16 / web:4）で 30 件以下のため修正して採用。
+    "exactOptionalPropertyTypes": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

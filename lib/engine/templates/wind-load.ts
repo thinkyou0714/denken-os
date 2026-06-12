@@ -3,14 +3,11 @@
  *   風圧荷重  P = q · A   〔N〕（q=風圧〔Pa=N/m²〕, A=受圧面積〔m²〕）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const Q_SET: ReadonlyArray<number> = [490, 980, 1000, 1230, 2000, 2940];
 const A_SET: ReadonlyArray<number> = [0.5, 1, 2, 3, 5];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(q: number, A: number): GenerationResult | null {
   if (q <= 0 || A <= 0) return null;

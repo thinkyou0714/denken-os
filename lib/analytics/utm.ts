@@ -33,11 +33,16 @@ export function quizLink(baseUrl: string, problemId: string, medium = "profile")
 export function parseUtm(url: string): Partial<UtmParams> & { content?: string } {
   const u = new URL(url);
   const g = (k: string) => u.searchParams.get(k) ?? undefined;
-  return {
-    source: g("utm_source"),
-    medium: g("utm_medium"),
-    campaign: g("utm_campaign"),
-    content: g("utm_content"),
-    term: g("utm_term"),
-  };
+  const result: Partial<UtmParams> & { content?: string } = {};
+  const source = g("utm_source");
+  const medium = g("utm_medium");
+  const campaign = g("utm_campaign");
+  const content = g("utm_content");
+  const term = g("utm_term");
+  if (source !== undefined) result.source = source;
+  if (medium !== undefined) result.medium = medium;
+  if (campaign !== undefined) result.campaign = campaign;
+  if (content !== undefined) result.content = content;
+  if (term !== undefined) result.term = term;
+  return result;
 }

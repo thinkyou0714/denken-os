@@ -6,16 +6,36 @@
  * 係数の閉形式は tests/engine/new-templates.test.ts 等で固定値検算済み。
  * したがって human_checked=true / status=validated で収録する。
  *
- * 使い方: npm run seed:data  （data/problems/T-0004〜 を上書き生成）
+ * 使い方:
+ *   npm run seed:data              （data/problems/T-0004〜 を上書き生成）
+ *   npm run seed:data -- --help
  * ※ 監修者(合格者/有資格者)による supervisor_checked は別途運用で付与する。
  */
-import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Problem } from "../lib/engine/schema.js";
-import { getTemplate } from "../lib/engine/templates/index.js";
+import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import type { GenerationResult } from "../lib/engine/templates/types.js";
 import { validateProblem } from "../lib/engine/validate.js";
+import { atomicWriteFileSync, printHelp } from "./shared.js";
+
+const HELP = `\
+seed-data-problems — 検証済み(validated)問題を data/problems/ に生成する
+
+使い方:
+  npm run seed:data [-- オプション]
+
+オプション:
+  --help, -h  このヘルプを表示して終了
+
+有効な topic 一覧:
+${listTopics()
+  .map((t) => `  ${t}`)
+  .join("\n")}
+
+例:
+  npm run seed:data
+`;
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -134,9 +154,28 @@ const SEEDS: Seed[] = [
   { id: "T-0052", topic: "送電効率", params: { received_power: 95, sent_power: 100 } },
 ];
 
-function build(seed: Seed): Problem {
+/** 指定された topic が SEEDS に存在するか確認し、未知なら候補一覧を示してエラー */
+export function assertKnownTopics(topics: string[]): void {
+  const validTopics = listTopics();
+  const unknowns = topics.filter((t) => !validTopics.includes(t));
+  if (unknowns.length > 0) {
+    process.stderr.write(`エラー: 未知の topic が指定されました: ${unknowns.join(", ")}\n`);
+    process.stderr.write(`有効な topic 一覧:\n`);
+    for (const t of validTopics) {
+      process.stderr.write(`  ${t}\n`);
+    }
+    process.exit(1);
+  }
+}
+
+/** 1件の問題を生成する純関数（テスト可能）。 */
+export function buildFromSeed(seed: Seed): Problem {
   const template = getTemplate(seed.topic);
-  if (!template) throw new Error(`未知の topic: ${seed.topic}`);
+  if (!template) {
+    const validTopics = listTopics();
+    const msg = `未知の topic: ${seed.topic}\n有効な topic 一覧:\n${validTopics.map((t) => `  ${t}`).join("\n")}`;
+    throw new Error(msg);
+  }
   const g: GenerationResult | null = template.generateFrom(seed.params);
   if (!g) throw new Error(`生成失敗（係数が綺麗でない可能性）: ${seed.id} ${seed.topic}`);
   const format = g.format ?? "multiple_choice";
@@ -179,10 +218,15 @@ function build(seed: Seed): Problem {
 }
 
 function main(): void {
+  const argv = process.argv.slice(2);
+  if (argv.includes("--help") || argv.includes("-h")) {
+    printHelp(HELP);
+  }
+
   let count = 0;
   for (const seed of SEEDS) {
-    const problem = build(seed);
-    writeFileSync(join(ROOT, "data", "problems", `${seed.id}.json`), `${JSON.stringify(problem, null, 2)}\n`);
+    const problem = buildFromSeed(seed);
+    atomicWriteFileSync(join(ROOT, "data", "problems", `${seed.id}.json`), `${JSON.stringify(problem, null, 2)}\n`);
     count += 1;
   }
   console.log(`data/problems に検証済み問題を ${count} 件生成しました（T-0004〜）。`);

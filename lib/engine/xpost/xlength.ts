@@ -24,7 +24,8 @@ function isLightCodePoint(cp: number): boolean {
 export function xWeightedLength(text: string): number {
   let total = 0;
   for (const ch of text) {
-    const cp = ch.codePointAt(0)!;
+    // for..of の各 ch は単一文字（スプレッド済みコードポイント単位）のため codePointAt(0) は常に number。
+    const cp = ch.codePointAt(0) as number;
     total += isLightCodePoint(cp) ? 1 : 2;
   }
   return total;
@@ -42,7 +43,8 @@ function sliceWeighted(text: string, limit: number): { head: string; rest: strin
   const chars = [...text];
   let i = 0;
   for (; i < chars.length; i++) {
-    const w = isLightCodePoint(chars[i]!.codePointAt(0)!) ? 1 : 2;
+    // for ループ条件で i < chars.length を確認済みのため chars[i] は存在し、codePointAt(0) は常に number。
+    const w = isLightCodePoint((chars[i] as string).codePointAt(0) as number) ? 1 : 2;
     if (acc + w > limit) break;
     acc += w;
     head += chars[i];

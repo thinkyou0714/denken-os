@@ -3,7 +3,15 @@
  * 通知過多=離脱の根本原因 → ユーザーが頻度を制御でき、オプトアウトは即反映、
  * 配信時刻にゆらぎ、文面は前向き（罪悪感で追い込まない）。
  * 実配信(Web Push/Discord)はこの純関数の出力を送るアダプタが担う。
+ *
+ * 境界挙動（試験日カウントダウン）:
+ *   - 試験日当日（days === 0）: カウントダウン通知を送らない。学習に集中させる。
+ *   - 試験日が過去（days < 0）: 同様に送らない（レビュー時点で不要）。
+ *   - days > 0 かつ節目の日（100/60/30/14/7/3/1）のときのみ通知を送る。
+ *   days の計算は Math.ceil を使うため、試験日の00:00より前の任意の時刻で days=1 となり、
+ *   試験日の00:00以降で days=0 以下となる（JST 日付境界に依存する点に注意）。
  */
+import { DAY_MS } from "../shared/time.js";
 
 export type NotificationKind = "study_reminder" | "streak_at_risk" | "exam_countdown" | "evening_answer";
 
@@ -91,7 +99,7 @@ export function planNotifications(ctx: PlanContext): PlannedNotification[] {
 
   // 試験カウントダウン（節目で）
   if (prefs.enabled.exam_countdown && ctx.examDate) {
-    const days = Math.ceil((ctx.examDate.getTime() - now.getTime()) / 86_400_000);
+    const days = Math.ceil((ctx.examDate.getTime() - now.getTime()) / DAY_MS);
     if (days > 0 && [100, 60, 30, 14, 7, 3, 1].includes(days)) {
       out.push({ kind: "exam_countdown", atMs: now.getTime(), message: `試験まであと${days}日。コツコツいこう。` });
     }

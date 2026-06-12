@@ -11,24 +11,15 @@ import {
 import { MASCOT_TRIVIA, mascotSvg, mascotTip, tierForLevel } from "../../web/src/mascot.js";
 import { dailyQuests, dayIndexOf } from "../../web/src/quests.js";
 import { getSound, getSoundLevel, setSound, setSoundLevel } from "../../web/src/settings.js";
-import type { StorageLike, WebAnswerLog } from "../../web/src/store.js";
+import type { WebAnswerLog } from "../../web/src/store.js";
 import { comboBonus, QUEST_BOOST_MULT, totalXp, XP_BY_RATING, xpFromLogs } from "../../web/src/xp.js";
+import { MemoryStorage } from "../helpers/storage.js";
 
 const DAY0 = Date.UTC(2026, 0, 5, 3, 0, 0); // 2026-01-05 12:00 JST
 const DAY0_IDX = dayIndexOf(DAY0);
 
 function log(over: Partial<WebAnswerLog> = {}): WebAnswerLog {
   return { topic: "三相交流電力", correct: true, atMs: DAY0, rating: "good", ...over };
-}
-
-class MemoryStorage implements StorageLike {
-  m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
 }
 
 describe("XPブースト（クエスト全達成後の正解XP×1.5）", () => {

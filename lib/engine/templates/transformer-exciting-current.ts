@@ -4,6 +4,7 @@
  *   (Iw, Iμ, I0) がピタゴラス数になる組に限定して綺麗な値を担保。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (V, Pi, I0) — Iw=Pi/V と I0 がピタゴラス組（Iμ が綺麗）。 */
@@ -17,10 +18,6 @@ const TRIPLES: ReadonlyArray<readonly [number, number, number]> = [
   [100, 900, 15], // Iw=9, Iμ=12
   [400, 3200, 17], // Iw=8, Iμ=15
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(v: number, pi: number, i0: number): GenerationResult | null {
   if (v <= 0 || pi <= 0 || i0 <= 0) return null;

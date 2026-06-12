@@ -4,13 +4,10 @@
  *   （正確には Vd=2√2·V/π≈0.9V。電験の頻出近似値）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const V_SET: ReadonlyArray<number> = [100, 110, 200, 220, 400, 1000];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(V: number): GenerationResult | null {
   if (V <= 0) return null;

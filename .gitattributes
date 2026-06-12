@@ -7,6 +7,12 @@ web/dist/**         linguist-generated=true
 web/problems.json   linguist-generated=true
 data/**             linguist-generated=true
 
+# 手書きの検証済み標準問題（T-0001〜T-0003）は生成扱いを解除し、
+# 人間が管理するソースデータとして linguist に認識させる（I-097）。
+data/problems/T-0001.json  linguist-generated=false
+data/problems/T-0002.json  linguist-generated=false
+data/problems/T-0003.json  linguist-generated=false
+
 # バイナリ扱い（差分を取らない）。
 *.png  binary
 *.jpg  binary

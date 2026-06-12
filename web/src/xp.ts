@@ -91,10 +91,11 @@ export function xpFromLogs(logs: readonly WebAnswerLog[], dayOffsetMs: number = 
   let total = 0;
   let i = 0;
   while (i < sorted.length) {
-    const day = dayIndexOf(sorted[i]!.atMs, dayOffsetMs);
+    // while 条件で i < sorted.length を確認済みのため sorted[i] は存在する。
+    const day = dayIndexOf((sorted[i] as WebAnswerLog).atMs, dayOffsetMs);
     const dayLogs: WebAnswerLog[] = [];
-    while (i < sorted.length && dayIndexOf(sorted[i]!.atMs, dayOffsetMs) === day) {
-      dayLogs.push(sorted[i]!);
+    while (i < sorted.length && dayIndexOf((sorted[i] as WebAnswerLog).atMs, dayOffsetMs) === day) {
+      dayLogs.push(sorted[i] as WebAnswerLog);
       i += 1;
     }
     total += xpOfDay(dayLogs, day);
@@ -182,7 +183,8 @@ const TITLES: ReadonlyArray<readonly [number, string]> = [
 ];
 
 export function titleForLevel(level: number): string {
-  let title = TITLES[0]![1];
+  // TITLES はリテラル配列で要素が存在することが保証される。
+  let title = (TITLES[0] as (typeof TITLES)[number])[1];
   for (const [lv, t] of TITLES) {
     if (level >= lv) title = t;
   }

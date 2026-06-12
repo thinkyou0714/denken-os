@@ -6,15 +6,12 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { firstOrderBlockFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const K_SET: ReadonlyArray<number> = [2, 3, 4, 5, 10];
 const A_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10];
 const T_SET: ReadonlyArray<number> = [0.1, 0.2, 0.5, 1, 2];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(K: number, A: number, T: number): GenerationResult | null {
   if (K <= 0 || A <= 0 || T <= 0) return null;

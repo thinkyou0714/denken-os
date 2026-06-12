@@ -5,15 +5,12 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { wheatstoneFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R1_SET: ReadonlyArray<number> = [10, 20, 50, 100, 200];
 const R2_SET: ReadonlyArray<number> = [100, 150, 200, 300, 400, 500];
 const R3_SET: ReadonlyArray<number> = [100, 200, 300, 400, 600];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(R1: number, R2: number, R3: number): GenerationResult | null {
   if (R1 <= 0 || R2 <= 0 || R3 <= 0) return null;

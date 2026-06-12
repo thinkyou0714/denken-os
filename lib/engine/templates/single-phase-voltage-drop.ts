@@ -5,6 +5,7 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { singleLineDropFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const I_SET: ReadonlyArray<number> = [5, 10, 15, 20, 25, 30, 50];
@@ -21,10 +22,6 @@ const PF_SET: ReadonlyArray<readonly [number, number]> = [
   [0.6, 0.8],
   [1.0, 0.0],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(I: number, R: number, X: number, cos: number, sin: number): GenerationResult | null {
   if (I <= 0 || R <= 0 || X < 0 || cos <= 0 || cos > 1) return null;

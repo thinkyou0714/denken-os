@@ -4,13 +4,10 @@
  *     Kp=位置偏差定数（開ループゲイン）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const K_SET: ReadonlyArray<number> = [1, 3, 4, 9, 19, 24];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(K: number): GenerationResult | null {
   if (K <= 0) return null;

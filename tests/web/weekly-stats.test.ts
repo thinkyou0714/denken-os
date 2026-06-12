@@ -11,24 +11,15 @@ import {
 } from "../../web/src/quests.js";
 import { getMascotEnabled, setMascotEnabled } from "../../web/src/settings.js";
 import { myStats } from "../../web/src/stats.js";
-import type { StorageLike, WebAnswerLog } from "../../web/src/store.js";
+import type { WebAnswerLog } from "../../web/src/store.js";
 import { levelInfo, nextTitleFor, totalXp, weeklyBonusXp, xpBySubject, xpForLog } from "../../web/src/xp.js";
+import { MemoryStorage } from "../helpers/storage.js";
 
 const DAY_MS = 86_400_000;
 const DAY0 = Date.UTC(2026, 0, 5, 3, 0, 0); // 2026-01-05(月) 12:00 JST
 
 function log(over: Partial<WebAnswerLog> = {}): WebAnswerLog {
   return { topic: "三相交流電力", correct: true, atMs: DAY0, rating: "good", ...over };
-}
-
-class MemoryStorage implements StorageLike {
-  m = new Map<string, string>();
-  getItem(k: string): string | null {
-    return this.m.get(k) ?? null;
-  }
-  setItem(k: string, v: string): void {
-    this.m.set(k, v);
-  }
 }
 
 describe("weekIndexOf（JST週番号・月曜はじまり）", () => {

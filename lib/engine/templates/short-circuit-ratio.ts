@@ -5,13 +5,10 @@
  *   （Ks は単位法の同期インピーダンス Zs[p.u.] の逆数 = 1/(%Zs/100)）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const PZ_SET: ReadonlyArray<number> = [80, 100, 125, 160, 200, 250];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(pz: number): GenerationResult | null {
   if (pz <= 0) return null;
@@ -22,14 +19,17 @@ function buildFrom(pz: number): GenerationResult | null {
   return {
     format: "numeric",
     params: {
-      percent_synchronous_impedance: { value: pz, unit: "%", realistic_range: [50, 300] },
+      percent_synchronous_impedance: {
+        value: pz,
+        unit: "%",
+        realistic_range: [50, 300],
+      },
     },
     answerValue: Ks,
     answerUnit: "",
     answerText,
     facts: { pz, Ks },
-    defaultStatement:
-      `ある三相同期発電機のパーセント同期インピーダンスが %Zs=${pz}% である。` + `この発電機の短絡比 Ks は?`,
+    defaultStatement: `ある三相同期発電機のパーセント同期インピーダンスが %Zs=${pz}% である。この発電機の短絡比 Ks は?`,
     defaultSolution: [`短絡比 Ks=1/(%Zs/100)=100/%Zs`, `Ks=100/${pz}`, `Ks=${answerText}`],
     physicallyValid: true,
   };

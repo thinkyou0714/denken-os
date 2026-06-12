@@ -50,6 +50,13 @@ export function aggregate(p: Problem, poll: PollResult | null): AggregateOutput 
   const choices = p.choices ?? [];
   // votes と choices の対応がずれた入力（X poll は最大4択で choices が5件以上だと末尾が
   // poll に出ない等）でも、既知の選択肢に対応する票だけで集計する（防御）。
+  if (poll.votes.length !== choices.length) {
+    // 長さ不一致は通常の X poll 制約（最大4択）か設定ミスのため、診断用に警告する（I-026）。
+    console.warn(
+      `aggregate: votes.length(${poll.votes.length}) !== choices.length(${choices.length}) for problem ${p.id}. ` +
+        "末尾の要素は集計されません。",
+    );
+  }
   const n = Math.min(poll.votes.length, choices.length);
   let total = 0;
   for (let i = 0; i < n; i++) total += poll.votes[i] ?? 0;

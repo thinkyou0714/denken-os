@@ -12,6 +12,7 @@ import type { Card } from "ts-fsrs";
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
 import { FsrsScheduler, type FsrsView } from "../../lib/scheduler/fsrs.js";
 import type { Rating } from "../../lib/scheduler/types.js";
+import { dayIndex as _dayIndex, JST_OFFSET_MS } from "./dates.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -32,10 +33,6 @@ const RETENTION_KEY = "denken:retention";
 /** 解答ログの保持上限。無限成長で localStorage quota（〜5MB）に達すると
  *  以後の保存がすべて失敗するため、古い順に間引く（1日10問×500日分は保持）。 */
 export const LOG_CAP = 5000;
-const DAY_MS = 86_400_000;
-/** 既定の「1日」境界は日本標準時(UTC+9)。電験は国内試験で受験者は JST 生活のため、
- *  朝7時(JST)の学習が UTC では前日扱いになりストリークが途切れる不具合を避ける。 */
-const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 function ratingOf(x: Rating | boolean): Rating {
   if (typeof x === "boolean") return x ? "good" : "again";
@@ -52,6 +49,9 @@ function reviveCard(s: StoredCard): Card {
 
 export class LocalProgress {
   private scheduler: FsrsScheduler;
+  /** 最後に保存が失敗したキーと時刻（成功でクリア）。G6 が保存失敗 UI に利用する。 */
+  private _lastPersistError: { key: string; atMs: number } | null = null;
+
   constructor(
     private storage: StorageLike,
     /** 日境界のタイムゾーンオフセット(ms)。既定 JST。テストで上書き可。 */
@@ -60,9 +60,18 @@ export class LocalProgress {
     this.scheduler = new FsrsScheduler(this.desiredRetention());
   }
 
+  /**
+   * 最後に localStorage 保存が失敗したキーと時刻。
+   * iOS プライベートモードや quota 超過時に記録される。保存成功でクリアされる。
+   * G6（app.ts 分割後）が保存失敗をユーザーに通知するために使う。
+   */
+  get lastPersistError(): { key: string; atMs: number } | null {
+    return this._lastPersistError;
+  }
+
   /** epoch ms をオフセット込みの「日番号」に落とす（同一日の判定・連続日数に使う）。 */
   private dayIndex(ms: number): number {
-    return Math.floor((ms + this.dayOffsetMs) / DAY_MS);
+    return _dayIndex(ms, this.dayOffsetMs);
   }
 
   private read<T>(key: string, fallback: T): T {
@@ -71,18 +80,22 @@ export class LocalProgress {
     try {
       return JSON.parse(raw) as T;
     } catch {
+      console.warn(`[store] JSON.parse 失敗: key=${key}`);
       return fallback;
     }
   }
 
   /** 書き込みの安全ラッパ。iOS プライベートモードや quota 超過で setItem が
    *  throw すると採点フロー全体が落ちるため、保存失敗は学習継続より劣後させる
-   *  （その回の永続化は諦め、アプリは動き続ける）。 */
+   *  （その回の永続化は諦め、アプリは動き続ける）。失敗時は lastPersistError に記録。 */
   private safeSet(key: string, value: string): void {
     try {
       this.storage.setItem(key, value);
+      // 保存成功: エラー記録をクリア
+      this._lastPersistError = null;
     } catch {
       // 保存不能（プライベートモード・容量超過）。クラッシュさせない。
+      this._lastPersistError = { key, atMs: Date.now() };
     }
   }
 
@@ -148,7 +161,14 @@ export class LocalProgress {
     this.safeSet(CARD_KEY, JSON.stringify(cards));
 
     const logs = this.logs();
-    logs.push({ topic, correct: rating !== "again", atMs: nowMs, timeMs, problemId, rating });
+    logs.push({
+      topic,
+      correct: rating !== "again",
+      atMs: nowMs,
+      rating,
+      ...(timeMs !== undefined ? { timeMs } : {}),
+      ...(problemId !== undefined ? { problemId } : {}),
+    });
     if (logs.length > LOG_CAP) logs.splice(0, logs.length - LOG_CAP); // 古い順に間引く
     this.safeSet(LOG_KEY, JSON.stringify(logs));
     return this.scheduler.view(next);

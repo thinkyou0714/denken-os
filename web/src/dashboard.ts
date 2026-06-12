@@ -5,6 +5,7 @@
  */
 import type { Problem, Subject } from "../../lib/engine/schema.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
+import { JST_OFFSET_MS as _JST_OFFSET_MS, DAY_MS } from "./dates.js";
 import type { WebAnswerLog } from "./store.js";
 
 export interface Tally {
@@ -18,8 +19,6 @@ export interface SubjectRow extends Tally {
 }
 
 export type Mastery = "未学習" | "要復習" | "習得中" | "習得";
-
-const DAY_MS = 86_400_000;
 
 function tally(attempts: number, correct: number): Tally {
   return { attempts, correct, accuracy: attempts > 0 ? correct / attempts : 0 };
@@ -64,7 +63,10 @@ export function bySubject(logs: WebAnswerLog[], problems: Problem[]): SubjectRow
     cur.attempts += 1;
     if (l.correct) cur.correct += 1;
   }
-  return order.map((subject) => ({ subject, ...tally(acc.get(subject)!.attempts, acc.get(subject)!.correct) }));
+  return order.map((subject) => {
+    const t = acc.get(subject) ?? { attempts: 0, correct: 0 }; // order 全件を上で seed 済み
+    return { subject, ...tally(t.attempts, t.correct) };
+  });
 }
 
 /** 論点別集計（正答率の低い順 = 弱点順）。 */
@@ -90,15 +92,12 @@ export function masteryLevel(t: Tally): Mastery {
   return "習得";
 }
 
-/** 既定の日境界は日本標準時(UTC+9)。store.ts / plan.ts と揃え、「今日/明日」のズレを防ぐ。 */
-const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
-
 /** 今後 days 日の復習予定件数（カードの due を日別に集計）。index0=今日（JST 日境界）。 */
 export function reviewForecast(
   views: Iterable<FsrsView>,
   nowMs: number,
   days = 7,
-  dayOffsetMs: number = JST_OFFSET_MS,
+  dayOffsetMs: number = _JST_OFFSET_MS,
 ): number[] {
   const out = new Array<number>(days).fill(0);
   const todayIdx = Math.floor((nowMs + dayOffsetMs) / DAY_MS);
@@ -140,7 +139,7 @@ export function dailyActivity(
   logs: WebAnswerLog[],
   days: number,
   nowMs: number,
-  dayOffsetMs: number = JST_OFFSET_MS,
+  dayOffsetMs: number = _JST_OFFSET_MS,
 ): DayActivity[] {
   const todayIdx = Math.floor((nowMs + dayOffsetMs) / DAY_MS);
   const counts = new Map<number, number>();
