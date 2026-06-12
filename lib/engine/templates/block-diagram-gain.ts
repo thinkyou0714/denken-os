@@ -1,0 +1,72 @@
+/**
+ * テンプレート: フィードバック系の合成ゲイン（機械制御・二次・numeric）。
+ *   負帰還系の合成伝達関数 W = G/(1+G·H)。定常状態（DC）のゲインを数値で求める。
+ *   ブロック線図の等価変換の最初の一歩（二次・機械制御の頻出基礎）。
+ */
+import { formatClean, isCleanAnswer } from "../clean.js";
+import type { GenerationResult, Template } from "./types.js";
+
+/** (G, H) — W=G/(1+GH) が綺麗になる組。 */
+const GH_PAIRS: ReadonlyArray<readonly [number, number]> = [
+  [4, 1],
+  [9, 1],
+  [19, 1],
+  [99, 1],
+  [4, 0.25],
+  [6, 0.5],
+  [8, 0.5],
+  [12, 0.25],
+  [20, 0.2],
+  [15, 0.2],
+];
+
+function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)]!;
+}
+
+function buildFrom(g: number, hh: number): GenerationResult | null {
+  if (g <= 0 || hh <= 0) return null;
+  const w = g / (1 + g * hh);
+  if (!isCleanAnswer(w) || !isCleanAnswer(1 + g * hh)) return null;
+  const answerText = formatClean(w);
+  return {
+    format: "numeric",
+    params: {
+      forward_gain: { value: g, realistic_range: [1, 200] },
+      feedback_gain: { value: hh, realistic_range: [0.1, 2] },
+    },
+    answerValue: w,
+    answerUnit: "",
+    answerText,
+    facts: { g, hh, w },
+    defaultStatement:
+      `前向き要素のゲイン G=${formatClean(g)}、フィードバック要素のゲイン H=${formatClean(hh)} の` +
+      `負帰還制御系がある。系全体の合成ゲイン W=G/(1+GH) の値は?`,
+    defaultSolution: [
+      `負帰還系の合成伝達関数 W=G/(1+G·H)`,
+      `=${formatClean(g)}/(1+${formatClean(g)}×${formatClean(hh)})=${formatClean(g)}/${formatClean(1 + g * hh)}`,
+      `=${answerText}`,
+    ],
+    physicallyValid: true,
+  };
+}
+
+export const blockDiagramGain: Template = {
+  topic: "負帰還系の合成ゲイン",
+  subject: "機械制御",
+  exam: "denken2_secondary",
+  difficulty: 3,
+  paramSpecs: {
+    forward_gain: { realistic_range: [1, 200] },
+    feedback_gain: { realistic_range: [0.1, 2] },
+  },
+  generate(rng) {
+    const [g, hh] = pick(GH_PAIRS, rng);
+    return buildFrom(g, hh);
+  },
+  generateFrom(params) {
+    const { forward_gain, feedback_gain } = params;
+    if (forward_gain === undefined || feedback_gain === undefined) return null;
+    return buildFrom(forward_gain, feedback_gain);
+  },
+};

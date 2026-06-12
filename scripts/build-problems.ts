@@ -10,7 +10,7 @@
  *
  * 使い方: npm run build:problems  （既定で web/problems.json を上書き）
  */
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate } from "../lib/engine/generate.js";
@@ -19,7 +19,7 @@ import type { Problem } from "../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import { validateProblem } from "../lib/engine/validate.js";
 
-const PER_TOPIC = 8;
+const PER_TOPIC = 10;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** 決定論 RNG（テストと同じ実装）。topic ごとに別 seed を与える。 */
@@ -54,14 +54,58 @@ async function buildForTopic(topic: string): Promise<Problem[]> {
     idPrefix: "TMP",
   });
   const seen = new Set<string>();
+  const seenParams = new Set<string>();
   const unique: Problem[] = [];
   for (const p of candidates) {
     if (seen.has(p.statement)) continue;
+    // 係数署名でも重複除去（文面が違っても数値が同一の実質重複を排除）。
+    const sig = paramsSignature(p);
+    if (seenParams.has(sig)) continue;
     seen.add(p.statement);
+    seenParams.add(sig);
     unique.push(p);
     if (unique.length >= PER_TOPIC) break;
   }
   return unique;
+}
+
+/** 係数の値だけを並べた署名（キー順固定）。 */
+function paramsSignature(p: Problem): string {
+  const params = p.params ?? {};
+  return Object.keys(params)
+    .sort()
+    .map((k) => `${k}=${params[k]!.value}`)
+    .join("|");
+}
+
+/**
+ * 内容由来の安定ID。topic＋係数署名の FNV-1a ハッシュから生成する。
+ * 通し番号と違い、テンプレ追加・並び替えで既存問題のIDが変わらないため、
+ * 学習者の解答ログ（problemId）や間違いノートが将来の再生成後も正しく紐づく。
+ */
+/** 旧・連番ID時代（mainに出荷済みの405問）の署名→ID対応。
+ *  既存ユーザーの解答ログ・間違いノート（problemId参照）を壊さないため、
+ *  内容が同一の問題には出荷済みのIDをそのまま使い続ける（Codexレビュー対応）。 */
+const LEGACY_IDS: Record<string, string> = JSON.parse(
+  readFileSync(join(dirname(fileURLToPath(import.meta.url)), "legacy-ids.json"), "utf8"),
+) as Record<string, string>;
+
+function stableId(p: Problem, taken: Set<string>): string {
+  const base = `${p.topic}|${paramsSignature(p)}`;
+  const legacy = LEGACY_IDS[base];
+  if (legacy && !taken.has(legacy)) {
+    taken.add(legacy);
+    return legacy;
+  }
+  let h = hashSeed(base);
+  let id = `G-${h.toString(16).padStart(8, "0").toUpperCase()}`;
+  // 万一の衝突は再ハッシュで回避（決定論を保つ）。
+  while (taken.has(id)) {
+    h = hashSeed(`${base}#${h}`);
+    id = `G-${h.toString(16).padStart(8, "0").toUpperCase()}`;
+  }
+  taken.add(id);
+  return id;
 }
 
 async function main(): Promise<void> {
@@ -71,8 +115,10 @@ async function main(): Promise<void> {
     all.push(...items);
   }
 
-  // ID を通し番号で振り直す（topic 順 → 安定）。
-  const problems = all.map((p, i) => ({ ...p, id: `D-${String(i + 1).padStart(4, "0")}` }));
+  // ID は内容由来の安定ハッシュ（テンプレ追加・並び替えでIDがズレて
+  // 既存ユーザーの間違いノートが別問題を指す事故を構造的に防ぐ）。
+  const taken = new Set<string>();
+  const problems = all.map((p) => ({ ...p, id: stableId(p, taken) }));
 
   // 念のため全件 validate（壊れた問題を web に出さない）。
   for (const p of problems) {
@@ -96,6 +142,20 @@ async function main(): Promise<void> {
       .map(([k, v]) => `${k}=${v}`)
       .join(", ")}`,
   );
+  // 科目×形式マトリクス（在庫の偏りを毎回可視化し、ドキュメント乖離の再発を防ぐ）。
+  const bySubject = new Map<string, Record<string, number>>();
+  for (const p of problems) {
+    const row = bySubject.get(p.subject) ?? {};
+    const f = p.format ?? "multiple_choice";
+    row[f] = (row[f] ?? 0) + 1;
+    row.total = (row.total ?? 0) + 1;
+    bySubject.set(p.subject, row);
+  }
+  for (const [subject, row] of bySubject) {
+    console.log(
+      `  ${subject}: 計${row.total} (mc=${row.multiple_choice ?? 0}, num=${row.numeric ?? 0}, desc=${row.descriptive ?? 0})`,
+    );
+  }
 }
 
 main().catch((err) => {
