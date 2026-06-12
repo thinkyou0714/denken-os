@@ -4,14 +4,11 @@
  *   機械的出力  Pm = P2·(1−s)   〔kW〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P2_SET: ReadonlyArray<number> = [5, 8, 10, 12, 15, 20, 30, 40];
 const S_SET: ReadonlyArray<number> = [0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.1];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(P2: number, s: number): GenerationResult | null {
   if (P2 <= 0 || s <= 0 || s >= 1) return null;

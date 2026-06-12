@@ -5,14 +5,11 @@
  *   （排熱 (1−ηG) のうち ηS を回収する、の式変形。過去問頻出の導出）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const ETA_G_SET: ReadonlyArray<number> = [25, 30, 35, 40];
 const ETA_S_SET: ReadonlyArray<number> = [20, 25, 30, 35, 40];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(etaG: number, etaS: number): GenerationResult | null {
   if (etaG <= 0 || etaG >= 100 || etaS <= 0 || etaS >= 100) return null;

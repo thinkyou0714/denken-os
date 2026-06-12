@@ -4,6 +4,7 @@
  *   δ=90°で最大（定態安定極限）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const VS_SET: ReadonlyArray<number> = [60, 66, 100, 110];
@@ -13,10 +14,6 @@ const DELTA_SET: ReadonlyArray<readonly [number, number]> = [
   [30, 0.5],
   [90, 1.0],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(Vs: number, Vr: number, X: number, deg: number, sin: number): GenerationResult | null {
   if (Vs <= 0 || Vr <= 0 || X <= 0 || sin <= 0) return null;

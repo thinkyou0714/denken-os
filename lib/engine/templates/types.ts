@@ -35,9 +35,12 @@ export interface GenerationResult {
   /** コードが算出した数値の真値（検算の基準）。 */
   answerValue: number;
   answerUnit: string;
-  /** 整形済みの正解テキスト（multiple_choice では choices のいずれかと一致）。 */
+  /**
+   * 整形済みの正解テキスト（multiple_choice では choices のいずれかと一致することを保証）。
+   * answerText は String(Number(x.toFixed(2))) または formatClean(x) で生成する。
+   */
   answerText: string;
-  /** 正解を含む選択肢（昇順）。numeric では省略。 */
+  /** 正解を含む選択肢（昇順）。numeric/descriptive では省略。 */
   choices?: string[];
   distractors?: Distractor[];
   /** 最頻誤答になりやすい選択肢テキスト（stats.common_wrong_choice の既定値）。 */

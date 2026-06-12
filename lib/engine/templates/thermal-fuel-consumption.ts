@@ -4,6 +4,7 @@
  *   ⇒ m = 3600·W / (η·H)   〔kg〕  （1kWh = 3600kJ）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (効率%, 発熱量kJ/kg) — 3600/(η·H) が綺麗な kg/kWh になる組だけ採用。 */
@@ -20,10 +21,6 @@ const ETA_H_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [25, 48000],
 ];
 const W_SET: ReadonlyArray<number> = [1000, 2000, 4000, 5000, 8000, 10000, 20000];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(etaPct: number, heat: number, energy: number): GenerationResult | null {
   if (etaPct <= 0 || etaPct >= 100 || heat <= 0 || energy <= 0) return null;

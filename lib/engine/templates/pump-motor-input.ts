@@ -4,16 +4,13 @@
  *     Q=揚水量〔m³/s〕, H=全揚程〔m〕, η=ポンプ＋電動機の総合効率
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const Q_SET: ReadonlyArray<number> = [1, 2, 4, 5, 10];
 const H_SET: ReadonlyArray<number> = [20, 50, 100, 150, 200];
 // 総合効率は現実的な範囲のみ（0.98 は綺麗な答えになるが物理的に非現実的なので除外）。
 const ETA_SET: ReadonlyArray<number> = [0.7, 0.8];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(Q: number, H: number, eta: number): GenerationResult | null {
   if (Q <= 0 || H <= 0 || eta <= 0 || eta > 1) return null;

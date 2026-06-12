@@ -5,6 +5,7 @@
  *   綺麗な η になる (P_out, P_i, P_c) の組のみ採用する。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 // [出力 P_out(kW), 鉄損 P_i(kW), 銅損 P_c(kW)] — η が綺麗(整数 or .5%)になる組。
@@ -18,10 +19,6 @@ const TUPLES: ReadonlyArray<readonly [number, number, number]> = [
   [1880, 40, 80],
   [1990, 4, 6],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(pout: number, pi: number, pc: number): GenerationResult | null {
   if (pout <= 0 || pi <= 0 || pc <= 0) return null;

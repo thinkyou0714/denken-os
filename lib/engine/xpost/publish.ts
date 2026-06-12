@@ -50,25 +50,39 @@ export async function scheduleProblem(p: Problem, opts: PublishOptions = {}): Pr
 
   const morning: PostReceipt[] = [];
   for (let i = 0; i < posts.morning.length; i++) {
-    const r = await client.schedule({
-      text: posts.morning[i]!,
-      scheduledAt: times.morning,
-      // poll は先頭ポストにのみ併設。
-      poll: i === 0 && poll ? poll : undefined,
-    });
-    morning.push(r);
+    try {
+      const r = await client.schedule({
+        text: posts.morning[i]!,
+        scheduledAt: times.morning,
+        // poll は先頭ポストにのみ併設。
+        poll: i === 0 && poll ? poll : undefined,
+      });
+      morning.push(r);
+    } catch (e) {
+      // 投稿予約エラーに topic・段階の文脈を付与（I-020）。
+      throw new Error(
+        `[draw/xpost] topic="${p.topic}" id="${p.id}" 朝スレッド[${i}]の予約に失敗しました: ${e instanceof Error ? e.message : e}`,
+      );
+    }
   }
 
   const morningHeadId = morning[0]?.id;
   const evening: PostReceipt[] = [];
   for (let i = 0; i < posts.evening.length; i++) {
-    const r = await client.schedule({
-      text: posts.evening[i]!,
-      scheduledAt: times.evening,
-      // 夜の先頭は朝の先頭を引用してツリー化（遡れる＋滞在時間）。
-      quoteOfId: i === 0 ? morningHeadId : undefined,
-    });
-    evening.push(r);
+    try {
+      const r = await client.schedule({
+        text: posts.evening[i]!,
+        scheduledAt: times.evening,
+        // 夜の先頭は朝の先頭を引用してツリー化（遡れる＋滞在時間）。
+        quoteOfId: i === 0 ? morningHeadId : undefined,
+      });
+      evening.push(r);
+    } catch (e) {
+      // 投稿予約エラーに topic・段階の文脈を付与（I-020）。
+      throw new Error(
+        `[draw/xpost] topic="${p.topic}" id="${p.id}" 夜スレッド[${i}]の予約に失敗しました: ${e instanceof Error ? e.message : e}`,
+      );
+    }
   }
 
   return { morning, evening, hasPoll: poll !== null };

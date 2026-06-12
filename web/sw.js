@@ -28,12 +28,20 @@
 //         デンタマ成長(Lv10星/Lv20ヘルメット/Lv40王冠)＋まめ知識12種・効果音音量4段階・
 //         実績タップでシェア・ヘルプのカード内クリック誤閉じ修正)
 //   (v18: 問題データ拡充 — テンプレ88種・788問(法規77/MC49)を配信。出荷済み405問のIDは温存し、新規は内容由来の安定ID)
-const CACHE = "denken-os-v18";
+//   (v19: リファクタ — 分割バンドル・保存失敗可視化(lastPersistError)・日付ユーティリティ一元化・
+//         sanitizeSvg・SW堅牢化(fetch失敗フォールバック・install失敗時skipWaiting抑制))
+const CACHE = "denken-os-v19";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
-  self.skipWaiting();
+  event.waitUntil(
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(ASSETS))
+      .then(() => self.skipWaiting()),
+    // addAll が失敗した場合（ネットワークエラー等）は skipWaiting しない。
+    // アクティブ化を保留することで、破損したキャッシュが使われるのを防ぐ。
+  );
 });
 
 self.addEventListener("activate", (event) => {
@@ -45,5 +53,16 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).catch(() => {
+        // ナビゲーションリクエスト（ページ遷移）でネットワーク失敗時は app shell へフォールバック。
+        if (event.request.mode === "navigate") {
+          return caches.match("./").then((shell) => shell ?? Response.error());
+        }
+        return Response.error();
+      });
+    }),
+  );
 });

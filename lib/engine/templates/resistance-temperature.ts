@@ -3,15 +3,12 @@
  *   R2 = R1·{1 + α·(t2 − t1)}（α: 抵抗温度係数〔/K〕）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R1_SET: ReadonlyArray<number> = [10, 20, 25, 50, 100, 200];
 const ALPHA_SET: ReadonlyArray<number> = [0.002, 0.0025, 0.004, 0.005];
 const DT_SET: ReadonlyArray<number> = [10, 20, 25, 40, 50, 75, 100];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(r1: number, alpha: number, dT: number): GenerationResult | null {
   if (r1 <= 0 || alpha <= 0 || dT === 0) return null;

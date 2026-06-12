@@ -22,6 +22,7 @@ export function loadSeenBadges(storage: StorageLike): Set<string> {
     const arr = JSON.parse(raw) as unknown;
     return new Set(Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : []);
   } catch {
+    console.warn(`[achievements] JSON.parse 失敗: key=${BADGES_KEY}`);
     return new Set();
   }
 }

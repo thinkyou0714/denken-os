@@ -4,6 +4,7 @@
  *   R,X はピタゴラス数の組に限定し、|Z|・I・cosφ を全て綺麗な値にする。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
@@ -21,10 +22,6 @@ const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [16, 12],
 ];
 const V_SET: ReadonlyArray<number> = [100, 200];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(v: number, r: number, x: number): GenerationResult | null {
   if (v <= 0 || r <= 0 || x <= 0) return null;

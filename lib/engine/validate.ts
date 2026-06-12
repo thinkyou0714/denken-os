@@ -4,8 +4,12 @@
  * 二段構え (problem-schema.json の $comment / 09-ci-quality-gate.md の役割分担):
  *  1) 構造検証: zod (problem-schema.json のミラー)
  *  2) コード側不変条件: draft-07 で表現できない「answer ∈ choices」等
+ *
+ * ε: ANSWER_EPSILON は clean.ts が提供する定数（G1 との契約）。
+ * G1 完了前にこのファイルを参照する場合は型エラーになりうるが、
+ * wave 終了時にオーケストレータが統合検証する。
  */
-import { isCleanAnswer } from "./clean.js";
+import { ANSWER_EPSILON, isCleanAnswer } from "./clean.js";
 import { type Problem, problemSchema } from "./schema.js";
 
 export interface ValidationIssue {
@@ -69,6 +73,16 @@ export function validateProblem(input: unknown): ValidationResult {
 /**
  * 解説テキストから「最終的な答え」を取り出し、想定値と一致するか確認する。
  * narrate.ts が出した解説の数値整合チェック（不一致なら generate 側で破棄）。
+ *
+ * 数値抽出正規表現:
+ *  - 指数表記 (1.5e3, 2E-4) に対応（I-013 拡張）。
+ *  - 符号付き数値 (-5.0, +3) にも対応。
+ *  - 既存の受理挙動は維持し、受理範囲を広げる方向の拡張のみ行う。
+ *
+ * 受理が広がった例:
+ *  - "電流 I=1.5e3A" → 1500 として answerText="1500" と照合できるようになった。
+ *  - "+3.2" のように符号付き数値も数値として抽出できるようになった。
+ *  - "2.56E-4" の大文字 E 指数表記も受理。
  */
 export function narrationMatchesAnswer(solution: string[], answerText: string): boolean {
   const expected = Number(answerText);
@@ -77,10 +91,11 @@ export function narrationMatchesAnswer(solution: string[], answerText: string): 
     return solution.some((s) => s.includes(answerText));
   }
   // 解説全体から数値を抽出し、想定値に十分近いものが含まれるか。
+  // 指数表記（1.5e3, 2E-4 など）にも対応した正規表現（I-013）。
   const nums =
     solution
       .join(" ")
-      .match(/-?\d+(?:\.\d+)?/g)
+      .match(/[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)
       ?.map(Number) ?? [];
-  return nums.some((n) => Math.abs(n - expected) < 1e-6);
+  return nums.some((n) => Math.abs(n - expected) < ANSWER_EPSILON);
 }

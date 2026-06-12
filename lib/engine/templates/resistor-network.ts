@@ -4,6 +4,7 @@
  * 正解はコードで算出。誤答は典型ミス（全部直列・R1を忘れ並列のみ・R3を無視）。
  */
 import { resistorLadderFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R1_SET = [5, 10, 15, 20, 30];
@@ -20,10 +21,6 @@ const PAR_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [50, 50],
   [60, 30],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(R1: number, R2: number, R3: number): GenerationResult | null {
   if (R1 <= 0 || R2 <= 0 || R3 <= 0) return null;

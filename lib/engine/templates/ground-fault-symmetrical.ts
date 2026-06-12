@@ -5,15 +5,12 @@
  *   （正相=逆相と仮定し Z1=Z2 を採る代表問題）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const E_SET: ReadonlyArray<number> = [200, 400, 1000, 3810, 6350];
 const Z1_SET: ReadonlyArray<number> = [2, 5, 8, 10, 15];
 const Z0_SET: ReadonlyArray<number> = [2, 4, 5, 10, 20];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(E: number, Z1: number, Z0: number): GenerationResult | null {
   if (E <= 0 || Z1 <= 0 || Z0 <= 0) return null;

@@ -3,10 +3,11 @@ name: validate
 # 09-ci-quality-gate: schema違反・出典欠落・検証未通過の公開を機械的に止める安全網。
 on:
   push:
+    branches: [main]  # main push のみ。PR 実行との二重起動を防ぐ（I-091）。
   pull_request:
   workflow_dispatch:
 
-# push と pull_request の二重起動を抑制。
+# 同一ブランチ・PRへの新 push 時に旧実行をキャンセルし最新だけ走らせる（I-085）。
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -45,7 +46,27 @@ jobs:
         run: npm run validate:data
 
       - name: Run unit tests (with coverage gate)
-        run: npm run test:coverage
+        run: npm run test:coverage 2>&1 | tee /tmp/test-output.txt; exit ${PIPESTATUS[0]}
+
+      - name: Upload coverage to step summary
+        if: always()
+        run: tail -20 /tmp/test-output.txt >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build offline web app
         run: npm run build:web
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+      - name: Upload web dist
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist/
+          retention-days: 7

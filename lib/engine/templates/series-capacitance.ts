@@ -3,6 +3,7 @@
  *   直列: C = C1·C2/(C1+C2)（和分の積）。並列の単純和との取り違えが最頻誤答。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** 合成値が綺麗になる (C1, C2) μF の組。 */
@@ -23,10 +24,6 @@ const C_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [10, 15],
   [5, 20],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(c1: number, c2: number): GenerationResult | null {
   if (c1 <= 0 || c2 <= 0) return null;

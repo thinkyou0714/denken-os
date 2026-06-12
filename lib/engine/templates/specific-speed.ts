@@ -4,6 +4,7 @@
  *   H^(5/4)・√P が整数になる組に限定して綺麗な値を担保する。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (H, P, N) — H^1.25 と √P が整数で、Ns が綺麗になる組。 */
@@ -19,10 +20,6 @@ const TRIPLES: ReadonlyArray<readonly [number, number, number]> = [
   [625, 2500, 750], // 3125, 50 → 12
   [625, 10000, 375], // 100 → 12
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(head: number, power: number, speed: number): GenerationResult | null {
   if (head <= 0 || power <= 0 || speed <= 0) return null;

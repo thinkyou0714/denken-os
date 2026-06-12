@@ -30,6 +30,7 @@ export function loadChat(storage: StorageLike): ChatMessage[] {
         typeof (m as ChatMessage).content === "string",
     );
   } catch {
+    console.warn(`[chat] JSON.parse 失敗: key=${CHAT_KEY}`);
     return [];
   }
 }

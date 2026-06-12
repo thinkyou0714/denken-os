@@ -7,14 +7,11 @@
  *     （Codexレビュー指摘: 木柱=一律1.5 という旧出題は条件不備のため撤回）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const SAFETY_FACTOR = 2.5;
 const T_SET: ReadonlyArray<number> = [2, 4, 6, 8, 10, 12, 16, 20];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(tension: number): GenerationResult | null {
   if (tension <= 0) return null;

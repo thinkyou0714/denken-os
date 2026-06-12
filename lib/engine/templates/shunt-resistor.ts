@@ -3,14 +3,11 @@
  *   倍率 m の分流器抵抗  R_s = r / (m − 1)   〔Ω〕（r=電流計の内部抵抗）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const R_SET: ReadonlyArray<number> = [9, 18, 20, 45, 90, 99];
 const M_SET: ReadonlyArray<number> = [2, 4, 5, 10, 11, 20, 100];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(r: number, m: number): GenerationResult | null {
   if (r <= 0 || m <= 1) return null;

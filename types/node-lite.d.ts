@@ -1,6 +1,15 @@
 /**
  * Minimal Node.js ambient types used by this repository's CLI/scripts/tests.
  *
+ * 存在理由 (I-031):
+ *   @types/node を devDependencies に加えると package-lock.json が大きく膨らみ、
+ *   制限付きパッケージレジストリ環境（社内 CI 等）での `npm ci` が不安定になる。
+ *   本リポジトリが実際に使う Node API は `fs`・`path`・`url`・`os` の一部のみであり、
+ *   そのシムをここに集約することで品質ゲートを決定論的に維持する。
+ *
+ *   新しい Node API を追加したくなった場合はまず@types/node の全面導入コストを
+ *   検討し、採用しない場合は必要な型だけをここへ追記すること。
+ *
  * The ideal production setup is to depend on @types/node. This shim keeps the
  * quality gate deterministic in restricted package registries while covering
  * only the small Node surface imported in this codebase.

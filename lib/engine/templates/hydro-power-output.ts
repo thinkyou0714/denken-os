@@ -4,15 +4,12 @@
  *     Q=流量〔m³/s〕, H=有効落差〔m〕, η=総合効率
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const Q_SET: ReadonlyArray<number> = [5, 10, 15, 20, 25, 30, 40, 50];
 const H_SET: ReadonlyArray<number> = [20, 50, 80, 100, 120, 150, 200];
 const ETA_SET: ReadonlyArray<number> = [0.85, 0.9];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(Q: number, H: number, eta: number): GenerationResult | null {
   if (Q <= 0 || H <= 0 || eta <= 0 || eta > 1) return null;

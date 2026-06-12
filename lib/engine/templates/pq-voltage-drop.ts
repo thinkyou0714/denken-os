@@ -5,6 +5,7 @@
  *   （P〔kW〕, Q〔kvar〕, R・X〔Ω〕, V: 受電端線間電圧〔kV〕 → ΔV〔V〕。単位整合に注意）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const P_SET: ReadonlyArray<number> = [1000, 2000, 3000, 4000, 5000, 8000];
@@ -12,10 +13,6 @@ const PF_RATIO: ReadonlyArray<number> = [0.5, 0.75, 1, 1.25];
 const R_SET: ReadonlyArray<number> = [1, 2, 4, 5];
 const X_SET: ReadonlyArray<number> = [2, 4, 5, 8, 10];
 const V_SET: ReadonlyArray<number> = [10, 20, 50];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(p: number, q: number, r: number, x: number, v: number): GenerationResult | null {
   if (p <= 0 || q < 0 || r <= 0 || x <= 0 || v <= 0) return null;

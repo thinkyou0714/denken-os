@@ -3,19 +3,17 @@
  *   W = ½·C·V²  〔J〕   (C は静電容量, V は電圧)
  * 二次（記述/計算）寄りの「選択肢なし・数値回答」形式のデモ。正解はコードで算出。
  */
+import { ANSWER_EPSILON } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const CAP_UF = [1, 2, 4, 5, 10, 20, 47, 100]; // μF
 const VOLT = [10, 20, 50, 100, 200];
 
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
-
 /** 値を「綺麗な」mJ 文字列に整形（小数2桁で割り切れるもののみ採用）。 */
 function formatMilliJoule(joule: number): string | null {
   const mJ = joule * 1000;
-  if (Math.abs(mJ * 100 - Math.round(mJ * 100)) > 1e-6) return null;
+  if (Math.abs(mJ * 100 - Math.round(mJ * 100)) > ANSWER_EPSILON) return null;
   // 小数2桁に丸めたうえで余分な0を落とす（50.00→"50", 12.50→"12.5", 2.56→"2.56"）。
   return String(Number(mJ.toFixed(2)));
 }

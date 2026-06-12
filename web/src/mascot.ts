@@ -111,7 +111,9 @@ function accessory(tier: MascotTier): string {
 
 /**
  * デンタマのSVG（電気の玉の妖精。稲妻のアホ毛がトレードマーク）。
- * 文字列を `figure`/`div` の innerHTML として使う（自前生成・信頼済み）。
+ * 文字列を `figure`/`div` の innerHTML として使う（自前生成・信頼済み・ビルド時固定）。
+ * 注意: この SVG はコード内でのみ生成され、ユーザー入力・外部データを含まない。
+ * 外部由来 SVG を innerHTML に使う場合は sanitize.ts の sanitizeSvg を経由すること。
  * @param tier 成長段階（レベル帯でアクセサリーが付く）
  */
 export function mascotSvg(mood: MascotMood, size = 72, tier: MascotTier = 0): string {

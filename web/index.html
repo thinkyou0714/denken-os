@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="電験二種（第二種電気主任技術者）の学習をサポートするオフライン対応 PWA。FSRS による間隔反復・デイリークエスト・実績バッジで継続をサポートします。" />
     <title>DENKEN-OS — 電験二種 学習</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -48,7 +49,8 @@
         --surface: #161b25;
         --surface-2: #1d2330;
         --text: #e7eaf1;
-        --muted: #9aa4b6;
+        /* #aab4c8 は背景 #0d1017 に対してコントラスト比 ≥ 4.5:1 を満たす（WCAG AA 準拠）。 */
+        --muted: #aab4c8;
         --border: #262d3b;
         --border-strong: #38445a;
         --accent: #5d83f7;
@@ -232,6 +234,8 @@
         border: 1px solid var(--border-strong); border-radius: var(--r-sm);
         background: var(--surface); color: var(--text);
       }
+      /* バリデーション失敗フィールドを視覚的に示す（アクセシビリティ向上）。 */
+      input:invalid { border-color: var(--ng); box-shadow: 0 0 0 1px var(--ng); }
 
       /* ===== 進捗系 ===== */
       .bar { background: var(--surface-2); border-radius: var(--r-pill); height: .6rem; overflow: hidden; box-shadow: inset 0 0 0 1px var(--border); }

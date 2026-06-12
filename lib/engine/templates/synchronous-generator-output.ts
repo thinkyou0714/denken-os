@@ -6,6 +6,7 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { syncPhasorFigure } from "../figures/index.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const V_SET: ReadonlyArray<number> = [200, 220, 440];
@@ -16,10 +17,6 @@ const DELTA_SET: ReadonlyArray<readonly [number, number]> = [
   [30, 0.5],
   [90, 1.0],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(V: number, E: number, Xs: number, deg: number, sin: number): GenerationResult | null {
   if (V <= 0 || E <= 0 || Xs <= 0 || sin <= 0) return null;

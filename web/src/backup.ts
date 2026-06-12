@@ -69,7 +69,7 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
   const file = parsed as Partial<BackupFile>;
   if (file.app !== "denken-os") return { ok: false, reason: "DENKEN-OS のバックアップではありません。" };
   if (typeof file.version !== "number" || file.version > BACKUP_VERSION) {
-    return { ok: false, reason: "このアプリより新しい形式のバックアップです。アプリを更新してください。" };
+    return { ok: false, reason: "このアプリより新しいバックアップです。アプリを更新してください。" };
   }
   if (typeof file.data !== "object" || file.data === null) return { ok: false, reason: "データ部がありません。" };
 

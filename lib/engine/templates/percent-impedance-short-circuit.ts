@@ -5,14 +5,11 @@
  *   （%Z は基準容量におけるパーセントインピーダンス）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const IN_SET: ReadonlyArray<number> = [100, 150, 200, 250, 300, 400, 500];
 const PZ_SET: ReadonlyArray<number> = [4, 5, 8, 10, 12.5, 20, 25];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(In: number, pz: number): GenerationResult | null {
   if (In <= 0 || pz <= 0) return null;

@@ -3,16 +3,13 @@
  *   所要出力  P = W·v / η   〔kW〕（W=荷重〔N〕, v=巻上速度〔m/s〕, η=効率）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const W_SET: ReadonlyArray<number> = [1000, 2000, 4900, 5000, 9800];
 const V_SET: ReadonlyArray<number> = [0.5, 1, 2, 4, 5];
 // 機構効率は現実的な範囲のみ（0.98 は綺麗な答えになるが物理的に非現実的なので除外）。
 const ETA_SET: ReadonlyArray<number> = [0.7, 0.8];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(W: number, v: number, eta: number): GenerationResult | null {
   if (W <= 0 || v <= 0 || eta <= 0 || eta > 1) return null;

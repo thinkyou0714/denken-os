@@ -1,0 +1,47 @@
+name: release
+
+# I-087: タグ push (v*) または手動実行で release:check → GitHub Release 草稿を作成する。
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# 同一タグへの再 push（強制プッシュ等）時に旧実行を置き換える。
+# cancel-in-progress: true でリリース草稿の二重作成を防ぐ。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Release check (lint / typecheck / test / validate / build / audit)
+        run: npm run release:check
+
+      - name: Create GitHub Release draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME:-$(git describe --tags --exact-match 2>/dev/null || echo 'v0.0.0')}"
+          gh release create "$TAG" \
+            --draft \
+            --generate-notes \
+            --title "Release $TAG"

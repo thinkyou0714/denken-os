@@ -4,15 +4,12 @@
  *   水力・風力・太陽光の出題で頻出（期間は30日=720hで固定し、綺麗な比を構成）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const PERIOD_HOURS = 720; // 30日間
 const P_SET: ReadonlyArray<number> = [100, 200, 500, 1000, 2000, 5000];
 const RATIO_SET: ReadonlyArray<number> = [0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(rated: number, energy: number): GenerationResult | null {
   if (rated <= 0 || energy <= 0) return null;

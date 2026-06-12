@@ -4,15 +4,12 @@
  *     e = B·l·v   〔V〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const B_SET: ReadonlyArray<number> = [0.2, 0.4, 0.5, 0.8, 1, 1.2, 1.5, 2];
 const L_SET: ReadonlyArray<number> = [0.2, 0.25, 0.4, 0.5, 0.8, 1];
 const V_SET: ReadonlyArray<number> = [2, 4, 5, 8, 10, 12, 20];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(b: number, len: number, v: number): GenerationResult | null {
   if (b <= 0 || len <= 0 || v <= 0) return null;

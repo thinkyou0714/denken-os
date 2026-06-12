@@ -3,14 +3,11 @@
  *   E = I / r²〔lx〕（I: 光度cd, r: 距離m。光に垂直な面の直下照度）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const I_SET: ReadonlyArray<number> = [100, 160, 200, 400, 500, 800, 1000, 2000];
 const R_SET: ReadonlyArray<number> = [1, 2, 2.5, 4, 5, 10];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(luminous: number, r: number): GenerationResult | null {
   if (luminous <= 0 || r <= 0) return null;

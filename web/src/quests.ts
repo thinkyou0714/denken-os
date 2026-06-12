@@ -8,15 +8,16 @@
  *    これにより XP のクエストボーナスも完全に決定論で導出できる。
  * DOM 非依存でテスト可能。日境界は store.ts / retention.ts と同じ JST(UTC+9)。
  */
+
+import { dayIndex as _dayIndex, JST_OFFSET_MS } from "./dates.js";
 import type { WebAnswerLog } from "./store.js";
 
-const DAY_MS = 86_400_000;
-/** 既定の日境界は日本標準時(UTC+9)。store.ts / retention.ts と揃える。 */
-export const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+// dates.ts から再エクスポート（後方互換維持）。
+export { JST_OFFSET_MS } from "./dates.js";
 
 /** epoch ms を JST 日番号へ（クエストの抽選種・当日判定に使う）。 */
 export function dayIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): number {
-  return Math.floor((ms + dayOffsetMs) / DAY_MS);
+  return _dayIndex(ms, dayOffsetMs);
 }
 
 export type QuestKind = "solve" | "correct" | "combo" | "topics" | "easy";
@@ -143,7 +144,7 @@ export function allQuestsClear(dayLogs: readonly WebAnswerLog[], dayIndex: numbe
  * JST 週番号（月曜はじまり）。epoch 日番号 0 = 1970-01-01(木) なので +3 で月曜起点に揃う。
  */
 export function weekIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): number {
-  return Math.floor((dayIndexOf(ms, dayOffsetMs) + 3) / 7);
+  return Math.floor((_dayIndex(ms, dayOffsetMs) + 3) / 7);
 }
 
 export type WeeklyQuestKind = "wsolve" | "wcorrect" | "wdays" | "wtopics" | "wperfect";

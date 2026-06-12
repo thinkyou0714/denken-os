@@ -5,14 +5,11 @@
  *   （%Zが小さい方が多く分担する。過去問頻出の基本）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const Z_SET: ReadonlyArray<number> = [2, 2.5, 3, 4, 5, 6, 7.5];
 const P_SET: ReadonlyArray<number> = [300, 500, 600, 800, 900, 1000, 1200, 1500];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(za: number, zb: number, total: number): GenerationResult | null {
   if (za <= 0 || zb <= 0 || total <= 0 || za === zb) return null;

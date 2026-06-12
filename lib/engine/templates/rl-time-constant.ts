@@ -3,14 +3,11 @@
  *   τ = L/R（電流は最終値の63.2%に τ で到達。RC の既存テンプレと対をなす）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const L_SET: ReadonlyArray<number> = [10, 20, 40, 50, 100, 200, 400, 500];
 const R_SET: ReadonlyArray<number> = [2, 4, 5, 8, 10, 20, 25, 50];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(lMilliH: number, r: number): GenerationResult | null {
   if (lMilliH <= 0 || r <= 0) return null;

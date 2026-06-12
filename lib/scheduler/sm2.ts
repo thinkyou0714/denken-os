@@ -42,6 +42,9 @@ export class Sm2Scheduler implements Scheduler {
     }
 
     // SM-2 の ease 更新式。
+    // ease の上限は意図的に設けていない。標準 SM-2 仕様（Wozniak 1990）は上限なしであり、
+    // 上限を設けると超優秀カードの間隔が人為的に短縮されて記憶効率が下がる。
+    // 下限 MIN_EASE(1.3) だけ設けてカード間隔の底割れを防ぐ設計。
     ease = ease + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
     if (ease < MIN_EASE) ease = MIN_EASE;
 

@@ -51,6 +51,7 @@ export function loadFreezeState(storage: StorageLike): FreezeState {
     const restDays = Array.isArray(p.restDays) ? p.restDays.filter((d): d is number => typeof d === "number") : [];
     return { count, usedDays, lastAwardStreak, restDays };
   } catch {
+    console.warn(`[freeze] JSON.parse 失敗: key=${FREEZE_KEY}`);
     return emptyState();
   }
 }

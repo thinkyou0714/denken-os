@@ -5,12 +5,31 @@
  *   const stores = createSupabaseStores(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!)
  * で差し込む。行⇔ドメインのマッピングは純関数として切り出し、テスト可能にしている
  * （実 I/O は薄いラッパ）。
+ *
+ * zod 検証: rowToProblem / rowToReviewState / rowToAnswerLog は zod スキーマで検証し、
+ * パース失敗時は「どのテーブルのどの id か」を含むエラーを投げる（I-022）。
+ * 正常系データは全て通過するため、既存テストは無変更でグリーンになる。
+ *
+ * エラーラッパ: fail(op, error) で操作名付きのエラーに統一する（I-023）。
+ * URL/key の空チェック: createSupabaseStores で早期失敗（I-024）。
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { z } from "zod";
 import type { Problem } from "../engine/schema.js";
+import { problemSchema } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
 import type { ReviewState } from "../scheduler/types.js";
 import type { AnswerLogStore, ProblemStore, ReviewStateStore } from "./index.js";
+
+// ── エラーラッパ（I-023）────────────────────────────────────────────────────
+
+/**
+ * Supabase 操作の失敗を統一フォーマットで投げる内部ヘルパー。
+ * 例: `fail("problems.upsert", error)` → `Error: problems.upsert failed: <message>`
+ */
+function fail(op: string, error: { message: string }): never {
+  throw new Error(`${op} failed: ${error.message}`);
+}
 
 // ── 行 ⇔ ドメイン マッピング（純関数・テスト対象）──────────────────────────
 
@@ -50,13 +69,17 @@ export function problemToRow(p: Problem): ProblemRow {
   };
 }
 
+/**
+ * DB 行を Problem ドメインオブジェクトへ変換する。
+ * zod で検証し、失敗時は `"problems table, id=<id>"` を含むエラーを投げる（I-022）。
+ */
 export function rowToProblem(r: ProblemRow): Problem {
-  return {
+  const raw = {
     id: r.id,
-    exam: (r.exam ?? undefined) as Problem["exam"],
-    subject: r.subject as Problem["subject"],
+    exam: r.exam ?? undefined,
+    subject: r.subject,
     topic: r.topic,
-    format: r.format as Problem["format"],
+    format: r.format,
     difficulty: r.difficulty,
     statement: r.statement,
     choices: r.choices ?? undefined,
@@ -65,8 +88,14 @@ export function rowToProblem(r: ProblemRow): Problem {
     validation: r.validation,
     source: r.source,
     stats: r.stats ?? undefined,
-    status: r.status as Problem["status"],
+    status: r.status,
   };
+  const result = problemSchema.safeParse(raw);
+  if (!result.success) {
+    const issues = result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`problems table, id=${r.id}: ${issues}`);
+  }
+  return result.data;
 }
 
 export interface ReviewStateRow {
@@ -79,6 +108,16 @@ export interface ReviewStateRow {
   due_at: string; // ISO
   last_review_at: string | null;
 }
+
+/** zod スキーマ: review_states テーブル行の最小検証。 */
+const reviewStateRowSchema = z.object({
+  reps: z.number().int().min(0),
+  lapses: z.number().int().min(0),
+  interval_days: z.number().min(0),
+  ease: z.number().min(0),
+  due_at: z.string().datetime({ offset: true }),
+  last_review_at: z.string().datetime({ offset: true }).nullable(),
+});
 
 export function reviewStateToRow(userId: string, topic: string, s: ReviewState): ReviewStateRow {
   return {
@@ -93,14 +132,53 @@ export function reviewStateToRow(userId: string, topic: string, s: ReviewState):
   };
 }
 
+/**
+ * DB 行を ReviewState ドメインオブジェクトへ変換する。
+ * zod で検証し、失敗時は `"review_states table, user=<userId> topic=<topic>"` を含むエラーを投げる（I-022）。
+ */
 export function rowToReviewState(r: ReviewStateRow): ReviewState {
+  const result = reviewStateRowSchema.safeParse(r);
+  if (!result.success) {
+    const issues = result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`review_states table, user=${r.user_id} topic=${r.topic}: ${issues}`);
+  }
+  const d = result.data;
   return {
-    reps: r.reps,
-    lapses: r.lapses,
-    intervalDays: r.interval_days,
-    ease: r.ease,
-    dueMs: new Date(r.due_at).getTime(),
-    lastReviewMs: r.last_review_at === null ? null : new Date(r.last_review_at).getTime(),
+    reps: d.reps,
+    lapses: d.lapses,
+    intervalDays: d.interval_days,
+    ease: d.ease,
+    dueMs: new Date(d.due_at).getTime(),
+    lastReviewMs: d.last_review_at === null ? null : new Date(d.last_review_at).getTime(),
+  };
+}
+
+/** zod スキーマ: answer_logs テーブル行の最小検証。 */
+const answerLogRowSchema = z.object({
+  topic: z.string().min(1),
+  correct: z.boolean(),
+  time_ms: z.number().nullable(),
+  answered_at: z.string().datetime({ offset: true }),
+  problem_id: z.string().nullable(),
+});
+
+/**
+ * DB 行を AnswerLog ドメインオブジェクトへ変換する。
+ * zod で検証し、失敗時は `"answer_logs table, user=<userId>"` を含むエラーを投げる（I-022）。
+ */
+function rowToAnswerLog(r: Record<string, unknown>, userId: string): AnswerLog {
+  const result = answerLogRowSchema.safeParse(r);
+  if (!result.success) {
+    const issues = result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`answer_logs table, user=${userId}: ${issues}`);
+  }
+  const d = result.data;
+  return {
+    topic: d.topic,
+    correct: d.correct,
+    timeMs: d.time_ms ?? undefined,
+    atMs: new Date(d.answered_at).getTime(),
+    problemId: d.problem_id ?? undefined,
   };
 }
 
@@ -111,12 +189,12 @@ export class SupabaseProblemStore implements ProblemStore {
 
   async upsert(p: Problem): Promise<void> {
     const { error } = await this.client.from("problems").upsert(problemToRow(p));
-    if (error) throw new Error(`problems upsert failed: ${error.message}`);
+    if (error) fail("problems.upsert", error);
   }
 
   async get(id: string): Promise<Problem | undefined> {
     const { data, error } = await this.client.from("problems").select("*").eq("id", id).maybeSingle();
-    if (error) throw new Error(`problems get failed: ${error.message}`);
+    if (error) fail("problems.get", error);
     return data ? rowToProblem(data as ProblemRow) : undefined;
   }
 
@@ -125,7 +203,7 @@ export class SupabaseProblemStore implements ProblemStore {
     if (filter?.status) q = q.eq("status", filter.status);
     if (filter?.topic) q = q.eq("topic", filter.topic);
     const { data, error } = await q;
-    if (error) throw new Error(`problems list failed: ${error.message}`);
+    if (error) fail("problems.list", error);
     return (data ?? []).map((r) => rowToProblem(r as ProblemRow));
   }
 }
@@ -142,7 +220,7 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
       time_ms: log.timeMs ?? null,
       answered_at: new Date(log.atMs).toISOString(),
     });
-    if (error) throw new Error(`answer_logs insert failed: ${error.message}`);
+    if (error) fail("answer_logs.insert", error);
   }
 
   async byUser(userId: string): Promise<AnswerLog[]> {
@@ -151,14 +229,8 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
       .select("topic, correct, time_ms, answered_at, problem_id")
       .eq("user_id", userId)
       .order("answered_at", { ascending: true });
-    if (error) throw new Error(`answer_logs byUser failed: ${error.message}`);
-    return (data ?? []).map((r: Record<string, unknown>) => ({
-      topic: r.topic as string,
-      correct: r.correct as boolean,
-      timeMs: (r.time_ms as number | null) ?? undefined,
-      atMs: new Date(r.answered_at as string).getTime(),
-      problemId: (r.problem_id as string | null) ?? undefined,
-    }));
+    if (error) fail("answer_logs.byUser", error);
+    return (data ?? []).map((r: Record<string, unknown>) => rowToAnswerLog(r, userId));
   }
 }
 
@@ -172,18 +244,18 @@ export class SupabaseReviewStateStore implements ReviewStateStore {
       .eq("user_id", userId)
       .eq("topic", topic)
       .maybeSingle();
-    if (error) throw new Error(`review_states get failed: ${error.message}`);
+    if (error) fail("review_states.get", error);
     return data ? rowToReviewState(data as ReviewStateRow) : undefined;
   }
 
   async set(userId: string, topic: string, state: ReviewState): Promise<void> {
     const { error } = await this.client.from("review_states").upsert(reviewStateToRow(userId, topic, state));
-    if (error) throw new Error(`review_states upsert failed: ${error.message}`);
+    if (error) fail("review_states.upsert", error);
   }
 
   async byUser(userId: string): Promise<Map<string, ReviewState>> {
     const { data, error } = await this.client.from("review_states").select("*").eq("user_id", userId);
-    if (error) throw new Error(`review_states byUser failed: ${error.message}`);
+    if (error) fail("review_states.byUser", error);
     const out = new Map<string, ReviewState>();
     for (const r of data ?? []) {
       const row = r as ReviewStateRow;
@@ -193,8 +265,13 @@ export class SupabaseReviewStateStore implements ReviewStateStore {
   }
 }
 
-/** URL と key（service_role か anon）から3ストアをまとめて作る。 */
+/**
+ * URL と key（service_role か anon）から3ストアをまとめて作る。
+ * url または key が空文字・空白のみの場合は早期に例外を投げる（I-024）。
+ */
 export function createSupabaseStores(url: string, key: string) {
+  if (!url.trim()) throw new Error("createSupabaseStores: url が空です");
+  if (!key.trim()) throw new Error("createSupabaseStores: key が空です");
   const client = createClient(url, key);
   return {
     problems: new SupabaseProblemStore(client),

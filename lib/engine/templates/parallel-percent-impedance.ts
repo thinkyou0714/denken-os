@@ -4,13 +4,10 @@
  *   （短絡容量 Ps=Pbase·100/%Z の前段計算で頻出）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const PZ_SET: ReadonlyArray<number> = [4, 5, 6, 8, 10, 12, 20];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(za: number, zb: number): GenerationResult | null {
   if (za <= 0 || zb <= 0) return null;

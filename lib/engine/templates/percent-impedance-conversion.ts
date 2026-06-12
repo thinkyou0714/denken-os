@@ -3,6 +3,7 @@
  *   %Z は容量に比例する:  %Z2 = %Z1 × (P2 / P1)   〔%〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const PZ_SET: ReadonlyArray<number> = [4, 5, 8, 10, 12.5];
@@ -15,10 +16,6 @@ const P_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [5, 10],
   [50, 100],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(pz1: number, P1: number, P2: number): GenerationResult | null {
   if (pz1 <= 0 || P1 <= 0 || P2 <= 0) return null;

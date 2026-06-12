@@ -142,18 +142,32 @@ async function main() {
     process.exit(1);
   }
 
-  const problems = await generate(template, {
-    count: args.count,
-    source: args.source,
-    citation: args.citation,
-    rng: makeRng(args.seed),
-  });
+  let problems: Awaited<ReturnType<typeof generate>>;
+  try {
+    problems = await generate(template, {
+      count: args.count,
+      source: args.source,
+      citation: args.citation,
+      rng: makeRng(args.seed),
+    });
+  } catch (e) {
+    // draw/narrate/validate 段階のエラーに topic 文脈を付与（I-020）。
+    console.error(`[draw/narrate/validate] topic="${args.topic}" の問題生成中にエラーが発生しました:`);
+    console.error(e instanceof Error ? e.message : e);
+    process.exit(1);
+  }
 
   const json = JSON.stringify(problems, null, 2);
   if (args.out) {
-    mkdirSync(dirname(args.out), { recursive: true });
-    writeFileSync(args.out, `${json}\n`, "utf8");
-    console.error(`${problems.length} 件を ${args.out} に書き出しました。`);
+    try {
+      mkdirSync(dirname(args.out), { recursive: true });
+      writeFileSync(args.out, `${json}\n`, "utf8");
+      console.error(`${problems.length} 件を ${args.out} に書き出しました。`);
+    } catch (e) {
+      console.error(`[write] 出力ファイル "${args.out}" への書き込みに失敗しました:`);
+      console.error(e instanceof Error ? e.message : e);
+      process.exit(1);
+    }
   } else {
     console.log(json);
   }
@@ -161,9 +175,15 @@ async function main() {
   if (args.xpost) {
     console.error("\n--- X 投稿プレビュー（朝/夜スレッド） ---");
     for (const p of problems) {
-      const posts = buildXPosts(p, { rng: makeRng(args.seed) });
-      const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
-      console.error(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
+      try {
+        const posts = buildXPosts(p, { rng: makeRng(args.seed) });
+        const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
+        console.error(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
+      } catch (e) {
+        // 投稿文面生成のエラーに topic・問題 ID の文脈を付与（I-020）。
+        console.error(`[xpost] topic="${args.topic}" id="${p.id}" の投稿文面生成中にエラーが発生しました:`);
+        console.error(e instanceof Error ? e.message : e);
+      }
     }
   }
 }

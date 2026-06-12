@@ -6,6 +6,7 @@
  *     ωn = √(K/T),  ζ = 1/(2√(K·T))
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (K, T) — ωn と ζ がともに綺麗な値になる組だけ採用。 */
@@ -20,10 +21,6 @@ const KT_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [100, 1],
   [100, 4],
 ];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(k: number, t: number): GenerationResult | null {
   if (k <= 0 || t <= 0) return null;

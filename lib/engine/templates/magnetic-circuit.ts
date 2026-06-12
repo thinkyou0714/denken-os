@@ -4,15 +4,12 @@
  *   電気回路のオームの法則とのアナロジー（起磁力↔起電力・磁束↔電流・磁気抵抗↔抵抗）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const N_SET: ReadonlyArray<number> = [100, 200, 250, 400, 500, 800, 1000];
 const I_SET: ReadonlyArray<number> = [0.5, 1, 2, 2.5, 4, 5];
 const RM_SET: ReadonlyArray<number> = [1e6, 2e6, 2.5e6, 4e6, 5e6, 1e7];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(n: number, i: number, rm: number): GenerationResult | null {
   if (n <= 0 || i <= 0 || rm <= 0) return null;

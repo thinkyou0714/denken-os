@@ -7,15 +7,12 @@
  *     SI 単位の厳密式に全面改修（Codexレビュー指摘の根本対応）。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const J_SET: ReadonlyArray<number> = [2, 4, 5, 10, 20, 25, 40, 50, 100];
 const OMEGA_SET: ReadonlyArray<number> = [50, 100, 120, 150, 200, 250, 300];
 const T_SET: ReadonlyArray<number> = [10, 20, 25, 40, 50, 100, 125, 200, 250];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(inertia: number, omega: number, torque: number): GenerationResult | null {
   if (inertia <= 0 || omega <= 0 || torque <= 0) return null;

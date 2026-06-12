@@ -3,14 +3,11 @@
  *   三相短絡電流  Is = E / Z   〔A〕（E=相電圧, Z=故障点までの合成インピーダンス）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 const E_SET: ReadonlyArray<number> = [100, 200, 400, 1000, 2000, 3810, 6350];
 const Z_SET: ReadonlyArray<number> = [2, 4, 5, 8, 10, 20, 25];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(E: number, Z: number): GenerationResult | null {
   if (E <= 0 || Z <= 0) return null;

@@ -4,6 +4,7 @@
  *   タップを上げると二次電圧は下がる（巻数比が増える）方向の理解を問う。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
+import { pick } from "./helpers.js";
 import type { GenerationResult, Template } from "./types.js";
 
 /** (一次電圧, タップ電圧) — 比が綺麗になる組（6kV級配電用変圧器を想定）。 */
@@ -18,10 +19,6 @@ const V1_TAP_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [6900, 6000],
 ];
 const V2N_SET: ReadonlyArray<number> = [105, 210, 420];
-
-function pick<T>(arr: ReadonlyArray<T>, rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)]!;
-}
 
 function buildFrom(v1: number, tap: number, v2n: number): GenerationResult | null {
   if (v1 <= 0 || tap <= 0 || v2n <= 0) return null;
