@@ -6,11 +6,8 @@
  * カスタムチェックで補う。1件でも落ちれば非ゼロ終了。
  *
  * AJV strict モードについて（I-078）:
- *   strict: true を試みたが、problem-schema.json の draft-07 allOf/if/then 構造で
- *   "minItems" が array 型なし（strictTypes）、"citation" が then 内に定義なし
- *   （strictRequired）などの AJV v8 strict 違反が複数あり通過不可。
- *   スキーマ変更はデータ仕様変更に相当するため Wave1 スコープ外とし、
- *   strict: false を維持する（G9/Wave3 で対処候補）。
+ *   problem-schema.json の draft-07 allOf/if/then 構造を AJV v8 strict 対応済み。
+ *   schema で表現できる構造不備は compile 時に検出するため strict: true で検証する。
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -132,8 +129,8 @@ function main() {
   }
 
   const schema = JSON.parse(readFileSync(SCHEMA_PATH, "utf8"));
-  // AJV strict: false を維持（理由は上部コメント参照）
-  const ajv = new Ajv({ allErrors: true, strict: false });
+  // schema の構造不備も CI で検出する
+  const ajv = new Ajv({ allErrors: true, strict: true });
   addFormats(ajv);
   const validate = ajv.compile(schema);
 

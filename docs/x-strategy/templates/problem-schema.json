@@ -52,8 +52,14 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "type": { "enum": ["past_exam_modified", "past_exam_quoted"] } } },
-          "then": { "required": ["citation"] }
+          "if": { "type": "object", "properties": { "type": { "enum": ["past_exam_modified", "past_exam_quoted"] } } },
+          "then": {
+            "type": "object",
+            "required": ["citation"],
+            "properties": {
+              "citation": { "type": "string" }
+            }
+          }
         }
       ]
     },
@@ -71,23 +77,28 @@
   "allOf": [
     {
       "if": {
+        "type": "object",
         "required": ["format"],
         "properties": { "format": { "const": "multiple_choice" } }
       },
       "then": {
+        "type": "object",
         "required": ["choices"],
-        "properties": { "choices": { "minItems": 2 } }
+        "properties": { "choices": { "type": "array", "minItems": 2 } }
       }
     },
     {
       "if": {
+        "type": "object",
         "required": ["status"],
         "properties": { "status": { "enum": ["validated", "published"] } }
       },
       "then": {
+        "type": "object",
         "required": ["validation"],
         "properties": {
           "validation": {
+            "type": "object",
             "required": ["solver_checked", "human_checked", "clean_answer", "physically_valid"],
             "properties": {
               "solver_checked": { "const": true },
