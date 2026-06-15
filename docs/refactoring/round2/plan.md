@@ -18,35 +18,35 @@
 ## フェーズ構成（waveは並列実行単位）
 
 ```
-Phase 0  計画策定（本書＋ideas-round2.md＋ゴールファイルRG1〜RG8）……このコミット
-Phase 1  ドメイン/エンジン/サービス（Wave 1: RG1〜RG4 を並列）
-Phase 2  Web/テスト/配信（Wave 2: RG5〜RG7 を並列）
-Phase 3  ドキュメント整合（Wave 3: RG8 単独）
+Phase 0  計画策定（本書＋ideas-round2.md＋ゴールファイルRG1〜RG8）……このコミット   ✅ 完了
+Phase 1  ドメイン/エンジン/サービス（Wave 1: RG1〜RG4 を並列）                     ✅ 完了（994テスト全グリーン）
+Phase 2  Web/テスト/配信（Wave 2: RG5〜RG7 を並列）                                ✅ 完了（994テスト全グリーン）
+Phase 3  ドキュメント整合（Wave 3: RG8 単独）                                       ✅ 完了（2026-06-15）
 各wave末に `npm run verify` 全グリーン＋`build:problems`でweb/problems.jsonバイト一致を確認。
 ```
 
-### Wave 1 — ドメイン・エンジン・サービス層
+### Wave 1 — ドメイン・エンジン・サービス層 ✅ 完了
 
-| タスク | ゴール | 所有ファイル | 概要 |
-|--------|--------|-------------|------|
-| RG1 | [goals/RG1-templates-physics.md](./goals/RG1-templates-physics.md) | `lib/engine/templates/**`, `lib/engine/clean.ts`, 新規`lib/shared/constants.ts` | 物理制約ヘルパー一元化＋全テンプレのdefineTemplate移行 |
-| RG2 | [goals/RG2-engine-types-observability.md](./goals/RG2-engine-types-observability.md) | `lib/engine/{generate,validate,narrate,schema,gate,index}.ts` | 型の表現力強化（discriminated union）・検証深化・narrate/生成テレメトリ |
-| RG3 | [goals/RG3-cli-figures-xpost.md](./goals/RG3-cli-figures-xpost.md) | `lib/engine/cli.ts`, `lib/engine/figures/**`, `lib/engine/xpost/**` | CLI堅牢化・段階別エラー・図ヘルパー・xpost出力制御 |
-| RG4 | [goals/RG4-lib-services.md](./goals/RG4-lib-services.md) | `lib/scheduler/**`, `lib/store/**`, `lib/chat/**`, `lib/aggregate/**`, `lib/ingest/**` ほか | スケジューラ根拠明記・診断テスト性・retrieve品質・知識構造・ストア堅牢性 |
+| タスク | ゴール | 所有ファイル | 概要 | 状態 |
+|--------|--------|-------------|------|------|
+| RG1 | [goals/RG1-templates-physics.md](./goals/RG1-templates-physics.md) | `lib/engine/templates/**`, `lib/engine/clean.ts`, 新規`lib/shared/constants.ts` | 物理制約ヘルパー一元化＋全テンプレのdefineTemplate移行 | ✅ `constrainRange`/`isNonNegative` 追加、全87テンプレ移行済み、`POWER_FACTOR_TOLERANCE` 集約済み |
+| RG2 | [goals/RG2-engine-types-observability.md](./goals/RG2-engine-types-observability.md) | `lib/engine/{generate,validate,narrate,schema,gate,index}.ts` | 型の表現力強化（discriminated union）・検証深化・narrate/生成テレメトリ | ✅ source discriminated union、`validatePhysics`/`validateProblemSet`、`attemptsUsed`、telemetryフック、`rejection_reason` 実装済み |
+| RG3 | [goals/RG3-cli-figures-xpost.md](./goals/RG3-cli-figures-xpost.md) | `lib/engine/cli.ts`, `lib/engine/figures/**`, `lib/engine/xpost/**` | CLI堅牢化・段階別エラー・図ヘルパー・xpost出力制御 | ✅ `-t`/`-v`/`--version`/`--xpost-limit`/`--xpost-out` 追加、`figures/primitives.ts` 新設済み |
+| RG4 | [goals/RG4-lib-services.md](./goals/RG4-lib-services.md) | `lib/scheduler/**`, `lib/store/**`, `lib/chat/**`, `lib/aggregate/**`, `lib/ingest/**` ほか | スケジューラ根拠明記・診断テスト性・retrieve品質・知識構造・ストア堅牢性 | ✅ `getScheduler()`、SM-2 Wozniak1990 根拠、lenientモード、`parseCitation()`、`Card.createdAtMs`、`KNOWLEDGE_META` 実装済み |
 
-### Wave 2 — Web・テスト・配信
+### Wave 2 — Web・テスト・配信 ✅ 完了
 
-| タスク | ゴール | 所有ファイル | 概要 |
-|--------|--------|-------------|------|
-| RG5 | [goals/RG5-web-perf-state.md](./goals/RG5-web-perf-state.md) | `web/src/*.ts`（view以外）, `web/src/state/**` | メモ化キャッシュ・状態永続・チャットcleanup・quota管理 |
-| RG6 | [goals/RG6-web-views-a11y.md](./goals/RG6-web-views-a11y.md) | `web/src/views/**`, `web/src/ui/**`, `web/src/keyboard.ts`, `app.ts`, `app-init.ts` | タイマーリーク解消・aria-live/フォーカス・DOM安全・per-viewエラー境界 |
-| RG7 | [goals/RG7-tests-ci-security-data.md](./goals/RG7-tests-ci-security-data.md) | `tests/**`, `vitest.config.ts`, `scripts/**`, `.github/**`, `supabase/migrations/`, `web/{index.html,sw.js,manifest.webmanifest}`, ルート設定 | ファズ/統合/fake-timersテスト・CSP/SRI・SW版数自動化・RLS/FK・CI成熟 |
+| タスク | ゴール | 所有ファイル | 概要 | 状態 |
+|--------|--------|-------------|------|------|
+| RG5 | [goals/RG5-web-perf-state.md](./goals/RG5-web-perf-state.md) | `web/src/*.ts`（view以外）, `web/src/state/**` | メモ化キャッシュ・状態永続・チャットcleanup・quota管理 | ✅ `xpByDayCached`/`byTopicCached`/`evaluateAchievementsCached` 実装済み、`state/practice.ts` setter 追加済み |
+| RG6 | [goals/RG6-web-views-a11y.md](./goals/RG6-web-views-a11y.md) | `web/src/views/**`, `web/src/ui/**`, `web/src/keyboard.ts`, `app.ts`, `app-init.ts` | タイマーリーク解消・aria-live/フォーカス・DOM安全・per-viewエラー境界 | ✅ `clearExamTimer`、`aria-live`、per-viewエラー境界、`$req()`/`SafeHtml`/`safeHtml()` 実装済み |
+| RG7 | [goals/RG7-tests-ci-security-data.md](./goals/RG7-tests-ci-security-data.md) | `tests/**`, `vitest.config.ts`, `scripts/**`, `.github/**`, `supabase/migrations/`, `web/{index.html,sw.js,manifest.webmanifest}`, ルート設定 | ファズ/統合/fake-timersテスト・CSP/SRI・SW版数自動化・RLS/FK・CI成熟 | ✅ CSP/SRI 追加、SW v20（自動版数）、`migrations/0004` 追加、統合/ファズテスト追加、CIバジェット追加済み |
 
-### Wave 3 — ドキュメント
+### Wave 3 — ドキュメント ✅ 完了（2026-06-15）
 
-| タスク | ゴール | 所有ファイル | 概要 |
-|--------|--------|-------------|------|
-| RG8 | [goals/RG8-docs.md](./goals/RG8-docs.md) | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `docs/**` | 実装反映・テンプレ実装ガイド・ADR・フロー図 |
+| タスク | ゴール | 所有ファイル | 概要 | 状態 |
+|--------|--------|-------------|------|------|
+| RG8 | [goals/RG8-docs.md](./goals/RG8-docs.md) | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `docs/**` | 実装反映・テンプレ実装ガイド・ADR・フロー図 | ✅ 本タスク完了（2026-06-15）|
 
 ## 並列実装の運用ルール（全ゴール共通）
 

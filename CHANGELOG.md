@@ -5,6 +5,77 @@
 
 ## [Unreleased]
 
+### Changed — コードベース大規模リファクタ 第2ラウンド（Wave 1〜3: RG1〜RG8, PR #36, 2026-06-15）
+
+本リファクタは**外部挙動を変えない**（生成問題データ・保存データ形式・UI文言・採点結果は不変）。
+
+**変更なし**: `web/problems.json` バイト列・localStorage キー・Supabase テーブル外部インターフェース・
+既存ユーザーの間違いノート・解答ログ・FSRS 状態。既存テストは無変更でグリーン（994件）。
+
+#### Wave 1: ドメイン・エンジン・サービス層（RG1〜RG4 並列）
+
+- **RG1 テンプレ物理制約・ファクトリ全移行** (`lib/engine/templates/**`, `lib/shared/constants.ts`):
+  残り74テンプレを `defineTemplate` ファクトリへ完全移行（全87テンプレが統一形式）。
+  `lib/engine/templates/helpers.ts` に `constrainRange(value, min, max)` と `isNonNegative(value)` を追加
+  （物理制約チェックを各テンプレに散在させず一元化）。
+  `lib/shared/constants.ts` を新設し `POWER_FACTOR_TOLERANCE=1e-9` を集約（力率上限比較の誤差許容）。
+  `helpers.ts` が `POWER_FACTOR_TOLERANCE` を re-export することでテンプレートは1か所から参照できる。
+
+- **RG2 エンジン型表現力・検証深化・観測性** (`lib/engine/{schema,generate,validate,narrate}.ts`):
+  `source` フィールドを discriminated union で型化（`type!=="original"` 時に `citation` を型レベル必須化）。
+  `validatePhysics(draw, physicallyValid)` を追加（テンプレートの `physicallyValid` フラグと問題の整合を確認）。
+  `validateProblemSet(problems)` を追加（同一 topic 内の酷似 params による実質重複を検出）。
+  `generateOneDetailed` が `attemptsUsed`・`rejectionReason` を返し、棄却回数・段階の可視化が可能に。
+  `narrate` に `telemetry` フック口を追加（フォールバック率・原因・モデルを記録できる基盤）。
+  `validation.rejection_reason?` フィールドを追加（`human_checked=false` の理由の記録）。
+
+- **RG3 CLI 堅牢化・図ヘルパー・xpost 出力制御** (`lib/engine/cli.ts`, `lib/engine/figures/`):
+  CLI に `-t`（`--topic` 短縮形）・`-v`/`--version`（版数表示）を追加。
+  `--xpost-limit <N>`（出力件数上限・既定10）・`--xpost-out <path>`（ファイル出力）を追加し stdout 肥大を防止。
+  不明オプションを警告・段階別エラーメッセージを追加。
+  `lib/engine/figures/primitives.ts` に共通プリミティブヘルパーを抽出（軸/目盛/ラベルの重複解消）。
+
+- **RG4 スケジューラ・知識・ストア堅牢性** (`lib/scheduler/**`, `lib/store/**`, `lib/chat/`, `lib/ingest/`):
+  `lib/scheduler/index.ts` に `getScheduler("fsrs" | "sm2")` ファクトリを追加（type-safe スケジューラ選択）。
+  SM-2 に Wozniak 1990 の根拠を JSDoc で明記・ease 異常値 warning を追加。
+  Supabase ストアに lenient モード（行の zod 検証失敗時はスキップして記録、1件破損で全停止しない）を追加。
+  `lib/ingest/ingest.ts` に `parseCitation(year, examType, subject)` を追加（不完全出典のフォーマット強制）。
+  `ReviewState.createdAtMs` を追加（古い state 誤参照リスク軽減のための生成時刻メタ）。
+  `lib/chat/knowledge.ts` に `KNOWLEDGE_META` を追加（各セクションのレビュー基準・定期レビュー基準化）。
+
+#### Wave 2: Web・テスト・配信（RG5〜RG7 並列）
+
+- **RG5 Web パフォーマンス・状態** (`web/src/`):
+  `xp.ts` に `xpByDayCached()`・`dashboard.ts` に `byTopicCached()`・
+  `achievements.ts` に `evaluateAchievementsCached()` を追加
+  （毎描画 O(n) 集計を差分更新キャッシュ化・ログ追記時のみ再計算）。
+  `state/practice.ts` に combo/hints/answered の setter を追加（全体 render ではなく必要部分のみ更新）。
+
+- **RG6 Web ビュー・アクセシビリティ・DOM 安全** (`web/src/views/**`, `web/src/ui/**`):
+  `views/exam.ts` に `clearExamTimer()` を追加（模試タイマーの setInterval リークを一元解消・II-156）。
+  `views/router.ts` に per-view エラー境界を追加（1タブの描画例外が全タブを白画面にしない・II-162）。
+  `render()` を `root.replaceChildren()` + `aria-busy` トグルに変更（SR のフォーカス破壊を防止・II-157）。
+  トースト消滅に `aria-live` を適正化（残60秒警告を SR に通知・II-158/159）。
+  `ui/dom.ts` に `$req<T>(host, sel)` を追加（querySelector null 黙殺を防ぐガード付き取得・II-170）。
+  `ui/safe-html.ts` に `SafeHtml` branded type と `safeHtml()` を追加（`h()` の `html` 属性に型保証・II-169）。
+
+- **RG7 テスト・CI・セキュリティ・データ層** (`tests/**`, `web/index.html`, `web/sw.js`, `supabase/migrations/`):
+  `tests/integration/` を新設（生成→検証→保存→読込の E2E 統合テスト）。
+  共有ヘルパーへのファズテスト（`constrainRange`/`buildChoices`/`percentage`/`pick` へランダム入力1000回）。
+  時刻依存テストに `vi.useFakeTimers()` を徹底適用。
+  `web/index.html` に `Content-Security-Policy` meta タグと `dist/app.js` への SRI（sha384）を追加（II-182/183）。
+  `web/sw.js` をv20に更新。`scripts/build-web.ts` がバンドルハッシュから `CACHE` 値を自動更新（手動管理廃止・II-187）。
+  `supabase/migrations/0004_rls_fk_notnull.sql` を追加（UPDATE/DELETE RLS ポリシー・FK CASCADE・difficulty NOT NULL 補完・II-186）。
+  CI にバンドルサイズバジェット（`BUNDLE_SIZE_LIMIT_KB` 超過で失敗）を追加（II-188）。
+
+#### Wave 3: ドキュメント（RG8）
+
+- **RG8 ドキュメント整合** (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `docs/**`):
+  本エントリ参照。詳細は下記。
+  `docs/adr/0002-types-and-observability.md` 新設（discriminated union 採用・観測フック・キャッシュ戦略の設計判断）。
+
+---
+
 ### Changed — コードベース大規模リファクタ（Wave 1〜3: G1〜G9）
 
 本リファクタは**外部挙動を変えない**（生成問題データ・保存データ形式・UI文言・採点結果は不変）。
