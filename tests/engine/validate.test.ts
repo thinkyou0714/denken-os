@@ -36,6 +36,12 @@ describe("validateProblem", () => {
     const r = validateProblem(bad);
     expect(r.ok).toBe(false);
   });
+
+  it("original 以外で citation が空白のみを弾く（Codex#4 回帰）", () => {
+    const bad = { ...T0001, source: { type: "past_exam_quoted", citation: "   " } };
+    const r = validateProblem(bad);
+    expect(r.ok).toBe(false);
+  });
 });
 
 describe("narrationMatchesAnswer（解説の数値整合）", () => {

@@ -3,7 +3,26 @@
  * RLS ポリシーのモック検証テスト（RG7）。
  * 実際の Supabase DB なしにポリシーロジックを純関数として検証する。
  */
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+
+const __mdir = dirname(fileURLToPath(import.meta.url));
+
+describe("0004 migration: difficulty backfill 順序（Codex#3 回帰）", () => {
+  const sql = readFileSync(join(__mdir, "../../supabase/migrations/0004_rls_fk_notnull.sql"), "utf-8");
+
+  it("既存 NULL を埋める UPDATE が SET NOT NULL より前に存在する", () => {
+    const backfillIdx = sql.search(
+      /update\s+public\.review_states\s+set\s+difficulty\s*=\s*5\.17\s+where\s+difficulty\s+is\s+null/i,
+    );
+    const notNullIdx = sql.search(/alter\s+column\s+difficulty\s+set\s+not\s+null/i);
+    expect(backfillIdx).toBeGreaterThanOrEqual(0);
+    expect(notNullIdx).toBeGreaterThanOrEqual(0);
+    expect(backfillIdx).toBeLessThan(notNullIdx);
+  });
+});
 
 // RLS ポリシーの純関数モデル
 // 各ポリシーは (auth_uid, row_user_id) => boolean の形式

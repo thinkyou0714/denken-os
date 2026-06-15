@@ -72,7 +72,10 @@ export const originalSourceSchema = z.object({
 
 export const pastExamSourceSchema = z.object({
   type: z.enum(["past_exam_modified", "past_exam_quoted"]),
-  citation: z.string().min(1, "source.type が original 以外のときは citation が必須です"),
+  // 空白のみ（"   "）は出典なしと同義なので拒否する（round1 の trim 検証を維持。Codex#4 指摘）。
+  citation: z
+    .string()
+    .refine((s) => s.trim().length > 0, { message: "source.type が original 以外のときは citation が必須です" }),
 });
 
 export const sourceSchema = z.union([originalSourceSchema, pastExamSourceSchema]);

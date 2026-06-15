@@ -71,10 +71,11 @@ export function parseCitation(
   if (!year || year.trim().length === 0) {
     return { ok: false, reason: "year(年度) が空です" };
   }
-  // 「令和X年度」「平成X年度」「昭和X年度」のいずれか（X は正整数）を許容。
-  const yearPattern = /^(令和|平成|昭和)\d+年度$/;
+  // 「令和X年度」「平成X年度」「昭和X年度」のいずれか（X は正整数 or 元年の「元」）を許容。
+  // 改元初年度は公式表記が「令和元年度」等で数字でないため `元` も受理する（Codex#2 指摘）。
+  const yearPattern = /^(令和|平成|昭和)(\d+|元)年度$/;
   if (!yearPattern.test(year.trim())) {
-    return { ok: false, reason: `year は「令和X年度」または「平成X年度」の形式が必要です: ${year}` };
+    return { ok: false, reason: `year は「令和X年度」「令和元年度」等の形式が必要です: ${year}` };
   }
   if (!examType || examType.trim().length === 0) {
     return { ok: false, reason: "examType(試験区分) が空です" };

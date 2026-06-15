@@ -165,7 +165,22 @@ async function main() {
   }
 
   // --- SW バージョン自動更新（II-187）---
-  const shortHash = createHash("sha256").update(appJsContent).digest("hex").slice(0, 8);
+  // sw.js がプリキャッシュする全アセットの内容を版数ハッシュに含める（Codex#1 指摘の根本対応）。
+  // app.js だけをハッシュすると、problems.json や index.html/CSS のみ変わった配信で sw.js が
+  // バイト不変のままになり、ブラウザが SW 更新を検知せず古いキャッシュを返し続ける。
+  // SRI 注入後の index.html を読むため、この計算は SRI 注入の後に置く。
+  const cachedAssetPaths = [
+    outfile, // web/dist/app.js
+    join(ROOT, "web/index.html"),
+    join(ROOT, "web/problems.json"),
+    join(ROOT, "web/manifest.webmanifest"),
+    join(ROOT, "web/icon.svg"),
+  ];
+  const versionHash = createHash("sha256");
+  for (const p of cachedAssetPaths) {
+    if (existsSync(p)) versionHash.update(readFileSync(p, "utf-8"));
+  }
+  const shortHash = versionHash.digest("hex").slice(0, 8);
   const swVersion = `v20-${shortHash}`;
 
   const swJsPath = join(ROOT, "web/sw.js");

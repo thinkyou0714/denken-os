@@ -16,6 +16,9 @@ create policy review_states_delete_own on public.review_states
   for delete using (auth.uid() = user_id);
 
 -- review_states.difficulty: NOT NULL + デフォルト値（FSRS 初期値 5.17）
+-- 0001〜0003 では difficulty が nullable で、ストアもこの列を書かないため既存行に NULL が残りうる。
+-- SET NOT NULL は1行でも NULL があると失敗するため、制約付与の前に既存 NULL を埋める（Codex#3 指摘）。
+update public.review_states set difficulty = 5.17 where difficulty is null;
 alter table public.review_states
   alter column difficulty set default 5.17,
   alter column difficulty set not null;

@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { ingest, type RawPastExam } from "../../lib/ingest/ingest.js";
+import { ingest, parseCitation, type RawPastExam } from "../../lib/ingest/ingest.js";
+
+describe("parseCitation 元年度の受理（Codex#2 回帰）", () => {
+  it("令和元年度を受理する", () => {
+    expect(parseCitation("令和元年度", "第二種 一次", "理論").ok).toBe(true);
+  });
+  it("平成元年度を受理する", () => {
+    expect(parseCitation("平成元年度", "一次", "電力").ok).toBe(true);
+  });
+  it("通常の数字年度も引き続き受理する", () => {
+    expect(parseCitation("令和5年度", "一次", "機械").ok).toBe(true);
+  });
+  it("元号なしの年度は拒否する", () => {
+    expect(parseCitation("2019年度", "一次", "理論").ok).toBe(false);
+  });
+});
 
 describe("過去問取込（04）", () => {
   it("出典メタ欠落データは取込エラー（rejected）になる", () => {
