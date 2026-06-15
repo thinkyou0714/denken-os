@@ -13,6 +13,13 @@ export interface ParamSpec {
   unit?: string;
   /** 係数を振る現実的レンジ [min, max]（03-quality-pipeline の数値レンジルール）。 */
   realistic_range: [number, number];
+  /**
+   * このパラメータが generateFrom の入力として必須かどうか（II-110）。
+   * 省略時は必須扱い（既定 true）。
+   * false を指定した省略可能パラメータは、generateFrom で欠落していても null を返さない。
+   * （defineTemplate の paramOrder によるキー存在チェックと整合する）
+   */
+  required?: boolean;
 }
 
 export interface ParamValue {
@@ -24,8 +31,18 @@ export interface ParamValue {
 export interface Distractor {
   /** 整形済みの誤答テキスト。 */
   text: string;
-  /** どんな典型ミスに対応するか（解答編の解説に使う）。 */
+  /** どんな典型ミスに対応するか（解答編の解説に使う）。必須（II-109）。 */
   reason: string;
+  /**
+   * この誤答が選ばれる相対的な頻度の推定値（II-109）。
+   * 未指定時は均一として扱う。将来の統計収集で活用するための予約フィールド。
+   */
+  frequency?: number;
+  /**
+   * この誤答パターンの典拠・参照先（II-123）。
+   * 例: "H28-問4" (過去問) / "教科書 p.123" など。
+   */
+  sourceRef?: string;
 }
 
 export interface GenerationResult {

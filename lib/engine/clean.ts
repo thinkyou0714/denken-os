@@ -2,6 +2,25 @@
  * 「綺麗な値」判定（03-quality-pipeline.md「数値レンジのルール」）。
  * 答えが整数 or 小さい分母の有理数（=2桁の小数で割り切れる）かどうか。
  * 汚い答え（無限小数・端数）は出題しない。
+ *
+ * ## formatClean と formatKW の使い分け（II-106）
+ *
+ * | 関数         | 用途                                      | 末尾ゼロ      | 例                      |
+ * |------------|------------------------------------------|------------|------------------------|
+ * | formatClean | numeric/descriptive 形式の answerText、解説中数値 | 落とす       | 50→"50" / 4.0→"4"      |
+ * | formatKW    | kW 単位の multiple_choice 選択肢テキスト         | 1桁は残す    | 4000W→"4.0" / 3200W→"3.2" |
+ *
+ * 選択肢生成では formatKW または formatClean を **混用しない**こと。
+ * 同一テンプレート内で正解と誤答の整形関数を統一する（桁数の差が重複排除を妨げる）。
+ *
+ * ### ゼロ割・NaN の扱い（II-104）
+ *
+ * `percentage()` 等のヘルパーは分母 0 のとき NaN を返す（例外ではなく NaN）。
+ * 呼び出し側は `Number.isNaN(result)` でチェックし、NaN なら `return null` で棄却すること。
+ *
+ * @example
+ * const eta = percentage(output, input);
+ * if (Number.isNaN(eta) || eta <= 0) return null;
  */
 
 /**

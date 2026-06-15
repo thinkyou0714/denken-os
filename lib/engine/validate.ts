@@ -8,6 +8,10 @@
  * ε: ANSWER_EPSILON は clean.ts が提供する定数（G1 との契約）。
  * G1 完了前にこのファイルを参照する場合は型エラーになりうるが、
  * wave 終了時にオーケストレータが統合検証する。
+ *
+ * ## validateProblemSet（II-115）
+ * `validateProblemSet(problems)` で問題セット全体の酷似パラメータ（実質重複）を検出する。
+ * 純関数・既存 generate には組み込まず、提供のみ。
  */
 import { ANSWER_EPSILON, isCleanAnswer } from "./clean.js";
 import { type Problem, problemSchema } from "./schema.js";
@@ -68,6 +72,86 @@ export function validateProblem(input: unknown): ValidationResult {
   }
 
   return { ok: issues.length === 0, issues, problem: p };
+}
+
+/**
+ * 問題セット全体の酷似パラメータ（実質重複）を検出する（II-115）。
+ *
+ * 同一 topic 内で全数値パラメータが `PARAM_SIMILARITY_THRESHOLD` 以内に収まる問題を
+ * 「酷似」とみなし、`ValidationIssue` として報告する。純関数。
+ * 既存の generate には組み込まず、セット全体のポストバリデーションとして提供する。
+ *
+ * @param problems - 検査対象の問題セット（validateProblem を通過した Problem[]）
+ * @param threshold - 各パラメータ値の相対誤差許容範囲（既定: 1e-6 = 実質同一）
+ * @returns 酷似ペアごとの ValidationIssue リスト（空 = 問題なし）
+ *
+ * 使用例:
+ * ```ts
+ * const issues = validateProblemSet(problems);
+ * if (issues.length > 0) console.warn("重複問題検出:", issues);
+ * ```
+ */
+export const PARAM_SIMILARITY_THRESHOLD = 1e-6;
+
+export function validateProblemSet(problems: Problem[], threshold = PARAM_SIMILARITY_THRESHOLD): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  // topic ごとにグループ化
+  const byTopic = new Map<string, Problem[]>();
+  for (const p of problems) {
+    const group = byTopic.get(p.topic) ?? [];
+    group.push(p);
+    byTopic.set(p.topic, group);
+  }
+
+  for (const [topic, group] of byTopic) {
+    // 数値パラメータを持つ問題のみ比較（filter で params の存在は確認済み）
+    const withParams = group.filter((p) => p.params && Object.keys(p.params).length > 0);
+    for (let i = 0; i < withParams.length - 1; i++) {
+      const a = withParams[i];
+      if (!a) continue;
+      for (let j = i + 1; j < withParams.length; j++) {
+        const b = withParams[j];
+        if (!b) continue;
+        // filter で params 存在を確認済みだが、型システム上 undefined 可能なため空オブジェクトにフォールバック
+        const aParams = a.params ?? {};
+        const bParams = b.params ?? {};
+        if (areSimilarParams(aParams, bParams, threshold)) {
+          issues.push({
+            rule: "duplicate_params",
+            message: `topic="${topic}" 内で問題 ${a.id} と ${b.id} のパラメータが酷似しています（相対誤差 ≤ ${threshold}）`,
+          });
+        }
+      }
+    }
+  }
+
+  return issues;
+}
+
+/**
+ * 2問のパラメータが「酷似」しているか判定する（validateProblemSet のヘルパー）。
+ * キーセットが同一で、全値の相対誤差が threshold 以内のとき true。
+ */
+function areSimilarParams(
+  a: NonNullable<Problem["params"]>,
+  b: NonNullable<Problem["params"]>,
+  threshold: number,
+): boolean {
+  const keysA = Object.keys(a).sort();
+  const keysB = Object.keys(b).sort();
+  if (keysA.length !== keysB.length) return false;
+  if (keysA.some((k, i) => k !== keysB[i])) return false;
+
+  for (const key of keysA) {
+    const va = a[key]?.value;
+    const vb = b[key]?.value;
+    if (va === undefined || vb === undefined) return false;
+    // ゼロ同士はそのまま同一とみなす。それ以外は相対誤差。
+    const denom = Math.max(Math.abs(va), Math.abs(vb), Number.EPSILON);
+    if (Math.abs(va - vb) / denom > threshold) return false;
+  }
+  return true;
 }
 
 /**

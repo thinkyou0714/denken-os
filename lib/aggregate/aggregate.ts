@@ -51,10 +51,19 @@ export function aggregate(p: Problem, poll: PollResult | null): AggregateOutput 
   // votes と choices の対応がずれた入力（X poll は最大4択で choices が5件以上だと末尾が
   // poll に出ない等）でも、既知の選択肢に対応する票だけで集計する（防御）。
   if (poll.votes.length !== choices.length) {
-    // 長さ不一致は通常の X poll 制約（最大4択）か設定ミスのため、診断用に警告する（I-026）。
+    // 長さ不一致は通常の X poll 制約（最大4択）か設定ミスのため、診断用に警告する（I-026, II-134）。
+    // 失われた要素の index 範囲を具体的に付与して、どの選択肢が集計されなかったかを明確にする。
+    const keepN = Math.min(poll.votes.length, choices.length);
+    const lostStart = keepN;
+    const lostEndVotes = poll.votes.length - 1;
+    const lostEndChoices = choices.length - 1;
+    const lostDesc =
+      poll.votes.length > choices.length
+        ? `votes[${lostStart}..${lostEndVotes}] に対応する choices が存在しない`
+        : `choices[${lostStart}..${lostEndChoices}] に対応する votes が存在しない（集計から除外）`;
     console.warn(
       `aggregate: votes.length(${poll.votes.length}) !== choices.length(${choices.length}) for problem ${p.id}. ` +
-        "末尾の要素は集計されません。",
+        `${lostDesc}。集計対象は index 0..${keepN - 1} のみ。`,
     );
   }
   const n = Math.min(poll.votes.length, choices.length);

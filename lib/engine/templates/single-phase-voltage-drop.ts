@@ -5,8 +5,7 @@
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { singleLineDropFigure } from "../figures/index.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 const I_SET: ReadonlyArray<number> = [5, 10, 15, 20, 25, 30, 50];
 const RX_SET: ReadonlyArray<readonly [number, number]> = [
@@ -23,38 +22,14 @@ const PF_SET: ReadonlyArray<readonly [number, number]> = [
   [1.0, 0.0],
 ];
 
-function buildFrom(I: number, R: number, X: number, cos: number, sin: number): GenerationResult | null {
-  if (I <= 0 || R <= 0 || X < 0 || cos <= 0 || cos > 1) return null;
-  const v = 2 * I * (R * cos + X * sin);
-  if (v <= 0 || !isCleanAnswer(v)) return null;
-  const answerText = formatClean(v);
+type Params = {
+  line_current: number;
+  resistance: number;
+  reactance: number;
+  power_factor: number;
+};
 
-  return {
-    format: "numeric",
-    params: {
-      line_current: { value: I, unit: "A", realistic_range: [5, 50] },
-      resistance: { value: R, unit: "ohm", realistic_range: [0.1, 1] },
-      reactance: { value: X, unit: "ohm", realistic_range: [0, 1] },
-      power_factor: { value: cos, unit: "", realistic_range: [0.5, 1] },
-    },
-    answerValue: v,
-    answerUnit: "V",
-    answerText,
-    facts: { I, R, X, cos, sin, v },
-    defaultStatement:
-      `単相2線式の線路で、線電流 I=${I}A、1線の抵抗 R=${R}Ω、リアクタンス X=${X}Ω、` +
-      `負荷力率 cosθ=${cos}（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。`,
-    defaultSolution: [
-      `単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)`,
-      `v=2×${I}×(${R}×${cos}+${X}×${sin})`,
-      `v=${answerText}V`,
-    ],
-    figure: singleLineDropFigure(I, R, X, cos),
-    physicallyValid: true,
-  };
-}
-
-export const singlePhaseVoltageDrop: Template = {
+export const singlePhaseVoltageDrop = defineTemplate<Params>({
   topic: "単相2線式の電圧降下",
   subject: "電力",
   exam: "denken2_primary",
@@ -65,22 +40,45 @@ export const singlePhaseVoltageDrop: Template = {
     reactance: { unit: "ohm", realistic_range: [0, 1] },
     power_factor: { unit: "", realistic_range: [0.5, 1] },
   },
-  generate(rng) {
+  paramOrder: ["line_current", "resistance", "reactance", "power_factor"],
+  draw(rng) {
     const [R, X] = pick(RX_SET, rng);
-    const [cos, sin] = pick(PF_SET, rng);
-    return buildFrom(pick(I_SET, rng), R, X, cos, sin);
+    const [cos] = pick(PF_SET, rng);
+    return {
+      line_current: pick(I_SET, rng),
+      resistance: R,
+      reactance: X,
+      power_factor: cos,
+    };
   },
-  generateFrom(params) {
-    const { line_current, resistance, reactance, power_factor } = params;
-    if (
-      line_current === undefined ||
-      resistance === undefined ||
-      reactance === undefined ||
-      power_factor === undefined
-    ) {
-      return null;
-    }
-    const sin = Number(Math.sqrt(1 - power_factor * power_factor).toFixed(4));
-    return buildFrom(line_current, resistance, reactance, power_factor, sin);
+  buildFrom({ line_current: I, resistance: R, reactance: X, power_factor: cos }) {
+    if (I <= 0 || R <= 0 || X < 0 || cos <= 0 || cos > 1) return null;
+    const sin = Number(Math.sqrt(1 - cos * cos).toFixed(4));
+    const v = 2 * I * (R * cos + X * sin);
+    if (v <= 0 || !isCleanAnswer(v)) return null;
+    const answerText = formatClean(v);
+    return {
+      format: "numeric",
+      params: {
+        line_current: { value: I, unit: "A", realistic_range: [5, 50] },
+        resistance: { value: R, unit: "ohm", realistic_range: [0.1, 1] },
+        reactance: { value: X, unit: "ohm", realistic_range: [0, 1] },
+        power_factor: { value: cos, unit: "", realistic_range: [0.5, 1] },
+      },
+      answerValue: v,
+      answerUnit: "V",
+      answerText,
+      facts: { I, R, X, cos, sin, v },
+      defaultStatement:
+        `単相2線式の線路で、線電流 I=${I}A、1線の抵抗 R=${R}Ω、リアクタンス X=${X}Ω、` +
+        `負荷力率 cosθ=${cos}（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。`,
+      defaultSolution: [
+        `単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)`,
+        `v=2×${I}×(${R}×${cos}+${X}×${sin})`,
+        `v=${answerText}V`,
+      ],
+      figure: singleLineDropFigure(I, R, X, cos),
+      physicallyValid: true,
+    };
   },
-};
+});

@@ -6,8 +6,7 @@
  *     ωn = √(K/T),  ζ = 1/(2√(K·T))
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 /** (K, T) — ωn と ζ がともに綺麗な値になる組だけ採用。 */
 const KT_PAIRS: ReadonlyArray<readonly [number, number]> = [
@@ -22,35 +21,12 @@ const KT_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [100, 4],
 ];
 
-function buildFrom(k: number, t: number): GenerationResult | null {
-  if (k <= 0 || t <= 0) return null;
-  const omegaN = Math.sqrt(k / t);
-  const zeta = 1 / (2 * Math.sqrt(k * t));
-  if (!isCleanAnswer(omegaN) || !isCleanAnswer(zeta)) return null;
-  const answerText = formatClean(omegaN);
-  return {
-    format: "numeric",
-    params: {
-      gain: { value: k, realistic_range: [0.5, 200] },
-      time_constant: { value: t, unit: "s", realistic_range: [0.5, 50] },
-    },
-    answerValue: omegaN,
-    answerUnit: "rad/s",
-    answerText,
-    facts: { k, t, omegaN, zeta },
-    defaultStatement:
-      `開ループ伝達関数 G(s)=K/{s(Ts+1)}（K=${formatClean(k)}, T=${formatClean(t)}s）の単位フィードバック系がある。` +
-      `閉ループ系を標準二次系で表したときの固有角周波数 ωn〔rad/s〕は?`,
-    defaultSolution: [
-      `閉ループ伝達関数 W(s)=G/(1+G)=K/(Ts²+s+K)`,
-      `標準形と比較して ωn=√(K/T), ζ=1/(2√(KT))（本問の ζ=${formatClean(zeta)}）`,
-      `ωn=√(${formatClean(k)}/${formatClean(t)})=${answerText}rad/s`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  gain: number;
+  time_constant: number;
+};
 
-export const secondOrderResponse: Template = {
+export const secondOrderResponse = defineTemplate<Params>({
   topic: "二次系の固有角周波数",
   subject: "機械制御",
   exam: "denken2_secondary",
@@ -59,13 +35,36 @@ export const secondOrderResponse: Template = {
     gain: { realistic_range: [0.5, 200] },
     time_constant: { unit: "s", realistic_range: [0.5, 50] },
   },
-  generate(rng) {
+  paramOrder: ["gain", "time_constant"],
+  draw(rng) {
     const [k, t] = pick(KT_PAIRS, rng);
-    return buildFrom(k, t);
+    return { gain: k, time_constant: t };
   },
-  generateFrom(params) {
-    const { gain, time_constant } = params;
-    if (gain === undefined || time_constant === undefined) return null;
-    return buildFrom(gain, time_constant);
+  buildFrom({ gain: k, time_constant: t }) {
+    if (k <= 0 || t <= 0) return null;
+    const omegaN = Math.sqrt(k / t);
+    const zeta = 1 / (2 * Math.sqrt(k * t));
+    if (!isCleanAnswer(omegaN) || !isCleanAnswer(zeta)) return null;
+    const answerText = formatClean(omegaN);
+    return {
+      format: "numeric",
+      params: {
+        gain: { value: k, realistic_range: [0.5, 200] },
+        time_constant: { value: t, unit: "s", realistic_range: [0.5, 50] },
+      },
+      answerValue: omegaN,
+      answerUnit: "rad/s",
+      answerText,
+      facts: { k, t, omegaN, zeta },
+      defaultStatement:
+        `開ループ伝達関数 G(s)=K/{s(Ts+1)}（K=${formatClean(k)}, T=${formatClean(t)}s）の単位フィードバック系がある。` +
+        `閉ループ系を標準二次系で表したときの固有角周波数 ωn〔rad/s〕は?`,
+      defaultSolution: [
+        `閉ループ伝達関数 W(s)=G/(1+G)=K/(Ts²+s+K)`,
+        `標準形と比較して ωn=√(K/T), ζ=1/(2√(KT))（本問の ζ=${formatClean(zeta)}）`,
+        `ωn=√(${formatClean(k)}/${formatClean(t)})=${answerText}rad/s`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});

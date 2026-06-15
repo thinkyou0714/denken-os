@@ -4,7 +4,7 @@
  *   特別高圧=7000V超。区分の境界値を問う（一次法規の頻出知識）。
  */
 import { formatClean } from "../clean.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate } from "./helpers.js";
 
 interface Case {
   question: string;
@@ -34,41 +34,43 @@ const CASES: ReadonlyArray<Case> = [
   },
 ];
 
-function buildFrom(caseIndex: number): GenerationResult | null {
-  const c = CASES[caseIndex];
-  if (!c) return null;
-  const answerText = formatClean(c.answer);
-  const choices = c.pool.map((v) => formatClean(v));
-  const distractors = c.pool
-    .filter((v) => v !== c.answer)
-    .map((v) => ({ text: formatClean(v), reason: "交流/直流・低圧/高圧の境界の取り違え（6600Vは公称電圧との混同）" }));
-  return {
-    format: "multiple_choice",
-    params: { case_index: { value: caseIndex, realistic_range: [0, CASES.length - 1] } },
-    answerValue: c.answer,
-    answerUnit: "V",
-    answerText,
-    choices,
-    distractors,
-    facts: { caseIndex, answer: c.answer },
-    defaultStatement: `電気設備技術基準で定める電圧の区分について、${c.question}は?`,
-    defaultSolution: [`電技省令第2条: ${c.fact}`, `=${answerText}V`],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  case_index: number;
+};
 
-export const voltageClassification: Template = {
+export const voltageClassification = defineTemplate<Params>({
   topic: "電圧の区分",
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 1,
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
-  generate(rng) {
-    return buildFrom(Math.floor(rng() * CASES.length));
+  paramOrder: ["case_index"],
+  draw(rng) {
+    return { case_index: Math.floor(rng() * CASES.length) };
   },
-  generateFrom(params) {
-    const { case_index } = params;
-    if (case_index === undefined) return null;
-    return buildFrom(case_index);
+  buildFrom({ case_index: caseIndex }) {
+    const c = CASES[caseIndex];
+    if (!c) return null;
+    const answerText = formatClean(c.answer);
+    const choices = c.pool.map((v) => formatClean(v));
+    const distractors = c.pool
+      .filter((v) => v !== c.answer)
+      .map((v) => ({
+        text: formatClean(v),
+        reason: "交流/直流・低圧/高圧の境界の取り違え（6600Vは公称電圧との混同）",
+      }));
+    return {
+      format: "multiple_choice",
+      params: { case_index: { value: caseIndex, realistic_range: [0, CASES.length - 1] } },
+      answerValue: c.answer,
+      answerUnit: "V",
+      answerText,
+      choices,
+      distractors,
+      facts: { caseIndex, answer: c.answer },
+      defaultStatement: `電気設備技術基準で定める電圧の区分について、${c.question}は?`,
+      defaultSolution: [`電技省令第2条: ${c.fact}`, `=${answerText}V`],
+      physicallyValid: true,
+    };
   },
-};
+});

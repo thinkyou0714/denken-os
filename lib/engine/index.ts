@@ -12,10 +12,16 @@
 export type { ValidationFlags } from "./gate.js";
 // --- ゲート ---
 export { decideStatus, meetsConfidence, meetsValidationGate } from "./gate.js";
-export type { GenerateOptions } from "./generate.js";
+export type { GenerateOneResult, GenerateOptions } from "./generate.js";
 // --- 問題生成パイプライン ---
-export { generate, generateOne } from "./generate.js";
-export type { Narration, NarrationInput, Narrator } from "./narrate.js";
+export {
+  checkParamsConsistency,
+  generate,
+  generateOne,
+  generateOneDetailed,
+  validatePhysics,
+} from "./generate.js";
+export type { Narration, NarrationInput, Narrator, NarratorFallbackEvent, NarratorTelemetryHook } from "./narrate.js";
 // --- ナレーター ---
 export {
   AnthropicNarrator,
@@ -27,6 +33,8 @@ export {
 } from "./narrate.js";
 export type {
   Exam,
+  OriginalSource,
+  PastExamSource,
   Problem,
   ProblemFormat,
   ProblemStatus,
@@ -37,6 +45,8 @@ export type {
 export {
   examEnum,
   formatEnum,
+  originalSourceSchema,
+  pastExamSourceSchema,
   problemSchema,
   sourceSchema,
   sourceTypeEnum,
@@ -50,4 +60,11 @@ export type { Template } from "./templates/index.js";
 export { getTemplate, listTopics } from "./templates/index.js";
 export type { ValidationIssue, ValidationResult } from "./validate.js";
 // --- 問題検証 ---
-export { answerInChoices, answerIsClean, narrationMatchesAnswer, validateProblem } from "./validate.js";
+export {
+  answerInChoices,
+  answerIsClean,
+  narrationMatchesAnswer,
+  PARAM_SIMILARITY_THRESHOLD,
+  validateProblem,
+  validateProblemSet,
+} from "./validate.js";
