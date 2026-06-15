@@ -48,5 +48,11 @@ export function getScheduler(
       return new FsrsScheduler(options?.desiredRetention);
     case "sm2":
       return new Sm2Scheduler();
+    default: {
+      // 網羅性ガード: SchedulerKind に種別を追加して未対応なら、ここで型エラーになる（将来のミス検出）。
+      // 実行時に型を迂回した不正な kind が来た場合も明示的に失敗させる。
+      const _exhaustive: never = kind;
+      throw new Error(`未知のスケジューラ種別: ${String(_exhaustive)}`);
+    }
   }
 }
