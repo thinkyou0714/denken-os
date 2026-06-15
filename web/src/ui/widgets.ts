@@ -5,7 +5,7 @@
 import type { Problem } from "../../../lib/engine/schema.js";
 import { formatMath } from "../mathfmt.js";
 import { sanitizeSvg } from "../sanitize.js";
-import { h } from "./dom.js";
+import { h, safeHtml } from "./dom.js";
 
 /** 難易度を星で表示。 */
 export function difficultyStars(n: number): string {
@@ -25,7 +25,7 @@ export function solutionNode(p: Problem, label: string): HTMLElement {
     "div",
     { class: "solution" },
     h("strong", {}, label),
-    h("ol", {}, ...p.solution.map((s) => h("li", { html: formatMath(s) }))),
+    h("ol", {}, ...p.solution.map((s) => h("li", { html: safeHtml(formatMath(s)) }))),
     h("p", { class: "src" }, sourceText(p)),
   );
 }
@@ -33,7 +33,7 @@ export function solutionNode(p: Problem, label: string): HTMLElement {
 /** 図（インライン SVG）を表示するノード。sanitizeSvg でサニタイズ済み（I-037）。 */
 export function figureNode(svgStr: string): HTMLElement {
   const safe = sanitizeSvg(svgStr);
-  return h("figure", { class: "figure", html: safe });
+  return h("figure", { class: "figure", html: safeHtml(safe) });
 }
 
 /** 空状態（履歴なし等）の上質な表示。 */
@@ -61,7 +61,7 @@ export function sparklineNode(values: number[]): HTMLElement | null {
   const svg =
     `<svg class="spark" viewBox="0 0 ${w} ${hh}" preserveAspectRatio="none" role="img" aria-label="正答率の推移">` +
     `<path class="area" d="${area}"/><path class="line" d="${line}"/></svg>`;
-  return h("div", { html: svg });
+  return h("div", { html: safeHtml(svg) });
 }
 
 /** 達成率のリングプログレス（日次目標など）。 */
@@ -76,7 +76,7 @@ export function ringNode(value: number, max: number): HTMLElement {
     `<circle cx="29" cy="29" r="${r}" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" ` +
     `stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 29 29)"/>` +
     `<text x="29" y="34" text-anchor="middle" fill="currentColor" font-size="14" font-weight="700">${Math.round(pct * 100)}%</text></svg>`;
-  return h("div", { html: svg, style: "flex:none" });
+  return h("div", { html: safeHtml(svg), style: "flex:none" });
 }
 
 /** 進捗バー。label を渡すと支援技術に進捗として伝わる（role=progressbar）。 */

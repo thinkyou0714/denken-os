@@ -161,79 +161,106 @@ function pick(variants: readonly string[], seed: number): string {
   return variants[Math.abs(seed) % variants.length] as string;
 }
 
+// ---- II-146: 表情選択を 1D ルックアップ表に ----
+// streakState × todayGoalMet × dueCount の組み合わせを文字列キーにマップする。
+// ネストした if-else（5×3×4 相当）を排除し、追加・テストを容易にする。
+
+type HomeConditionKey = "none" | "broken" | "at-risk" | "goal-met" | "has-due" | "default";
+
+function homeConditionKey(ctx: MascotContext): HomeConditionKey {
+  if (ctx.streakState === "none") return "none";
+  if (ctx.streakState === "broken") return "broken";
+  if (ctx.streakState === "at-risk") return "at-risk";
+  if (ctx.todayCount >= ctx.dailyGoal) return "goal-met";
+  if (ctx.dueCount > 0) return "has-due";
+  return "default";
+}
+
+const HOME_MOOD_TABLE: Record<HomeConditionKey, MascotMood> = {
+  none: "happy",
+  broken: "sad",
+  "at-risk": "worried",
+  "goal-met": "cheer",
+  "has-due": "happy",
+  default: "happy",
+};
+
 /** ホーム（学習タブ）でのデンタマの一言。状況に応じて表情と台詞が変わる。 */
 export function mascotHome(ctx: MascotContext): MascotView {
-  const { streakState, streakDays, todayCount, dailyGoal, dueCount, dayIndex } = ctx;
-  if (streakState === "none") {
-    return {
-      mood: "happy",
-      message: `はじめまして、${MASCOT_NAME}だよ！⚡ まずは1問、いっしょにやってみよう！`,
-    };
+  const { streakDays, todayCount, dailyGoal, dueCount, dayIndex } = ctx;
+  const key = homeConditionKey(ctx);
+  const mood = HOME_MOOD_TABLE[key];
+  switch (key) {
+    case "none":
+      return {
+        mood,
+        message: `はじめまして、${MASCOT_NAME}だよ！⚡ まずは1問、いっしょにやってみよう！`,
+      };
+    case "broken":
+      return {
+        mood,
+        message: pick(
+          [
+            "おかえり！会いたかったよ。軽い1問から再開しよう⚡",
+            "また会えてうれしい！今日から新しい炎を育てよう🔥",
+            "ブランクは気にしない！戻ってきたキミがえらい！",
+          ],
+          dayIndex,
+        ),
+      };
+    case "at-risk":
+      return {
+        mood,
+        message: pick(
+          [
+            `🔥${streakDays}日の炎が消えちゃう…！1問だけでもやろう？`,
+            `今日まだ0問だよ…3分だけ、ね？ ${streakDays}日連続を守ろう！`,
+            `ストリークがピンチ！キミの${streakDays}日を無駄にしたくないんだ。`,
+          ],
+          dayIndex,
+        ),
+      };
+    case "goal-met":
+      return {
+        mood,
+        message: pick(
+          [
+            "今日の目標達成！キミ、ほんとにすごいよ🎉",
+            "やりきったね！明日もボクと続けよう⚡",
+            "目標クリア！この積み重ねが合格をつくるんだ✨",
+          ],
+          dayIndex,
+        ),
+      };
+    case "has-due": {
+      const remain = Math.max(1, dailyGoal - todayCount);
+      return {
+        mood,
+        message: pick(
+          [
+            `復習が ${dueCount} 件待ってるよ。忘れる前が勝負！`,
+            `今日あと ${remain} 問！まず復習 ${dueCount} 件から片付けよう。`,
+            `復習 ${dueCount} 件→新しい問題、の順がオススメだよ⚡`,
+          ],
+          dayIndex,
+        ),
+      };
+    }
+    default: {
+      const remain = Math.max(1, dailyGoal - todayCount);
+      return {
+        mood,
+        message: pick(
+          [
+            `今日あと ${remain} 問で目標達成！いいペース⚡`,
+            `あと ${remain} 問！コツコツが合格への最短ルートだよ。`,
+            `調子いいね！あと ${remain} 問、いってみよう！`,
+          ],
+          dayIndex,
+        ),
+      };
+    }
   }
-  if (streakState === "broken") {
-    return {
-      mood: "sad",
-      message: pick(
-        [
-          "おかえり！会いたかったよ。軽い1問から再開しよう⚡",
-          "また会えてうれしい！今日から新しい炎を育てよう🔥",
-          "ブランクは気にしない！戻ってきたキミがえらい！",
-        ],
-        dayIndex,
-      ),
-    };
-  }
-  if (streakState === "at-risk") {
-    return {
-      mood: "worried",
-      message: pick(
-        [
-          `🔥${streakDays}日の炎が消えちゃう…！1問だけでもやろう？`,
-          `今日まだ0問だよ…3分だけ、ね？ ${streakDays}日連続を守ろう！`,
-          `ストリークがピンチ！キミの${streakDays}日を無駄にしたくないんだ。`,
-        ],
-        dayIndex,
-      ),
-    };
-  }
-  if (todayCount >= dailyGoal) {
-    return {
-      mood: "cheer",
-      message: pick(
-        [
-          "今日の目標達成！キミ、ほんとにすごいよ🎉",
-          "やりきったね！明日もボクと続けよう⚡",
-          "目標クリア！この積み重ねが合格をつくるんだ✨",
-        ],
-        dayIndex,
-      ),
-    };
-  }
-  const remain = Math.max(1, dailyGoal - todayCount);
-  if (dueCount > 0) {
-    return {
-      mood: "happy",
-      message: pick(
-        [
-          `復習が ${dueCount} 件待ってるよ。忘れる前が勝負！`,
-          `今日あと ${remain} 問！まず復習 ${dueCount} 件から片付けよう。`,
-          `復習 ${dueCount} 件→新しい問題、の順がオススメだよ⚡`,
-        ],
-        dayIndex,
-      ),
-    };
-  }
-  return {
-    mood: "happy",
-    message: pick(
-      [
-        `今日あと ${remain} 問で目標達成！いいペース⚡`,
-        `あと ${remain} 問！コツコツが合格への最短ルートだよ。`,
-        `調子いいね！あと ${remain} 問、いってみよう！`,
-      ],
-      dayIndex,
-    ),
-  };
 }
 
 /** 電験まめ知識（タップで聞ける小ネタ。教科書レベルの定番事実のみ＝検証可能）。 */
@@ -256,6 +283,37 @@ export const MASCOT_TRIVIA: readonly string[] = [
 export function mascotTip(index: number): string {
   // モジュロ演算で [0, MASCOT_TRIVIA.length) の範囲内のため安全。
   return MASCOT_TRIVIA[((index % MASCOT_TRIVIA.length) + MASCOT_TRIVIA.length) % MASCOT_TRIVIA.length] as string;
+}
+
+// ---- II-147: tipIndex メモ化（日決定論的なインデックスをキャッシュ） ----
+
+interface TipIndexCache {
+  dayIndex: number;
+  tipCount: number;
+  index: number;
+}
+
+let _tipIndexCache: TipIndexCache | null = null;
+
+/**
+ * 日番号から決定論的な tipIndex を計算し、メモ化して返す。
+ * 同一日 (dayIndex) では同じインデックスを返す（毎描画の再計算を回避）。
+ * 翌日になると新しいインデックスを計算する。
+ */
+export function tipIndexForDay(dayIndex: number): number {
+  const tipCount = MASCOT_TRIVIA.length;
+  if (_tipIndexCache !== null && _tipIndexCache.dayIndex === dayIndex && _tipIndexCache.tipCount === tipCount) {
+    return _tipIndexCache.index;
+  }
+  // dayIndex をシードにして決定論的に選ぶ（日替わり・巡回）。
+  const index = ((dayIndex % tipCount) + tipCount) % tipCount;
+  _tipIndexCache = { dayIndex, tipCount, index };
+  return index;
+}
+
+/** tipIndex キャッシュを強制クリアする（テスト・リセット用）。 */
+export function clearTipIndexCache(): void {
+  _tipIndexCache = null;
 }
 
 /** 解答直後のリアクション（正誤とコンボで変わる短い一言）。 */

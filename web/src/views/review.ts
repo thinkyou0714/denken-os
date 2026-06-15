@@ -8,8 +8,8 @@ import { dailyReviewBatch, JST_OFFSET_MS, streakStatus } from "../retention.js";
 import { dueReviewProblems, mistakeNotebook } from "../review.js";
 import { getMascotEnabled, getReviewCap } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
-import { practice } from "../state/practice.js";
-import { h } from "../ui/dom.js";
+import { practice, setCombo } from "../state/practice.js";
+import { h, safeHtml } from "../ui/dom.js";
 import { emptyState } from "../ui/widgets.js";
 import { usedFreezeDays } from "./practice.js";
 import { switchView } from "./router.js";
@@ -23,7 +23,7 @@ export function renderReview(root: HTMLElement): void {
         h(
           "div",
           { class: `card nudge ${ss.state} mascot` },
-          h("div", { class: "mface", html: mascotSvg(ss.state === "at-risk" ? "worried" : "sad", 48) }),
+          h("div", { class: "mface", html: safeHtml(mascotSvg(ss.state === "at-risk" ? "worried" : "sad", 48)) }),
           h("div", { class: "mbubble" }, ss.message),
         ),
       );
@@ -106,7 +106,7 @@ export function renderReview(root: HTMLElement): void {
         h(
           "div",
           { class: "card" },
-          h("div", { html: formatMath(m.problem.statement) }),
+          h("div", { html: safeHtml(formatMath(m.problem.statement)) }),
           h(
             "div",
             { class: "muted" },
@@ -124,6 +124,6 @@ import type { Problem } from "../../../lib/engine/schema.js";
 export function startDrill(pool: Problem[]): void {
   practice.pool = pool;
   practice.current = null;
-  practice.combo = 0; // 新しいセッションとして仕切り直す
+  setCombo(0); // 新しいセッションとして仕切り直す
   switchView("practice");
 }

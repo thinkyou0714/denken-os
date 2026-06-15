@@ -8,7 +8,7 @@ import { reloadProblems } from "./app-init.js";
 import { onKeydown } from "./keyboard.js";
 import { getTheme } from "./settings.js";
 import type { InstallPromptEvent } from "./state/app.js";
-import { applyTheme, setInstallPrompt, storage } from "./state/app.js";
+import { applyTheme, loadFailed, setInstallPrompt, storage } from "./state/app.js";
 import { showToast } from "./ui/toast.js";
 import { runFreezeBridge } from "./views/practice.js";
 import { renderHeader, renderNav, updateNetStatus } from "./views/router.js";
@@ -82,7 +82,12 @@ async function main(): Promise<void> {
   await reloadProblems();
   document.addEventListener("keydown", onKeydown);
   // オフライン状態の変化をヘッダに反映（完全オフライン動作だが状態は明示する）。
-  window.addEventListener("online", updateNetStatus);
+  // II-165: オンライン復帰時に自動リトライ（loadFailed のときだけ再取得）。
+  window.addEventListener("online", () => {
+    updateNetStatus();
+    // loadFailed 状態のときだけ自動リトライ（二重ロードフラグはapp-init側で管理）。
+    if (loadFailed) void reloadProblems();
+  });
   window.addEventListener("offline", updateNetStatus);
   registerServiceWorker();
 }

@@ -1,0 +1,13 @@
+# Allowlist for gitleaks false positives
+# test fixtures and example values (not real secrets)
+# .env.example is intentionally empty values
+
+# .env.example contains only placeholder keys with empty values - not real secrets
+.env.example:ANTHROPIC_API_KEY
+.env.example:X_API_KEY
+.env.example:X_API_SECRET
+.env.example:X_ACCESS_TOKEN
+.env.example:X_ACCESS_SECRET
+.env.example:SUPABASE_URL
+.env.example:SUPABASE_ANON_KEY
+.env.example:DISCORD_BOT_TOKEN

@@ -6,6 +6,15 @@ on:
     branches: [main]  # main push のみ。PR 実行との二重起動を防ぐ（I-091）。
   pull_request:
   workflow_dispatch:
+    inputs:
+      clear_cache:
+        description: "キャッシュをクリアして再ビルドする（デバッグ用）"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 # 同一ブランチ・PRへの新 push 時に旧実行をキャンセルし最新だけ走らせる（I-085）。
 concurrency:
@@ -17,9 +26,10 @@ permissions:
   contents: read
 
 jobs:
-  quality-gate:
+  # ジョブ1: Lint・型チェック・データバリデーション
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
         with:
@@ -28,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "22"
-          cache: npm
+          cache: ${{ inputs.clear_cache == 'true' && '' || 'npm' }}
 
       - name: Install dependencies
         run: npm ci
@@ -48,6 +58,23 @@ jobs:
       - name: Validate problem data against schema
         run: npm run validate:data
 
+  # ジョブ2: ユニットテスト（カバレッジ計測）
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: ${{ inputs.clear_cache == 'true' && '' || 'npm' }}
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run unit tests (with coverage gate)
         run: npm run test:coverage 2>&1 | tee /tmp/test-output.txt; exit ${PIPESTATUS[0]}
 
@@ -55,16 +82,34 @@ jobs:
         if: always()
         run: tail -20 /tmp/test-output.txt >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Build offline web app
-        run: npm run build:web
-
       - name: Upload coverage report
-        if: always()
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
           retention-days: 7
+
+  # ジョブ3: ウェブアプリビルド（validate + test が成功した場合のみ実行）
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [validate, test]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: ${{ inputs.clear_cache == 'true' && '' || 'npm' }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build offline web app
+        run: npm run build:web
 
       - name: Upload web dist
         if: success()

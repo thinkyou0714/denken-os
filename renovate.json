@@ -3,5 +3,30 @@
   "extends": [
     "local>thinkyou0714/.github",
     "helpers:pinGitHubActionDigests"
+  ],
+  "schedule": ["before 6am on monday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "matchPackageNames": ["*"]
+    },
+    {
+      "matchPackageNames": ["vitest", "@vitest/coverage-v8"],
+      "groupName": "vitest"
+    },
+    {
+      "matchPackageNames": ["@biomejs/biome"],
+      "groupName": "biome"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    }
   ]
 }
