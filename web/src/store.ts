@@ -34,6 +34,25 @@ const RETENTION_KEY = "denken:retention";
  *  以後の保存がすべて失敗するため、古い順に間引く（1日10問×500日分は保持）。 */
 export const LOG_CAP = 5000;
 
+/**
+ * II-151: localStorage の使用量を推定する（JSON.stringify の文字数をバイト近似値として使用）。
+ * ブラウザの quota（一般に 5MB〜10MB）に対して何 KB 使っているかを返す。
+ * 推定値のため実際の quota 残量とは一致しない場合があるが、警告の目安として十分。
+ * @returns 推定使用量（KB）
+ */
+export function estimateStorageKb(storage: StorageLike, keys: readonly string[]): number {
+  let total = 0;
+  for (const key of keys) {
+    const v = storage.getItem(key);
+    if (v !== null) total += key.length + v.length;
+  }
+  // UTF-16 の文字列を UTF-8 に近似（ASCII 主体なので ×1 が妥当な近似）。
+  return Math.round(total / 1024);
+}
+
+/** localStorage quota の推奨警告閾値（KB）。この値を超えたら UI で通知する。 */
+export const STORAGE_WARN_KB = 3_000; // 3 MB 超で警告
+
 function ratingOf(x: Rating | boolean): Rating {
   if (typeof x === "boolean") return x ? "good" : "again";
   return x;

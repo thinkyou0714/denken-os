@@ -84,14 +84,13 @@ describe("テンプレート再現性（I-067）: generate→generateFrom の結
     });
   }
 
-  it("KNOWN_DIVERGENT リストを報告（ゼロが理想）", () => {
+  it("KNOWN_DIVERGENT は空である（再現性不一致テンプレートが無いことを保証）", () => {
     if (KNOWN_DIVERGENT.size > 0) {
       console.warn(`[I-067] KNOWN_DIVERGENT に ${KNOWN_DIVERGENT.size} 件の不一致が記録されています:`);
-      for (const t of KNOWN_DIVERGENT) {
-        console.warn(`  - ${t}`);
-      }
+      for (const t of KNOWN_DIVERGENT) console.warn(`  - ${t}`);
     }
-    // KNOWN_DIVERGENT 自体の存在は fail にしない（ゼロが理想だが既知ならリストで管理）
-    expect(KNOWN_DIVERGENT.size).toBeGreaterThanOrEqual(0);
+    // `>= 0`（常に真）は偽グリーンだった。新たに不一致テンプレが混入したら気付けるよう厳密化する。
+    // 既知の不一致を許容する場合は、このアサーションを更新し TODO(audit) で理由を残すこと。
+    expect([...KNOWN_DIVERGENT]).toEqual([]);
   });
 });

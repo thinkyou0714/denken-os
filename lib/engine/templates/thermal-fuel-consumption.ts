@@ -4,8 +4,7 @@
  *   ⇒ m = 3600·W / (η·H)   〔kg〕  （1kWh = 3600kJ）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 /** (効率%, 発熱量kJ/kg) — 3600/(η·H) が綺麗な kg/kWh になる組だけ採用。 */
 const ETA_H_PAIRS: ReadonlyArray<readonly [number, number]> = [
@@ -22,35 +21,13 @@ const ETA_H_PAIRS: ReadonlyArray<readonly [number, number]> = [
 ];
 const W_SET: ReadonlyArray<number> = [1000, 2000, 4000, 5000, 8000, 10000, 20000];
 
-function buildFrom(etaPct: number, heat: number, energy: number): GenerationResult | null {
-  if (etaPct <= 0 || etaPct >= 100 || heat <= 0 || energy <= 0) return null;
-  const m = (3600 * energy) / ((etaPct / 100) * heat); // kg
-  if (!isCleanAnswer(m)) return null;
-  const answerText = formatClean(m);
-  return {
-    format: "numeric",
-    params: {
-      efficiency: { value: etaPct, unit: "%", realistic_range: [20, 55] },
-      heating_value: { value: heat, unit: "kJ/kg", realistic_range: [30000, 55000] },
-      energy: { value: energy, unit: "kWh", realistic_range: [500, 50000] },
-    },
-    answerValue: m,
-    answerUnit: "kg",
-    answerText,
-    facts: { etaPct, heat, energy, m },
-    defaultStatement:
-      `発熱量 ${heat}kJ/kg の燃料を使う熱効率 ${etaPct}% の汽力発電所で、` +
-      `電力量 ${energy}kWh を発電するのに必要な燃料消費量〔kg〕は?（1kWh=3600kJ）`,
-    defaultSolution: [
-      `W·3600 = m·H·η より m=3600W/(η·H)`,
-      `=3600×${energy}/(${formatClean(etaPct / 100)}×${heat})`,
-      `=${answerText}kg`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  efficiency: number;
+  heating_value: number;
+  energy: number;
+};
 
-export const thermalFuelConsumption: Template = {
+export const thermalFuelConsumption = defineTemplate<Params>({
   topic: "火力発電の燃料消費量",
   subject: "電力",
   exam: "denken2_primary",
@@ -60,13 +37,40 @@ export const thermalFuelConsumption: Template = {
     heating_value: { unit: "kJ/kg", realistic_range: [30000, 55000] },
     energy: { unit: "kWh", realistic_range: [500, 50000] },
   },
-  generate(rng) {
+  paramOrder: ["efficiency", "heating_value", "energy"],
+  draw(rng) {
     const [eta, heat] = pick(ETA_H_PAIRS, rng);
-    return buildFrom(eta, heat, pick(W_SET, rng));
+    return {
+      efficiency: eta,
+      heating_value: heat,
+      energy: pick(W_SET, rng),
+    };
   },
-  generateFrom(params) {
-    const { efficiency, heating_value, energy } = params;
-    if (efficiency === undefined || heating_value === undefined || energy === undefined) return null;
-    return buildFrom(efficiency, heating_value, energy);
+  buildFrom({ efficiency: etaPct, heating_value: heat, energy }) {
+    if (etaPct <= 0 || etaPct >= 100 || heat <= 0 || energy <= 0) return null;
+    const m = (3600 * energy) / ((etaPct / 100) * heat); // kg
+    if (!isCleanAnswer(m)) return null;
+    const answerText = formatClean(m);
+    return {
+      format: "numeric",
+      params: {
+        efficiency: { value: etaPct, unit: "%", realistic_range: [20, 55] },
+        heating_value: { value: heat, unit: "kJ/kg", realistic_range: [30000, 55000] },
+        energy: { value: energy, unit: "kWh", realistic_range: [500, 50000] },
+      },
+      answerValue: m,
+      answerUnit: "kg",
+      answerText,
+      facts: { etaPct, heat, energy, m },
+      defaultStatement:
+        `発熱量 ${heat}kJ/kg の燃料を使う熱効率 ${etaPct}% の汽力発電所で、` +
+        `電力量 ${energy}kWh を発電するのに必要な燃料消費量〔kg〕は?（1kWh=3600kJ）`,
+      defaultSolution: [
+        `W·3600 = m·H·η より m=3600W/(η·H)`,
+        `=3600×${energy}/(${formatClean(etaPct / 100)}×${heat})`,
+        `=${answerText}kg`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});

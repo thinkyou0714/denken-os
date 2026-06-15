@@ -12,7 +12,7 @@ import { appendChatMessage, clearChat, loadChat, streamClaude } from "../chat.js
 import { formatMath } from "../mathfmt.js";
 import { getApiKey, getChatModel } from "../settings.js";
 import { storage, view } from "../state/app.js";
-import { h } from "../ui/dom.js";
+import { h, safeHtml } from "../ui/dom.js";
 import { emptyState } from "../ui/widgets.js";
 import { switchView } from "./router.js";
 
@@ -26,7 +26,7 @@ function bubbleNode(msg: ChatMessage): HTMLElement {
     b.textContent = msg.content;
     return b;
   }
-  const b = h("div", { class: "msg bot", html: formatMath(msg.content) });
+  const b = h("div", { class: "msg bot", html: safeHtml(formatMath(msg.content)) });
   if (msg.citations && msg.citations.length > 0) {
     b.append(h("div", { class: "src" }, `出典: ${msg.citations.join(" ／ ")}`));
   }

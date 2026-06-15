@@ -5,13 +5,14 @@
  *   npm run gen -- --topic 三相交流電力 --count 5
  *   npm run gen -- --topic 三相交流電力 --count 5 --xpost
  *   npm run gen -- --topic 三相交流電力 --count 100 --out out/problems.json
+ *   npm run gen -- --version
  *
  * 既定では ANTHROPIC_API_KEY が無ければ決定論スタブで言い回しを生成するので、
  * API キー無しでも動く。
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
-import { pathToFileURL } from "node:url";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { generate } from "./generate.js";
 import type { SourceType } from "./schema.js";
 import { getTemplate, listTopics } from "./templates/index.js";
@@ -24,32 +25,60 @@ export interface Args {
   citation?: string;
   out?: string;
   xpost: boolean;
+  /** 先頭 N 件のみ xpost プレビュー表示（既定: 10）。 */
+  xpostLimit: number;
+  /** xpost プレビューをファイルに出力（省略時は stderr）。 */
+  xpostOut?: string;
   seed?: number;
   help: boolean;
+  version: boolean;
 }
 
 const SOURCE_TYPES: readonly SourceType[] = ["original", "past_exam_modified", "past_exam_quoted"];
 
+/** --topic 直後の値がオプション（--xxx）や欠落のとき警告を出してデフォルト扱いにする。 */
+function isOptionLike(v: string | undefined): boolean {
+  return v === undefined || v.startsWith("--") || v === "-h" || v === "-t" || v === "-v";
+}
+
 export function parseArgs(argv: string[]): Args {
-  const args: Args = { count: 5, source: "original", xpost: false, help: false };
+  const args: Args = {
+    count: 5,
+    source: "original",
+    xpost: false,
+    xpostLimit: 10,
+    help: false,
+    version: false,
+  };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
-      const v = argv[++i];
-      return v !== undefined ? v : undefined;
+      const v = argv[i + 1];
+      if (isOptionLike(v)) return undefined;
+      i++;
+      return v;
     };
     switch (a) {
-      case "--topic": {
+      case "--topic":
+      case "-t": {
         const v = next();
-        if (v !== undefined) args.topic = v;
+        if (v !== undefined) {
+          args.topic = v;
+        } else {
+          console.warn("警告: --topic の直後に値がありません。--topic を無視します。");
+        }
         break;
       }
-      case "--count":
-        args.count = Number(next());
+      case "--count": {
+        const v = argv[++i];
+        args.count = Number(v);
         break;
-      case "--source":
-        args.source = next() as SourceType;
+      }
+      case "--source": {
+        const v = argv[++i];
+        args.source = v as SourceType;
         break;
+      }
       case "--citation": {
         const v = next();
         if (v !== undefined) args.citation = v;
@@ -63,15 +92,31 @@ export function parseArgs(argv: string[]): Args {
       case "--xpost":
         args.xpost = true;
         break;
-      case "--seed":
-        args.seed = Number(next());
+      case "--xpost-limit": {
+        const v = argv[++i];
+        args.xpostLimit = Number(v);
         break;
+      }
+      case "--xpost-out": {
+        const v = next();
+        if (v !== undefined) args.xpostOut = v;
+        break;
+      }
+      case "--seed": {
+        const v = argv[++i];
+        args.seed = Number(v);
+        break;
+      }
       case "--help":
       case "-h":
         args.help = true;
         break;
+      case "--version":
+      case "-v":
+        args.version = true;
+        break;
       default:
-        if (a?.startsWith("--")) console.warn(`未知のオプション: ${a}`);
+        if (a?.startsWith("-")) console.warn(`警告: 未知のオプション: ${a}`);
     }
   }
   return args;
@@ -92,6 +137,9 @@ export function argErrors(args: Args): string[] {
   if (args.seed !== undefined && !Number.isFinite(args.seed)) {
     errs.push("--seed は数値で指定してください");
   }
+  if (!Number.isInteger(args.xpostLimit) || args.xpostLimit < 1) {
+    errs.push("--xpost-limit は 1 以上の整数で指定してください");
+  }
   return errs;
 }
 
@@ -99,17 +147,21 @@ const USAGE = `DENKEN-OS 問題生成エンジン
 
 使い方:
   npm run gen -- --topic <論点> [--count N] [--source <type>] [--citation <出典>]
-                 [--out <path>] [--xpost] [--seed N]
+                 [--out <path>] [--xpost] [--xpost-limit N] [--xpost-out <path>]
+                 [--seed N] [--version]
 
 オプション:
-  --topic     生成する論点（必須）。引数なしで一覧表示。
-  --count     生成件数（1〜100000、既定 5）。
-  --source    original | past_exam_modified | past_exam_quoted（既定 original）。
-  --citation  出典（original 以外で必須）。
-  --out       JSON の出力先ファイル（省略時は標準出力）。
-  --xpost     朝/夜の X 投稿スレッドもプレビュー表示。
-  --seed      決定論 RNG のシード（再現生成用）。
-  -h, --help  このヘルプを表示。`;
+  --topic, -t   生成する論点（必須）。引数なしで一覧表示。
+  --count       生成件数（1〜100000、既定 5）。
+  --source      original | past_exam_modified | past_exam_quoted（既定 original）。
+  --citation    出典（original 以外で必須）。
+  --out         JSON の出力先ファイル（省略時は標準出力）。
+  --xpost       朝/夜の X 投稿スレッドもプレビュー表示。
+  --xpost-limit 先頭 N 件のみ xpost プレビュー（既定 10）。
+  --xpost-out   xpost プレビューをファイルに出力。
+  --seed        決定論 RNG のシード（再現生成用）。
+  --version, -v バージョン番号を表示して終了。
+  -h, --help    このヘルプを表示。`;
 
 /** seed 付き決定論 RNG（再現性のため。mulberry32）。 */
 export function makeRng(seed?: number): (() => number) | undefined {
@@ -124,8 +176,24 @@ export function makeRng(seed?: number): (() => number) | undefined {
   };
 }
 
+/** package.json の version フィールドを読んで返す。 */
+export function readVersion(): string {
+  try {
+    const pkgPath = resolve(fileURLToPath(import.meta.url), "../../../package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as { version?: string };
+    return pkg.version ?? "unknown";
+  } catch {
+    return "unknown";
+  }
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+
+  if (args.version) {
+    console.log(readVersion());
+    return;
+  }
 
   if (args.help) {
     console.log(USAGE);
@@ -161,9 +229,12 @@ async function main() {
       ...(rng !== undefined && { rng }),
     });
   } catch (e) {
-    // draw/narrate/validate 段階のエラーに topic 文脈を付与（I-020）。
-    console.error(`[draw/narrate/validate] topic="${args.topic}" の問題生成中にエラーが発生しました:`);
-    console.error(e instanceof Error ? e.message : e);
+    // draw/narrate/validate 各段階のエラーに topic 文脈を付与。
+    // エラーメッセージから段階を推測してログレベルを分離。
+    const msg = e instanceof Error ? e.message : String(e);
+    const stage = /narrat/i.test(msg) ? "narrate" : /validat/i.test(msg) ? "validate" : "draw";
+    console.error(`[${stage}] topic="${args.topic}" の問題生成中にエラーが発生しました:`);
+    console.error(msg);
     process.exit(1);
   }
 
@@ -183,18 +254,41 @@ async function main() {
   }
 
   if (args.xpost) {
-    console.error("\n--- X 投稿プレビュー（朝/夜スレッド） ---");
-    for (const p of problems) {
+    // 先頭 xpostLimit 件のみプレビュー（stdout 肥大防止 / II-126）。
+    const previewProblems = problems.slice(0, args.xpostLimit);
+    const xpostLines: string[] = [];
+    xpostLines.push("\n--- X 投稿プレビュー（朝/夜スレッド） ---");
+    if (problems.length > args.xpostLimit) {
+      xpostLines.push(`（全 ${problems.length} 件中先頭 ${args.xpostLimit} 件を表示 / --xpost-limit で変更可）`);
+    }
+
+    for (const p of previewProblems) {
       try {
         const xpostRng = makeRng(args.seed);
         const posts = buildXPosts(p, { ...(xpostRng !== undefined && { rng: xpostRng }) });
         const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
-        console.error(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
+        xpostLines.push(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);
       } catch (e) {
-        // 投稿文面生成のエラーに topic・問題 ID の文脈を付与（I-020）。
-        console.error(`[xpost] topic="${args.topic}" id="${p.id}" の投稿文面生成中にエラーが発生しました:`);
+        // xpost 文面生成のエラーに topic・問題 ID の文脈を付与。
+        xpostLines.push(
+          `[xpost] topic="${args.topic}" id="${p.id}" の投稿文面生成中にエラーが発生しました: ${e instanceof Error ? e.message : e}`,
+        );
+      }
+    }
+
+    const xpostOutput = xpostLines.join("\n");
+
+    if (args.xpostOut) {
+      try {
+        mkdirSync(dirname(args.xpostOut), { recursive: true });
+        writeFileSync(args.xpostOut, `${xpostOutput}\n`, "utf8");
+        console.error(`xpost プレビューを ${args.xpostOut} に書き出しました。`);
+      } catch (e) {
+        console.error(`[xpost-write] ファイル "${args.xpostOut}" への書き込みに失敗しました:`);
         console.error(e instanceof Error ? e.message : e);
       }
+    } else {
+      console.error(xpostOutput);
     }
   }
 }

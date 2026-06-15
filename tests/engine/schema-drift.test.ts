@@ -62,8 +62,9 @@ describe("スキーマドリフト検知（I-069）", () => {
 
   const files = readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"));
 
-  it(`data/problems/ に ${52} 件以上の問題ファイルが存在する（ファイル数の回帰防止）`, () => {
-    expect(files.length).toBeGreaterThanOrEqual(1);
+  // 出荷済みデータの削除を機械的に止める下限ゲート（>=1 では51件削除しても通る偽グリーンだった）。
+  it("data/problems/ に 52 件以上の問題ファイルが存在する（ファイル数の回帰防止）", () => {
+    expect(files.length).toBeGreaterThanOrEqual(52);
   });
 
   for (const filename of files) {

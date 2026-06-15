@@ -12,6 +12,17 @@
  *
  * エラーラッパ: fail(op, error) で操作名付きのエラーに統一する（I-023）。
  * URL/key の空チェック: createSupabaseStores で早期失敗（I-024）。
+ *
+ * ## lenient モード（II-138）
+ *
+ * 既定は strict（zod 検証失敗 = 例外）。`lenient: true` を指定するとパース失敗行を
+ * スキップして警告を出し、成功した行だけを返す（recovery 戦略）。
+ * 1件の破損行が全件取得を止める問題を回避する。
+ *
+ * - 既定は strict のため既存テスト・既存動作は変わらない。
+ * - lenient はオプトイン（デバッグ・マイグレーション中の救済用途）。
+ *   本番で全件 lenient にするとデータ破損を検出できなくなるため、
+ *   通常は strict のまま運用し、障害調査時のみ lenient を使う。
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -20,6 +31,20 @@ import { problemSchema } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
 import type { ReviewState } from "../scheduler/types.js";
 import type { AnswerLogStore, ProblemStore, ReviewStateStore } from "./index.js";
+
+// ── lenient モード オプション（II-138）────────────────────────────────────────
+
+/**
+ * lenient モードのオプション型。
+ *
+ * `lenient: true` にするとzod検証失敗の行をスキップして警告を出すため、
+ * 1件の破損行があっても残りの行を返せる（recovery 戦略）。
+ * 既定は `false`（strict：従来通り例外を投げる）。
+ */
+export interface LenientOptions {
+  /** zod 検証失敗時にスキップ＋warning を出す（既定: false = strict）。 */
+  lenient?: boolean;
+}
 
 // ── エラーラッパ（I-023）────────────────────────────────────────────────────
 
@@ -159,7 +184,9 @@ const answerLogRowSchema = z.object({
   correct: z.boolean(),
   time_ms: z.number().nullable(),
   answered_at: z.string().datetime({ offset: true }),
-  problem_id: z.string().nullable(),
+  // 空文字の problem_id は実質「未設定」だが truthy 判定をすり抜けて誤参照を招くため、
+  // null か非空文字列のみ受理する（append は null を書くので空文字は本来入らない）。
+  problem_id: z.string().min(1).nullable(),
 });
 
 /**
@@ -198,12 +225,32 @@ export class SupabaseProblemStore implements ProblemStore {
     return data ? rowToProblem(data as ProblemRow) : undefined;
   }
 
-  async list(filter?: { status?: Problem["status"]; topic?: string }): Promise<Problem[]> {
+  async list(filter?: { status?: Problem["status"]; topic?: string }): Promise<Problem[]>;
+  /**
+   * lenient モード付きの list（II-138）。`lenient: true` でzod失敗行をスキップ。
+   * 既定（lenient 省略 / false）は従来の strict 挙動。
+   */
+  async list(filter?: { status?: Problem["status"]; topic?: string }, opts?: LenientOptions): Promise<Problem[]>;
+  async list(filter?: { status?: Problem["status"]; topic?: string }, opts?: LenientOptions): Promise<Problem[]> {
     let q = this.client.from("problems").select("*");
     if (filter?.status) q = q.eq("status", filter.status);
     if (filter?.topic) q = q.eq("topic", filter.topic);
     const { data, error } = await q;
     if (error) fail("problems.list", error);
+    if (opts?.lenient) {
+      const results: Problem[] = [];
+      for (const r of data ?? []) {
+        try {
+          results.push(rowToProblem(r as ProblemRow));
+        } catch (e) {
+          console.warn(
+            `problems.list [lenient]: 行をスキップしました id=${(r as ProblemRow).id}:`,
+            e instanceof Error ? e.message : e,
+          );
+        }
+      }
+      return results;
+    }
     return (data ?? []).map((r) => rowToProblem(r as ProblemRow));
   }
 }
@@ -223,13 +270,33 @@ export class SupabaseAnswerLogStore implements AnswerLogStore {
     if (error) fail("answer_logs.insert", error);
   }
 
-  async byUser(userId: string): Promise<AnswerLog[]> {
+  async byUser(userId: string): Promise<AnswerLog[]>;
+  /**
+   * lenient モード付きの byUser（II-138）。`lenient: true` でzod失敗行をスキップ。
+   * 既定（lenient 省略 / false）は従来の strict 挙動。
+   */
+  async byUser(userId: string, opts?: LenientOptions): Promise<AnswerLog[]>;
+  async byUser(userId: string, opts?: LenientOptions): Promise<AnswerLog[]> {
     const { data, error } = await this.client
       .from("answer_logs")
       .select("topic, correct, time_ms, answered_at, problem_id")
       .eq("user_id", userId)
       .order("answered_at", { ascending: true });
     if (error) fail("answer_logs.byUser", error);
+    if (opts?.lenient) {
+      const results: AnswerLog[] = [];
+      for (const r of data ?? []) {
+        try {
+          results.push(rowToAnswerLog(r as Record<string, unknown>, userId));
+        } catch (e) {
+          console.warn(
+            `answer_logs.byUser [lenient]: ユーザー ${userId} の行をスキップしました:`,
+            e instanceof Error ? e.message : e,
+          );
+        }
+      }
+      return results;
+    }
     return (data ?? []).map((r: Record<string, unknown>) => rowToAnswerLog(r, userId));
   }
 }
@@ -253,13 +320,30 @@ export class SupabaseReviewStateStore implements ReviewStateStore {
     if (error) fail("review_states.upsert", error);
   }
 
-  async byUser(userId: string): Promise<Map<string, ReviewState>> {
+  async byUser(userId: string): Promise<Map<string, ReviewState>>;
+  /**
+   * lenient モード付きの byUser（II-138）。`lenient: true` でzod失敗行をスキップ。
+   * 既定（lenient 省略 / false）は従来の strict 挙動。
+   */
+  async byUser(userId: string, opts?: LenientOptions): Promise<Map<string, ReviewState>>;
+  async byUser(userId: string, opts?: LenientOptions): Promise<Map<string, ReviewState>> {
     const { data, error } = await this.client.from("review_states").select("*").eq("user_id", userId);
     if (error) fail("review_states.byUser", error);
     const out = new Map<string, ReviewState>();
     for (const r of data ?? []) {
       const row = r as ReviewStateRow;
-      out.set(row.topic, rowToReviewState(row));
+      if (opts?.lenient) {
+        try {
+          out.set(row.topic, rowToReviewState(row));
+        } catch (e) {
+          console.warn(
+            `review_states.byUser [lenient]: ユーザー ${userId} topic=${row.topic} の行をスキップしました:`,
+            e instanceof Error ? e.message : e,
+          );
+        }
+      } else {
+        out.set(row.topic, rowToReviewState(row));
+      }
     }
     return out;
   }

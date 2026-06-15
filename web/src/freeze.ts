@@ -13,6 +13,11 @@ import { dayIndexOf, JST_OFFSET_MS } from "./quests.js";
 import type { StorageLike, WebAnswerLog } from "./store.js";
 
 export const FREEZE_KEY = "denken:freeze";
+/**
+ * II-154: runFreezeBridge の最終実行日を記録するキー。
+ * 同一日に複数回呼ばれても二重カウントしないための冪等化用。
+ */
+export const FREEZE_BRIDGE_DATE_KEY = "denken:freezeBridgeDate";
 /** 保持できるお守りの上限（Duolingo と同じ2個。貯めすぎると緊張感が消える）。 */
 export const FREEZE_CAP = 2;
 /** お守りの獲得周期（ストリークが7の倍数に到達するたびに1個）。 */
@@ -174,4 +179,34 @@ export function toggleRestReservation(state: FreezeState, todayIdx: number): Fre
 /** ストリーク計算で「学習日扱い」にする日（お守り消費日＋おやすみ予約日）。 */
 export function coveredDays(state: FreezeState): number[] {
   return [...state.usedDays, ...state.restDays];
+}
+
+// ---- II-154: runFreezeBridge 冪等化ヘルパー ----
+
+/**
+ * 今日の JST 日番号文字列を返す（FREEZE_BRIDGE_DATE_KEY の保存値と比較する）。
+ * @internal freeze.ts 内の冪等化判定に使う。
+ */
+function todayDateString(todayIdx: number): string {
+  return String(todayIdx);
+}
+
+/**
+ * runFreezeBridge を今日すでに実行済みか確認する（冪等化チェック）。
+ * 実行済みなら true を返す。views 層の runFreezeBridge はこれを呼んで早期リターンできる。
+ */
+export function isFreezeBridgeRunToday(storage: StorageLike, todayIdx: number): boolean {
+  return storage.getItem(FREEZE_BRIDGE_DATE_KEY) === todayDateString(todayIdx);
+}
+
+/**
+ * runFreezeBridge の実行日を記録する（冪等化マーク）。
+ * views 層の runFreezeBridge はブリッジ処理後にこれを呼んで実行日を保存する。
+ */
+export function markFreezeBridgeRun(storage: StorageLike, todayIdx: number): void {
+  try {
+    storage.setItem(FREEZE_BRIDGE_DATE_KEY, todayDateString(todayIdx));
+  } catch {
+    // 保存不能でも学習は継続させる。
+  }
 }

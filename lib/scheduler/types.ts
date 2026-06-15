@@ -13,6 +13,12 @@ export interface ReviewState {
   ease: number; // 易しさ係数（SM-2）
   dueMs: number; // 次回復習予定（epoch ms）
   lastReviewMs: number | null;
+  /**
+   * 状態の生成時刻（epoch ms）。後方互換のため optional（II-141）。
+   * 古い永続化データは undefined になるが、init() で生成した新規状態は必ず設定される。
+   * 用途: 長期未レビューの状態（古い参照）を検出し誤参照リスクを低減する。
+   */
+  createdAtMs?: number;
 }
 
 export interface Scheduler {

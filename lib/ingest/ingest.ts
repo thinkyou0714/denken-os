@@ -43,6 +43,49 @@ function normalize(s: string): string {
   return s.replace(/\s+/g, "").trim();
 }
 
+/**
+ * 出典フォーマット（年度＋区分＋科目）を検証するパーサ（II-139）。
+ *
+ * 不完全な出典（年度のみ・科目のみ等）を取込前に検出し、後から追跡不能な
+ * 著作権リスクを防ぐ。
+ *
+ * @param year - 年度文字列。「令和X年度」または「平成X年度」の形式を期待。
+ * @param examType - 試験区分文字列。空でないこと。
+ * @param subject - 科目。undefined でないこと。
+ * @returns `{ ok: true, citation }` または `{ ok: false, reason }`。
+ *
+ * @example
+ * ```ts
+ * parseCitation("令和5年度", "第二種 一次", "理論")
+ * // => { ok: true, citation: "令和5年度 第二種 一次 理論" }
+ *
+ * parseCitation("2023", "一次", "理論")
+ * // => { ok: false, reason: "year は「令和X年度」または「平成X年度」の形式が必要です: 2023" }
+ * ```
+ */
+export function parseCitation(
+  year: string | undefined,
+  examType: string | undefined,
+  subject: string | undefined,
+): { ok: true; citation: string } | { ok: false; reason: string } {
+  if (!year || year.trim().length === 0) {
+    return { ok: false, reason: "year(年度) が空です" };
+  }
+  // 「令和X年度」「平成X年度」「昭和X年度」のいずれか（X は正整数 or 元年の「元」）を許容。
+  // 改元初年度は公式表記が「令和元年度」等で数字でないため `元` も受理する（Codex#2 指摘）。
+  const yearPattern = /^(令和|平成|昭和)(\d+|元)年度$/;
+  if (!yearPattern.test(year.trim())) {
+    return { ok: false, reason: `year は「令和X年度」「令和元年度」等の形式が必要です: ${year}` };
+  }
+  if (!examType || examType.trim().length === 0) {
+    return { ok: false, reason: "examType(試験区分) が空です" };
+  }
+  if (!subject || (subject as string).trim().length === 0) {
+    return { ok: false, reason: "subject(科目) が空です" };
+  }
+  return { ok: true, citation: `${year.trim()} ${examType.trim()} ${subject}` };
+}
+
 /** 出典メタが揃っているか（年度・区分・科目・問題文）。 */
 function missingMeta(r: RawPastExam): string | null {
   if (!r.year) return "year(年度)欠落";
@@ -67,6 +110,13 @@ export function ingest(raws: RawPastExam[]): IngestResult {
       continue;
     }
     // missingMeta(r) が null を返した場合は statement/subject/year/examType の存在が保証される。
+    // parseCitation でフォーマットを検証（II-139）: 年度が正しい形式かを確認する。
+    const citationResult = parseCitation(r.year, r.examType, r.subject as string | undefined);
+    if (!citationResult.ok) {
+      rejected.push({ raw: r, reason: citationResult.reason });
+      continue;
+    }
+
     const key = normalize(r.statement as string);
     if (seen.has(key)) {
       duplicates += 1;
@@ -78,7 +128,7 @@ export function ingest(raws: RawPastExam[]): IngestResult {
     if (needsManualFix) manualFixCount += 1;
 
     accepted.push({
-      citation: `${r.year} ${r.examType} ${r.subject}`,
+      citation: citationResult.citation,
       sourceType: "past_exam_quoted",
       subject: r.subject as Subject,
       statement: r.statement as string,

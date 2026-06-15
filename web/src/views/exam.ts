@@ -15,16 +15,25 @@ import { getDailyGoal, getSoundLevel } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
 import { type ExamPreset, exam, setExam } from "../state/exam.js";
 import { todayCount } from "../state/practice.js";
-import { $, h } from "../ui/dom.js";
+import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { bar, difficultyStars, figureNode, solutionNode } from "../ui/widgets.js";
 import { processRewards } from "./practice-rewards.js";
 import { startDrill } from "./review.js";
 import { renderHeader, switchView } from "./router.js";
 
+/** タイマーを安全に破棄するユーティリティ（II-156 タイマーリーク解消）。
+ * setterで既存破棄+view離脱時の一元cleanup。 */
+export function clearExamTimer(): void {
+  if (exam?.timerId != null) {
+    clearInterval(exam.timerId);
+    exam.timerId = null;
+  }
+}
+
 /** 模試を終了（タイマー解除）して模試タブの初期画面へ戻る。 */
 export function endExam(): void {
-  if (exam?.timerId) clearInterval(exam.timerId);
+  clearExamTimer();
   setExam(null);
   switchView("exam");
 }
@@ -112,6 +121,8 @@ export function startExam(count: number, preset: ExamPreset): void {
  *  ただし出題されていない問題なので FSRS 記録は付けない（記憶状態を汚さない）。 */
 export function timeoutExam(): void {
   if (!exam) return;
+  // タイマーを明示的に停止してから状態を変更する（II-156 タイマーリーク解消）。
+  clearExamTimer();
   while (exam.results.length < exam.set.length) exam.results.push(false);
   exam.idx = exam.set.length;
   exam.timedOut = true;
@@ -124,8 +135,9 @@ export function renderExamRunning(root: HTMLElement): void {
     renderExamResult(root);
     return;
   }
-  // exam.idx < exam.set.length を直前でチェック済みのため安全。
-  const p = exam.set[exam.idx] as (typeof exam.set)[number];
+  // .at() で境界安全化（II-171）。exam.idx < exam.set.length を直前でチェック済みのため undefined にならない。
+  const p = exam.set.at(exam.idx);
+  if (!p) return; // 空セットの別フロー（型安全）
   const header = h(
     "div",
     { class: "toolbar" },
@@ -152,11 +164,19 @@ export function renderExamRunning(root: HTMLElement): void {
   const host = h("div", {});
   host.append(
     h("div", { id: "meta" }, `${p.subject}・難易度${difficultyStars(p.difficulty)}`),
-    h("div", { class: "stmt", html: formatMath(p.statement) }),
+    h("div", { class: "stmt", html: safeHtml(formatMath(p.statement)) }),
   );
   if (p.figure) host.append(figureNode(p.figure));
   host.append(h("div", { class: "answers", id: "eanswers" }));
-  root.append(header, host);
+  // aria-live region: タイマー警告をスクリーンリーダーへ通知（II-159）。visually-hiddenで画面には見えない。
+  const timerLive = h("div", {
+    id: "timer-live",
+    role: "alert",
+    "aria-live": "assertive",
+    "aria-atomic": "true",
+    class: "sr-only",
+  });
+  root.append(header, host, timerLive);
   startTimer();
 
   const answers = host.querySelector("#eanswers") as HTMLElement;
@@ -218,10 +238,16 @@ export function renderExamRunning(root: HTMLElement): void {
   }
 }
 
-/** 残り時間のカウントダウン（時間制限の本実装）。0 で自動終了し本番を再現する。 */
+/** 残り時間のカウントダウン（時間制限の本実装）。0 で自動終了し本番を再現する。
+ * II-156: setter経由で既存タイマーを破棄してから新規設定（タイマーリーク解消）。
+ * II-159: 残60秒でaria-label更新＋aria-live通知（スクリーンリーダーへ警告）。
+ */
 export function startTimer(): void {
   if (!exam) return;
-  if (exam.timerId) clearInterval(exam.timerId);
+  // 既存タイマーを必ず破棄してから新規設定（II-156）。
+  clearExamTimer();
+  /** ラスト1分の警告をaria-liveで1回だけ通知するフラグ。 */
+  let warnAnnounced = false;
   exam.timerId = window.setInterval(() => {
     const t = $("timer");
     if (!t || !exam) return;
@@ -230,8 +256,22 @@ export function startTimer(): void {
       timeoutExam();
       return;
     }
-    t.textContent = `残り ${formatRemaining(remaining)}`;
-    t.classList.toggle("timer-warn", remaining <= 60_000); // ラスト1分は警告色
+    const formatted = formatRemaining(remaining);
+    t.textContent = `残り ${formatted}`;
+    const isWarn = remaining <= 60_000;
+    t.classList.toggle("timer-warn", isWarn);
+    // 残60秒に入ったとき: aria-label更新＋aria-liveで1回だけ通知（II-159）。
+    if (isWarn) {
+      t.setAttribute("aria-label", `残り時間 ${formatted} 警告：残り1分`);
+      if (!warnAnnounced) {
+        warnAnnounced = true;
+        // aria-live="assertive"のregionに書き込んで読み上げを発火させる。
+        const liveEl = document.getElementById("timer-live");
+        if (liveEl) liveEl.textContent = `残り1分を切りました。残り ${formatted}`;
+      }
+    } else {
+      t.setAttribute("aria-label", `残り時間 ${formatted}`);
+    }
   }, 1000);
 }
 
@@ -322,11 +362,31 @@ function examReviewSection(root: HTMLElement): void {
         h("span", { class: ok ? "ok" : "ng" }, ok ? "⭕" : "❌"),
         h("span", { class: "qtitle" }, ` 第${i + 1}問 ${p.subject}・${p.topic}`),
       ),
-      h("div", { class: "stmt-sm", html: formatMath(p.statement) }),
+      h("div", { class: "stmt-sm", html: safeHtml(formatMath(p.statement)) }),
       solutionNode(p, "解説"),
     );
     reviewList.append(details);
   });
+
+  // 見直し一括展開/畳むボタン（II-168）: 30件超の見直しで全開/全閉ができる。
+  const detailsAll = Array.from(reviewList.querySelectorAll("details")) as HTMLDetailsElement[];
+  if (detailsAll.length > 0) {
+    const expandBtn = h(
+      "button",
+      {
+        class: "chip",
+        type: "button",
+        onclick: () => {
+          const anyOpen = detailsAll.some((d) => d.open);
+          for (const d of detailsAll) d.open = !anyOpen;
+          expandBtn.textContent = anyOpen ? "▼ すべて展開" : "▲ すべて畳む";
+        },
+      },
+      "▼ すべて展開",
+    );
+    root.append(expandBtn);
+  }
+
   root.append(
     reviewList,
     h(
@@ -343,10 +403,9 @@ function examReviewSection(root: HTMLElement): void {
 
 export function renderExamResult(root: HTMLElement): void {
   if (!exam) return;
-  if (exam.timerId) {
-    clearInterval(exam.timerId);
-    exam.timerId = null;
-  }
+  // 結果画面遷移時にタイマーを確実に停止（II-156 タイマーリーク解消）。
+  clearExamTimer();
+  // 単一パスで集計（II-163）: score/subjectScores をここで1回計算してセクション関数へ渡す。
   const score = scoreExam(exam.results);
   const mins = Math.floor((Date.now() - exam.startedAt) / 60000);
   // 科目別内訳（電験一次は科目ごとに合否＝各60%）

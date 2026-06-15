@@ -3,7 +3,7 @@
  */
 import { FORMULAS, filterFormulas } from "../formulas.js";
 import { formatMath } from "../mathfmt.js";
-import { h } from "../ui/dom.js";
+import { h, safeHtml } from "../ui/dom.js";
 import { emptyState } from "../ui/widgets.js";
 
 /** 公式タブの検索クエリ（タブ滞在中は保持）。 */
@@ -27,7 +27,7 @@ function renderFormulaList(host: HTMLElement): void {
           h(
             "td",
             {},
-            h("span", { html: formatMath(item.formula) }),
+            h("span", { html: safeHtml(formatMath(item.formula)) }),
             item.note ? h("div", { class: "muted" }, item.note) : "",
           ),
         ),

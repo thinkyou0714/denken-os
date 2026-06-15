@@ -22,13 +22,16 @@ export function loadChat(storage: StorageLike): ChatMessage[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (m): m is ChatMessage =>
-        typeof m === "object" &&
-        m !== null &&
-        ((m as ChatMessage).role === "user" || (m as ChatMessage).role === "assistant") &&
-        typeof (m as ChatMessage).content === "string",
-    );
+    // II-150: load 時も上限トリムを適用（CHAT_HISTORY_MAX 変更後の不整合を防ぐ）。
+    return parsed
+      .filter(
+        (m): m is ChatMessage =>
+          typeof m === "object" &&
+          m !== null &&
+          ((m as ChatMessage).role === "user" || (m as ChatMessage).role === "assistant") &&
+          typeof (m as ChatMessage).content === "string",
+      )
+      .slice(-CHAT_HISTORY_MAX);
   } catch {
     console.warn(`[chat] JSON.parse 失敗: key=${CHAT_KEY}`);
     return [];
@@ -74,7 +77,11 @@ export function extractTextDelta(payload: string): string | null {
   try {
     ev = JSON.parse(payload) as typeof ev;
   } catch {
-    return null; // "[DONE]" など JSON でないペイロードは無視
+    // II-149: "[DONE]" など正常系の非JSON ペイロードと、真の parse エラーを区別して診断 warn。
+    if (payload !== "[DONE]" && payload.trim() !== "") {
+      console.warn(`[chat] extractTextDelta: JSON parse 失敗（payload=${payload.slice(0, 80)}）`);
+    }
+    return null;
   }
   if (ev.type === "error") throw new Error(ev.error?.message ?? "APIエラー");
   if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") return ev.delta.text ?? "";
@@ -125,15 +132,20 @@ export async function* streamClaude(opts: StreamClaudeOptions): AsyncGenerator<s
   if (!reader) throw new Error("ストリーミング応答を取得できませんでした。");
   const decoder = new TextDecoder();
   let buffer = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const { data, rest } = drainSseBuffer(buffer);
-    buffer = rest;
-    for (const payload of data) {
-      const text = extractTextDelta(payload);
-      if (text) yield text;
+  // II-148: abort 時も finally で reader を確実に解放する（live node の残存を防ぐ）。
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const { data, rest } = drainSseBuffer(buffer);
+      buffer = rest;
+      for (const payload of data) {
+        const text = extractTextDelta(payload);
+        if (text) yield text;
+      }
     }
+  } finally {
+    reader.releaseLock();
   }
 }

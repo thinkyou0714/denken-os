@@ -3,42 +3,19 @@
  *   R2 = R1·{1 + α·(t2 − t1)}（α: 抵抗温度係数〔/K〕）
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 const R1_SET: ReadonlyArray<number> = [10, 20, 25, 50, 100, 200];
 const ALPHA_SET: ReadonlyArray<number> = [0.002, 0.0025, 0.004, 0.005];
 const DT_SET: ReadonlyArray<number> = [10, 20, 25, 40, 50, 75, 100];
 
-function buildFrom(r1: number, alpha: number, dT: number): GenerationResult | null {
-  if (r1 <= 0 || alpha <= 0 || dT === 0) return null;
-  const r2 = r1 * (1 + alpha * dT);
-  if (!isCleanAnswer(r2)) return null;
-  const answerText = formatClean(r2);
-  return {
-    format: "numeric",
-    params: {
-      resistance_initial: { value: r1, unit: "Ω", realistic_range: [1, 500] },
-      temp_coefficient: { value: alpha, unit: "/K", realistic_range: [0.001, 0.006] },
-      temp_rise: { value: dT, unit: "K", realistic_range: [5, 120] },
-    },
-    answerValue: r2,
-    answerUnit: "Ω",
-    answerText,
-    facts: { r1, alpha, dT, r2 },
-    defaultStatement:
-      `温度 t1 で ${formatClean(r1)}Ω の抵抗線がある。抵抗温度係数を ${formatClean(alpha, 4)}/K とするとき、` +
-      `温度が ${formatClean(dT)}K 上昇したあとの抵抗値〔Ω〕は?`,
-    defaultSolution: [
-      `R2=R1{1+α(t2−t1)}`,
-      `=${formatClean(r1)}×(1+${formatClean(alpha, 4)}×${formatClean(dT)})`,
-      `=${answerText}Ω`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  resistance_initial: number;
+  temp_coefficient: number;
+  temp_rise: number;
+};
 
-export const resistanceTemperature: Template = {
+export const resistanceTemperature = defineTemplate<Params>({
   topic: "抵抗の温度変化",
   subject: "理論",
   exam: "denken2_primary",
@@ -48,12 +25,39 @@ export const resistanceTemperature: Template = {
     temp_coefficient: { unit: "/K", realistic_range: [0.001, 0.006] },
     temp_rise: { unit: "K", realistic_range: [5, 120] },
   },
-  generate(rng) {
-    return buildFrom(pick(R1_SET, rng), pick(ALPHA_SET, rng), pick(DT_SET, rng));
+  paramOrder: ["resistance_initial", "temp_coefficient", "temp_rise"],
+  draw(rng) {
+    return {
+      resistance_initial: pick(R1_SET, rng),
+      temp_coefficient: pick(ALPHA_SET, rng),
+      temp_rise: pick(DT_SET, rng),
+    };
   },
-  generateFrom(params) {
-    const { resistance_initial, temp_coefficient, temp_rise } = params;
-    if (resistance_initial === undefined || temp_coefficient === undefined || temp_rise === undefined) return null;
-    return buildFrom(resistance_initial, temp_coefficient, temp_rise);
+  buildFrom({ resistance_initial: r1, temp_coefficient: alpha, temp_rise: dT }) {
+    if (r1 <= 0 || alpha <= 0 || dT === 0) return null;
+    const r2 = r1 * (1 + alpha * dT);
+    if (!isCleanAnswer(r2)) return null;
+    const answerText = formatClean(r2);
+    return {
+      format: "numeric",
+      params: {
+        resistance_initial: { value: r1, unit: "Ω", realistic_range: [1, 500] },
+        temp_coefficient: { value: alpha, unit: "/K", realistic_range: [0.001, 0.006] },
+        temp_rise: { value: dT, unit: "K", realistic_range: [5, 120] },
+      },
+      answerValue: r2,
+      answerUnit: "Ω",
+      answerText,
+      facts: { r1, alpha, dT, r2 },
+      defaultStatement:
+        `温度 t1 で ${formatClean(r1)}Ω の抵抗線がある。抵抗温度係数を ${formatClean(alpha, 4)}/K とするとき、` +
+        `温度が ${formatClean(dT)}K 上昇したあとの抵抗値〔Ω〕は?`,
+      defaultSolution: [
+        `R2=R1{1+α(t2−t1)}`,
+        `=${formatClean(r1)}×(1+${formatClean(alpha, 4)}×${formatClean(dT)})`,
+        `=${answerText}Ω`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});

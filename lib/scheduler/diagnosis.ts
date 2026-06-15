@@ -37,17 +37,47 @@ export function aggregateByTopic(logs: AnswerLog[]): Map<string, TopicProgress> 
   return m;
 }
 
-/** 弱点優先度スコア（高いほど優先）。正答率が低く、due 超過が大きいほど高い。 */
+/**
+ * 弱点優先度スコア（高いほど優先）。正答率が低く、due 超過が大きいほど高い（II-131）。
+ *
+ * ## 係数の根拠・設計意図
+ *
+ * | 項目                        | 係数 | 根拠                                                                 |
+ * |-----------------------------|------|----------------------------------------------------------------------|
+ * | (1 − 正答率) × **10**       |  10  | 誤答率を 0〜10 のレンジにスケール。スコアの主軸として最重要視する。   |
+ * | 超過日数（上限30日） × **1** |   1  | 日単位で加算し「long overdue」を最大30点として補正。                  |
+ * | 試行回数（上限5） × **0.1** | 0.1  | 試行数が多い=信頼性が高い分だけ軽く優先度を上げる（0〜0.5点の微調整）。|
+ *
+ * ### 合計スコアの範囲
+ * - 最小: 0 + 0 + 0 = 0（正答率100%・due未超過・試行0）
+ * - 最大: 10 + 30 + 0.5 = 40.5（正答率0%・30日超過・5回以上試行）
+ *
+ * ### 係数の較正方針
+ * - 誤答率を最優先にするため係数10を使い overdue の最大値（30）を誤答率フル(10)の3倍に抑えた。
+ *   これにより「超優秀だが放置されたカード（rate=1, overdue=30日）」のスコアは30となり、
+ *   「弱点で少しだけ overdue（rate=0, overdue=5日）」のスコア15より高くなる設計。
+ *   運用上は弱点かつ overdue が最高優先度になるよう両軸を組み合わせる。
+ * - 係数の精密な最適化（較正テスト）は RG7 に委ねる（II-131）。
+ *
+ * この関数は純粋関数（副作用なし・外部依存なし）でテスト可能（II-131, II-5）。
+ */
 export function weaknessScore(p: TopicProgress, nowMs: number): number {
-  const rate = p.attempts > 0 ? p.correct / p.attempts : 0;
+  // 異常入力（負のattempts等）でもスコアが破綻しないようクランプする（attempts は本来非負）。
+  const attempts = Math.max(0, p.attempts);
+  const rate = attempts > 0 ? p.correct / attempts : 0;
   const overdueDays = Math.max(0, (nowMs - p.dueMs) / DAY_MS);
-  // 正答率が低いほど (1-rate) が大きい。due 超過も加点。試行回数で軽く重み付け。
-  return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(p.attempts, 5) * 0.1;
+  return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(attempts, 5) * 0.1;
 }
 
 /**
- * 今日出すべき弱点 topic を優先度順に返す。
- * 同 topic で連続不正解 → rate 低下 → 優先度が上がる。
+ * 今日出すべき弱点 topic を優先度順に返す（II-133, II-142）。
+ *
+ * @param progress - topic 別の学習進捗（`aggregateByTopic` の結果など）。
+ * @param nowMs - 現在時刻（epoch ms）。省略時は `Date.now()`。
+ * @param limit - 返す最大件数（既定: 3）。引数で制御できる（II-133）。
+ * @returns 優先度降順の topic 名配列（最大 `limit` 件）。
+ *
+ * 同 topic で連続不正解 → rate 低下 → `weaknessScore` が上昇 → 優先度が上がる。
  */
 export function weakestTopics(progress: Iterable<TopicProgress>, nowMs: number = Date.now(), limit = 3): string[] {
   return [...progress]

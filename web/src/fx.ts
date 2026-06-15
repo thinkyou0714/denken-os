@@ -19,13 +19,21 @@ export function prefersReducedMotion(): boolean {
 
 const CONFETTI_COLORS = ["#ffd645", "#5d83f7", "#34d399", "#f87171", "#f0a4f7", "#7cc4ff"];
 
-/** 画面上部から紙吹雪を降らせる（約1.6秒で自動消滅）。 */
+/** 画面上部から紙吹雪を降らせる（animationend で各 span を個別削除。全消滅後に host も除去）。 */
 export function confettiBurst(count = 28): void {
   if (prefersReducedMotion()) return;
   try {
     const host = document.createElement("div");
     host.className = "confetti";
     host.setAttribute("aria-hidden", "true");
+    // II-155: 各 span を animationend で削除し、全 span 消滅後に host も除去する。
+    // setTimeout フォールバックは animationend 非発火（hidden タブ等）への保険。
+    let remaining = count;
+    function onEnd(e: Event): void {
+      (e.currentTarget as HTMLElement).remove();
+      remaining -= 1;
+      if (remaining <= 0) host.remove();
+    }
     for (let i = 0; i < count; i++) {
       const p = document.createElement("span");
       const left = Math.random() * 100;
@@ -34,9 +42,11 @@ export function confettiBurst(count = 28): void {
       const color = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
       const rot = Math.floor(Math.random() * 360);
       p.style.cssText = `left:${left}%;background:${color};animation-delay:${delay}s;animation-duration:${dur}s;transform:rotate(${rot}deg)`;
+      p.addEventListener("animationend", onEnd, { once: true });
       host.appendChild(p);
     }
     document.body.appendChild(host);
+    // フォールバック: アニメーションが発火しない環境（hidden タブ等）でも確実に除去する。
     window.setTimeout(() => host.remove(), 1900);
   } catch {
     // 演出は失敗しても学習を止めない。

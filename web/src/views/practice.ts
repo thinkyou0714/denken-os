@@ -43,7 +43,7 @@ import {
 } from "../settings.js";
 import { loadFailed, problems, progress, storage, view } from "../state/app.js";
 import { practice, todayCount, weakTopics } from "../state/practice.js";
-import { $, h } from "../ui/dom.js";
+import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { difficultyStars, emptyState, figureNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
@@ -204,7 +204,7 @@ function onboardingCard(root: HTMLElement): HTMLElement {
     h(
       "div",
       { class: "obhead" },
-      h("span", { class: "mface", html: mascotSvg("happy", 52) }),
+      h("span", { class: "mface", html: safeHtml(mascotSvg("happy", 52)) }),
       h("strong", {}, "👋 はじめまして！デンタマです。30秒だけ目標を決めよう"),
     ),
     h("div", { class: "wizrow" }, h("label", {}, "試験日"), dateInput),
@@ -267,7 +267,7 @@ function mascotCard(): HTMLElement {
   return h(
     "div",
     { class: "card mascot" },
-    h("div", { class: "mface", html: mascotSvg(mv.mood, 64, tier) }),
+    h("div", { class: "mface", html: safeHtml(mascotSvg(mv.mood, 64, tier)) }),
     h("div", { class: "mcol" }, bubble, tipBtn),
   );
 }
@@ -393,7 +393,7 @@ export function nextQuestion(root: HTMLElement): void {
   }
   practice.shownAt = Date.now();
   practice.hintsShown = 0;
-  const stmt = h("div", { class: "stmt", tabindex: "-1", html: formatMath(p.statement) });
+  const stmt = h("div", { class: "stmt", tabindex: "-1", html: safeHtml(formatMath(p.statement)) });
   host.append(h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`), stmt);
   if (p.figure) host.append(figureNode(p.figure));
   // ヒント段階開示: 解答前に解説の先頭ステップ（着眼点）だけ覗ける（最大2段）。
@@ -410,7 +410,9 @@ export function nextQuestion(root: HTMLElement): void {
           // hintsShown < maxHints ≤ p.solution.length - 1 を保証済みのため安全。
           const step = p.solution[practice.hintsShown] as string;
           practice.hintsShown += 1;
-          hintHost.append(h("div", { class: "hint", html: `💡 ヒント${practice.hintsShown}: ${formatMath(step)}` }));
+          hintHost.append(
+            h("div", { class: "hint", html: safeHtml(`💡 ヒント${practice.hintsShown}: ${formatMath(step)}`) }),
+          );
           if (practice.hintsShown >= maxHints) (hintBtn as HTMLButtonElement).disabled = true;
           hintBtn.textContent = `💡 ヒントを見る（${practice.hintsShown}/${maxHints}）`;
         },

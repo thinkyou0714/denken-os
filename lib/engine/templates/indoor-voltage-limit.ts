@@ -4,7 +4,7 @@
  *   定格消費電力2kW以上の機器を専用回路で施設する等の条件を満たせば300V以下にできる。
  */
 import { formatClean } from "../clean.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate } from "./helpers.js";
 
 interface Case {
   cond: string;
@@ -23,45 +23,44 @@ const CASES: ReadonlyArray<Case> = [
   },
 ];
 
-function buildFrom(caseIndex: number): GenerationResult | null {
-  const c = CASES[caseIndex];
-  if (!c) return null;
-  const answerText = formatClean(c.answer);
-  const choices = c.pool.map((v) => formatClean(v));
-  const distractors = c.pool
-    .filter((v) => v !== c.answer)
-    .map((v) => ({ text: formatClean(v), reason: "原則値(150V)と緩和条件(300V)・電圧区分との取り違え" }));
-  return {
-    format: "multiple_choice",
-    params: { case_index: { value: caseIndex, realistic_range: [0, CASES.length - 1] } },
-    answerValue: c.answer,
-    answerUnit: "V",
-    answerText,
-    choices,
-    distractors,
-    facts: { caseIndex, answer: c.answer },
-    defaultStatement: `${c.cond}における対地電圧の上限〔V〕として定められている値は?`,
-    defaultSolution: [
-      `電技解釈第143条: 住宅の屋内電路の対地電圧は原則150V以下。2kW以上の機器を専用回路（専用の開閉器・過電流遮断器＋漏電遮断器・電線直接接続）で施設する等の条件を満たすと300V以下にできる`,
-      `本問は「${c.cond}」`,
-      `=${answerText}V`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  case_index: number;
+};
 
-export const indoorVoltageLimit: Template = {
+export const indoorVoltageLimit = defineTemplate<Params>({
   topic: "屋内電路の対地電圧制限",
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
-  generate(rng) {
-    return buildFrom(Math.floor(rng() * CASES.length));
+  paramOrder: ["case_index"],
+  draw(rng) {
+    return { case_index: Math.floor(rng() * CASES.length) };
   },
-  generateFrom(params) {
-    const { case_index } = params;
-    if (case_index === undefined) return null;
-    return buildFrom(case_index);
+  buildFrom({ case_index: caseIndex }) {
+    const c = CASES[caseIndex];
+    if (!c) return null;
+    const answerText = formatClean(c.answer);
+    const choices = c.pool.map((v) => formatClean(v));
+    const distractors = c.pool
+      .filter((v) => v !== c.answer)
+      .map((v) => ({ text: formatClean(v), reason: "原則値(150V)と緩和条件(300V)・電圧区分との取り違え" }));
+    return {
+      format: "multiple_choice",
+      params: { case_index: { value: caseIndex, realistic_range: [0, CASES.length - 1] } },
+      answerValue: c.answer,
+      answerUnit: "V",
+      answerText,
+      choices,
+      distractors,
+      facts: { caseIndex, answer: c.answer },
+      defaultStatement: `${c.cond}における対地電圧の上限〔V〕として定められている値は?`,
+      defaultSolution: [
+        `電技解釈第143条: 住宅の屋内電路の対地電圧は原則150V以下。2kW以上の機器を専用回路（専用の開閉器・過電流遮断器＋漏電遮断器・電線直接接続）で施設する等の条件を満たすと300V以下にできる`,
+        `本問は「${c.cond}」`,
+        `=${answerText}V`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});

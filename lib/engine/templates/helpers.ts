@@ -1,12 +1,15 @@
 /**
- * テンプレート共有ヘルパー層（I-001〜I-004, I-009, I-010）。
+ * テンプレート共有ヘルパー層（I-001〜I-004, I-009, I-010, II-102〜II-105）。
  *
  * 新規テンプレートはこの形を標準とする:
- *   1. pick / buildChoices / percentage / ensureRange などのヘルパーを import する。
+ *   1. pick / buildChoices / percentage / ensureRange / constrainRange / isNonNegative などのヘルパーを import する。
  *   2. 必要に応じて defineTemplate() ファクトリを使って Template を組み立てる。
  *   3. ローカルで pick() を重複定義しない。
  */
 import type { ParamSpec, Template } from "./types.js";
+
+// POWER_FACTOR_TOLERANCE を re-export して、テンプレートが1か所から参照できるようにする（II-103）。
+export { POWER_FACTOR_TOLERANCE } from "../../shared/constants.js";
 
 // ---------------------------------------------------------------------------
 // I-001 / I-002: pick
@@ -75,6 +78,57 @@ export function ensureRange(value: number, range: readonly [number, number]): bo
   const [min, max] = range;
   return value >= min && value <= max;
 }
+
+// ---------------------------------------------------------------------------
+// II-102: constrainRange — 物理制約チェック共有ヘルパー
+// ---------------------------------------------------------------------------
+
+/**
+ * value が [min, max] の閉区間に収まるかを返す（II-102）。
+ * ensureRange と同等だが、物理制約チェック用途であることを名前で明示する。
+ * 効率 η≤1、力率≤1 等の物理上限チェックをテンプレートごとに書かないための共有ヘルパー。
+ *
+ * @param value  チェックする値
+ * @param min    最小値（境界を含む）
+ * @param max    最大値（境界を含む）
+ * @param _name  デバッグ用の量の名前（将来の診断ログ用; 現在は使用しない）
+ * @returns value が [min, max] に収まれば true
+ *
+ * @example
+ * // 効率 η≤1 の物理制約チェック
+ * if (!constrainRange(eta, 0, 1)) return null;
+ *
+ * @example
+ * // 力率 cosφ≤1 の物理制約チェック（許容誤差付きは POWER_FACTOR_TOLERANCE を別途使用）
+ * if (!constrainRange(cosPhi, 0, 1 + POWER_FACTOR_TOLERANCE)) return null;
+ */
+export function constrainRange(value: number, min: number, max: number, _name?: string): boolean {
+  return value >= min && value <= max;
+}
+
+// ---------------------------------------------------------------------------
+// II-105: isNonNegative — 物理量の非負ガード
+// ---------------------------------------------------------------------------
+
+/**
+ * 物理量の非負ガード（II-105）。
+ * 丸め誤差等で負値化した計算結果を棄却するための共有ヘルパー。
+ * return null のみの暗黙的なガードを共有化する。
+ *
+ * @param value  チェックする物理量
+ * @returns 0以上（非負）なら true
+ *
+ * @example
+ * const power = calcPower(I, R);
+ * if (!isNonNegative(power)) return null; // 丸め誤差で負値になった場合を棄却
+ */
+export function isNonNegative(value: number): boolean {
+  return value >= 0;
+}
+
+// ---------------------------------------------------------------------------
+// II-104: percentage のゼロ割 NaN についての注記は helpers.ts の percentage を参照
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // I-009: defineTemplate ファクトリ
