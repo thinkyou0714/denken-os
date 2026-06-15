@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="電験二種（第二種電気主任技術者）の学習をサポートするオフライン対応 PWA。FSRS による間隔反復・デイリークエスト・実績バッジで継続をサポートします。" />
+    <meta name="description" content="電験二種 学習OS — FSRS間隔反復・模試・AIチャット対応のオフライン PWA。" />
+    <!-- script-src の sha256 は下部のインライン FOUC 防止スクリプトのハッシュ。スクリプト変更時は再計算（docs/refactoring/round2 参照）。 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kTrWdDD77A48JF/DFC5ygGL8txhFNongFMH11qqQcvg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com https://*.supabase.co https://*.supabase.in; worker-src 'self'; manifest-src 'self';" />
     <title>DENKEN-OS — 電験二種 学習</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -92,6 +94,11 @@
       .brand .logo { width: 34px; height: 34px; border-radius: 9px; box-shadow: var(--shadow-sm); flex: none; }
       .brand h1 { font-size: 1.12rem; margin: 0; font-weight: 800; letter-spacing: .02em; }
       .brand .tagline { font-size: .72rem; color: var(--muted); margin-top: -1px; }
+      /* スクリーンリーダー専用（視覚的に隠すが支援技術には読み上げさせる。aria-live領域に使用）。 */
+      .sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      }
       .stats { display: flex; gap: .4rem; flex-wrap: wrap; }
       .pill {
         font-size: .76rem; font-weight: 600; color: var(--muted);
@@ -556,6 +563,6 @@
       復習は FSRS（最新の間隔反復アルゴリズム）。コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 
-    <script type="module" src="./dist/app.js"></script>
+    <script type="module" src="./dist/app.js" integrity="sha384-HX/bbbbrNk/F53OUHdXAohHlquIZO70cZ/yGgfrSCLLXvKqGWV53Imac8JNU3Wx7" crossorigin="anonymous"></script>
   </body>
 </html>

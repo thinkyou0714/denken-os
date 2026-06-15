@@ -1,7 +1,19 @@
 /**
- * file-store.ts — JSON ファイル永続化の store 実装。
+ * file-store.ts — JSON ファイル永続化の store 実装（II-140）。
  * インメモリと違い再起動後も残るため、CLI 生成物の保管や小規模運用に使える
  * （Supabase 実装と同じインターフェース。supabase/migrations の DDL に対応）。
+ *
+ * ## 並行性・トランザクション制限（II-140）
+ *
+ * - **単一プロセス前提**: ファイルストアは1プロセスからの逐次アクセスを想定している。
+ *   複数プロセスが同じファイルを同時に読み書きすると race condition が発生しうる。
+ * - **原子的書き込み**: `writeJson` は一時ファイルに書いてから `rename` で差し替えるため、
+ *   書き込み途中のクラッシュで本体ファイルが破損することはない（read-after-write は安全）。
+ * - **トランザクションなし**: 複数ストア（problems + answerLogs）を跨ぐ操作は原子ではない。
+ *   半端な状態が残る可能性があるため、本番用途には Supabase ストアを使うこと。
+ * - **同一プロセス内の並行**: Node.js はシングルスレッドだが `await` の境界で
+ *   他の非同期処理が割り込める。現実装は read-modify-write を同期的に行うため
+ *   同一プロセス内での同時書き込みも競合しない（`readFileSync`/`writeFileSync` 使用）。
  */
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

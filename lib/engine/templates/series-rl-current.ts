@@ -4,8 +4,7 @@
  *   R,X はピタゴラス数の組に限定し、|Z|・I・cosφ を全て綺麗な値にする。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
   [3, 4],
@@ -23,37 +22,13 @@ const RX_PAIRS: ReadonlyArray<readonly [number, number]> = [
 ];
 const V_SET: ReadonlyArray<number> = [100, 200];
 
-function buildFrom(v: number, r: number, x: number): GenerationResult | null {
-  if (v <= 0 || r <= 0 || x <= 0) return null;
-  const z = Math.sqrt(r * r + x * x);
-  const i = v / z;
-  const pf = r / z;
-  if (!isCleanAnswer(z) || !isCleanAnswer(i) || !isCleanAnswer(pf)) return null;
-  const answerText = formatClean(i);
-  return {
-    format: "numeric",
-    params: {
-      voltage: { value: v, unit: "V", realistic_range: [50, 400] },
-      resistance: { value: r, unit: "Ω", realistic_range: [1, 50] },
-      reactance: { value: x, unit: "Ω", realistic_range: [1, 50] },
-    },
-    answerValue: i,
-    answerUnit: "A",
-    answerText,
-    facts: { v, r, x, z, i, pf },
-    defaultStatement:
-      `抵抗 ${formatClean(r)}Ω と誘導性リアクタンス ${formatClean(x)}Ω を直列接続し、` +
-      `交流電圧 ${formatClean(v)}V を加えた。回路に流れる電流〔A〕は?`,
-    defaultSolution: [
-      `|Z|=√(R²+X²)=√(${formatClean(r * r)}+${formatClean(x * x)})=${formatClean(z)}Ω`,
-      `このとき力率 cosφ=R/|Z|=${formatClean(pf)}`,
-      `I=V/|Z|=${formatClean(v)}/${formatClean(z)}=${answerText}A`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  voltage: number;
+  resistance: number;
+  reactance: number;
+};
 
-export const seriesRlCurrent: Template = {
+export const seriesRlCurrent = defineTemplate<Params>({
   topic: "単相直列回路の電流",
   subject: "理論",
   exam: "denken2_primary",
@@ -63,13 +38,42 @@ export const seriesRlCurrent: Template = {
     resistance: { unit: "Ω", realistic_range: [1, 50] },
     reactance: { unit: "Ω", realistic_range: [1, 50] },
   },
-  generate(rng) {
+  paramOrder: ["voltage", "resistance", "reactance"],
+  draw(rng) {
     const [r, x] = pick(RX_PAIRS, rng);
-    return buildFrom(pick(V_SET, rng), r, x);
+    return {
+      voltage: pick(V_SET, rng),
+      resistance: r,
+      reactance: x,
+    };
   },
-  generateFrom(params) {
-    const { voltage, resistance, reactance } = params;
-    if (voltage === undefined || resistance === undefined || reactance === undefined) return null;
-    return buildFrom(voltage, resistance, reactance);
+  buildFrom({ voltage: v, resistance: r, reactance: x }) {
+    if (v <= 0 || r <= 0 || x <= 0) return null;
+    const z = Math.sqrt(r * r + x * x);
+    const i = v / z;
+    const pf = r / z;
+    if (!isCleanAnswer(z) || !isCleanAnswer(i) || !isCleanAnswer(pf)) return null;
+    const answerText = formatClean(i);
+    return {
+      format: "numeric",
+      params: {
+        voltage: { value: v, unit: "V", realistic_range: [50, 400] },
+        resistance: { value: r, unit: "Ω", realistic_range: [1, 50] },
+        reactance: { value: x, unit: "Ω", realistic_range: [1, 50] },
+      },
+      answerValue: i,
+      answerUnit: "A",
+      answerText,
+      facts: { v, r, x, z, i, pf },
+      defaultStatement:
+        `抵抗 ${formatClean(r)}Ω と誘導性リアクタンス ${formatClean(x)}Ω を直列接続し、` +
+        `交流電圧 ${formatClean(v)}V を加えた。回路に流れる電流〔A〕は?`,
+      defaultSolution: [
+        `|Z|=√(R²+X²)=√(${formatClean(r * r)}+${formatClean(x * x)})=${formatClean(z)}Ω`,
+        `このとき力率 cosφ=R/|Z|=${formatClean(pf)}`,
+        `I=V/|Z|=${formatClean(v)}/${formatClean(z)}=${answerText}A`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});

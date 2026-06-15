@@ -2,22 +2,29 @@
  * 図ビルダー — topic ごとに facts を受け取り、説明用のインライン SVG を返す純関数群。
  * すべて svg.ts のプリミティブで構成し、オフライン/最小依存・テーマ追従・a11y を満たす。
  * レイアウトは「上辺y=30 / 下辺y=110 / 左辺x=40 の矩形ループ＋左に電源」を基本形にする。
+ *
+ * 共通プリミティブ（primitives.ts）:
+ *  - svgLabel(): SVG 図内数値整形（II-128: 誤用防止のための公開エイリアス）
+ *  - verticalTick(): 破線目盛線＋ラベル（II-129）
+ *  - loopFrame(): 回路ループフレーム（primitives.ts の公開版と同一実装）
  */
+import { svgLabel, verticalTick } from "./primitives.js";
 import { arrow, circle, dot, line, polyline, rect, resistorH, resistorV, source, svg, text } from "./svg.js";
 
 /**
- * SVG ラベル用の数値整形関数（I-019 — SVG 内表記専用）。
+ * SVG ラベル用の数値整形関数（II-128: SVG 内表記専用 — primitives.ts の svgLabel() を参照）。
  *
  * 用途の違い（clean.ts 系との使い分け）:
- *  - fmt(): SVG 図内の軸ラベル・寸法表示専用。toFixed(2) で2桁揃え、末尾ゼロは
+ *  - fmt() / svgLabel(): SVG 図内の軸ラベル・寸法表示専用。toFixed(2) で2桁揃え、末尾ゼロは
  *    Number() で除去する。ビジュアル表示の都合で小数点以下2桁以内に丸める。
  *  - formatClean() (clean.ts): 問題の答え・選択肢・解説テキスト内の数値整形に使用。
  *    ルールは同様だが、文脈は「問題データ」。
  *  - formatKW() (clean.ts): 電力(W) を kW 表記に変換する特定用途の整形。
  *
- * SVG ラベル以外の数値整形には formatClean/formatKW を使うこと。
+ * ⚠️ SVG ラベル以外の数値整形には formatClean/formatKW を使うこと。
+ * 外部から参照する場合は primitives.ts の svgLabel() を使用すること（II-128）。
  */
-const fmt = (n: number): string => String(Number(n.toFixed(2)));
+const fmt: (n: number) => string = svgLabel;
 const TC = 'text-anchor="middle"';
 
 /** 矩形ループの左辺＋電源＋下辺の共通部品（上辺は呼び出し側で描く）。 */
@@ -254,10 +261,8 @@ export function torqueSlipFigure(s1: number, s2: number): string {
     text(ox + 4, oy - h - 18, "トルク T"),
     curve(px1, false),
     curve(px2, true),
-    line(px1, oy, px1, oy - h + 10, 'stroke-dasharray="2 2"'),
-    text(px1, oy + 18, `s1=${fmt(s1)}`, TC),
-    line(px2, oy, px2, oy - h + 30, 'stroke-dasharray="2 2"'),
-    text(px2, oy + 18, `s2=${fmt(s2)}`, TC),
+    verticalTick(px1, oy, oy - h + 10, `s1=${fmt(s1)}`, TC),
+    verticalTick(px2, oy, oy - h + 30, `s2=${fmt(s2)}`, TC),
     text(ox + 95, oy - h - 6, "r2増 → 右へ推移"),
   ].join("");
   return svg(

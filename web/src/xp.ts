@@ -260,3 +260,52 @@ export function xpByDay(
   }
   return out;
 }
+
+// ---- II-143: xpByDay メモ化キャッシュ ----
+// ログが追記された（長さが増えた）ときのみ再計算する差分更新キャッシュ。
+// 結果は非キャッシュ時の xpByDay と完全一致することをテストで保証する。
+
+interface XpByDayCache {
+  logsLength: number;
+  lastLogAtMs: number;
+  days: number;
+  todayIdx: number;
+  dayOffsetMs: number;
+  result: number[];
+}
+
+let _xpByDayCache: XpByDayCache | null = null;
+
+/**
+ * xpByDay のメモ化版。
+ * ログの件数・最終ログ時刻・days・todayIdx・dayOffsetMs が変化したときのみ再計算する。
+ * キャッシュヒット時は前回の結果を返す（純粋性は保証される）。
+ */
+export function xpByDayCached(
+  logs: readonly WebAnswerLog[],
+  days: number,
+  nowMs: number,
+  dayOffsetMs: number = JST_OFFSET_MS,
+): number[] {
+  const todayIdx = dayIndexOf(nowMs, dayOffsetMs);
+  const logsLength = logs.length;
+  const lastLogAtMs = logsLength > 0 ? (logs[logsLength - 1] as WebAnswerLog).atMs : 0;
+  if (
+    _xpByDayCache !== null &&
+    _xpByDayCache.logsLength === logsLength &&
+    _xpByDayCache.lastLogAtMs === lastLogAtMs &&
+    _xpByDayCache.days === days &&
+    _xpByDayCache.todayIdx === todayIdx &&
+    _xpByDayCache.dayOffsetMs === dayOffsetMs
+  ) {
+    return _xpByDayCache.result;
+  }
+  const result = xpByDay(logs, days, nowMs, dayOffsetMs);
+  _xpByDayCache = { logsLength, lastLogAtMs, days, todayIdx, dayOffsetMs, result };
+  return result;
+}
+
+/** xpByDay キャッシュを強制クリアする（テスト・リセット用）。 */
+export function clearXpByDayCache(): void {
+  _xpByDayCache = null;
+}

@@ -22,8 +22,8 @@ import {
 } from "../quests.js";
 import { getDailyGoal, getSoundLevel } from "../settings.js";
 import { installPrompt, progress, storage } from "../state/app.js";
-import { practice, todayCount } from "../state/practice.js";
-import { $, h } from "../ui/dom.js";
+import { practice, setCombo, todayCount } from "../state/practice.js";
+import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { solutionNode, sourceText } from "../ui/widgets.js";
 import { totalXp } from "../xp.js";
@@ -39,7 +39,7 @@ export function gradeObjective(host: HTMLElement, p: Problem, given: string, cli
     return;
   }
   const correct = isAnswerCorrect(p, given);
-  practice.combo = correct ? practice.combo + 1 : 0;
+  setCombo(correct ? practice.combo + 1 : 0);
   playTone(correct ? "correct" : "wrong", getSoundLevel(storage));
   vibrate(correct ? 18 : [40, 50, 40]);
   const answers = host.querySelector("#answers") as HTMLElement;
@@ -92,7 +92,7 @@ export function revealDescriptive(host: HTMLElement, p: Problem): void {
   steps.forEach((s, i) => {
     const cb = h("input", { type: "checkbox", id: `rb${i}` }) as HTMLInputElement;
     checks.push(cb);
-    list.append(h("label", { class: "rubric-item", for: `rb${i}` }, cb, h("span", { html: formatMath(s) })));
+    list.append(h("label", { class: "rubric-item", for: `rb${i}` }, cb, h("span", { html: safeHtml(formatMath(s)) })));
   });
   const grade = h(
     "button",
@@ -163,7 +163,7 @@ export function finalize(
   // 記述(二次)はここで初めて正誤相当が確定する（客観式は gradeObjective で演出済み）。
   if (score) {
     const ok = score.pct >= 2 / 3;
-    practice.combo = ok ? practice.combo + 1 : 0;
+    setCombo(ok ? practice.combo + 1 : 0);
     playTone(ok ? "correct" : "wrong", getSoundLevel(storage));
     vibrate(ok ? 18 : [40, 50, 40]);
   }

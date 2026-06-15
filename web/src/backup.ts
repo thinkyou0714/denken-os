@@ -27,6 +27,8 @@ export const BACKUP_KEYS: readonly string[] = [
 ];
 
 export const BACKUP_VERSION = 1;
+/** バックアップのメジャーバージョン（互換性の境界判定に使う）。 */
+export const BACKUP_MAJOR_VERSION = 1;
 
 export interface BackupFile {
   app: "denken-os";
@@ -68,7 +70,13 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
   if (typeof parsed !== "object" || parsed === null) return { ok: false, reason: "形式が不正です。" };
   const file = parsed as Partial<BackupFile>;
   if (file.app !== "denken-os") return { ok: false, reason: "DENKEN-OS のバックアップではありません。" };
-  if (typeof file.version !== "number" || file.version > BACKUP_VERSION) {
+  // II-152: マイナーバージョン互換を許容し、メジャーバージョン超過のみ拒否する。
+  // 同一メジャー内であれば旧→新バックアップを既存キーの範囲でインポート可能。
+  if (typeof file.version !== "number") {
+    return { ok: false, reason: "バージョン情報が不正です。" };
+  }
+  const fileMajor = Math.floor(file.version);
+  if (fileMajor > BACKUP_MAJOR_VERSION) {
     return { ok: false, reason: "このアプリより新しいバックアップです。アプリを更新してください。" };
   }
   if (typeof file.data !== "object" || file.data === null) return { ok: false, reason: "データ部がありません。" };

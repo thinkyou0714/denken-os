@@ -7,15 +7,18 @@ import { buildStudyPlan } from "../plan.js";
 import { dailyReviewBatch, offlineLabel } from "../retention.js";
 import { getDailyGoal, getExamDate, getReviewCap } from "../settings.js";
 import { problems, progress, setView, storage, view } from "../state/app.js";
-import { exam } from "../state/exam.js";
 import { $, h } from "../ui/dom.js";
+import { showToast } from "../ui/toast.js";
 import { renderChat } from "./chat.js";
 import { renderDashboard } from "./dashboard.js";
-import { renderExam } from "./exam.js";
+import { clearExamTimer, renderExam } from "./exam.js";
 import { renderFormulas } from "./formulas.js";
 import { currentLevel, freezeInfo, renderPractice } from "./practice.js";
 import { renderReview } from "./review.js";
 import { renderSettings } from "./settings.js";
+
+/** lastPersistErrorを通知済みかどうか（セッション内1回だけ）。II-166 */
+let _persistErrNotified = false;
 
 export const TABS: ReadonlyArray<readonly [string, string, string]> = [
   ["practice", "学習", "✏️"],
@@ -88,10 +91,8 @@ export function renderNav(): void {
 }
 
 export function switchView(id: string): void {
-  if (exam?.timerId) {
-    clearInterval(exam.timerId);
-    exam.timerId = null;
-  }
+  // タイマーリーク解消（II-156）: view離脱時に必ずclearInterval。clearExamTimerで一元管理。
+  clearExamTimer();
   setView(id);
   renderNav();
   render();
@@ -99,23 +100,45 @@ export function switchView(id: string): void {
 
 export function render(): void {
   const root = $("view");
-  root.innerHTML = "";
-  // エラーバウンダリ: 描画例外でSPA全体が白画面になり「壊れた」と離脱されるのを防ぐ。
-  // 例外時は安心メッセージ＋復旧導線を出し、学習記録が無事であることを伝える。
+  // replaceChildren() は innerHTML="" より冪等で、既存ノードのGCが効きやすい（II-157）。
+  root.replaceChildren();
+  // aria-busy: 描画中をスクリーンリーダーに伝える（II-157）。
+  root.setAttribute("aria-busy", "true");
+  // lastPersistError 通知（セッション内1回だけ）（II-166）。
+  if (!_persistErrNotified && progress.lastPersistError) {
+    _persistErrNotified = true;
+    showToast("⚠️ 前回の保存に失敗しました。端末の空き容量を確認してください", "OK", () => {});
+  }
   try {
     // 開きっぱなしのタブ（visibilitychange が発火しない常時表示）で日をまたいだ場合に備え、
     // 描画のたびに欠席日のお守りカバーを確認する（冪等・通常は何もしない）。
     runFreezeBridge();
     renderHeader();
-    if (view === "practice") renderPractice(root);
-    else if (view === "review") renderReview(root);
-    else if (view === "exam") renderExam(root);
-    else if (view === "chat") renderChat(root);
-    else if (view === "dashboard") renderDashboard(root);
-    else if (view === "formulas") renderFormulas(root);
-    else if (view === "settings") renderSettings(root);
+    // per-viewエラー境界（II-162）: 各タブの描画例外はそのタブ内でrecovery表示。
+    // 親render はルーティングに専念し、1タブの例外が全体を白画面にしない。
+    if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
+    else if (view === "review") renderViewSafe(root, "review", () => renderReview(root));
+    else if (view === "exam") renderViewSafe(root, "exam", () => renderExam(root));
+    else if (view === "chat") renderViewSafe(root, "chat", () => renderChat(root));
+    else if (view === "dashboard") renderViewSafe(root, "dashboard", () => renderDashboard(root));
+    else if (view === "formulas") renderViewSafe(root, "formulas", () => renderFormulas(root));
+    else if (view === "settings") renderViewSafe(root, "settings", () => renderSettings(root));
   } catch (err) {
+    // ルーティング自体の例外（ヘッダ等）は全体バウンダリでキャッチ。
     renderErrorBoundary(root, err);
+  } finally {
+    root.setAttribute("aria-busy", "false");
+  }
+}
+
+/** per-viewエラー境界（II-162）: 1タブの描画失敗を該当タブ内に閉じ込める。 */
+function renderViewSafe(root: HTMLElement, viewId: string, fn: () => void): void {
+  try {
+    fn();
+  } catch (err) {
+    root.replaceChildren();
+    renderErrorBoundary(root, err);
+    console.error(`[render] ${viewId} タブの描画でエラー:`, err);
   }
 }
 

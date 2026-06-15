@@ -151,6 +151,84 @@ graph TD
 - Web アプリは `scripts/build-web.ts`（esbuild）で単一バンドル化する。
   `.js` 指定を実在 `.ts` に解決する小さなプラグインを噛ませている。
 
+## web/src 実行フロー（RG6 リファクタ後・II-195）
+
+`web/src/app.ts` の `main()` 起動から view dispatch・state mutation までの制御フロー。
+
+```mermaid
+flowchart TD
+    A["app.ts main()
+    ①テーマ適用 applyTheme()
+    ②お守りブリッジ runFreezeBridge()
+    ③イベントリスナ登録（visibilitychange/beforeinstallprompt）
+    ④グローバルエラーハンドラ"] --> B["app-init.ts
+    reloadProblems()
+    — problems.json fetch → state/app.problems"]
+    A --> C["views/router.ts renderNav()
+    WAI-ARIA tablist を DOM に生成"]
+    B --> D["views/router.ts render()"]
+
+    D --> E{"view（タブ識別子）"}
+    E -->|practice| F["views/practice.ts renderPractice(root)"]
+    E -->|review|   G["views/review.ts renderReview(root)"]
+    E -->|exam|     H["views/exam.ts renderExam(root)"]
+    E -->|chat|     I["views/chat.ts renderChat(root)"]
+    E -->|dashboard|J["views/dashboard.ts renderDashboard(root)"]
+    E -->|formulas| K["views/formulas.ts renderFormulas(root)"]
+    E -->|settings| L["views/settings.ts renderSettings(root)"]
+
+    D -->|per-view エラー境界 II-162| M["errors.ts recoveryView()
+    — role=alert 復旧 UI"]
+
+    F --> N["state/practice.ts
+    combo / hints / answered
+    setter で差分更新（II-174）"]
+    H --> O["state/exam.ts
+    timerId（clearExamTimer で一元管理 II-156）
+    残時間・問題インデックス"]
+
+    F --> P["xp.ts xpByDayCached()
+    byTopicCached() — メモ化 II-143/144"]
+    J --> P
+    J --> Q["achievements.ts evaluateAchievementsCached()
+    ログ追記時のみ差分再評価 II-145"]
+
+    D --> R["ui/dom.ts h() / $req()
+    SafeHtml branded type
+    — XSS 防止 II-169/170"]
+    D --> S["ui/toast.ts showToast()
+    aria-live=assertive で SR 告知 II-158"]
+
+    style M fill:#fdd,stroke:#c44
+    style R fill:#e6f0ff,stroke:#4a78c8
+    style S fill:#e6f0ff,stroke:#4a78c8
+```
+
+### タブ切替シーケンス
+
+```
+ユーザー操作 → switchView(id)
+  → clearExamTimer()          // タイマーリーク防止（II-156）
+  → state/app.setView(id)     // view 識別子を更新
+  → renderNav()               // aria-selected を更新
+  → render()                  // 新タブの view 関数を呼出
+      → root.replaceChildren()  // aria-busy=true（II-157）
+      → renderViewSafe(root, id, fn)   // per-view エラー境界
+      → root.setAttribute("aria-busy","false")
+```
+
+### RG1〜RG7 で変化した主な構造
+
+| Wave | タスク | 追加・変更されたモジュール |
+|------|--------|--------------------------|
+| Wave 1 | RG1 | `lib/engine/templates/helpers.ts`（`constrainRange`/`isNonNegative`）`lib/shared/constants.ts`（`POWER_FACTOR_TOLERANCE`） |
+| Wave 1 | RG2 | `lib/engine/schema.ts`（source discriminated union・`rejection_reason`）`lib/engine/validate.ts`（`validatePhysics`/`validateProblemSet`）`lib/engine/generate.ts`（`attemptsUsed`・テレメトリ） |
+| Wave 1 | RG3 | `lib/engine/cli.ts`（`-t`/`-v`/`--version`/`--xpost-limit`/`--xpost-out`）`lib/engine/figures/primitives.ts`（共通プリミティブ） |
+| Wave 1 | RG4 | `lib/scheduler/index.ts`（`getScheduler`）`lib/scheduler/sm2.ts`（SM-2 Wozniak1990 根拠・`createdAtMs`）`lib/store/`（lenient モード）`lib/ingest/`（`parseCitation`）`lib/chat/knowledge.ts`（`KNOWLEDGE_META`） |
+| Wave 2 | RG5 | `web/src/xp.ts`（`xpByDayCached`）`web/src/dashboard.ts`（`byTopicCached`）`web/src/achievements.ts`（`evaluateAchievementsCached`）`web/src/state/practice.ts`（setter） |
+| Wave 2 | RG6 | `web/src/views/exam.ts`（`clearExamTimer`）`web/src/views/router.ts`（per-view エラー境界・`aria-busy`）`web/src/ui/dom.ts`（`$req`/`SafeHtml`）`web/src/ui/safe-html.ts` |
+| Wave 2 | RG7 | `web/index.html`（CSP/SRI）`web/sw.js`（v20・自動版数）`supabase/migrations/0004_rls_fk_notnull.sql`（RLS/FK/NOT NULL）`tests/integration/`（統合テスト）CI バジェット |
+
 ## 検証パイプライン
 
 `npm run verify`（= CI `.github/workflows/validate.yml` と同一手順。プリプッシュ確認に使う）:
@@ -174,7 +252,7 @@ GitHub Release 草稿を自動作成する（`gh release create --draft`）。
 | スクリプト | 主なフラグ |
 |---|---|
 | `npm run build:problems` | `--per-topic <N>`（1トピック当たり問題数・既定10）, `--help` |
-| `npm run gen` | `--topic`, `--count`, `--seed`, `--xpost`, `--help` |
+| `npm run gen` | `--topic`（`-t`）, `--count`, `--seed`, `--xpost`, `--xpost-limit <N>`, `--xpost-out <path>`, `--version`（`-v`）, `--help`（`-h`） |
 | `npm run validate:data` | `--help` |
 | `npm run audit:status` | `--strict`, `--help` |
 | `npm run export:vault` | `--out <dir>`, `--help` |

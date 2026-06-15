@@ -5,8 +5,15 @@
  *
  * ビルド後に生成物のサイズレポート（生バイト・gzip サイズ）を出力する。
  * sourcemap の sources が空の場合は異常として throw する。
+ *
+ * ## SRI / SW バージョン自動化（RG7）
+ * - app.js の SHA-384 を計算して web/index.html の __SRI_HASH__ プレースホルダを書き換える。
+ * - 同ハッシュの先頭8文字を使って web/sw.js の __SW_VERSION__ を "v20-<hash>" に書き換える。
+ * - バンドルサイズ予算チェック: BUNDLE_SIZE_LIMIT_KB 環境変数（既定 500）超過時は警告。
+ *   GITHUB_STEP_SUMMARY が設定されていれば GitHub Actions のサマリーに書き込む。
  */
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { appendFileSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
@@ -137,6 +144,60 @@ async function main() {
   if (reportFiles.length > 0) {
     console.error("\nビルド生成物サイズ:");
     printSizeReport(reportFiles);
+  }
+
+  // --- SRI ハッシュ計算・index.html への注入（RG7）---
+  const appJsContent = readFileSync(outfile, "utf-8");
+  const sha384 = createHash("sha384").update(appJsContent).digest("base64");
+  const integrityValue = `sha384-${sha384}`;
+
+  const indexHtmlPath = join(ROOT, "web/index.html");
+  if (existsSync(indexHtmlPath)) {
+    const htmlContent = readFileSync(indexHtmlPath, "utf-8");
+    // __SRI_HASH__ プレースホルダ、または既注入の sha384-... 値の両方を置換（冪等）。
+    const newHtml = htmlContent.replace(/__SRI_HASH__|sha384-[A-Za-z0-9+/=]+/g, integrityValue);
+    if (newHtml !== htmlContent) {
+      writeFileSync(indexHtmlPath, newHtml, "utf-8");
+      console.error(`SRI ハッシュを web/index.html に注入しました: ${integrityValue.slice(0, 20)}...`);
+    } else {
+      console.error("web/index.html に SRI 注入箇所が見つかりません（スキップ）。");
+    }
+  }
+
+  // --- SW バージョン自動更新（II-187）---
+  const shortHash = createHash("sha256").update(appJsContent).digest("hex").slice(0, 8);
+  const swVersion = `v20-${shortHash}`;
+
+  const swJsPath = join(ROOT, "web/sw.js");
+  if (existsSync(swJsPath)) {
+    const swContent = readFileSync(swJsPath, "utf-8");
+    // __SW_VERSION__ プレースホルダ、または既注入の v20-XXXXXXXX 値の両方を置換（冪等）。
+    const newSw = swContent.replace(/__SW_VERSION__|v20-[0-9a-f]{8}/g, swVersion);
+    if (newSw !== swContent) {
+      writeFileSync(swJsPath, newSw, "utf-8");
+      console.error(`SW バージョンを web/sw.js に注入しました: denken-os-${swVersion}`);
+    } else {
+      console.error("web/sw.js に SW バージョン注入箇所が見つかりません（スキップ）。");
+    }
+  }
+
+  // --- バンドルサイズ予算チェック（II-188）---
+  const limitKb = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? "500");
+  const appSizeKb = appJsContent.length / 1024;
+  const budgetLine = `バンドルサイズ: ${appSizeKb.toFixed(1)} KB / 上限 ${limitKb} KB`;
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+  if (appSizeKb > limitKb) {
+    const msg = `⚠️  バンドルサイズ予算超過: ${appSizeKb.toFixed(1)} KB > ${limitKb} KB`;
+    console.error(msg);
+    if (summaryPath) {
+      appendFileSync(summaryPath, `\n## バンドルバジェット\n\n${budgetLine} — **OVER BUDGET**\n`);
+    }
+    process.exit(1);
+  } else {
+    console.error(`✅ ${budgetLine} — 予算内`);
+    if (summaryPath) {
+      appendFileSync(summaryPath, `\n## バンドルバジェット\n\n${budgetLine} — OK\n`);
+    }
   }
 }
 

@@ -31,6 +31,53 @@ GitHub の [Private vulnerability reporting](https://github.com/thinkyou0714/den
   サーバ側環境変数でのみ扱う。
 - 万一キーをコミットした場合は、**履歴の修正だけでなく当該キーのローテーション（失効）**を行うこと。
 
+## SVG サニタイズ規約（II-199）
+
+学習アプリの問題図（回路図・ベクトル図・ブロック図）はインライン SVG で配信している。
+SVG は `<script>` 等を含むと XSS になるため、以下の規約を守ること。
+
+- **`web/src/sanitize.ts` の `sanitizeSvg()` を必ず通す。** エンジンが生成した SVG 文字列は
+  `lib/engine/figures/` で組み立てるが、Web 側で描画する前に必ず `sanitizeSvg()` を適用する。
+- **`web/src/ui/dom.ts` の `SafeHtml` ブランド型を使う。** `h()` の `html` 属性は
+  `SafeHtml` 型（branded string）のみを受け付ける。`safeHtml()` キャストは
+  「呼び出し元がサニタイズ済みであることを明示する」契約であり、未サニタイズの文字列に
+  使わないこと（`web/src/ui/safe-html.ts` 参照）。
+- SVG 内の `<use href>` / `href=` / `xlink:href` 属性が外部URLを指す場合は除去される
+  （SSRF/データ漏洩防止）。
+
+## CSP / SRI 方針（II-199）
+
+`web/index.html` に `Content-Security-Policy` meta タグを配置している。
+
+```
+default-src 'self';
+script-src  'self' '<sha256-インラインスクリプトのハッシュ>';
+style-src   'self' 'unsafe-inline';
+img-src     'self' data:;
+connect-src 'self' https://api.anthropic.com https://*.supabase.co https://*.supabase.in;
+worker-src  'self'; manifest-src 'self';
+```
+
+- `unsafe-inline` はスタイルのみ許可（インライン CSS はデザイントークンの初期適用に必要）。
+- インラインスクリプト（FOUC 防止の1行）は sha256 ハッシュで明示許可する。
+  スクリプトを変更した場合は `docs/refactoring/round2/` の注記に従いハッシュを再計算すること。
+- `dist/app.js` には `integrity="sha384-…"` の SRI 属性を付与している。
+  `npm run build:web`（`scripts/build-web.ts`）が esbuild バンドル後に SHA-384 を算出して
+  自動埋込するため、**手動での integrity 属性変更は禁止**。
+
+## BYOK APIキー保管（II-199）
+
+「質問タブ」の Claude ストリーミング機能は BYOK（Bring Your Own Key）方式を採用している。
+
+- **APIキーは `localStorage` のみに保管する。** サーバには一切送信されない。
+- **保管は利用者の自己責任。** プロダクトとして暗号化・難読化は行わない
+  （sessionStorage への移行は UX 破壊のため見送り: `docs/refactoring/round2/ideas-round2.md` X-201 参照）。
+- **バックアップ対象外。** 設定タブの「バックアップ書き出し」に APIキーは含まれない
+  （`web/src/backup.ts` の `EXCLUDED_KEYS` で除外済み）。
+- **キーをコミットしない。** `ANTHROPIC_API_KEY` を誤ってコミットした場合は、
+  履歴の修正に加えキーのローテーション（失効）を必ず行うこと。
+- `service_role` キーをクライアント側 JavaScript / Web バンドルに含めないこと。
+
 ## サポート対象バージョン
 
 pre-alpha のため、セキュリティ修正は最新の `main` に対してのみ提供する。

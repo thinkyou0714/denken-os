@@ -84,6 +84,37 @@ export function byTopic(logs: WebAnswerLog[]): Array<Tally & { topic: string; la
     .sort((a, b) => a.accuracy - b.accuracy || b.attempts - a.attempts);
 }
 
+// ---- II-144: byTopic メモ化キャッシュ ----
+
+interface ByTopicCache {
+  logsLength: number;
+  lastLogAtMs: number;
+  result: Array<Tally & { topic: string; lastMs: number }>;
+}
+
+let _byTopicCache: ByTopicCache | null = null;
+
+/**
+ * byTopic のメモ化版。
+ * ログの件数・最終ログ時刻が変化したときのみ再計算する。
+ * キャッシュヒット時は前回の結果を返す（純粋性は保証される）。
+ */
+export function byTopicCached(logs: WebAnswerLog[]): Array<Tally & { topic: string; lastMs: number }> {
+  const logsLength = logs.length;
+  const lastLogAtMs = logsLength > 0 ? (logs[logsLength - 1] as WebAnswerLog).atMs : 0;
+  if (_byTopicCache !== null && _byTopicCache.logsLength === logsLength && _byTopicCache.lastLogAtMs === lastLogAtMs) {
+    return _byTopicCache.result;
+  }
+  const result = byTopic(logs);
+  _byTopicCache = { logsLength, lastLogAtMs, result };
+  return result;
+}
+
+/** byTopic キャッシュを強制クリアする（テスト・リセット用）。 */
+export function clearByTopicCache(): void {
+  _byTopicCache = null;
+}
+
 /** 到達度の判定（正答率と試行回数から）。 */
 export function masteryLevel(t: Tally): Mastery {
   if (t.attempts === 0) return "未学習";

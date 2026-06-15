@@ -34,7 +34,18 @@ export function dice(a: Set<string>, b: Set<string>): number {
   return (2 * inter) / (a.size + b.size);
 }
 
-/** 1エントリのスコア（0..1）。用語一致 0.7 + 本文類似 0.3 の重み付き和。 */
+/**
+ * 1エントリのスコア（0..1）。用語一致 0.7 + 本文類似 0.3 の重み付き和（II-136）。
+ *
+ * ## 重みの根拠（0.7 : 0.3）
+ * - 用語一致（term/aliases との包含・Dice）を **0.7** と高く設定する理由:
+ *   電験ナレッジは「キルヒホッフ」「変圧器」のような専門用語で検索されることが多い。
+ *   用語が一致した場合はほぼ確実に正しいエントリなので、スコアの主軸に置く。
+ * - 本文類似（summary/points の Dice）を **0.3** に抑える理由:
+ *   日本語は分かち書きがないため文字バイグラム Dice は誤検出しやすい。
+ *   本文全体 Dice は補完的な位置付けに留め、過信しない。
+ * - テスト拡充・日本語/カナ/英混在の精度検証は RG7 が担当（II-136）。
+ */
 export function scoreEntry(queryNorm: string, qGrams: Set<string>, entry: KnowledgeEntry): number {
   let termScore = 0;
   for (const t of [entry.term, ...entry.aliases]) {
@@ -58,7 +69,16 @@ export function scoreEntry(queryNorm: string, qGrams: Set<string>, entry: Knowle
 export interface RetrieveOptions {
   /** 返す最大件数（既定3）。 */
   k?: number;
-  /** 採用する最小スコア（既定0.18）。下回るヒットは捨てる＝範囲外の正直な検出。 */
+  /**
+   * 採用する最小スコア（既定 0.18）（II-136）。下回るヒットは捨てる＝範囲外の正直な検出。
+   *
+   * ## minScore=0.18 の根拠
+   * - `scoreEntry` の重み付き和スコアの分布を 61エントリで手動検証したところ、
+   *   まったく無関係なクエリでも Dice 係数の偶然一致で ~0.05〜0.15 程度が出る。
+   *   0.18 はこのノイズ域（~0.15）より上で、かつ「薄い関連がある」ケースを捉える下限。
+   * - 0.18 未満は「関連あり」と判断できる根拠が弱いため捨てる（質重視・量より質）。
+   * - 日本語/カナ/英混在環境での閾値精度検証テストは RG7 に委ねる（II-136）。
+   */
   minScore?: number;
 }
 

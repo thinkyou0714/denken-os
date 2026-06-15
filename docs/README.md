@@ -47,6 +47,63 @@ docs/
     └── 01〜12                 各自動化領域のタスク仕様
 ```
 
+## 自動化パイプライン全体図（II-198）
+
+生成→検証→配信→集計→改善の循環ループ。
+
+```mermaid
+flowchart LR
+    subgraph generate["① 生成（lib/engine/）"]
+        T["templates/*.ts\n88テンプレ（決定論ソルバ）"]
+        G["generate.ts\ngenerateOne / attemptsUsed"]
+        N["narrate.ts\n解説言い回し（Claude API or stub）"]
+        T --> G --> N
+    end
+
+    subgraph validate["② 検証（lib/engine/ + scripts/）"]
+        V["validate.ts\nvalidateProblem / validatePhysics\nvalidateProblemSet"]
+        AJV["validate-problems.ts\nproblem-schema.json（ajv）"]
+        SD["schema-drift.test.ts\nzod ↔ ajv ドリフト検知"]
+        N --> V --> AJV
+        AJV -.->|drift check| SD
+    end
+
+    subgraph build["③ 配信（scripts/ + CI + web/）"]
+        BP["build-problems.ts\nnpm run build:problems\n→ web/problems.json（788問）"]
+        BW["build-web.ts\nesbuild → web/dist/app.js\nSRI sha384 埋込"]
+        CI["validate.yml\nlint → typecheck → test → build\nバンドルサイズバジェット\nGITHUB_STEP_SUMMARY"]
+        SW["sw.js v20\nService Worker\nオフラインキャッシュ"]
+        AJV --> BP --> BW --> SW
+        BW --> CI
+    end
+
+    subgraph app["④ 学習アプリ（web/）"]
+        APP["app.ts → router.ts\n7タブ SPA（PWA・オフライン）"]
+        STATE["state/\npractice / exam / app"]
+        CACHE["xpByDayCached\nbyTopicCached\nevaluateAchievementsCached"]
+        SW --> APP --> STATE
+        STATE --> CACHE
+    end
+
+    subgraph collect["⑤ 集計（lib/aggregate/ + supabase/）"]
+        LOG["answer_logs\n（localStorage / Supabase RLS）"]
+        AGG["aggregate.ts\n正答率・最頻誤答・難易度提案"]
+        DIAG["diagnosis.ts\nweaknessScore・getScheduler()"]
+        STATE --> LOG --> AGG --> DIAG
+    end
+
+    subgraph improve["⑥ 改善（lib/ingest/ + lib/chat/）"]
+        ING["ingest.ts + parseCitation()\n過去問取込・出典フォーマット強制"]
+        KNOW["knowledge.ts\nKNOWLEDGE_META（RAG 知識ベース）"]
+        DIAG -->|弱点フィードバック| ING
+        ING --> T
+        KNOW --> APP
+    end
+```
+
+> **挙動不変の原則**: `web/problems.json` のバイト列・localStorage キー・Supabase テーブル構造は
+> リファクタ（RG1〜RG7）を通じて不変。`git diff --exit-code web/problems.json` でゼロ差分を CI が確認。
+
 ## 読む順番（おすすめ）
 
 1. `strategy/00-overview.md` … 何を目指すか（コンセプトと図解）

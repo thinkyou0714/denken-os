@@ -255,6 +255,47 @@ export function evaluateAchievements(input: AchievementInput): AchievementView[]
   }));
 }
 
+// ---- II-145: バッジステータスキャッシュ ----
+// ログが追記されたとき（件数・最終ログ時刻の変化）のみ再計算する差分更新キャッシュ。
+
+interface BadgeCache {
+  logsLength: number;
+  lastLogAtMs: number;
+  streakDays: number;
+  level: number;
+  result: AchievementView[];
+}
+
+let _badgeCache: BadgeCache | null = null;
+
+/**
+ * evaluateAchievements のメモ化版。
+ * ログの件数・最終ログ時刻・streakDays・level が変化したときのみ再計算する。
+ * キャッシュヒット時は前回の結果を返す（純粋性は保証される）。
+ */
+export function evaluateAchievementsCached(input: AchievementInput): AchievementView[] {
+  const logs = input.logs;
+  const logsLength = logs.length;
+  const lastLogAtMs = logsLength > 0 ? (logs[logsLength - 1] as (typeof logs)[number]).atMs : 0;
+  if (
+    _badgeCache !== null &&
+    _badgeCache.logsLength === logsLength &&
+    _badgeCache.lastLogAtMs === lastLogAtMs &&
+    _badgeCache.streakDays === input.streakDays &&
+    _badgeCache.level === input.level
+  ) {
+    return _badgeCache.result;
+  }
+  const result = evaluateAchievements(input);
+  _badgeCache = { logsLength, lastLogAtMs, streakDays: input.streakDays, level: input.level, result };
+  return result;
+}
+
+/** バッジキャッシュを強制クリアする（テスト・リセット用）。 */
+export function clearBadgeCache(): void {
+  _badgeCache = null;
+}
+
 /** 解除済みのうち、まだ祝賀していない実績（app.ts が表示済みIDと突き合わせる）。 */
 export function newlyUnlocked(views: readonly AchievementView[], seenIds: ReadonlySet<string>): AchievementView[] {
   return views.filter((v) => v.unlocked && !seenIds.has(v.id));

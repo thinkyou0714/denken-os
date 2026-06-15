@@ -6,8 +6,7 @@
  *     Ig = 変圧器の高圧側電路の1線地絡電流〔A〕
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { pick } from "./helpers.js";
-import type { GenerationResult, Template } from "./types.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 /** 遮断条件 → 分子の電圧（電技解釈第17条）。 */
 const CASES: ReadonlyArray<readonly [number, string]> = [
@@ -17,35 +16,12 @@ const CASES: ReadonlyArray<readonly [number, string]> = [
 ];
 const IG_SET: ReadonlyArray<number> = [2, 3, 4, 5, 6, 10, 12, 15, 20, 25, 30];
 
-function buildFrom(base: number, ig: number): GenerationResult | null {
-  const found = CASES.find(([v]) => v === base);
-  if (!found || ig <= 0) return null;
-  const r = base / ig;
-  if (!isCleanAnswer(r)) return null;
-  const answerText = formatClean(r);
-  return {
-    format: "numeric",
-    params: {
-      base_voltage: { value: base, unit: "V", realistic_range: [150, 600] },
-      ground_fault_current: { value: ig, unit: "A", realistic_range: [1, 50] },
-    },
-    answerValue: r,
-    answerUnit: "Ω",
-    answerText,
-    facts: { base, ig, r },
-    defaultStatement:
-      `高圧電路と低圧電路を結合する変圧器に B種接地工事を施す。高圧側電路の1線地絡電流は ${ig}A であり、` +
-      `${found[1]}。このとき B種接地工事の接地抵抗の上限値〔Ω〕は?`,
-    defaultSolution: [
-      `B種接地抵抗の上限 R=V/Ig（電技解釈第17条。V は遮断時間により 150/300/600V）`,
-      `本問の条件では V=${base}V`,
-      `R=${base}/${ig}=${answerText}Ω`,
-    ],
-    physicallyValid: true,
-  };
-}
+type Params = {
+  base_voltage: number;
+  ground_fault_current: number;
+};
 
-export const bTypeGrounding: Template = {
+export const bTypeGrounding = defineTemplate<Params>({
   topic: "B種接地工事の接地抵抗",
   subject: "法規",
   exam: "denken2_primary",
@@ -54,14 +30,37 @@ export const bTypeGrounding: Template = {
     base_voltage: { unit: "V", realistic_range: [150, 600] },
     ground_fault_current: { unit: "A", realistic_range: [1, 50] },
   },
-  generate(rng) {
+  paramOrder: ["base_voltage", "ground_fault_current"],
+  draw(rng) {
     const [base] = pick(CASES, rng);
     const ig = pick(IG_SET, rng);
-    return buildFrom(base, ig);
+    return { base_voltage: base, ground_fault_current: ig };
   },
-  generateFrom(params) {
-    const { base_voltage, ground_fault_current } = params;
-    if (base_voltage === undefined || ground_fault_current === undefined) return null;
-    return buildFrom(base_voltage, ground_fault_current);
+  buildFrom({ base_voltage: base, ground_fault_current: ig }) {
+    const found = CASES.find(([v]) => v === base);
+    if (!found || ig <= 0) return null;
+    const r = base / ig;
+    if (!isCleanAnswer(r)) return null;
+    const answerText = formatClean(r);
+    return {
+      format: "numeric",
+      params: {
+        base_voltage: { value: base, unit: "V", realistic_range: [150, 600] },
+        ground_fault_current: { value: ig, unit: "A", realistic_range: [1, 50] },
+      },
+      answerValue: r,
+      answerUnit: "Ω",
+      answerText,
+      facts: { base, ig, r },
+      defaultStatement:
+        `高圧電路と低圧電路を結合する変圧器に B種接地工事を施す。高圧側電路の1線地絡電流は ${ig}A であり、` +
+        `${found[1]}。このとき B種接地工事の接地抵抗の上限値〔Ω〕は?`,
+      defaultSolution: [
+        `B種接地抵抗の上限 R=V/Ig（電技解釈第17条。V は遮断時間により 150/300/600V）`,
+        `本問の条件では V=${base}V`,
+        `R=${base}/${ig}=${answerText}Ω`,
+      ],
+      physicallyValid: true,
+    };
   },
-};
+});
