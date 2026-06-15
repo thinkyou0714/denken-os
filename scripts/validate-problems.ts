@@ -148,6 +148,16 @@ function main() {
     process.exit(1);
   }
 
+  // 出荷済みデータの大量削除を機械的に止める下限ゲート（length===0 だけでは51件削除を見逃す）。
+  // 新規データ追加で増えるのは歓迎、下回る場合は意図的な削除であることをPRで説明すること。
+  const EXPECTED_MIN_FILES = 52;
+  if (files.length < EXPECTED_MIN_FILES) {
+    console.error(
+      `問題ファイルが ${files.length} 件で下限 ${EXPECTED_MIN_FILES} を下回ります。意図的な削除なら scripts/validate-problems.ts の EXPECTED_MIN_FILES を更新してください。`,
+    );
+    process.exit(1);
+  }
+
   const failures = validateFiles(files, DATA_DIR, validate, () => validate.errors ?? []);
 
   const errorMessages = failures.map((fl) => `[${fl.rule}] ${fl.message}`);

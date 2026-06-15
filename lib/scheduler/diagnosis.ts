@@ -62,9 +62,11 @@ export function aggregateByTopic(logs: AnswerLog[]): Map<string, TopicProgress> 
  * この関数は純粋関数（副作用なし・外部依存なし）でテスト可能（II-131, II-5）。
  */
 export function weaknessScore(p: TopicProgress, nowMs: number): number {
-  const rate = p.attempts > 0 ? p.correct / p.attempts : 0;
+  // 異常入力（負のattempts等）でもスコアが破綻しないようクランプする（attempts は本来非負）。
+  const attempts = Math.max(0, p.attempts);
+  const rate = attempts > 0 ? p.correct / attempts : 0;
   const overdueDays = Math.max(0, (nowMs - p.dueMs) / DAY_MS);
-  return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(p.attempts, 5) * 0.1;
+  return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(attempts, 5) * 0.1;
 }
 
 /**

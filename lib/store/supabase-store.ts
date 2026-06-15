@@ -184,7 +184,9 @@ const answerLogRowSchema = z.object({
   correct: z.boolean(),
   time_ms: z.number().nullable(),
   answered_at: z.string().datetime({ offset: true }),
-  problem_id: z.string().nullable(),
+  // 空文字の problem_id は実質「未設定」だが truthy 判定をすり抜けて誤参照を招くため、
+  // null か非空文字列のみ受理する（append は null を書くので空文字は本来入らない）。
+  problem_id: z.string().min(1).nullable(),
 });
 
 /**

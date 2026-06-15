@@ -6,7 +6,24 @@
  * 端末間同期（Supabase）は M2 のため、まず「自分のデータを自分で持ち出せる」
  * エクスポート/インポートを提供する。秘匿情報（APIキー）は書き出さない。
  */
+import { clearBadgeCache } from "./achievements.js";
+import { clearByTopicCache } from "./dashboard.js";
+import { clearTipIndexCache } from "./mascot.js";
 import type { StorageLike } from "./store.js";
+import { clearXpByDayCache } from "./xp.js";
+
+/**
+ * 集計メモ化キャッシュ（byTopic/xpByDay/badge/tip）をすべて破棄する。
+ * バックアップ復元は logs/cards 配列をまるごと差し替えるため、件数や末尾時刻が
+ * 偶然一致すると各キャッシュが古い結果を返しうる（キャッシュキーは内容ハッシュではない）。
+ * 復元直後に全キャッシュを無効化して次回描画で必ず再計算させる。
+ */
+function clearDerivedCaches(): void {
+  clearByTopicCache();
+  clearXpByDayCache();
+  clearBadgeCache();
+  clearTipIndexCache();
+}
 
 /** バックアップ対象のキー。APIキー（denken:apiKey）は秘匿のため意図的に除外する。 */
 export const BACKUP_KEYS: readonly string[] = [
@@ -91,5 +108,7 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
     restoredKeys.push(key);
   }
   if (restoredKeys.length === 0) return { ok: false, reason: "復元できるデータが見つかりませんでした。" };
+  // 復元でストア内容が差し替わったので、集計メモ化キャッシュを破棄して整合を保つ（T-B1）。
+  clearDerivedCaches();
   return { ok: true, restoredKeys };
 }

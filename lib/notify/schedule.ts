@@ -45,14 +45,19 @@ function parseHHMM(s: string): { h: number; m: number } {
   const [hs, ms] = s.split(":");
   const h = Number(hs);
   const m = Number(ms);
-  return {
-    h: Number.isInteger(h) && h >= 0 && h <= 23 ? h : 20,
-    m: Number.isInteger(m) && m >= 0 && m <= 59 ? m : 0,
-  };
+  const hValid = Number.isInteger(h) && h >= 0 && h <= 23;
+  const mValid = Number.isInteger(m) && m >= 0 && m <= 59;
+  // 無効時刻（"25:00" 等）を無音で既定値に吸収すると設定ミスに気付けないため警告する。
+  if (!hValid || !mValid) {
+    console.warn(`[notify] 無効な時刻指定 "${s}" を既定 20:00 にフォールバックしました。`);
+  }
+  return { h: hValid ? h : 20, m: mValid ? m : 0 };
 }
 
 function jitter(baseMs: number, spreadMinutes: number, rng: () => number): number {
-  const delta = Math.round((rng() * 2 - 1) * spreadMinutes);
+  // rng が [0,1) を逸脱しても通知時刻が過去/異常にならないようクランプする。
+  const r = Math.min(1, Math.max(0, rng()));
+  const delta = Math.round((r * 2 - 1) * spreadMinutes);
   return baseMs + delta * 60_000;
 }
 
