@@ -32,7 +32,7 @@
 //         sanitizeSvg・SW堅牢化(fetch失敗フォールバック・install失敗時skipWaiting抑制))
 //   (v20: Wave2リファクタ — CSP/SRI・SW版数自動化・RLS補完・fuzz/統合テスト追加)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v20-162ce7ab";
+const CACHE = "denken-os-v20-d3522172";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

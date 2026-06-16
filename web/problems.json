@@ -40062,6 +40062,776 @@
     "status": "draft"
   },
   {
+    "id": "G-9D6F0C14",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 150,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.6,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 150kW、需要率が 0.6、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "90",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 150×0.6 = 90kW",
+      "変圧器所要容量 S = 最大需要/力率 = 90/1",
+      "S = 90kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-15F56576",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.6,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 0.8,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 250kW、需要率が 0.6、負荷の力率が 0.8 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "187.5",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 250×0.6 = 150kW",
+      "変圧器所要容量 S = 最大需要/力率 = 150/0.8",
+      "S = 187.5kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-06D2A981",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.8,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 500kW、需要率が 0.8、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "400",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 500×0.8 = 400kW",
+      "変圧器所要容量 S = 最大需要/力率 = 400/1",
+      "S = 400kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-51BE2A30",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 400,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.7,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 0.8,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 400kW、需要率が 0.7、負荷の力率が 0.8 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "350",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 400×0.7 = 280kW",
+      "変圧器所要容量 S = 最大需要/力率 = 280/0.8",
+      "S = 350kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-E5666186",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.7,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 0.8,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 200kW、需要率が 0.7、負荷の力率が 0.8 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "175",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 200×0.7 = 140kW",
+      "変圧器所要容量 S = 最大需要/力率 = 140/0.8",
+      "S = 175kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8014EC32",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 300,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.7,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 300kW、需要率が 0.7、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "210",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 300×0.7 = 210kW",
+      "変圧器所要容量 S = 最大需要/力率 = 210/1",
+      "S = 210kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-303526F0",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 400,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.8,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 400kW、需要率が 0.8、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "320",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 400×0.8 = 320kW",
+      "変圧器所要容量 S = 最大需要/力率 = 320/1",
+      "S = 320kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F070B873",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 250,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.6,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 250kW、需要率が 0.6、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "150",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 250×0.6 = 150kW",
+      "変圧器所要容量 S = 最大需要/力率 = 150/1",
+      "S = 150kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-09964523",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 200,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.7,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 200kW、需要率が 0.7、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "140",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 200×0.7 = 140kW",
+      "変圧器所要容量 S = 最大需要/力率 = 140/1",
+      "S = 140kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-61A5B483",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "変圧器容量の選定",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "installed_capacity": {
+        "value": 500,
+        "unit": "kW",
+        "realistic_range": [
+          150,
+          500
+        ]
+      },
+      "demand_factor": {
+        "value": 0.6,
+        "realistic_range": [
+          0.5,
+          0.8
+        ]
+      },
+      "power_factor": {
+        "value": 1,
+        "realistic_range": [
+          0.8,
+          1
+        ]
+      }
+    },
+    "statement": "ある需要設備の設備容量が 500kW、需要率が 0.6、負荷の力率が 1 であるとき、必要な変圧器の所要容量〔kVA〕を求めよ。",
+    "answer": "300",
+    "solution": [
+      "最大需要電力 = 設備容量×需要率 = 500×0.6 = 300kW",
+      "変圧器所要容量 S = 最大需要/力率 = 300/1",
+      "S = 300kVA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8AEA62DB",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "特別高圧の絶縁耐力試験電圧",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "nominal_voltage": {
+        "value": 33000,
+        "unit": "V",
+        "realistic_range": [
+          22000,
+          33000
+        ]
+      }
+    },
+    "statement": "公称電圧 33000V の特別高圧機器について、交流絶縁耐力試験を行う。試験電圧〔V〕を求めよ（最大使用電圧=公称×1.15/1.1、7000V超60000V以下は試験電圧=最大使用電圧×1.25）。",
+    "answer": "43125",
+    "solution": [
+      "最大使用電圧 = 公称電圧×1.15/1.1 = 33000×1.15/1.1 = 34500V",
+      "7000V超60000V以下のため試験電圧=最大使用電圧×1.25",
+      "試験電圧 = 34500×1.25 = 43125V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-021E54A9",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "特別高圧の絶縁耐力試験電圧",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "nominal_voltage": {
+        "value": 22000,
+        "unit": "V",
+        "realistic_range": [
+          22000,
+          33000
+        ]
+      }
+    },
+    "statement": "公称電圧 22000V の特別高圧機器について、交流絶縁耐力試験を行う。試験電圧〔V〕を求めよ（最大使用電圧=公称×1.15/1.1、7000V超60000V以下は試験電圧=最大使用電圧×1.25）。",
+    "answer": "28750",
+    "solution": [
+      "最大使用電圧 = 公称電圧×1.15/1.1 = 22000×1.15/1.1 = 23000V",
+      "7000V超60000V以下のため試験電圧=最大使用電圧×1.25",
+      "試験電圧 = 23000×1.25 = 28750V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-13ED6B35",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "小規模事業用電気工作物の範囲",
+    "format": "multiple_choice",
+    "difficulty": 2,
+    "params": {
+      "case_index": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          2
+        ]
+      }
+    },
+    "statement": "2023年3月施行の改正電気事業法施行規則に基づき、太陽電池発電設備が小規模事業用電気工作物となる出力の上限（この値未満）〔kW〕は?",
+    "choices": [
+      "10",
+      "20",
+      "50",
+      "500"
+    ],
+    "answer": "50",
+    "solution": [
+      "小規模事業用電気工作物（2023年3月施行）: 太陽光10kW以上50kW未満・風力20kW未満",
+      "技術基準適合維持・基礎情報の届出・使用前自己確認が義務",
+      "本問の答え = 50kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-10ED667C",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "小規模事業用電気工作物の範囲",
+    "format": "multiple_choice",
+    "difficulty": 2,
+    "params": {
+      "case_index": {
+        "value": 2,
+        "realistic_range": [
+          0,
+          2
+        ]
+      }
+    },
+    "statement": "2023年3月施行の改正電気事業法施行規則に基づき、風力発電設備が小規模事業用電気工作物となる出力の上限（この値未満）〔kW〕は?",
+    "choices": [
+      "10",
+      "20",
+      "50",
+      "500"
+    ],
+    "answer": "20",
+    "solution": [
+      "小規模事業用電気工作物（2023年3月施行）: 太陽光10kW以上50kW未満・風力20kW未満",
+      "技術基準適合維持・基礎情報の届出・使用前自己確認が義務",
+      "本問の答え = 20kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-12ED69A2",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "小規模事業用電気工作物の範囲",
+    "format": "multiple_choice",
+    "difficulty": 2,
+    "params": {
+      "case_index": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          2
+        ]
+      }
+    },
+    "statement": "2023年3月施行の改正電気事業法施行規則に基づき、太陽電池発電設備が小規模事業用電気工作物となる出力の下限〔kW〕は?",
+    "choices": [
+      "10",
+      "20",
+      "50",
+      "500"
+    ],
+    "answer": "10",
+    "solution": [
+      "小規模事業用電気工作物（2023年3月施行）: 太陽光10kW以上50kW未満・風力20kW未満",
+      "技術基準適合維持・基礎情報の届出・使用前自己確認が義務",
+      "本問の答え = 10kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
     "id": "D-0291",
     "exam": "denken2_secondary",
     "subject": "機械制御",

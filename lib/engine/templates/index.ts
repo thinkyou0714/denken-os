@@ -26,6 +26,7 @@ import { groundingResistance } from "./grounding-resistance.js";
 import { groundingTypes } from "./grounding-types.js";
 import { guyWireSafety } from "./guy-wire-safety.js";
 import { hoistMotorOutput } from "./hoist-motor-output.js";
+import { hvInsulationTestVoltage } from "./hv-insulation-test-voltage.js";
 import { hydroPowerOutput } from "./hydro-power-output.js";
 import { indoorVoltageLimit } from "./indoor-voltage-limit.js";
 import { inducedEmf } from "./induced-emf.js";
@@ -77,6 +78,7 @@ import { shortCircuitOhm } from "./short-circuit-ohm.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
 import { shuntResistor } from "./shunt-resistor.js";
 import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
+import { smallScaleElectricalFacility } from "./small-scale-electrical-facility.js";
 import { solenoidMagneticField } from "./solenoid-magnetic-field.js";
 import { specificSpeed } from "./specific-speed.js";
 import { speedRegulation } from "./speed-regulation.js";
@@ -88,6 +90,7 @@ import { thermalEfficiency } from "./thermal-efficiency.js";
 import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
 import { theveninLoadCurrent } from "./thevenin-load-current.js";
 import { threePhasePower } from "./three-phase-power.js";
+import { transformerCapacitySelection } from "./transformer-capacity-selection.js";
 import { transformerEfficiency } from "./transformer-efficiency.js";
 import { transformerExcitingCurrent } from "./transformer-exciting-current.js";
 import { transformerParallelLoad } from "./transformer-parallel-load.js";
@@ -193,6 +196,9 @@ const templates: Template[] = [
   leakageCurrent,
   conductorActualLength,
   poleEmbedmentDepth,
+  transformerCapacitySelection,
+  hvInsulationTestVoltage,
+  smallScaleElectricalFacility,
   // 機械制御（二次）
   transformerVoltageRegulation,
   synchronousGeneratorOutput,
@@ -254,6 +260,7 @@ export {
   groundingTypes,
   guyWireSafety,
   hoistMotorOutput,
+  hvInsulationTestVoltage,
   hydroPowerOutput,
   indoorVoltageLimit,
   inducedEmf,
@@ -306,6 +313,7 @@ export {
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
+  smallScaleElectricalFacility,
   solenoidMagneticField,
   specificSpeed,
   speedRegulation,
@@ -317,6 +325,7 @@ export {
   thermalFuelConsumption,
   theveninLoadCurrent,
   threePhasePower,
+  transformerCapacitySelection,
   transformerEfficiency,
   transformerExcitingCurrent,
   transformerParallelLoad,
