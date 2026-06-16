@@ -19,6 +19,7 @@ export const shortCircuitCapacity = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "短絡・故障計算", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     base_capacity: { unit: "MVA", realistic_range: [10, 100] },
     percent_impedance: { unit: "%", realistic_range: [4, 25] },

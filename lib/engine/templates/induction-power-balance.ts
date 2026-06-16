@@ -19,6 +19,7 @@ export const inductionPowerBalance = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "誘導機", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     secondary_input: { unit: "kW", realistic_range: [5, 40] },
     slip: { unit: "", realistic_range: [0.01, 0.1] },

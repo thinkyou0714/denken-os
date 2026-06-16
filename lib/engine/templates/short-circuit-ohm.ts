@@ -18,9 +18,10 @@ export const shortCircuitOhm = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "短絡・故障計算", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     phase_voltage: { unit: "V", realistic_range: [100, 6350] },
-    impedance: { unit: "ohm", realistic_range: [2, 25] },
+    impedance: { unit: "Ω", realistic_range: [2, 25] },
   },
   paramOrder: ["phase_voltage", "impedance"],
   draw(rng) {
@@ -38,7 +39,7 @@ export const shortCircuitOhm = defineTemplate<Params>({
       format: "descriptive",
       params: {
         phase_voltage: { value: E, unit: "V", realistic_range: [100, 6350] },
-        impedance: { value: Z, unit: "ohm", realistic_range: [2, 25] },
+        impedance: { value: Z, unit: "Ω", realistic_range: [2, 25] },
       },
       answerValue: Is,
       answerUnit: "A",

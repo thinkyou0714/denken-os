@@ -24,6 +24,7 @@ export const electricHeating = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "電熱・電気化学", frequency: "mid", years: [2010, 2016, 2022] },
   paramSpecs: {
     mass: { unit: "kg", realistic_range: [5, 500] },
     delta_theta: { unit: "K", realistic_range: [5, 80] },

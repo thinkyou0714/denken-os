@@ -22,6 +22,7 @@ export const sagTension = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電線路・架空配電", frequency: "high", years: [2006, 2010, 2014, 2018, 2022] },
   paramSpecs: {
     unit_load: { unit: "N/m", realistic_range: [10, 30] },
     span: { unit: "m", realistic_range: [100, 200] },

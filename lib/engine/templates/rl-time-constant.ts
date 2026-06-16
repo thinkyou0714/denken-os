@@ -18,6 +18,7 @@ export const rlTimeConstant = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "単相交流回路", frequency: "high", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     inductance: { unit: "mH", realistic_range: [1, 1000] },
     resistance: { unit: "Ω", realistic_range: [1, 100] },

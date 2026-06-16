@@ -18,6 +18,7 @@ export const buckChopper = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "パワーエレクトロニクス", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     input_voltage: { unit: "V", realistic_range: [100, 600] },
     duty_ratio: { unit: "", realistic_range: [0.1, 0.9] },

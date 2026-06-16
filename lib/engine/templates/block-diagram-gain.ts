@@ -30,6 +30,7 @@ export const blockDiagramGain = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "自動制御理論", frequency: "high", years: [2006, 2011, 2017, 2022] },
   paramSpecs: {
     forward_gain: { realistic_range: [1, 200] },
     feedback_gain: { realistic_range: [0.1, 2] },

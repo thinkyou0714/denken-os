@@ -20,6 +20,7 @@ export const coulombForce = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "静電気", frequency: "high", years: [2009, 2013, 2019, 2024] },
   paramSpecs: {
     charge1: { unit: "μC", realistic_range: [0.5, 20] },
     charge2: { unit: "μC", realistic_range: [0.5, 20] },

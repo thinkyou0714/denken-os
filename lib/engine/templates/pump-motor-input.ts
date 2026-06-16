@@ -22,6 +22,7 @@ export const pumpMotorInput = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "電動機応用", frequency: "mid", years: [2010, 2015, 2020, 2025] },
   paramSpecs: {
     flow: { unit: "m3/s", realistic_range: [1, 10] },
     head: { unit: "m", realistic_range: [20, 200] },

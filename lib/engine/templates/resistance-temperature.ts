@@ -20,6 +20,7 @@ export const resistanceTemperature = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "直流回路", frequency: "mid", years: [2011, 2017, 2023] },
   paramSpecs: {
     resistance_initial: { unit: "Ω", realistic_range: [1, 500] },
     temp_coefficient: { unit: "/K", realistic_range: [0.001, 0.006] },

@@ -18,6 +18,7 @@ export const shortCircuitRatio = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "同期機", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     percent_synchronous_impedance: { unit: "%", realistic_range: [50, 300] },
   },

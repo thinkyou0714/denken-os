@@ -18,6 +18,7 @@ export const speedRegulation = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "水力発電", frequency: "mid", years: [2011, 2017, 2023] },
   paramSpecs: {
     no_load_speed: { unit: "min^-1", realistic_range: [300, 1600] },
     rated_speed: { unit: "min^-1", realistic_range: [250, 1500] },

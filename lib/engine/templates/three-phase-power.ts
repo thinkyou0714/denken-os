@@ -47,10 +47,11 @@ export const threePhasePower = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "三相交流回路", frequency: "high", years: [2007, 2011, 2015, 2019, 2023] },
   paramSpecs: {
     line_voltage: { unit: "V", realistic_range: [100, 6600] },
-    R: { unit: "ohm", realistic_range: [1, 50] },
-    X: { unit: "ohm", realistic_range: [1, 50] },
+    R: { unit: "Ω", realistic_range: [1, 50] },
+    X: { unit: "Ω", realistic_range: [1, 50] },
   },
   paramOrder: ["line_voltage", "R", "X"],
   draw(rng) {
@@ -88,8 +89,8 @@ export const threePhasePower = defineTemplate<Params>({
     return {
       params: {
         line_voltage: { value: V, unit: "V", realistic_range: [100, 6600] },
-        R: { value: R, unit: "ohm", realistic_range: [1, 50] },
-        X: { value: X, unit: "ohm", realistic_range: [1, 50] },
+        R: { value: R, unit: "Ω", realistic_range: [1, 50] },
+        X: { value: X, unit: "Ω", realistic_range: [1, 50] },
       },
       answerValue: P,
       answerUnit: "kW",

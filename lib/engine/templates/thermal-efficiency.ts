@@ -19,6 +19,7 @@ export const thermalEfficiency = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "発電（水力・汽力）", frequency: "high", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     heat_rate: { unit: "kJ/kWh", realistic_range: [7000, 10000] },
   },

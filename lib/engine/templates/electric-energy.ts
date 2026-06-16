@@ -20,6 +20,7 @@ export const electricEnergy = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 1,
+  pastExam: { area: "直流回路", frequency: "mid", years: [2008, 2014, 2019, 2024] },
   paramSpecs: {
     power: { unit: "kW", realistic_range: [2, 50] },
     hours: { unit: "h", realistic_range: [3, 24] },

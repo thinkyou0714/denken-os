@@ -6,7 +6,7 @@
  *   2. 必要に応じて defineTemplate() ファクトリを使って Template を組み立てる。
  *   3. ローカルで pick() を重複定義しない。
  */
-import type { ParamSpec, Template } from "./types.js";
+import type { ParamSpec, PastExamCoverage, Template } from "./types.js";
 
 // POWER_FACTOR_TOLERANCE を re-export して、テンプレートが1か所から参照できるようにする（II-103）。
 export { POWER_FACTOR_TOLERANCE } from "../../shared/constants.js";
@@ -144,6 +144,8 @@ export interface TemplateSpec<P extends Record<string, number>> {
   subject: Template["subject"];
   exam: Template["exam"];
   difficulty: number;
+  /** 過去問の出題傾向メタ（任意）。20年分のカバレッジ可視化・傾向分析に使う。 */
+  pastExam?: PastExamCoverage;
   paramSpecs: Record<keyof P & string, ParamSpec>;
   /** パラメータ名の順序（generateFrom のキー存在確認に使う）。 */
   paramOrder: (keyof P & string)[];
@@ -165,6 +167,8 @@ export function defineTemplate<P extends Record<string, number>>(spec: TemplateS
     subject: spec.subject,
     exam: spec.exam,
     difficulty: spec.difficulty,
+    // exactOptionalPropertyTypes: 未指定時はキー自体を省く（undefined を代入しない）。
+    ...(spec.pastExam ? { pastExam: spec.pastExam } : {}),
     paramSpecs: spec.paramSpecs as Record<string, ParamSpec>,
     generate(rng) {
       return spec.buildFrom(spec.draw(rng));

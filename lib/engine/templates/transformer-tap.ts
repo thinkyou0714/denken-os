@@ -30,6 +30,7 @@ export const transformerTap = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "変電・変圧器", frequency: "mid", years: [2010, 2016, 2022] },
   paramSpecs: {
     primary_voltage: { unit: "V", realistic_range: [5500, 7500] },
     tap_voltage: { unit: "V", realistic_range: [5500, 7700] },

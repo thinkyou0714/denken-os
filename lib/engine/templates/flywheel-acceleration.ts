@@ -24,6 +24,7 @@ export const rotorAcceleration = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 4,
+  pastExam: { area: "電動機応用", frequency: "mid", years: [2008, 2015, 2021] },
   paramSpecs: {
     inertia: { unit: "kg·m²", realistic_range: [1, 500] },
     omega: { unit: "rad/s", realistic_range: [10, 400] },

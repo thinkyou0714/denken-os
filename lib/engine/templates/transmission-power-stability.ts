@@ -26,10 +26,11 @@ export const transmissionPowerStability = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "送電・系統安定度", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     sending_voltage: { unit: "kV", realistic_range: [60, 110] },
     receiving_voltage: { unit: "kV", realistic_range: [60, 110] },
-    reactance: { unit: "ohm", realistic_range: [40, 100] },
+    reactance: { unit: "Ω", realistic_range: [40, 100] },
     phase_angle: { unit: "deg", realistic_range: [0, 90] },
   },
   paramOrder: ["sending_voltage", "receiving_voltage", "reactance", "phase_angle"],
@@ -54,7 +55,7 @@ export const transmissionPowerStability = defineTemplate<Params>({
       params: {
         sending_voltage: { value: Vs, unit: "kV", realistic_range: [60, 110] },
         receiving_voltage: { value: Vr, unit: "kV", realistic_range: [60, 110] },
-        reactance: { value: X, unit: "ohm", realistic_range: [40, 100] },
+        reactance: { value: X, unit: "Ω", realistic_range: [40, 100] },
         phase_angle: { value: deg, unit: "deg", realistic_range: [0, 90] },
       },
       answerValue: P,

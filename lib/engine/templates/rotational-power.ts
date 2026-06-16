@@ -20,6 +20,7 @@ export const rotationalPower = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電動機応用", frequency: "mid", years: [2006, 2012, 2017, 2022] },
   paramSpecs: {
     angular_velocity: { unit: "rad/s", realistic_range: [10, 400] },
     torque: { unit: "N·m", realistic_range: [5, 500] },

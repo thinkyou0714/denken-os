@@ -25,6 +25,7 @@ export const lightingDesign = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "照明", frequency: "mid", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     illuminance: { unit: "lx", realistic_range: [100, 1000] },
     area: { unit: "m2", realistic_range: [50, 200] },

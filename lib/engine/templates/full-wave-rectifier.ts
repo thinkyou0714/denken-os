@@ -17,6 +17,7 @@ export const fullWaveRectifier = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "パワーエレクトロニクス", frequency: "high", years: [2008, 2012, 2018, 2023] },
   paramSpecs: {
     ac_voltage: { unit: "V", realistic_range: [100, 1000] },
   },

@@ -28,6 +28,7 @@ export const transmissionEfficiency = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "送電・線路計算", frequency: "high", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     received_power: { unit: "kW", realistic_range: [90, 2000] },
     sent_power: { unit: "kW", realistic_range: [100, 2000] },

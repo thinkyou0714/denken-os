@@ -33,6 +33,7 @@ export const seriesRlCurrent = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "単相交流回路", frequency: "high", years: [2006, 2012, 2017, 2022] },
   paramSpecs: {
     voltage: { unit: "V", realistic_range: [50, 400] },
     resistance: { unit: "Ω", realistic_range: [1, 50] },

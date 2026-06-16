@@ -27,6 +27,7 @@ export const maxEfficiencyLoad = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "変圧器", frequency: "mid", years: [2011, 2016, 2021] },
   paramSpecs: {
     iron_loss: { unit: "kW", realistic_range: [1, 50] },
     copper_loss: { unit: "kW", realistic_range: [1, 60] },

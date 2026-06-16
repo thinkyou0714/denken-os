@@ -26,6 +26,7 @@ export const bTypeGrounding = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "接地工事", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     base_voltage: { unit: "V", realistic_range: [150, 600] },
     ground_fault_current: { unit: "A", realistic_range: [1, 50] },

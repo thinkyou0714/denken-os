@@ -29,6 +29,7 @@ export const transformerTurnsRatio = defineTemplate<Params>({
   subject: "機械",
   exam: "denken3",
   difficulty: 1,
+  pastExam: { area: "変圧器", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     primary_voltage: { unit: "V", realistic_range: [100, 6600] },
     secondary_voltage: { unit: "V", realistic_range: [100, 6600] },

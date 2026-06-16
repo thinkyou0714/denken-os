@@ -23,6 +23,7 @@ export const firstOrderControl = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "自動制御理論", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     gain: { unit: "", realistic_range: [1, 10] },
     step_size: { unit: "", realistic_range: [1, 10] },

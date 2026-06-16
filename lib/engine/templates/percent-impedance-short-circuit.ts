@@ -20,6 +20,7 @@ export const percentImpedanceShortCircuit = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "短絡・％インピーダンス", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     rated_current: { unit: "A", realistic_range: [100, 500] },
     percent_impedance: { unit: "%", realistic_range: [4, 25] },

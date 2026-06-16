@@ -27,6 +27,7 @@ export const percentImpedanceConversion = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "短絡・％インピーダンス", frequency: "high", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     percent_impedance: { unit: "%", realistic_range: [4, 12.5] },
     base_capacity: { unit: "MVA", realistic_range: [5, 100] },

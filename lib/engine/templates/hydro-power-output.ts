@@ -21,6 +21,7 @@ export const hydroPowerOutput = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "発電（水力・汽力）", frequency: "high", years: [2007, 2011, 2016, 2021] },
   paramSpecs: {
     flow: { unit: "m3/s", realistic_range: [5, 50] },
     head: { unit: "m", realistic_range: [20, 200] },

@@ -21,6 +21,7 @@ export const lossFactor = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "配電・需要損失", frequency: "mid", years: [2011, 2017, 2023] },
   paramSpecs: {
     load_factor: { realistic_range: [0.1, 1] },
   },

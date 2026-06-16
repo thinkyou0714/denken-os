@@ -21,10 +21,11 @@ export const dcMotorEmf = defineTemplate<Params>({
   subject: "機械",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "直流機", frequency: "high", years: [2008, 2012, 2016, 2020, 2024] },
   paramSpecs: {
     terminal_voltage: { unit: "V", realistic_range: [100, 220] },
     armature_current: { unit: "A", realistic_range: [10, 50] },
-    armature_resistance: { unit: "ohm", realistic_range: [0.1, 1] },
+    armature_resistance: { unit: "Ω", realistic_range: [0.1, 1] },
   },
   paramOrder: ["terminal_voltage", "armature_current", "armature_resistance"],
   draw(rng) {
@@ -45,7 +46,7 @@ export const dcMotorEmf = defineTemplate<Params>({
       params: {
         terminal_voltage: { value: V, unit: "V", realistic_range: [100, 220] },
         armature_current: { value: Ia, unit: "A", realistic_range: [10, 50] },
-        armature_resistance: { value: Ra, unit: "ohm", realistic_range: [0.1, 1] },
+        armature_resistance: { value: Ra, unit: "Ω", realistic_range: [0.1, 1] },
       },
       answerValue: E,
       answerUnit: "V",

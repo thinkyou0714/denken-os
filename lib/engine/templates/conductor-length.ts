@@ -31,6 +31,7 @@ export const conductorLength = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "送電・線路計算", frequency: "mid", years: [2011, 2016, 2021] },
   paramSpecs: {
     span: { unit: "m", realistic_range: [50, 500] },
     sag: { unit: "m", realistic_range: [0.5, 12] },

@@ -20,6 +20,7 @@ export const combinedCycleEfficiency = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "火力発電", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     eta_gas: { unit: "%", realistic_range: [20, 45] },
     eta_steam: { unit: "%", realistic_range: [15, 45] },

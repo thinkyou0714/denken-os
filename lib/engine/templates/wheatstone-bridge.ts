@@ -22,10 +22,11 @@ export const wheatstoneBridge = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "電気計測", frequency: "mid", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
-    r1: { unit: "ohm", realistic_range: [10, 200] },
-    r2: { unit: "ohm", realistic_range: [100, 500] },
-    r3: { unit: "ohm", realistic_range: [100, 600] },
+    r1: { unit: "Ω", realistic_range: [10, 200] },
+    r2: { unit: "Ω", realistic_range: [100, 500] },
+    r3: { unit: "Ω", realistic_range: [100, 600] },
   },
   paramOrder: ["r1", "r2", "r3"],
   draw(rng) {
@@ -43,12 +44,12 @@ export const wheatstoneBridge = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        r1: { value: R1, unit: "ohm", realistic_range: [10, 200] },
-        r2: { value: R2, unit: "ohm", realistic_range: [100, 500] },
-        r3: { value: R3, unit: "ohm", realistic_range: [100, 600] },
+        r1: { value: R1, unit: "Ω", realistic_range: [10, 200] },
+        r2: { value: R2, unit: "Ω", realistic_range: [100, 500] },
+        r3: { value: R3, unit: "Ω", realistic_range: [100, 600] },
       },
       answerValue: Rx,
-      answerUnit: "ohm",
+      answerUnit: "Ω",
       answerText,
       facts: { R1, R2, R3, Rx },
       defaultStatement:

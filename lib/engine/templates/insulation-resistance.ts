@@ -30,6 +30,7 @@ export const insulationResistance = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "絶縁・絶縁耐力", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

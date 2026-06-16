@@ -43,6 +43,7 @@ export const voltageClassification = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 1,
+  pastExam: { area: "電気設備技術基準", frequency: "high", years: [2008, 2013, 2018, 2023] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

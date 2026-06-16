@@ -20,6 +20,7 @@ export const inductorEnergy = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "電磁気", frequency: "mid", years: [2010, 2015, 2020, 2025] },
   paramSpecs: {
     inductance: { unit: "H", realistic_range: [0.1, 2] },
     current: { unit: "A", realistic_range: [1, 20] },

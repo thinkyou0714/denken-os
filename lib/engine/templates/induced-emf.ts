@@ -21,6 +21,7 @@ export const inducedEmf = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電磁気", frequency: "high", years: [2007, 2012, 2018, 2023] },
   paramSpecs: {
     flux_density: { unit: "T", realistic_range: [0.1, 2.5] },
     length: { unit: "m", realistic_range: [0.1, 2] },

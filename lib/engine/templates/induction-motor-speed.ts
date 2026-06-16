@@ -20,6 +20,7 @@ export const inductionMotorSpeed = defineTemplate<Params>({
   subject: "機械",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "誘導機", frequency: "high", years: [2007, 2011, 2015, 2019, 2023] },
   paramSpecs: {
     frequency: { unit: "Hz", realistic_range: [50, 60] },
     poles: { unit: "pole", realistic_range: [2, 12] },

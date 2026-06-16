@@ -18,6 +18,7 @@ export const guyWireSafety = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "風圧荷重・機械的強度", frequency: "mid", years: [2011, 2016, 2021] },
   paramSpecs: {
     max_tension: { unit: "kN", realistic_range: [1, 50] },
   },

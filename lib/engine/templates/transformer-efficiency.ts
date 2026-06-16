@@ -30,6 +30,7 @@ export const transformerEfficiency = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "変圧器", frequency: "high", years: [2006, 2010, 2014, 2018, 2022] },
   paramSpecs: {
     output_power: { unit: "kW", realistic_range: [300, 2000] },
     iron_loss: { unit: "kW", realistic_range: [1, 60] },
