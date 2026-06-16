@@ -23,6 +23,7 @@ export const rcTimeConstant = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 1,
+  pastExam: { area: "単相交流回路", frequency: "high", years: [2007, 2011, 2016, 2021] },
   paramSpecs: {
     resistance: { unit: "kohm", realistic_range: [1, 100] },
     capacitance: { unit: "uF", realistic_range: [1, 100] },

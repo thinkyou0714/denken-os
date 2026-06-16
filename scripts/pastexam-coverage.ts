@@ -11,11 +11,7 @@
  *   npm run coverage:pastexam -- --json
  *   npm run coverage:pastexam -- --help
  */
-import {
-  computePastExamCoverage,
-  formatCoverageReport,
-  toTemplateLike,
-} from "../lib/audit/pastexam-coverage.js";
+import { computePastExamCoverage, formatCoverageReport, toTemplateLike } from "../lib/audit/pastexam-coverage.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import { printHelp } from "./shared.js";
 

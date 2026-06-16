@@ -5,6 +5,32 @@
 
 ## [Unreleased]
 
+### Added — 過去問20年分の出題傾向を織り込む（理論・法規を重点拡充, PR #37）
+
+過去問を**逐語コピーせず**、頻出テーマのテンプレ網羅＋出題傾向メタで「20年分を織り込む」。
+本プロジェクトの核心（**正解はコードで算出**・著作権回避・テーマ網羅 = `docs/automation/04 §1`）と整合。
+
+- **出題傾向メタ基盤** (`lib/engine/templates/types.ts`, `helpers.ts`):
+  `PastExamCoverage` 型（`area` 出題分野 / `frequency` 頻度 high|mid|low / `years` 代表年度 / `note`）を新設。
+  `defineTemplate` が `pastExam` を受理（`exactOptionalPropertyTypes` 対応）。
+  **逐語の問題文・数値は一切含めない**（型コメントに明記）。
+- **20年分の正準出題分野マップ** (`lib/engine/templates/pastexam-areas.ts`):
+  理論8分野・法規8分野を正準化（`PASTEXAM_WINDOW=[2006,2025]`）。網羅度計測の基準データ。
+- **カバレッジ計測** (`lib/audit/pastexam-coverage.ts` ＋ `scripts/pastexam-coverage.ts` ＋ `npm run coverage:pastexam`):
+  各テンプレの `pastExam.area` を正準分類と突き合わせ、科目別の分野カバレッジ・未カバー頻出分野・
+  メタ付与率を算出（`--json` 対応）。傾向分析・改題出題の重み付けの元データ。
+- **新規テンプレ10種**（すべて正解をコード算出・`isCleanAnswer` ゲート・検算対応）:
+  - 理論7: オペアンプ非反転増幅 / ソレノイド内の磁界 / 平行導体間の電磁力 / 相互インダクタンスと合成 /
+    Δ-Y変換 / 点電荷の電位 / テブナンの定理
+  - 法規3: 漏えい電流 / 電線の実長 / 支持物の根入れ深さ
+  テンプレ総数 88→98、自動生成問題 788→879問（理論259・法規99）。
+- **既存32テンプレ（理論19・法規13）に出題傾向メタをバックフィル**。
+  結果: 理論7/8分野・法規7/8分野をカバー（理論/法規ともメタ付与100%）。
+  法規「電気計算（B問題）」は電力/機械と科目横断のため法規単独では未カバーとして**正直に可視化**（⚠表示）。
+- **テスト** (`tests/engine/pastexam-{theory,regulation}-templates.test.ts`, `pastexam-coverage.test.ts`):
+  各式の代表値検証・全分岐・受入条件（理論/法規の全テンプレにメタ・未知area無し・理論の頻出未カバー無し）。
+  全テスト 994→1057件・カバレッジ閾値（stmts86/branch76/funcs96/lines93）グリーン。
+
 ### Changed — コードベース大規模リファクタ 第2ラウンド（Wave 1〜3: RG1〜RG8, PR #36, 2026-06-15）
 
 本リファクタは**外部挙動を変えない**（生成問題データ・保存データ形式・UI文言・採点結果は不変）。

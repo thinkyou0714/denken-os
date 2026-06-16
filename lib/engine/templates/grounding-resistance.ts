@@ -19,6 +19,7 @@ export const groundingResistance = defineTemplate<Params>({
   subject: "法規",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "接地工事", frequency: "high", years: [2007, 2011, 2015, 2019, 2023] },
   paramSpecs: { ground_fault_current: { unit: "A", realistic_range: [1, 30] } },
   paramOrder: ["ground_fault_current"],
   draw(rng) {

@@ -32,6 +32,7 @@ export const indoorVoltageLimit = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "低圧・引込・屋内配線", frequency: "high", years: [2007, 2013, 2019, 2024] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

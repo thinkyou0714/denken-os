@@ -18,6 +18,7 @@ export const multiplierResistor = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "電気計測", frequency: "high", years: [2009, 2013, 2017, 2022] },
   paramSpecs: {
     internal_resistance: { unit: "ohm", realistic_range: [10, 2000] },
     multiplier: { unit: "", realistic_range: [2, 100] },

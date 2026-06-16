@@ -23,6 +23,7 @@ export const allowableTension = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電線路・架空配電", frequency: "mid", years: [2010, 2015, 2020, 2025] },
   paramSpecs: {
     tensile_strength: { unit: "N", realistic_range: [2000, 20000] },
     safety_factor: { unit: "", realistic_range: [2, 5] },

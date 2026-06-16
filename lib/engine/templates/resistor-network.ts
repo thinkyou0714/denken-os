@@ -32,6 +32,7 @@ export const resistorNetwork = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 1,
+  pastExam: { area: "直流回路", frequency: "high", years: [2006, 2010, 2014, 2018, 2022] },
   paramSpecs: {
     R1: { unit: "ohm", realistic_range: [1, 100] },
     R2: { unit: "ohm", realistic_range: [1, 100] },

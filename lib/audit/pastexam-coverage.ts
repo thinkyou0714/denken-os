@@ -9,9 +9,9 @@
  */
 import type { Subject } from "../engine/schema.js";
 import {
+  areasForSubject,
   type CanonicalArea,
   PASTEXAM_WINDOW,
-  areasForSubject,
   trackedSubjects,
 } from "../engine/templates/pastexam-areas.js";
 import type { PastExamCoverage, Template } from "../engine/templates/types.js";

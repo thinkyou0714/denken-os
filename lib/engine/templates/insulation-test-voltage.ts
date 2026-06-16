@@ -17,6 +17,7 @@ export const insulationTestVoltage = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "絶縁・絶縁耐力", frequency: "high", years: [2008, 2012, 2016, 2020, 2024] },
   paramSpecs: {
     nominal_voltage: { unit: "V", realistic_range: [3300, 6600] },
   },

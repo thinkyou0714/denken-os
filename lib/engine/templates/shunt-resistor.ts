@@ -18,6 +18,7 @@ export const shuntResistor = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "電気計測", frequency: "high", years: [2006, 2010, 2015, 2020] },
   paramSpecs: {
     internal_resistance: { unit: "ohm", realistic_range: [1, 100] },
     multiplier: { unit: "", realistic_range: [2, 100] },

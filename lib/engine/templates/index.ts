@@ -8,10 +8,12 @@ import { buckChopper } from "./buck-chopper.js";
 import { capacitorEnergy } from "./capacitor-energy.js";
 import { capacityFactor } from "./capacity-factor.js";
 import { combinedCycleEfficiency } from "./combined-cycle-efficiency.js";
+import { conductorActualLength } from "./conductor-actual-length.js";
 import { conductorLength } from "./conductor-length.js";
 import { coulombForce } from "./coulomb-force.js";
 import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
+import { deltaWyeResistance } from "./delta-wye-resistance.js";
 import { demandFactor } from "./demand-factor.js";
 import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
@@ -34,6 +36,7 @@ import { inductorEnergy } from "./inductor-energy.js";
 import { insulationResistance } from "./insulation-resistance.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { inverseSquareIlluminance } from "./inverse-square-illuminance.js";
+import { leakageCurrent } from "./leakage-current.js";
 import { lightingDesign } from "./lighting-design.js";
 import { loadFactor } from "./load-factor.js";
 import { lossFactor } from "./loss-factor.js";
@@ -42,12 +45,16 @@ import { maxDemandComposite } from "./max-demand-composite.js";
 import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
+import { mutualInductance } from "./mutual-inductance.js";
 import { opAmpNoninvertingGain } from "./op-amp-noninverting-gain.js";
 import { overheadClearance } from "./overhead-clearance.js";
+import { parallelConductorForce } from "./parallel-conductor-force.js";
 import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
 import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
 import { percentImpedanceShortCircuit } from "./percent-impedance-short-circuit.js";
+import { pointChargePotential } from "./point-charge-potential.js";
+import { poleEmbedmentDepth } from "./pole-embedment-depth.js";
 import { powerFactorCorrection } from "./power-factor-correction.js";
 import { pqVoltageDrop } from "./pq-voltage-drop.js";
 import { pumpMotorInput } from "./pump-motor-input.js";
@@ -67,6 +74,7 @@ import { shortCircuitOhm } from "./short-circuit-ohm.js";
 import { shortCircuitRatio } from "./short-circuit-ratio.js";
 import { shuntResistor } from "./shunt-resistor.js";
 import { singlePhaseVoltageDrop } from "./single-phase-voltage-drop.js";
+import { solenoidMagneticField } from "./solenoid-magnetic-field.js";
 import { specificSpeed } from "./specific-speed.js";
 import { speedRegulation } from "./speed-regulation.js";
 import { steadyStateError } from "./steady-state-error.js";
@@ -74,6 +82,7 @@ import { supplyVoltageLimit } from "./supply-voltage-limit.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
 import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
+import { theveninLoadCurrent } from "./thevenin-load-current.js";
 import { threePhasePower } from "./three-phase-power.js";
 import { transformerEfficiency } from "./transformer-efficiency.js";
 import { transformerExcitingCurrent } from "./transformer-exciting-current.js";
@@ -112,6 +121,12 @@ const templates: Template[] = [
   seriesRlCurrent,
   magneticCircuit,
   opAmpNoninvertingGain,
+  solenoidMagneticField,
+  parallelConductorForce,
+  mutualInductance,
+  deltaWyeResistance,
+  pointChargePotential,
+  theveninLoadCurrent,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -165,6 +180,9 @@ const templates: Template[] = [
   guyWireSafety,
   indoorVoltageLimit,
   supplyVoltageLimit,
+  leakageCurrent,
+  conductorActualLength,
+  poleEmbedmentDepth,
   // 機械制御（二次）
   transformerVoltageRegulation,
   synchronousGeneratorOutput,
@@ -209,10 +227,12 @@ export {
   capacitorEnergy,
   capacityFactor,
   combinedCycleEfficiency,
+  conductorActualLength,
   conductorLength,
   coulombForce,
   dcGeneratorEmf,
   dcMotorEmf,
+  deltaWyeResistance,
   demandFactor,
   diversityFactor,
   electricEnergy,
@@ -234,6 +254,7 @@ export {
   insulationResistance,
   insulationTestVoltage,
   inverseSquareIlluminance,
+  leakageCurrent,
   lightingDesign,
   loadFactor,
   lossFactor,
@@ -242,12 +263,16 @@ export {
   maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
+  mutualInductance,
   opAmpNoninvertingGain,
   overheadClearance,
+  parallelConductorForce,
   parallelPercentImpedance,
   parallelPlateField,
   percentImpedanceConversion,
   percentImpedanceShortCircuit,
+  pointChargePotential,
+  poleEmbedmentDepth,
   powerFactorCorrection,
   pqVoltageDrop,
   pumpMotorInput,
@@ -268,6 +293,7 @@ export {
   shortCircuitRatio,
   shuntResistor,
   singlePhaseVoltageDrop,
+  solenoidMagneticField,
   specificSpeed,
   speedRegulation,
   steadyStateError,
@@ -275,6 +301,7 @@ export {
   synchronousGeneratorOutput,
   thermalEfficiency,
   thermalFuelConsumption,
+  theveninLoadCurrent,
   threePhasePower,
   transformerEfficiency,
   transformerExcitingCurrent,

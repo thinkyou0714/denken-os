@@ -24,6 +24,7 @@ export const maxPowerTransfer = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "直流回路", frequency: "mid", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     emf: { unit: "V", realistic_range: [10, 200] },
     internal_resistance: { unit: "ohm", realistic_range: [1, 20] },

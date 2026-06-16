@@ -27,6 +27,7 @@ export const capacitorEnergy = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "静電気", frequency: "high", years: [2008, 2012, 2016, 2020, 2024] },
   paramSpecs: {
     capacitance: { unit: "uF", realistic_range: [1, 100] },
     voltage: { unit: "V", realistic_range: [10, 200] },

@@ -10170,6 +10170,3695 @@
     "status": "draft"
   },
   {
+    "id": "G-42A188FE",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 40,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 2,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=40kΩ、反転入力と接地の間の抵抗 Ri=2kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "21",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+40/2=1+20",
+      "Av=21倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-B8B8521E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 4,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 2,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=4kΩ、反転入力と接地の間の抵抗 Ri=2kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "3",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+4/2=1+2",
+      "Av=3倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2B0DE10E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 90,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 1,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=90kΩ、反転入力と接地の間の抵抗 Ri=1kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "91",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+90/1=1+90",
+      "Av=91倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-FF4B4C24",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 9,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 5,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=9kΩ、反転入力と接地の間の抵抗 Ri=5kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "2.8",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+9/5=1+1.8",
+      "Av=2.8倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-AB730207",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 19,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 10,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=19kΩ、反転入力と接地の間の抵抗 Ri=10kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "2.9",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+19/10=1+1.9",
+      "Av=2.9倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F431097A",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 18,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 10,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=18kΩ、反転入力と接地の間の抵抗 Ri=10kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "2.8",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+18/10=1+1.8",
+      "Av=2.8倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-07701154",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 19,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 2,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=19kΩ、反転入力と接地の間の抵抗 Ri=2kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "10.5",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+19/2=1+9.5",
+      "Av=10.5倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2A0DDF7B",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 90,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 2,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=90kΩ、反転入力と接地の間の抵抗 Ri=2kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "46",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+90/2=1+45",
+      "Av=46倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-BF14337D",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 20,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 5,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=20kΩ、反転入力と接地の間の抵抗 Ri=5kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "5",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+20/5=1+4",
+      "Av=5倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F2271661",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "オペアンプ非反転増幅",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "feedback_resistance": {
+        "value": 4,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      },
+      "ground_resistance": {
+        "value": 10,
+        "unit": "kohm",
+        "realistic_range": [
+          1,
+          100
+        ]
+      }
+    },
+    "statement": "理想オペアンプを用いた非反転増幅回路で、帰還抵抗 Rf=4kΩ、反転入力と接地の間の抵抗 Ri=10kΩ である。電圧利得 Av〔倍〕はいくらか。",
+    "answer": "1.4",
+    "solution": [
+      "非反転増幅の電圧利得は Av=1+Rf/Ri",
+      "Av=1+4/10=1+0.4",
+      "Av=1.4倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-40F3E80D",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 500,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 4,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.25,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=500 回、長さ l=0.25m の十分に長いソレノイドに 電流 I=4A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "8000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=500×4/0.25",
+      "H=8000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-6859586C",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 2000,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 1,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.4,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=2000 回、長さ l=0.4m の十分に長いソレノイドに 電流 I=1A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "5000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=2000×1/0.4",
+      "H=5000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8065F3CA",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 200,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 2,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 1,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=200 回、長さ l=1m の十分に長いソレノイドに 電流 I=2A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "400",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=200×2/1",
+      "H=400A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4EE63860",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 1000,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 1,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 1,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=1000 回、長さ l=1m の十分に長いソレノイドに 電流 I=1A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "1000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=1000×1/1",
+      "H=1000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0CE04583",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 400,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 4,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.4,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=400 回、長さ l=0.4m の十分に長いソレノイドに 電流 I=4A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "4000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=400×4/0.4",
+      "H=4000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2E8317DB",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 200,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 1,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.5,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=200 回、長さ l=0.5m の十分に長いソレノイドに 電流 I=1A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "400",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=200×1/0.5",
+      "H=400A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-98C8028A",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 1000,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 4,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.2,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=1000 回、長さ l=0.2m の十分に長いソレノイドに 電流 I=4A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "20000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=1000×4/0.2",
+      "H=20000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2A54C7DE",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 2000,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 5,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.2,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=2000 回、長さ l=0.2m の十分に長いソレノイドに 電流 I=5A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "50000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=2000×5/0.2",
+      "H=50000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-255A5F85",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 200,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 4,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.4,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=200 回、長さ l=0.4m の十分に長いソレノイドに 電流 I=4A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "2000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=200×4/0.4",
+      "H=2000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-7307A54E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "ソレノイド内の磁界",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "turns": {
+        "value": 1000,
+        "realistic_range": [
+          100,
+          2000
+        ]
+      },
+      "current": {
+        "value": 2,
+        "unit": "A",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "length": {
+        "value": 0.4,
+        "unit": "m",
+        "realistic_range": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "statement": "総巻数 N=1000 回、長さ l=0.4m の十分に長いソレノイドに 電流 I=2A を流したとき、内部の磁界の大きさ H〔A/m〕は?",
+    "answer": "5000",
+    "solution": [
+      "無限長ソレノイド内の磁界 H=nI=(N/l)I",
+      "H=1000×2/0.4",
+      "H=5000A/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C0C24C3F",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 50,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 200,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.2,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.2m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=50A、I2=200A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.01",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×50×200/0.2",
+      "F=0.01N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C61C6FDE",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 100,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 400,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.1,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.1m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=100A、I2=400A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.08",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×100×400/0.1",
+      "F=0.08N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F2B8A936",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 200,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 100,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.1,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.1m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=200A、I2=100A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.04",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×200×100/0.1",
+      "F=0.04N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F30468D6",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 500,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 400,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.5,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.5m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=500A、I2=400A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.08",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×500×400/0.5",
+      "F=0.08N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-E5D369F3",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 200,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 400,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.1,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.1m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=200A、I2=400A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.16",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×200×400/0.1",
+      "F=0.16N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-7B684FCF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 100,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 500,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.1,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.1m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=100A、I2=500A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.1",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×100×500/0.1",
+      "F=0.1N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-B3429FE7",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 300,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 300,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.1,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.1m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=300A、I2=300A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.18",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×300×300/0.1",
+      "F=0.18N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-24C19EEF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 500,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 500,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.5,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.5m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=500A、I2=500A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.1",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×500×500/0.5",
+      "F=0.1N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-CB2218E5",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 400,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 100,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.2,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.2m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=400A、I2=100A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.04",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×400×100/0.2",
+      "F=0.04N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-69D7F1F4",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "平行導体間の電磁力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "current1": {
+        "value": 300,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "current2": {
+        "value": 500,
+        "unit": "A",
+        "realistic_range": [
+          50,
+          500
+        ]
+      },
+      "distance": {
+        "value": 0.2,
+        "unit": "m",
+        "realistic_range": [
+          0.1,
+          1
+        ]
+      }
+    },
+    "statement": "真空中で距離 d=0.2m を隔てて平行に置かれた2本の長い導体に、それぞれ I1=300A、I2=500A の電流を流したとき、導体の単位長あたりに働く力の大きさ〔N/m〕は?",
+    "answer": "0.15",
+    "solution": [
+      "平行導体間に働く力 F/l=μ0·I1·I2/(2πd)=2×10⁻⁷·I1·I2/d",
+      "F=2×10⁻⁷×300×500/0.2",
+      "F=0.15N/m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-BDAF21A7",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 30,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 15,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=30mH と L2=20mH の2つのコイルを、相互インダクタンス M=15mH で差動接続（磁束が打ち消す向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "20",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2−2M（差動接続（磁束が打ち消す向き））",
+      "L=30+20−2×15",
+      "L=20mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-659E862D",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 40,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=20mH と L2=40mH の2つのコイルを、相互インダクタンス M=20mH で和動接続（磁束が加わる向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "100",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2+2M（和動接続（磁束が加わる向き））",
+      "L=20+40+2×20",
+      "L=100mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8A337EBF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=20mH と L2=20mH の2つのコイルを、相互インダクタンス M=10mH で差動接続（磁束が打ち消す向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "20",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2−2M（差動接続（磁束が打ち消す向き））",
+      "L=20+20−2×10",
+      "L=20mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-98A48507",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 40,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=10mH と L2=40mH の2つのコイルを、相互インダクタンス M=10mH で和動接続（磁束が加わる向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "70",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2+2M（和動接続（磁束が加わる向き））",
+      "L=10+40+2×10",
+      "L=70mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2973579E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 40,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 5,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=40mH と L2=10mH の2つのコイルを、相互インダクタンス M=5mH で差動接続（磁束が打ち消す向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "40",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2−2M（差動接続（磁束が打ち消す向き））",
+      "L=40+10−2×5",
+      "L=40mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F1865A7C",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 40,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 5,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=10mH と L2=40mH の2つのコイルを、相互インダクタンス M=5mH で差動接続（磁束が打ち消す向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "40",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2−2M（差動接続（磁束が打ち消す向き））",
+      "L=10+40−2×5",
+      "L=40mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-1343A115",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 30,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 30,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=30mH と L2=30mH の2つのコイルを、相互インダクタンス M=20mH で和動接続（磁束が加わる向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "100",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2+2M（和動接続（磁束が加わる向き））",
+      "L=30+30+2×20",
+      "L=100mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-BA29E43E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 40,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 15,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 1,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=20mH と L2=40mH の2つのコイルを、相互インダクタンス M=15mH で差動接続（磁束が打ち消す向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "30",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2−2M（差動接続（磁束が打ち消す向き））",
+      "L=20+40−2×15",
+      "L=30mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-D6CECABF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 30,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 10,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 15,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=30mH と L2=10mH の2つのコイルを、相互インダクタンス M=15mH で和動接続（磁束が加わる向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "70",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2+2M（和動接続（磁束が加わる向き））",
+      "L=30+10+2×15",
+      "L=70mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-404A3FAF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "相互インダクタンスと合成",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "inductance1": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "inductance2": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          10,
+          40
+        ]
+      },
+      "mutual": {
+        "value": 20,
+        "unit": "mH",
+        "realistic_range": [
+          5,
+          20
+        ]
+      },
+      "connection": {
+        "value": 0,
+        "realistic_range": [
+          0,
+          1
+        ]
+      }
+    },
+    "statement": "自己インダクタンス L1=20mH と L2=20mH の2つのコイルを、相互インダクタンス M=20mH で和動接続（磁束が加わる向き）になるよう直列接続した。合成インダクタンス〔mH〕は?",
+    "answer": "80",
+    "solution": [
+      "直列接続の合成インダクタンス L=L1+L2+2M（和動接続（磁束が加わる向き））",
+      "L=20+20+2×20",
+      "L=80mH"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-507EB79B",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 12,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=12Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "4",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=12/3",
+      "R_Y=4Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-63F25ECA",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 6,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=6Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "2",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=6/3",
+      "R_Y=2Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-56F24A53",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 9,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=9Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "3",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=9/3",
+      "R_Y=3Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-60F25A11",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 3,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=3Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "1",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=3/3",
+      "R_Y=1Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C1862543",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 45,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=45Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "15",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=45/3",
+      "R_Y=15Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-426B19D9",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 90,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=90Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "30",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=90/3",
+      "R_Y=30Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-557EBF7A",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 15,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=15Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "5",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=15/3",
+      "R_Y=5Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4A7EAE29",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 18,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=18Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "6",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=18/3",
+      "R_Y=6Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-BE83E1F3",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 30,
+        "unit": "ohm",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=30Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "10",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=30/3",
+      "R_Y=10Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-6D83FBE8",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 2,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.3,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=2nC から 0.3m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "60",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×2×10⁻⁹/0.3",
+      "V=60V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-A3582ADA",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 10,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 1.5,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=10nC から 1.5m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "60",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×10×10⁻⁹/1.5",
+      "V=60V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-35DC58C1",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 10,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.5,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=10nC から 0.5m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "180",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×10×10⁻⁹/0.5",
+      "V=180V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-37D068C6",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 20,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.3,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=20nC から 0.3m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "600",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×20×10⁻⁹/0.3",
+      "V=600V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-11EFE4FE",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 3,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.6,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=3nC から 0.6m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "45",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×3×10⁻⁹/0.6",
+      "V=45V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-CD91CE53",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 20,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 1.5,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=20nC から 1.5m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "120",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×20×10⁻⁹/1.5",
+      "V=120V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-B2C1EC35",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 5,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.9,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=5nC から 0.9m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "50",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×5×10⁻⁹/0.9",
+      "V=50V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-243DC49A",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 5,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 1.5,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=5nC から 1.5m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "30",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×5×10⁻⁹/1.5",
+      "V=30V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-235A8079",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 1,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.9,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=1nC から 0.9m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "10",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×1×10⁻⁹/0.9",
+      "V=10V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-16EFECDD",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "点電荷の電位",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "charge": {
+        "value": 3,
+        "unit": "nC",
+        "realistic_range": [
+          1,
+          20
+        ]
+      },
+      "distance": {
+        "value": 0.3,
+        "unit": "m",
+        "realistic_range": [
+          0.3,
+          3
+        ]
+      }
+    },
+    "statement": "真空中に置かれた点電荷 Q=3nC から 0.3m 離れた点の電位 V〔V〕は?（クーロン定数 k=9×10⁹N·m²/C²）",
+    "answer": "90",
+    "solution": [
+      "点電荷の電位 V=k·Q/r（k=9×10⁹）",
+      "V=9×10⁹×3×10⁻⁹/0.3",
+      "V=90V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F9ADBA83",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 60,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=60V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=10Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "5",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=60/(2+10)",
+      "I=5A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F68EDFBE",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 120,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 15,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=120V、等価内部抵抗 R0=5Ω であった。この端子に負荷抵抗 RL=15Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "6",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=120/(5+15)",
+      "I=6A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4DE82829",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 10,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 8,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=10V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=8Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "1",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=10/(2+8)",
+      "I=1A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2334E5FF",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 120,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 8,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=120V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=8Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "12",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=120/(2+8)",
+      "I=12A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0A7FE640",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 20,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 6,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=20V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=6Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "2.5",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=20/(2+6)",
+      "I=2.5A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-FDFC0952",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 30,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 5,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 20,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=30V、等価内部抵抗 R0=5Ω であった。この端子に負荷抵抗 RL=20Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "1.2",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=30/(5+20)",
+      "I=1.2A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-81508192",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 60,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 8,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=60V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=8Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "6",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=60/(2+8)",
+      "I=6A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-21C19EC7",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 6,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=100V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=6Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "12.5",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=100/(2+6)",
+      "I=12.5A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-095E9A6B",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 20,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 10,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 6,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=20V、等価内部抵抗 R0=10Ω であった。この端子に負荷抵抗 RL=6Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "1.25",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=20/(10+6)",
+      "I=1.25A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3B96E87B",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "テブナンの定理",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "emf": {
+        "value": 10,
+        "unit": "V",
+        "realistic_range": [
+          10,
+          120
+        ]
+      },
+      "thevenin_resistance": {
+        "value": 2,
+        "unit": "ohm",
+        "realistic_range": [
+          2,
+          10
+        ]
+      },
+      "load_resistance": {
+        "value": 6,
+        "unit": "ohm",
+        "realistic_range": [
+          6,
+          20
+        ]
+      }
+    },
+    "statement": "ある回路をテブナン等価電源で表すと、開放電圧 E0=10V、等価内部抵抗 R0=2Ω であった。この端子に負荷抵抗 RL=6Ω を接続したとき、負荷に流れる電流 I〔A〕は?",
+    "answer": "1.25",
+    "solution": [
+      "テブナンの定理より I=E0/(R0+RL)",
+      "I=10/(2+6)",
+      "I=1.25A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
     "id": "D-0089",
     "exam": "denken3",
     "subject": "電力",
@@ -32698,6 +36387,1052 @@
       "維持すべき電圧: 標準電圧100V→101±6V（95〜107V）/ 200V→202±20V（182〜222V）",
       "本問は「標準電圧100Vの電気を供給する場所での上限値〔V〕」",
       "=107V"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0458A583",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 105,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.5,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=105V、絶縁抵抗 R=0.5MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.21",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=105/(0.5×10⁶)〔A〕を mA に換算（×10³）",
+      "I=105/(0.5×10³)=0.21mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0758AA3C",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.5,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=100V、絶縁抵抗 R=0.5MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.2",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=100/(0.5×10⁶)〔A〕を mA に換算（×10³）",
+      "I=100/(0.5×10³)=0.2mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C1A586F0",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.2,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=200V、絶縁抵抗 R=0.2MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "1",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=200/(0.2×10⁶)〔A〕を mA に換算（×10³）",
+      "I=200/(0.2×10³)=1mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5316DD58",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.1,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=100V、絶縁抵抗 R=0.1MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "1",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=100/(0.1×10⁶)〔A〕を mA に換算（×10³）",
+      "I=100/(0.1×10³)=1mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-355B1CE2",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 210,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 1,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=210V、絶縁抵抗 R=1MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.21",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=210/(1×10⁶)〔A〕を mA に換算（×10³）",
+      "I=210/(1×10³)=0.21mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C7A7CEF9",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 210,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.2,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=210V、絶縁抵抗 R=0.2MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "1.05",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=210/(0.2×10⁶)〔A〕を mA に換算（×10³）",
+      "I=210/(0.2×10³)=1.05mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-DE0AAE74",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 210,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.5,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=210V、絶縁抵抗 R=0.5MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.42",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=210/(0.5×10⁶)〔A〕を mA に換算（×10³）",
+      "I=210/(0.5×10³)=0.42mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5816E537",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 105,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.1,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=105V、絶縁抵抗 R=0.1MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "1.05",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=105/(0.1×10⁶)〔A〕を mA に換算（×10³）",
+      "I=105/(0.1×10³)=1.05mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-E40CF67D",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 200,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.5,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=200V、絶縁抵抗 R=0.5MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.4",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=200/(0.5×10⁶)〔A〕を mA に換算（×10³）",
+      "I=200/(0.5×10³)=0.4mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-1EA8BB91",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "漏えい電流",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "voltage": {
+        "value": 100,
+        "unit": "V",
+        "realistic_range": [
+          100,
+          210
+        ]
+      },
+      "insulation_resistance": {
+        "value": 0.2,
+        "unit": "Mohm",
+        "realistic_range": [
+          0.1,
+          2
+        ]
+      }
+    },
+    "statement": "低圧電路において、対地電圧 V=100V、絶縁抵抗 R=0.2MΩ であるとき、この電路に流れる漏えい電流〔mA〕は?",
+    "answer": "0.5",
+    "solution": [
+      "漏えい電流 I=V/R=V/(R×10⁶)〔A〕（R[MΩ]=R×10⁶Ω）",
+      "I=100/(0.2×10⁶)〔A〕を mA に換算（×10³）",
+      "I=100/(0.2×10³)=0.5mA"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-550CAD15",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 150,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=150m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "150.64",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=150+8×36/(3×150)",
+      "L=150.64m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-CD5CFB9F",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 300,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=300m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "300.08",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=300+8×9/(3×300)",
+      "L=300.08m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-13B3FE29",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 200,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=200m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "200.48",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=200+8×36/(3×200)",
+      "L=200.48m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-E3053DDA",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 120,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=120m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "120.8",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=120+8×36/(3×120)",
+      "L=120.8m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-6EC5C7D4",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 200,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=200m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "200.12",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=200+8×9/(3×200)",
+      "L=200.12m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-342E7E3E",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 300,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=300m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "300.32",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=300+8×36/(3×300)",
+      "L=300.32m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2DBCCAC8",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 150,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=150m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "150.16",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=150+8×9/(3×150)",
+      "L=150.16m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-37CE23A7",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 120,
+        "unit": "m",
+        "realistic_range": [
+          120,
+          300
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          6
+        ]
+      }
+    },
+    "statement": "径間 S=120m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "120.2",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=120+8×9/(3×120)",
+      "L=120.2m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-BFAB9746",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 15,
+        "unit": "m",
+        "realistic_range": [
+          6,
+          15
+        ]
+      }
+    },
+    "statement": "全長 15m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "2.5",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=15/6",
+      "depth=2.5m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4ABB2A9E",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          6,
+          15
+        ]
+      }
+    },
+    "statement": "全長 6m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "1",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=6/6",
+      "depth=1m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-45BB22BF",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 9,
+        "unit": "m",
+        "realistic_range": [
+          6,
+          15
+        ]
+      }
+    },
+    "statement": "全長 9m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "1.5",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=9/6",
+      "depth=1.5m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C2AB9BFF",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 12,
+        "unit": "m",
+        "realistic_range": [
+          6,
+          15
+        ]
+      }
+    },
+    "statement": "全長 12m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "2",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=12/6",
+      "depth=2m"
     ],
     "validation": {
       "solver_checked": true,

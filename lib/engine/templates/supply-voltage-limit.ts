@@ -28,6 +28,7 @@ export const supplyVoltageLimit = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電気事業法・電気工作物", frequency: "high", years: [2008, 2014, 2020, 2025] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

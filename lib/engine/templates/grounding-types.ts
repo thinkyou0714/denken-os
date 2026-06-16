@@ -28,6 +28,7 @@ export const groundingTypes = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "接地工事", frequency: "high", years: [2006, 2010, 2015, 2020] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

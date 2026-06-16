@@ -34,6 +34,7 @@ export const seriesCapacitance = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "静電気", frequency: "mid", years: [2010, 2016, 2022] },
   paramSpecs: {
     cap1: { unit: "μF", realistic_range: [1, 100] },
     cap2: { unit: "μF", realistic_range: [1, 100] },

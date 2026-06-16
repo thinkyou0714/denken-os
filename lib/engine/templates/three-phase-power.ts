@@ -47,6 +47,7 @@ export const threePhasePower = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "三相交流回路", frequency: "high", years: [2007, 2011, 2015, 2019, 2023] },
   paramSpecs: {
     line_voltage: { unit: "V", realistic_range: [100, 6600] },
     R: { unit: "ohm", realistic_range: [1, 50] },

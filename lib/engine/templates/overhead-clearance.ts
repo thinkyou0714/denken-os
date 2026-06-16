@@ -29,6 +29,7 @@ export const overheadClearance = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電線路・架空配電", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: { case_index: { realistic_range: [0, CASES.length - 1] } },
   paramOrder: ["case_index"],
   draw(rng) {

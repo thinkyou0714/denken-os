@@ -18,6 +18,7 @@ export const windLoad = defineTemplate<Params>({
   subject: "法規",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "風圧荷重・機械的強度", frequency: "mid", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     wind_pressure: { unit: "Pa", realistic_range: [400, 3000] },
     area: { unit: "m2", realistic_range: [0.5, 5] },

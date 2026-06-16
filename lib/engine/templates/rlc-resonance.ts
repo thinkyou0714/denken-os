@@ -35,6 +35,7 @@ export const rlcResonance = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "単相交流回路", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     inductance: { unit: "mH", realistic_range: [1, 500] },
     capacitance: { unit: "μF", realistic_range: [1, 200] },

@@ -18,6 +18,7 @@ export const parallelPlateField = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "静電気", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     voltage: { unit: "V", realistic_range: [100, 6000] },
     gap: { unit: "mm", realistic_range: [1, 10] },

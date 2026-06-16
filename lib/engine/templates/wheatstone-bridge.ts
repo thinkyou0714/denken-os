@@ -22,6 +22,7 @@ export const wheatstoneBridge = defineTemplate<Params>({
   subject: "理論",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "電気計測", frequency: "mid", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     r1: { unit: "ohm", realistic_range: [10, 200] },
     r2: { unit: "ohm", realistic_range: [100, 500] },

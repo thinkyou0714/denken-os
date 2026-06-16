@@ -21,6 +21,7 @@ export const magneticCircuit = defineTemplate<Params>({
   subject: "理論",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "電磁気", frequency: "high", years: [2008, 2013, 2019, 2024] },
   paramSpecs: {
     turns: { realistic_range: [50, 2000] },
     current: { unit: "A", realistic_range: [0.1, 10] },
