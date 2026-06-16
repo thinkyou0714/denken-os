@@ -18,6 +18,7 @@ export const parallelPercentImpedance = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "短絡・故障計算", frequency: "mid", years: [2008, 2014, 2020] },
   paramSpecs: {
     percent_z_a: { unit: "%", realistic_range: [4, 20] },
     percent_z_b: { unit: "%", realistic_range: [4, 20] },

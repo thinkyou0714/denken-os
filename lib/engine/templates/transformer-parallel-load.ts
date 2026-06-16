@@ -21,6 +21,7 @@ export const transformerParallelLoad = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "変圧器", frequency: "mid", years: [2009, 2014, 2020, 2025] },
   paramSpecs: {
     percent_z_a: { unit: "%", realistic_range: [1, 10] },
     percent_z_b: { unit: "%", realistic_range: [1, 10] },

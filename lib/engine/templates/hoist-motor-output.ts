@@ -21,6 +21,7 @@ export const hoistMotorOutput = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "電動機応用", frequency: "mid", years: [2007, 2013, 2019, 2024] },
   paramSpecs: {
     load: { unit: "N", realistic_range: [1000, 9800] },
     speed: { unit: "m/s", realistic_range: [0.5, 5] },

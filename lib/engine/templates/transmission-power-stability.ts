@@ -26,6 +26,7 @@ export const transmissionPowerStability = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "送電・系統安定度", frequency: "high", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     sending_voltage: { unit: "kV", realistic_range: [60, 110] },
     receiving_voltage: { unit: "kV", realistic_range: [60, 110] },

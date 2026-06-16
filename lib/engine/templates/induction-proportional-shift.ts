@@ -23,6 +23,7 @@ export const inductionProportionalShift = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "回転機の制御", frequency: "high", years: [2008, 2013, 2019, 2024] },
   paramSpecs: {
     secondary_resistance: { unit: "ohm", realistic_range: [0.1, 1] },
     slip_before: { unit: "", realistic_range: [0.02, 0.08] },

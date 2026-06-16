@@ -20,6 +20,7 @@ export const diversityFactor = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "配電・需要計算", frequency: "mid", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     sum_of_maxima: { unit: "kW", realistic_range: [100, 300] },
     composite_max: { unit: "kW", realistic_range: [80, 200] },

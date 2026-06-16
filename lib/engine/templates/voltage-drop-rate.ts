@@ -29,6 +29,7 @@ export const voltageDropRate = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "送電・線路計算", frequency: "mid", years: [2010, 2015, 2020, 2025] },
   paramSpecs: {
     sending_voltage: { unit: "V", realistic_range: [100, 6600] },
     receiving_voltage: { unit: "V", realistic_range: [100, 6600] },

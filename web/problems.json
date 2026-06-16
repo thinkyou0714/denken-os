@@ -23127,6 +23127,496 @@
     "status": "draft"
   },
   {
+    "id": "G-7F4A2C71",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1200,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 780,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1200MWh、これを用いた発電で得られた電力量が780MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "65",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=780/1200×100",
+      "η=65%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-045C933E",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 2000,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 1400,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が2000MWh、これを用いた発電で得られた電力量が1400MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "70",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=1400/2000×100",
+      "η=70%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0F8C9199",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1000,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 650,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1000MWh、これを用いた発電で得られた電力量が650MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "65",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=650/1000×100",
+      "η=65%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-CF67B8BA",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1000,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 750,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1000MWh、これを用いた発電で得られた電力量が750MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "75",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=750/1000×100",
+      "η=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3998869F",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1500,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 1050,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1500MWh、これを用いた発電で得られた電力量が1050MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "70",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=1050/1500×100",
+      "η=70%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C271672F",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1200,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 900,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1200MWh、これを用いた発電で得られた電力量が900MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "75",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=900/1200×100",
+      "η=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5C359AD2",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1000,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 800,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1000MWh、これを用いた発電で得られた電力量が800MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "80",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=800/1000×100",
+      "η=80%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4E29E9F3",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1000,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 700,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1000MWh、これを用いた発電で得られた電力量が700MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "70",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=700/1000×100",
+      "η=70%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-00E23940",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1200,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 840,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1200MWh、これを用いた発電で得られた電力量が840MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "70",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=840/1200×100",
+      "η=70%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-50A94D80",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "揚水発電の総合効率",
+    "format": "numeric",
+    "difficulty": 3,
+    "params": {
+      "pumping_energy": {
+        "value": 1500,
+        "unit": "MWh",
+        "realistic_range": [
+          1000,
+          2000
+        ]
+      },
+      "generating_energy": {
+        "value": 1125,
+        "unit": "MWh",
+        "realistic_range": [
+          600,
+          1600
+        ]
+      }
+    },
+    "statement": "ある揚水発電所で、揚水に要した電力量が1500MWh、これを用いた発電で得られた電力量が1125MWh であった。総合効率 η〔%〕はいくらか。",
+    "answer": "75",
+    "solution": [
+      "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
+      "η=1125/1500×100",
+      "η=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
     "id": "D-0168",
     "exam": "denken3",
     "subject": "機械",
@@ -32735,6 +33225,976 @@
       "距離の逆二乗の法則 E=I/r²",
       "=160/16",
       "=10lx"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5B0118B2",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 4,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数4の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "1800",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×60/4",
+      "Ns=1800 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-33E39E1D",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 4,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数50Hz、極数4の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "1500",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×50/4",
+      "Ns=1500 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5F011EFE",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 8,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数8の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "900",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×60/8",
+      "Ns=900 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2DE394AB",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 2,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数50Hz、極数2の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "3000",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×50/2",
+      "Ns=3000 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-52B2256B",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 10,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数10の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "720",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×60/10",
+      "Ns=720 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-DE45380A",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 10,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数50Hz、極数10の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "600",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×50/10",
+      "Ns=600 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5901158C",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 6,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数6の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "1200",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×60/6",
+      "Ns=1200 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-27E38B39",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 8,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数50Hz、極数8の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "750",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×50/8",
+      "Ns=750 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-55010F40",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 60,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 2,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数60Hz、極数2の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "3600",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×60/2",
+      "Ns=3600 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-31E39AF7",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "同期速度",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "frequency": {
+        "value": 50,
+        "unit": "Hz",
+        "realistic_range": [
+          50,
+          60
+        ]
+      },
+      "poles": {
+        "value": 6,
+        "unit": "pole",
+        "realistic_range": [
+          2,
+          12
+        ]
+      }
+    },
+    "statement": "周波数50Hz、極数6の同期機の同期速度 Ns〔min⁻¹〕はいくらか。",
+    "answer": "1000",
+    "solution": [
+      "同期速度 Ns=120·f/p",
+      "Ns=120×50/6",
+      "Ns=1000 min⁻¹"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3D419646",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 30,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.05,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=30kW、すべりが s=0.05 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "1.5",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.05×30",
+      "Pc2=1.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8A98598E",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 15,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.06,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=15kW、すべりが s=0.06 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.9",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.06×15",
+      "Pc2=0.9kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-7461EA94",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 10,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.05,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=10kW、すべりが s=0.05 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.5",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.05×10",
+      "Pc2=0.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F306AB5B",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.04,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=5kW、すべりが s=0.04 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.2",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.04×5",
+      "Pc2=0.2kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0C9F3879",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 20,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.03,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=20kW、すべりが s=0.03 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.6",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.03×20",
+      "Pc2=0.6kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0F9F3D32",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 20,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.06,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=20kW、すべりが s=0.06 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "1.2",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.06×20",
+      "Pc2=1.2kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2C01EA9A",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.1,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=5kW、すべりが s=0.1 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.5",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.1×5",
+      "Pc2=0.5kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F206A9C8",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.05,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=5kW、すべりが s=0.05 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.25",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.05×5",
+      "Pc2=0.25kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F506AE81",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 5,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.06,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=5kW、すべりが s=0.06 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "0.3",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.06×5",
+      "Pc2=0.3kW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3C4194B3",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "topic": "誘導電動機の二次銅損",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "secondary_input": {
+        "value": 30,
+        "unit": "kW",
+        "realistic_range": [
+          5,
+          30
+        ]
+      },
+      "slip": {
+        "value": 0.06,
+        "realistic_range": [
+          0.03,
+          0.1
+        ]
+      }
+    },
+    "statement": "三相誘導電動機の二次入力が P2=30kW、すべりが s=0.06 である。二次銅損 Pc2〔kW〕はいくらか。",
+    "answer": "1.8",
+    "solution": [
+      "二次入力P2・すべりs の電力配分は P2:Pc2:Pm=1:s:(1−s)",
+      "二次銅損 Pc2=s·P2=0.06×30",
+      "Pc2=1.8kW"
     ],
     "validation": {
       "solver_checked": true,

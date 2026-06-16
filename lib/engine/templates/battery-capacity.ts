@@ -21,6 +21,7 @@ export const batteryCapacity = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "電熱・電気化学", frequency: "low", years: [2013, 2019, 2024] },
   paramSpecs: {
     current: { unit: "A", realistic_range: [1, 100] },
     hours: { unit: "h", realistic_range: [0.25, 24] },

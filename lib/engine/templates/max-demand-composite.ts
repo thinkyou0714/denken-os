@@ -23,6 +23,7 @@ export const maxDemandComposite = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "配電・需要損失", frequency: "mid", years: [2009, 2015, 2021] },
   paramSpecs: {
     capacity_a: { unit: "kW", realistic_range: [50, 2000] },
     demand_factor_a: { realistic_range: [0.2, 1] },

@@ -32,6 +32,7 @@ export const powerFactorCorrection = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "力率改善・無効電力", frequency: "high", years: [2006, 2010, 2015, 2019, 2023] },
   paramSpecs: {
     load_power: { unit: "kW", realistic_range: [50, 600] },
     power_factor_before: { unit: "", realistic_range: [0.5, 1] },

@@ -29,6 +29,7 @@ export const transformerExcitingCurrent = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "変圧器", frequency: "mid", years: [2011, 2017, 2023] },
   paramSpecs: {
     voltage: { unit: "V", realistic_range: [100, 600] },
     iron_loss: { unit: "W", realistic_range: [100, 5000] },

@@ -32,6 +32,7 @@ import { inducedEmf } from "./induced-emf.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
 import { inductionProportionalShift } from "./induction-proportional-shift.js";
+import { inductionSecondaryCopperLoss } from "./induction-secondary-copper-loss.js";
 import { inductorEnergy } from "./inductor-energy.js";
 import { insulationResistance } from "./insulation-resistance.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
@@ -58,6 +59,7 @@ import { poleEmbedmentDepth } from "./pole-embedment-depth.js";
 import { powerFactorCorrection } from "./power-factor-correction.js";
 import { pqVoltageDrop } from "./pq-voltage-drop.js";
 import { pumpMotorInput } from "./pump-motor-input.js";
+import { pumpedStorageEfficiency } from "./pumped-storage-efficiency.js";
 import { rcTimeConstant } from "./rc-time-constant.js";
 import { reactivePowerCompensation } from "./reactive-power-compensation.js";
 import { resistanceTemperature } from "./resistance-temperature.js";
@@ -80,6 +82,7 @@ import { speedRegulation } from "./speed-regulation.js";
 import { steadyStateError } from "./steady-state-error.js";
 import { supplyVoltageLimit } from "./supply-voltage-limit.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
+import { synchronousSpeed } from "./synchronous-speed.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
 import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
 import { theveninLoadCurrent } from "./thevenin-load-current.js";
@@ -146,6 +149,7 @@ const templates: Template[] = [
   conductorLength,
   pqVoltageDrop,
   transformerTap,
+  pumpedStorageEfficiency,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -166,6 +170,8 @@ const templates: Template[] = [
   transformerExcitingCurrent,
   rotorAcceleration,
   inverseSquareIlluminance,
+  synchronousSpeed,
+  inductionSecondaryCopperLoss,
   // 法規
   groundingResistance,
   sagTension,
@@ -250,6 +256,7 @@ export {
   inductionMotorSpeed,
   inductionPowerBalance,
   inductionProportionalShift,
+  inductionSecondaryCopperLoss,
   inductorEnergy,
   insulationResistance,
   insulationTestVoltage,
@@ -275,6 +282,7 @@ export {
   poleEmbedmentDepth,
   powerFactorCorrection,
   pqVoltageDrop,
+  pumpedStorageEfficiency,
   pumpMotorInput,
   rcTimeConstant,
   reactivePowerCompensation,
@@ -299,6 +307,7 @@ export {
   steadyStateError,
   supplyVoltageLimit,
   synchronousGeneratorOutput,
+  synchronousSpeed,
   thermalEfficiency,
   thermalFuelConsumption,
   theveninLoadCurrent,

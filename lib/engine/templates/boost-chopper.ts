@@ -18,6 +18,7 @@ export const boostChopper = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "パワーエレクトロニクス", frequency: "high", years: [2010, 2015, 2020, 2025] },
   paramSpecs: {
     input_voltage: { unit: "V", realistic_range: [100, 300] },
     duty_ratio: { unit: "", realistic_range: [0.1, 0.9] },

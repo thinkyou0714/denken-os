@@ -21,6 +21,7 @@ export const dcMotorEmf = defineTemplate<Params>({
   subject: "機械",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "直流機", frequency: "high", years: [2008, 2012, 2016, 2020, 2024] },
   paramSpecs: {
     terminal_voltage: { unit: "V", realistic_range: [100, 220] },
     armature_current: { unit: "A", realistic_range: [10, 50] },

@@ -18,6 +18,7 @@ export const inverseSquareIlluminance = defineTemplate<Params>({
   subject: "機械",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "照明", frequency: "mid", years: [2007, 2014, 2020] },
   paramSpecs: {
     luminous_intensity: { unit: "cd", realistic_range: [50, 5000] },
     distance: { unit: "m", realistic_range: [0.5, 20] },

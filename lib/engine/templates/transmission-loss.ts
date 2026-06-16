@@ -21,6 +21,7 @@ export const transmissionLoss = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "送電・線路計算", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     line_current: { unit: "A", realistic_range: [10, 100] },
     line_resistance: { unit: "ohm", realistic_range: [0.5, 5] },

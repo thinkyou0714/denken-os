@@ -32,6 +32,7 @@ export const thermalFuelConsumption = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 3,
+  pastExam: { area: "火力発電", frequency: "high", years: [2008, 2014, 2019, 2024] },
   paramSpecs: {
     efficiency: { unit: "%", realistic_range: [20, 55] },
     heating_value: { unit: "kJ/kg", realistic_range: [30000, 55000] },

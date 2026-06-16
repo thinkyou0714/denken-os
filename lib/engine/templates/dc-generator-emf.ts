@@ -20,6 +20,7 @@ export const dcGeneratorEmf = defineTemplate<Params>({
   subject: "機械",
   exam: "denken3",
   difficulty: 2,
+  pastExam: { area: "直流機", frequency: "high", years: [2009, 2013, 2017, 2022] },
   paramSpecs: {
     terminal_voltage: { unit: "V", realistic_range: [100, 220] },
     armature_current: { unit: "A", realistic_range: [10, 50] },

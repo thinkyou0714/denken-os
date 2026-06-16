@@ -22,6 +22,7 @@ export const groundFaultSymmetrical = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "短絡・故障計算", frequency: "mid", years: [2010, 2016, 2022] },
   paramSpecs: {
     phase_voltage: { unit: "V", realistic_range: [100, 6350] },
     positive_seq: { unit: "ohm", realistic_range: [1, 20] },

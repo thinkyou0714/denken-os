@@ -31,6 +31,7 @@ export const secondOrderResponse = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "自動制御理論", frequency: "high", years: [2009, 2014, 2020, 2024] },
   paramSpecs: {
     gain: { realistic_range: [0.5, 200] },
     time_constant: { unit: "s", realistic_range: [0.5, 50] },

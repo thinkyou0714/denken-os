@@ -31,6 +31,7 @@ export const specificSpeed = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 4,
+  pastExam: { area: "水力発電", frequency: "high", years: [2007, 2012, 2018, 2023] },
   paramSpecs: {
     head: { unit: "m", realistic_range: [10, 800] },
     power: { unit: "kW", realistic_range: [50, 20000] },

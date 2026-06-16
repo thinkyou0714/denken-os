@@ -26,6 +26,7 @@ export const pqVoltageDrop = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 4,
+  pastExam: { area: "送電・線路計算", frequency: "high", years: [2009, 2014, 2020, 2024] },
   paramSpecs: {
     active_power: { unit: "kW", realistic_range: [500, 20000] },
     reactive_power: { unit: "kvar", realistic_range: [0, 20000] },

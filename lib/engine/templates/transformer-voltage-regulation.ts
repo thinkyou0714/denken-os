@@ -27,6 +27,7 @@ export const transformerVoltageRegulation = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 3,
+  pastExam: { area: "回転機の制御", frequency: "mid", years: [2008, 2013, 2018, 2023] },
   paramSpecs: {
     percent_resistance: { unit: "%", realistic_range: [1, 5] },
     percent_reactance: { unit: "%", realistic_range: [2, 15] },

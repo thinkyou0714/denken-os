@@ -29,6 +29,7 @@ export const synchronousGeneratorOutput = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "回転機の制御", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     phase_voltage: { unit: "V", realistic_range: [100, 500] },
     induced_emf: { unit: "V", realistic_range: [100, 600] },

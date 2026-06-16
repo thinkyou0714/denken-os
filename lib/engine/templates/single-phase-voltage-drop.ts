@@ -34,6 +34,7 @@ export const singlePhaseVoltageDrop = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "送電・線路計算", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     line_current: { unit: "A", realistic_range: [5, 50] },
     resistance: { unit: "ohm", realistic_range: [0.1, 1] },

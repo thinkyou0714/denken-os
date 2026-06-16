@@ -21,6 +21,7 @@ export const loadFactor = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "配電・需要計算", frequency: "high", years: [2006, 2010, 2015, 2020, 2024] },
   paramSpecs: {
     max_demand: { unit: "kW", realistic_range: [100, 1000] },
     avg_demand: { unit: "kW", realistic_range: [40, 1000] },

@@ -17,6 +17,7 @@ export const steadyStateError = defineTemplate<Params>({
   subject: "機械制御",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "自動制御理論", frequency: "high", years: [2007, 2012, 2018, 2023] },
   paramSpecs: {
     gain: { unit: "", realistic_range: [1, 50] },
   },

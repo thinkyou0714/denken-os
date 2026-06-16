@@ -3,7 +3,7 @@
  *
  * 1) 純関数（computeSubjectCoverage / computePastExamCoverage / toTemplateLike /
  *    formatCoverageReport）を手組みフィクスチャで全分岐検証。
- * 2) 実レジストリに対する受入条件（理論・法規の全テンプレに pastExam メタが付与され、
+ * 2) 実レジストリに対する受入条件（全6科目の全テンプレに pastExam メタが付与され、
  *    area がすべて正準分類に一致＝未知area無し、理論の頻出分野に未カバー無し）を検証。
  */
 import { describe, expect, it } from "vitest";
@@ -15,8 +15,10 @@ import {
   type TemplateLike,
   toTemplateLike,
 } from "../../lib/audit/pastexam-coverage.js";
+import type { Subject } from "../../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../../lib/engine/templates/index.js";
 import { areasForSubject, PASTEXAM_WINDOW, trackedSubjects } from "../../lib/engine/templates/pastexam-areas.js";
+import type { Template } from "../../lib/engine/templates/types.js";
 
 describe("pastexam-areas（正準分類）", () => {
   it("PASTEXAM_WINDOW は直近20年 [2006, 2025]", () => {
@@ -24,17 +26,19 @@ describe("pastexam-areas（正準分類）", () => {
     expect(PASTEXAM_WINDOW[1] - PASTEXAM_WINDOW[0]).toBe(19); // 20年分（両端含む）
   });
 
-  it("trackedSubjects は理論・法規を含む", () => {
+  it("trackedSubjects は全6科目を含む", () => {
     const tracked = trackedSubjects();
-    expect(tracked).toContain("理論");
-    expect(tracked).toContain("法規");
+    for (const s of ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] as Subject[]) {
+      expect(tracked, `${s} がタクソノミに登録されている`).toContain(s);
+    }
   });
 
-  it("areasForSubject: 登録科目は分野を返し、未登録科目は空配列", () => {
-    expect(areasForSubject("理論").length).toBeGreaterThan(0);
-    expect(areasForSubject("法規").length).toBeGreaterThan(0);
-    // 機械はタクソノミ未登録 → 空（カバレッジ計算の対象外）
-    expect(areasForSubject("機械")).toEqual([]);
+  it("areasForSubject: 全6科目が分野を返し、enum外（未登録）は空配列", () => {
+    for (const s of ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] as Subject[]) {
+      expect(areasForSubject(s).length, `${s} は分野を持つ`).toBeGreaterThan(0);
+    }
+    // タクソノミ未登録のキー（防御的フォールバック）→ 空配列
+    expect(areasForSubject("未登録科目" as unknown as Subject)).toEqual([]);
   });
 });
 
@@ -76,10 +80,19 @@ describe("computeSubjectCoverage（手組みフィクスチャ・全分岐）", 
     expect(cov.totalAreas).toBe(areasForSubject("理論").length);
   });
 
-  it("メタ無し科目（タクソノミ未登録）は totalAreas=0・ratio=1", () => {
-    const machineCov = computeSubjectCoverage("機械", [{ topic: "x", subject: "機械" }]);
-    expect(machineCov.totalAreas).toBe(0);
-    expect(machineCov.coverageRatio).toBe(1);
+  it("タクソノミ未登録の科目は totalAreas=0・ratio=1（防御的フォールバック）", () => {
+    // 全6科目が登録済みのため、enum外の値で未登録分岐を検証する。
+    const subject = "未登録科目" as unknown as Subject;
+    const cov0 = computeSubjectCoverage(subject, [{ topic: "x", subject }]);
+    expect(cov0.totalAreas).toBe(0);
+    expect(cov0.coverageRatio).toBe(1);
+  });
+
+  it("登録科目でテンプレ0件なら coveredAreas=0・ratio=0", () => {
+    const empty = computeSubjectCoverage("機械", []);
+    expect(empty.totalAreas).toBe(areasForSubject("機械").length);
+    expect(empty.coveredAreas).toBe(0);
+    expect(empty.coverageRatio).toBe(0);
   });
 });
 
@@ -93,16 +106,23 @@ describe("computePastExamCoverage / toTemplateLike", () => {
   });
 
   it("toTemplateLike: pastExam の有無でキーを出し分ける", () => {
-    // 理論テンプレ（バックフィル済み）→ pastExam 有り
+    // 実テンプレ（バックフィル済み）→ pastExam 有り
     const theory = getTemplate("最大電力伝送");
     expect(theory).toBeDefined();
     const withMeta = toTemplateLike(theory!);
     expect(withMeta.pastExam).toBeDefined();
 
-    // 機械テンプレ（メタ未付与）→ pastExam キー自体を持たない
-    const machine = getTemplate("需要率") ?? getTemplate("誘導電動機の回転速度");
-    expect(machine).toBeDefined();
-    const noMeta = toTemplateLike(machine!);
+    // メタ未付与テンプレ（全レジストリは付与済みのため擬似 Template で検証）→ キー自体を持たない
+    const bare = {
+      topic: "メタ無し",
+      subject: "機械",
+      exam: "denken3",
+      difficulty: 1,
+      paramSpecs: {},
+      generate: () => null,
+      generateFrom: () => null,
+    } as unknown as Template;
+    const noMeta = toTemplateLike(bare);
     expect("pastExam" in noMeta).toBe(false);
   });
 });
@@ -168,47 +188,53 @@ describe("formatCoverageReport（全分岐を合成レポートで網羅）", ()
   });
 });
 
-describe("受入条件: 実レジストリ（理論・法規の20年分メタ整備）", () => {
-  it("理論・法規の全テンプレに pastExam メタが付与されている", () => {
-    const missing: string[] = [];
-    for (const topic of listTopics()) {
-      const t = getTemplate(topic);
-      if (!t) continue;
-      if ((t.subject === "理論" || t.subject === "法規") && !t.pastExam) missing.push(topic);
-    }
-    expect(missing, `メタ未付与: ${missing.join(", ")}`).toEqual([]);
-  });
-
-  it("理論・法規の pastExam.area はすべて正準分類に一致する（未知area無し）", () => {
-    const report = computePastExamCoverage(
+describe("受入条件: 実レジストリ（全6科目の20年分メタ整備）", () => {
+  const registryReport = (): PastExamCoverageReport =>
+    computePastExamCoverage(
       listTopics()
         .map((topic) => getTemplate(topic))
         .filter((t): t is NonNullable<typeof t> => t !== undefined)
         .map(toTemplateLike),
     );
+
+  it("全テンプレ（全6科目）に pastExam メタが付与されている", () => {
+    const missing: string[] = [];
+    for (const topic of listTopics()) {
+      const t = getTemplate(topic);
+      if (!t) continue;
+      if (!t.pastExam) missing.push(`${t.subject}:${topic}`);
+    }
+    expect(missing, `メタ未付与: ${missing.join(", ")}`).toEqual([]);
+  });
+
+  it("全科目の pastExam.area はすべて正準分類に一致する（未知area無し）", () => {
+    const report = registryReport();
     for (const s of report.subjects) {
       expect(s.unknownAreaTopics, `${s.subject} に未知area: ${s.unknownAreaTopics.join(", ")}`).toEqual([]);
     }
   });
 
   it("理論は頻出(high)分野に未カバーが無い", () => {
-    const report = computePastExamCoverage(
-      listTopics()
-        .map((topic) => getTemplate(topic))
-        .filter((t): t is NonNullable<typeof t> => t !== undefined)
-        .map(toTemplateLike),
-    );
-    const theory = report.subjects.find((s) => s.subject === "理論");
+    const theory = registryReport().subjects.find((s) => s.subject === "理論");
     expect(theory?.uncoveredHighFrequency, "理論の未カバー頻出分野").toEqual([]);
   });
 
-  it("メタ付与テンプレ数は新規10種＋バックフィル分（>=32）", () => {
-    const report = computePastExamCoverage(
-      listTopics()
-        .map((topic) => getTemplate(topic))
-        .filter((t): t is NonNullable<typeof t> => t !== undefined)
-        .map(toTemplateLike),
-    );
-    expect(report.templatesWithMeta).toBeGreaterThanOrEqual(32);
+  it("メタ付与は全登録テンプレ（>=90・付与率100%）に及ぶ", () => {
+    const report = registryReport();
+    expect(report.templatesWithMeta).toBeGreaterThanOrEqual(90);
+    expect(report.templatesWithMeta).toBe(report.totalTemplates);
+  });
+
+  it("pastExam.years はすべて20年窓 [2006,2025] 内の整数（逐語索引でなく代表年の回帰ガード）", () => {
+    const [from, to] = PASTEXAM_WINDOW;
+    const offending: string[] = [];
+    for (const topic of listTopics()) {
+      const years = getTemplate(topic)?.pastExam?.years;
+      if (!years) continue;
+      for (const y of years) {
+        if (!Number.isInteger(y) || y < from || y > to) offending.push(`${topic}:${y}`);
+      }
+    }
+    expect(offending, `窓外/非整数の年度: ${offending.join(", ")}`).toEqual([]);
   });
 });

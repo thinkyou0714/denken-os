@@ -20,6 +20,7 @@ export const capacityFactor = defineTemplate<Params>({
   subject: "電力",
   exam: "denken2_primary",
   difficulty: 2,
+  pastExam: { area: "配電・需要計算", frequency: "mid", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     rated_output: { unit: "kW", realistic_range: [50, 10000] },
     energy: { unit: "kWh", realistic_range: [1000, 5000000] },

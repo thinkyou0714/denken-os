@@ -29,6 +29,7 @@ export const reactivePowerCompensation = defineTemplate<Params>({
   subject: "電力管理",
   exam: "denken2_secondary",
   difficulty: 4,
+  pastExam: { area: "変電・調相", frequency: "mid", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     load_power: { unit: "kW", realistic_range: [500, 3000] },
     power_factor_before: { unit: "", realistic_range: [0.5, 1] },
