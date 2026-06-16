@@ -1,6 +1,7 @@
 /**
- * pastexam-theory-templates.test.ts — 過去問傾向バックフィルで新規追加した
- * 理論6テンプレ（index 未登録・直接 import）の閉形式検算とプロパティ検証。
+ * pastexam-theory-templates.test.ts — 過去問傾向拡充で新規追加した
+ * 理論6テンプレ（index 登録済み・ここでは直接 import で検証）の閉形式検算とプロパティ検証。
+ * 相互インダクタンスは和動/差動の2ケースを検算するため、代表値検算は計7ケース。
  *
  * 各テンプレについて:
  *   - generateFrom(代表入力) の answerText / answerUnit が固定値どおり
