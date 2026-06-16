@@ -74,12 +74,41 @@ export interface GenerationResult {
   physicallyValid: boolean;
 }
 
+/**
+ * 過去問の出題傾向メタ（docs/automation/04-pastexam-ingest）。
+ *
+ * 設計意図: 「過去問20年分を織り込む」を **逐語引用なし** で実現するためのメタデータ。
+ * 公表問題（電気技術者試験センター）の出題分野・頻度の傾向を各テンプレートに紐づけ、
+ * 「どの分野が20年間でどれだけ問われ、いまテンプレでカバーできているか」を
+ * `pastexam-coverage` で定量化する。傾向分析・改題出題の重み付けの元データになる。
+ *
+ * 重要（著作権＝docs/automation/04 §1）:
+ *  - 問題文・数値の **逐語コピーは一切含めない**（逐語引用は source.type で別管理する）。
+ *  - `area` は `pastexam-areas.ts` の正準分類（canonical area 名）と一致させる。
+ *  - `years` は公表問題の出題傾向に基づく **推定の代表年度** であり、特定問題の逐語索引ではない。
+ */
+export interface PastExamCoverage {
+  /** 出題分野（`pastexam-areas.ts` の canonical area 名と一致させる）。例: "静電気" / "直流回路"。 */
+  area: string;
+  /** 20年スパンでの出題頻度の区分（high=ほぼ毎年 / mid=数年おき / low=稀）。 */
+  frequency: "high" | "mid" | "low";
+  /**
+   * 代表的に出題された年度（西暦・推定）。傾向の可視化に使う任意フィールド。
+   * 逐語引用の索引ではない（出典必須の引用は `source` で管理する）。
+   */
+  years?: number[];
+  /** 出題のされ方の特徴など、傾向に関する注記（任意）。 */
+  note?: string;
+}
+
 export interface Template {
   topic: string;
   subject: Subject;
   exam: Exam;
   difficulty: number;
   paramSpecs: Record<string, ParamSpec>;
+  /** 過去問の出題傾向メタ（任意）。20年分のカバレッジ可視化・傾向分析に使う。 */
+  pastExam?: PastExamCoverage;
   /**
    * rng(0..1) で係数を振り、コードで正解を算出する。
    * 「答えが綺麗にならない」「物理的に不成立」な draw は null を返す（呼び出し側で振り直し）。

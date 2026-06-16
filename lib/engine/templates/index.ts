@@ -42,6 +42,7 @@ import { maxDemandComposite } from "./max-demand-composite.js";
 import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
+import { opAmpNoninvertingGain } from "./op-amp-noninverting-gain.js";
 import { overheadClearance } from "./overhead-clearance.js";
 import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
@@ -110,6 +111,7 @@ const templates: Template[] = [
   resistanceTemperature,
   seriesRlCurrent,
   magneticCircuit,
+  opAmpNoninvertingGain,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -240,6 +242,7 @@ export {
   maxEfficiencyLoad,
   maxPowerTransfer,
   multiplierResistor,
+  opAmpNoninvertingGain,
   overheadClearance,
   parallelPercentImpedance,
   parallelPlateField,
