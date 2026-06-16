@@ -20,7 +20,7 @@ export const shuntResistor = defineTemplate<Params>({
   difficulty: 2,
   pastExam: { area: "電気計測", frequency: "high", years: [2006, 2010, 2015, 2020] },
   paramSpecs: {
-    internal_resistance: { unit: "ohm", realistic_range: [1, 100] },
+    internal_resistance: { unit: "Ω", realistic_range: [1, 100] },
     multiplier: { unit: "", realistic_range: [2, 100] },
   },
   paramOrder: ["internal_resistance", "multiplier"],
@@ -38,11 +38,11 @@ export const shuntResistor = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        internal_resistance: { value: r, unit: "ohm", realistic_range: [1, 100] },
+        internal_resistance: { value: r, unit: "Ω", realistic_range: [1, 100] },
         multiplier: { value: m, unit: "", realistic_range: [2, 100] },
       },
       answerValue: Rs,
-      answerUnit: "ohm",
+      answerUnit: "Ω",
       answerText,
       facts: { r, m, Rs },
       defaultStatement: `内部抵抗 r=${r}Ω の電流計の測定範囲を ${m} 倍にしたい。並列に接続する分流器の抵抗 R_s〔Ω〕は?`,

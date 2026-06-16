@@ -24,7 +24,7 @@ export const transmissionLoss = defineTemplate<Params>({
   pastExam: { area: "送電・線路計算", frequency: "high", years: [2006, 2011, 2016, 2021] },
   paramSpecs: {
     line_current: { unit: "A", realistic_range: [10, 100] },
-    line_resistance: { unit: "ohm", realistic_range: [0.5, 5] },
+    line_resistance: { unit: "Ω", realistic_range: [0.5, 5] },
   },
   paramOrder: ["line_current", "line_resistance"],
   draw(rng) {
@@ -44,7 +44,7 @@ export const transmissionLoss = defineTemplate<Params>({
       format: "numeric",
       params: {
         line_current: { value: I, unit: "A", realistic_range: [10, 100] },
-        line_resistance: { value: R, unit: "ohm", realistic_range: [0.5, 5] },
+        line_resistance: { value: R, unit: "Ω", realistic_range: [0.5, 5] },
       },
       answerValue: lossKW,
       answerUnit: "kW",

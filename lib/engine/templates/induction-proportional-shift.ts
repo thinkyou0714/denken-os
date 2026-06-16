@@ -25,7 +25,7 @@ export const inductionProportionalShift = defineTemplate<Params>({
   difficulty: 4,
   pastExam: { area: "回転機の制御", frequency: "high", years: [2008, 2013, 2019, 2024] },
   paramSpecs: {
-    secondary_resistance: { unit: "ohm", realistic_range: [0.1, 1] },
+    secondary_resistance: { unit: "Ω", realistic_range: [0.1, 1] },
     slip_before: { unit: "", realistic_range: [0.02, 0.08] },
     slip_after: { unit: "", realistic_range: [0.1, 0.2] },
   },
@@ -45,12 +45,12 @@ export const inductionProportionalShift = defineTemplate<Params>({
     return {
       format: "descriptive",
       params: {
-        secondary_resistance: { value: r2, unit: "ohm", realistic_range: [0.1, 1] },
+        secondary_resistance: { value: r2, unit: "Ω", realistic_range: [0.1, 1] },
         slip_before: { value: s1, unit: "", realistic_range: [0.02, 0.08] },
         slip_after: { value: s2, unit: "", realistic_range: [0.1, 0.2] },
       },
       answerValue: R,
-      answerUnit: "ohm",
+      answerUnit: "Ω",
       answerText,
       facts: { r2, s1, s2, R },
       defaultStatement:

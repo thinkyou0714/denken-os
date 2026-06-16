@@ -25,8 +25,8 @@ export const groundFaultSymmetrical = defineTemplate<Params>({
   pastExam: { area: "短絡・故障計算", frequency: "mid", years: [2010, 2016, 2022] },
   paramSpecs: {
     phase_voltage: { unit: "V", realistic_range: [100, 6350] },
-    positive_seq: { unit: "ohm", realistic_range: [1, 20] },
-    zero_seq: { unit: "ohm", realistic_range: [1, 20] },
+    positive_seq: { unit: "Ω", realistic_range: [1, 20] },
+    zero_seq: { unit: "Ω", realistic_range: [1, 20] },
   },
   paramOrder: ["phase_voltage", "positive_seq", "zero_seq"],
   draw(rng) {
@@ -46,8 +46,8 @@ export const groundFaultSymmetrical = defineTemplate<Params>({
       format: "descriptive",
       params: {
         phase_voltage: { value: E, unit: "V", realistic_range: [100, 6350] },
-        positive_seq: { value: Z1, unit: "ohm", realistic_range: [1, 20] },
-        zero_seq: { value: Z0, unit: "ohm", realistic_range: [1, 20] },
+        positive_seq: { value: Z1, unit: "Ω", realistic_range: [1, 20] },
+        zero_seq: { value: Z0, unit: "Ω", realistic_range: [1, 20] },
       },
       answerValue: Ig,
       answerUnit: "A",

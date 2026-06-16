@@ -30,7 +30,7 @@ export const pumpedStorageEfficiency = defineTemplate<Params>({
   },
   paramSpecs: {
     pumping_energy: { unit: "MWh", realistic_range: [1000, 2000] },
-    generating_energy: { unit: "MWh", realistic_range: [600, 1600] },
+    generating_energy: { unit: "MWh", realistic_range: [650, 1600] },
   },
   paramOrder: ["pumping_energy", "generating_energy"],
   draw(rng) {
@@ -47,7 +47,7 @@ export const pumpedStorageEfficiency = defineTemplate<Params>({
       format: "numeric",
       params: {
         pumping_energy: { value: wp, unit: "MWh", realistic_range: [1000, 2000] },
-        generating_energy: { value: wg, unit: "MWh", realistic_range: [600, 1600] },
+        generating_energy: { value: wg, unit: "MWh", realistic_range: [650, 1600] },
       },
       answerValue: eta,
       answerUnit: "%",

@@ -11,7 +11,7 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const DELTA_SET: ReadonlyArray<number> = [3, 6, 9, 12, 15, 18, 30, 45, 90]; // 〔Ω〕
+const DELTA_SET: ReadonlyArray<number> = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 36, 45, 60, 75, 90]; // 〔Ω〕
 
 type Params = {
   delta_resistance: number;
@@ -29,7 +29,7 @@ export const deltaWyeResistance = defineTemplate<Params>({
     note: "平衡三相のΔ→Y等価変換。各相 R_Y=R_Δ/3",
   },
   paramSpecs: {
-    delta_resistance: { unit: "ohm", realistic_range: [3, 90] },
+    delta_resistance: { unit: "Ω", realistic_range: [3, 90] },
   },
   paramOrder: ["delta_resistance"],
   draw(rng) {
@@ -45,10 +45,10 @@ export const deltaWyeResistance = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        delta_resistance: { value: deltaR, unit: "ohm", realistic_range: [3, 90] },
+        delta_resistance: { value: deltaR, unit: "Ω", realistic_range: [3, 90] },
       },
       answerValue: wyeR,
-      answerUnit: "ohm",
+      answerUnit: "Ω",
       answerText,
       facts: { deltaR, wyeR },
       defaultStatement:

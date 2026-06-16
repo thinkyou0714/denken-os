@@ -33,7 +33,7 @@ export const synchronousGeneratorOutput = defineTemplate<Params>({
   paramSpecs: {
     phase_voltage: { unit: "V", realistic_range: [100, 500] },
     induced_emf: { unit: "V", realistic_range: [100, 600] },
-    synchronous_reactance: { unit: "ohm", realistic_range: [1, 30] },
+    synchronous_reactance: { unit: "Ω", realistic_range: [1, 30] },
     load_angle: { unit: "deg", realistic_range: [0, 90] },
   },
   paramOrder: ["phase_voltage", "induced_emf", "synchronous_reactance", "load_angle"],
@@ -59,7 +59,7 @@ export const synchronousGeneratorOutput = defineTemplate<Params>({
       params: {
         phase_voltage: { value: V, unit: "V", realistic_range: [100, 500] },
         induced_emf: { value: E, unit: "V", realistic_range: [100, 600] },
-        synchronous_reactance: { value: Xs, unit: "ohm", realistic_range: [1, 30] },
+        synchronous_reactance: { value: Xs, unit: "Ω", realistic_range: [1, 30] },
         load_angle: { value: deg, unit: "deg", realistic_range: [0, 90] },
       },
       answerValue: pKW,

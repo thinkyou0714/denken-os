@@ -11,7 +11,7 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const POLE_SET: ReadonlyArray<number> = [6, 9, 12, 15]; // 〔m〕
+const POLE_SET: ReadonlyArray<number> = [3, 6, 9, 12, 15]; // 〔m〕
 
 type Params = {
   pole_length: number;
@@ -29,7 +29,7 @@ export const poleEmbedmentDepth = defineTemplate<Params>({
     note: "電技解釈59条：全長15m以下の支持物の根入れは全長×1/6以上（簡略化）",
   },
   paramSpecs: {
-    pole_length: { unit: "m", realistic_range: [6, 15] },
+    pole_length: { unit: "m", realistic_range: [3, 15] },
   },
   paramOrder: ["pole_length"],
   draw(rng) {
@@ -45,7 +45,7 @@ export const poleEmbedmentDepth = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        pole_length: { value: poleLength, unit: "m", realistic_range: [6, 15] },
+        pole_length: { value: poleLength, unit: "m", realistic_range: [3, 15] },
       },
       answerValue: depth,
       answerUnit: "m",

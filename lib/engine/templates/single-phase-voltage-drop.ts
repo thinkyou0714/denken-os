@@ -37,8 +37,8 @@ export const singlePhaseVoltageDrop = defineTemplate<Params>({
   pastExam: { area: "送電・線路計算", frequency: "high", years: [2007, 2012, 2017, 2022] },
   paramSpecs: {
     line_current: { unit: "A", realistic_range: [5, 50] },
-    resistance: { unit: "ohm", realistic_range: [0.1, 1] },
-    reactance: { unit: "ohm", realistic_range: [0, 1] },
+    resistance: { unit: "Ω", realistic_range: [0.1, 1] },
+    reactance: { unit: "Ω", realistic_range: [0, 1] },
     power_factor: { unit: "", realistic_range: [0.5, 1] },
   },
   paramOrder: ["line_current", "resistance", "reactance", "power_factor"],
@@ -62,8 +62,8 @@ export const singlePhaseVoltageDrop = defineTemplate<Params>({
       format: "numeric",
       params: {
         line_current: { value: I, unit: "A", realistic_range: [5, 50] },
-        resistance: { value: R, unit: "ohm", realistic_range: [0.1, 1] },
-        reactance: { value: X, unit: "ohm", realistic_range: [0, 1] },
+        resistance: { value: R, unit: "Ω", realistic_range: [0.1, 1] },
+        reactance: { value: X, unit: "Ω", realistic_range: [0, 1] },
         power_factor: { value: cos, unit: "", realistic_range: [0.5, 1] },
       },
       answerValue: v,

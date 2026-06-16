@@ -11,8 +11,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const SPAN_SET: ReadonlyArray<number> = [120, 150, 200, 300]; // 〔m〕
-const DIP_SET: ReadonlyArray<number> = [3, 6]; // 〔m〕
+const SPAN_SET: ReadonlyArray<number> = [100, 120, 150, 200, 240, 300, 400]; // 〔m〕
+const DIP_SET: ReadonlyArray<number> = [3, 6, 9]; // 〔m〕
 
 type Params = {
   span: number;
@@ -31,8 +31,8 @@ export const conductorActualLength = defineTemplate<Params>({
     note: "径間S・たるみDからの電線実長 L≈S+8D²/(3S)",
   },
   paramSpecs: {
-    span: { unit: "m", realistic_range: [120, 300] },
-    dip: { unit: "m", realistic_range: [3, 6] },
+    span: { unit: "m", realistic_range: [100, 400] },
+    dip: { unit: "m", realistic_range: [3, 9] },
   },
   paramOrder: ["span", "dip"],
   draw(rng) {
@@ -49,8 +49,8 @@ export const conductorActualLength = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        span: { value: span, unit: "m", realistic_range: [120, 300] },
-        dip: { value: dip, unit: "m", realistic_range: [3, 6] },
+        span: { value: span, unit: "m", realistic_range: [100, 400] },
+        dip: { value: dip, unit: "m", realistic_range: [3, 9] },
       },
       answerValue: l,
       answerUnit: "m",

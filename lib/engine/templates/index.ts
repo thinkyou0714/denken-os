@@ -47,6 +47,7 @@ import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
 import { mutualInductance } from "./mutual-inductance.js";
+import { nuclearPowerOutput } from "./nuclear-power-output.js";
 import { opAmpNoninvertingGain } from "./op-amp-noninverting-gain.js";
 import { overheadClearance } from "./overhead-clearance.js";
 import { parallelConductorForce } from "./parallel-conductor-force.js";
@@ -93,6 +94,7 @@ import { transformerParallelLoad } from "./transformer-parallel-load.js";
 import { transformerTap } from "./transformer-tap.js";
 import { transformerTurnsRatio } from "./transformer-turns-ratio.js";
 import { transformerVoltageRegulation } from "./transformer-voltage-regulation.js";
+import { transistorCurrentGain } from "./transistor-current-gain.js";
 import { transmissionEfficiency } from "./transmission-efficiency.js";
 import { transmissionLoss } from "./transmission-loss.js";
 import { transmissionPowerStability } from "./transmission-power-stability.js";
@@ -130,6 +132,7 @@ const templates: Template[] = [
   deltaWyeResistance,
   pointChargePotential,
   theveninLoadCurrent,
+  transistorCurrentGain,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -150,6 +153,7 @@ const templates: Template[] = [
   pqVoltageDrop,
   transformerTap,
   pumpedStorageEfficiency,
+  nuclearPowerOutput,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -271,6 +275,7 @@ export {
   maxPowerTransfer,
   multiplierResistor,
   mutualInductance,
+  nuclearPowerOutput,
   opAmpNoninvertingGain,
   overheadClearance,
   parallelConductorForce,
@@ -318,6 +323,7 @@ export {
   transformerTap,
   transformerTurnsRatio,
   transformerVoltageRegulation,
+  transistorCurrentGain,
   transmissionEfficiency,
   transmissionLoss,
   transmissionPowerStability,

@@ -17,7 +17,7 @@
       },
       "R": {
         "value": 3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -25,7 +25,7 @@
       },
       "X": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -85,7 +85,7 @@
       },
       "R": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -93,7 +93,7 @@
       },
       "X": {
         "value": 16,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -153,7 +153,7 @@
       },
       "R": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -161,7 +161,7 @@
       },
       "X": {
         "value": 16,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -221,7 +221,7 @@
       },
       "R": {
         "value": 3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -229,7 +229,7 @@
       },
       "X": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -289,7 +289,7 @@
       },
       "R": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -297,7 +297,7 @@
       },
       "X": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -357,7 +357,7 @@
       },
       "R": {
         "value": 16,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -365,7 +365,7 @@
       },
       "X": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -425,7 +425,7 @@
       },
       "R": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -433,7 +433,7 @@
       },
       "X": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -493,7 +493,7 @@
       },
       "R": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -501,7 +501,7 @@
       },
       "X": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -561,7 +561,7 @@
       },
       "R": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -569,7 +569,7 @@
       },
       "X": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -629,7 +629,7 @@
       },
       "R": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -637,7 +637,7 @@
       },
       "X": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           50
@@ -689,7 +689,7 @@
     "params": {
       "R1": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -697,7 +697,7 @@
       },
       "R2": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -705,7 +705,7 @@
       },
       "R3": {
         "value": 60,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -754,7 +754,7 @@
     "params": {
       "R1": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -762,7 +762,7 @@
       },
       "R2": {
         "value": 40,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -770,7 +770,7 @@
       },
       "R3": {
         "value": 60,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -819,7 +819,7 @@
     "params": {
       "R1": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -827,7 +827,7 @@
       },
       "R2": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -835,7 +835,7 @@
       },
       "R3": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -884,7 +884,7 @@
     "params": {
       "R1": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -892,7 +892,7 @@
       },
       "R2": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -900,7 +900,7 @@
       },
       "R3": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -949,7 +949,7 @@
     "params": {
       "R1": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -957,7 +957,7 @@
       },
       "R2": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -965,7 +965,7 @@
       },
       "R3": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1014,7 +1014,7 @@
     "params": {
       "R1": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1022,7 +1022,7 @@
       },
       "R2": {
         "value": 60,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1030,7 +1030,7 @@
       },
       "R3": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1079,7 +1079,7 @@
     "params": {
       "R1": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1087,7 +1087,7 @@
       },
       "R2": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1095,7 +1095,7 @@
       },
       "R3": {
         "value": 30,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1144,7 +1144,7 @@
     "params": {
       "R1": {
         "value": 15,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1152,7 +1152,7 @@
       },
       "R2": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1160,7 +1160,7 @@
       },
       "R3": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1209,7 +1209,7 @@
     "params": {
       "R1": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1217,7 +1217,7 @@
       },
       "R2": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1225,7 +1225,7 @@
       },
       "R3": {
         "value": 12,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1274,7 +1274,7 @@
     "params": {
       "R1": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1282,7 +1282,7 @@
       },
       "R2": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1290,7 +1290,7 @@
       },
       "R3": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -1837,7 +1837,7 @@
       },
       "internal_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -1888,7 +1888,7 @@
       },
       "internal_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -1939,7 +1939,7 @@
       },
       "internal_resistance": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -1990,7 +1990,7 @@
       },
       "internal_resistance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2041,7 +2041,7 @@
       },
       "internal_resistance": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2092,7 +2092,7 @@
       },
       "internal_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2143,7 +2143,7 @@
       },
       "internal_resistance": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2194,7 +2194,7 @@
       },
       "internal_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2245,7 +2245,7 @@
       },
       "internal_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2296,7 +2296,7 @@
       },
       "internal_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -2839,7 +2839,7 @@
     "params": {
       "r1": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -2847,7 +2847,7 @@
       },
       "r2": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -2855,7 +2855,7 @@
       },
       "r3": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -2897,7 +2897,7 @@
     "params": {
       "r1": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -2905,7 +2905,7 @@
       },
       "r2": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -2913,7 +2913,7 @@
       },
       "r3": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -2955,7 +2955,7 @@
     "params": {
       "r1": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -2963,7 +2963,7 @@
       },
       "r2": {
         "value": 150,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -2971,7 +2971,7 @@
       },
       "r3": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3013,7 +3013,7 @@
     "params": {
       "r1": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3021,7 +3021,7 @@
       },
       "r2": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3029,7 +3029,7 @@
       },
       "r3": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3071,7 +3071,7 @@
     "params": {
       "r1": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3079,7 +3079,7 @@
       },
       "r2": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3087,7 +3087,7 @@
       },
       "r3": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3129,7 +3129,7 @@
     "params": {
       "r1": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3137,7 +3137,7 @@
       },
       "r2": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3145,7 +3145,7 @@
       },
       "r3": {
         "value": 400,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3187,7 +3187,7 @@
     "params": {
       "r1": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3195,7 +3195,7 @@
       },
       "r2": {
         "value": 300,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3203,7 +3203,7 @@
       },
       "r3": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3245,7 +3245,7 @@
     "params": {
       "r1": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3253,7 +3253,7 @@
       },
       "r2": {
         "value": 500,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3261,7 +3261,7 @@
       },
       "r3": {
         "value": 300,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3303,7 +3303,7 @@
     "params": {
       "r1": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3311,7 +3311,7 @@
       },
       "r2": {
         "value": 150,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3319,7 +3319,7 @@
       },
       "r3": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3361,7 +3361,7 @@
     "params": {
       "r1": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           200
@@ -3369,7 +3369,7 @@
       },
       "r2": {
         "value": 500,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           500
@@ -3377,7 +3377,7 @@
       },
       "r3": {
         "value": 200,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           100,
           600
@@ -3419,7 +3419,7 @@
     "params": {
       "internal_resistance": {
         "value": 45,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3468,7 +3468,7 @@
     "params": {
       "internal_resistance": {
         "value": 90,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3517,7 +3517,7 @@
     "params": {
       "internal_resistance": {
         "value": 18,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3566,7 +3566,7 @@
     "params": {
       "internal_resistance": {
         "value": 99,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3615,7 +3615,7 @@
     "params": {
       "internal_resistance": {
         "value": 45,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3664,7 +3664,7 @@
     "params": {
       "internal_resistance": {
         "value": 99,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3713,7 +3713,7 @@
     "params": {
       "internal_resistance": {
         "value": 9,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3762,7 +3762,7 @@
     "params": {
       "internal_resistance": {
         "value": 18,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3811,7 +3811,7 @@
     "params": {
       "internal_resistance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3860,7 +3860,7 @@
     "params": {
       "internal_resistance": {
         "value": 90,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           100
@@ -3909,7 +3909,7 @@
     "params": {
       "internal_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -3958,7 +3958,7 @@
     "params": {
       "internal_resistance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4007,7 +4007,7 @@
     "params": {
       "internal_resistance": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4056,7 +4056,7 @@
     "params": {
       "internal_resistance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4105,7 +4105,7 @@
     "params": {
       "internal_resistance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4154,7 +4154,7 @@
     "params": {
       "internal_resistance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4203,7 +4203,7 @@
     "params": {
       "internal_resistance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4252,7 +4252,7 @@
     "params": {
       "internal_resistance": {
         "value": 2000,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4301,7 +4301,7 @@
     "params": {
       "internal_resistance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -4350,7 +4350,7 @@
     "params": {
       "internal_resistance": {
         "value": 1000,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           10,
           2000
@@ -12430,7 +12430,7 @@
     "status": "draft"
   },
   {
-    "id": "G-507EB79B",
+    "id": "G-4A7EAE29",
     "exam": "denken2_primary",
     "subject": "理論",
     "topic": "Δ-Y変換",
@@ -12438,20 +12438,20 @@
     "difficulty": 2,
     "params": {
       "delta_resistance": {
-        "value": 12,
-        "unit": "ohm",
+        "value": 18,
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
         ]
       }
     },
-    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=12Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
-    "answer": "4",
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=18Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "6",
     "solution": [
       "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
-      "R_Y=12/3",
-      "R_Y=4Ω"
+      "R_Y=18/3",
+      "R_Y=6Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -12480,7 +12480,7 @@
     "params": {
       "delta_resistance": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
@@ -12512,7 +12512,7 @@
     "status": "draft"
   },
   {
-    "id": "G-56F24A53",
+    "id": "G-557EBF7A",
     "exam": "denken2_primary",
     "subject": "理論",
     "topic": "Δ-Y変換",
@@ -12520,20 +12520,20 @@
     "difficulty": 2,
     "params": {
       "delta_resistance": {
-        "value": 9,
-        "unit": "ohm",
+        "value": 15,
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
         ]
       }
     },
-    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=9Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
-    "answer": "3",
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=15Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "5",
     "solution": [
       "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
-      "R_Y=9/3",
-      "R_Y=3Ω"
+      "R_Y=15/3",
+      "R_Y=5Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -12562,7 +12562,7 @@
     "params": {
       "delta_resistance": {
         "value": 3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
@@ -12603,7 +12603,7 @@
     "params": {
       "delta_resistance": {
         "value": 45,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
@@ -12644,7 +12644,7 @@
     "params": {
       "delta_resistance": {
         "value": 90,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
@@ -12676,7 +12676,7 @@
     "status": "draft"
   },
   {
-    "id": "G-557EBF7A",
+    "id": "G-56F24A53",
     "exam": "denken2_primary",
     "subject": "理論",
     "topic": "Δ-Y変換",
@@ -12684,20 +12684,20 @@
     "difficulty": 2,
     "params": {
       "delta_resistance": {
-        "value": 15,
-        "unit": "ohm",
+        "value": 9,
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
         ]
       }
     },
-    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=15Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
-    "answer": "5",
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=9Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "3",
     "solution": [
       "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
-      "R_Y=15/3",
-      "R_Y=5Ω"
+      "R_Y=9/3",
+      "R_Y=3Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -12717,7 +12717,7 @@
     "status": "draft"
   },
   {
-    "id": "G-4A7EAE29",
+    "id": "G-508B838E",
     "exam": "denken2_primary",
     "subject": "理論",
     "topic": "Δ-Y変換",
@@ -12725,20 +12725,20 @@
     "difficulty": 2,
     "params": {
       "delta_resistance": {
-        "value": 18,
-        "unit": "ohm",
+        "value": 60,
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
         ]
       }
     },
-    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=18Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
-    "answer": "6",
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=60Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "20",
     "solution": [
       "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
-      "R_Y=18/3",
-      "R_Y=6Ω"
+      "R_Y=60/3",
+      "R_Y=20Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -12758,7 +12758,7 @@
     "status": "draft"
   },
   {
-    "id": "G-BE83E1F3",
+    "id": "G-507EB79B",
     "exam": "denken2_primary",
     "subject": "理論",
     "topic": "Δ-Y変換",
@@ -12766,20 +12766,61 @@
     "difficulty": 2,
     "params": {
       "delta_resistance": {
-        "value": 30,
-        "unit": "ohm",
+        "value": 12,
+        "unit": "Ω",
         "realistic_range": [
           3,
           90
         ]
       }
     },
-    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=30Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
-    "answer": "10",
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=12Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "4",
     "solution": [
       "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
-      "R_Y=30/3",
-      "R_Y=10Ω"
+      "R_Y=12/3",
+      "R_Y=4Ω"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-5981045D",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "Δ-Y変換",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "delta_resistance": {
+        "value": 21,
+        "unit": "Ω",
+        "realistic_range": [
+          3,
+          90
+        ]
+      }
+    },
+    "statement": "各辺の抵抗が等しい平衡 Δ（三角）結線（各辺 R_Δ=21Ω）を、等価な Y（星形）結線に変換したとき、Y結線の各相抵抗 R_Y〔Ω〕は?",
+    "answer": "7",
+    "solution": [
+      "平衡 Δ→Y 変換は各相 R_Y=R_Δ/3",
+      "R_Y=21/3",
+      "R_Y=7Ω"
     ],
     "validation": {
       "solver_checked": true,
@@ -13306,7 +13347,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13314,7 +13355,7 @@
       },
       "load_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13363,7 +13404,7 @@
       },
       "thevenin_resistance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13371,7 +13412,7 @@
       },
       "load_resistance": {
         "value": 15,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13420,7 +13461,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13428,7 +13469,7 @@
       },
       "load_resistance": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13477,7 +13518,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13485,7 +13526,7 @@
       },
       "load_resistance": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13534,7 +13575,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13542,7 +13583,7 @@
       },
       "load_resistance": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13591,7 +13632,7 @@
       },
       "thevenin_resistance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13599,7 +13640,7 @@
       },
       "load_resistance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13648,7 +13689,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13656,7 +13697,7 @@
       },
       "load_resistance": {
         "value": 8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13705,7 +13746,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13713,7 +13754,7 @@
       },
       "load_resistance": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13762,7 +13803,7 @@
       },
       "thevenin_resistance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13770,7 +13811,7 @@
       },
       "load_resistance": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13819,7 +13860,7 @@
       },
       "thevenin_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           10
@@ -13827,7 +13868,7 @@
       },
       "load_resistance": {
         "value": 6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           6,
           20
@@ -13840,6 +13881,496 @@
       "テブナンの定理より I=E0/(R0+RL)",
       "I=10/(2+6)",
       "I=1.25A"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-18B694E2",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 5,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 50,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=5mA、ベース電流 Ib=50μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "100",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=5mA=5000μA, Ib=50μA",
+      "hFE=5000/50=100倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-DF903BE7",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 2,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 10,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=2mA、ベース電流 Ib=10μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "200",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=2mA=2000μA, Ib=10μA",
+      "hFE=2000/10=200倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-9E173528",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 2,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 20,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=2mA、ベース電流 Ib=20μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "100",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=2mA=2000μA, Ib=20μA",
+      "hFE=2000/20=100倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-E0903D7A",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 1,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 10,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=1mA、ベース電流 Ib=10μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "100",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=1mA=1000μA, Ib=10μA",
+      "hFE=1000/10=100倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3F252B07",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 5,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 40,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=5mA、ベース電流 Ib=40μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "125",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=5mA=5000μA, Ib=40μA",
+      "hFE=5000/40=125倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-06E3B4CA",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 1,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 25,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=1mA、ベース電流 Ib=25μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "40",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=1mA=1000μA, Ib=25μA",
+      "hFE=1000/25=40倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-9F1736BB",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 3,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 20,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=3mA、ベース電流 Ib=20μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "150",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=3mA=3000μA, Ib=20μA",
+      "hFE=3000/20=150倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3C25264E",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 2,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 40,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=2mA、ベース電流 Ib=40μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "50",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=2mA=2000μA, Ib=40μA",
+      "hFE=2000/40=50倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-19B69675",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 4,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 50,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=4mA、ベース電流 Ib=50μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "80",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=4mA=4000μA, Ib=50μA",
+      "hFE=4000/50=80倍"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3B2524BB",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "topic": "トランジスタの電流増幅率",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "collector_current": {
+        "value": 1,
+        "unit": "mA",
+        "realistic_range": [
+          1,
+          5
+        ]
+      },
+      "base_current": {
+        "value": 40,
+        "unit": "uA",
+        "realistic_range": [
+          10,
+          50
+        ]
+      }
+    },
+    "statement": "エミッタ接地トランジスタで、コレクタ電流 Ic=1mA、ベース電流 Ib=40μA であった。直流電流増幅率 hFE〔倍〕はいくらか。",
+    "answer": "25",
+    "solution": [
+      "直流電流増幅率 hFE=Ic/Ib",
+      "単位を揃える Ic=1mA=1000μA, Ib=40μA",
+      "hFE=1000/40=25倍"
     ],
     "validation": {
       "solver_checked": true,
@@ -15456,7 +15987,7 @@
       },
       "line_resistance": {
         "value": 2.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15505,7 +16036,7 @@
       },
       "line_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15554,7 +16085,7 @@
       },
       "line_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15603,7 +16134,7 @@
       },
       "line_resistance": {
         "value": 2.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15652,7 +16183,7 @@
       },
       "line_resistance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15701,7 +16232,7 @@
       },
       "line_resistance": {
         "value": 2.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15750,7 +16281,7 @@
       },
       "line_resistance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15799,7 +16330,7 @@
       },
       "line_resistance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15848,7 +16379,7 @@
       },
       "line_resistance": {
         "value": 2.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15897,7 +16428,7 @@
       },
       "line_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.5,
           5
@@ -15946,7 +16477,7 @@
       },
       "resistance": {
         "value": 0.6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -15954,7 +16485,7 @@
       },
       "reactance": {
         "value": 0.8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16012,7 +16543,7 @@
       },
       "resistance": {
         "value": 0.6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16020,7 +16551,7 @@
       },
       "reactance": {
         "value": 0.8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16078,7 +16609,7 @@
       },
       "resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16086,7 +16617,7 @@
       },
       "reactance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16144,7 +16675,7 @@
       },
       "resistance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16152,7 +16683,7 @@
       },
       "reactance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16210,7 +16741,7 @@
       },
       "resistance": {
         "value": 0.6,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16218,7 +16749,7 @@
       },
       "reactance": {
         "value": 0.8,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16276,7 +16807,7 @@
       },
       "resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16284,7 +16815,7 @@
       },
       "reactance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16342,7 +16873,7 @@
       },
       "resistance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16350,7 +16881,7 @@
       },
       "reactance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16408,7 +16939,7 @@
       },
       "resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16416,7 +16947,7 @@
       },
       "reactance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16474,7 +17005,7 @@
       },
       "resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16482,7 +17013,7 @@
       },
       "reactance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -16540,7 +17071,7 @@
       },
       "resistance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -16548,7 +17079,7 @@
       },
       "reactance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0,
           1
@@ -23146,7 +23677,7 @@
         "value": 780,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23195,7 +23726,7 @@
         "value": 1400,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23244,7 +23775,7 @@
         "value": 650,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23293,7 +23824,7 @@
         "value": 750,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23342,7 +23873,7 @@
         "value": 1050,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23391,7 +23922,7 @@
         "value": 900,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23440,7 +23971,7 @@
         "value": 800,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23489,7 +24020,7 @@
         "value": 700,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23538,7 +24069,7 @@
         "value": 840,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23587,7 +24118,7 @@
         "value": 1125,
         "unit": "MWh",
         "realistic_range": [
-          600,
+          650,
           1600
         ]
       }
@@ -23598,6 +24129,486 @@
       "揚水発電の総合効率 η=発電電力量/揚水電力量×100",
       "η=1125/1500×100",
       "η=75%"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-8252181D",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 2000,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.33,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=2000MW、熱効率が η=0.33 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "660",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.33×2000",
+      "Pe=660MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-262C803A",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 2000,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.32,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=2000MW、熱効率が η=0.32 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "640",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.32×2000",
+      "Pe=640MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-9CFB6C0B",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 3000,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.32,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=3000MW、熱効率が η=0.32 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "960",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.32×3000",
+      "Pe=960MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-FB929FD6",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 3300,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.32,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=3300MW、熱効率が η=0.32 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "1056",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.32×3300",
+      "Pe=1056MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-C9294B99",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 2500,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.32,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=2500MW、熱効率が η=0.32 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "800",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.32×2500",
+      "Pe=800MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-38A6364D",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 3300,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.33,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=3300MW、熱効率が η=0.33 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "1089",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.33×3300",
+      "Pe=1089MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2B01B505",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 3000,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.34,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=3000MW、熱効率が η=0.34 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "1020",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.34×3000",
+      "Pe=1020MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-3AF82A33",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 2500,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.34,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=2500MW、熱効率が η=0.34 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "850",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.34×2500",
+      "Pe=850MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-17AC7674",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 2000,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.34,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=2000MW、熱効率が η=0.34 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "680",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.34×2000",
+      "Pe=680MW"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-0E4DE8B0",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "topic": "原子力発電の電気出力",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "thermal_output": {
+        "value": 1500,
+        "unit": "MW",
+        "realistic_range": [
+          1500,
+          3300
+        ]
+      },
+      "efficiency": {
+        "value": 0.34,
+        "realistic_range": [
+          0.32,
+          0.35
+        ]
+      }
+    },
+    "statement": "ある原子力発電所の原子炉熱出力が Qt=1500MW、熱効率が η=0.34 である。電気出力 Pe〔MW〕はいくらか。",
+    "answer": "510",
+    "solution": [
+      "電気出力 Pe=熱効率η×熱出力Qt",
+      "Pe=0.34×1500",
+      "Pe=510MW"
     ],
     "validation": {
       "solver_checked": true,
@@ -24738,7 +25749,7 @@
       },
       "armature_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -24795,7 +25806,7 @@
       },
       "armature_resistance": {
         "value": 0.1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -24852,7 +25863,7 @@
       },
       "armature_resistance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -24909,7 +25920,7 @@
       },
       "armature_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -24966,7 +25977,7 @@
       },
       "armature_resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -25023,7 +26034,7 @@
       },
       "armature_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -25080,7 +26091,7 @@
       },
       "armature_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -25137,7 +26148,7 @@
       },
       "armature_resistance": {
         "value": 0.1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -25194,7 +26205,7 @@
       },
       "armature_resistance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -25251,7 +26262,7 @@
       },
       "armature_resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -27883,7 +28894,7 @@
       },
       "armature_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -27940,7 +28951,7 @@
       },
       "armature_resistance": {
         "value": 0.1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -27997,7 +29008,7 @@
       },
       "armature_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28054,7 +29065,7 @@
       },
       "armature_resistance": {
         "value": 0.1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28111,7 +29122,7 @@
       },
       "armature_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28168,7 +29179,7 @@
       },
       "armature_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28225,7 +29236,7 @@
       },
       "armature_resistance": {
         "value": 0.4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28282,7 +29293,7 @@
       },
       "armature_resistance": {
         "value": 0.1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28339,7 +29350,7 @@
       },
       "armature_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -28396,7 +29407,7 @@
       },
       "armature_resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -38356,7 +39367,7 @@
     "status": "draft"
   },
   {
-    "id": "G-550CAD15",
+    "id": "G-6355AB76",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の実長",
@@ -38367,221 +39378,25 @@
         "value": 150,
         "unit": "m",
         "realistic_range": [
-          120,
-          300
+          100,
+          400
         ]
       },
       "dip": {
-        "value": 6,
+        "value": 9,
         "unit": "m",
         "realistic_range": [
           3,
-          6
+          9
         ]
       }
     },
-    "statement": "径間 S=150m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "150.64",
+    "statement": "径間 S=150m、たるみ D=9m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "151.44",
     "solution": [
       "電線の実長 L≈S+8D²/(3S)",
-      "L=150+8×36/(3×150)",
-      "L=150.64m"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "G-CD5CFB9F",
-    "exam": "denken2_primary",
-    "subject": "法規",
-    "topic": "電線の実長",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "span": {
-        "value": 300,
-        "unit": "m",
-        "realistic_range": [
-          120,
-          300
-        ]
-      },
-      "dip": {
-        "value": 3,
-        "unit": "m",
-        "realistic_range": [
-          3,
-          6
-        ]
-      }
-    },
-    "statement": "径間 S=300m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "300.08",
-    "solution": [
-      "電線の実長 L≈S+8D²/(3S)",
-      "L=300+8×9/(3×300)",
-      "L=300.08m"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "G-13B3FE29",
-    "exam": "denken2_primary",
-    "subject": "法規",
-    "topic": "電線の実長",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "span": {
-        "value": 200,
-        "unit": "m",
-        "realistic_range": [
-          120,
-          300
-        ]
-      },
-      "dip": {
-        "value": 6,
-        "unit": "m",
-        "realistic_range": [
-          3,
-          6
-        ]
-      }
-    },
-    "statement": "径間 S=200m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "200.48",
-    "solution": [
-      "電線の実長 L≈S+8D²/(3S)",
-      "L=200+8×36/(3×200)",
-      "L=200.48m"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "G-E3053DDA",
-    "exam": "denken2_primary",
-    "subject": "法規",
-    "topic": "電線の実長",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "span": {
-        "value": 120,
-        "unit": "m",
-        "realistic_range": [
-          120,
-          300
-        ]
-      },
-      "dip": {
-        "value": 6,
-        "unit": "m",
-        "realistic_range": [
-          3,
-          6
-        ]
-      }
-    },
-    "statement": "径間 S=120m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "120.8",
-    "solution": [
-      "電線の実長 L≈S+8D²/(3S)",
-      "L=120+8×36/(3×120)",
-      "L=120.8m"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "G-6EC5C7D4",
-    "exam": "denken2_primary",
-    "subject": "法規",
-    "topic": "電線の実長",
-    "format": "numeric",
-    "difficulty": 2,
-    "params": {
-      "span": {
-        "value": 200,
-        "unit": "m",
-        "realistic_range": [
-          120,
-          300
-        ]
-      },
-      "dip": {
-        "value": 3,
-        "unit": "m",
-        "realistic_range": [
-          3,
-          6
-        ]
-      }
-    },
-    "statement": "径間 S=200m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "200.12",
-    "solution": [
-      "電線の実長 L≈S+8D²/(3S)",
-      "L=200+8×9/(3×200)",
-      "L=200.12m"
+      "L=150+8×81/(3×150)",
+      "L=151.44m"
     ],
     "validation": {
       "solver_checked": true,
@@ -38612,8 +39427,8 @@
         "value": 300,
         "unit": "m",
         "realistic_range": [
-          120,
-          300
+          100,
+          400
         ]
       },
       "dip": {
@@ -38621,7 +39436,7 @@
         "unit": "m",
         "realistic_range": [
           3,
-          6
+          9
         ]
       }
     },
@@ -38650,7 +39465,7 @@
     "status": "draft"
   },
   {
-    "id": "G-2DBCCAC8",
+    "id": "G-ABBDE7CD",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の実長",
@@ -38658,28 +39473,28 @@
     "difficulty": 2,
     "params": {
       "span": {
-        "value": 150,
+        "value": 240,
         "unit": "m",
         "realistic_range": [
-          120,
-          300
+          100,
+          400
         ]
       },
       "dip": {
-        "value": 3,
+        "value": 6,
         "unit": "m",
         "realistic_range": [
           3,
-          6
+          9
         ]
       }
     },
-    "statement": "径間 S=150m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "150.16",
+    "statement": "径間 S=240m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "240.4",
     "solution": [
       "電線の実長 L≈S+8D²/(3S)",
-      "L=150+8×9/(3×150)",
-      "L=150.16m"
+      "L=240+8×36/(3×240)",
+      "L=240.4m"
     ],
     "validation": {
       "solver_checked": true,
@@ -38699,7 +39514,252 @@
     "status": "draft"
   },
   {
-    "id": "G-37CE23A7",
+    "id": "G-F14E3C3B",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 100,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 9,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=100m、たるみ D=9m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "102.16",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=100+8×81/(3×100)",
+      "L=102.16m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-D6BBDE30",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 240,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=240m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "240.1",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=240+8×9/(3×240)",
+      "L=240.1m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-2D1409FC",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 400,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 9,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=400m、たるみ D=9m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "400.54",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=400+8×81/(3×400)",
+      "L=400.54m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-13B3FE29",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 200,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=200m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "200.48",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=200+8×36/(3×200)",
+      "L=200.48m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-10A8E1BE",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 400,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=400m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "400.06",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=400+8×9/(3×400)",
+      "L=400.06m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-6548E2A9",
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "電線の実長",
@@ -38710,25 +39770,74 @@
         "value": 120,
         "unit": "m",
         "realistic_range": [
-          120,
-          300
+          100,
+          400
         ]
       },
       "dip": {
-        "value": 3,
+        "value": 9,
         "unit": "m",
         "realistic_range": [
           3,
-          6
+          9
         ]
       }
     },
-    "statement": "径間 S=120m、たるみ D=3m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
-    "answer": "120.2",
+    "statement": "径間 S=120m、たるみ D=9m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "121.8",
     "solution": [
       "電線の実長 L≈S+8D²/(3S)",
-      "L=120+8×9/(3×120)",
-      "L=120.2m"
+      "L=120+8×81/(3×120)",
+      "L=121.8m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-F0E2981F",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "電線の実長",
+    "format": "numeric",
+    "difficulty": 2,
+    "params": {
+      "span": {
+        "value": 400,
+        "unit": "m",
+        "realistic_range": [
+          100,
+          400
+        ]
+      },
+      "dip": {
+        "value": 6,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          9
+        ]
+      }
+    },
+    "statement": "径間 S=400m、たるみ D=6m の架空電線がある。この電線の実長 L〔m〕は?（放物線近似）",
+    "answer": "400.24",
+    "solution": [
+      "電線の実長 L≈S+8D²/(3S)",
+      "L=400+8×36/(3×400)",
+      "L=400.24m"
     ],
     "validation": {
       "solver_checked": true,
@@ -38759,7 +39868,7 @@
         "value": 15,
         "unit": "m",
         "realistic_range": [
-          6,
+          3,
           15
         ]
       }
@@ -38770,6 +39879,47 @@
       "全長15m以下の支持物の根入れは全長×1/6以上",
       "depth=15/6",
       "depth=2.5m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-4FBB327D",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 3,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          15
+        ]
+      }
+    },
+    "statement": "全長 3m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "0.5",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=3/6",
+      "depth=0.5m"
     ],
     "validation": {
       "solver_checked": true,
@@ -38800,7 +39950,7 @@
         "value": 6,
         "unit": "m",
         "realistic_range": [
-          6,
+          3,
           15
         ]
       }
@@ -38811,47 +39961,6 @@
       "全長15m以下の支持物の根入れは全長×1/6以上",
       "depth=6/6",
       "depth=1m"
-    ],
-    "validation": {
-      "solver_checked": true,
-      "human_checked": false,
-      "clean_answer": true,
-      "physically_valid": true,
-      "confidence": 0.9
-    },
-    "source": {
-      "type": "original",
-      "citation": "DENKEN-OS オリジナル問題"
-    },
-    "stats": {
-      "answered": 0,
-      "correct_rate": 0
-    },
-    "status": "draft"
-  },
-  {
-    "id": "G-45BB22BF",
-    "exam": "denken2_primary",
-    "subject": "法規",
-    "topic": "支持物の根入れ深さ",
-    "format": "numeric",
-    "difficulty": 1,
-    "params": {
-      "pole_length": {
-        "value": 9,
-        "unit": "m",
-        "realistic_range": [
-          6,
-          15
-        ]
-      }
-    },
-    "statement": "全長 9m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
-    "answer": "1.5",
-    "solution": [
-      "全長15m以下の支持物の根入れは全長×1/6以上",
-      "depth=9/6",
-      "depth=1.5m"
     ],
     "validation": {
       "solver_checked": true,
@@ -38882,7 +39991,7 @@
         "value": 12,
         "unit": "m",
         "realistic_range": [
-          6,
+          3,
           15
         ]
       }
@@ -38893,6 +40002,47 @@
       "全長15m以下の支持物の根入れは全長×1/6以上",
       "depth=12/6",
       "depth=2m"
+    ],
+    "validation": {
+      "solver_checked": true,
+      "human_checked": false,
+      "clean_answer": true,
+      "physically_valid": true,
+      "confidence": 0.9
+    },
+    "source": {
+      "type": "original",
+      "citation": "DENKEN-OS オリジナル問題"
+    },
+    "stats": {
+      "answered": 0,
+      "correct_rate": 0
+    },
+    "status": "draft"
+  },
+  {
+    "id": "G-45BB22BF",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "topic": "支持物の根入れ深さ",
+    "format": "numeric",
+    "difficulty": 1,
+    "params": {
+      "pole_length": {
+        "value": 9,
+        "unit": "m",
+        "realistic_range": [
+          3,
+          15
+        ]
+      }
+    },
+    "statement": "全長 9m（15m以下）の支持物を施設する。電技解釈に基づく最小の根入れ深さ〔m〕は?（根入れは全長の1/6以上とする）",
+    "answer": "1.5",
+    "solution": [
+      "全長15m以下の支持物の根入れは全長×1/6以上",
+      "depth=9/6",
+      "depth=1.5m"
     ],
     "validation": {
       "solver_checked": true,
@@ -39517,7 +40667,7 @@
       },
       "synchronous_reactance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39585,7 +40735,7 @@
       },
       "synchronous_reactance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39653,7 +40803,7 @@
       },
       "synchronous_reactance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39721,7 +40871,7 @@
       },
       "synchronous_reactance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39789,7 +40939,7 @@
       },
       "synchronous_reactance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39857,7 +41007,7 @@
       },
       "synchronous_reactance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39925,7 +41075,7 @@
       },
       "synchronous_reactance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -39993,7 +41143,7 @@
       },
       "synchronous_reactance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -40061,7 +41211,7 @@
       },
       "synchronous_reactance": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -40129,7 +41279,7 @@
       },
       "synchronous_reactance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           30
@@ -41261,7 +42411,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41321,7 +42471,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41381,7 +42531,7 @@
     "params": {
       "secondary_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41441,7 +42591,7 @@
     "params": {
       "secondary_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41501,7 +42651,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41561,7 +42711,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41621,7 +42771,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.3,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41681,7 +42831,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41741,7 +42891,7 @@
     "params": {
       "secondary_resistance": {
         "value": 0.2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -41801,7 +42951,7 @@
     "params": {
       "secondary_resistance": {
         "value": 1,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           0.1,
           1
@@ -45318,7 +46468,7 @@
       },
       "reactance": {
         "value": 40,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45384,7 +46534,7 @@
       },
       "reactance": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45450,7 +46600,7 @@
       },
       "reactance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45516,7 +46666,7 @@
       },
       "reactance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45582,7 +46732,7 @@
       },
       "reactance": {
         "value": 50,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45648,7 +46798,7 @@
       },
       "reactance": {
         "value": 66,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45714,7 +46864,7 @@
       },
       "reactance": {
         "value": 100,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45780,7 +46930,7 @@
       },
       "reactance": {
         "value": 60,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45846,7 +46996,7 @@
       },
       "reactance": {
         "value": 40,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45912,7 +47062,7 @@
       },
       "reactance": {
         "value": 60,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           40,
           100
@@ -45970,7 +47120,7 @@
       },
       "impedance": {
         "value": 25,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46019,7 +47169,7 @@
       },
       "impedance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46068,7 +47218,7 @@
       },
       "impedance": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46117,7 +47267,7 @@
       },
       "impedance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46166,7 +47316,7 @@
       },
       "impedance": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46215,7 +47365,7 @@
       },
       "impedance": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46264,7 +47414,7 @@
       },
       "impedance": {
         "value": 25,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46313,7 +47463,7 @@
       },
       "impedance": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46362,7 +47512,7 @@
       },
       "impedance": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46411,7 +47561,7 @@
       },
       "impedance": {
         "value": 25,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           2,
           25
@@ -46460,7 +47610,7 @@
       },
       "positive_seq": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46468,7 +47618,7 @@
       },
       "zero_seq": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46518,7 +47668,7 @@
       },
       "positive_seq": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46526,7 +47676,7 @@
       },
       "zero_seq": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46576,7 +47726,7 @@
       },
       "positive_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46584,7 +47734,7 @@
       },
       "zero_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46634,7 +47784,7 @@
       },
       "positive_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46642,7 +47792,7 @@
       },
       "zero_seq": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46692,7 +47842,7 @@
       },
       "positive_seq": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46700,7 +47850,7 @@
       },
       "zero_seq": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46750,7 +47900,7 @@
       },
       "positive_seq": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46758,7 +47908,7 @@
       },
       "zero_seq": {
         "value": 4,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46808,7 +47958,7 @@
       },
       "positive_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46816,7 +47966,7 @@
       },
       "zero_seq": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46866,7 +48016,7 @@
       },
       "positive_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46874,7 +48024,7 @@
       },
       "zero_seq": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46924,7 +48074,7 @@
       },
       "positive_seq": {
         "value": 2,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46932,7 +48082,7 @@
       },
       "zero_seq": {
         "value": 20,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46982,7 +48132,7 @@
       },
       "positive_seq": {
         "value": 5,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20
@@ -46990,7 +48140,7 @@
       },
       "zero_seq": {
         "value": 10,
-        "unit": "ohm",
+        "unit": "Ω",
         "realistic_range": [
           1,
           20

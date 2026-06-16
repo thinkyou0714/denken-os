@@ -27,7 +27,7 @@ export const maxPowerTransfer = defineTemplate<Params>({
   pastExam: { area: "直流回路", frequency: "mid", years: [2009, 2014, 2019, 2024] },
   paramSpecs: {
     emf: { unit: "V", realistic_range: [10, 200] },
-    internal_resistance: { unit: "ohm", realistic_range: [1, 20] },
+    internal_resistance: { unit: "Ω", realistic_range: [1, 20] },
   },
   paramOrder: ["emf", "internal_resistance"],
   draw(rng) {
@@ -45,7 +45,7 @@ export const maxPowerTransfer = defineTemplate<Params>({
       format: "numeric",
       params: {
         emf: { value: E, unit: "V", realistic_range: [10, 200] },
-        internal_resistance: { value: R, unit: "ohm", realistic_range: [1, 20] },
+        internal_resistance: { value: R, unit: "Ω", realistic_range: [1, 20] },
       },
       answerValue: pMax,
       answerUnit: "W",

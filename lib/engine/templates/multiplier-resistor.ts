@@ -20,7 +20,7 @@ export const multiplierResistor = defineTemplate<Params>({
   difficulty: 2,
   pastExam: { area: "電気計測", frequency: "high", years: [2009, 2013, 2017, 2022] },
   paramSpecs: {
-    internal_resistance: { unit: "ohm", realistic_range: [10, 2000] },
+    internal_resistance: { unit: "Ω", realistic_range: [10, 2000] },
     multiplier: { unit: "", realistic_range: [2, 100] },
   },
   paramOrder: ["internal_resistance", "multiplier"],
@@ -38,11 +38,11 @@ export const multiplierResistor = defineTemplate<Params>({
     return {
       format: "numeric",
       params: {
-        internal_resistance: { value: r, unit: "ohm", realistic_range: [10, 2000] },
+        internal_resistance: { value: r, unit: "Ω", realistic_range: [10, 2000] },
         multiplier: { value: m, unit: "", realistic_range: [2, 100] },
       },
       answerValue: Rm,
-      answerUnit: "ohm",
+      answerUnit: "Ω",
       answerText,
       facts: { r, m, Rm },
       defaultStatement: `内部抵抗 r=${r}Ω の電圧計の測定範囲を ${m} 倍にしたい。直列に接続する倍率器の抵抗 R_m〔Ω〕は?`,

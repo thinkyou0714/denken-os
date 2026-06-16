@@ -34,9 +34,9 @@ export const resistorNetwork = defineTemplate<Params>({
   difficulty: 1,
   pastExam: { area: "直流回路", frequency: "high", years: [2006, 2010, 2014, 2018, 2022] },
   paramSpecs: {
-    R1: { unit: "ohm", realistic_range: [1, 100] },
-    R2: { unit: "ohm", realistic_range: [1, 100] },
-    R3: { unit: "ohm", realistic_range: [1, 100] },
+    R1: { unit: "Ω", realistic_range: [1, 100] },
+    R2: { unit: "Ω", realistic_range: [1, 100] },
+    R3: { unit: "Ω", realistic_range: [1, 100] },
   },
   paramOrder: ["R1", "R2", "R3"],
   draw(rng) {
@@ -64,9 +64,9 @@ export const resistorNetwork = defineTemplate<Params>({
 
     return {
       params: {
-        R1: { value: R1, unit: "ohm", realistic_range: [1, 100] },
-        R2: { value: R2, unit: "ohm", realistic_range: [1, 100] },
-        R3: { value: R3, unit: "ohm", realistic_range: [1, 100] },
+        R1: { value: R1, unit: "Ω", realistic_range: [1, 100] },
+        R2: { value: R2, unit: "Ω", realistic_range: [1, 100] },
+        R3: { value: R3, unit: "Ω", realistic_range: [1, 100] },
       },
       answerValue: total,
       answerUnit: "Ω",

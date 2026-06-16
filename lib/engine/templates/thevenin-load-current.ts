@@ -33,8 +33,8 @@ export const theveninLoadCurrent = defineTemplate<Params>({
   },
   paramSpecs: {
     emf: { unit: "V", realistic_range: [10, 120] },
-    thevenin_resistance: { unit: "ohm", realistic_range: [2, 10] },
-    load_resistance: { unit: "ohm", realistic_range: [6, 20] },
+    thevenin_resistance: { unit: "Ω", realistic_range: [2, 10] },
+    load_resistance: { unit: "Ω", realistic_range: [6, 20] },
   },
   paramOrder: ["emf", "thevenin_resistance", "load_resistance"],
   draw(rng) {
@@ -53,8 +53,8 @@ export const theveninLoadCurrent = defineTemplate<Params>({
       format: "numeric",
       params: {
         emf: { value: emf, unit: "V", realistic_range: [10, 120] },
-        thevenin_resistance: { value: r0, unit: "ohm", realistic_range: [2, 10] },
-        load_resistance: { value: rl, unit: "ohm", realistic_range: [6, 20] },
+        thevenin_resistance: { value: r0, unit: "Ω", realistic_range: [2, 10] },
+        load_resistance: { value: rl, unit: "Ω", realistic_range: [6, 20] },
       },
       answerValue: i,
       answerUnit: "A",
