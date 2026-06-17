@@ -224,6 +224,14 @@ const templates: Template[] = [
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
 
+// topic は出題の一意キー。重複すると後勝ちで片方が黙って消えるため、
+// モジュール読込時に検出して即座に落とす（テンプレ追加時の事故を早期発見）。
+if (registry.size !== templates.length) {
+  const seen = new Set<string>();
+  const dups = templates.map((t) => t.topic).filter((topic) => (seen.has(topic) ? true : (seen.add(topic), false)));
+  throw new Error(`テンプレートの topic が重複しています: ${[...new Set(dups)].join(", ")}`);
+}
+
 export function getTemplate(topic: string): Template | undefined {
   return registry.get(topic);
 }

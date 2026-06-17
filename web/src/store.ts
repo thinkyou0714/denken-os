@@ -171,11 +171,12 @@ export class LocalProgress {
   ): FsrsView {
     const rating = ratingOf(ratingOrCorrect);
     const now = new Date(nowMs);
-    const stored = this.cards()[topic];
+    // cards() は localStorage 全体を読んで JSON.parse する。1解答につき1回だけ読む。
+    const cards = this.cards();
+    const stored = cards[topic];
     const prev = stored ? reviveCard(stored) : this.scheduler.init(now);
     const next = this.scheduler.review(prev, rating, now);
 
-    const cards = this.cards();
     cards[topic] = next as unknown as StoredCard; // Date は JSON で ISO 文字列化される
     this.safeSet(CARD_KEY, JSON.stringify(cards));
 

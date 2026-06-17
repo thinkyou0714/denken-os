@@ -16764,7 +16764,7 @@
         ]
       }
     },
-    "statement": "単相2線式の線路で、線電流 I=25A、1線の抵抗 R=0.6Ω、リアクタンス X=0.8Ω、負荷力率 cosθ=1（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
+    "statement": "単相2線式の線路で、線電流 I=25A、1線の抵抗 R=0.6Ω、リアクタンス X=0.8Ω、負荷力率 cosθ=1（力率1）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。",
     "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 290 144\" role=\"img\" aria-label=\"単相2線式線路 I=25A、R=0.6Ω、X=0.8Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>単相2線式線路 I=25A、R=0.6Ω、X=0.8Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"40\" cy=\"70\" r=\"20\" fill=\"none\"/><text x=\"40\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Vs</text><line x1=\"40\" y1=\"50\" x2=\"40\" y2=\"30\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"110\"/><line x1=\"70\" y1=\"30\" x2=\"85.75\" y2=\"30\"/><rect x=\"85.75\" y=\"21\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"124.25\" y1=\"30\" x2=\"140\" y2=\"30\"/><text x=\"105\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">R=0.6</text><polyline points=\"150,30 156,22 162,38 168,22 174,38 180,30\"/><text x=\"165\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">X=0.8</text><line x1=\"180\" y1=\"30\" x2=\"215\" y2=\"30\"/><rect x=\"215\" y=\"35\" width=\"35\" height=\"60\" fill=\"none\"/><text x=\"232\" y=\"60\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">負荷</text><text x=\"232\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">cosθ=1</text><line x1=\"215\" y1=\"95\" x2=\"215\" y2=\"110\"/><line x1=\"215\" y1=\"110\" x2=\"40\" y2=\"110\"/><line x1=\"250\" y1=\"30\" x2=\"250\" y2=\"35\"/><line x1=\"250\" y1=\"95\" x2=\"250\" y2=\"110\"/><line x1=\"250\" y1=\"110\" x2=\"215\" y2=\"110\"/><text x=\"150\" y=\"130\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">I=25A → v=2I(Rcosθ+Xsinθ)</text></g></svg>",
     "answer": "30",
     "solution": [
@@ -40864,7 +40864,7 @@
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=2%、%リアクタンス降下 q=10%、負荷力率 cosθ=1（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=2%、%リアクタンス降下 q=10%、負荷力率 cosθ=1（力率1）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
     "answer": "2",
     "solution": [
       "sinθ=√(1−cos²θ)=√(1−1²)=0",
@@ -41386,7 +41386,7 @@
         ]
       }
     },
-    "statement": "定格運転中の変圧器で、%抵抗降下 p=3%、%リアクタンス降下 q=4%、負荷力率 cosθ=1（遅れ）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
+    "statement": "定格運転中の変圧器で、%抵抗降下 p=3%、%リアクタンス降下 q=4%、負荷力率 cosθ=1（力率1）である。電圧変動率 ε〔%〕を一次近似 ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。",
     "answer": "3",
     "solution": [
       "sinθ=√(1−cos²θ)=√(1−1²)=0",

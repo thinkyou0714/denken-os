@@ -17,7 +17,7 @@
 import { defaultNarrator, type Narrator, toNarrationInput } from "./narrate.js";
 import type { Problem, SourceType } from "./schema.js";
 import type { GenerationResult, Template } from "./templates/types.js";
-import { narrationMatchesAnswer, validateProblem } from "./validate.js";
+import { narrationMatchesAnswer, statementMatchesParams, validateProblem } from "./validate.js";
 
 /**
  * 自動生成問題に付与するデフォルト信頼度。
@@ -170,7 +170,15 @@ export async function generateOneDetailed(
 
   const narration = await opts.narrator.narrate(toNarrationInput(draw, template.topic, template.subject));
 
-  // [4] 整合確認: 解説の最終数値がコード正解と一致しなければ破棄。
+  // [4a] 問題文の整合確認（engine#1）: LLM リライトがパラメータ値を改変した場合は
+  //   内部矛盾（問題文 vs 正解）を避けるため、決定論の defaultStatement にフォールバックする。
+  //   StubNarrator は statement=defaultStatement のため通常はそのまま採用される。
+  const paramValues = Object.values(draw.params).map((p) => p.value);
+  const statement = statementMatchesParams(narration.statement, paramValues)
+    ? narration.statement
+    : draw.defaultStatement;
+
+  // [4b] 整合確認: 解説の最終数値がコード正解と一致しなければ破棄。
   if (!narrationMatchesAnswer(narration.solution, draw.answerText)) {
     return {
       problem: null,
@@ -208,7 +216,7 @@ export async function generateOneDetailed(
     format,
     difficulty: template.difficulty,
     params: draw.params,
-    statement: narration.statement,
+    statement,
     ...(draw.figure ? { figure: draw.figure } : {}),
     // numeric は選択肢なし。multiple_choice のみ choices を持つ。
     ...(format === "multiple_choice" ? { choices: draw.choices } : {}),

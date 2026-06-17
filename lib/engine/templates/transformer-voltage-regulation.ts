@@ -48,6 +48,8 @@ export const transformerVoltageRegulation = defineTemplate<Params>({
     const eps = p * cos + q * sin; // 一次近似の電圧変動率(%)
     if (!isCleanAnswer(eps)) return null;
     const answerText = String(Number(eps.toFixed(2)));
+    // cosθ=1 は sinθ=0 で「遅れ」が存在しない。力率1のときは（遅れ）を付けない。
+    const pfNote = sin > 0 ? "（遅れ）" : "（力率1）";
     return {
       format: "descriptive",
       params: {
@@ -61,7 +63,7 @@ export const transformerVoltageRegulation = defineTemplate<Params>({
       facts: { p, q, cos, sin, eps },
       defaultStatement:
         `定格運転中の変圧器で、%抵抗降下 p=${p}%、%リアクタンス降下 q=${q}%、` +
-        `負荷力率 cosθ=${cos}（遅れ）である。電圧変動率 ε〔%〕を一次近似 ` +
+        `負荷力率 cosθ=${cos}${pfNote}である。電圧変動率 ε〔%〕を一次近似 ` +
         `ε≈p·cosθ+q·sinθ により求め、導出過程とともに示せ。`,
       defaultSolution: [
         `sinθ=√(1−cos²θ)=√(1−${cos}²)=${sin}`,

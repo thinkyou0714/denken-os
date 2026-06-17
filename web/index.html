@@ -556,13 +556,16 @@
 
     <p class="demo"><span aria-hidden="true">⚠️</span><span>問題は自動生成（コードで検算済み・未監修のデモ）。正解の数値はコード算出ですが、本番運用前に人の目チェックを通します。</span></p>
 
-    <main id="view" aria-live="polite"></main>
+    <!-- aria-live はあえて付けない: 描画のたびにビュー全体を読み上げてしまうため。
+         個別の通知は toast(aria-live) と模試タイマーの live 領域が担う。
+         tabindex=-1 はビュー切替時のフォーカス移動先（router が focus() する）。 -->
+    <main id="view" tabindex="-1"></main>
 
     <footer>
       オフライン対応 PWA。学習記録はこの端末内（localStorage）にのみ保存されます。<br />
       復習は FSRS（最新の間隔反復アルゴリズム）。コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 
-    <script type="module" src="./dist/app.js" integrity="sha384-qozKEi4b1YI/EMrX2Jnns5zvcKBbJ70XnEfcmUdGi094y47r+za0ClwUb4vZcdD3" crossorigin="anonymous"></script>
+    <script type="module" src="./dist/app.js" integrity="sha384-xeCw3XvmYELMjAFidMxnaV2Nv/nRqocz5J6jcVmvEJiW8wwJL4Bu6kXh/r6m33Gs" crossorigin="anonymous"></script>
   </body>
 </html>

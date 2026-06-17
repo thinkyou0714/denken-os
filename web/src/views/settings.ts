@@ -289,11 +289,27 @@ const SEEN_STREAK_MILESTONE_KEY = "denken:seenStreakMilestone";
 function resetData(): void {
   if (!window.confirm("学習記録（解答ログ・記憶状態・XP/実績・お守り）を全て削除します。よろしいですか？")) return;
   // XP/レベル/実績はログから導出するため、ログのリセットと整合する付随キーも初期化する。
-  storage.setItem("denken:cards", "{}");
-  storage.setItem("denken:logs", "[]");
-  storage.setItem("denken:freeze", "");
-  storage.setItem("denken:badges", "[]");
-  storage.setItem(SEEN_LEVEL_KEY, "1");
-  storage.setItem(SEEN_STREAK_MILESTONE_KEY, "0");
+  // 書き込みが quota/プライベートモードで throw しても半壊リセットにならないよう、
+  // 各 setItem を個別の try で保護し、失敗キーを集計してから結果を通知する。
+  const entries: ReadonlyArray<readonly [string, string]> = [
+    ["denken:cards", "{}"],
+    ["denken:logs", "[]"],
+    ["denken:freeze", ""],
+    ["denken:badges", "[]"],
+    [SEEN_LEVEL_KEY, "1"],
+    [SEEN_STREAK_MILESTONE_KEY, "0"],
+    ["denken:onboarded", ""], // オンボーディングを再表示できるようにする（web#31）
+  ];
+  const failed: string[] = [];
+  for (const [key, value] of entries) {
+    try {
+      storage.setItem(key, value);
+    } catch {
+      failed.push(key);
+    }
+  }
+  if (failed.length > 0) {
+    showToast("⚠️ 一部のデータを削除できませんでした。端末の空き容量を確認してください", "OK", () => {});
+  }
   switchView("dashboard");
 }

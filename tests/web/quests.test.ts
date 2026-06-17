@@ -5,8 +5,12 @@ import {
   dailyQuests,
   dayIndexOf,
   logsOfDay,
+  logsOfWeek,
   maxConsecutiveCorrect,
   questStatuses,
+  weekIndexOf,
+  weeklyQuestStatuses,
+  weeklyQuests,
 } from "../../web/src/quests.js";
 import type { WebAnswerLog } from "../../web/src/store.js";
 
@@ -94,5 +98,31 @@ describe("logsOfDay / questStatuses / allQuestsClear", () => {
       logs.push(log({ atMs: DAY0 + i * 1000, topic: `論点${i}`, rating: "easy" }));
     }
     expect(allQuestsClear(logs, DAY0_IDX)).toBe(true);
+  });
+});
+
+describe("週次クエストカードの進捗（回帰: 週インデックスに logsOfDay を渡すバグ）", () => {
+  it("logsOfWeek(週idx) はその週のログを返し、進捗が反映される", () => {
+    const weekIdx = weekIndexOf(DAY0);
+    // 同じ週の別日にまたがる十分な数のログ（週次目標を達成できる量）。
+    const logs: WebAnswerLog[] = [];
+    for (let d = 0; d < 5; d++) {
+      for (let i = 0; i < 12; i++) {
+        logs.push(log({ atMs: DAY0 + d * 86_400_000 + i * 1000, topic: `論点${(d * 12 + i) % 16}` }));
+      }
+    }
+    const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfWeek(logs, weekIdx));
+    // 修正後: 週のログが集計され、少なくとも一部の進捗値が 0 より大きい。
+    expect(statuses.some((s) => s.value > 0)).toBe(true);
+  });
+
+  it("旧実装（週インデックスに logsOfDay）は空集合になり進捗が常に0だった", () => {
+    const weekIdx = weekIndexOf(DAY0);
+    const logs: WebAnswerLog[] = [];
+    for (let i = 0; i < 30; i++) logs.push(log({ atMs: DAY0 + i * 1000, topic: `論点${i % 16}` }));
+    // 週番号(~2900)は日番号(~20600)と一致しないため、logsOfDay(週idx) は必ず空。
+    expect(logsOfDay(logs, weekIdx)).toHaveLength(0);
+    // 一方 logsOfWeek は当該週のログを拾う。
+    expect(logsOfWeek(logs, weekIdx).length).toBeGreaterThan(0);
   });
 });

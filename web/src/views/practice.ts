@@ -22,6 +22,7 @@ import {
   dailyQuests,
   dayIndexOf,
   logsOfDay,
+  logsOfWeek,
   QUEST_CLEAR_BONUS_XP,
   questStatuses,
   WEEKLY_CLEAR_BONUS_XP,
@@ -153,7 +154,9 @@ export function questsCard(): HTMLElement {
 /** 今週のクエストカード（進捗タブ用。日次より大きな積み上げ目標）。 */
 export function weeklyQuestsCard(): HTMLElement {
   const weekIdx = weekIndexOf(Date.now());
-  const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfDay(progress.logs(), weekIdx));
+  // 週次クエストは「その週の全ログ」で進捗判定する。
+  // 旧実装は logsOfDay(週番号) を渡しており、週番号は日番号と一致しないため常に空 → 0% 表示だった。
+  const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfWeek(progress.logs(), weekIdx));
   const allDone = statuses.every((s) => s.done);
   const card = h(
     "div",
