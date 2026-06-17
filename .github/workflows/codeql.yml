@@ -1,0 +1,56 @@
+name: codeql
+
+# #80: CodeQL による SAST（静的解析）。JS/TS のセキュリティ・品質クエリを実行する。
+# push/PR(main) と週次スケジュールで走らせ、結果を GitHub Security タブへ送る。
+#
+# 注: github/codeql-action は @v3 メジャータグ参照。リポジトリは Renovate の
+# helpers:pinGitHubActionDigests / pinGitHubDigests を有効化しているため、
+# 次回 Renovate 実行時にコミット SHA へ自動ピンされる（既存 action の参照様式に合わせている）。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # 毎週月曜 05:30 UTC（依存・コードの新規脆弱性を定期検出）。
+    - cron: "30 5 * * 1"
+
+# 最小権限。CodeQL の結果アップロードに security-events: write が必須。
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (javascript-typescript)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+      # PR の Code Scanning 連携に必要（fork PR では自動的に縮退する）。
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript-typescript"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # セキュリティ拡張＋品質クエリを併用（既定より広いカバレッジ）。
+          queries: security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

@@ -1,0 +1,37 @@
+version: 2
+
+# #81: Dependabot 設定。
+#
+# 本リポジトリの「バージョン更新」は Renovate（renovate.json）が主担当。
+# Dependabot は重複 PR を避けつつ、Renovate ではカバーしにくい役割を担う:
+#   - github-actions: 週次のバージョン更新（CI で使う action の追従）。
+#   - npm: バージョン更新 PR は無効化（limit: 0）し、Dependabot security updates のみ有効に保つ。
+#     （security updates は open-pull-requests-limit の影響を受けず、脆弱性検知時に PR が立つ。）
+#
+# これにより SECURITY.md が参照する .github/dependabot.yml が実在し、
+# Dependabot alerts/security updates の動作前提が満たされる。
+updates:
+  # GitHub Actions: ワークフローで使う action を週次で更新する。
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "ci"
+
+  # npm: バージョン更新は Renovate に委譲（limit: 0 で通常 PR を抑止）。
+  # Dependabot security updates（脆弱性修正）はこの設定の有無に関わらず有効。
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+    commit-message:
+      prefix: "deps"
