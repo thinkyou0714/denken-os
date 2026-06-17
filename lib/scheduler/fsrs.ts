@@ -56,7 +56,9 @@ export class FsrsScheduler {
     this.engine = fsrs(
       generatorParameters({
         request_retention: desiredRetention,
-        ...(maximumIntervalDays !== undefined ? { maximum_interval: Math.max(1, Math.floor(maximumIntervalDays)) } : {}),
+        ...(maximumIntervalDays !== undefined
+          ? { maximum_interval: Math.max(1, Math.floor(maximumIntervalDays)) }
+          : {}),
       }),
     );
   }

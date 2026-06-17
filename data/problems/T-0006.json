@@ -8,7 +8,7 @@
   "params": {
     "r1": {
       "value": 100,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         10,
         200
@@ -16,7 +16,7 @@
     },
     "r2": {
       "value": 200,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         100,
         500
@@ -24,7 +24,7 @@
     },
     "r3": {
       "value": 150,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         100,
         600

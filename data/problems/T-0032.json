@@ -8,7 +8,7 @@
   "params": {
     "internal_resistance": {
       "value": 9,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         1,
         100

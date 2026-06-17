@@ -18,7 +18,7 @@ const ROOT = join(__dirname, "../..");
 const jsonSchema = JSON.parse(readFileSync(join(ROOT, "docs/x-strategy/templates/problem-schema.json"), "utf8"));
 const T0001 = JSON.parse(readFileSync(join(ROOT, "data/problems/T-0001.json"), "utf8"));
 
-const ajv = new Ajv({ allErrors: true, strict: false });
+const ajv = new Ajv({ allErrors: true, strict: true });
 addFormats(ajv);
 const ajvValidate = ajv.compile(jsonSchema);
 
