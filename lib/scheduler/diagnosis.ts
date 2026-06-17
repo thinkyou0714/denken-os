@@ -61,10 +61,35 @@ export function aggregateByTopic(logs: AnswerLog[]): Map<string, TopicProgress> 
  *
  * この関数は純粋関数（副作用なし・外部依存なし）でテスト可能（II-131, II-5）。
  */
+/**
+ * 弱点判定の事前分布（#26/#58）。試行が少ない論点の正答率を、この合格ライン相当の
+ * 事前確率へ加法平滑化で寄せる。1回だけ外した論点が、多数試行で確実に弱点の論点を
+ * 上回ってしまう過大評価（ノイズ駆動）を防ぐ。
+ */
+export const WEAKNESS_PRIOR_RATE = 0.6; // 合格ライン相当を中立の事前正答率とする
+export const WEAKNESS_PRIOR_STRENGTH = 3; // 擬似試行数（〜3問ぶんの事前情報で平滑化）
+
+/**
+ * 加法平滑化した正答率（Bayes 事後平均）。
+ *   (correct + s·p0) / (attempts + s)
+ * 試行0なら事前 p0、試行が増えるほど実測へ収束する。
+ */
+export function smoothedSuccessRate(
+  correct: number,
+  attempts: number,
+  prior = WEAKNESS_PRIOR_RATE,
+  strength = WEAKNESS_PRIOR_STRENGTH,
+): number {
+  const a = Math.max(0, attempts);
+  const c = Math.min(Math.max(0, correct), a);
+  return (c + strength * prior) / (a + strength);
+}
+
 export function weaknessScore(p: TopicProgress, nowMs: number): number {
   // 異常入力（負のattempts等）でもスコアが破綻しないようクランプする（attempts は本来非負）。
   const attempts = Math.max(0, p.attempts);
-  const rate = attempts > 0 ? p.correct / attempts : 0;
+  // 平滑化正答率を使う（#58）。少試行の論点は事前へ寄り、ノイズで弱点リストを占有しない。
+  const rate = smoothedSuccessRate(p.correct, attempts);
   const overdueDays = Math.max(0, (nowMs - p.dueMs) / DAY_MS);
   return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(attempts, 5) * 0.1;
 }
