@@ -9,7 +9,8 @@ import { buildApiMessages, buildSystemPrompt } from "../../../lib/chat/prompt.js
 import { retrieve } from "../../../lib/chat/retrieve.js";
 import type { ChatMessage } from "../../../lib/chat/types.js";
 import { appendChatMessage, clearChat, loadChat, streamClaude } from "../chat.js";
-import { formatMath } from "../mathfmt.js";
+import { renderMarkdown } from "../markdown.js";
+import { applyMathMarkup } from "../mathfmt.js";
 import { getApiKey, getChatModel } from "../settings.js";
 import { storage, view } from "../state/app.js";
 import { h, safeHtml } from "../ui/dom.js";
@@ -19,14 +20,23 @@ import { switchView } from "./router.js";
 /** 送信中フラグ（多重送信の防止）。 */
 const chatState = { busy: false, lastSentMs: 0 };
 
-/** チャット1件の吹き出しノード。assistant は数式整形（HTMLエスケープ込み）して表示。 */
+/**
+ * assistant 応答を整形する。Claude 応答は Markdown を含むため、まず XSS 安全な
+ * Markdown レンダリング（HTMLエスケープ→記法変換）を行い、その上に下付き/上付きの
+ * 数式マークアップを重ねる（再エスケープしない applyMathMarkup を使用）。
+ */
+function formatAssistant(content: string): string {
+  return applyMathMarkup(renderMarkdown(content));
+}
+
+/** チャット1件の吹き出しノード。assistant は Markdown＋数式整形（HTMLエスケープ込み）して表示。 */
 function bubbleNode(msg: ChatMessage): HTMLElement {
   if (msg.role === "user") {
     const b = h("div", { class: "msg user" });
     b.textContent = msg.content;
     return b;
   }
-  const b = h("div", { class: "msg bot", html: safeHtml(formatMath(msg.content)) });
+  const b = h("div", { class: "msg bot", html: safeHtml(formatAssistant(msg.content)) });
   if (msg.citations && msg.citations.length > 0) {
     b.append(h("div", { class: "src" }, `出典: ${msg.citations.join(" ／ ")}`));
   }
@@ -72,11 +82,16 @@ async function sendChat(question: string): Promise<void> {
   // どちらのモードでもまずローカル検索（API モードではグラウンディング文脈に流用）。
   const hits = retrieve(q, KNOWLEDGE, { k: 4 });
 
-  if (!apiKey) {
+  // II-16: キーがあってもオフラインなら API は必ず失敗するため、fetch を待たず内蔵ナレッジで回答する。
+  //   失敗するリクエストでユーザーを待たせず、オフライン知識を使う旨を明示する。
+  const apiUnavailable = !apiKey || !navigator.onLine;
+  if (apiUnavailable) {
     const a = answerLocally(q);
+    // キーはあるがオフラインのときだけ、なぜ API を使わなかったかを一言添える。
+    const offlineNote = apiKey && !navigator.onLine ? "📴 オフラインのため内蔵ナレッジで回答します。\n\n" : "";
     appendChatMessage(storage, {
       role: "assistant",
-      content: a.text,
+      content: `${offlineNote}${a.text}`,
       citations: a.citations,
       mode: "local",
       atMs: Date.now(),
@@ -102,7 +117,8 @@ async function sendChat(question: string): Promise<void> {
     });
     for await (const chunk of stream) {
       acc += chunk;
-      live.innerHTML = formatMath(acc);
+      // formatAssistant は Markdown→XSS安全HTML＋数式整形（escapeHtml 済み）を返す。
+      live.innerHTML = formatAssistant(acc);
       scrollChatToBottom();
     }
     appendChatMessage(storage, {
@@ -144,10 +160,17 @@ function renderChatLogOnly(suggestions?: readonly string[]): void {
 export function renderChat(root: HTMLElement): void {
   const apiKey = getApiKey(storage);
   const history = loadChat(storage);
+  // キーがあってもオフラインなら API は使えない旨をピルに明示する（II-16）。
+  const apiActive = apiKey && navigator.onLine;
+  const pillLabel = apiActive
+    ? "✨ Claude API（ローカル検索で接地）"
+    : apiKey
+      ? "📴 オフライン（内蔵ナレッジで回答）"
+      : "📚 内蔵ナレッジ（オフライン）";
   const toolbar = h(
     "div",
     { class: "toolbar" },
-    h("span", { class: "pill" }, apiKey ? "✨ Claude API（ローカル検索で接地）" : "📚 内蔵ナレッジ（オフライン）"),
+    h("span", { class: "pill" }, pillLabel),
     h(
       "button",
       {

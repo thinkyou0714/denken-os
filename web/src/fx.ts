@@ -34,11 +34,14 @@ export function confettiBurst(count = 28): void {
       remaining -= 1;
       if (remaining <= 0) host.remove();
     }
+    // フォールバックは実際の最大(遅延+継続)から算出する（固定 1900ms は将来の値変更でズレる）。
+    let maxEndSec = 0;
     for (let i = 0; i < count; i++) {
       const p = document.createElement("span");
       const left = Math.random() * 100;
       const delay = Math.random() * 0.25;
       const dur = 1 + Math.random() * 0.6;
+      maxEndSec = Math.max(maxEndSec, delay + dur);
       const color = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
       const rot = Math.floor(Math.random() * 360);
       p.style.cssText = `left:${left}%;background:${color};animation-delay:${delay}s;animation-duration:${dur}s;transform:rotate(${rot}deg)`;
@@ -47,7 +50,8 @@ export function confettiBurst(count = 28): void {
     }
     document.body.appendChild(host);
     // フォールバック: アニメーションが発火しない環境（hidden タブ等）でも確実に除去する。
-    window.setTimeout(() => host.remove(), 1900);
+    // 実測の最大終了時刻に小さな余裕(0.3s)を足してミリ秒へ。
+    window.setTimeout(() => host.remove(), Math.ceil((maxEndSec + 0.3) * 1000));
   } catch {
     // 演出は失敗しても学習を止めない。
   }

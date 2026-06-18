@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { escapeHtml, formatMath } from "../../web/src/mathfmt.js";
+import { applyMathMarkup, escapeHtml, formatMath } from "../../web/src/mathfmt.js";
 
 describe("mathfmt（数式の軽量整形）", () => {
   it("HTML をエスケープする（XSS 防止）", () => {
@@ -22,5 +22,13 @@ describe("mathfmt（数式の軽量整形）", () => {
     const s = formatMath("|Z|=√(8²+6²)=10Ω、cosφ=0.8");
     expect(s).toContain("√(8²+6²)");
     expect(s).toContain("cosφ");
+  });
+
+  it("applyMathMarkup はエスケープせず sub/sup だけ適用する（Markdown 連携用）", () => {
+    // 既にエスケープ済みの文字列に重ねて使う想定なので、再エスケープしない。
+    expect(applyMathMarkup("V_p")).toBe("V<sub>p</sub>");
+    expect(applyMathMarkup("R^2")).toBe("R<sup>2</sup>");
+    // formatMath = escapeHtml + applyMathMarkup の合成と一致する。
+    expect(formatMath("V_p")).toBe(applyMathMarkup(escapeHtml("V_p")));
   });
 });

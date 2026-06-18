@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="電験二種 学習OS — FSRS間隔反復・模試・AIチャット対応のオフライン PWA。" />
     <!-- script-src の sha256 は下部のインライン FOUC 防止スクリプトのハッシュ。スクリプト変更時は再計算（docs/refactoring/round2 参照）。 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kTrWdDD77A48JF/DFC5ygGL8txhFNongFMH11qqQcvg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com https://*.supabase.co https://*.supabase.in; worker-src 'self'; manifest-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kTrWdDD77A48JF/DFC5ygGL8txhFNongFMH11qqQcvg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com; worker-src 'self'; manifest-src 'self';" />
     <title>DENKEN-OS — 電験二種 学習</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -99,6 +99,15 @@
         position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
         overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
       }
+      /* 本文へスキップ（キーボード/支援技術向け）。フォーカス時のみ画面に現れる。 */
+      .skip-link {
+        position: absolute; left: 0; top: 0; z-index: 100;
+        transform: translateY(-120%); transition: transform .15s var(--ease);
+        background: var(--accent); color: var(--accent-contrast);
+        padding: .55rem .9rem; border-radius: 0 0 var(--r-md) 0; font-weight: 700; font-size: .9rem;
+        text-decoration: none;
+      }
+      .skip-link:focus { transform: translateY(0); outline: none; box-shadow: var(--ring); }
       .stats { display: flex; gap: .4rem; flex-wrap: wrap; }
       .pill {
         font-size: .76rem; font-weight: 600; color: var(--muted);
@@ -538,6 +547,7 @@
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#view">本文へスキップ</a>
     <header>
       <div class="brand">
         <img class="logo" src="./icon.svg" alt="" />
@@ -566,6 +576,6 @@
       復習は FSRS（最新の間隔反復アルゴリズム）。コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 
-    <script type="module" src="./dist/app.js" integrity="sha384-BPlVqwjibyQ5vPq+IISFjXX0bHeV0LwV9rx7vmqBDyymGXwmp/zw9b+p5zkJeI2K" crossorigin="anonymous"></script>
+    <script type="module" src="./dist/app.js" integrity="sha384-eqtUTcvuJ/0psJt/yaJ8T7XXDmiPQiI+8OZ/vIBjo3C1xEkMUu+ZiQu4xS0ILiD+" crossorigin="anonymous"></script>
   </body>
 </html>

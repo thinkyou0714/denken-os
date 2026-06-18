@@ -46,7 +46,7 @@ import { loadFailed, problems, progress, storage, view } from "../state/app.js";
 import { practice, todayCount, weakTopics } from "../state/practice.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
-import { difficultyStars, emptyState, figureNode } from "../ui/widgets.js";
+import { difficultyStars, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
 import { renderHeader } from "./router.js";
 
@@ -207,7 +207,7 @@ function onboardingCard(root: HTMLElement): HTMLElement {
     h(
       "div",
       { class: "obhead" },
-      h("span", { class: "mface", html: safeHtml(mascotSvg("happy", 52)) }),
+      svgNode(mascotSvg("happy", 52), "span", { class: "mface" }),
       h("strong", {}, "👋 はじめまして！デンタマです。30秒だけ目標を決めよう"),
     ),
     h("div", { class: "wizrow" }, h("label", {}, "試験日"), dateInput),
@@ -270,7 +270,7 @@ function mascotCard(): HTMLElement {
   return h(
     "div",
     { class: "card mascot" },
-    h("div", { class: "mface", html: safeHtml(mascotSvg(mv.mood, 64, tier)) }),
+    svgNode(mascotSvg(mv.mood, 64, tier), "div", { class: "mface" }),
     h("div", { class: "mcol" }, bubble, tipBtn),
   );
 }
@@ -329,7 +329,9 @@ export function practicePool(): Problem[] {
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
 
 export function renderPractice(root: HTMLElement): void {
-  if (!isOnboarded(storage) && progress.logs().length === 0) root.append(onboardingCard(root));
+  // 未オンボーディングなら目標設定ウィザードを出す。設定タブの「もう一度見る」で
+  // 既存ユーザー（ログあり）も再表示できるよう、ログ件数では絞らない（onboarded フラグのみで判定）。
+  if (!isOnboarded(storage)) root.append(onboardingCard(root));
   if (getMascotEnabled(storage)) root.append(mascotCard());
   root.append(questsCard());
   const toolbar = h(

@@ -27,7 +27,7 @@ import {
   setTheme,
   type ThemePref,
 } from "../settings.js";
-import { applyTheme, installPrompt, progress, storage } from "../state/app.js";
+import { applyTheme, installPrompt, progress, setInstallPrompt, storage } from "../state/app.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { renderHeader, renderNav, switchView } from "./router.js";
@@ -182,13 +182,36 @@ export function renderSettings(root: HTMLElement): void {
               {
                 class: "choice",
                 type: "button",
-                onclick: () => void installPrompt?.prompt(),
+                onclick: () => {
+                  // prompt() は1回しか使えない。使用後は null 化して再プロンプトを防ぐ。
+                  void installPrompt?.prompt();
+                  setInstallPrompt(null);
+                },
               },
               "📲 ホーム画面に追加（1タップで起動）",
             ),
           ),
         ]
       : []),
+    h(
+      "div",
+      { class: "card" },
+      h("label", {}, "チュートリアル "),
+      h(
+        "button",
+        {
+          class: "choice",
+          type: "button",
+          onclick: () => {
+            // 初回オンボーディングを再表示できるようにする（学習タブで再表示される）。
+            storage.setItem("denken:onboarded", "");
+            switchView("practice");
+          },
+        },
+        "🔄 チュートリアルをもう一度見る",
+      ),
+      h("div", { class: "muted" }, "初回の目標設定ガイドを学習タブで再表示します（学習記録は消えません）。"),
+    ),
     h(
       "button",
       { class: "choice", type: "button", style: "border-color:var(--ng);color:var(--ng)", onclick: resetData },

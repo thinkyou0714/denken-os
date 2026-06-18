@@ -22,13 +22,47 @@ import { processRewards } from "./practice-rewards.js";
 import { startDrill } from "./review.js";
 import { renderHeader, switchView } from "./router.js";
 
+/**
+ * バックグラウンドタブ復帰時の保険（II-8）。
+ * setInterval はタブ非表示中にスロットル/停止され、復帰時に残り時間が正しく
+ * 反映されない（または期限超過に気づけない）。可視化時に残りを再計算し、
+ * 期限切れなら即 timeoutExam する。startTimer で登録し clearExamTimer で解除する。
+ */
+let _examVisibilityHandler: (() => void) | null = null;
+
+function attachExamVisibility(): void {
+  if (_examVisibilityHandler) return; // 二重登録を防ぐ。
+  _examVisibilityHandler = () => {
+    if (document.visibilityState !== "visible" || !exam) return;
+    const remaining = exam.limitMs - (Date.now() - exam.startedAt);
+    if (remaining <= 0) {
+      // 非表示中に期限超過していたら復帰時に確定で時間切れにする。
+      timeoutExam();
+      return;
+    }
+    // 表示の即時補正（次の tick を待たずに残り時間を反映）。
+    const t = document.getElementById("timer");
+    if (t) t.textContent = `残り ${formatRemaining(remaining)}`;
+  };
+  document.addEventListener("visibilitychange", _examVisibilityHandler);
+}
+
+function detachExamVisibility(): void {
+  if (_examVisibilityHandler) {
+    document.removeEventListener("visibilitychange", _examVisibilityHandler);
+    _examVisibilityHandler = null;
+  }
+}
+
 /** タイマーを安全に破棄するユーティリティ（II-156 タイマーリーク解消）。
- * setterで既存破棄+view離脱時の一元cleanup。 */
+ * setterで既存破棄+view離脱時の一元cleanup。visibility リスナも併せて解除する（II-8）。 */
 export function clearExamTimer(): void {
   if (exam?.timerId != null) {
     clearInterval(exam.timerId);
     exam.timerId = null;
   }
+  // 模試タイマーの終了に合わせて visibility リスナも外す（リーク・誤発火防止）。
+  detachExamVisibility();
 }
 
 /** 模試を終了（タイマー解除）して模試タブの初期画面へ戻る。 */
@@ -244,8 +278,11 @@ export function renderExamRunning(root: HTMLElement): void {
  */
 export function startTimer(): void {
   if (!exam) return;
-  // 既存タイマーを必ず破棄してから新規設定（II-156）。
+  // 既存タイマーを必ず破棄してから新規設定（II-156）。clearExamTimer は visibility も外すため、
+  // この後に attachExamVisibility で登録し直す。
   clearExamTimer();
+  // バックグラウンド復帰時の残り時間補正・期限切れ確定（II-8）。
+  attachExamVisibility();
   /** ラスト1分の警告をaria-liveで1回だけ通知するフラグ。 */
   let warnAnnounced = false;
   exam.timerId = window.setInterval(() => {

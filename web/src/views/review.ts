@@ -10,7 +10,7 @@ import { getMascotEnabled, getReviewCap } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
 import { practice, setCombo } from "../state/practice.js";
 import { h, safeHtml } from "../ui/dom.js";
-import { emptyState } from "../ui/widgets.js";
+import { emptyState, svgNode } from "../ui/widgets.js";
 import { usedFreezeDays } from "./practice.js";
 import { switchView } from "./router.js";
 
@@ -23,7 +23,7 @@ export function renderReview(root: HTMLElement): void {
         h(
           "div",
           { class: `card nudge ${ss.state} mascot` },
-          h("div", { class: "mface", html: safeHtml(mascotSvg(ss.state === "at-risk" ? "worried" : "sad", 48)) }),
+          svgNode(mascotSvg(ss.state === "at-risk" ? "worried" : "sad", 48), "div", { class: "mface" }),
           h("div", { class: "mbubble" }, ss.message),
         ),
       );

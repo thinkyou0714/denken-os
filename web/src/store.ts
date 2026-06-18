@@ -70,6 +70,13 @@ export class LocalProgress {
   private scheduler: FsrsScheduler;
   /** 最後に保存が失敗したキーと時刻（成功でクリア）。G6 が保存失敗 UI に利用する。 */
   private _lastPersistError: { key: string; atMs: number } | null = null;
+  /**
+   * dueTopics の件数メモ化（xpByDayCached パターン）。
+   * dueTopics() は毎呼び出しで全 FSRS カードを revive するため renderNav の度に重い。
+   * cards-blob の長さ・nowMs の「分」・retention をキーにキャッシュする。
+   * 内容ハッシュではないが、書き込みは safeSet 経由で blob 長 or 内容が変わるため十分実用的。
+   */
+  private _dueCountCache: { cardsLen: number; minute: number; retention: number; count: number } | null = null;
 
   constructor(
     private storage: StorageLike,
@@ -133,6 +140,8 @@ export class LocalProgress {
     const clamped = Math.min(0.97, Math.max(0.7, value));
     this.safeSet(RETENTION_KEY, String(clamped));
     this.scheduler = new FsrsScheduler(clamped);
+    // 目標保持率が変わると due 判定も変わるためメモ化キャッシュを破棄する。
+    this._dueCountCache = null;
   }
 
   logs(): WebAnswerLog[] {
@@ -161,6 +170,31 @@ export class LocalProgress {
       .map(([topic]) => topic);
   }
 
+  /**
+   * 期限到来 topic の「件数」だけをメモ化して返す（renderNav 用）。
+   * カード blob 長・nowMs の分・retention が前回と同じならキャッシュを返す。
+   * 件数が必要なだけの呼び出し（ナビのバッジ）で全カード revive の繰り返しを避ける。
+   * 返す件数は同条件の dueTopics(nowMs).length と一致する（テストで保証）。
+   */
+  dueCountCached(nowMs: number = Date.now()): number {
+    const blob = this.storage.getItem(CARD_KEY);
+    const cardsLen = blob === null ? 0 : blob.length;
+    const minute = Math.floor(nowMs / 60_000);
+    const retention = this.desiredRetention();
+    const c = this._dueCountCache;
+    if (c !== null && c.cardsLen === cardsLen && c.minute === minute && c.retention === retention) {
+      return c.count;
+    }
+    const count = this.dueTopics(nowMs).length;
+    this._dueCountCache = { cardsLen, minute, retention, count };
+    return count;
+  }
+
+  /** dueCount キャッシュを破棄する（テスト・復元用）。 */
+  clearDueCountCache(): void {
+    this._dueCountCache = null;
+  }
+
   /** 採点を記録し、FSRS で記憶状態を更新する。rating は4段階 or 正誤boolean。 */
   record(
     topic: string,
@@ -179,6 +213,8 @@ export class LocalProgress {
 
     cards[topic] = next as unknown as StoredCard; // Date は JSON で ISO 文字列化される
     this.safeSet(CARD_KEY, JSON.stringify(cards));
+    // due 件数が変わりうるのでメモ化キャッシュを破棄（blob 長が同じでも内容変化を取りこぼさない）。
+    this._dueCountCache = null;
 
     const logs = this.logs();
     logs.push({

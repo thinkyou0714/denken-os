@@ -80,6 +80,63 @@ describe("LocalProgress（ブラウザ進捗・FSRS）", () => {
     expect(b.getCardView("機械")).toBeDefined();
   });
 
+  // ---- II-6: dueCountCached メモ化（renderNav の重い revive を間引く）----
+
+  it("dueCountCached は同条件の dueTopics().length と一致する", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    p.record("理論", true, now);
+    p.record("電力", true, now);
+    const future = now + 100 * DAY;
+    expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
+    // 期限前は 0 件。
+    expect(p.dueCountCached(now)).toBe(p.dueTopics(now).length);
+  });
+
+  it("record 後はキャッシュが無効化され、新しい due 件数を返す", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    const future = now + 100 * DAY;
+    p.record("理論", true, now);
+    expect(p.dueCountCached(future)).toBe(1); // 乗せる
+    // 別 topic を追加すると due 件数が増える（キャッシュは record で破棄）。
+    p.record("電力", true, now);
+    expect(p.dueCountCached(future)).toBe(2);
+    expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
+  });
+
+  it("同一分・同一カードなら2回目はキャッシュ値（dueTopics と一致を維持）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    const future = now + 100 * DAY;
+    p.record("理論", true, now);
+    const a = p.dueCountCached(future);
+    const b = p.dueCountCached(future);
+    expect(a).toBe(b);
+    expect(a).toBe(p.dueTopics(future).length);
+  });
+
+  it("clearDueCountCache 後も正しい件数を返す", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    const future = now + 100 * DAY;
+    p.record("理論", true, now);
+    p.dueCountCached(future);
+    p.clearDueCountCache();
+    expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
+  });
+
+  it("setDesiredRetention はキャッシュを破棄する", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    const now = Date.UTC(2026, 0, 10);
+    const future = now + 100 * DAY;
+    p.record("理論", true, now);
+    p.dueCountCached(future);
+    p.setDesiredRetention(0.8);
+    // retention 変更後も dueTopics と一致する（再計算される）。
+    expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
+  });
+
   it("日境界は既定 JST（UTC 22時=JST翌07時の学習が『今日』に入る）", () => {
     const p = new LocalProgress(new MemoryStorage()); // 既定 JST(+9h)
     // 2026-01-10T22:00:00Z = JST 2026-01-11 07:00。JST では「11日」の学習。

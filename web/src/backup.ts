@@ -73,6 +73,47 @@ export function exportBackup(storage: StorageLike, nowMs: number = Date.now()): 
 export type ImportResult = { ok: true; restoredKeys: string[] } | { ok: false; reason: string };
 
 /**
+ * 復元前に各値が期待する形をしているか検証する（壊れた値で進捗を破壊しないため）。
+ * - denken:logs → {atMs:number, topic:string} の配列（他フィールドは許容）
+ * - denken:cards → オブジェクト（topic→Card のマップ）
+ * その他のキーは従来どおり「文字列であること」のみで通す（緩い検証）。
+ * @returns 妥当なら null、問題があればユーザー向けの理由文字列
+ */
+function validateBackupValue(key: string, raw: string): string | null {
+  if (key === "denken:logs") {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return "学習ログ（denken:logs）が壊れています。";
+    }
+    if (!Array.isArray(parsed)) return "学習ログ（denken:logs）が配列ではありません。";
+    const ok = parsed.every(
+      (l) =>
+        typeof l === "object" &&
+        l !== null &&
+        typeof (l as { atMs?: unknown }).atMs === "number" &&
+        typeof (l as { topic?: unknown }).topic === "string",
+    );
+    if (!ok) return "学習ログ（denken:logs）の形式が不正です。";
+    return null;
+  }
+  if (key === "denken:cards") {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return "記憶状態（denken:cards）が壊れています。";
+    }
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return "記憶状態（denken:cards）の形式が不正です。";
+    }
+    return null;
+  }
+  return null;
+}
+
+/**
  * バックアップ JSON を検証して取り込む。
  * 許可リスト（BACKUP_KEYS）外のキーは黙って無視する＝悪意ある JSON で
  * 任意キーを書き込まれない（インポートは信頼できない入力として扱う）。
@@ -98,12 +139,19 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
   }
   if (typeof file.data !== "object" || file.data === null) return { ok: false, reason: "データ部がありません。" };
 
+  // II-9: 書き込み前に、形が分かるキー（logs/cards）の構造を検証する。
+  // 壊れた値で進捗を上書きしないよう、不正があればファイル全体を拒否する（明確な理由付き）。
+  for (const key of BACKUP_KEYS) {
+    const v = (file.data as Record<string, unknown>)[key];
+    if (typeof v !== "string") continue;
+    const problem = validateBackupValue(key, v);
+    if (problem) return { ok: false, reason: problem };
+  }
+
   const restoredKeys: string[] = [];
   for (const key of BACKUP_KEYS) {
     const v = (file.data as Record<string, unknown>)[key];
     if (typeof v !== "string") continue;
-    // 各値は JSON or プリミティブ文字列。壊れた JSON を入れると read 側の
-    // フォールバックで初期値扱いになるため、ここでは文字列であることのみ検証する。
     storage.setItem(key, v);
     restoredKeys.push(key);
   }

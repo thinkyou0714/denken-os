@@ -30,10 +30,21 @@ export function solutionNode(p: Problem, label: string): HTMLElement {
   );
 }
 
+/**
+ * SVG 文字列を innerHTML に流す唯一の経路（多層防御）。
+ * すべての SVG→innerHTML は必ず sanitizeSvg を通す（mascotSvg も figure と同様に経由させる）。
+ * 現状の SVG はビルド時固定で安全だが、将来の動的化に備えて一元化しておく。
+ * @param tag ラップする要素タグ（既定 div）
+ * @param attrs 追加属性（class/style など。html は内部で設定するため不可）
+ */
+export function svgNode(svgStr: string, tag = "div", attrs: Record<string, string> = {}): HTMLElement {
+  const safe = sanitizeSvg(svgStr);
+  return h(tag, { ...attrs, html: safeHtml(safe) });
+}
+
 /** 図（インライン SVG）を表示するノード。sanitizeSvg でサニタイズ済み（I-037）。 */
 export function figureNode(svgStr: string): HTMLElement {
-  const safe = sanitizeSvg(svgStr);
-  return h("figure", { class: "figure", html: safeHtml(safe) });
+  return svgNode(svgStr, "figure", { class: "figure" });
 }
 
 /** 空状態（履歴なし等）の上質な表示。 */
