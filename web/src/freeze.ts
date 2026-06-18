@@ -88,6 +88,40 @@ export function streakWithFreezes(days: ReadonlySet<number>, usedDays: readonly 
   return streak;
 }
 
+export interface StreakBreakdown {
+  /** 実効ストリーク日数（学習＋肩代わり）。 */
+  total: number;
+  /** うち実際に学習した日数。 */
+  studiedDays: number;
+  /** うちお守り・おやすみで肩代わりした日数。 */
+  coveredDays: number;
+}
+
+/**
+ * 現在のストリークの内訳（#62）。学習した日と、お守り/おやすみで肩代わりした日を区別する。
+ * 「連続◯日（うち学習◯日・お守り◯日）」のように UI で透明に見せるための純関数。
+ */
+export function streakBreakdown(
+  studied: ReadonlySet<number>,
+  covered: readonly number[],
+  todayIdx: number,
+): StreakBreakdown {
+  const coveredSet = new Set(covered);
+  const all = new Set(studied);
+  for (const d of coveredSet) all.add(d);
+  let cursor = all.has(todayIdx) ? todayIdx : todayIdx - 1;
+  if (!all.has(cursor)) return { total: 0, studiedDays: 0, coveredDays: 0 };
+  let studiedDays = 0;
+  let coveredDays = 0;
+  while (all.has(cursor)) {
+    // 学習日として記録があれば「学習」、無ければ「肩代わり」に数える（学習を優先）。
+    if (studied.has(cursor)) studiedDays += 1;
+    else coveredDays += 1;
+    cursor -= 1;
+  }
+  return { total: studiedDays + coveredDays, studiedDays, coveredDays };
+}
+
 export interface BridgeResult {
   state: FreezeState;
   /** 今回お守りで肩代わりした日（昇順）。空なら消費なし。 */

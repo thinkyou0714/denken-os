@@ -13,6 +13,10 @@
  * 既定は FSRS（現行アプリの動作と一致）。
  */
 export * from "./diagnosis.js";
+export {
+  type ExamAwareParams,
+  examAwareParams,
+} from "./exam-aware.js";
 export { FsrsScheduler, type FsrsView } from "./fsrs.js";
 export { Sm2Scheduler } from "./sm2.js";
 export type { Rating, ReviewState, Scheduler } from "./types.js";

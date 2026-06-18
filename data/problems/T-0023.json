@@ -8,7 +8,7 @@
   "params": {
     "secondary_resistance": {
       "value": 0.3,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         0.1,
         1

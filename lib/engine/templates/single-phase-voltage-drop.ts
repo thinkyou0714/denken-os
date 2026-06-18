@@ -58,6 +58,8 @@ export const singlePhaseVoltageDrop = defineTemplate<Params>({
     const v = 2 * I * (R * cos + X * sin);
     if (v <= 0 || !isCleanAnswer(v)) return null;
     const answerText = formatClean(v);
+    // cosθ=1 は sinθ=0 で「遅れ」が存在しない。力率1のときは（遅れ）を付けない。
+    const pfNote = sin > 0 ? "（遅れ）" : "（力率1）";
     return {
       format: "numeric",
       params: {
@@ -72,7 +74,7 @@ export const singlePhaseVoltageDrop = defineTemplate<Params>({
       facts: { I, R, X, cos, sin, v },
       defaultStatement:
         `単相2線式の線路で、線電流 I=${I}A、1線の抵抗 R=${R}Ω、リアクタンス X=${X}Ω、` +
-        `負荷力率 cosθ=${cos}（遅れ）である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。`,
+        `負荷力率 cosθ=${cos}${pfNote}である。線路の電圧降下 v〔V〕を v≈2I(Rcosθ+Xsinθ) で求めよ。`,
       defaultSolution: [
         `単相2線式は往復2線分: v=2·I·(R·cosθ+X·sinθ)`,
         `v=2×${I}×(${R}×${cos}+${X}×${sin})`,

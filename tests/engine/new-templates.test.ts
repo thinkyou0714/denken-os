@@ -209,8 +209,10 @@ describe("拡充テンプレートの閉形式（固定値検算）", () => {
     ).toBe("25");
   });
 
-  it("法規: 風圧荷重 P=qA（980Pa,2m² → 1960N）", () => {
-    expect(windLoad.generateFrom({ wind_pressure: 980, area: 2 })!.answerText).toBe("1960");
+  it("法規: 風圧荷重 P=q·(d/1000)·L（甲種980Pa,d20mm,L100m → A=2m²,1960N）", () => {
+    const g = windLoad.generateFrom({ wind_pressure: 980, diameter: 20, span: 100 });
+    expect(g!.answerText).toBe("1960");
+    expect(g!.format).toBe("numeric");
   });
 
   it("法規: 許容張力 Tb/f（10000N,2.5 → 4000N）", () => {

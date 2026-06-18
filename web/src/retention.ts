@@ -18,6 +18,22 @@ export { JST_OFFSET_MS } from "./dates.js";
 /** 1日に出す復習の既定上限。多すぎる復習による離脱を防ぐ（設定で変更可）。 */
 export const DEFAULT_DAILY_REVIEW_CAP = 30;
 
+/** 直前モードで復習上限を引き上げる倍率（#64）。試験間際は取りこぼしを減らすため多めに出す。 */
+export const CRAM_REVIEW_CAP_MULT = 2;
+/** 直前モードでも1日に出す復習の絶対上限（無制限による離脱を防ぐ安全弁）。 */
+export const CRAM_REVIEW_CAP_MAX = 120;
+
+/**
+ * 実効の1日復習上限（#64）。通常は設定値、直前モード（試験間際）では引き上げる。
+ * 分散学習の上限は離脱防止のためだが、試験直前は「全部やり切る」方が合理的なため、
+ * cram のときだけ上限を緩める（絶対上限 CRAM_REVIEW_CAP_MAX でクランプ）。
+ */
+export function effectiveReviewCap(baseCap: number, cramMode: boolean): number {
+  const base = Math.max(1, Math.floor(baseCap));
+  if (!cramMode) return base;
+  return Math.min(CRAM_REVIEW_CAP_MAX, base * CRAM_REVIEW_CAP_MULT);
+}
+
 export interface ReviewBatch {
   /** 今日出す分（due 順を尊重して上限で切る）。 */
   batch: string[];

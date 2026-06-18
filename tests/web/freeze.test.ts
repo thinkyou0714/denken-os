@@ -7,6 +7,7 @@ import {
   loadFreezeState,
   maybeAwardFreeze,
   saveFreezeState,
+  streakBreakdown,
   streakWithFreezes,
   studiedDays,
 } from "../../web/src/freeze.js";
@@ -146,5 +147,41 @@ describe("studiedDays", () => {
       { topic: "t", correct: true, atMs: after },
     ]);
     expect(days.size).toBe(2);
+  });
+});
+
+describe("streakBreakdown（学習日 vs 肩代わり日の区別・#62）", () => {
+  it("全て学習日なら coveredDays=0", () => {
+    const studied = new Set([10, 9, 8]);
+    const bd = streakBreakdown(studied, [], 10);
+    expect(bd).toEqual({ total: 3, studiedDays: 3, coveredDays: 0 });
+  });
+
+  it("肩代わり日を分けて数える（連続の中に欠席カバーが混ざる）", () => {
+    // 今日(10)・8 を学習、9 はお守りで肩代わり → 連続3日（学習2・肩代わり1）。
+    const studied = new Set([10, 8]);
+    const bd = streakBreakdown(studied, [9], 10);
+    expect(bd.total).toBe(3);
+    expect(bd.studiedDays).toBe(2);
+    expect(bd.coveredDays).toBe(1);
+  });
+
+  it("学習記録があれば肩代わり指定と重複しても『学習』に数える", () => {
+    const studied = new Set([10, 9]);
+    const bd = streakBreakdown(studied, [9], 10); // 9 は学習済みなので学習として数える
+    expect(bd.studiedDays).toBe(2);
+    expect(bd.coveredDays).toBe(0);
+  });
+
+  it("継続していなければ全て0", () => {
+    const studied = new Set([5]);
+    expect(streakBreakdown(studied, [], 10)).toEqual({ total: 0, studiedDays: 0, coveredDays: 0 });
+  });
+
+  it("昨日起点でも内訳を返す（今日未学習・昨日まで継続）", () => {
+    const studied = new Set([9, 8]);
+    const bd = streakBreakdown(studied, [], 10); // 今日(10)は未学習、昨日(9)から遡る
+    expect(bd.total).toBe(2);
+    expect(bd.studiedDays).toBe(2);
   });
 });

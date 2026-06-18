@@ -16,7 +16,7 @@
     },
     "impedance": {
       "value": 5,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         2,
         25

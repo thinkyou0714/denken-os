@@ -16,7 +16,7 @@
     },
     "internal_resistance": {
       "value": 5,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         1,
         20

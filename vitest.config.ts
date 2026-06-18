@@ -6,18 +6,27 @@ export default defineConfig({
     environment: "node",
     coverage: {
       provider: "v8",
-      reporter: ["text", "html"],
-      include: ["lib/**/*.ts"],
-      // 現状(2026-06)の実測(stmts88/branch79/funcs94/lines91, lib全体)を下回らない
-      // ための回帰防止フロア。値を上げるのは歓迎、下げる場合は理由をPRに記すこと。
-      // G7(I-073): 実測 stmts86/branch78/funcs97/lines95 に基づき funcs/lines を引き上げ。
-      // 第3ラウンド(2026-06-15): 実測 stmts86.8/branch76.7/funcs96.2/lines93.4 に追従して床上げ。
-      // branches は実測 76.7 のため 76 を維持（77 は余裕不足）。下げる場合は理由をPRに記すこと。
+      // text/html はローカル閲覧用、lcov は外部ツール連携用、json-summary は CI のバッジ/比較用。
+      reporter: ["text", "html", "lcov", "json-summary"],
+      // lib 全体 + web のロジック層を計測対象に含める（#75/#87）。
+      // ただし DOM glue（state/ui/views）は node 環境で import 時に window/document へ触れて
+      // 評価できないため除外する。これらは tests/web から間接的にしか到達せず、
+      // include に残すと 0% ファイルとして全体率を不当に押し下げる。
+      include: ["lib/**/*.ts", "web/src/**/*.ts"],
+      exclude: ["web/src/state/**", "web/src/ui/**", "web/src/views/**"],
+      // 実測値を整数へ切り捨てた回帰防止フロア。値を上げるのは歓迎、下げる場合は理由をPRに記すこと。
+      // 計測範囲が lib のみ → lib + web ロジック層（web/src の DOM glue を除く）へ拡大したため、
+      // 床値も新しい実測に合わせて再設定した（#75/#87）。
+      // 第4ラウンド(2026-06-17): include に web/src/**（state/ui/views を除外）を追加。
+      //   全テスト緑・安定時の実測は stmts84.88 / branch77.23 / funcs92.11 / lines89.88。
+      //   実測を整数へ切り捨てた値をフロアに採用（stmts84 / lines89）。
+      //   branch/funcs はテンプレ拡充の進行で小幅変動するため floor から 1pt の余裕を残す
+      //   （branch76 / funcs91）。CI を緑に保ちつつ回帰を防ぐ安全側設定。値を上げるのは歓迎。
       thresholds: {
-        statements: 86,
+        statements: 84,
         branches: 76,
-        functions: 96,
-        lines: 93,
+        functions: 91,
+        lines: 89,
       },
     },
   },

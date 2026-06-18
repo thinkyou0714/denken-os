@@ -4,6 +4,7 @@
  * 復習見込みを算出する。DOM 非依存でテスト可能。
  */
 import type { Problem, Subject } from "../../lib/engine/schema.js";
+import { smoothedSuccessRate } from "../../lib/scheduler/diagnosis.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
 import { JST_OFFSET_MS as _JST_OFFSET_MS, DAY_MS } from "./dates.js";
 import type { WebAnswerLog } from "./store.js";
@@ -160,6 +161,82 @@ export interface DayActivity {
   /** 今日からの相対日（0=今日, -1=昨日 …）。 */
   offset: number;
   count: number;
+}
+
+// ---- #52: 科目別 合格見込み（推定）----
+
+export type ReadinessVerdict = "順調" | "もう少し" | "遅れ";
+
+export interface SubjectReadiness {
+  subject: Subject;
+  /** 取り組んだ問題数（信頼度の目安）。 */
+  attempts: number;
+  /** 0..1 の合格見込み（推定）。 */
+  readiness: number;
+  /** 簡潔な判定（順調/もう少し/遅れ）。 */
+  verdict: ReadinessVerdict;
+  /** その科目の論点カバレッジ（着手した論点 ÷ 全論点, 0..1）。 */
+  coverage: number;
+  /** 平滑化した正答率（0..1）。 */
+  accuracy: number;
+}
+
+/** 合格ライン（科目60%）を中立点とした正答率の達成度（0..1）。0.6で0.5, 1.0で1.0 付近に張る。 */
+function accuracyComponent(accuracy: number): number {
+  // 0%→0, 合格ライン60%→0.6, 100%→1.0 の単調写像（合格ラインを満たすと十分高い）。
+  // 実測 accuracy をそのまま使うと 60% で「半分しかできていない」印象になるため、
+  // 合格ラインを 0.6 に対応させる線形写像にする（pass=0.6 を基準点に据える）。
+  return Math.max(0, Math.min(1, accuracy));
+}
+
+/**
+ * 科目1つの合格見込み（推定）を計算する（#52）。純関数。
+ *
+ * 合格見込み = 正答率成分 × 0.6 + カバレッジ成分 × 0.4。
+ *  - 正答率は少試行のノイズを抑えるため Bayes 平滑化（合格ライン0.6を事前）を使う。
+ *  - カバレッジは「その科目の論点のうち何割に着手したか」。
+ * 判定（順調/もう少し/遅れ）は残り日数で閾値を厳しくする（時間が無いほど高い完成度が必要）。
+ * あくまで推定であり、合否を保証しない（UI でも「推定」と明示する）。
+ */
+export function subjectReadiness(
+  subject: Subject,
+  logs: WebAnswerLog[],
+  problems: Problem[],
+  daysLeft: number,
+): SubjectReadiness {
+  const map = topicSubjectMap(problems);
+  // その科目の全論点（カバレッジ分母）。
+  const subjectTopics = new Set<string>();
+  for (const p of problems) if (p.subject === subject) subjectTopics.add(p.topic);
+  let attempts = 0;
+  let correct = 0;
+  const attemptedTopics = new Set<string>();
+  for (const l of logs) {
+    if (map.get(l.topic) !== subject) continue;
+    attempts += 1;
+    if (l.correct) correct += 1;
+    attemptedTopics.add(l.topic);
+  }
+  const accuracy = smoothedSuccessRate(correct, attempts);
+  const coverage = subjectTopics.size > 0 ? Math.min(1, attemptedTopics.size / subjectTopics.size) : 0;
+  const readiness = Math.max(0, Math.min(1, accuracyComponent(accuracy) * 0.6 + coverage * 0.4));
+
+  // 残り日数で判定を厳しくする: 直前ほど高い完成度を「順調」とみなす。
+  // 余裕がある（>60日）ほど閾値を下げ、間際（<14日）は上げる。
+  const okThreshold = daysLeft <= 14 ? 0.75 : daysLeft <= 60 ? 0.65 : 0.55;
+  const midThreshold = daysLeft <= 14 ? 0.55 : daysLeft <= 60 ? 0.45 : 0.4;
+  const verdict: ReadinessVerdict =
+    attempts === 0 ? "遅れ" : readiness >= okThreshold ? "順調" : readiness >= midThreshold ? "もう少し" : "遅れ";
+
+  return { subject, attempts, readiness, verdict, coverage, accuracy };
+}
+
+/** 全科目の合格見込み（推定）を固定順で返す（#52）。 */
+export function allSubjectReadiness(logs: WebAnswerLog[], problems: Problem[], daysLeft: number): SubjectReadiness[] {
+  // 出題に存在する科目のみ対象（問題集に無い科目は判定しない）。
+  const order: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
+  const present = new Set(problems.map((p) => p.subject));
+  return order.filter((s) => present.has(s)).map((s) => subjectReadiness(s, logs, problems, daysLeft));
 }
 
 /**

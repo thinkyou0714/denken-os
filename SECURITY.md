@@ -31,6 +31,21 @@ GitHub の [Private vulnerability reporting](https://github.com/thinkyou0714/den
   サーバ側環境変数でのみ扱う。
 - 万一キーをコミットした場合は、**履歴の修正だけでなく当該キーのローテーション（失効）**を行うこと。
 
+## CI の依存インストール方針（#89: `npm ci --ignore-scripts` を採用しない）
+
+サプライチェーン強化として `npm ci --ignore-scripts`（依存の postinstall を実行しない）を
+検討したが、**本リポジトリでは採用しない**。理由は以下のとおり。
+
+- ビルド依存の **esbuild が `postinstall`（`node install.js`）でプラットフォーム別バイナリを取得**する。
+  `--ignore-scripts` を全体に適用するとこのバイナリ取得がスキップされ、
+  `npm run build:web`（`scripts/build-web.ts` が esbuild でバンドル）が壊れる。
+- すなわちハードニングのためにビルドが恒常的に失敗する状態を招くため、**安全側に倒して導入を見送る**。
+- 代替の供給網対策は別途実施済み: 依存の SHA ピン（Renovate `pinGitHubActionDigests`）、
+  `npm audit --omit=dev --audit-level=high`（CI ブロッキング）、dependency-review、gitleaks、
+  Dependabot security updates（`.github/dependabot.yml`）、CodeQL（`.github/workflows/codeql.yml`）。
+- 将来 esbuild 等のネイティブ依存を排せた場合や、ビルド専用ジョブでのみ scripts を許可する
+  構成（インストールを分離）にできた場合は再検討する。
+
 ## SVG サニタイズ規約（II-199）
 
 学習アプリの問題図（回路図・ベクトル図・ブロック図）はインライン SVG で配信している。

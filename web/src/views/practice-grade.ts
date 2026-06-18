@@ -22,7 +22,7 @@ import {
 } from "../quests.js";
 import { getDailyGoal, getSoundLevel } from "../settings.js";
 import { installPrompt, progress, storage } from "../state/app.js";
-import { practice, setCombo, todayCount } from "../state/practice.js";
+import { enqueueRequeue, practice, setCombo, todayCount } from "../state/practice.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { solutionNode, sourceText } from "../ui/widgets.js";
@@ -153,6 +153,11 @@ export function finalize(
   const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
 
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
+
+  // 間違えた問題はセッション後半で再出題する（短期の想起練習 #49）。
+  // 客観式: rating="again"（不正解）。記述: 部分点が合格圏未満。
+  const missed = score ? score.pct < 2 / 3 : rating === "again";
+  if (missed) enqueueRequeue(p);
 
   // 保存失敗チェック（I-035）
   const persistErr = progress.lastPersistError;

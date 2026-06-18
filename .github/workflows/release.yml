@@ -33,6 +33,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # #88: 押されたタグ vX.Y.Z が package.json の version と一致することを保証する。
+      # 不一致のままリリースすると配布物と版管理がズレるため、ここで早期に落とす。
+      # （手動実行など tag が無い場合はチェックをスキップする。）
+      - name: Assert tag matches package.json version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          echo "tag=$TAG package.json=$PKG_VERSION"
+          if [ "$TAG" != "v$PKG_VERSION" ]; then
+            echo "::error::タグ ($TAG) が package.json の version (v$PKG_VERSION) と一致しません。" \
+                 "package.json を更新してから vX.Y.Z タグを押してください。"
+            exit 1
+          fi
+
       - name: Release check (lint / typecheck / test / validate / build / audit)
         run: npm run release:check
 

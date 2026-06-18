@@ -24,7 +24,7 @@
     },
     "reactance": {
       "value": 50,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         40,
         100

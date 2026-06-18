@@ -22,6 +22,7 @@ import {
   dailyQuests,
   dayIndexOf,
   logsOfDay,
+  logsOfWeek,
   QUEST_CLEAR_BONUS_XP,
   questStatuses,
   WEEKLY_CLEAR_BONUS_XP,
@@ -29,7 +30,7 @@ import {
   weeklyQuestStatuses,
   weeklyQuests,
 } from "../quests.js";
-import { dailyReviewBatch, JST_OFFSET_MS, streakStatus } from "../retention.js";
+import { dailyReviewBatch, effectiveReviewCap, JST_OFFSET_MS, streakStatus } from "../retention.js";
 import { pickNextProblem } from "../select.js";
 import {
   getDailyGoal,
@@ -42,10 +43,10 @@ import {
   setOnboarded,
 } from "../settings.js";
 import { loadFailed, problems, progress, storage, view } from "../state/app.js";
-import { practice, todayCount, weakTopics } from "../state/practice.js";
+import { practice, pushRecentTopic, takeDueRequeue, todayCount, weakTopics } from "../state/practice.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
-import { difficultyStars, emptyState, figureNode } from "../ui/widgets.js";
+import { difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
 import { renderHeader } from "./router.js";
 
@@ -153,7 +154,9 @@ export function questsCard(): HTMLElement {
 /** 今週のクエストカード（進捗タブ用。日次より大きな積み上げ目標）。 */
 export function weeklyQuestsCard(): HTMLElement {
   const weekIdx = weekIndexOf(Date.now());
-  const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfDay(progress.logs(), weekIdx));
+  // 週次クエストは「その週の全ログ」で進捗判定する。
+  // 旧実装は logsOfDay(週番号) を渡しており、週番号は日番号と一致しないため常に空 → 0% 表示だった。
+  const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfWeek(progress.logs(), weekIdx));
   const allDone = statuses.every((s) => s.done);
   const card = h(
     "div",
@@ -204,7 +207,7 @@ function onboardingCard(root: HTMLElement): HTMLElement {
     h(
       "div",
       { class: "obhead" },
-      h("span", { class: "mface", html: safeHtml(mascotSvg("happy", 52)) }),
+      svgNode(mascotSvg("happy", 52), "span", { class: "mface" }),
       h("strong", {}, "👋 はじめまして！デンタマです。30秒だけ目標を決めよう"),
     ),
     h("div", { class: "wizrow" }, h("label", {}, "試験日"), dateInput),
@@ -223,6 +226,8 @@ function onboardingCard(root: HTMLElement): HTMLElement {
         type: "button",
         onclick: (e) => {
           setExamDate(storage, dateInput.value);
+          // 試験日逆算スケジューリングを新しい試験日で再構築（#34/#35）。
+          progress.setExamDate(getExamDate(storage));
           setDailyGoal(storage, Number(goalSel.value));
           setOnboarded(storage);
           ((e.target as HTMLElement).closest(".onboard") as HTMLElement | null)?.remove();
@@ -246,7 +251,8 @@ function mascotCard(): HTMLElement {
     streakDays: fi.streak,
     todayCount: todayCount(),
     dailyGoal: getDailyGoal(storage),
-    dueCount: dailyReviewBatch(progress.dueTopics(), getReviewCap(storage)).batch.length,
+    dueCount: dailyReviewBatch(progress.dueTopics(), effectiveReviewCap(getReviewCap(storage), progress.cramMode()))
+      .batch.length,
     dayIndex: dayIndexOf(Date.now()),
   });
   // レベルが上がるとデンタマも成長する（Lv10+ 星バッジ / Lv20+ ヘルメット / Lv40+ 王冠）。
@@ -267,7 +273,7 @@ function mascotCard(): HTMLElement {
   return h(
     "div",
     { class: "card mascot" },
-    h("div", { class: "mface", html: safeHtml(mascotSvg(mv.mood, 64, tier)) }),
+    svgNode(mascotSvg(mv.mood, 64, tier), "div", { class: "mface" }),
     h("div", { class: "mcol" }, bubble, tipBtn),
   );
 }
@@ -325,8 +331,26 @@ export function practicePool(): Problem[] {
 
 const SUBJECTS: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
 
+/**
+ * 直前モード（cram）バナー（#34/#35）。試験まで残りわずかのとき、分散学習から
+ * 弱点の集中復習へ切り替えることを促す。store.cramMode() が真のときだけ出す。
+ */
+export function cramBanner(): HTMLElement | null {
+  if (!progress.cramMode()) return null;
+  return h(
+    "div",
+    { class: "card nudge at-risk" },
+    h("strong", {}, "🔥 直前モード"),
+    h("div", { class: "muted" }, "試験が近づいています。弱点・未習得の論点を集中的に復習しましょう。"),
+  );
+}
+
 export function renderPractice(root: HTMLElement): void {
-  if (!isOnboarded(storage) && progress.logs().length === 0) root.append(onboardingCard(root));
+  // 未オンボーディングなら目標設定ウィザードを出す。設定タブの「もう一度見る」で
+  // 既存ユーザー（ログあり）も再表示できるよう、ログ件数では絞らない（onboarded フラグのみで判定）。
+  if (!isOnboarded(storage)) root.append(onboardingCard(root));
+  const cram = cramBanner();
+  if (cram) root.append(cram);
   if (getMascotEnabled(storage)) root.append(mascotCard());
   root.append(questsCard());
   const toolbar = h(
@@ -373,10 +397,23 @@ export function nextQuestion(root: HTMLElement): void {
   const host = root.querySelector("#q") as HTMLElement | null;
   if (!host) return;
   const excludeId = practice.current?.id;
-  practice.current = pickNextProblem(practicePool(), {
-    weakTopics: weakTopics(),
-    ...(excludeId !== undefined ? { excludeId } : {}),
-  });
+  // 出題の通し番号を進める（再出題タイミングの基準 #49）。
+  practice.asked += 1;
+  // まず再出題期限が来た「間違えた問題」を優先して出す（短期の想起練習 #49）。
+  const pool = practicePool();
+  const poolIds = new Set(pool.map((p) => p.id));
+  let next = takeDueRequeue(practice.asked, excludeId);
+  // 再出題対象が現在のプール（分野フィルタ）に無いならスキップして通常選択へ。
+  if (next && !poolIds.has(next.id)) next = null;
+  // 通常選択: 弱点をインターリーブしつつ選ぶ（#50）。
+  next =
+    next ??
+    pickNextProblem(pool, {
+      weakTopics: weakTopics(),
+      recentTopics: practice.recentTopics,
+      ...(excludeId !== undefined ? { excludeId } : {}),
+    });
+  practice.current = next;
   host.innerHTML = "";
   const p = practice.current;
   if (!p) {
@@ -393,8 +430,14 @@ export function nextQuestion(root: HTMLElement): void {
   }
   practice.shownAt = Date.now();
   practice.hintsShown = 0;
+  // インターリーブ用に直近 topic を記録する（次の選択で後回し判定に使う #50）。
+  pushRecentTopic(p.topic);
   const stmt = h("div", { class: "stmt", tabindex: "-1", html: safeHtml(formatMath(p.statement)) });
-  host.append(h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`), stmt);
+  // 未監修（自動生成）の問題はバッジで明示する（#63）。
+  const meta = h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`);
+  const badge = draftBadge(p);
+  if (badge) meta.append(" ", badge);
+  host.append(meta, stmt);
   if (p.figure) host.append(figureNode(p.figure));
   // ヒント段階開示: 解答前に解説の先頭ステップ（着眼点）だけ覗ける（最大2段）。
   const maxHints = Math.min(2, p.solution.length - 1);
@@ -442,12 +485,24 @@ export function renderAnswerInputs(host: HTMLElement, p: Problem): void {
       answers.append(btn);
     });
   } else if (p.format === "descriptive") {
+    // 解答前に自分の導出を書く/考えることを促す（後知恵バイアスで自己採点が甘くなるのを防ぐ #44）。
+    // 模範解答は「解答を考えた」と明示的に確認してから開示する。
+    const ta = h("textarea", {
+      class: "derivation",
+      rows: "4",
+      placeholder: "ここに解答の方針・導出を書き出してから模範解答を見ましょう（任意・端末内のみ）",
+      "aria-label": "自分の解答メモ",
+    }) as HTMLTextAreaElement;
     const reveal = h(
       "button",
       { class: "choice", type: "button", onclick: () => revealDescriptive(host, p) },
-      "模範解答を表示して自己採点",
+      "📝 解答を考えた・模範解答を見て自己採点",
     );
-    answers.append(reveal);
+    answers.append(
+      h("p", { class: "muted small" }, "記述は本番でも『書けるか』が勝負。まず自分で導出してから照合します。"),
+      ta,
+      reveal,
+    );
   } else {
     const input = h("input", {
       id: "num",

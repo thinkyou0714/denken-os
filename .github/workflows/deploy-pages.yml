@@ -1,24 +1,38 @@
 name: deploy-pages
 
-# オフライン学習アプリ(web/)を main マージ時に GitHub Pages へ自動公開する。
+# オフライン学習アプリ(web/)を GitHub Pages へ公開する。
 # 事前準備(1回): Settings → Pages → Build and deployment → Source = "GitHub Actions"。
+#
+# #76: 本番デプロイは検証パイプライン(validate)の成功を必須とする。
+# main への push で validate が完走し成功した場合にのみ、workflow_run 経由で起動する。
+# これにより lint / typecheck / typecheck:web / validate:data / test / build が
+# 通っていないコミットが Pages に出ることを構造的に防ぐ。
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["validate"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 # 同時デプロイは1本に直列化（実行中はキャンセルしない。I-084）。
+# workflow_run 起動時は ref が無いので run_id でグループ化し、手動実行とも衝突しないようにする。
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # workflow_run トリガ時: validate が main で成功した場合のみ実行する。
+    # （workflow_run は全ブランチで発火するため head_branch と conclusion で絞る。）
+    # workflow_dispatch（手動）時は workflow_run コンテキストが無いので無条件に実行する。
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
     permissions:
       contents: read
       pages: write
@@ -26,6 +40,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          # 検証に通ったコミットそのものをデプロイする（workflow_run の head_sha）。
+          # 手動実行時は空文字となり、既定の参照（ブランチ HEAD）が使われる。
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
 
       - uses: actions/setup-node@v6
         with:

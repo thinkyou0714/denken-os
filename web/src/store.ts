@@ -10,9 +10,11 @@
  */
 import type { Card } from "ts-fsrs";
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
+import { examAwareParams } from "../../lib/scheduler/exam-aware.js";
 import { FsrsScheduler, type FsrsView } from "../../lib/scheduler/fsrs.js";
 import type { Rating } from "../../lib/scheduler/types.js";
 import { dayIndex as _dayIndex, JST_OFFSET_MS } from "./dates.js";
+import { daysUntil } from "./plan.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -70,13 +72,68 @@ export class LocalProgress {
   private scheduler: FsrsScheduler;
   /** 最後に保存が失敗したキーと時刻（成功でクリア）。G6 が保存失敗 UI に利用する。 */
   private _lastPersistError: { key: string; atMs: number } | null = null;
+  /**
+   * dueTopics の件数メモ化（xpByDayCached パターン）。
+   * dueTopics() は毎呼び出しで全 FSRS カードを revive するため renderNav の度に重い。
+   * cards-blob の長さ・nowMs の「分」・retention をキーにキャッシュする。
+   * 内容ハッシュではないが、書き込みは safeSet 経由で blob 長 or 内容が変わるため十分実用的。
+   */
+  private _dueCountCache: { cardsLen: number; minute: number; retention: number; count: number } | null = null;
+
+  /**
+   * 試験日(ISO `YYYY-MM-DD`)。設定タブから変更され、setExamDate で更新される。
+   * 試験日逆算（#34/#35）で実効目標保持率・最大間隔・直前モードを決めるために保持する。
+   * null（試験日不明）なら従来どおり期限なしの FSRS として動く。
+   */
+  private examDateIso: string | null;
 
   constructor(
     private storage: StorageLike,
     /** 日境界のタイムゾーンオフセット(ms)。既定 JST。テストで上書き可。 */
     private dayOffsetMs: number = JST_OFFSET_MS,
+    /**
+     * 試験日(ISO `YYYY-MM-DD`)。渡すと試験日逆算スケジューリングが有効化される（#34/#35）。
+     * 後方互換のため省略可。省略時は期限なしの FSRS（従来挙動）。
+     */
+    examDateIso: string | null = null,
   ) {
-    this.scheduler = new FsrsScheduler(this.desiredRetention());
+    this.examDateIso = examDateIso;
+    this.scheduler = this.buildScheduler();
+  }
+
+  /**
+   * 試験日逆算（#34/#35）の実効パラメータを返す純ヘルパー。
+   * 試験日が未設定なら base のまま・間隔上限なし・直前モード off。
+   */
+  private examParams() {
+    const base = this.desiredRetention();
+    const daysLeft = this.examDateIso ? daysUntil(this.examDateIso) : null;
+    // daysUntil は過去/不明を 0 にするため、0 のときは「試験なし扱い」へ寄せる（base 維持）。
+    return examAwareParams(daysLeft && daysLeft > 0 ? daysLeft : null, base);
+  }
+
+  /** 実効パラメータで FSRS スケジューラを構築する（試験日を越える復習を組まない）。 */
+  private buildScheduler(): FsrsScheduler {
+    const { requestRetention, maximumIntervalDays } = this.examParams();
+    return new FsrsScheduler(requestRetention, maximumIntervalDays);
+  }
+
+  /**
+   * 直前モード（集中復習を推奨する期間か）。試験まで CRAM_MODE_DAYS 以内のとき true。
+   * 学習/復習タブのバナー表示・弱点集中の切替に使う（#34/#35）。
+   */
+  cramMode(): boolean {
+    return this.examParams().cramMode;
+  }
+
+  /**
+   * 試験日を更新し、スケジューラを再構築する（試験日が変われば実効保持率・間隔上限が変わる）。
+   * due 判定も変わるためメモ化キャッシュを破棄する。
+   */
+  setExamDate(iso: string | null): void {
+    this.examDateIso = iso;
+    this.scheduler = this.buildScheduler();
+    this._dueCountCache = null;
   }
 
   /**
@@ -132,7 +189,10 @@ export class LocalProgress {
   setDesiredRetention(value: number): void {
     const clamped = Math.min(0.97, Math.max(0.7, value));
     this.safeSet(RETENTION_KEY, String(clamped));
-    this.scheduler = new FsrsScheduler(clamped);
+    // 試験日逆算込みで再構築する（直前期は base より高い実効保持率になりうる）。
+    this.scheduler = this.buildScheduler();
+    // 目標保持率が変わると due 判定も変わるためメモ化キャッシュを破棄する。
+    this._dueCountCache = null;
   }
 
   logs(): WebAnswerLog[] {
@@ -161,6 +221,32 @@ export class LocalProgress {
       .map(([topic]) => topic);
   }
 
+  /**
+   * 期限到来 topic の「件数」だけをメモ化して返す（renderNav 用）。
+   * カード blob 長・nowMs の分・retention が前回と同じならキャッシュを返す。
+   * 件数が必要なだけの呼び出し（ナビのバッジ）で全カード revive の繰り返しを避ける。
+   * 返す件数は同条件の dueTopics(nowMs).length と一致する（テストで保証）。
+   */
+  dueCountCached(nowMs: number = Date.now()): number {
+    const blob = this.storage.getItem(CARD_KEY);
+    const cardsLen = blob === null ? 0 : blob.length;
+    const minute = Math.floor(nowMs / 60_000);
+    // 実効保持率をキーにする（試験日逆算のランプで日々変わりうるため base ではなく実効値）。
+    const retention = this.scheduler.desiredRetention;
+    const c = this._dueCountCache;
+    if (c !== null && c.cardsLen === cardsLen && c.minute === minute && c.retention === retention) {
+      return c.count;
+    }
+    const count = this.dueTopics(nowMs).length;
+    this._dueCountCache = { cardsLen, minute, retention, count };
+    return count;
+  }
+
+  /** dueCount キャッシュを破棄する（テスト・復元用）。 */
+  clearDueCountCache(): void {
+    this._dueCountCache = null;
+  }
+
   /** 採点を記録し、FSRS で記憶状態を更新する。rating は4段階 or 正誤boolean。 */
   record(
     topic: string,
@@ -171,13 +257,16 @@ export class LocalProgress {
   ): FsrsView {
     const rating = ratingOf(ratingOrCorrect);
     const now = new Date(nowMs);
-    const stored = this.cards()[topic];
+    // cards() は localStorage 全体を読んで JSON.parse する。1解答につき1回だけ読む。
+    const cards = this.cards();
+    const stored = cards[topic];
     const prev = stored ? reviveCard(stored) : this.scheduler.init(now);
     const next = this.scheduler.review(prev, rating, now);
 
-    const cards = this.cards();
     cards[topic] = next as unknown as StoredCard; // Date は JSON で ISO 文字列化される
     this.safeSet(CARD_KEY, JSON.stringify(cards));
+    // due 件数が変わりうるのでメモ化キャッシュを破棄（blob 長が同じでも内容変化を取りこぼさない）。
+    this._dueCountCache = null;
 
     const logs = this.logs();
     logs.push({

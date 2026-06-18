@@ -6,6 +6,7 @@
 import { evaluateAchievements } from "../achievements.js";
 import {
   accuracyTrend,
+  allSubjectReadiness,
   bySubject,
   byTopic,
   dailyActivity,
@@ -13,6 +14,7 @@ import {
   overall,
   recentAccuracy,
   reviewForecast,
+  type SubjectReadiness,
   topicSubjectMap,
 } from "../dashboard.js";
 import { sameJstDay } from "../dates.js";
@@ -159,6 +161,40 @@ function masterySection(root: HTMLElement, logs: ReturnType<typeof progress.logs
         h("span", {}, subject),
         bar(Math.round((xp / maxSubjectXp) * 100)),
         h("span", {}, `${xp.toLocaleString("ja-JP")}`),
+      ),
+    );
+  }
+}
+
+/** 科目別 合格見込み（推定）のセクション（#52）。正答率＋カバレッジ＋残り日数で判定。 */
+function readinessSection(root: HTMLElement, logs: ReturnType<typeof progress.logs>, daysLeft: number): void {
+  const rows = allSubjectReadiness(logs, problems, daysLeft);
+  // 全科目とも未着手なら出さない（空のセクションを避ける）。
+  if (rows.every((r) => r.attempts === 0)) return;
+  const verdictStyle = (v: SubjectReadiness["verdict"]): string =>
+    v === "順調" ? "color:var(--ok)" : v === "もう少し" ? "color:var(--accent)" : "color:var(--ng)";
+  const verdictIcon = (v: SubjectReadiness["verdict"]): string =>
+    v === "順調" ? "🟢" : v === "もう少し" ? "🟡" : "🔴";
+  root.append(
+    h("h2", {}, "科目別 合格見込み（推定）"),
+    h(
+      "p",
+      { class: "muted small" },
+      "直近の正答率・論点カバレッジ・残り日数からの推定です（合否を保証するものではありません）。",
+    ),
+  );
+  for (const r of rows) {
+    root.append(
+      h(
+        "div",
+        { class: "row" },
+        h("span", {}, r.subject),
+        bar(Math.round(r.readiness * 100)),
+        h(
+          "span",
+          { style: verdictStyle(r.verdict) },
+          `${verdictIcon(r.verdict)} ${r.verdict} ${Math.round(r.readiness * 100)}%`,
+        ),
       ),
     );
   }
@@ -363,6 +399,7 @@ export function renderDashboard(root: HTMLElement): void {
   todaySection(root, logs, plan, o);
   xpChartSection(root, logs);
   masterySection(root, logs);
+  readinessSection(root, logs, plan.daysLeft);
   statsSection(root, logs, lv);
   badgesSection(root, logs, lv);
 }

@@ -21,6 +21,7 @@ import { electricHeating } from "./electric-heating.js";
 import { firstOrderControl } from "./first-order-control.js";
 import { rotorAcceleration } from "./flywheel-acceleration.js";
 import { fullWaveRectifier } from "./full-wave-rectifier.js";
+import { groundFaultNeutralResistance } from "./ground-fault-neutral-resistance.js";
 import { groundFaultSymmetrical } from "./ground-fault-symmetrical.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { groundingTypes } from "./grounding-types.js";
@@ -38,6 +39,7 @@ import { inductorEnergy } from "./inductor-energy.js";
 import { insulationResistance } from "./insulation-resistance.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { inverseSquareIlluminance } from "./inverse-square-illuminance.js";
+import { kirchhoffTwoMesh } from "./kirchhoff-two-mesh.js";
 import { leakageCurrent } from "./leakage-current.js";
 import { lightingDesign } from "./lighting-design.js";
 import { loadFactor } from "./load-factor.js";
@@ -52,6 +54,7 @@ import { nuclearPowerOutput } from "./nuclear-power-output.js";
 import { opAmpNoninvertingGain } from "./op-amp-noninverting-gain.js";
 import { overheadClearance } from "./overhead-clearance.js";
 import { parallelConductorForce } from "./parallel-conductor-force.js";
+import { parallelImpedanceMagnitude } from "./parallel-impedance-magnitude.js";
 import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
 import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
@@ -62,6 +65,7 @@ import { powerFactorCorrection } from "./power-factor-correction.js";
 import { pqVoltageDrop } from "./pq-voltage-drop.js";
 import { pumpMotorInput } from "./pump-motor-input.js";
 import { pumpedStorageEfficiency } from "./pumped-storage-efficiency.js";
+import { pwmInverterVoltage } from "./pwm-inverter-voltage.js";
 import { rcTimeConstant } from "./rc-time-constant.js";
 import { reactivePowerCompensation } from "./reactive-power-compensation.js";
 import { resistanceTemperature } from "./resistance-temperature.js";
@@ -101,7 +105,9 @@ import { transistorCurrentGain } from "./transistor-current-gain.js";
 import { transmissionEfficiency } from "./transmission-efficiency.js";
 import { transmissionLoss } from "./transmission-loss.js";
 import { transmissionPowerStability } from "./transmission-power-stability.js";
+import { twoWattmeterPower } from "./two-wattmeter-power.js";
 import type { Template } from "./types.js";
+import { vConnectionTransformer } from "./v-connection-transformer.js";
 import { voltageClassification } from "./voltage-classification.js";
 import { voltageDropRate } from "./voltage-drop-rate.js";
 import { wheatstoneBridge } from "./wheatstone-bridge.js";
@@ -136,6 +142,9 @@ const templates: Template[] = [
   pointChargePotential,
   theveninLoadCurrent,
   transistorCurrentGain,
+  twoWattmeterPower,
+  kirchhoffTwoMesh,
+  parallelImpedanceMagnitude,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -179,6 +188,8 @@ const templates: Template[] = [
   inverseSquareIlluminance,
   synchronousSpeed,
   inductionSecondaryCopperLoss,
+  vConnectionTransformer,
+  pwmInverterVoltage,
   // 法規
   groundingResistance,
   sagTension,
@@ -217,12 +228,25 @@ const templates: Template[] = [
   transmissionPowerStability,
   shortCircuitOhm,
   groundFaultSymmetrical,
+  groundFaultNeutralResistance,
   parallelPercentImpedance,
   lossFactor,
   maxDemandComposite,
 ];
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
+
+// topic は出題の一意キー。重複すると後勝ちで片方が黙って消えるため、
+// モジュール読込時に検出して即座に落とす（テンプレ追加時の事故を早期発見）。
+if (registry.size !== templates.length) {
+  const seen = new Set<string>();
+  const dups: string[] = [];
+  for (const t of templates) {
+    if (seen.has(t.topic)) dups.push(t.topic);
+    else seen.add(t.topic);
+  }
+  throw new Error(`テンプレートの topic が重複しています: ${[...new Set(dups)].join(", ")}`);
+}
 
 export function getTemplate(topic: string): Template | undefined {
   return registry.get(topic);
@@ -255,6 +279,7 @@ export {
   electricHeating,
   firstOrderControl,
   fullWaveRectifier,
+  groundFaultNeutralResistance,
   groundFaultSymmetrical,
   groundingResistance,
   groundingTypes,
@@ -272,6 +297,7 @@ export {
   insulationResistance,
   insulationTestVoltage,
   inverseSquareIlluminance,
+  kirchhoffTwoMesh,
   leakageCurrent,
   lightingDesign,
   loadFactor,
@@ -286,6 +312,7 @@ export {
   opAmpNoninvertingGain,
   overheadClearance,
   parallelConductorForce,
+  parallelImpedanceMagnitude,
   parallelPercentImpedance,
   parallelPlateField,
   percentImpedanceConversion,
@@ -296,6 +323,7 @@ export {
   pqVoltageDrop,
   pumpedStorageEfficiency,
   pumpMotorInput,
+  pwmInverterVoltage,
   rcTimeConstant,
   reactivePowerCompensation,
   resistanceTemperature,
@@ -336,6 +364,8 @@ export {
   transmissionEfficiency,
   transmissionLoss,
   transmissionPowerStability,
+  twoWattmeterPower,
+  vConnectionTransformer,
   voltageClassification,
   voltageDropRate,
   wheatstoneBridge,

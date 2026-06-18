@@ -31,8 +31,9 @@
 //   (v19: リファクタ — 分割バンドル・保存失敗可視化(lastPersistError)・日付ユーティリティ一元化・
 //         sanitizeSvg・SW堅牢化(fetch失敗フォールバック・install失敗時skipWaiting抑制))
 //   (v20: Wave2リファクタ — CSP/SRI・SW版数自動化・RLS補完・fuzz/統合テスト追加)
+//   (v21: 最高品質化 — stale-while-revalidate(陳腐化解消)・週次クエスト修正・採点/a11y/試験忠実度の根本是正)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v20-d3522172";
+const CACHE = "denken-os-v20-1c0b21ac";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -53,18 +54,37 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+// stale-while-revalidate: キャッシュを即返ししつつ裏でネットワーク更新する（web#3）。
+// 純 cache-first では SW 版数が上がるまで problems.json / index.html が陳腐化したままだったため、
+// オンライン時は次回読込で最新が反映されるよう、取得成功時にキャッシュを差し替える。
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE);
+  const cached = await cache.match(request);
+  const network = fetch(request)
+    .then((res) => {
+      // 同一オリジンの正常応答のみ保存（opaque/エラー応答はキャッシュ汚染を避けて保存しない）。
+      if (res?.ok && res.type === "basic") cache.put(request, res.clone());
+      return res;
+    })
+    .catch(() => null);
+  if (cached) {
+    network.catch(() => {}); // 裏で更新（失敗は無視）。
+    return cached;
+  }
+  const res = await network;
+  if (res) return res;
+  // オフライン かつ 未キャッシュ: ナビゲーションは app shell へフォールバック。
+  if (request.mode === "navigate") {
+    const shell = await cache.match("./");
+    if (shell) return shell;
+  }
+  return Response.error();
+}
+
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).catch(() => {
-        // ナビゲーションリクエスト（ページ遷移）でネットワーク失敗時は app shell へフォールバック。
-        if (event.request.mode === "navigate") {
-          return caches.match("./").then((shell) => shell ?? Response.error());
-        }
-        return Response.error();
-      });
-    }),
-  );
+  // 同一オリジンのみ SW が扱う（外部 API 等は素通し）。
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+  event.respondWith(staleWhileRevalidate(event.request));
 });

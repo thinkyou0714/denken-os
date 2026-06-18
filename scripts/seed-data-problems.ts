@@ -129,7 +129,7 @@ const SEEDS: Seed[] = [
     topic: "照明設計（光束法）",
     params: { illuminance: 500, area: 100, lumen: 5000, utilization: 0.5, maintenance: 0.8 },
   },
-  { id: "T-0038", topic: "風圧荷重", params: { wind_pressure: 980, area: 2 } },
+  { id: "T-0038", topic: "風圧荷重", params: { wind_pressure: 980, diameter: 20, span: 100 } },
   { id: "T-0039", topic: "電線の許容張力", params: { tensile_strength: 10000, safety_factor: 2.5 } },
   { id: "T-0040", topic: "電圧降下率", params: { sending_voltage: 210, receiving_voltage: 200 } },
   {

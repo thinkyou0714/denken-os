@@ -23,23 +23,23 @@ function log(over: Partial<WebAnswerLog> = {}): WebAnswerLog {
 }
 
 describe("XPブースト（クエスト全達成後の正解XP×1.5）", () => {
-  /** 全クエストを確実にクリアする12問（easy・全問正解・論点分散）。 */
+  /** 全クエストを確実にクリアする12問（全問正解・論点分散＝mastery/topics/solve/correct を満たす）。 */
   function clearingLogs(): WebAnswerLog[] {
-    return Array.from({ length: 12 }, (_, i) => log({ atMs: DAY0 + i * 60_000, topic: `論点${i}`, rating: "easy" }));
+    return Array.from({ length: 12 }, (_, i) => log({ atMs: DAY0 + i * 60_000, topic: `論点${i}`, rating: "good" }));
   }
 
   it("全達成後の正解は ×1.5（端数は四捨五入）で加算される", () => {
     const base12 = clearingLogs();
     const extra = log({ atMs: DAY0 + 13 * 60_000, topic: "追加論点", rating: "good" });
     const delta = totalXp([...base12, extra]) - totalXp(base12);
-    // 13問目: 基礎 good=10 ＋ コンボ上限 +5 ＝ 15 → ×1.5 ＝ 22.5 → 23。
+    // 13問目: 基礎 good ＋ コンボ上限 +5 → ×1.5（四捨五入）。
     expect(delta).toBe(Math.round((XP_BY_RATING.good + 5) * QUEST_BOOST_MULT));
   });
 
   it("クエスト未達成の日はブーストが掛からない", () => {
-    // 同一論点・good のみ3問 → どのクエスト構成でも全達成は不可能（solve≥5/topics≥2/easy≥1 のいずれかを満たせない）。
+    // 同一論点・good のみ3問 → どのクエスト構成でも全達成は不可能（solve≥5/topics≥2/mastery≥2 のいずれかを満たせない）。
     const logs = [log(), log({ atMs: DAY0 + 1000 }), log({ atMs: DAY0 + 2000 })];
-    expect(xpFromLogs(logs)).toBe(30 + comboBonus(2) + comboBonus(3));
+    expect(xpFromLogs(logs)).toBe(XP_BY_RATING.good * 3 + comboBonus(2) + comboBonus(3));
   });
 
   it("不正解（参加報酬）にはブーストが掛からない", () => {

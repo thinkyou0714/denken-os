@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { type AnswerLog, aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
+import {
+  type AnswerLog,
+  aggregateByTopic,
+  smoothedSuccessRate,
+  weakestTopics,
+  weaknessScore,
+} from "../../lib/scheduler/diagnosis.js";
 
 describe("弱点診断", () => {
   it("連続不正解の topic ほど優先度が上がる", () => {
@@ -17,6 +23,34 @@ describe("弱点診断", () => {
     const prog = aggregateByTopic(logs);
     const weak = weakestTopics(prog.values(), now, 2);
     expect(weak[0]).toBe("三相交流電力");
+  });
+
+  it("試行1回のミスが、多数試行で確実に弱い論点を上回らない（#58 平滑化）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    const logs: AnswerLog[] = [
+      // 1回だけ挑戦して外した論点（ノイズ。確信度が低い）。
+      { topic: "たまたま外した論点", correct: false, atMs: now },
+    ];
+    // 20回中4回しか正解しない、確実に弱い論点。
+    for (let i = 0; i < 20; i++) logs.push({ topic: "本当に弱い論点", correct: i < 4, atMs: now });
+    const prog = aggregateByTopic(logs);
+    const weak = weakestTopics(prog.values(), now, 2);
+    expect(weak[0]).toBe("本当に弱い論点");
+  });
+
+  it("smoothedSuccessRate は試行0で事前、試行増で実測へ収束する", () => {
+    expect(smoothedSuccessRate(0, 0)).toBeCloseTo(0.6, 5); // 事前
+    // 0/1 は事前へ強く寄る（生の0より十分高い）。
+    expect(smoothedSuccessRate(0, 1)).toBeGreaterThan(0.3);
+    // 多数試行では実測（0.2）に近づく。
+    expect(smoothedSuccessRate(4, 20)).toBeLessThan(0.3);
+  });
+
+  it("平滑化後も、明確な弱点(0/3)は得意(3/3)より高スコア（順序保存）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    const weak = weaknessScore({ topic: "w", attempts: 3, correct: 0, dueMs: now }, now);
+    const strong = weaknessScore({ topic: "s", attempts: 3, correct: 3, dueMs: now }, now);
+    expect(weak).toBeGreaterThan(strong);
   });
 
   it("dueMs は並び順に依存せず最新の解答時刻になる", () => {

@@ -21,16 +21,25 @@ export function escapeHtml(s: string): string {
 }
 
 /**
+ * 既にエスケープ済みの文字列に下付き/上付きのマークアップだけを適用する（エスケープしない）。
+ *  - `^{...}` / `^x` → <sup>、`_{...}` / `_x` → <sub>
+ *  下付き/上付きの対象は英数字（V_p, P_out, x^2 等）に限定し、誤変換を避ける。
+ * Markdown レンダラー（escape 済み）から再エスケープせずに数式整形を重ねるために分離。
+ */
+export function applyMathMarkup(escaped: string): string {
+  let s = escaped.replace(/\^\{([^}]+)\}/g, "<sup>$1</sup>");
+  s = s.replace(/\^([0-9A-Za-z]+)/g, "<sup>$1</sup>");
+  s = s.replace(/_\{([^}]+)\}/g, "<sub>$1</sub>");
+  s = s.replace(/_([0-9A-Za-z]+)/g, "<sub>$1</sub>");
+  return s;
+}
+
+/**
  * テキストを安全な HTML に整形する。
  *  - まず HTML エスケープ（XSS 防止）
  *  - `^{...}` / `^x` → <sup>、`_{...}` / `_x` → <sub>
  *  下付き/上付きの対象は英数字（V_p, P_out, x^2 等）に限定し、誤変換を避ける。
  */
 export function formatMath(raw: string): string {
-  let s = escapeHtml(raw);
-  s = s.replace(/\^\{([^}]+)\}/g, "<sup>$1</sup>");
-  s = s.replace(/\^([0-9A-Za-z]+)/g, "<sup>$1</sup>");
-  s = s.replace(/_\{([^}]+)\}/g, "<sub>$1</sub>");
-  s = s.replace(/_([0-9A-Za-z]+)/g, "<sub>$1</sub>");
-  return s;
+  return applyMathMarkup(escapeHtml(raw));
 }

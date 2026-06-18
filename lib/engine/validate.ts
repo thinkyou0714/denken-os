@@ -13,7 +13,7 @@
  * `validateProblemSet(problems)` で問題セット全体の酷似パラメータ（実質重複）を検出する。
  * 純関数・既存 generate には組み込まず、提供のみ。
  */
-import { ANSWER_EPSILON, isCleanAnswer } from "./clean.js";
+import { ANSWER_EPSILON, formatClean, isCleanAnswer } from "./clean.js";
 import { type Problem, problemSchema } from "./schema.js";
 
 export interface ValidationIssue {
@@ -168,18 +168,92 @@ function areSimilarParams(
  *  - "+3.2" のように符号付き数値も数値として抽出できるようになった。
  *  - "2.56E-4" の大文字 E 指数表記も受理。
  */
+/** 上付き指数（×10⁻³ など）を e 表記へ正規化する写像。 */
+const SUPERSCRIPT: Record<string, string> = {
+  "⁰": "0",
+  "¹": "1",
+  "²": "2",
+  "³": "3",
+  "⁴": "4",
+  "⁵": "5",
+  "⁶": "6",
+  "⁷": "7",
+  "⁸": "8",
+  "⁹": "9",
+  "⁻": "-",
+  "⁺": "+",
+};
+
+/**
+ * 科学表記の正規化（I-013 拡張 / engine#4）。
+ * `a×10ⁿ` `a·10^n` `a*10-3` を `aen` に畳み込む。
+ * 効果:
+ *  - `9×10⁹`（クーロン定数）を 9000000000 として1トークンに集約し、
+ *    末尾の係数 `9` が答え `9` に誤マッチする偽陽性を防ぐ。
+ *  - `1×10⁻³` のような指数表記の最終値も照合できるようにする。
+ */
+function normalizeSci(s: string): string {
+  return s.replace(/[×·*]\s*10\s*\^?\s*([⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+|[+-]?\d+)/g, (_m, exp: string) => {
+    const ascii = [...exp].map((c) => SUPERSCRIPT[c] ?? c).join("");
+    return `e${ascii}`;
+  });
+}
+
+/** 補足・別解など「結論ではない」解説ステップの接頭辞。 */
+const ASIDE_STEP = /^[（(]?\s*(別解|別法|ポイント|補足|注意|注[:：]|ヒント|参考|検算|確認|なお|ちなみに)/;
+
+function isAsideStep(step: string): boolean {
+  const t = step.trim();
+  // 括弧で始まるステップ（「（t=T で63.2%…）」等の補足注記）は結論ではない。
+  return t.startsWith("（") || t.startsWith("(") || ASIDE_STEP.test(t);
+}
+
+/** 解説の中で「結論」とみなすステップ（末尾から見て最初の非・補足ステップ）。 */
+export function conclusionStep(solution: readonly string[]): string {
+  for (let i = solution.length - 1; i >= 0; i--) {
+    const s = solution[i];
+    if (s !== undefined && !isAsideStep(s)) return s;
+  }
+  return solution[solution.length - 1] ?? "";
+}
+
+/**
+ * 解説の「最終的な答え」が想定値と一致するか確認する（narrate の整合チェック）。
+ *
+ * engine#2 是正: 旧実装は解説**全体**から数値を抽出し1つでも近ければ通過したため、
+ * LLM が**最終結論だけ**を誤った値に書き換えても、入力値や係数が前段に残っていれば
+ * すり抜ける偽陽性があった。本実装は**結論ステップ**（末尾の非・補足ステップ）に
+ * 想定値が現れることを要求する。決定論スタブの defaultSolution は結論ステップに
+ * 答えを置く規約のため挙動は不変。
+ *
+ * 数値抽出:
+ *  - 指数表記 (1.5e3, 2E-4) ＋ 上付き指数 (×10⁻³) に対応（normalizeSci）。
+ *  - 符号付き数値 (-5.0, +3) にも対応。
+ */
 export function narrationMatchesAnswer(solution: string[], answerText: string): boolean {
+  if (solution.length === 0) return false;
+  const conclusion = conclusionStep(solution);
   const expected = Number(answerText);
   if (Number.isNaN(expected)) {
-    // 非数値の答えは、最終ステップに answerText が現れることを要求。
-    return solution.some((s) => s.includes(answerText));
+    // 非数値の答え（センチネル等）は結論ステップに answerText が現れることを要求。
+    return conclusion.includes(answerText);
   }
-  // 解説全体から数値を抽出し、想定値に十分近いものが含まれるか。
-  // 指数表記（1.5e3, 2E-4 など）にも対応した正規表現（I-013）。
   const nums =
-    solution
-      .join(" ")
+    normalizeSci(conclusion)
       .match(/[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)
       ?.map(Number) ?? [];
-  return nums.some((n) => Math.abs(n - expected) < ANSWER_EPSILON);
+  const tol = Math.max(ANSWER_EPSILON, Math.abs(expected) * ANSWER_EPSILON);
+  return nums.some((n) => Math.abs(n - expected) <= tol);
+}
+
+/**
+ * 問題文がパラメータの数値を保持しているか（engine#1）。
+ *
+ * narrate（LLM リライト）が問題文中の入力値を改変すると、**問題文と正解が乖離**した
+ * 内部矛盾問題が生まれる（解説・正解は別途検証されるが問題文は未検証だった）。
+ * 各パラメータ値の整形済み文字列が問題文に現れることを要求し、欠けていれば
+ * 呼び出し側は決定論の defaultStatement にフォールバックする（問題は失わない）。
+ */
+export function statementMatchesParams(statement: string, paramValues: readonly number[]): boolean {
+  return paramValues.every((v) => statement.includes(formatClean(v)));
 }

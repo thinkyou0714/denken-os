@@ -2,11 +2,15 @@
  * views/router.ts — TABS定義・ヘッダ・ナビ・ルーティング・エラーバウンダリ。
  */
 
+import { BACKUP_KEYS } from "../backup.js";
 import { recoveryView } from "../errors.js";
+import { coveredDays, streakBreakdown, studiedDays } from "../freeze.js";
 import { buildStudyPlan } from "../plan.js";
-import { dailyReviewBatch, offlineLabel } from "../retention.js";
+import { dayIndexOf } from "../quests.js";
+import { offlineLabel } from "../retention.js";
 import { getDailyGoal, getExamDate, getReviewCap } from "../settings.js";
 import { problems, progress, setView, storage, view } from "../state/app.js";
+import { estimateStorageKb, STORAGE_WARN_KB } from "../store.js";
 import { $, h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { renderChat } from "./chat.js";
@@ -35,12 +39,17 @@ export function renderHeader(): void {
   $("xp").textContent = `Lv.${lv.level} ⚡${lv.totalXp.toLocaleString("ja-JP")}`;
   $("xp").setAttribute("title", `${lv.title} ・ 次のレベルまで ${lv.xpNeed - lv.xpInto} XP`);
   const fi = freezeInfo();
-  $("streak").textContent = `🔥 ${fi.streak}日${fi.state.count > 0 ? ` 🧊×${fi.state.count}` : ""}`;
+  // ストリークの内訳（学習日 vs お守り/おやすみで肩代わりした日）を区別して見せる（#62）。
+  const bd = streakBreakdown(studiedDays(progress.logs()), coveredDays(fi.state), dayIndexOf(Date.now()));
+  $("streak").textContent =
+    `🔥 ${fi.streak}日${bd.coveredDays > 0 ? `（学習${bd.studiedDays}）` : ""}` +
+    `${fi.state.count > 0 ? ` 🧊×${fi.state.count}` : ""}`;
+  const breakdownText = bd.coveredDays > 0 ? `（うち学習${bd.studiedDays}日・お守り/おやすみ${bd.coveredDays}日）` : "";
   $("streak").setAttribute(
     "title",
     fi.state.count > 0
-      ? `連続学習${fi.streak}日 ・ お守り${fi.state.count}個（欠席日を自動カバー）`
-      : `連続学習${fi.streak}日`,
+      ? `連続${fi.streak}日${breakdownText} ・ お守り${fi.state.count}個（欠席日を自動カバー）`
+      : `連続${fi.streak}日${breakdownText}`,
   );
   const days = buildStudyPlan({
     examDateIso: getExamDate(storage),
@@ -66,7 +75,11 @@ export function renderNav(): void {
   nav.innerHTML = "";
   // 復習バッジは「今日出す分」（上限でバッチ化）の件数に合わせ、過大表示で圧迫しない。
   // 完了した復習は FSRS が due から外すため、ここでは上限キャップのみ適用する。
-  const dueCount = dailyReviewBatch(progress.dueTopics(), getReviewCap(storage)).batch.length;
+  // II-6: dueCountCached で全 FSRS カードの revive を毎描画で繰り返さない（メモ化）。
+  // バッジは件数のみ必要なので、due 件数（メモ化）を上限でクランプして算出する
+  //   （dailyReviewBatch(topics, cap).batch.length と一致: alreadyDoneToday=0 のため min(count, cap)）。
+  const cap = Math.max(1, Math.floor(getReviewCap(storage)));
+  const dueCount = Math.min(progress.dueCountCached(), cap);
   for (const [id, label, icon] of TABS) {
     const due = id === "review" ? dueCount : 0;
     const selected = id === view;
@@ -90,15 +103,42 @@ export function renderNav(): void {
   }
 }
 
-export function switchView(id: string): void {
+/** 既知のタブ ID か（不明な hash は practice へフォールバックする）。 */
+function isKnownView(id: string): boolean {
+  return TABS.some(([tabId]) => tabId === id);
+}
+
+/**
+ * タブを切り替える。
+ * @param id 遷移先タブ ID
+ * @param opts.fromHistory popstate/hashchange 起点のとき true（その場合は history を書き換えない）
+ */
+export function switchView(id: string, opts: { fromHistory?: boolean } = {}): void {
   // タイマーリーク解消（II-156）: view離脱時に必ずclearInterval。clearExamTimerで一元管理。
   clearExamTimer();
   setView(id);
+  // II-5: アクティブ view を location.hash に同期し、ハードウェア戻るで前のタブへ戻れるようにする。
+  //   履歴起点（popstate/hashchange）のときは二重 push を避けるため書き換えない。
+  if (!opts.fromHistory) {
+    try {
+      const target = `#${id}`;
+      if (location.hash !== target) history.pushState({ view: id }, "", target);
+    } catch {
+      // file:// 等で history API が使えなくても遷移自体は続行する。
+    }
+  }
   renderNav();
-  render();
+  // II-2: タブ切替時はスクロール位置を先頭へ戻す（前タブの途中位置を引き継がない）。
+  try {
+    window.scrollTo(0, 0);
+  } catch {
+    // 環境によって未実装でも無害。
+  }
+  // II-1: ユーザー操作起点のタブ切替では新しい view の見出し（or #view）へフォーカスを移す。
+  render({ focus: true });
 }
 
-export function render(): void {
+export function render(opts: { focus?: boolean } = {}): void {
   const root = $("view");
   // replaceChildren() は innerHTML="" より冪等で、既存ノードのGCが効きやすい（II-157）。
   root.replaceChildren();
@@ -109,11 +149,22 @@ export function render(): void {
     _persistErrNotified = true;
     showToast("⚠️ 前回の保存に失敗しました。端末の空き容量を確認してください", "OK", () => {});
   }
+  // II-14: ヘッダ/お守りブリッジは独立した try/catch に閉じ込める。
+  //   ここで例外が出ても view 描画は続行し、1つのヘッダ失敗で全タブが白画面化したり
+  //   グローバルエラートーストがループするのを防ぐ。
   try {
     // 開きっぱなしのタブ（visibilitychange が発火しない常時表示）で日をまたいだ場合に備え、
     // 描画のたびに欠席日のお守りカバーを確認する（冪等・通常は何もしない）。
     runFreezeBridge();
+  } catch (err) {
+    console.error("[render] runFreezeBridge でエラー:", err);
+  }
+  try {
     renderHeader();
+  } catch (err) {
+    console.error("[render] renderHeader でエラー:", err);
+  }
+  try {
     // per-viewエラー境界（II-162）: 各タブの描画例外はそのタブ内でrecovery表示。
     // 親render はルーティングに専念し、1タブの例外が全体を白画面にしない。
     if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
@@ -128,6 +179,24 @@ export function render(): void {
     renderErrorBoundary(root, err);
   } finally {
     root.setAttribute("aria-busy", "false");
+  }
+  // II-1: ユーザー操作起点の切替のみ、新しい view の見出し（or #view）へフォーカスを移す。
+  //   初回ロードでは focus を渡さない（強制スクロール/読み上げが煩わしいため無害化）。
+  if (opts.focus) focusViewHeading(root);
+  // II-7: 容量逼迫の事前警告（スロットル）。export を促す（描画のたびに軽くチェック）。
+  maybeWarnStorage();
+}
+
+/** 新しい view の見出し(h2)へフォーカスを移す。h2 が無ければ #view 自体へ。 */
+function focusViewHeading(root: HTMLElement): void {
+  try {
+    const h2 = root.querySelector("h2");
+    const target = (h2 as HTMLElement | null) ?? root;
+    // h2 はフォーカス不可なので tabindex=-1 を付与してプログラム的にフォーカスする。
+    if (target === h2 && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
+  } catch {
+    // フォーカス移動は補助的。失敗しても描画は完了している。
   }
 }
 
@@ -165,6 +234,82 @@ export function renderErrorBoundary(root: HTMLElement, err: unknown): void {
       ),
     ),
   );
+}
+
+// ---- II-7: 容量逼迫の事前警告（スロットル） ----
+
+/** 直近のチェック時刻（throttle 用）。 */
+let _lastQuotaCheckMs = 0;
+/** 警告トーストは1セッション1回だけ（しつこくしない）。 */
+let _quotaWarned = false;
+/** チェック間隔（ms）。描画ごとに毎回 estimate するのは無駄なので間引く。 */
+const QUOTA_CHECK_INTERVAL_MS = 60_000;
+
+/**
+ * localStorage の推定使用量が閾値を超えていたら、export を促すトーストを1回だけ出す。
+ * 描画のたびに呼ばれるが、60秒に1回だけ実測し（throttle）、超過時のみ通知する。
+ */
+function maybeWarnStorage(): void {
+  if (_quotaWarned) return;
+  const now = Date.now();
+  if (now - _lastQuotaCheckMs < QUOTA_CHECK_INTERVAL_MS) return;
+  _lastQuotaCheckMs = now;
+  try {
+    const kb = estimateStorageKb(storage, BACKUP_KEYS);
+    if (kb >= STORAGE_WARN_KB) {
+      _quotaWarned = true;
+      showToast(
+        "⚠️ 保存容量が増えています。設定タブからデータの書き出し（バックアップ）をおすすめします",
+        "OK",
+        () => {},
+        8000,
+      );
+    }
+  } catch {
+    // 推定は補助的。失敗しても学習は継続する。
+  }
+}
+
+// ---- II-5: 履歴/ハッシュルーティング ----
+
+/** 現在の location.hash からタブ ID を取り出す（不明・空は practice）。 */
+function viewFromHash(): string {
+  const id = location.hash.replace(/^#/, "");
+  return isKnownView(id) ? id : "practice";
+}
+
+/** スキップリンク（href="#view"）由来の hash は経路ではないので無視する。 */
+function isRouteHash(): boolean {
+  const id = location.hash.replace(/^#/, "");
+  return id !== "view";
+}
+
+/**
+ * 履歴ルーティングを初期化する。初期 hash を尊重し、戻る/進む（popstate）や
+ * hashchange で対応するタブへ切り替える。app.ts の起動時に1回呼ぶ。
+ */
+export function initRouting(): void {
+  // 戻る/進む: 履歴起点なので switchView は history を書き換えない。
+  window.addEventListener("popstate", () => {
+    if (!isRouteHash()) return; // スキップリンクの #view は無視。
+    const id = viewFromHash();
+    if (id !== view) switchView(id, { fromHistory: true });
+  });
+  // 手動の hash 変更（アドレスバー編集等）にも追従する。
+  window.addEventListener("hashchange", () => {
+    if (!isRouteHash()) return; // スキップリンクの #view は無視。
+    const id = viewFromHash();
+    if (id !== view) switchView(id, { fromHistory: true });
+  });
+  // 初期 hash を尊重（共有 URL からの直接起動など）。既定は practice。
+  const initial = viewFromHash();
+  setView(initial);
+  // 初期状態を replaceState で履歴に固定（戻るで空 hash 状態に落ちないように）。
+  try {
+    history.replaceState({ view: initial }, "", `#${initial}`);
+  } catch {
+    // history 不可環境でも以降の描画は通常どおり。
+  }
 }
 
 // runFreezeBridge は practice.ts からインポート

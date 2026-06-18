@@ -32,7 +32,9 @@ export const hvInsulationTestVoltage = defineTemplate<Params>({
     return { nominal_voltage: pick(NOMINAL_SET, rng) };
   },
   buildFrom({ nominal_voltage }) {
-    const maxUse = (nominal_voltage / 1.1) * 1.15;
+    // 演算順を sibling テンプレ（insulation-test-voltage）と統一し、
+    // (公称×1.15)/1.1 を小数2桁に丸めて facts の浮動小数ノイズ（…99999）を排除する。
+    const maxUse = Math.round(((nominal_voltage * 1.15) / 1.1) * 100) / 100;
     if (!(maxUse > 7000 && maxUse <= 60000)) return null;
     const test = maxUse * 1.25;
     if (!isCleanAnswer(test)) return null;

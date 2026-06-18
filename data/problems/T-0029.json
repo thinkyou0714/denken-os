@@ -16,7 +16,7 @@
     },
     "R": {
       "value": 8,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         1,
         50
@@ -24,7 +24,7 @@
     },
     "X": {
       "value": 6,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         1,
         50

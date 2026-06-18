@@ -6,12 +6,13 @@
 
 import { reloadProblems } from "./app-init.js";
 import { onKeydown } from "./keyboard.js";
+import { runMigrations } from "./migrate.js";
 import { getTheme } from "./settings.js";
 import type { InstallPromptEvent } from "./state/app.js";
 import { applyTheme, loadFailed, setInstallPrompt, storage } from "./state/app.js";
 import { showToast } from "./ui/toast.js";
 import { runFreezeBridge } from "./views/practice.js";
-import { renderHeader, renderNav, updateNetStatus } from "./views/router.js";
+import { initRouting, renderHeader, renderNav, updateNetStatus } from "./views/router.js";
 
 /** 読込中のスケルトン（problems.json 取得まで）。 */
 function renderSkeleton(): void {
@@ -45,6 +46,9 @@ function registerServiceWorker(): void {
 }
 
 async function main(): Promise<void> {
+  // localStorage スキーマのマイグレーション（現状 no-op。版の記録＋将来の足場）。
+  // 描画前に実行し、以降のコードが新スキーマ前提で動けるようにする。
+  runMigrations(storage);
   applyTheme();
   // system 設定時は OS のテーマ変更に追従。
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
@@ -77,6 +81,9 @@ async function main(): Promise<void> {
   };
   window.addEventListener("error", onGlobalError);
   window.addEventListener("unhandledrejection", onGlobalError);
+  // II-5: 履歴/ハッシュルーティングを初期化（初期 hash を尊重し戻る/進むに対応）。
+  //   renderNav の前に呼び、初期 view を hash から確定させる。
+  initRouting();
   renderNav();
   renderSkeleton();
   await reloadProblems();

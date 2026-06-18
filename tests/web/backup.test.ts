@@ -62,4 +62,85 @@ describe("バックアップ（エクスポート/インポート）", () => {
     const r = importBackup(new MemoryStorage(), JSON.stringify({ app: "denken-os", version: 1, data: {} }));
     expect(r.ok).toBe(false);
   });
+
+  // ---- II-9: 値の形状検証（壊れた値で進捗を破壊しない）----
+
+  it("denken:logs が配列でない値は拒否する", () => {
+    const dst = new MemoryStorage();
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:logs": JSON.stringify({ not: "array" }) },
+    });
+    const r = importBackup(dst, json);
+    expect(r.ok).toBe(false);
+    // 拒否時は何も書き込まない。
+    expect(dst.getItem("denken:logs")).toBeNull();
+  });
+
+  it("denken:logs の要素が {atMs:number, topic:string} でなければ拒否する", () => {
+    const dst = new MemoryStorage();
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:logs": JSON.stringify([{ atMs: "x", topic: 1 }]) },
+    });
+    expect(importBackup(dst, json).ok).toBe(false);
+  });
+
+  it("denken:logs の壊れた JSON 文字列は拒否する", () => {
+    const dst = new MemoryStorage();
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:logs": "{oops" },
+    });
+    expect(importBackup(dst, json).ok).toBe(false);
+  });
+
+  it("denken:cards が配列やプリミティブなら拒否する", () => {
+    const dst = new MemoryStorage();
+    const arr = JSON.stringify({ app: "denken-os", version: 1, data: { "denken:cards": "[]" } });
+    expect(importBackup(dst, arr).ok).toBe(false);
+    const prim = JSON.stringify({ app: "denken-os", version: 1, data: { "denken:cards": "42" } });
+    expect(importBackup(dst, prim).ok).toBe(false);
+  });
+
+  it("正しい形状の logs/cards は復元できる", () => {
+    const dst = new MemoryStorage();
+    const logs = JSON.stringify([{ atMs: 1, topic: "三相交流電力", correct: true }]);
+    const cards = JSON.stringify({ 三相交流電力: { due: "2026-06-10T00:00:00.000Z" } });
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:logs": logs, "denken:cards": cards },
+    });
+    const r = importBackup(dst, json);
+    expect(r.ok).toBe(true);
+    expect(dst.getItem("denken:logs")).toBe(logs);
+    expect(dst.getItem("denken:cards")).toBe(cards);
+  });
+
+  it("不正な値があれば、他の正しいキーも含めてファイル全体を拒否する（部分復元しない）", () => {
+    const dst = new MemoryStorage();
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:dailyGoal": "20", "denken:logs": "{broken" },
+    });
+    const r = importBackup(dst, json);
+    expect(r.ok).toBe(false);
+    // 正しい dailyGoal も書き込まれない（全体拒否でストアを汚さない）。
+    expect(dst.getItem("denken:dailyGoal")).toBeNull();
+  });
+
+  it("空配列の logs・空オブジェクトの cards は妥当（拒否しない）", () => {
+    const dst = new MemoryStorage();
+    const json = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      data: { "denken:logs": "[]", "denken:cards": "{}" },
+    });
+    expect(importBackup(dst, json).ok).toBe(true);
+  });
 });

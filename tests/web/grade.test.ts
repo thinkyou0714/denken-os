@@ -47,6 +47,38 @@ describe("isAnswerCorrect（numeric は数値比較）", () => {
   });
 });
 
+describe("isAnswerCorrect（有効数字の許容誤差・#46）", () => {
+  it("有効数字の丸め違いを正解にする（14.5 ≒ 14.52）", () => {
+    // 14.52 に対し 14.5 は相対 0.14% < 0.5% → 正解。
+    expect(isAnswerCorrect(numeric("14.52"), "14.5")).toBe(true);
+    expect(isAnswerCorrect(numeric("14.5"), "14.52")).toBe(true);
+  });
+
+  it("明らかに違う値は不正解（14.52 に対し 14.6 / 15）", () => {
+    // 14.6 は相対 0.55% > 0.5% → 不正解（境界の外）。
+    expect(isAnswerCorrect(numeric("14.52"), "14.6")).toBe(false);
+    expect(isAnswerCorrect(numeric("14.52"), "15")).toBe(false);
+  });
+
+  it("完全一致は当然正解（境界を緩めても exact を壊さない）", () => {
+    expect(isAnswerCorrect(numeric("14.52"), "14.52")).toBe(true);
+    expect(isAnswerCorrect(numeric("1000"), "1000")).toBe(true);
+    expect(isAnswerCorrect(numeric("3.14159"), "3.14159")).toBe(true);
+  });
+
+  it("大きな値でも相対誤差で判定（900 に対し 901 は許容、910 は不正解）", () => {
+    // 900 × 0.5% = 4.5 → 901 は許容、905 は境界外。
+    expect(isAnswerCorrect(numeric("900"), "901")).toBe(true);
+    expect(isAnswerCorrect(numeric("900"), "904")).toBe(true);
+    expect(isAnswerCorrect(numeric("900"), "910")).toBe(false);
+  });
+
+  it("整数の近接誤答は弾く（50 に対し 49 は 2% で不正解）", () => {
+    expect(isAnswerCorrect(numeric("50"), "49")).toBe(false);
+    expect(isAnswerCorrect(numeric("50"), "50")).toBe(true);
+  });
+});
+
 describe("isAnswerCorrect（その他は厳密一致）", () => {
   it("multiple_choice は選択肢テキストの厳密一致", () => {
     expect(isAnswerCorrect(mc("3.2"), "3.2")).toBe(true);

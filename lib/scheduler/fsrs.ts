@@ -42,10 +42,25 @@ function toFsrsRating(r: Rating): Grade {
 export class FsrsScheduler {
   private engine: FSRS;
   readonly desiredRetention: number;
+  /** 実効最大間隔（日）。試験日逆算（exam-aware）で試験日を越える復習を抑える。 */
+  readonly maximumIntervalDays: number | undefined;
 
-  constructor(desiredRetention = 0.9) {
+  /**
+   * @param desiredRetention 目標保持率（FSRS の最重要設定。既定 0.9）。
+   * @param maximumIntervalDays 最大間隔（日）。試験日逆算で渡すと、それより先の復習予定を組まない。
+   *   未指定なら ts-fsrs 既定（実質無制限）。
+   */
+  constructor(desiredRetention = 0.9, maximumIntervalDays?: number) {
     this.desiredRetention = desiredRetention;
-    this.engine = fsrs(generatorParameters({ request_retention: desiredRetention }));
+    this.maximumIntervalDays = maximumIntervalDays;
+    this.engine = fsrs(
+      generatorParameters({
+        request_retention: desiredRetention,
+        ...(maximumIntervalDays !== undefined
+          ? { maximum_interval: Math.max(1, Math.floor(maximumIntervalDays)) }
+          : {}),
+      }),
+    );
   }
 
   init(now: Date = new Date()): Card {

@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  CRAM_REVIEW_CAP_MAX,
+  CRAM_REVIEW_CAP_MULT,
   DEFAULT_DAILY_REVIEW_CAP,
   dailyReviewBatch,
+  effectiveReviewCap,
   JST_OFFSET_MS,
   offlineLabel,
   streakStatus,
@@ -93,5 +96,25 @@ describe("offlineLabel", () => {
   it("オンラインは空、オフラインはラベル", () => {
     expect(offlineLabel(true)).toBe("");
     expect(offlineLabel(false)).toContain("オフライン");
+  });
+});
+
+describe("effectiveReviewCap（直前モードの上限引き上げ・#64）", () => {
+  it("通常時は設定値そのまま", () => {
+    expect(effectiveReviewCap(30, false)).toBe(30);
+    expect(effectiveReviewCap(50, false)).toBe(50);
+  });
+
+  it("直前モードは上限を倍にする", () => {
+    expect(effectiveReviewCap(30, true)).toBe(30 * CRAM_REVIEW_CAP_MULT);
+  });
+
+  it("直前モードでも絶対上限でクランプする", () => {
+    expect(effectiveReviewCap(200, true)).toBe(CRAM_REVIEW_CAP_MAX);
+  });
+
+  it("不正値は最低1に丸める", () => {
+    expect(effectiveReviewCap(0, false)).toBe(1);
+    expect(effectiveReviewCap(-5, false)).toBe(1);
   });
 });

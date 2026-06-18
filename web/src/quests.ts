@@ -20,7 +20,7 @@ export function dayIndexOf(ms: number, dayOffsetMs: number = JST_OFFSET_MS): num
   return _dayIndex(ms, dayOffsetMs);
 }
 
-export type QuestKind = "solve" | "correct" | "combo" | "topics" | "easy";
+export type QuestKind = "solve" | "correct" | "combo" | "topics" | "mastery";
 
 export interface Quest {
   /** `${dayIndex}-${kind}` 形式（日をまたぐと別IDになる）。 */
@@ -52,7 +52,9 @@ const TEMPLATES: readonly QuestTemplate[] = [
   { kind: "correct", icon: "⭕", targets: [3, 5, 7], label: (t) => `${t} 問正解する` },
   { kind: "combo", icon: "⚡", targets: [3, 4, 5], label: (t) => `${t} 連続で正解する` },
   { kind: "topics", icon: "🗺️", targets: [2, 3, 4], label: (t) => `${t} 種類の論点に挑戦する` },
-  { kind: "easy", icon: "😎", targets: [1, 2, 3], label: (t) => `「余裕」評価を ${t} 回つける` },
+  // 是正（#51）: 「余裕評価をN回」は自己評価インフレを誘発するため廃止し、
+  // 「異なる論点を正解する」習得志向のクエストに差し替える（楽勝申告ではなく実力で進む）。
+  { kind: "mastery", icon: "🎓", targets: [2, 3, 4], label: (t) => `${t} 種類の論点を正解する` },
 ];
 
 /** 1日に出すクエスト数。3つ＝「全部できそう」と思える量（多いと圧迫、少ないと単調）。 */
@@ -122,8 +124,9 @@ function questValue(quest: Quest, dayLogs: readonly WebAnswerLog[]): number {
       return maxConsecutiveCorrect(dayLogs);
     case "topics":
       return new Set(dayLogs.map((l) => l.topic)).size;
-    case "easy":
-      return dayLogs.filter((l) => l.rating === "easy").length;
+    case "mastery":
+      // 正解した論点の種類数（楽勝申告ではなく実力で進む。#51）。
+      return new Set(dayLogs.filter((l) => l.correct).map((l) => l.topic)).size;
   }
 }
 

@@ -10,16 +10,32 @@ interface Case {
   cond: string;
   answer: number;
   pool: ReadonlyArray<number>;
+  /** 各誤答値が「なぜ紛らわしいか（典型的な思い違い）」の具体説明。 */
+  reasons: Record<number, string>;
 }
 
 const CASES: ReadonlyArray<Case> = [
-  { cond: "住宅の屋内電路（原則）", answer: 150, pool: [100, 150, 200, 300] },
+  {
+    cond: "住宅の屋内電路（原則）",
+    answer: 150,
+    pool: [100, 150, 200, 300],
+    reasons: {
+      100: "単相100Vの公称電圧と対地電圧の上限を混同（原則は150V以下）",
+      200: "単相200V配線を念頭に200Vと当て推量（対地電圧の原則上限は150V）",
+      300: "緩和条件下の上限300Vを原則値と取り違え（原則は150V）",
+    },
+  },
   {
     cond:
       "定格消費電力2kW以上の機器を、専用の開閉器・過電流遮断器と漏電遮断器を施設した専用回路で、" +
       "電線を機器に直接接続して施設する場合",
     answer: 300,
     pool: [150, 200, 300, 600],
+    reasons: {
+      150: "原則の150Vを緩和条件にも適用した取り違え（条件を満たせば300V以下）",
+      200: "200V機器のイメージから200Vと当て推量（緩和後の上限は300V）",
+      600: "低圧（交流）の上限600Vと対地電圧の上限を混同（緩和後でも300V以下）",
+    },
   },
 ];
 
@@ -45,7 +61,7 @@ export const indoorVoltageLimit = defineTemplate<Params>({
     const choices = c.pool.map((v) => formatClean(v));
     const distractors = c.pool
       .filter((v) => v !== c.answer)
-      .map((v) => ({ text: formatClean(v), reason: "原則値(150V)と緩和条件(300V)・電圧区分との取り違え" }));
+      .map((v) => ({ text: formatClean(v), reason: c.reasons[v] ?? "原則値(150V)と緩和条件(300V)の取り違え" }));
     return {
       format: "multiple_choice",
       params: { case_index: { value: caseIndex, realistic_range: [0, CASES.length - 1] } },

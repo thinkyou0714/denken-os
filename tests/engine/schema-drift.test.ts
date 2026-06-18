@@ -54,9 +54,9 @@ function customChecks(p: unknown): string[] {
 }
 
 describe("スキーマドリフト検知（I-069）", () => {
-  // AJV のセットアップ（validate-problems.ts と同条件: strict: false）
+  // AJV のセットアップ（validate-problems.ts と同条件: strict: true）
   const schema = JSON.parse(readFileSync(SCHEMA_PATH, "utf8"));
-  const ajv = new Ajv({ allErrors: true, strict: false });
+  const ajv = new Ajv({ allErrors: true, strict: true });
   addFormats(ajv);
   const ajvValidate = ajv.compile(schema);
 

@@ -1,40 +1,66 @@
 import { describe, expect, it } from "vitest";
-import type { Problem } from "../../lib/engine/schema.js";
+import type { Problem, Subject } from "../../lib/engine/schema.js";
 import {
-  DESCRIPTIVE_PER_PROBLEM_MS,
   EXAM_TIME_CAP_MS,
   examTimeLimitMs,
-  PRIMARY_PER_PROBLEM_MS,
+  FULL_SUBJECT_QUESTION_COUNT,
+  SUBJECT_EXAM_MINUTES,
 } from "../../web/src/exam.js";
 import { formatElapsed, formatRemaining } from "../../web/src/format.js";
 
-const prob = (format: Problem["format"]): Problem => ({
-  id: `p-${format}`,
-  subject: "理論",
-  topic: "t",
-  format,
-  difficulty: 2,
-  statement: "s",
-  answer: "1",
-  solution: ["x"],
-  validation: { solver_checked: true, human_checked: false, clean_answer: true, physically_valid: true },
-  source: { type: "original" },
-});
+const prob = (subject: Subject, id = "p"): Problem =>
+  ({
+    id: `${id}-${subject}`,
+    subject,
+    topic: `t-${id}`,
+    difficulty: 2,
+    statement: "s",
+    answer: "1",
+    solution: ["x"],
+    validation: { solver_checked: true, human_checked: false, clean_answer: true, physically_valid: true },
+    source: { type: "original" },
+  }) as Problem;
 
-describe("examTimeLimitMs（模試の制限時間）", () => {
-  it("一次形式は3分/問", () => {
-    expect(examTimeLimitMs([prob("multiple_choice"), prob("numeric")])).toBe(2 * PRIMARY_PER_PROBLEM_MS);
+describe("examTimeLimitMs（本番の科目別 総試験時間を再現）", () => {
+  it("単一科目フル相当はその科目の本番時間（理論=90分）", () => {
+    // 理論の基準数ぶん（FULL_SUBJECT_QUESTION_COUNT）以上で本番フル。
+    const n = FULL_SUBJECT_QUESTION_COUNT.理論;
+    const set = Array.from({ length: n }, (_, i) => prob("理論", String(i)));
+    expect(examTimeLimitMs(set)).toBe(SUBJECT_EXAM_MINUTES.理論 * 60_000);
   });
 
-  it("記述は10分/問（一次と混合なら合算）", () => {
-    expect(examTimeLimitMs([prob("descriptive"), prob("multiple_choice")])).toBe(
-      DESCRIPTIVE_PER_PROBLEM_MS + PRIMARY_PER_PROBLEM_MS,
-    );
+  it("部分模試（基準数未満）は本番時間を比例配分する", () => {
+    // 理論を基準数の半分だけ → 90分の約半分（比例配分）。
+    const half = Math.floor(FULL_SUBJECT_QUESTION_COUNT.理論 / 2);
+    const set = Array.from({ length: half }, (_, i) => prob("理論", String(i)));
+    const ms = examTimeLimitMs(set);
+    const fullMs = SUBJECT_EXAM_MINUTES.理論 * 60_000;
+    expect(ms).toBeLessThan(fullMs);
+    expect(ms).toBeGreaterThan(0);
+    // 概ね half/full の比率（丸め誤差を許容）。
+    expect(ms / fullMs).toBeCloseTo(half / FULL_SUBJECT_QUESTION_COUNT.理論, 1);
   });
 
-  it("上限120分でキャップされる", () => {
-    const many = Array.from({ length: 50 }, () => prob("descriptive"));
-    expect(examTimeLimitMs(many)).toBe(EXAM_TIME_CAP_MS);
+  it("複数科目は各科目の本番時間を合算する", () => {
+    // 法規(65分)を基準数ぶん + 理論(90分)を基準数ぶん → 合算 155分。
+    const set = [
+      ...Array.from({ length: FULL_SUBJECT_QUESTION_COUNT.法規 }, (_, i) => prob("法規", `h${i}`)),
+      ...Array.from({ length: FULL_SUBJECT_QUESTION_COUNT.理論 }, (_, i) => prob("理論", `r${i}`)),
+    ];
+    expect(examTimeLimitMs(set)).toBe((SUBJECT_EXAM_MINUTES.法規 + SUBJECT_EXAM_MINUTES.理論) * 60_000);
+  });
+
+  it("二次フル2科目の合算は上限180分でキャップされる", () => {
+    const set = [
+      ...Array.from({ length: FULL_SUBJECT_QUESTION_COUNT.電力管理 }, (_, i) => prob("電力管理", `d${i}`)),
+      ...Array.from({ length: FULL_SUBJECT_QUESTION_COUNT.機械制御 }, (_, i) => prob("機械制御", `k${i}`)),
+    ];
+    // 120 + 60 = 180 = 上限ちょうど。
+    expect(examTimeLimitMs(set)).toBe(EXAM_TIME_CAP_MS);
+  });
+
+  it("法規は理論より総試験時間が短い（65分 < 90分）", () => {
+    expect(SUBJECT_EXAM_MINUTES.法規).toBeLessThan(SUBJECT_EXAM_MINUTES.理論);
   });
 
   it("空セットは0", () => {

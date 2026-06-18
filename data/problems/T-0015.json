@@ -24,7 +24,7 @@
     },
     "synchronous_reactance": {
       "value": 20,
-      "unit": "ohm",
+      "unit": "Ω",
       "realistic_range": [
         1,
         30

@@ -3,11 +3,14 @@
  * problems 配列・loadFailed・現在 view・progress インスタンス・テーマ。
  */
 import type { Problem } from "../../../lib/engine/schema.js";
-import { getTheme } from "../settings.js";
+import { JST_OFFSET_MS } from "../dates.js";
+import { getExamDate, getTheme } from "../settings.js";
 import { LocalProgress } from "../store.js";
 
 export const storage = window.localStorage;
-export const progress = new LocalProgress(storage);
+// 試験日を渡して FSRS を試験日逆算モードで構築する（#34/#35）。試験日が変わったら
+// settings 側で progress.setExamDate を呼んで再構築する。
+export const progress = new LocalProgress(storage, JST_OFFSET_MS, getExamDate(storage));
 
 /** 読み込み済みの問題リスト。 */
 export let problems: Problem[] = [];
