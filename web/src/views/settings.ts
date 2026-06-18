@@ -37,7 +37,10 @@ export function renderSettings(root: HTMLElement): void {
   const examInput = h("input", { type: "date", value: getExamDate(storage) }) as HTMLInputElement;
   examInput.addEventListener("change", () => {
     setExamDate(storage, examInput.value);
+    // 試験日が変わると試験日逆算スケジューリング（実効保持率・最大間隔・直前モード）が変わる（#34/#35）。
+    progress.setExamDate(getExamDate(storage));
     renderHeader();
+    renderNav();
   });
   const goalInput = h("input", {
     type: "number",

@@ -37,4 +37,29 @@ describe("pickNextProblem", () => {
     const chosen = pickNextProblem(pool, { weakTopics: [], rng: () => 0 });
     expect(chosen).not.toBeNull();
   });
+
+  it("インターリーブ: 直近に出した弱点 topic は後回しにする（#50）", () => {
+    // 弱点が 理論→機械 の順でも、直近に理論を出していれば機械を優先する。
+    const chosen = pickNextProblem(pool, {
+      weakTopics: ["理論", "機械"],
+      recentTopics: ["理論"],
+      rng: () => 0,
+    });
+    expect(chosen?.topic).toBe("機械");
+  });
+
+  it("インターリーブ: 全弱点が直近に出ていれば元の優先順を保つ（後回し先が無い）", () => {
+    const chosen = pickNextProblem(pool, {
+      weakTopics: ["理論", "機械"],
+      recentTopics: ["理論", "機械"],
+      rng: () => 0,
+    });
+    // 両方 stale → 元順（理論が先頭）。
+    expect(chosen?.topic).toBe("理論");
+  });
+
+  it("インターリーブ: recentTopics 未指定なら従来どおり優先順で選ぶ", () => {
+    const chosen = pickNextProblem(pool, { weakTopics: ["理論", "機械"], rng: () => 0 });
+    expect(chosen?.topic).toBe("理論");
+  });
 });

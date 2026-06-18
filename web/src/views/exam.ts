@@ -4,8 +4,17 @@
  * startTimer / endExam
  */
 
-import type { Subject } from "../../../lib/engine/schema.js";
-import { buildMockExam, examTimeLimitMs, isPrimaryPass, scoreExam, scoreExamBySubject } from "../exam.js";
+import type { Problem, Subject } from "../../../lib/engine/schema.js";
+import {
+  buildMockExam,
+  buildPrimaryFullMock,
+  examTimeLimitMs,
+  primaryVerdict,
+  scoreExam,
+  scoreExamBySubject,
+  scoreSecondary,
+} from "../exam.js";
+import { appendExamHistory, type ExamHistoryPreset, loadExamHistory, recentScores } from "../exam-history.js";
 import { formatRemaining } from "../format.js";
 import { confettiBurst, playTone } from "../fx.js";
 import { isAnswerCorrect, normalizeNumericInput } from "../grade.js";
@@ -13,14 +22,20 @@ import { formatMath } from "../mathfmt.js";
 import { allQuestsClear, allWeeklyQuestsClear, dayIndexOf, logsOfDay, logsOfWeek, weekIndexOf } from "../quests.js";
 import { getDailyGoal, getSoundLevel } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
-import { type ExamPreset, exam, setExam } from "../state/exam.js";
+import { type ExamPreset, exam, secondarySelect, setExam, setSecondarySelect } from "../state/exam.js";
 import { todayCount } from "../state/practice.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
-import { bar, difficultyStars, figureNode, solutionNode } from "../ui/widgets.js";
+import { bar, difficultyStars, draftBadge, figureNode, solutionNode, sparklineNode } from "../ui/widgets.js";
 import { processRewards } from "./practice-rewards.js";
 import { startDrill } from "./review.js";
 import { renderHeader, switchView } from "./router.js";
+
+/** 二次「N問中M問選択」の候補数・選択数（#43）。 */
+const SECONDARY_CHOICE: Readonly<Record<string, { candidates: number; choose: number }>> = {
+  電力管理: { candidates: 6, choose: 4 },
+  機械制御: { candidates: 4, choose: 2 },
+};
 
 /**
  * バックグラウンドタブ復帰時の保険（II-8）。
@@ -69,6 +84,7 @@ export function clearExamTimer(): void {
 export function endExam(): void {
   clearExamTimer();
   setExam(null);
+  setSecondarySelect(null);
   switchView("exam");
 }
 
@@ -77,10 +93,15 @@ export function renderExam(root: HTMLElement): void {
     renderExamRunning(root);
     return;
   }
+  if (secondarySelect) {
+    renderSecondarySelect(root);
+    return;
+  }
   root.append(
     h("h2", {}, "模試（時間制限・合格ライン60%）"),
     h("p", { class: "muted" }, "本番の緊張感で実力を測り、弱点を炙り出します。記述は自己採点です。"),
   );
+  examHistorySection(root);
   let count = 10;
   let preset: "all" | "primary" | "secondary" = "all";
   const toolbar = h(
@@ -108,30 +129,72 @@ export function renderExam(root: HTMLElement): void {
       }) as HTMLSelectElement;
       sel.append(
         h("option", { value: "all" }, "全分野"),
-        h("option", { value: "primary" }, "一次（理論/電力/機械/法規）"),
-        h("option", { value: "secondary" }, "二次（電力管理/機械制御）"),
+        h("option", { value: "primary" }, "一次フル（4科目・合格判定）"),
+        h("option", { value: "secondary" }, "二次（電力管理＋機械制御・合算判定）"),
       );
       return sel;
     })(),
   );
   root.append(
     toolbar,
+    h(
+      "p",
+      { class: "muted small" },
+      "一次フルは4科目すべてを出題し、各科目60%で合格判定します。二次は問題を選んでから合算（108/180）で判定します。",
+    ),
     h("button", { class: "primary", type: "button", onclick: () => startExam(count, preset) }, "▶ 模試を開始"),
   );
 }
 
+/** 模試結果のスコア推移（履歴）。直近の得点率をスパークライン＋直近リストで見せる（#13）。 */
+function examHistorySection(root: HTMLElement): void {
+  const history = loadExamHistory(storage);
+  if (history.length === 0) return;
+  const scores = recentScores(history, 10);
+  // sparklineNode は 0..1 を取るので 0..100 → 0..1 に正規化する。
+  const spark = sparklineNode(scores.map((s) => s / 100));
+  const list = h("div", { class: "exam-trend" });
+  for (const e of history.slice(-5).reverse()) {
+    const d = new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric", timeZone: "Asia/Tokyo" }).format(
+      new Date(e.atMs),
+    );
+    const label =
+      e.preset === "primary" ? "一次" : e.preset === "secondary" ? "二次" : e.subjects.join("/") || "全分野";
+    list.append(
+      h(
+        "div",
+        { class: "row" },
+        h("span", { class: "muted" }, `${d} ${label}`),
+        h(
+          "span",
+          { style: `color:${e.passed ? "var(--ok)" : "var(--ng)"}` },
+          `${e.scorePct}点 ${e.passed ? "✅" : ""}`,
+        ),
+      ),
+    );
+  }
+  root.append(h("h2", {}, "模試スコアの推移"));
+  if (spark) root.append(spark);
+  root.append(list);
+}
+
 export function startExam(count: number, preset: ExamPreset): void {
-  const subjects =
-    preset === "primary"
-      ? (["理論", "電力", "機械", "法規"] as Subject[])
-      : preset === "secondary"
-        ? (["電力管理", "機械制御"] as Subject[])
-        : undefined;
-  const set = buildMockExam(problems, { count, ...(subjects !== undefined ? { subjects } : {}) });
+  // 二次は「N問中M問選択」の選択フェーズを挟む（#43）。
+  if (preset === "secondary") {
+    startSecondarySelection(count);
+    return;
+  }
+  // 一次フルは4科目すべてを代表させる（#48）。
+  const set = preset === "primary" ? buildPrimaryFullMock(problems, count) : buildMockExam(problems, { count });
   if (set.length === 0) {
     switchView("exam");
     return;
   }
+  launchExam(set, preset);
+}
+
+/** 出題セットから時間制限つき模試を開始する（preset 共通の点火処理）。 */
+function launchExam(set: Problem[], preset: ExamPreset): void {
   const todayIdx = dayIndexOf(Date.now());
   const weekIdx = weekIndexOf(Date.now());
   setExam({
@@ -149,6 +212,112 @@ export function startExam(count: number, preset: ExamPreset): void {
     celebrated: false,
   });
   switchView("exam");
+}
+
+/** 二次の選択フェーズを開始する（電力管理6→4, 機械制御4→2 の候補を用意）（#43）。 */
+function startSecondarySelection(count: number): void {
+  const groups: NonNullable<typeof secondarySelect>["groups"] = [];
+  for (const subject of ["電力管理", "機械制御"] as Subject[]) {
+    const spec = SECONDARY_CHOICE[subject];
+    if (!spec) continue;
+    const candidates = buildMockExam(problems, { count: spec.candidates, subjects: [subject] });
+    if (candidates.length === 0) continue;
+    // 候補が選択数に満たないときは選択数を候補数に丸める（出題不能を避ける）。
+    groups.push({ subject, candidates, choose: Math.min(spec.choose, candidates.length) });
+  }
+  if (groups.length === 0) {
+    switchView("exam");
+    return;
+  }
+  setSecondarySelect({ groups, count });
+  switchView("exam");
+}
+
+/** 二次の選択画面（#43）。各科目で必要数を選んだら本番開始。 */
+function renderSecondarySelect(root: HTMLElement): void {
+  if (!secondarySelect) return;
+  const sel = secondarySelect;
+  const chosen = new Map<Subject, Set<string>>();
+  for (const g of sel.groups) chosen.set(g.subject, new Set());
+
+  root.append(
+    h("h2", {}, "二次模試: 問題を選択"),
+    h(
+      "p",
+      { class: "muted" },
+      "本番同様、出題から解く問題を選びます。電力・管理は6問中4問、機械・制御は4問中2問を選択してください。",
+    ),
+  );
+
+  const startBtn = h(
+    "button",
+    { class: "primary", type: "button", disabled: true },
+    "▶ 選んだ問題で開始",
+  ) as HTMLButtonElement;
+  const refreshStartState = () => {
+    const ok = sel.groups.every((g) => (chosen.get(g.subject)?.size ?? 0) === g.choose);
+    startBtn.disabled = !ok;
+  };
+
+  for (const g of sel.groups) {
+    root.append(h("h2", {}, `${g.subject}（${g.choose}問を選択）`));
+    const list = h("div", { class: "exam-pick" });
+    g.candidates.forEach((p, i) => {
+      const cb = h("input", { type: "checkbox", id: `pick-${g.subject}-${i}` }) as HTMLInputElement;
+      cb.addEventListener("change", () => {
+        const set = chosen.get(g.subject);
+        if (!set) return;
+        if (cb.checked) {
+          if (set.size >= g.choose) {
+            // 上限に達していたら選択を弾く（本番の選択数を厳守）。
+            cb.checked = false;
+            showToast(`${g.subject}は${g.choose}問までです`, "OK", () => {});
+            return;
+          }
+          set.add(p.id);
+        } else {
+          set.delete(p.id);
+        }
+        refreshStartState();
+      });
+      list.append(
+        h(
+          "label",
+          { class: "card pick-item", for: `pick-${g.subject}-${i}` },
+          cb,
+          h("span", { class: "muted" }, `${p.topic}・難易度${difficultyStars(p.difficulty)}`),
+          h("div", { class: "stmt-sm", html: safeHtml(formatMath(p.statement)) }),
+        ),
+      );
+    });
+    root.append(list);
+  }
+
+  startBtn.addEventListener("click", () => {
+    const set: Problem[] = [];
+    for (const g of sel.groups) {
+      const picks = chosen.get(g.subject) ?? new Set();
+      for (const p of g.candidates) if (picks.has(p.id)) set.push(p);
+    }
+    if (set.length === 0) return;
+    setSecondarySelect(null);
+    launchExam(set, "secondary");
+  });
+  root.append(
+    startBtn,
+    h(
+      "button",
+      {
+        class: "chip",
+        type: "button",
+        onclick: () => {
+          setSecondarySelect(null);
+          switchView("exam");
+        },
+      },
+      "やめる",
+    ),
+  );
 }
 
 /** 時間切れ: 未解答の残り問題は本番同様 0 点（不正解）として結果へ。
@@ -196,10 +365,11 @@ export function renderExamRunning(root: HTMLElement): void {
     ),
   );
   const host = h("div", {});
-  host.append(
-    h("div", { id: "meta" }, `${p.subject}・難易度${difficultyStars(p.difficulty)}`),
-    h("div", { class: "stmt", html: safeHtml(formatMath(p.statement)) }),
-  );
+  // 未監修（自動生成）の問題はバッジで明示する（#63）。
+  const meta = h("div", { id: "meta" }, `${p.subject}・難易度${difficultyStars(p.difficulty)}`);
+  const badge = draftBadge(p);
+  if (badge) meta.append(" ", badge);
+  host.append(meta, h("div", { class: "stmt", html: safeHtml(formatMath(p.statement)) }));
   if (p.figure) host.append(figureNode(p.figure));
   host.append(h("div", { class: "answers", id: "eanswers" }));
   // aria-live region: タイマー警告をスクリーンリーダーへ通知（II-159）。visually-hiddenで画面には見えない。
@@ -227,8 +397,16 @@ export function renderExamRunning(root: HTMLElement): void {
         h("button", { class: "choice", type: "button", onclick: () => advance(isAnswerCorrect(p, c)) }, c),
       );
   } else if (p.format === "descriptive") {
+    // 解答前に導出を書く/考えてから模範解答を開示する（後知恵バイアス対策 #44）。
+    const ta = h("textarea", {
+      class: "derivation",
+      rows: "4",
+      placeholder: "解答の方針・導出をここに書いてから模範解答を見ましょう（任意）",
+      "aria-label": "自分の解答メモ",
+    }) as HTMLTextAreaElement;
     answers.append(
-      h("div", { class: "muted" }, "記述: 解答後に模範解答と照合して自己採点します。"),
+      h("div", { class: "muted" }, "記述: まず自分で解答を書き、それから模範解答と照合して自己採点します。"),
+      ta,
       h(
         "button",
         {
@@ -247,7 +425,7 @@ export function renderExamRunning(root: HTMLElement): void {
             );
           },
         },
-        "模範解答を表示",
+        "📝 解答を考えた・模範解答を表示",
       ),
     );
   } else {
@@ -343,16 +521,28 @@ function examScoreSection(root: HTMLElement, score: ReturnType<typeof scoreExam>
 }
 
 function examSubjectSection(root: HTMLElement, subjectScores: ReturnType<typeof scoreExamBySubject>): void {
-  // 一次プリセットは「全科目60%以上」で本番合格判定。
+  // 一次プリセットは「4科目すべて60%以上」で本番合格判定。4科目揃わなければ部分模試（#48）。
   // biome-ignore lint/style/noNonNullAssertion: renderExamResult の `if (!exam) return` 後に呼ばれるため exam は非 null。
   if (exam!.preset === "primary") {
-    const primaryPass = isPrimaryPass(subjectScores);
+    const verdict = primaryVerdict(subjectScores);
+    const card =
+      verdict === "pass"
+        ? { color: "var(--ok)", title: "✅ 一次 合格判定（4科目すべて60%以上）" }
+        : verdict === "fail"
+          ? { color: "var(--ng)", title: "✗ 一次 不合格（足切り科目あり）" }
+          : { color: "var(--accent)", title: "ℹ️ 部分模試（4科目が揃っていないため合否判定なし）" };
     root.append(
       h(
         "div",
-        { class: "card", style: `border-color:${primaryPass ? "var(--ok)" : "var(--ng)"}` },
-        h("strong", {}, primaryPass ? "✅ 一次 合格判定（全科目60%以上）" : "✗ 一次 不合格（足切り科目あり）"),
-        h("div", { class: "muted" }, "本番は科目ごとに60%以上が必要。1科目でも下回ると不合格です。"),
+        { class: "card", style: `border-color:${card.color}` },
+        h("strong", {}, card.title),
+        h(
+          "div",
+          { class: "muted" },
+          verdict === "partial"
+            ? "本番は理論/電力/機械/法規の4科目すべてが各60%以上で合格。出題に全科目を含めると合否判定できます。"
+            : "本番は科目ごとに60%以上が必要。1科目でも下回ると不合格です。",
+        ),
       ),
     );
   }
@@ -365,6 +555,43 @@ function examSubjectSection(root: HTMLElement, subjectScores: ReturnType<typeof 
         h("span", {}, `${v.subject}${v.passed ? " ✅" : " ✗"}`),
         bar(v.scorePct),
         h("span", {}, `${v.correct}/${v.total}`),
+      ),
+    );
+  }
+  root.append(breakdown);
+}
+
+/** 二次の合算判定セクション（#48）。電力管理(120)＋機械制御(60) の合算で 108/180(60%) を判定。 */
+function examSecondarySection(root: HTMLElement, set: Problem[], results: boolean[]): void {
+  const sec = scoreSecondary(set, results);
+  root.append(
+    h(
+      "div",
+      { class: "card", style: `border-color:${sec.passed ? "var(--ok)" : "var(--ng)"}` },
+      h(
+        "strong",
+        {},
+        sec.passed
+          ? `✅ 二次 合格判定（合算 ${sec.totalPoints}/${sec.totalMax}点）`
+          : `✗ 二次 不合格（合算 ${sec.totalPoints}/${sec.totalMax}点）`,
+      ),
+      h(
+        "div",
+        { class: "muted" },
+        "二次は電力・管理(120点)と機械・制御(60点)の合算で60%（108/180）以上が合格。科目別ではありません。",
+      ),
+    ),
+  );
+  const breakdown = h("div", {});
+  for (const s of sec.perSubject) {
+    const pct = s.max > 0 ? Math.round((s.points / s.max) * 100) : 0;
+    breakdown.append(
+      h(
+        "div",
+        { class: "row" },
+        h("span", {}, s.subject),
+        bar(pct),
+        h("span", {}, `${Math.round(s.points)}/${s.max}点`),
       ),
     );
   }
@@ -442,8 +669,12 @@ export function renderExamResult(root: HTMLElement): void {
   if (!exam) return;
   // 結果画面遷移時にタイマーを確実に停止（II-156 タイマーリーク解消）。
   clearExamTimer();
+  const isSecondary = exam.preset === "secondary";
   // 単一パスで集計（II-163）: score/subjectScores をここで1回計算してセクション関数へ渡す。
-  const score = scoreExam(exam.results);
+  const rawScore = scoreExam(exam.results);
+  // 二次は合算判定（108/180）。見出しの得点率・合否は合算ベースに差し替える（#48）。
+  const sec = isSecondary ? scoreSecondary(exam.set, exam.results) : null;
+  const score = sec ? { ...rawScore, scorePct: sec.scorePct, passed: sec.passed } : rawScore;
   const mins = Math.floor((Date.now() - exam.startedAt) / 60000);
   // 科目別内訳（電験一次は科目ごとに合否＝各60%）
   const subjectScores = scoreExamBySubject(exam.set, exam.results);
@@ -471,7 +702,23 @@ export function renderExamResult(root: HTMLElement): void {
     renderHeader();
   }
 
+  // 結果を履歴に保存（初回のみ。タブ往復での二重保存を防ぐ）（#13）。
+  if (!exam.historySaved) {
+    exam.historySaved = true;
+    const subjects = [...new Set(exam.set.map((p) => p.subject))];
+    const passed = exam.preset === "primary" ? primaryVerdict(subjectScores) === "pass" : score.passed;
+    appendExamHistory(storage, {
+      atMs: Date.now(),
+      preset: exam.preset as ExamHistoryPreset,
+      subjects,
+      scorePct: score.scorePct,
+      total: exam.set.length,
+      passed,
+    });
+  }
+
   examScoreSection(root, score, mins);
-  examSubjectSection(root, subjectScores);
+  if (sec) examSecondarySection(root, exam.set, exam.results);
+  else examSubjectSection(root, subjectScores);
   examReviewSection(root);
 }

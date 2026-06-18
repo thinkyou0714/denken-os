@@ -3,6 +3,7 @@ import type { Problem } from "../../lib/engine/schema.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
 import {
   accuracyTrend,
+  allSubjectReadiness,
   bySubject,
   byTopic,
   dailyActivity,
@@ -10,6 +11,7 @@ import {
   overall,
   recentAccuracy,
   reviewForecast,
+  subjectReadiness,
 } from "../../web/src/dashboard.js";
 import type { WebAnswerLog } from "../../web/src/store.js";
 
@@ -125,5 +127,67 @@ describe("dashboard（進捗集計）", () => {
     expect(act[0]?.count).toBe(1); // 2日前
     expect(act[1]?.count).toBe(0); // 昨日
     expect(act[2]?.count).toBe(2); // 今日
+  });
+});
+
+describe("subjectReadiness（科目別 合格見込みの推定・#52）", () => {
+  // 理論に2論点ある問題集（カバレッジを測れるようにする）。
+  const probs: Problem[] = [
+    prob("R1", "理論", "三相交流電力"),
+    prob("R2", "理論", "オームの法則"),
+    prob("D1", "電力", "需要率"),
+  ];
+
+  it("未着手の科目は『遅れ』・readiness 0 近傍", () => {
+    const r = subjectReadiness("電力", [], probs, 90);
+    expect(r.attempts).toBe(0);
+    expect(r.verdict).toBe("遅れ");
+  });
+
+  it("高正答率＋全論点カバーは『順調』", () => {
+    // 理論の2論点を高正答率で多数こなす。
+    const logs: WebAnswerLog[] = [];
+    for (let i = 0; i < 8; i++) logs.push(log("三相交流電力", true, i));
+    for (let i = 0; i < 8; i++) logs.push(log("オームの法則", true, 100 + i));
+    const r = subjectReadiness("理論", logs, probs, 90);
+    expect(r.coverage).toBe(1); // 2/2 論点
+    expect(r.accuracy).toBeGreaterThan(0.8);
+    expect(r.verdict).toBe("順調");
+    expect(r.readiness).toBeGreaterThan(0.6);
+  });
+
+  it("低正答率は readiness が下がる", () => {
+    const logs: WebAnswerLog[] = [];
+    for (let i = 0; i < 8; i++) logs.push(log("三相交流電力", false, i)); // 全外し
+    const r = subjectReadiness("理論", logs, probs, 90);
+    expect(r.accuracy).toBeLessThan(0.4);
+    expect(r.readiness).toBeLessThan(0.5);
+    expect(r.verdict).not.toBe("順調");
+  });
+
+  it("残り日数が少ないほど判定が厳しくなる（同じ実力でも直前は順調になりにくい）", () => {
+    const logs: WebAnswerLog[] = [];
+    // 1論点だけ・そこそこの正答率（カバレッジ0.5）。
+    for (let i = 0; i < 6; i++) logs.push(log("三相交流電力", i % 3 !== 0, i)); // 約67%
+    const far = subjectReadiness("理論", logs, probs, 120);
+    const near = subjectReadiness("理論", logs, probs, 7);
+    // readiness 自体は同じ（実力は同じ）。判定の厳しさだけが変わる。
+    expect(near.readiness).toBeCloseTo(far.readiness);
+    const rank = (v: string) => (v === "順調" ? 2 : v === "もう少し" ? 1 : 0);
+    expect(rank(near.verdict)).toBeLessThanOrEqual(rank(far.verdict));
+  });
+
+  it("allSubjectReadiness: 問題集に存在する科目だけを返す", () => {
+    const rows = allSubjectReadiness([], probs, 90);
+    expect(rows.map((r) => r.subject).sort()).toEqual(["理論", "電力"].sort());
+  });
+
+  it("readiness は 0..1 にクランプされる", () => {
+    const logs: WebAnswerLog[] = [];
+    for (let i = 0; i < 20; i++) logs.push(log("三相交流電力", true, i));
+    for (let i = 0; i < 20; i++) logs.push(log("オームの法則", true, 100 + i));
+    const r = subjectReadiness("理論", logs, probs, 90);
+    expect(r.readiness).toBeGreaterThanOrEqual(0);
+    expect(r.readiness).toBeLessThanOrEqual(1);
   });
 });

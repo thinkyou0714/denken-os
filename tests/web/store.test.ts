@@ -137,6 +137,53 @@ describe("LocalProgress（ブラウザ進捗・FSRS）", () => {
     expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
   });
 
+  // ---- #34/#35: 試験日逆算スケジューリングの配線 ----
+
+  it("試験日を渡すと直前期(<=14日)で cramMode が立つ", () => {
+    const storage = new MemoryStorage();
+    // 試験日を今日から10日後（JST）に置く。daysUntil は Date.now() 基準のため、
+    // 「直近の日付」を ISO で作る。
+    const soon = new Date(Date.now() + 10 * DAY).toISOString().slice(0, 10);
+    const p = new LocalProgress(storage, undefined, soon);
+    expect(p.cramMode()).toBe(true);
+  });
+
+  it("試験日が遠い/未設定なら cramMode は立たない", () => {
+    const far = new Date(Date.now() + 200 * DAY).toISOString().slice(0, 10);
+    expect(new LocalProgress(new MemoryStorage(), undefined, far).cramMode()).toBe(false);
+    // 試験日未設定（従来挙動）
+    expect(new LocalProgress(new MemoryStorage()).cramMode()).toBe(false);
+  });
+
+  it("setExamDate で直前モードが切り替わる（遠い→近い）", () => {
+    const p = new LocalProgress(new MemoryStorage());
+    expect(p.cramMode()).toBe(false);
+    const soon = new Date(Date.now() + 5 * DAY).toISOString().slice(0, 10);
+    p.setExamDate(soon);
+    expect(p.cramMode()).toBe(true);
+    p.setExamDate(null);
+    expect(p.cramMode()).toBe(false);
+  });
+
+  it("試験日逆算でも dueCountCached は dueTopics().length と一致する", () => {
+    const soon = new Date(Date.now() + 7 * DAY).toISOString().slice(0, 10);
+    const p = new LocalProgress(new MemoryStorage(), undefined, soon);
+    const now = Date.now();
+    p.record("理論", true, now);
+    const future = now + 100 * DAY;
+    expect(p.dueCountCached(future)).toBe(p.dueTopics(future).length);
+  });
+
+  it("試験日を渡しても従来の記録・復元は壊れない（後方互換）", () => {
+    const storage = new MemoryStorage();
+    const far = new Date(Date.now() + 300 * DAY).toISOString().slice(0, 10);
+    const a = new LocalProgress(storage, undefined, far);
+    a.record("機械", true, Date.UTC(2026, 0, 10));
+    const b = new LocalProgress(storage, undefined, far);
+    expect(b.logs().length).toBe(1);
+    expect(b.getCardView("機械")).toBeDefined();
+  });
+
   it("日境界は既定 JST（UTC 22時=JST翌07時の学習が『今日』に入る）", () => {
     const p = new LocalProgress(new MemoryStorage()); // 既定 JST(+9h)
     // 2026-01-10T22:00:00Z = JST 2026-01-11 07:00。JST では「11日」の学習。

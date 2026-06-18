@@ -4,12 +4,22 @@
  */
 import type { Problem } from "../../../lib/engine/schema.js";
 import { formatMath } from "../mathfmt.js";
+import { isUnsupervised } from "../problem-meta.js";
 import { sanitizeSvg } from "../sanitize.js";
 import { h, safeHtml } from "./dom.js";
 
 /** 難易度を星で表示。 */
 export function difficultyStars(n: number): string {
   return "★".repeat(Math.max(1, Math.min(5, n)));
+}
+
+/**
+ * 未監修（draft / 自動生成）バッジ（#63）。
+ * 人手で検証されていない可能性がある問題を学習者に明示する（透明性）。監修済みなら null。
+ */
+export function draftBadge(p: Problem): HTMLElement | null {
+  if (!isUnsupervised(p)) return null;
+  return h("span", { class: "chip draft", title: "自動生成・未監修の問題です（内容は確認中）" }, "未監修");
 }
 
 /** 問題の出典テキスト。 */

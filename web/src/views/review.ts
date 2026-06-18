@@ -4,17 +4,20 @@
 
 import { mascotSvg } from "../mascot.js";
 import { formatMath } from "../mathfmt.js";
-import { dailyReviewBatch, JST_OFFSET_MS, streakStatus } from "../retention.js";
+import { dailyReviewBatch, effectiveReviewCap, JST_OFFSET_MS, streakStatus } from "../retention.js";
 import { dueReviewProblems, mistakeNotebook } from "../review.js";
 import { getMascotEnabled, getReviewCap } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
-import { practice, setCombo } from "../state/practice.js";
+import { practice, resetPracticeSession } from "../state/practice.js";
 import { h, safeHtml } from "../ui/dom.js";
 import { emptyState, svgNode } from "../ui/widgets.js";
-import { usedFreezeDays } from "./practice.js";
+import { cramBanner, usedFreezeDays } from "./practice.js";
 import { switchView } from "./router.js";
 
 export function renderReview(root: HTMLElement): void {
+  // 直前モードのバナー（試験が近いと集中復習を促す #34/#35）。
+  const cram = cramBanner();
+  if (cram) root.append(cram);
   // ストリーク予兆ナッジ（崩れる前に背中を押す）。デンタマの表情つきで届きやすく。
   const ss = streakStatus(progress.logs(), Date.now(), JST_OFFSET_MS, usedFreezeDays());
   if (ss.state === "at-risk" || ss.state === "broken") {
@@ -32,9 +35,9 @@ export function renderReview(root: HTMLElement): void {
     }
   }
 
-  // 1日上限でバッチ化（大量の復習による離脱を防ぐ）。
+  // 1日上限でバッチ化（大量の復習による離脱を防ぐ）。直前モードでは上限を引き上げる（#64）。
   const allDue = progress.dueTopics();
-  const cap = getReviewCap(storage);
+  const cap = effectiveReviewCap(getReviewCap(storage), progress.cramMode());
   const { batch, overflow, capped } = dailyReviewBatch(allDue, cap);
   const dueProblems = dueReviewProblems(problems, batch);
   const notebook = mistakeNotebook(progress.logs(), problems, 30);
@@ -124,6 +127,7 @@ import type { Problem } from "../../../lib/engine/schema.js";
 export function startDrill(pool: Problem[]): void {
   practice.pool = pool;
   practice.current = null;
-  setCombo(0); // 新しいセッションとして仕切り直す
+  // 新しいセッションとして仕切り直す（combo・再出題キュー・直近 topic をリセット #49/#50）。
+  resetPracticeSession();
   switchView("practice");
 }

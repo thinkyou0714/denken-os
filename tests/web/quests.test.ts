@@ -72,7 +72,7 @@ describe("logsOfDay / questStatuses / allQuestsClear", () => {
     expect(day[0]!.atMs).toBeLessThan(day[1]!.atMs);
   });
 
-  it("進捗値とdoneが一致する（solve/correct/topics/easy/combo）", () => {
+  it("進捗値とdoneが一致する（solve/correct/topics/mastery/combo）", () => {
     const quests = dailyQuests(DAY0_IDX);
     const logs: WebAnswerLog[] = [];
     for (let i = 0; i < 12; i++) {
@@ -92,12 +92,51 @@ describe("logsOfDay / questStatuses / allQuestsClear", () => {
     }
   });
 
-  it("十分な全正解easyログで3クエスト全達成になる", () => {
+  it("十分な全正解ログで3クエスト全達成になる", () => {
     const logs: WebAnswerLog[] = [];
     for (let i = 0; i < 12; i++) {
-      logs.push(log({ atMs: DAY0 + i * 1000, topic: `論点${i}`, rating: "easy" }));
+      logs.push(log({ atMs: DAY0 + i * 1000, topic: `論点${i}`, rating: "good", correct: true }));
     }
     expect(allQuestsClear(logs, DAY0_IDX)).toBe(true);
+  });
+});
+
+describe("mastery クエスト（#51: 余裕評価×N の置き換え）", () => {
+  // 旧「easy」種は廃止。新「mastery」は『正解した論点の種類数』で進捗する。
+  const masteryQuest = {
+    id: "x-mastery",
+    kind: "mastery" as const,
+    target: 3,
+    icon: "🎓",
+    label: "3 種類の論点を正解する",
+  };
+
+  it("正解した論点の種類数で進捗する", () => {
+    const logs = [
+      log({ topic: "A", correct: true }),
+      log({ topic: "B", correct: true }),
+      log({ topic: "C", correct: true }),
+    ];
+    const [s] = questStatuses([masteryQuest], logs);
+    expect(s?.value).toBe(3);
+    expect(s?.done).toBe(true);
+  });
+
+  it("不正解の論点は数えない（楽勝申告でなく実力で進む）", () => {
+    const logs = [
+      log({ topic: "A", correct: true }),
+      log({ topic: "B", correct: false, rating: "again" }),
+      log({ topic: "C", correct: false, rating: "again" }),
+    ];
+    const [s] = questStatuses([masteryQuest], logs);
+    expect(s?.value).toBe(1); // 正解はAのみ
+    expect(s?.done).toBe(false);
+  });
+
+  it("同じ論点を複数回正解しても種類数は1", () => {
+    const logs = [log({ topic: "A", correct: true }), log({ topic: "A", correct: true })];
+    const [s] = questStatuses([masteryQuest], logs);
+    expect(s?.value).toBe(1);
   });
 });
 

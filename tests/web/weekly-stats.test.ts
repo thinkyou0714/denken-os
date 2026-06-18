@@ -12,7 +12,15 @@ import {
 import { getMascotEnabled, setMascotEnabled } from "../../web/src/settings.js";
 import { myStats } from "../../web/src/stats.js";
 import type { WebAnswerLog } from "../../web/src/store.js";
-import { levelInfo, nextTitleFor, totalXp, weeklyBonusXp, xpBySubject, xpForLog } from "../../web/src/xp.js";
+import {
+  levelInfo,
+  nextTitleFor,
+  totalXp,
+  weeklyBonusXp,
+  XP_BY_RATING,
+  xpBySubject,
+  xpForLog,
+} from "../../web/src/xp.js";
 import { MemoryStorage } from "../helpers/storage.js";
 
 const DAY_MS = 86_400_000;
@@ -125,8 +133,9 @@ describe("xpBySubject（科目別XP）", () => {
     ]);
     const logs = [log(), log({ topic: "変圧器効率" }), log({ topic: "未知の論点" })];
     const out = xpBySubject(logs, map);
-    expect(out.get("理論")).toBe(10);
-    expect(out.get("機械")).toBe(10);
+    // log() の既定評価は good。科目別XPは基礎XPのみの合算。
+    expect(out.get("理論")).toBe(XP_BY_RATING.good);
+    expect(out.get("機械")).toBe(XP_BY_RATING.good);
     expect([...out.keys()]).not.toContain("未知の論点");
   });
 });

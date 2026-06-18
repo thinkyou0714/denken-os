@@ -6,8 +6,11 @@
  *  - XP は「解答ログから完全に導出」する（専用の保存キーを持たない）。
  *    これにより既存ユーザーにも遡って付与され、バックアップ/復元/リセットも
  *    ログと常に整合する（二重管理のズレという将来バグを根本から断つ）。
- *  - 評価が高いほど XP が多い（again=2 / hard=8 / good=10 / easy=12）。
- *    不正解でも 2XP（挑戦自体に報酬を与え、間違いを罰しない）。
+ *  - 報酬設計の是正（#51）: 正解の自己評価（hard/good/easy）は **ほぼ同額** にし、
+ *    むしろ努力して想起できた hard をわずかに高くする（again=4 / easy=10 / good=11 / hard=12）。
+ *    旧設計は easy が最大（12）で「余裕」を選ぶほど得をするため、自己評価インフレを
+ *    誘発していた。正解はどの評価でも報われるべきで、楽勝申告を最も得にしない。
+ *    不正解でも 4XP（挑戦自体に報酬を与え、間違いを罰しない）。
  *  - 同日内の連続正解にはコンボボーナス（+1〜+5）。クエスト全達成は +20。
  * DOM 非依存でテスト可能。日境界は store.ts と同じ JST(UTC+9)。
  */
@@ -24,8 +27,12 @@ import {
 } from "./quests.js";
 import type { WebAnswerLog } from "./store.js";
 
-/** 評価別の基礎XP。不正解(again)にも参加報酬を与える（挑戦を罰しない）。 */
-export const XP_BY_RATING: Record<Rating, number> = { again: 2, hard: 8, good: 10, easy: 12 };
+/**
+ * 評価別の基礎XP（#51）。正解はどの評価でもほぼ同額にし、努力して想起できた hard を
+ * わずかに高くする（easy を最大にしない＝自己評価インフレを誘発しない）。
+ * 不正解(again)にも参加報酬を与える（挑戦を罰しない）。
+ */
+export const XP_BY_RATING: Record<Rating, number> = { again: 4, hard: 12, good: 11, easy: 10 };
 
 /** ログ1件の基礎XP。旧ログ（rating なし）は correct から good/again に写像する。 */
 export function xpForLog(log: WebAnswerLog): number {
@@ -51,8 +58,8 @@ function xpOfDay(dayLogs: readonly WebAnswerLog[], dayIndex: number): number {
   let count = 0;
   let correct = 0;
   let maxRun = 0;
-  let easy = 0;
   const topics = new Set<string>();
+  const correctTopics = new Set<string>(); // 正解した論点の種類（mastery クエスト用 #51）。
   for (const l of dayLogs) {
     run = l.correct ? run + 1 : 0;
     const base = xpForLog(l) + (l.correct ? comboBonus(run) : 0);
@@ -61,8 +68,8 @@ function xpOfDay(dayLogs: readonly WebAnswerLog[], dayIndex: number): number {
     count += 1;
     if (l.correct) correct += 1;
     if (run > maxRun) maxRun = run;
-    if (l.rating === "easy") easy += 1;
     topics.add(l.topic);
+    if (l.correct) correctTopics.add(l.topic);
     if (!cleared) {
       cleared = quests.every((q) => {
         switch (q.kind) {
@@ -74,8 +81,8 @@ function xpOfDay(dayLogs: readonly WebAnswerLog[], dayIndex: number): number {
             return maxRun >= q.target;
           case "topics":
             return topics.size >= q.target;
-          case "easy":
-            return easy >= q.target;
+          case "mastery":
+            return correctTopics.size >= q.target;
           default:
             return false;
         }

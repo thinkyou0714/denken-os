@@ -23,11 +23,20 @@ function log(over: Partial<WebAnswerLog> = {}): WebAnswerLog {
   return { topic: "三相交流電力", correct: true, atMs: DAY0, rating: "good", ...over };
 }
 
-describe("xpForLog（評価別の基礎XP）", () => {
-  it("評価が高いほど多い（again<hard<good<easy）", () => {
+describe("xpForLog（評価別の基礎XP・#51 報酬再設計）", () => {
+  it("正解の自己評価はほぼ同額で、easy を最大にしない（インフレ防止）", () => {
+    // 不正解(again) < 正解の各評価。
+    expect(XP_BY_RATING.again).toBeLessThan(XP_BY_RATING.easy);
+    expect(XP_BY_RATING.again).toBeLessThan(XP_BY_RATING.good);
     expect(XP_BY_RATING.again).toBeLessThan(XP_BY_RATING.hard);
-    expect(XP_BY_RATING.hard).toBeLessThan(XP_BY_RATING.good);
-    expect(XP_BY_RATING.good).toBeLessThan(XP_BY_RATING.easy);
+    // 旧設計の弊害を断つ: easy は最大ではない（楽勝申告が最も得にならない）。
+    expect(XP_BY_RATING.easy).toBeLessThanOrEqual(XP_BY_RATING.good);
+    expect(XP_BY_RATING.easy).toBeLessThanOrEqual(XP_BY_RATING.hard);
+    // 努力して想起できた hard は easy 以上に報われる。
+    expect(XP_BY_RATING.hard).toBeGreaterThanOrEqual(XP_BY_RATING.easy);
+    // 正解どうしの差は小さい（±2以内）。
+    const correctVals = [XP_BY_RATING.hard, XP_BY_RATING.good, XP_BY_RATING.easy];
+    expect(Math.max(...correctVals) - Math.min(...correctVals)).toBeLessThanOrEqual(2);
   });
 
   it("不正解にも参加報酬がある（0にしない＝挑戦を罰しない）", () => {
@@ -62,8 +71,8 @@ describe("xpFromLogs（基礎＋コンボ）", () => {
 
   it("同日内の連続正解にボーナスが付く", () => {
     const logs = [log({ atMs: DAY0 }), log({ atMs: DAY0 + 1000 }), log({ atMs: DAY0 + 2000 })];
-    // good 10×3 ＋ コンボ(0,+1,+2)
-    expect(xpFromLogs(logs)).toBe(30 + 0 + 1 + 2);
+    // good×3 ＋ コンボ(0,+1,+2)
+    expect(xpFromLogs(logs)).toBe(XP_BY_RATING.good * 3 + 0 + 1 + 2);
   });
 
   it("不正解でコンボが途切れる", () => {
@@ -72,15 +81,15 @@ describe("xpFromLogs（基礎＋コンボ）", () => {
       log({ atMs: DAY0 + 1000, correct: false, rating: "again" }),
       log({ atMs: DAY0 + 2000 }),
     ];
-    // 10 + 2 + 10（コンボボーナスなし: 連続が1問ずつ）
-    expect(xpFromLogs(logs)).toBe(22);
+    // good + again + good（コンボボーナスなし: 連続が1問ずつ）
+    expect(xpFromLogs(logs)).toBe(XP_BY_RATING.good + XP_BY_RATING.again + XP_BY_RATING.good);
   });
 
   it("コンボは日をまたがない（JST日境界でリセット）", () => {
     const nextDay = DAY0 + 86_400_000;
     const logs = [log({ atMs: DAY0 }), log({ atMs: DAY0 + 1000 }), log({ atMs: nextDay })];
-    // day1: 10 + (10+1), day2: 10（リセットでボーナス0）
-    expect(xpFromLogs(logs)).toBe(31);
+    // day1: good + (good+1), day2: good（リセットでボーナス0）
+    expect(xpFromLogs(logs)).toBe(XP_BY_RATING.good * 3 + 1);
   });
 
   it("ログ順序が乱れていても時系列に並べて計算する", () => {
@@ -154,7 +163,7 @@ describe("xpByDay（週間XPチャート）", () => {
     const logs = [log({ atMs: DAY0 }), log({ atMs: DAY0 + 1000 })];
     const out = xpByDay(logs, 7, DAY0 + 2 * 86_400_000);
     expect(out).toHaveLength(7);
-    expect(out[4]).toBe(21); // 10 + (10+1)
+    expect(out[4]).toBe(XP_BY_RATING.good * 2 + 1); // good + (good+1)
     expect(out[5]).toBe(0);
     expect(out[6]).toBe(0);
   });

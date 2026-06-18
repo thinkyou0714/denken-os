@@ -24,10 +24,29 @@ export interface ExamState {
   todayCountAtStart: number;
   /** 結果画面の祝賀（紙吹雪等）を実行済みか（タブ再描画での再発火を防ぐ）。 */
   celebrated: boolean;
+  /** 結果を履歴に保存済みか（タブ再描画での二重保存を防ぐ）。 */
+  historySaved?: boolean;
 }
 
 export let exam: ExamState | null = null;
 
 export function setExam(e: ExamState | null): void {
   exam = e;
+}
+
+/**
+ * 二次の「N問中M問選択」の選択フェーズ状態（#43）。
+ * 電力管理は6問中4問、機械制御は4問中2問を選ばせ、選んだ問題だけ採点する。
+ * 選択が確定したら startExam で本番（時間制限つき）へ移行する。
+ */
+export interface SecondarySelectState {
+  /** 科目ごとの候補と選択数（required）。 */
+  groups: Array<{ subject: Problem["subject"]; candidates: Problem[]; choose: number }>;
+  count: number;
+}
+
+export let secondarySelect: SecondarySelectState | null = null;
+
+export function setSecondarySelect(s: SecondarySelectState | null): void {
+  secondarySelect = s;
 }

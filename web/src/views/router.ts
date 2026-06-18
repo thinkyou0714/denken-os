@@ -4,7 +4,9 @@
 
 import { BACKUP_KEYS } from "../backup.js";
 import { recoveryView } from "../errors.js";
+import { coveredDays, streakBreakdown, studiedDays } from "../freeze.js";
 import { buildStudyPlan } from "../plan.js";
+import { dayIndexOf } from "../quests.js";
 import { offlineLabel } from "../retention.js";
 import { getDailyGoal, getExamDate, getReviewCap } from "../settings.js";
 import { problems, progress, setView, storage, view } from "../state/app.js";
@@ -37,12 +39,17 @@ export function renderHeader(): void {
   $("xp").textContent = `Lv.${lv.level} ⚡${lv.totalXp.toLocaleString("ja-JP")}`;
   $("xp").setAttribute("title", `${lv.title} ・ 次のレベルまで ${lv.xpNeed - lv.xpInto} XP`);
   const fi = freezeInfo();
-  $("streak").textContent = `🔥 ${fi.streak}日${fi.state.count > 0 ? ` 🧊×${fi.state.count}` : ""}`;
+  // ストリークの内訳（学習日 vs お守り/おやすみで肩代わりした日）を区別して見せる（#62）。
+  const bd = streakBreakdown(studiedDays(progress.logs()), coveredDays(fi.state), dayIndexOf(Date.now()));
+  $("streak").textContent =
+    `🔥 ${fi.streak}日${bd.coveredDays > 0 ? `（学習${bd.studiedDays}）` : ""}` +
+    `${fi.state.count > 0 ? ` 🧊×${fi.state.count}` : ""}`;
+  const breakdownText = bd.coveredDays > 0 ? `（うち学習${bd.studiedDays}日・お守り/おやすみ${bd.coveredDays}日）` : "";
   $("streak").setAttribute(
     "title",
     fi.state.count > 0
-      ? `連続学習${fi.streak}日 ・ お守り${fi.state.count}個（欠席日を自動カバー）`
-      : `連続学習${fi.streak}日`,
+      ? `連続${fi.streak}日${breakdownText} ・ お守り${fi.state.count}個（欠席日を自動カバー）`
+      : `連続${fi.streak}日${breakdownText}`,
   );
   const days = buildStudyPlan({
     examDateIso: getExamDate(storage),
