@@ -37,7 +37,7 @@ jobs:
       contents: read
       pages: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           # 検証に通ったコミットそのものをデプロイする（workflow_run の head_sha）。
