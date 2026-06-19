@@ -14,6 +14,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import { problemSchema } from "../lib/engine/schema.js";
+import { checkProblemInvariants } from "../lib/engine/validate.js";
 import { printHelp, validateOrExit } from "./shared.js";
 
 const HELP = `\
@@ -46,14 +48,14 @@ export function customChecks(file: string, p: unknown): Failure[] {
   const failures: Failure[] = [];
   const pr = p as Record<string, unknown>;
 
-  // answer ∈ choices（draft-07 では表現不可。03-quality-pipeline をコード化）
-  if (pr.format === "multiple_choice") {
-    if (!Array.isArray(pr.choices) || !(pr.choices as string[]).includes(pr.answer as string)) {
-      failures.push({
-        file,
-        rule: "answer_in_choices",
-        message: `${file}: answer "${String(pr.answer)}" が choices に含まれていません`,
-      });
+  // Code-side invariants (answer ∈ choices, clean_answer 整合) — shared with the
+  // zod path (validateProblem) so the CI/ajv gate enforces the SAME invariant set
+  // (PAR-01). Previously this path only checked answer ∈ choices, letting a
+  // clean_answer=true problem with a non-clean answer pass CI.
+  const parsed = problemSchema.safeParse(p);
+  if (parsed.success) {
+    for (const issue of checkProblemInvariants(parsed.data)) {
+      failures.push({ file, rule: issue.rule, message: `${file}: ${issue.message}` });
     }
   }
 

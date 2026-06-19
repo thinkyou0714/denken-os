@@ -17,6 +17,7 @@
       "description": "係数いじりの可変パラメータ。realistic_range 内で、答えが綺麗になる値のみ採用",
       "additionalProperties": {
         "type": "object",
+        "required": ["value"],
         "properties": {
           "value": { "type": "number" },
           "unit": { "type": "string" },
@@ -52,7 +53,7 @@
       },
       "allOf": [
         {
-          "if": { "type": "object", "properties": { "type": { "enum": ["past_exam_modified", "past_exam_quoted"] } } },
+          "if": { "type": "object", "required": ["type"], "properties": { "type": { "enum": ["past_exam_modified", "past_exam_quoted"] } } },
           "then": {
             "type": "object",
             "required": ["citation"],

@@ -5,6 +5,7 @@
  * 不正 JSON・スキーマ違反・空集合・カスタムルール違反のケースを検証する。
  */
 import { describe, expect, it } from "vitest";
+import { validateProblem } from "../../lib/engine/validate.js";
 import { customChecks, validateFiles } from "../../scripts/validate-problems.js";
 
 // テスト用の最小限の合格 problem
@@ -40,10 +41,27 @@ describe("customChecks（I-070）", () => {
     expect(failures[0]?.message).toContain("X");
   });
 
-  it("multiple_choice: choices が未定義の場合はエラー", () => {
+  it("multiple_choice: choices 未定義（構造不備）は customChecks の不変条件層では出さない（PAR-01: ajv/zod スキーマ層が担当）", () => {
+    // 不変条件チェック（answer ∈ choices / clean_answer）は構造妥当なデータにのみ適用し、
+    // zod 経路（validateProblem）と挙動を揃える。choices 欠落は schema エラーとして
+    // validateFiles 経路の ajv が別途検出する。
     const bad = { ...BASE_PROBLEM, choices: undefined };
     const failures = customChecks("test.json", bad);
-    expect(failures.some((f) => f.rule === "answer_in_choices")).toBe(true);
+    expect(failures.filter((f) => f.rule === "answer_in_choices")).toHaveLength(0);
+  });
+
+  it("PAR-01: CI 経路（customChecks）と zod 経路（validateProblem）が同じ不変条件を強制する", () => {
+    // 構造は妥当だが answer が choices に無い → 両経路とも answer_in_choices を出す。
+    const badChoice = { ...BASE_PROBLEM, answer: "X" };
+    expect(customChecks("test.json", badChoice).some((f) => f.rule === "answer_in_choices")).toBe(
+      validateProblem(badChoice).issues.some((i) => i.rule === "answer_in_choices"),
+    );
+    // clean_answer=true で answer が綺麗でない numeric 問題 → 両経路の判定が一致する
+    // （以前は CI 経路が clean_answer を見ておらず乖離していた）。
+    const dirtyClean = { ...BASE_PROBLEM, format: "numeric", choices: undefined, answer: "0.3333333333" };
+    expect(customChecks("test.json", dirtyClean).some((f) => f.rule === "clean_answer")).toBe(
+      validateProblem(dirtyClean).issues.some((i) => i.rule === "clean_answer"),
+    );
   });
 
   it("status=validated で検証4項目が揃っていない場合はエラー", () => {

@@ -181,13 +181,18 @@ async function main() {
     if (existsSync(p)) versionHash.update(readFileSync(p, "utf-8"));
   }
   const shortHash = versionHash.digest("hex").slice(0, 8);
-  const swVersion = `v20-${shortHash}`;
+  // SW_MAJOR は SW キャッシュ世代の単一の真実。web/sw.js の版数注記（最高品質化=v21）と
+  // 整合させる。以前は "v20" がここにハードコードされ、v21 を出荷しても CACHE が v20 の
+  // まま据え置かれていた（SW-01）。
+  const SW_MAJOR = "v21";
+  const swVersion = `${SW_MAJOR}-${shortHash}`;
 
   const swJsPath = join(ROOT, "web/sw.js");
   if (existsSync(swJsPath)) {
     const swContent = readFileSync(swJsPath, "utf-8");
-    // __SW_VERSION__ プレースホルダ、または既注入の v20-XXXXXXXX 値の両方を置換（冪等）。
-    const newSw = swContent.replace(/__SW_VERSION__|v20-[0-9a-f]{8}/g, swVersion);
+    // __SW_VERSION__ プレースホルダ、または既注入の v<major>-XXXXXXXX 値の両方を置換（冪等・
+    // prefix 非依存）。
+    const newSw = swContent.replace(/__SW_VERSION__|v\d+-[0-9a-f]{8}/g, swVersion);
     if (newSw !== swContent) {
       writeFileSync(swJsPath, newSw, "utf-8");
       console.error(`SW バージョンを web/sw.js に注入しました: denken-os-${swVersion}`);
