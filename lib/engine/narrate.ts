@@ -154,7 +154,13 @@ export class AnthropicNarrator implements Narrator {
    */
   constructor(
     model = process.env.DENKEN_NARRATE_MODEL ?? DEFAULT_NARRATE_MODEL,
-    onFallback: NarratorTelemetryHook = () => {},
+    // NARR-01: default to a visible warning so a parse-failure fallback (which
+    // silently substitutes the default narration) is observable without the
+    // caller having to wire a telemetry hook.
+    onFallback: NarratorTelemetryHook = (event) =>
+      console.warn(
+        `[narrate] fallback to default text (reason=${event.reason}, model=${event.model}, topic=${event.topic})`,
+      ),
   ) {
     this.model = model;
     this.onFallback = onFallback;
