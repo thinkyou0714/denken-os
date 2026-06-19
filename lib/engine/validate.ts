@@ -42,20 +42,12 @@ export function answerIsClean(p: Problem): boolean {
 }
 
 /**
- * 1件を完全検証する。構造(zod) → コード側不変条件 の順に積み上げる。
+ * コード側不変条件（draft-07 で表現できない「answer ∈ choices」「clean_answer 整合」）を
+ * 1 箇所に集約する純関数。validateProblem（zod 経路）と scripts/validate-problems.ts
+ * （ajv/CI 経路）の両方から呼び、二経路が同じ不変条件を強制することを保証する（PAR-01）。
  */
-export function validateProblem(input: unknown): ValidationResult {
+export function checkProblemInvariants(p: Problem): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-
-  const parsed = problemSchema.safeParse(input);
-  if (!parsed.success) {
-    for (const e of parsed.error.issues) {
-      issues.push({ rule: "schema", message: `${e.path.join(".")}: ${e.message}` });
-    }
-    return { ok: false, issues };
-  }
-
-  const p = parsed.data;
 
   if (!answerInChoices(p)) {
     issues.push({
@@ -70,6 +62,26 @@ export function validateProblem(input: unknown): ValidationResult {
       message: `clean_answer=true だが answer "${p.answer}" は綺麗な値ではありません`,
     });
   }
+
+  return issues;
+}
+
+/**
+ * 1件を完全検証する。構造(zod) → コード側不変条件 の順に積み上げる。
+ */
+export function validateProblem(input: unknown): ValidationResult {
+  const issues: ValidationIssue[] = [];
+
+  const parsed = problemSchema.safeParse(input);
+  if (!parsed.success) {
+    for (const e of parsed.error.issues) {
+      issues.push({ rule: "schema", message: `${e.path.join(".")}: ${e.message}` });
+    }
+    return { ok: false, issues };
+  }
+
+  const p = parsed.data;
+  issues.push(...checkProblemInvariants(p));
 
   return { ok: issues.length === 0, issues, problem: p };
 }

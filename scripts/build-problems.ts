@@ -20,7 +20,7 @@ import { generate } from "../lib/engine/generate.js";
 import { StubNarrator } from "../lib/engine/narrate.js";
 import type { Problem } from "../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
-import { validateProblem } from "../lib/engine/validate.js";
+import { validateProblem, validateProblemSet } from "../lib/engine/validate.js";
 // G3 が lib/shared/rng.ts を新設予定。同一 xorshift 出力を保証。
 import { hashSeed, seededRng } from "../lib/shared/rng.js";
 import { atomicWriteFileSync, printHelp, validateOrExit } from "./shared.js";
@@ -144,6 +144,14 @@ async function main(): Promise<void> {
     }
   }
   validateOrExit(errors, "生成問題の検証");
+
+  // II-115: 近似重複（相対誤差で酷似する params）を検出して警告する。stableId の
+  // exact-dedup では捕まらない実質重複を可視化する（build は止めない）。
+  const dupIssues = validateProblemSet(problems);
+  if (dupIssues.length > 0) {
+    console.warn(`⚠ 近似重複の可能性 ${dupIssues.length}件:`);
+    for (const i of dupIssues) console.warn(`  - ${i.message}`);
+  }
 
   const out = join(ROOT, "web", "problems.json");
   atomicWriteFileSync(out, `${JSON.stringify(problems, null, 2)}\n`);
