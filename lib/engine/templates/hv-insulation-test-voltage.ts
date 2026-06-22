@@ -1,14 +1,11 @@
 /**
- * テンプレート: 特別高圧の絶縁耐力試験電圧（法規・五択マークシート）。
+ * テンプレート: 特別高圧の絶縁耐力試験電圧（法規・numeric）。
  *   電技解釈15条: 最大使用電圧 7000V 超 60000V 以下は
  *     試験電圧 = 最大使用電圧 × 1.25（10分間印加）。
  *   最大使用電圧 = 公称電圧 × 1.15/1.1。
- *
- * 本番（一次）は五択マークシートのため、コード算出の試験電圧を真値とし、
- * 係数の取り違え等の典型ミスを buildMcChoices で五択に整える。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
+import { defineTemplate, pick } from "./helpers.js";
 
 const NOMINAL_SET: ReadonlyArray<number> = [22000, 33000]; // 〔V〕
 

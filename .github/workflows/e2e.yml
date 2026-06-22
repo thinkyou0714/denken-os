@@ -1,0 +1,57 @@
+name: e2e
+
+# E2E（Playwright）煙テスト。
+#
+# 非必須・非ブロッキングのワークフロー。理由:
+#   - Chromium バイナリのダウンロードが必要で、実行時間と外部依存（cdn.playwright.dev）が
+#     既存の validate パイプライン（lint/typecheck/unit/build）より重く不安定になりうる。
+#   - そのため required check には**しない**。PR をブロックしない形（手動 + スケジュール）で回す。
+# 既存の validate.yml には一切手を入れていない（gate を弱めない / 二重起動させない）。
+on:
+  workflow_dispatch: # 手動実行（PR からは任意で叩く）。
+  schedule:
+    - cron: "0 18 * * 1" # 毎週月曜 18:00 UTC に定期実行（回帰の早期検知用）。
+
+# 同一参照への新規起動で旧実行をキャンセル。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # GitHub Actions ランナーでは cdn.playwright.dev への egress が許可されているため
+      # ブラウザ取得が可能（開発 sandbox では不可のため、ここでのみ実行する）。
+      - name: Install Playwright browser (chromium)
+        run: npm run test:e2e:install
+
+      - name: Build offline web app
+        run: npm run build:web
+
+      - name: Run Playwright E2E smoke
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

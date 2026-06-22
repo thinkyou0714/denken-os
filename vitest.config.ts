@@ -3,6 +3,10 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     include: ["tests/**/*.test.ts", "lib/**/*.test.ts"],
+    // E2E（Playwright）の *.spec.ts は別ランナーで実行する。include は *.test.ts のみのため
+    // 通常は一致しないが、将来の取り違えを防ぐため明示的に除外しておく（E2E はブラウザ要・
+    // この sandbox では browser download 不可のため非必須ワークフローで実行する）。
+    exclude: ["**/node_modules/**", "**/dist/**", "tests/infra/e2e/**"],
     environment: "node",
     coverage: {
       provider: "v8",
