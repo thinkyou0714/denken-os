@@ -3,7 +3,7 @@
   "exam": "denken2_primary",
   "subject": "電力",
   "topic": "電圧降下率",
-  "format": "numeric",
+  "format": "multiple_choice",
   "difficulty": 2,
   "params": {
     "sending_voltage": {
@@ -24,6 +24,13 @@
     }
   },
   "statement": "送電端電圧 Vs=210V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+  "choices": [
+    "2.5",
+    "5",
+    "10",
+    "25",
+    "50"
+  ],
   "answer": "5",
   "solution": [
     "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -44,7 +51,8 @@
   },
   "stats": {
     "answered": 0,
-    "correct_rate": 0
+    "correct_rate": 0,
+    "common_wrong_choice": "10"
   },
   "status": "validated"
 }

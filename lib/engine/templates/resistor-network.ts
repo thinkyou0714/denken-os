@@ -1,10 +1,12 @@
 /**
  * テンプレート: 直並列合成抵抗。
  *   R1 と (R2 ∥ R3) の直列。 R = R1 + R2·R3/(R2+R3) 〔Ω〕
- * 正解はコードで算出。誤答は典型ミス（全部直列・R1を忘れ並列のみ・R3を無視）。
+ * 正解はコードで算出。誤答は典型ミス（全部直列・R1を忘れ並列のみ・R3を無視・並列部の取り違え）。
+ * 本番（一次）は五択マークシートのため buildMcChoices で五択に整える。
  */
+import { formatClean } from "../clean.js";
 import { resistorLadderFigure } from "../figures/index.js";
-import { defineTemplate, pick } from "./helpers.js";
+import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
 
 const R1_SET = [5, 10, 15, 20, 30];
 // 並列が整数になる (R2,R3) ペア。
@@ -53,14 +55,24 @@ export const resistorNetwork = defineTemplate<Params>({
     const seriesAll = R1 + R2 + R3; // 全部直列
     const parallelOnly = parallel; // R1 を忘れた
     const dropR3 = R1 + R2; // R3 を無視
+    // R2 を直列に残したまま並列部も加算（R2 が並列枝に消えることを失念）: R1+R2+(R2∥R3)。
+    const keepR2Series = R1 + R2 + parallel;
 
-    const vals = [total, seriesAll, parallelOnly, dropR3];
+    // Ω は整数前提のため、整数性・正値を先に確認（被り・汚い値は buildMcChoices でも弾く）。
+    const vals = [total, seriesAll, parallelOnly, dropR3, keepR2Series];
     if (!vals.every((v) => Number.isInteger(v) && v > 0)) return null;
-    const texts = new Set(vals.map((v) => String(v)));
-    if (texts.size !== 4) return null;
 
-    const answerText = String(total);
-    const choices = [...texts].sort((a, b) => Number(a) - Number(b));
+    const mc = buildMcChoices(
+      total,
+      [
+        { value: seriesAll, reason: "並列を見落とし全部直列で加算" },
+        { value: parallelOnly, reason: "直列のR1を忘れ並列のみ" },
+        { value: dropR3, reason: "R3を無視" },
+        { value: keepR2Series, reason: "R2を直列に残したまま並列部も加算（R2は並列枝に消える）" },
+      ],
+      formatClean,
+    );
+    if (!mc) return null;
 
     return {
       params: {
@@ -70,20 +82,16 @@ export const resistorNetwork = defineTemplate<Params>({
       },
       answerValue: total,
       answerUnit: "Ω",
-      answerText,
-      choices,
-      distractors: [
-        { text: String(seriesAll), reason: "並列を見落とし全部直列で加算" },
-        { text: String(parallelOnly), reason: "直列のR1を忘れ並列のみ" },
-        { text: String(dropR3), reason: "R3を無視" },
-      ],
-      likelyWrongChoice: String(seriesAll),
+      answerText: mc.answerText,
+      choices: mc.choices,
+      distractors: mc.distractors,
+      likelyWrongChoice: formatClean(seriesAll),
       facts: { R1, R2, R3, parallel, total },
       defaultStatement: `抵抗R1=${R1}Ωに、R2=${R2}ΩとR3=${R3}Ωの並列回路を直列接続した。合成抵抗R〔Ω〕は?`,
       defaultSolution: [
         `並列部 R2∥R3 = R2·R3/(R2+R3) = ${R2}·${R3}/(${R2}+${R3}) = ${parallel}Ω`,
         `直列なので R = R1 + (R2∥R3) = ${R1} + ${parallel}`,
-        `R = ${answerText}Ω`,
+        `R = ${mc.answerText}Ω`,
       ],
       figure: resistorLadderFigure(R1, R2, R3),
       physicallyValid: true,

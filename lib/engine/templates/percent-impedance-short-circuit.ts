@@ -1,11 +1,14 @@
 /**
- * テンプレート: %インピーダンスと短絡電流（電力・numeric）。
+ * テンプレート: %インピーダンスと短絡電流（電力・五択マークシート）。
  *   定格電流 In に対する三相短絡電流
  *     Is = In × 100 / %Z   〔A〕
  *   （%Z は基準容量におけるパーセントインピーダンス）
+ *
+ * 本番（一次）は五択マークシートのため、コード算出の Is を真値としつつ、
+ * 典型ミス由来の誤答を buildMcChoices で五択に整える。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { defineTemplate, pick } from "./helpers.js";
+import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
 
 const IN_SET: ReadonlyArray<number> = [100, 150, 200, 250, 300, 400, 500];
 const PZ_SET: ReadonlyArray<number> = [4, 5, 8, 10, 12.5, 20, 25];
@@ -36,21 +39,36 @@ export const percentImpedanceShortCircuit = defineTemplate<Params>({
     if (In <= 0 || pz <= 0) return null;
     const Is = (In * 100) / pz;
     if (!isCleanAnswer(Is)) return null;
-    const answerText = formatClean(Is);
+
+    // 五択（典型ミス由来の誤答）。全選択肢が綺麗・一意・正解含有を buildMcChoices で担保。
+    const mc = buildMcChoices(
+      Is,
+      [
+        { value: In, reason: "%Zで割らず定格電流をそのまま短絡電流とした（%Z=100扱い）" },
+        { value: (In * pz) / 100, reason: "%Zで割るべきところを掛けた（×と÷の取り違え）" },
+        { value: Is * 10, reason: "×100を×1000と桁を取り違えた（単位の取り違え）" },
+        { value: Is / 2, reason: "短絡電流を誤って半分にした（係数2のミス）" },
+      ],
+      formatClean,
+    );
+    if (!mc) return null;
+
     return {
-      format: "numeric",
       params: {
         rated_current: { value: In, unit: "A", realistic_range: [100, 500] },
         percent_impedance: { value: pz, unit: "%", realistic_range: [4, 25] },
       },
       answerValue: Is,
       answerUnit: "A",
-      answerText,
+      answerText: mc.answerText,
+      choices: mc.choices,
+      distractors: mc.distractors,
+      likelyWrongChoice: formatClean((In * pz) / 100),
       facts: { In, pz, Is },
       defaultStatement:
         `定格電流 In=${In}A の系統で、基準容量におけるパーセントインピーダンスが %Z=${pz}% である。` +
         `三相短絡電流 Is〔A〕は?`,
-      defaultSolution: [`短絡電流 Is=In×100/%Z`, `Is=${In}×100/${pz}`, `Is=${answerText}A`],
+      defaultSolution: [`短絡電流 Is=In×100/%Z`, `Is=${In}×100/${pz}`, `Is=${mc.answerText}A`],
       physicallyValid: true,
     };
   },

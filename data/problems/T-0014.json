@@ -3,7 +3,7 @@
   "exam": "denken2_primary",
   "subject": "法規",
   "topic": "絶縁耐力試験電圧",
-  "format": "numeric",
+  "format": "multiple_choice",
   "difficulty": 2,
   "params": {
     "nominal_voltage": {
@@ -16,6 +16,13 @@
     }
   },
   "statement": "公称電圧 6600V の高圧機器について、交流絶縁耐力試験を行う。試験電圧〔V〕を求めよ（最大使用電圧=公称×1.15/1.1、試験電圧=最大使用電圧×1.5）。",
+  "choices": [
+    "6900",
+    "8625",
+    "9900",
+    "10350",
+    "13800"
+  ],
   "answer": "10350",
   "solution": [
     "最大使用電圧=6600×1.15/1.1=6900V",
@@ -36,7 +43,8 @@
   },
   "stats": {
     "answered": 0,
-    "correct_rate": 0
+    "correct_rate": 0,
+    "common_wrong_choice": "6900"
   },
   "status": "validated"
 }

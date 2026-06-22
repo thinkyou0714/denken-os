@@ -6,7 +6,8 @@
  *   2. 必要に応じて defineTemplate() ファクトリを使って Template を組み立てる。
  *   3. ローカルで pick() を重複定義しない。
  */
-import type { ParamSpec, PastExamCoverage, Template } from "./types.js";
+import { isCleanAnswer } from "../clean.js";
+import type { Distractor, ParamSpec, PastExamCoverage, Template } from "./types.js";
 
 // POWER_FACTOR_TOLERANCE を re-export して、テンプレートが1か所から参照できるようにする（II-103）。
 export { POWER_FACTOR_TOLERANCE } from "../../shared/constants.js";
@@ -51,6 +52,114 @@ export function buildChoices(correctText: string, distractorTexts: string[]): st
     if (bIsNum) return 1;
     return a < b ? -1 : a > b ? 1 : 0;
   });
+}
+
+// ---------------------------------------------------------------------------
+// buildMcChoices — numeric→マークシート(五択)の選択肢を安全に組み立てる共有ヘルパー
+// ---------------------------------------------------------------------------
+
+/** buildMcChoices に渡す誤答候補（コードが算出した値 + その典型ミスの説明）。 */
+export interface McDistractorSpec {
+  /** コードが算出した誤答の数値（特定の典型ミスから導いた値）。 */
+  value: number;
+  /** どんな典型ミスに対応するか（必須・解説に使う）。 */
+  reason: string;
+  /** 任意: 典拠（過去問・教科書など）。 */
+  sourceRef?: string;
+}
+
+/** buildMcChoices の戻り値（昇順 choices ＋ reason 付き distractors）。 */
+export interface McChoices {
+  /** 正解を含む選択肢（整形済み・数値昇順・重複なし）。 */
+  choices: string[];
+  /** 整形済みの誤答（reason 付き）。 */
+  distractors: Distractor[];
+  /** 整形済みの正解テキスト（choices に必ず含まれる）。 */
+  answerText: string;
+  /** 最頻誤答になりやすい選択肢テキスト（先頭の誤答を既定とする）。 */
+  likelyWrongChoice: string;
+}
+
+/**
+ * numeric テンプレートを「マークシート（五択）」化するための選択肢ビルダ。
+ *
+ * 本番の電験二種・一次は五択マークシートのため、numeric の閉形式（コードが算出する唯一の真値）は
+ * そのまま使いつつ、「特定の典型ミスから導いた誤答値」を加えて選択肢を構成する。
+ *
+ * 安全ゲート（1つでも破れば null を返し、呼び出し側で draw を捨てる）:
+ *   1. 正解・全誤答の **表示文字列** がすべて「綺麗な値」（isCleanAnswer）。
+ *      ※整形関数（formatKW 等）が割る/丸めることがあるため、表示後の数値で判定する。
+ *   2. 表示が真値を **忠実に** 表す（丸めで汚い値を綺麗に見せかける誤答を排除）。
+ *      表示数値 × displayScale が真値と一致することを要求する。
+ *   3. 表示文字列が相互にすべて一意（重複する誤答は混乱を招くため不可）。
+ *   4. 正解が選択肢に含まれる（answer ∈ choices を構造的に保証）。
+ *   5. 誤答が正解と数値的に一致しない（formatter の桁落ちで偶然一致する誤答も排除）。
+ *
+ * @param answer        コードが算出した正解の数値（真値）。
+ * @param distractors   誤答候補（value=典型ミスの値, reason=説明）。
+ * @param formatter     正解・誤答を同一規則で整形する関数（formatClean / formatKW など）。
+ * @param opts.expected 期待する選択肢数（既定5＝本番の五択）。これと一致しなければ null。
+ * @param opts.displayScale 「真値 = 表示数値 × displayScale」の換算係数（既定1）。
+ *      formatKW のように W→kW で割る整形関数では 1000 を渡す（真値は W、表示は kW）。
+ * @returns 整形済み choices/distractors/answerText/likelyWrongChoice、または不成立で null。
+ */
+export function buildMcChoices(
+  answer: number,
+  distractors: ReadonlyArray<McDistractorSpec>,
+  formatter: (value: number) => string,
+  opts?: { expected?: number; displayScale?: number },
+): McChoices | null {
+  const expected = opts?.expected ?? 5;
+  const displayScale = opts?.displayScale ?? 1;
+
+  // 正解・誤答の数値が有限かつ表示が綺麗・忠実であることを要求する。
+  if (!isCleanByDisplay(answer, formatter, displayScale)) return null;
+  for (const d of distractors) {
+    if (!isCleanByDisplay(d.value, formatter, displayScale)) return null;
+    // 桁落ち等で誤答が正解と数値一致するものは「誤答として成立しない」ため排除。
+    if (Math.abs(d.value - answer) < EPSILON_TOL) return null;
+  }
+
+  const answerText = formatter(answer);
+  const formattedDistractors: Distractor[] = distractors.map((d) => ({
+    text: formatter(d.value),
+    reason: d.reason,
+    ...(d.sourceRef ? { sourceRef: d.sourceRef } : {}),
+  }));
+
+  // 表示文字列の一意性（正解 + 全誤答）。重複があれば不成立。
+  const texts = new Set([answerText, ...formattedDistractors.map((d) => d.text)]);
+  if (texts.size !== expected) return null;
+  // 念のため正解が誤答テキストに混じっていないことを再確認（数値一致ゲートと二重化）。
+  if (formattedDistractors.some((d) => d.text === answerText)) return null;
+
+  const choices = [...texts].sort((a, b) => Number(a) - Number(b));
+
+  return {
+    choices,
+    distractors: formattedDistractors,
+    answerText,
+    // 先頭に並べた誤答を最頻誤答の既定とする（呼び出し側で上書き可）。
+    likelyWrongChoice: formattedDistractors[0]?.text ?? answerText,
+  };
+}
+
+/** buildMcChoices 内の「数値一致」判定の許容誤差（表示前の真値の比較に使う）。 */
+const EPSILON_TOL = 1e-9;
+
+/**
+ * value が有限で、formatter の **表示文字列** が綺麗な値であり、かつ表示が真値を忠実に表すか。
+ * 「表示数値 × displayScale ≒ 真値」を要求し、丸めで汚い値を綺麗に見せかける誤答を弾く。
+ */
+function isCleanByDisplay(value: number, formatter: (v: number) => string, displayScale: number): boolean {
+  if (!Number.isFinite(value)) return false;
+  const shown = Number(formatter(value));
+  if (!Number.isFinite(shown)) return false;
+  if (!isCleanAnswer(shown)) return false;
+  // 表示が真値を忠実に表しているか（formatKW の W→kW 換算等を考慮）。
+  const reconstructed = shown * displayScale;
+  const tol = Math.max(EPSILON_TOL, Math.abs(value) * 1e-9);
+  return Math.abs(reconstructed - value) <= tol;
 }
 
 // ---------------------------------------------------------------------------

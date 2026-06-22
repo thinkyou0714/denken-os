@@ -6,7 +6,9 @@ describe("threePhasePower テンプレート", () => {
     const g = threePhasePower.generateFrom({ line_voltage: 200, R: 8, X: 6 });
     expect(g).not.toBeNull();
     expect(g!.answerText).toBe("3.2");
-    expect(g!.choices).toEqual(["2.56", "3.2", "4.0", "9.6"]);
+    // 五択（一次マークシート）: ② 無効電力 Q=V²X/(R²+X²)=2.4kW を加えた。
+    expect(g!.choices).toEqual(["2.4", "2.56", "3.2", "4.0", "9.6"]);
+    expect(g!.choices!.length).toBe(5);
     expect(g!.likelyWrongChoice).toBe("9.6"); // √3忘れが最頻誤答
     expect(g!.physicallyValid).toBe(true);
   });
@@ -28,7 +30,8 @@ describe("threePhasePower テンプレート", () => {
       const g = threePhasePower.generate(rng);
       if (!g) continue;
       expect(g.choices).toContain(g.answerText);
-      expect(g.choices?.length).toBe(4);
+      expect(g.choices?.length).toBe(5); // 一次は五択マークシート
+      expect(new Set(g.choices).size).toBe(5); // 相互に一意
       expect(g.physicallyValid).toBe(true);
     }
   });

@@ -3,7 +3,7 @@
   "exam": "denken2_primary",
   "subject": "電力",
   "topic": "％インピーダンスと短絡電流",
-  "format": "numeric",
+  "format": "multiple_choice",
   "difficulty": 3,
   "params": {
     "rated_current": {
@@ -24,6 +24,13 @@
     }
   },
   "statement": "定格電流 In=200A の系統で、基準容量におけるパーセントインピーダンスが %Z=5% である。三相短絡電流 Is〔A〕は?",
+  "choices": [
+    "10",
+    "200",
+    "2000",
+    "4000",
+    "40000"
+  ],
   "answer": "4000",
   "solution": [
     "短絡電流 Is=In×100/%Z",
@@ -44,7 +51,8 @@
   },
   "stats": {
     "answered": 0,
-    "correct_rate": 0
+    "correct_rate": 0,
+    "common_wrong_choice": "10"
   },
   "status": "validated"
 }

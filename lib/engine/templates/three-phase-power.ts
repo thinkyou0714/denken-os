@@ -7,12 +7,15 @@
  *
  * 誤答（すべて「成立する典型ミス」, problem-sample.md）:
  *   ① 力率二重掛け  P·cosφ
+ *   ② 無効電力混同  Q = V²·X/(R²+X²)（有効電力 P と無効電力 Q の取り違え）
  *   ③ 力率掛け忘れ  皮相電力 S = P/cosφ
  *   ④ √3 忘れ       線間電圧を相電圧として計算 = 3·P
+ *
+ * 本番（一次）は五択マークシートのため buildMcChoices で五択に整える。
  */
-import { formatKW, isCleanAnswer } from "../clean.js";
+import { formatKW } from "../clean.js";
 import { threePhaseYFigure } from "../figures/index.js";
-import { defineTemplate, pick } from "./helpers.js";
+import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
 
 // 係数いじりの母集合（|Z| が整数になる Pythagorean ペア × round な電圧）。
 // 「答えが綺麗になる係数だけ採用」(03-quality-pipeline) をサンプリング段で担保する。
@@ -66,23 +69,25 @@ export const threePhasePower = defineTemplate<Params>({
     if (cosPhi > 1 + 1e-9) return null; // 物理的に不成立
 
     const P = (V * V * R) / (R * R + X * X); // 正解(W)
+    const Q = (V * V * X) / (R * R + X * X); // ② 無効電力（P と Q の取り違え）
     const pfDouble = P * cosPhi; // ① 力率二重掛け
     const apparent = P / cosPhi; // ③ 力率掛け忘れ(皮相)
     const noSqrt3 = 3 * P; // ④ √3 忘れ
 
-    const answerText = formatKW(P);
-    const distractorVals: { value: number; reason: string }[] = [
-      { value: pfDouble, reason: "力率を二重に掛けた (3I²R にさらに cosφ)" },
-      { value: apparent, reason: "力率を掛け忘れ、皮相電力 S と混同" },
-      { value: noSqrt3, reason: "Y結線で √3 を忘れ、線間電圧を相電圧として計算" },
-    ];
+    // 本番（一次）の五択に合わせ、全選択肢の kW 表示が綺麗・一意であることを buildMcChoices で担保する。
+    const mc = buildMcChoices(
+      P,
+      [
+        { value: pfDouble, reason: "力率を二重に掛けた (3I²R にさらに cosφ)" },
+        { value: Q, reason: "有効電力 P の代わりに無効電力 Q=V²X/(R²+X²) を求めた" },
+        { value: apparent, reason: "力率を掛け忘れ、皮相電力 S と混同" },
+        { value: noSqrt3, reason: "Y結線で √3 を忘れ、線間電圧を相電圧として計算" },
+      ],
+      formatKW,
+      { displayScale: 1000 }, // formatKW は W→kW（÷1000）で整形するため真値(W)との照合に係数を渡す
+    );
+    if (!mc) return null;
 
-    // 正解・全誤答が「綺麗」かつ相互に重複しないことを要求（汚い/被る draw は捨てる）。
-    if (![P, pfDouble, apparent, noSqrt3].every((w) => isCleanAnswer(w / 1000))) return null;
-    const texts = new Set([answerText, ...distractorVals.map((d) => formatKW(d.value))]);
-    if (texts.size !== 4) return null;
-
-    const choices = [...texts].sort((a, b) => Number(a) - Number(b));
     const Vp = V / Math.sqrt(3);
     const I = Vp / Z;
 
@@ -94,9 +99,9 @@ export const threePhasePower = defineTemplate<Params>({
       },
       answerValue: P,
       answerUnit: "kW",
-      answerText,
-      choices,
-      distractors: distractorVals.map((d) => ({ text: formatKW(d.value), reason: d.reason })),
+      answerText: mc.answerText,
+      choices: mc.choices,
+      distractors: mc.distractors,
       likelyWrongChoice: formatKW(noSqrt3),
       facts: {
         V,
@@ -115,7 +120,7 @@ export const threePhasePower = defineTemplate<Params>({
         `|Z|=√(${R}²+${X}²)=${Z}Ω`,
         `力率cosφ=R/|Z|=${Number(cosPhi.toFixed(4))}`,
         `相電圧V_p=${V}/√3、相電流I=V_p/|Z|`,
-        `P=3·I²·R=${answerText}kW`,
+        `P=3·I²·R=${mc.answerText}kW`,
         `別解 P=√3·V_l·I_l·cosφ でも一致`,
         `ポイント: Y結線は相電圧=線間/√3。√3 の入れ忘れが最頻ミス。`,
       ],
