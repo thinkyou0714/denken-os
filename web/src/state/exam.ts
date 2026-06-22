@@ -3,7 +3,7 @@
  */
 import type { Problem } from "../../../lib/engine/schema.js";
 
-export type ExamPreset = "all" | "primary" | "secondary";
+export type ExamPreset = "all" | "primary" | "secondary" | "year";
 
 export interface ExamState {
   set: Problem[];

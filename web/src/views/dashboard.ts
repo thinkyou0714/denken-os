@@ -4,6 +4,7 @@
  * levelCard / todaySection / xpChartSection / masterySection / statsSection / badgesSection
  */
 import { evaluateAchievements } from "../achievements.js";
+import { masteredConceptAreas, recommendNextConcepts } from "../concept-graph.js";
 import {
   accuracyTrend,
   allSubjectReadiness,
@@ -197,6 +198,35 @@ function readinessSection(root: HTMLElement, logs: ReturnType<typeof progress.lo
         ),
       ),
     );
+  }
+}
+
+/**
+ * 学習順のおすすめセクション（前提コンセプトグラフ）。
+ * 習得済みの論点から到達した概念領域を推定し、前提を満たした「次に学ぶおすすめ」と
+ * まだ前提不足の領域を提示する。学習が進んでいない初期でも基礎領域を案内する。
+ */
+function learningOrderSection(root: HTMLElement, logs: ReturnType<typeof progress.logs>): void {
+  const masteredAreas = masteredConceptAreas(masteredTopics(logs));
+  const rec = recommendNextConcepts(masteredAreas);
+  if (rec.recommended.length === 0 && rec.blocked.length === 0) return;
+  root.append(
+    h("h2", {}, "学習順のおすすめ"),
+    h("p", { class: "muted small" }, "前提となる基礎から順に進めると効率的です（習得済みの論点から自動推定）。"),
+  );
+  if (rec.recommended.length > 0) {
+    const chips = h("div", { class: "concept-chips" });
+    for (const c of rec.recommended.slice(0, 8)) chips.append(h("span", { class: "concept-chip next" }, `▶ ${c}`));
+    root.append(h("div", { class: "muted small" }, "いま学ぶのにおすすめ:"), chips);
+  }
+  if (rec.blocked.length > 0) {
+    const chips = h("div", { class: "concept-chips" });
+    for (const b of rec.blocked.slice(0, 6)) {
+      chips.append(
+        h("span", { class: "concept-chip blocked", title: `前提: ${b.missingPrereqs.join("・")}` }, `🔒 ${b.topic}`),
+      );
+    }
+    root.append(h("div", { class: "muted small" }, "前提を固めてから（前提を習得すると解放）:"), chips);
   }
 }
 
@@ -400,6 +430,7 @@ export function renderDashboard(root: HTMLElement): void {
   xpChartSection(root, logs);
   masterySection(root, logs);
   readinessSection(root, logs, plan.daysLeft);
+  learningOrderSection(root, logs);
   statsSection(root, logs, lv);
   badgesSection(root, logs, lv);
 }

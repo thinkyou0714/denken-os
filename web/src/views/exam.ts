@@ -27,6 +27,7 @@ import { todayCount } from "../state/practice.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { bar, difficultyStars, draftBadge, figureNode, solutionNode, sparklineNode } from "../ui/widgets.js";
+import { buildYearMock } from "../year-mock.js";
 import { processRewards } from "./practice-rewards.js";
 import { startDrill } from "./review.js";
 import { renderHeader, switchView } from "./router.js";
@@ -103,7 +104,19 @@ export function renderExam(root: HTMLElement): void {
   );
   examHistorySection(root);
   let count = 10;
-  let preset: "all" | "primary" | "secondary" = "all";
+  let preset: ExamPreset = "all";
+  let yearSubject: Subject = "理論";
+  // 年度別通し模試の科目セレクタ（preset=year のときだけ有効化）。
+  const subjSel = h("select", {
+    id: "eyearsubj",
+    disabled: true,
+    onchange: (e) => {
+      yearSubject = (e.target as HTMLSelectElement).value as Subject;
+    },
+  }) as HTMLSelectElement;
+  for (const s of ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] as Subject[]) {
+    subjSel.append(h("option", { value: s }, s));
+  }
   const toolbar = h(
     "div",
     { class: "toolbar" },
@@ -124,25 +137,34 @@ export function renderExam(root: HTMLElement): void {
       const sel = h("select", {
         id: "epreset",
         onchange: (e) => {
-          preset = (e.target as HTMLSelectElement).value as typeof preset;
+          preset = (e.target as HTMLSelectElement).value as ExamPreset;
+          // 年度別通し模試のときだけ科目セレクタを有効化する。
+          subjSel.disabled = preset !== "year";
         },
       }) as HTMLSelectElement;
       sel.append(
         h("option", { value: "all" }, "全分野"),
         h("option", { value: "primary" }, "一次フル（4科目・合格判定）"),
         h("option", { value: "secondary" }, "二次（電力管理＋機械制御・合算判定）"),
+        h("option", { value: "year" }, "年度別通し模試（1科目・頻出重み）"),
       );
       return sel;
     })(),
+    h("label", { for: "eyearsubj" }, "科目:"),
+    subjSel,
   );
   root.append(
     toolbar,
     h(
       "p",
       { class: "muted small" },
-      "一次フルは4科目すべてを出題し、各科目60%で合格判定します。二次は問題を選んでから合算（108/180）で判定します。",
+      "一次フルは4科目すべてを出題し、各科目60%で合格判定します。二次は問題を選んでから合算（108/180）で判定します。年度別通し模試は1科目を頻出度の重みで本番尺に組みます。",
     ),
-    h("button", { class: "primary", type: "button", onclick: () => startExam(count, preset) }, "▶ 模試を開始"),
+    h(
+      "button",
+      { class: "primary", type: "button", onclick: () => startExam(count, preset, yearSubject) },
+      "▶ 模試を開始",
+    ),
   );
 }
 
@@ -178,14 +200,22 @@ function examHistorySection(root: HTMLElement): void {
   root.append(list);
 }
 
-export function startExam(count: number, preset: ExamPreset): void {
+export function startExam(count: number, preset: ExamPreset, yearSubject?: Subject): void {
   // 二次は「N問中M問選択」の選択フェーズを挟む（#43）。
   if (preset === "secondary") {
     startSecondarySelection(count);
     return;
   }
-  // 一次フルは4科目すべてを代表させる（#48）。
-  const set = preset === "primary" ? buildPrimaryFullMock(problems, count) : buildMockExam(problems, { count });
+  // 出題セットを preset 別に組む。
+  // - primary: 4科目すべてを代表させる（#48）。
+  // - year:    1科目を頻出度の重みで組む（年度別通し模試）。
+  // - all:     全分野からバランスよく。
+  const set =
+    preset === "primary"
+      ? buildPrimaryFullMock(problems, count)
+      : preset === "year" && yearSubject
+        ? buildYearMock(problems, { subject: yearSubject, count })
+        : buildMockExam(problems, { count });
   if (set.length === 0) {
     switchView("exam");
     return;
@@ -707,9 +737,11 @@ export function renderExamResult(root: HTMLElement): void {
     exam.historySaved = true;
     const subjects = [...new Set(exam.set.map((p) => p.subject))];
     const passed = exam.preset === "primary" ? primaryVerdict(subjectScores) === "pass" : score.passed;
+    // 年度別通し模試(year)は履歴上は単一科目の通常模試として "all" に丸める（合否はスコア60%判定）。
+    const historyPreset: ExamHistoryPreset = exam.preset === "year" ? "all" : exam.preset;
     appendExamHistory(storage, {
       atMs: Date.now(),
-      preset: exam.preset as ExamHistoryPreset,
+      preset: historyPreset,
       subjects,
       scorePct: score.scorePct,
       total: exam.set.length,
