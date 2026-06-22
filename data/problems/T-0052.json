@@ -3,7 +3,7 @@
   "exam": "denken2_primary",
   "subject": "電力",
   "topic": "送電効率",
-  "format": "numeric",
+  "format": "multiple_choice",
   "difficulty": 2,
   "params": {
     "received_power": {
@@ -24,6 +24,13 @@
     }
   },
   "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=95kW であった（線路損失 5kW）。送電効率 η〔%〕は?",
+  "choices": [
+    "5",
+    "47.5",
+    "95",
+    "190",
+    "950"
+  ],
   "answer": "95",
   "solution": [
     "送電効率 η=受電電力/送電電力×100",
@@ -44,7 +51,8 @@
   },
   "stats": {
     "answered": 0,
-    "correct_rate": 0
+    "correct_rate": 0,
+    "common_wrong_choice": "5"
   },
   "status": "validated"
 }

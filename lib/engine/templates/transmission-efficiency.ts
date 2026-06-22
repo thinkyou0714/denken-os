@@ -1,11 +1,12 @@
 /**
- * テンプレート: 送電効率（電力・numeric）。
+ * テンプレート: 送電効率（電力・五択マークシート）。
  *   送電効率  η = 受電電力 / 送電電力 × 100 = Pr / (Pr + 損失) × 100   〔%〕
  *
- * 新規テンプレートはこの形（defineTemplate ファクトリ）を標準とする。
+ * 本番（一次）は五択マークシートのため、コード算出の η を真値とし、
+ * 典型ミス由来の誤答を buildMcChoices で五択に整える。
  */
 import { formatClean, isCleanAnswer } from "../clean.js";
-import { defineTemplate, pick } from "./helpers.js";
+import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
 
 // [受電電力 Pr, 送電電力 Ps]（η が綺麗）。
 const PAIRS: ReadonlyArray<readonly [number, number]> = [
@@ -45,20 +46,35 @@ export const transmissionEfficiency = defineTemplate<Params>({
     if (Pr <= 0 || Ps <= 0 || Pr > Ps) return null;
     const eta = (Pr / Ps) * 100;
     if (!isCleanAnswer(eta)) return null;
-    const answerText = formatClean(eta);
     const loss = Ps - Pr;
+
+    // 五択（典型ミス由来の誤答）。
+    const mc = buildMcChoices(
+      eta,
+      [
+        { value: 100 - eta, reason: "送電効率でなく損失率（100−η）を答えた" },
+        { value: eta * 10, reason: "×100を×1000とし桁を取り違え（単位の取り違え）" },
+        { value: eta * 2, reason: "送電効率を誤って2倍にした（係数2のミス）" },
+        { value: eta / 2, reason: "送電効率を誤って半分にした（係数1/2のミス）" },
+      ],
+      formatClean,
+    );
+    if (!mc) return null;
+
     return {
-      format: "numeric",
       params: {
         received_power: { value: Pr, unit: "kW", realistic_range: [90, 2000] },
         sent_power: { value: Ps, unit: "kW", realistic_range: [100, 2000] },
       },
       answerValue: eta,
       answerUnit: "%",
-      answerText,
+      answerText: mc.answerText,
+      choices: mc.choices,
+      distractors: mc.distractors,
+      likelyWrongChoice: formatClean(100 - eta),
       facts: { Pr, Ps, loss, eta },
       defaultStatement: `送電電力 Ps=${Ps}kW に対し、受電電力 Pr=${Pr}kW であった（線路損失 ${loss}kW）。送電効率 η〔%〕は?`,
-      defaultSolution: [`送電効率 η=受電電力/送電電力×100`, `η=${Pr}/${Ps}×100`, `η=${answerText}%`],
+      defaultSolution: [`送電効率 η=受電電力/送電電力×100`, `η=${Pr}/${Ps}×100`, `η=${mc.answerText}%`],
       physicallyValid: true,
     };
   },

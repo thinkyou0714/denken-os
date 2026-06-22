@@ -37,6 +37,7 @@
     "choices": [
       "11.52",
       "19.2",
+      "25.6",
       "32.0",
       "57.6"
     ],
@@ -105,6 +106,7 @@
     "choices": [
       "2.88",
       "4.8",
+      "6.4",
       "8.0",
       "14.4"
     ],
@@ -173,6 +175,7 @@
     "choices": [
       "784.08",
       "1306.8",
+      "1742.4",
       "2178.0",
       "3920.4"
     ],
@@ -241,6 +244,7 @@
     "choices": [
       "3136.32",
       "5227.2",
+      "6969.6",
       "8712.0",
       "15681.6"
     ],
@@ -307,6 +311,7 @@
     "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=8+j6Ωのとき三相有効電力P〔kW〕は?",
     "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧3300V、1相 Z=8+j6Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧3300V、1相 Z=8+j6Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 3300V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=8+j6</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
+      "653.4",
       "696.96",
       "871.2",
       "1089.0",
@@ -375,6 +380,7 @@
     "statement": "平衡三相Y結線の負荷に線間電圧3300Vを加えた。1相のインピーダンスがZ=16+j12Ωのとき三相有効電力P〔kW〕は?",
     "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧3300V、1相 Z=16+j12Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧3300V、1相 Z=16+j12Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 3300V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=16+j12</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
+      "326.7",
       "348.48",
       "435.6",
       "544.5",
@@ -445,6 +451,7 @@
     "choices": [
       "0.36",
       "0.6",
+      "0.8",
       "1.0",
       "1.8"
     ],
@@ -511,6 +518,7 @@
     "statement": "平衡三相Y結線の負荷に線間電圧6600Vを加えた。1相のインピーダンスがZ=8+j6Ωのとき三相有効電力P〔kW〕は?",
     "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 130\" role=\"img\" aria-label=\"三相Y結線負荷 線間電圧6600V、1相 Z=8+j6Ω\" font-family=\"system-ui,sans-serif\" font-size=\"13\"><title>三相Y結線負荷 線間電圧6600V、1相 Z=8+j6Ω</title><g stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"45\" cy=\"70\" r=\"22\" fill=\"none\"/><text x=\"45\" y=\"75\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3φ</text><text x=\"45\" y=\"108\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">線間 6600V</text><line x1=\"67\" y1=\"70\" x2=\"105\" y2=\"70\"/><circle cx=\"105\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><line x1=\"105\" y1=\"40\" x2=\"105\" y2=\"100\"/><line x1=\"105\" y1=\"40\" x2=\"120.75\" y2=\"40\"/><rect x=\"120.75\" y=\"31\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"40\" x2=\"175\" y2=\"40\"/><text x=\"140\" y=\"26\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z=8+j6</text><line x1=\"105\" y1=\"70\" x2=\"120.75\" y2=\"70\"/><rect x=\"120.75\" y=\"61\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"70\" x2=\"175\" y2=\"70\"/><text x=\"140\" y=\"56\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"105\" y1=\"100\" x2=\"120.75\" y2=\"100\"/><rect x=\"120.75\" y=\"91\" width=\"38.5\" height=\"18\" fill=\"none\"/><line x1=\"159.25\" y1=\"100\" x2=\"175\" y2=\"100\"/><text x=\"140\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">Z</text><line x1=\"175\" y1=\"40\" x2=\"200\" y2=\"40\"/><line x1=\"175\" y1=\"70\" x2=\"200\" y2=\"70\"/><line x1=\"175\" y1=\"100\" x2=\"200\" y2=\"100\"/><line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"100\"/><circle cx=\"200\" cy=\"70\" r=\"3.2\" fill=\"currentColor\" stroke=\"none\"/><text x=\"208\" y=\"74\" fill=\"currentColor\" stroke=\"none\">N</text></g></svg>",
     "choices": [
+      "2613.6",
       "2787.84",
       "3484.8",
       "4356.0",
@@ -581,6 +589,7 @@
     "choices": [
       "392.04",
       "653.4",
+      "871.2",
       "1089.0",
       "1960.2"
     ],
@@ -649,6 +658,7 @@
     "choices": [
       "1568.16",
       "2613.6",
+      "3484.8",
       "4356.0",
       "7840.8"
     ],
@@ -718,6 +728,7 @@
       "20",
       "25",
       "35",
+      "55",
       "95"
     ],
     "answer": "25",
@@ -783,6 +794,7 @@
       "24",
       "54",
       "70",
+      "94",
       "130"
     ],
     "answer": "54",
@@ -848,6 +860,7 @@
       "12",
       "32",
       "40",
+      "52",
       "70"
     ],
     "answer": "32",
@@ -913,6 +926,7 @@
       "4",
       "34",
       "36",
+      "40",
       "48"
     ],
     "answer": "34",
@@ -978,6 +992,7 @@
       "10",
       "40",
       "50",
+      "60",
       "70"
     ],
     "answer": "40",
@@ -1043,6 +1058,7 @@
       "20",
       "50",
       "90",
+      "110",
       "120"
     ],
     "answer": "50",
@@ -1108,6 +1124,7 @@
       "12",
       "17",
       "25",
+      "37",
       "55"
     ],
     "answer": "17",
@@ -1173,6 +1190,7 @@
       "25",
       "40",
       "65",
+      "90",
       "115"
     ],
     "answer": "40",
@@ -1238,6 +1256,7 @@
       "6",
       "16",
       "22",
+      "28",
       "34"
     ],
     "answer": "16",
@@ -1303,6 +1322,7 @@
       "25",
       "45",
       "70",
+      "95",
       "120"
     ],
     "answer": "45",
@@ -15943,7 +15963,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -15964,6 +15984,13 @@
       }
     },
     "statement": "ある需要家の設備容量が100kW、最大需要電力が60kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "30",
+      "40",
+      "60",
+      "120",
+      "600"
+    ],
     "answer": "60",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -15983,7 +16010,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "40"
     },
     "status": "draft"
   },
@@ -15992,7 +16020,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16013,6 +16041,13 @@
       }
     },
     "statement": "ある需要家の設備容量が100kW、最大需要電力が30kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "15",
+      "30",
+      "60",
+      "70",
+      "300"
+    ],
     "answer": "30",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16032,7 +16067,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "70"
     },
     "status": "draft"
   },
@@ -16041,7 +16077,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16062,6 +16098,13 @@
       }
     },
     "statement": "ある需要家の設備容量が200kW、最大需要電力が60kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "15",
+      "30",
+      "60",
+      "70",
+      "300"
+    ],
     "answer": "30",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16081,7 +16124,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "70"
     },
     "status": "draft"
   },
@@ -16090,7 +16134,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16111,6 +16155,13 @@
       }
     },
     "statement": "ある需要家の設備容量が100kW、最大需要電力が75kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "25",
+      "37.5",
+      "75",
+      "150",
+      "750"
+    ],
     "answer": "75",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16130,7 +16181,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "25"
     },
     "status": "draft"
   },
@@ -16139,7 +16191,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16160,6 +16212,13 @@
       }
     },
     "statement": "ある需要家の設備容量が100kW、最大需要電力が45kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "22.5",
+      "45",
+      "55",
+      "90",
+      "450"
+    ],
     "answer": "45",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16179,7 +16238,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "55"
     },
     "status": "draft"
   },
@@ -16188,7 +16248,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16209,6 +16269,13 @@
       }
     },
     "statement": "ある需要家の設備容量が150kW、最大需要電力が45kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "15",
+      "30",
+      "60",
+      "70",
+      "300"
+    ],
     "answer": "30",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16228,7 +16295,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "70"
     },
     "status": "draft"
   },
@@ -16237,7 +16305,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16258,6 +16326,13 @@
       }
     },
     "statement": "ある需要家の設備容量が80kW、最大需要電力が60kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "25",
+      "37.5",
+      "75",
+      "150",
+      "750"
+    ],
     "answer": "75",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16277,7 +16352,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "25"
     },
     "status": "draft"
   },
@@ -16286,7 +16362,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16307,6 +16383,13 @@
       }
     },
     "statement": "ある需要家の設備容量が200kW、最大需要電力が180kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "10",
+      "45",
+      "90",
+      "180",
+      "900"
+    ],
     "answer": "90",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16326,7 +16409,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -16335,7 +16419,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16356,6 +16440,13 @@
       }
     },
     "statement": "ある需要家の設備容量が100kW、最大需要電力が40kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "20",
+      "40",
+      "60",
+      "80",
+      "400"
+    ],
     "answer": "40",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16375,7 +16466,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "60"
     },
     "status": "draft"
   },
@@ -16384,7 +16476,7 @@
     "exam": "denken3",
     "subject": "電力",
     "topic": "需要率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 1,
     "params": {
       "installed_capacity": {
@@ -16405,6 +16497,13 @@
       }
     },
     "statement": "ある需要家の設備容量が250kW、最大需要電力が40kWである。需要率〔%〕を求めよ。",
+    "choices": [
+      "8",
+      "16",
+      "32",
+      "84",
+      "160"
+    ],
     "answer": "16",
     "solution": [
       "需要率 = 最大需要電力 / 設備容量 × 100",
@@ -16424,7 +16523,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "84"
     },
     "status": "draft"
   },
@@ -17033,7 +17133,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17054,6 +17154,13 @@
       }
     },
     "statement": "定格電流 In=200A の系統で、基準容量におけるパーセントインピーダンスが %Z=12.5% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "25",
+      "200",
+      "800",
+      "1600",
+      "16000"
+    ],
     "answer": "1600",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17073,7 +17180,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "25"
     },
     "status": "draft"
   },
@@ -17082,7 +17190,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17103,6 +17211,13 @@
       }
     },
     "statement": "定格電流 In=200A の系統で、基準容量におけるパーセントインピーダンスが %Z=20% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "40",
+      "200",
+      "500",
+      "1000",
+      "10000"
+    ],
     "answer": "1000",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17122,7 +17237,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "40"
     },
     "status": "draft"
   },
@@ -17131,7 +17247,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17152,6 +17268,13 @@
       }
     },
     "statement": "定格電流 In=100A の系統で、基準容量におけるパーセントインピーダンスが %Z=25% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "25",
+      "100",
+      "200",
+      "400",
+      "4000"
+    ],
     "answer": "400",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17171,7 +17294,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "25"
     },
     "status": "draft"
   },
@@ -17180,7 +17304,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17201,6 +17325,13 @@
       }
     },
     "statement": "定格電流 In=150A の系統で、基準容量におけるパーセントインピーダンスが %Z=12.5% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "18.75",
+      "150",
+      "600",
+      "1200",
+      "12000"
+    ],
     "answer": "1200",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17220,7 +17351,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "18.75"
     },
     "status": "draft"
   },
@@ -17229,7 +17361,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17250,6 +17382,13 @@
       }
     },
     "statement": "定格電流 In=100A の系統で、基準容量におけるパーセントインピーダンスが %Z=12.5% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "12.5",
+      "100",
+      "400",
+      "800",
+      "8000"
+    ],
     "answer": "800",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17269,7 +17408,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "12.5"
     },
     "status": "draft"
   },
@@ -17278,7 +17418,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17299,6 +17439,13 @@
       }
     },
     "statement": "定格電流 In=150A の系統で、基準容量におけるパーセントインピーダンスが %Z=10% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "15",
+      "150",
+      "750",
+      "1500",
+      "15000"
+    ],
     "answer": "1500",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17318,7 +17465,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "15"
     },
     "status": "draft"
   },
@@ -17327,7 +17475,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17348,6 +17496,13 @@
       }
     },
     "statement": "定格電流 In=200A の系統で、基準容量におけるパーセントインピーダンスが %Z=10% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "20",
+      "200",
+      "1000",
+      "2000",
+      "20000"
+    ],
     "answer": "2000",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17367,7 +17522,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "20"
     },
     "status": "draft"
   },
@@ -17376,7 +17532,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17397,6 +17553,13 @@
       }
     },
     "statement": "定格電流 In=250A の系統で、基準容量におけるパーセントインピーダンスが %Z=12.5% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "31.25",
+      "250",
+      "1000",
+      "2000",
+      "20000"
+    ],
     "answer": "2000",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17416,7 +17579,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "31.25"
     },
     "status": "draft"
   },
@@ -17425,7 +17589,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17446,6 +17610,13 @@
       }
     },
     "statement": "定格電流 In=400A の系統で、基準容量におけるパーセントインピーダンスが %Z=25% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "100",
+      "400",
+      "800",
+      "1600",
+      "16000"
+    ],
     "answer": "1600",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17465,7 +17636,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "100"
     },
     "status": "draft"
   },
@@ -17474,7 +17646,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "％インピーダンスと短絡電流",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 3,
     "params": {
       "rated_current": {
@@ -17495,6 +17667,13 @@
       }
     },
     "statement": "定格電流 In=300A の系統で、基準容量におけるパーセントインピーダンスが %Z=5% である。三相短絡電流 Is〔A〕は?",
+    "choices": [
+      "15",
+      "300",
+      "3000",
+      "6000",
+      "60000"
+    ],
     "answer": "6000",
     "solution": [
       "短絡電流 Is=In×100/%Z",
@@ -17514,7 +17693,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "15"
     },
     "status": "draft"
   },
@@ -17523,7 +17703,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17544,6 +17724,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=80A が流れている。1線あたりの抵抗が R=2.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "16",
+      "48",
+      "96",
+      "16000",
+      "48000"
+    ],
     "answer": "48",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17563,7 +17750,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "48000"
     },
     "status": "draft"
   },
@@ -17572,7 +17760,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17593,6 +17781,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=40A が流れている。1線あたりの抵抗が R=0.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "0.8",
+      "2.4",
+      "4.8",
+      "800",
+      "2400"
+    ],
     "answer": "2.4",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17612,7 +17807,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "2400"
     },
     "status": "draft"
   },
@@ -17621,7 +17817,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17642,6 +17838,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=10A が流れている。1線あたりの抵抗が R=0.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "0.05",
+      "0.15",
+      "0.3",
+      "50",
+      "150"
+    ],
     "answer": "0.15",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17661,7 +17864,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "150"
     },
     "status": "draft"
   },
@@ -17670,7 +17874,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17691,6 +17895,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=30A が流れている。1線あたりの抵抗が R=2.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "2.25",
+      "6.75",
+      "13.5",
+      "2250",
+      "6750"
+    ],
     "answer": "6.75",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17710,7 +17921,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "6750"
     },
     "status": "draft"
   },
@@ -17719,7 +17931,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17740,6 +17952,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=80A が流れている。1線あたりの抵抗が R=2Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "12.8",
+      "38.4",
+      "76.8",
+      "12800",
+      "38400"
+    ],
     "answer": "38.4",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17759,7 +17978,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "38400"
     },
     "status": "draft"
   },
@@ -17768,7 +17988,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17789,6 +18009,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=10A が流れている。1線あたりの抵抗が R=2.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "0.25",
+      "0.75",
+      "1.5",
+      "250",
+      "750"
+    ],
     "answer": "0.75",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17808,7 +18035,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "750"
     },
     "status": "draft"
   },
@@ -17817,7 +18045,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17838,6 +18066,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=40A が流れている。1線あたりの抵抗が R=5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "8",
+      "24",
+      "48",
+      "8000",
+      "24000"
+    ],
     "answer": "24",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17857,7 +18092,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "24000"
     },
     "status": "draft"
   },
@@ -17866,7 +18102,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17887,6 +18123,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=10A が流れている。1線あたりの抵抗が R=5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "0.5",
+      "1.5",
+      "3",
+      "500",
+      "1500"
+    ],
     "answer": "1.5",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17906,7 +18149,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "1500"
     },
     "status": "draft"
   },
@@ -17915,7 +18159,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17936,6 +18180,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=100A が流れている。1線あたりの抵抗が R=2.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "25",
+      "75",
+      "150",
+      "25000",
+      "75000"
+    ],
     "answer": "75",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -17955,7 +18206,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "75000"
     },
     "status": "draft"
   },
@@ -17964,7 +18216,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電線の電力損失",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "line_current": {
@@ -17985,6 +18237,13 @@
       }
     },
     "statement": "三相3線式送電線で線電流 I=100A が流れている。1線あたりの抵抗が R=0.5Ω のとき、線路全体の電力損失 P_loss〔kW〕は?",
+    "choices": [
+      "5",
+      "15",
+      "30",
+      "5000",
+      "15000"
+    ],
     "answer": "15",
     "solution": [
       "三相3線式の線路損失 P_loss=3·I²·R",
@@ -18004,7 +18263,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "15000"
     },
     "status": "draft"
   },
@@ -19243,7 +19503,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19264,6 +19524,13 @@
       }
     },
     "statement": "送電端電圧 Vs=6300V、受電端電圧 Vr=6000V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "2.5",
+      "5",
+      "10",
+      "25",
+      "50"
+    ],
     "answer": "5",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19283,7 +19550,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -19292,7 +19560,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19313,6 +19581,13 @@
       }
     },
     "statement": "送電端電圧 Vs=105V、受電端電圧 Vr=100V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "2.5",
+      "5",
+      "10",
+      "25",
+      "50"
+    ],
     "answer": "5",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19332,7 +19607,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -19341,7 +19617,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19362,6 +19638,13 @@
       }
     },
     "statement": "送電端電圧 Vs=208V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "2",
+      "4",
+      "8",
+      "20",
+      "40"
+    ],
     "answer": "4",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19381,7 +19664,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "8"
     },
     "status": "draft"
   },
@@ -19390,7 +19674,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19411,6 +19695,13 @@
       }
     },
     "statement": "送電端電圧 Vs=6600V、受電端電圧 Vr=6000V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "5",
+      "10",
+      "20",
+      "50",
+      "100"
+    ],
     "answer": "10",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19430,7 +19721,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "20"
     },
     "status": "draft"
   },
@@ -19439,7 +19731,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19460,6 +19752,13 @@
       }
     },
     "statement": "送電端電圧 Vs=210V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "2.5",
+      "5",
+      "10",
+      "25",
+      "50"
+    ],
     "answer": "5",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19479,7 +19778,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -19488,7 +19788,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19509,6 +19809,13 @@
       }
     },
     "statement": "送電端電圧 Vs=216V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "4",
+      "8",
+      "16",
+      "40",
+      "80"
+    ],
     "answer": "8",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19528,7 +19835,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "16"
     },
     "status": "draft"
   },
@@ -19537,7 +19845,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19558,6 +19866,13 @@
       }
     },
     "statement": "送電端電圧 Vs=220V、受電端電圧 Vr=200V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "5",
+      "10",
+      "20",
+      "50",
+      "100"
+    ],
     "answer": "10",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19577,7 +19892,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "20"
     },
     "status": "draft"
   },
@@ -19586,7 +19902,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "電圧降下率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "sending_voltage": {
@@ -19607,6 +19923,13 @@
       }
     },
     "statement": "送電端電圧 Vs=3300V、受電端電圧 Vr=3000V である。電圧降下率 ε〔%〕は?",
+    "choices": [
+      "5",
+      "10",
+      "20",
+      "50",
+      "100"
+    ],
     "answer": "10",
     "solution": [
       "電圧降下率 ε=(Vs−Vr)/Vr×100",
@@ -19626,7 +19949,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "20"
     },
     "status": "draft"
   },
@@ -20615,7 +20939,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20636,6 +20960,13 @@
       }
     },
     "statement": "送電電力 Ps=2000kW に対し、受電電力 Pr=1900kW であった（線路損失 100kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "5",
+      "47.5",
+      "95",
+      "190",
+      "950"
+    ],
     "answer": "95",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20655,7 +20986,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "5"
     },
     "status": "draft"
   },
@@ -20664,7 +20996,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20685,6 +21017,13 @@
       }
     },
     "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=96kW であった（線路損失 4kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "4",
+      "48",
+      "96",
+      "192",
+      "960"
+    ],
     "answer": "96",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20704,7 +21043,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "4"
     },
     "status": "draft"
   },
@@ -20713,7 +21053,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20734,6 +21074,13 @@
       }
     },
     "statement": "送電電力 Ps=200kW に対し、受電電力 Pr=180kW であった（線路損失 20kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "10",
+      "45",
+      "90",
+      "180",
+      "900"
+    ],
     "answer": "90",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20753,7 +21100,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -20762,7 +21110,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20783,6 +21131,13 @@
       }
     },
     "statement": "送電電力 Ps=1000kW に対し、受電電力 Pr=950kW であった（線路損失 50kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "5",
+      "47.5",
+      "95",
+      "190",
+      "950"
+    ],
     "answer": "95",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20802,7 +21157,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "5"
     },
     "status": "draft"
   },
@@ -20811,7 +21167,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20832,6 +21188,13 @@
       }
     },
     "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=95kW であった（線路損失 5kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "5",
+      "47.5",
+      "95",
+      "190",
+      "950"
+    ],
     "answer": "95",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20851,7 +21214,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "5"
     },
     "status": "draft"
   },
@@ -20860,7 +21224,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20881,6 +21245,13 @@
       }
     },
     "statement": "送電電力 Ps=100kW に対し、受電電力 Pr=90kW であった（線路損失 10kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "10",
+      "45",
+      "90",
+      "180",
+      "900"
+    ],
     "answer": "90",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20900,7 +21271,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "10"
     },
     "status": "draft"
   },
@@ -20909,7 +21281,7 @@
     "exam": "denken2_primary",
     "subject": "電力",
     "topic": "送電効率",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "received_power": {
@@ -20930,6 +21302,13 @@
       }
     },
     "statement": "送電電力 Ps=500kW に対し、受電電力 Pr=475kW であった（線路損失 25kW）。送電効率 η〔%〕は?",
+    "choices": [
+      "5",
+      "47.5",
+      "95",
+      "190",
+      "950"
+    ],
     "answer": "95",
     "solution": [
       "送電効率 η=受電電力/送電電力×100",
@@ -20949,7 +21328,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "5"
     },
     "status": "draft"
   },
@@ -26211,6 +26591,7 @@
     },
     "statement": "周波数60Hz、極数4の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "36",
       "1728",
       "1764",
       "1800",
@@ -26275,6 +26656,7 @@
     },
     "statement": "周波数50Hz、極数12の三相誘導電動機が滑り3%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "15",
       "470",
       "485",
       "500",
@@ -26339,6 +26721,7 @@
     },
     "statement": "周波数60Hz、極数12の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "12",
       "576",
       "588",
       "600",
@@ -26403,6 +26786,7 @@
     },
     "statement": "周波数50Hz、極数12の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "10",
       "480",
       "490",
       "500",
@@ -26467,6 +26851,7 @@
     },
     "statement": "周波数60Hz、極数6の三相誘導電動機が滑り5%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "60",
       "1080",
       "1140",
       "1200",
@@ -26531,6 +26916,7 @@
     },
     "statement": "周波数60Hz、極数2の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "72",
       "3456",
       "3528",
       "3600",
@@ -26595,6 +26981,7 @@
     },
     "statement": "周波数50Hz、極数12の三相誘導電動機が滑り5%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "25",
       "450",
       "475",
       "500",
@@ -26659,6 +27046,7 @@
     },
     "statement": "周波数60Hz、極数4の三相誘導電動機が滑り3%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "54",
       "1692",
       "1746",
       "1800",
@@ -26723,6 +27111,7 @@
     },
     "statement": "周波数60Hz、極数8の三相誘導電動機が滑り4%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "36",
       "828",
       "864",
       "900",
@@ -26787,6 +27176,7 @@
     },
     "statement": "周波数60Hz、極数6の三相誘導電動機が滑り2%で運転している。回転速度N〔min⁻¹〕は?",
     "choices": [
+      "24",
       "1152",
       "1176",
       "1200",
@@ -36793,6 +37183,7 @@
     "choices": [
       "0.5",
       "0.58",
+      "0.67",
       "0.87",
       "1"
     ],
@@ -36840,7 +37231,8 @@
       "0.5",
       "0.58",
       "0.67",
-      "0.87"
+      "0.87",
+      "1"
     ],
     "answer": "0.58",
     "solution": [
@@ -38338,7 +38730,7 @@
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "nominal_voltage": {
@@ -38351,6 +38743,13 @@
       }
     },
     "statement": "公称電圧 3300V の高圧機器について、交流絶縁耐力試験を行う。試験電圧〔V〕を求めよ（最大使用電圧=公称×1.15/1.1、試験電圧=最大使用電圧×1.5）。",
+    "choices": [
+      "3450",
+      "4312.5",
+      "4950",
+      "5175",
+      "6900"
+    ],
     "answer": "5175",
     "solution": [
       "最大使用電圧=3300×1.15/1.1=3450V",
@@ -38370,7 +38769,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "3450"
     },
     "status": "draft"
   },
@@ -38379,7 +38779,7 @@
     "exam": "denken2_primary",
     "subject": "法規",
     "topic": "絶縁耐力試験電圧",
-    "format": "numeric",
+    "format": "multiple_choice",
     "difficulty": 2,
     "params": {
       "nominal_voltage": {
@@ -38392,6 +38792,13 @@
       }
     },
     "statement": "公称電圧 6600V の高圧機器について、交流絶縁耐力試験を行う。試験電圧〔V〕を求めよ（最大使用電圧=公称×1.15/1.1、試験電圧=最大使用電圧×1.5）。",
+    "choices": [
+      "6900",
+      "8625",
+      "9900",
+      "10350",
+      "13800"
+    ],
     "answer": "10350",
     "solution": [
       "最大使用電圧=6600×1.15/1.1=6900V",
@@ -38411,7 +38818,8 @@
     },
     "stats": {
       "answered": 0,
-      "correct_rate": 0
+      "correct_rate": 0,
+      "common_wrong_choice": "6900"
     },
     "status": "draft"
   },
@@ -39996,7 +40404,8 @@
       "0.1",
       "0.2",
       "0.4",
-      "1"
+      "1",
+      "2"
     ],
     "answer": "0.1",
     "solution": [
@@ -40043,7 +40452,8 @@
       "0.1",
       "0.2",
       "0.4",
-      "1"
+      "1",
+      "2"
     ],
     "answer": "0.2",
     "solution": [
@@ -40090,7 +40500,8 @@
       "0.1",
       "0.2",
       "0.4",
-      "1"
+      "1",
+      "2"
     ],
     "answer": "0.4",
     "solution": [
@@ -40137,7 +40548,8 @@
       "600",
       "700",
       "750",
-      "900"
+      "900",
+      "1500"
     ],
     "answer": "750",
     "solution": [
@@ -40182,7 +40594,8 @@
       "3500",
       "6600",
       "7000",
-      "10000"
+      "10000",
+      "22000"
     ],
     "answer": "7000",
     "solution": [
@@ -40224,6 +40637,7 @@
     },
     "statement": "電気設備技術基準で定める電圧の区分について、交流における「低圧」の上限電圧〔V〕は?",
     "choices": [
+      "100",
       "300",
       "450",
       "600",
@@ -40269,6 +40683,7 @@
     },
     "statement": "高圧架空電線を施設する場合、上記以外の場所（その他の原則）の地表上の高さの最小値〔m〕として定められている値は?",
     "choices": [
+      "3.5",
       "4",
       "4.5",
       "5",
@@ -40315,6 +40730,7 @@
     },
     "statement": "高圧架空電線を施設する場合、道路（車道）を横断する場合の路面上の高さの最小値〔m〕として定められている値は?",
     "choices": [
+      "3.5",
       "4",
       "5",
       "5.5",
@@ -40361,6 +40777,7 @@
     },
     "statement": "高圧架空電線を施設する場合、鉄道または軌道を横断する場合のレール面上の高さの最小値〔m〕として定められている値は?",
     "choices": [
+      "3.5",
       "4.5",
       "5",
       "5.5",
@@ -40410,7 +40827,8 @@
       "3",
       "3.5",
       "4",
-      "5"
+      "5",
+      "5.5"
     ],
     "answer": "3.5",
     "solution": [
@@ -40453,6 +40871,7 @@
     },
     "statement": "C種接地工事（300Vを超える低圧用機器の金属製外箱など）に必要な接地抵抗値として、原則の上限〔Ω〕は?",
     "choices": [
+      "5",
       "10",
       "30",
       "100",
@@ -40501,6 +40920,7 @@
     "choices": [
       "10",
       "30",
+      "50",
       "100",
       "500"
     ],
@@ -40548,7 +40968,8 @@
       "5",
       "10",
       "30",
-      "100"
+      "100",
+      "500"
     ],
     "answer": "10",
     "solution": [
@@ -40919,6 +41340,7 @@
     },
     "statement": "定格消費電力2kW以上の機器を、専用の開閉器・過電流遮断器と漏電遮断器を施設した専用回路で、電線を機器に直接接続して施設する場合における対地電圧の上限〔V〕として定められている値は?",
     "choices": [
+      "100",
       "150",
       "200",
       "300",
@@ -40968,7 +41390,8 @@
       "100",
       "150",
       "200",
-      "300"
+      "300",
+      "600"
     ],
     "answer": "150",
     "solution": [
@@ -41014,7 +41437,8 @@
       "90",
       "94",
       "95",
-      "100"
+      "100",
+      "107"
     ],
     "answer": "95",
     "solution": [
@@ -41060,7 +41484,8 @@
       "180",
       "182",
       "190",
-      "202"
+      "202",
+      "222"
     ],
     "answer": "182",
     "solution": [
@@ -41103,6 +41528,7 @@
     },
     "statement": "電気事業法令で定める供給電圧の維持基準について、標準電圧200Vの電気を供給する場所での上限値〔V〕は?",
     "choices": [
+      "182",
       "202",
       "220",
       "222",
@@ -41149,6 +41575,7 @@
     },
     "statement": "電気事業法令で定める供給電圧の維持基準について、標準電圧100Vの電気を供給する場所での上限値〔V〕は?",
     "choices": [
+      "95",
       "101",
       "106",
       "107",
@@ -43015,6 +43442,7 @@
       "10",
       "20",
       "50",
+      "100",
       "500"
     ],
     "answer": "50",
@@ -43061,6 +43489,7 @@
       "10",
       "20",
       "50",
+      "100",
       "500"
     ],
     "answer": "20",
@@ -43107,6 +43536,7 @@
       "10",
       "20",
       "50",
+      "100",
       "500"
     ],
     "answer": "10",

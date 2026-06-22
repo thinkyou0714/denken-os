@@ -1,12 +1,13 @@
 /**
- * テンプレート: 需要率（電力・numeric 形式）。
+ * テンプレート: 需要率（電力・五択マークシート）。
  *   需要率〔%〕 = 最大需要電力 / 設備容量 × 100
  * 正解はコードで算出。設備容量 > 最大需要 で、結果が綺麗になる組のみ採用。
  *
- * 新規テンプレートはこの形（defineTemplate ファクトリ）を標準とする。
+ * 本番（一次）は五択マークシートのため、コード算出の需要率を真値とし、
+ * 典型ミス由来の誤答を buildMcChoices で五択に整える。
  */
-import { isCleanAnswer } from "../clean.js";
-import { defineTemplate, pick } from "./helpers.js";
+import { formatClean, isCleanAnswer } from "../clean.js";
+import { buildMcChoices, defineTemplate, pick } from "./helpers.js";
 
 const INSTALLED: ReadonlyArray<number> = [50, 80, 100, 120, 150, 200, 250]; // 設備容量 kW
 const MAX_DEMAND: ReadonlyArray<number> = [30, 40, 45, 60, 75, 90, 120, 150, 180]; // 最大需要 kW
@@ -37,22 +38,37 @@ export const demandFactor = defineTemplate<Params>({
     if (installed <= 0 || maxDemand <= 0 || maxDemand >= installed) return null;
     const df = (maxDemand / installed) * 100;
     if (!isCleanAnswer(df)) return null;
-    const answerText = String(Number(df.toFixed(2)));
+
+    // 五択（典型ミス由来の誤答）。
+    const mc = buildMcChoices(
+      df,
+      [
+        { value: 100 - df, reason: "需要率を1から引いた余事象と取り違え（100−需要率）" },
+        { value: df * 10, reason: "×100を×1000とし桁を取り違え（単位の取り違え）" },
+        { value: df * 2, reason: "需要率を誤って2倍にした（係数2のミス）" },
+        { value: df / 2, reason: "需要率を誤って半分にした（係数1/2のミス）" },
+      ],
+      formatClean,
+    );
+    if (!mc) return null;
+
     return {
-      format: "numeric",
       params: {
         installed_capacity: { value: installed, unit: "kW", realistic_range: [10, 1000] },
         max_demand: { value: maxDemand, unit: "kW", realistic_range: [1, 1000] },
       },
       answerValue: df,
       answerUnit: "%",
-      answerText,
+      answerText: mc.answerText,
+      choices: mc.choices,
+      distractors: mc.distractors,
+      likelyWrongChoice: formatClean(100 - df),
       facts: { installed, maxDemand, demandFactor: df },
       defaultStatement: `ある需要家の設備容量が${installed}kW、最大需要電力が${maxDemand}kWである。需要率〔%〕を求めよ。`,
       defaultSolution: [
         "需要率 = 最大需要電力 / 設備容量 × 100",
         `= ${maxDemand} / ${installed} × 100`,
-        `= ${answerText}%`,
+        `= ${mc.answerText}%`,
       ],
       physicallyValid: true,
     };
