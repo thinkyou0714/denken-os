@@ -355,6 +355,99 @@
       .exam-review .stmt-sm { padding: .6rem .8rem 0; font-size: .92rem; }
       .exam-review .solution { margin: .6rem .8rem .8rem; }
 
+      /* ===== 直前モードバナー（#34/#35。試験直前の集中復習を促す目立つ警告帯） ===== */
+      .cram-banner {
+        border-left: 4px solid var(--ng);
+        background: linear-gradient(90deg, var(--ng-soft), transparent 80%);
+      }
+      .cram-banner strong { display: block; color: var(--ng); margin-bottom: .15rem; }
+
+      /* ===== 二次 問題選択（チェックボックス付きカード #43） ===== */
+      .exam-pick { display: flex; flex-direction: column; gap: .5rem; margin: .3rem 0 .6rem; }
+      .exam-pick .pick-item {
+        display: flex; align-items: flex-start; gap: .6rem; cursor: pointer;
+        margin: 0; transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+      }
+      .exam-pick .pick-item:hover { border-color: var(--border-strong); }
+      /* チェック中はアクセントで強調（選択状態を一目で）。 */
+      .exam-pick .pick-item:has(input:checked) {
+        border-color: var(--accent); box-shadow: var(--ring);
+      }
+      .exam-pick .pick-item input[type="checkbox"] {
+        width: 1.15rem; height: 1.15rem; margin: .15rem 0 0; flex: none; accent-color: var(--accent); cursor: pointer;
+      }
+      .exam-pick .pick-item .stmt-sm { font-size: .9rem; margin-top: .15rem; }
+
+      /* ===== 記述の自分メモ用テキストエリア（#44） ===== */
+      textarea.derivation {
+        width: 100%; resize: vertical; min-height: 4.5rem; font: inherit; font-size: .92rem;
+        color: var(--text); background: var(--surface); border: 1px solid var(--border-strong);
+        border-radius: var(--r-md); padding: .55rem .7rem; margin: .3rem 0 .5rem; line-height: 1.55;
+      }
+      textarea.derivation::placeholder { color: var(--muted); }
+      textarea.derivation:focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--accent); }
+
+      /* ===== 未監修チップ（自動生成バッジ #63） ===== */
+      .chip.draft {
+        color: var(--warn-text); background: var(--warn-bg); border-color: var(--warn-border);
+        cursor: help; font-weight: 700;
+      }
+
+      /* ===== 模試スコア推移リスト（#13） ===== */
+      .exam-trend { display: flex; flex-direction: column; gap: .25rem; margin: .2rem 0 .6rem; }
+      .exam-trend .row {
+        display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+        font-size: .85rem; padding: .3rem .55rem; border-radius: var(--r-sm); background: var(--surface-2);
+      }
+
+      /* ===== 学習順のおすすめ（前提コンセプトグラフ） ===== */
+      .concept-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: .25rem 0 .6rem; }
+      .concept-chip {
+        font-size: .78rem; font-weight: 700; padding: .22rem .6rem; border-radius: var(--r-pill);
+        border: 1px solid var(--border-strong); white-space: nowrap;
+      }
+      .concept-chip.next { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+      .concept-chip.blocked { color: var(--muted); background: var(--surface-2); cursor: help; }
+
+      /* ===== スキルドリル（公式導出 / 電卓速算） ===== */
+      .drill-launcher strong { display: block; margin-bottom: .1rem; }
+      .drill-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+      .drill-actions .chip {
+        font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer;
+        background: var(--surface); padding: .35rem .7rem;
+      }
+      .drill-actions .chip:disabled { opacity: .5; cursor: default; }
+      /* 公式導出ドリル: 並べ替えステップ。 */
+      ol.derivation-drill { list-style: decimal; margin: .4rem 0 .6rem; padding-left: 1.5rem; }
+      .derivation-drill .deriv-step {
+        display: flex; align-items: flex-start; gap: .6rem; justify-content: space-between;
+        border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface);
+        padding: .5rem .65rem; margin: .35rem 0; box-shadow: var(--shadow-sm);
+      }
+      .derivation-drill .deriv-text { flex: 1; font-size: .92rem; line-height: 1.5; }
+      .derivation-drill .deriv-moves { display: flex; gap: .25rem; flex: none; }
+      .derivation-drill .deriv-moves .chip {
+        cursor: pointer; font: inherit; font-weight: 700; min-width: 1.9rem; padding: .15rem .35rem;
+        background: var(--surface-2);
+      }
+      .derivation-drill .deriv-moves .chip:disabled { opacity: .4; cursor: default; }
+      ol.derivation-answer { margin: .4rem 0 .6rem; padding-left: 1.5rem; font-size: .9rem; }
+      ol.derivation-answer li { margin: .25rem 0; }
+      .card.deriv-ok { border-color: var(--ok); }
+      .card.deriv-ok strong { color: var(--ok); }
+      .card.deriv-ng { border-color: var(--ng); }
+      .card.deriv-ng strong { color: var(--ng); }
+      /* 電卓速算ドリル: 大きな設問とフィードバック。 */
+      .calc-prompt {
+        font-size: 1.5rem; font-weight: 800; letter-spacing: .01em; text-align: center;
+        padding: 1rem .8rem; margin: .4rem 0; border: 1px solid var(--border);
+        border-radius: var(--r-md); background: var(--surface-2);
+      }
+      .calc-hint { margin-top: .3rem; }
+      .calc-fbline { font-weight: 700; font-size: .95rem; margin: .4rem 0; }
+      .calc-fbline.ok { color: var(--ok); }
+      .calc-fbline.ng { color: var(--ng); }
+
       /* ===== 信頼性・リテンション（エラー境界・ナッジ・オフライン） ===== */
       .pill.net { color: var(--warn-text); background: var(--warn-bg); border-color: var(--warn-border); }
       .nudge { border-left: 3px solid var(--accent); font-size: .9rem; }
@@ -576,6 +669,6 @@
       復習は FSRS（最新の間隔反復アルゴリズム）。コード=MIT / 問題データ=CC-BY-SA-4.0。
     </footer>
 
-    <script type="module" src="./dist/app.js" integrity="sha384-r0vFsLrIkdlIwipvEvXrG8LTA0UiovOwRiF8X1gZXyNeCdq35xeu6KTxu4fNFGsh" crossorigin="anonymous"></script>
+    <script type="module" src="./dist/app.js" integrity="sha384-YkIEaEg7sGyAkvjFVQh/e4JFHrgvOGe9ThUhSmjk27TgJtV61fmRXIN9hd4H0h7t" crossorigin="anonymous"></script>
   </body>
 </html>

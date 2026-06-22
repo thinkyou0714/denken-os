@@ -31,7 +31,7 @@ import {
   weeklyQuests,
 } from "../quests.js";
 import { dailyReviewBatch, effectiveReviewCap, JST_OFFSET_MS, streakStatus } from "../retention.js";
-import { pickNextProblem } from "../select.js";
+import { missedProblemIds, pickNextProblem } from "../select.js";
 import {
   getDailyGoal,
   getExamDate,
@@ -48,6 +48,7 @@ import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
+import { drillLauncherCard } from "./drills.js";
 import { renderHeader } from "./router.js";
 
 // re-export todayCount for other views
@@ -339,7 +340,7 @@ export function cramBanner(): HTMLElement | null {
   if (!progress.cramMode()) return null;
   return h(
     "div",
-    { class: "card nudge at-risk" },
+    { class: "card cram-banner" },
     h("strong", {}, "🔥 直前モード"),
     h("div", { class: "muted" }, "試験が近づいています。弱点・未習得の論点を集中的に復習しましょう。"),
   );
@@ -391,6 +392,9 @@ export function renderPractice(root: HTMLElement): void {
   }
   root.append(toolbar, h("div", { id: "q" }));
   nextQuestion(root);
+  // スキルドリル起動カード（公式導出 / 電卓速算）。#q を題材ホストにする。
+  const qHost = root.querySelector("#q") as HTMLElement | null;
+  if (qHost) root.append(drillLauncherCard(qHost));
 }
 
 export function nextQuestion(root: HTMLElement): void {
@@ -406,11 +410,13 @@ export function nextQuestion(root: HTMLElement): void {
   // 再出題対象が現在のプール（分野フィルタ）に無いならスキップして通常選択へ。
   if (next && !poolIds.has(next.id)) next = null;
   // 通常選択: 弱点をインターリーブしつつ選ぶ（#50）。
+  // 問題単位の弱点バイアス: 同じ topic 内では過去に間違えた問題を優先する（FSRS は topic 単位のまま）。
   next =
     next ??
     pickNextProblem(pool, {
       weakTopics: weakTopics(),
       recentTopics: practice.recentTopics,
+      missedIds: missedProblemIds(progress.logs()),
       ...(excludeId !== undefined ? { excludeId } : {}),
     });
   practice.current = next;
