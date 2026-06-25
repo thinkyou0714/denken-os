@@ -9,6 +9,12 @@ import { fileStores } from "../../lib/store/file-store.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const PROV = { validated_by: "store-test", validated_at: "2026-06-01", method: "fixture" };
+const validatedT0001: Problem = {
+  ...T0001,
+  status: "validated",
+  validation: { ...T0001.validation, provenance: PROV },
+};
 
 describe("FileStores（JSON永続化）", () => {
   let dir: string;
@@ -21,7 +27,7 @@ describe("FileStores（JSON永続化）", () => {
 
   it("ProblemStore は再読込しても永続化されている", async () => {
     const a = fileStores(dir);
-    await a.problems.upsert(T0001);
+    await a.problems.upsert(validatedT0001);
     // 別インスタンスから読んでも残っている（=ファイルに書かれている）
     const b = fileStores(dir);
     expect((await b.problems.get("T-0001"))?.answer).toBe("3.2");

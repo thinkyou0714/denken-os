@@ -134,13 +134,13 @@ export const problemSchema = z
         });
       }
     }
-    // status=published は検収来歴 provenance(validated_by/validated_at/method) が必須（DI-13/DI-5）。
-    // validated には課さない（前向き契約。既存 validated データの偽 backfill を避ける）。
-    if (p.status === "published" && !p.validation.provenance) {
+    // status=validated|published は検収来歴 provenance(validated_by/validated_at/method) が必須（DI-13/DI-5）。
+    // seed/未検収のサンプルは status=draft へ降格して honest 化済（validated に上げるなら来歴が要る）。
+    if ((p.status === "validated" || p.status === "published") && !p.validation.provenance) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["validation", "provenance"],
-        message: "status=published は provenance(validated_by/validated_at/method) が必須です",
+        message: "status=validated|published は provenance(validated_by/validated_at/method) が必須です",
       });
     }
     // params.value は realistic_range 内（範囲外は出題前に弾く。範囲外入力起点の NaN/Infinity を恒久封鎖）

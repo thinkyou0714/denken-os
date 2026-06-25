@@ -3,7 +3,7 @@
 // ★版数(CACHE)は build:web が配信アセットの内容ハッシュで自動更新する（手で上げる必要は無い）。
 //   コミット時のプレースホルダは __BUILD_HASH__。ビルドで denken-os-<hash> に置換され、
 //   アセットが変わった時だけ版が変わって SW 更新→旧キャッシュ破棄が走る（版上げ忘れ防止）。
-const CACHE = "denken-os-__BUILD_HASH__";
+const CACHE = "denken-os-47c4bfc132a6";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

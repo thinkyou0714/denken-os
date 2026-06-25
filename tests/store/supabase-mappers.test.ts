@@ -12,10 +12,16 @@ import { problemToRow, reviewStateToRow, rowToProblem, rowToReviewState } from "
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const PROV = { validated_by: "store-test", validated_at: "2026-06-01", method: "fixture" };
+const validatedT0001: Problem = {
+  ...T0001,
+  status: "validated",
+  validation: { ...T0001.validation, provenance: PROV },
+};
 
 describe("Supabase row mappers", () => {
   it("Problem ⇔ row 往復で内容が保たれる", () => {
-    const back = rowToProblem(problemToRow(T0001));
+    const back = rowToProblem(problemToRow(validatedT0001));
     expect(back.id).toBe("T-0001");
     expect(back.answer).toBe("3.2");
     expect(back.choices).toEqual(["2.56", "3.2", "4.0", "9.6"]);

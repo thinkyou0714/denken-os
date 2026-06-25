@@ -42,7 +42,7 @@
         "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "閾値未満は出題しない" },
         "provenance": {
           "type": "object",
-          "description": "検収来歴(誰が/いつ/どの方法で検収したか)。status=published で必須。指定時は3項目とも必要",
+          "description": "検収来歴(誰が/いつ/どの方法で検収したか)。status=validated/published で必須。指定時は3項目とも必要",
           "required": ["validated_by", "validated_at", "method"],
           "properties": {
             "validated_by": { "type": "string", "minLength": 1, "description": "検収主体 例: 監修者名 / deterministic-solver" },
@@ -112,7 +112,7 @@
     {
       "if": {
         "required": ["status"],
-        "properties": { "status": { "const": "published" } }
+        "properties": { "status": { "enum": ["validated", "published"] } }
       },
       "then": {
         "required": ["validation"],

@@ -9,11 +9,17 @@ import { InMemoryAnswerLogStore, InMemoryProblemStore, InMemoryReviewStateStore 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const PROV = { validated_by: "store-test", validated_at: "2026-06-01", method: "fixture" };
+const validatedT0001: Problem = {
+  ...T0001,
+  status: "validated",
+  validation: { ...T0001.validation, provenance: PROV },
+};
 
 describe("InMemory stores", () => {
   it("ProblemStore は upsert/get/list(filter) が動く", async () => {
     const s = new InMemoryProblemStore();
-    await s.upsert(T0001);
+    await s.upsert(validatedT0001);
     expect((await s.get("T-0001"))?.answer).toBe("3.2");
     expect((await s.list({ status: "validated" })).length).toBe(1);
     expect((await s.list({ topic: "存在しない" })).length).toBe(0);

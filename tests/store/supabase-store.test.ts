@@ -19,6 +19,12 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const PROV = { validated_by: "store-test", validated_at: "2026-06-01", method: "fixture" };
+const validatedT0001: Problem = {
+  ...T0001,
+  status: "validated",
+  validation: { ...T0001.validation, provenance: PROV },
+};
 
 type Row = Record<string, unknown>;
 
@@ -91,7 +97,7 @@ function client(error?: string): SupabaseClient {
 describe("SupabaseProblemStore", () => {
   it("upsert → get → list（filter あり/なし）が往復する", async () => {
     const store = new SupabaseProblemStore(client());
-    await store.upsert(T0001);
+    await store.upsert(validatedT0001);
     const got = await store.get("T-0001");
     expect(got?.answer).toBe("3.2");
     expect(got?.choices).toEqual(["2.56", "3.2", "4.0", "9.6"]);

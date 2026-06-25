@@ -1,6 +1,6 @@
 /**
- * provenance gate（DI-13/DI-5）: status=published は検収来歴(validated_by/validated_at/method)が必須。
- * validated には課さない（前向き契約・既存データの偽 backfill 回避）。
+ * provenance gate（DI-13/DI-5）: status=validated/published は検収来歴(validated_by/validated_at/method)が必須。
+ * provenance 未記録のサンプルは draft に降格し、偽 backfill はしない。
  * ajv(problem-schema.json) と zod(schema.ts) の両ゲートで同じ判定になることも担保する。
  */
 import { readFileSync } from "node:fs";
@@ -26,11 +26,15 @@ function both(obj: unknown): { ajv: boolean; zod: boolean } {
 
 const PROV = { validated_by: "監修者A", validated_at: "2026-06-01", method: "human_review" };
 
-describe("provenance gate（published のみ必須・ajv⇄zod parity）", () => {
-  it("validated は provenance 無しでも通る（前向き契約・backfill 不要）", () => {
-    const r = both(T1); // T-0001 は status=validated, provenance 無し
-    expect(r.ajv).toBe(true);
-    expect(r.zod).toBe(true);
+describe("provenance gate（validated/published 必須・ajv⇄zod parity）", () => {
+  it("validated は provenance 無しだと両ゲートが弾き、正しい provenance 付きなら通る", () => {
+    const missing = both({ ...T1, status: "validated" });
+    expect(missing.ajv).toBe(false);
+    expect(missing.zod).toBe(false);
+
+    const valid = both({ ...T1, status: "validated", validation: { ...T1.validation, provenance: PROV } });
+    expect(valid.ajv).toBe(true);
+    expect(valid.zod).toBe(true);
   });
 
   it("published は provenance 無しだと両ゲートが弾く", () => {
@@ -58,7 +62,8 @@ describe("provenance gate（published のみ必須・ajv⇄zod parity）", () =>
 
   it("validated でも provenance を付けるなら整形は検証される（空項目は弾く）", () => {
     const bad = {
-      ...T1, // validated のまま
+      ...T1,
+      status: "validated",
       validation: { ...T1.validation, provenance: { validated_by: "", validated_at: "2026-06-01", method: "x" } },
     };
     const r = both(bad);
