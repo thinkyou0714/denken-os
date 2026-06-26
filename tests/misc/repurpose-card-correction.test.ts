@@ -1,14 +1,10 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { classifyReply, draftCorrectionReply, flagCorrections } from "../../lib/correction/classify.js";
 import { repurpose } from "../../lib/crosspost/repurpose.js";
-import type { Problem } from "../../lib/engine/schema.js";
 import { cardText, hasPii } from "../../lib/share-card/card-text.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 describe("crosspost.repurpose", () => {
   it("媒体別に異なる形式の下書きを出す（丸コピーでない）", () => {

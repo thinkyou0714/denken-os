@@ -33,7 +33,7 @@
 //   (v20: Wave2リファクタ — CSP/SRI・SW版数自動化・RLS補完・fuzz/統合テスト追加)
 //   (v21: 最高品質化 — stale-while-revalidate(陳腐化解消)・週次クエスト修正・採点/a11y/試験忠実度の根本是正)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v21-5a05aef2";
+const CACHE = "denken-os-v21-1095671d";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

@@ -44,9 +44,10 @@ import {
 } from "../settings.js";
 import { loadFailed, problems, progress, storage, view } from "../state/app.js";
 import { practice, pushRecentTopic, takeDueRequeue, todayCount, weakTopics } from "../state/practice.js";
+import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
-import { difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
+import { bar, difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
 import { drillLauncherCard } from "./drills.js";
 import { renderHeader } from "./router.js";
@@ -82,15 +83,11 @@ export function runFreezeBridge(): void {
   }
 }
 
-const SEEN_LEVEL_KEY = "denken:seenLevel";
-
 /** 祝賀済みのレベル（模試中のレベルアップも取りこぼさないため保存で管理）。 */
 export function seenLevel(): number {
   const n = Number(storage.getItem(SEEN_LEVEL_KEY));
   return Number.isFinite(n) && n >= 1 ? n : 1;
 }
-
-const SEEN_STREAK_MILESTONE_KEY = "denken:seenStreakMilestone";
 
 /** 祝賛済みのストリーク大台（30/50/100…のスペシャル演出を1回だけにする）。 */
 export function seenStreakMilestone(): number {
@@ -100,20 +97,6 @@ export function seenStreakMilestone(): number {
 
 /** まめ知識の表示位置（セッション内で順繰り。日替わりの開始位置で毎日違う話から始まる）。 */
 let tipIndex = -1;
-
-/** 進捗バー（ローカル版。ui/widgets.ts の bar と同一実装だが、views 内クロスインポート削減のため）。 */
-function bar(pct: number, label?: string): HTMLElement {
-  const clamped = Math.max(0, Math.min(100, pct));
-  const attrs: Record<string, string> = { class: "bar" };
-  if (label) {
-    attrs.role = "progressbar";
-    attrs["aria-label"] = label;
-    attrs["aria-valuenow"] = String(Math.round(clamped));
-    attrs["aria-valuemin"] = "0";
-    attrs["aria-valuemax"] = "100";
-  }
-  return h("div", attrs, h("span", { style: `width:${clamped}%` }));
-}
 
 /** 今日のクエストカード（3つの小目標＋全達成ボーナス表示）。 */
 export function questsCard(): HTMLElement {

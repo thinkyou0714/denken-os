@@ -22,8 +22,7 @@ export function normalizeNumericInput(raw: string): string {
     .replace(/[．。]/g, ".")
     .replace(/[，、]/g, ",")
     .replace(/,/g, "")
-    .replace(/\s+/g, "")
-    .trim();
+    .replace(/\s+/g, ""); // 全空白を除去するため末尾 trim は不要（no-op だった）。
 }
 
 /**

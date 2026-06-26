@@ -12,11 +12,12 @@ import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
 import { problemSchema } from "../../lib/engine/schema.js";
 import { threePhasePower } from "../../lib/engine/templates/index.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
 const jsonSchema = JSON.parse(readFileSync(join(ROOT, "docs/x-strategy/templates/problem-schema.json"), "utf8"));
-const T0001 = JSON.parse(readFileSync(join(ROOT, "data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 const ajv = new Ajv({ allErrors: true, strict: true });
 addFormats(ajv);
@@ -61,6 +62,20 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
   it("status=validated で検証4項目falseは両方が拒否する", () => {
     const broken = { ...T0001, validation: { ...T0001.validation, human_checked: false }, status: "validated" };
     const r = bothAccept(broken);
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  // 空文字・空配列のドリフト是正（Round-5）: zod は .min(1) で弾くが ajv は minLength/minItems
+  // 未指定で空を受理していた。両者を parity させ、空値を両方が拒否することを固定する。
+  it.each(["id", "topic", "statement", "answer"])("空文字の %s は両方が拒否する（ajv⇄zod parity）", (field) => {
+    const r = bothAccept({ ...T0001, [field]: "" });
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  it("空の solution 配列は両方が拒否する（ajv⇄zod parity）", () => {
+    const r = bothAccept({ ...T0001, solution: [] });
     expect(r.ajv).toBe(false);
     expect(r.zod).toBe(false);
   });

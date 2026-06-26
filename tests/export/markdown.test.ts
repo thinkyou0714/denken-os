@@ -1,12 +1,9 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
 import { toObsidianMarkdown, toVaultFiles } from "../../lib/export/markdown.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 describe("Obsidian Markdown 書き出し", () => {
   it("frontmatter・問題文・選択肢・折り畳み解答・出典を含む", () => {

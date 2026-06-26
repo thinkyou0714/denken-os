@@ -8,7 +8,7 @@
  *  - verticalTick(): 破線目盛線＋ラベル（II-129）
  *  - loopFrame(): 回路ループフレーム（primitives.ts の公開版と同一実装）
  */
-import { svgLabel, verticalTick } from "./primitives.js";
+import { loopFrame, svgLabel, verticalTick } from "./primitives.js";
 import { arrow, circle, dot, line, polyline, rect, resistorH, resistorV, source, svg, text } from "./svg.js";
 
 /**
@@ -26,17 +26,6 @@ import { arrow, circle, dot, line, polyline, rect, resistorH, resistorV, source,
  */
 const fmt: (n: number) => string = svgLabel;
 const TC = 'text-anchor="middle"';
-
-/** 矩形ループの左辺＋電源＋下辺の共通部品（上辺は呼び出し側で描く）。 */
-function loopFrame(sourceSym: string, sourceLabel: string, rightX: number): string {
-  return [
-    source(40, 70, 20, sourceSym, sourceLabel),
-    line(40, 50, 40, 30),
-    line(40, 90, 40, 110),
-    line(40, 110, rightX, 110),
-    line(rightX, 110, rightX, 30),
-  ].join("");
-}
 
 /** 三相 Y 結線負荷（1相 Z=R+jX）。 */
 export function threePhaseYFigure(V: number, R: number, X: number): string {

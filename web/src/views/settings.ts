@@ -28,6 +28,7 @@ import {
   type ThemePref,
 } from "../settings.js";
 import { applyTheme, installPrompt, progress, setInstallPrompt, storage } from "../state/app.js";
+import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { renderHeader, renderNav, switchView } from "./router.js";
@@ -48,7 +49,11 @@ export function renderSettings(root: HTMLElement): void {
     max: "200",
     value: String(getDailyGoal(storage)),
   }) as HTMLInputElement;
-  goalInput.addEventListener("change", () => setDailyGoal(storage, Number(goalInput.value)));
+  goalInput.addEventListener("change", () => {
+    setDailyGoal(storage, Number(goalInput.value));
+    // クランプ後の実保存値を入力欄へ反映する（capInput と同じ挙動。範囲外入力時のみ作用）。
+    goalInput.value = String(getDailyGoal(storage));
+  });
   const capInput = h("input", {
     type: "number",
     min: "5",
@@ -308,9 +313,6 @@ function backupCard(): HTMLElement {
     fileInput,
   );
 }
-
-const SEEN_LEVEL_KEY = "denken:seenLevel";
-const SEEN_STREAK_MILESTONE_KEY = "denken:seenStreakMilestone";
 
 function resetData(): void {
   if (!window.confirm("学習記録（解答ログ・記憶状態・XP/実績・お守り）を全て削除します。よろしいですか？")) return;

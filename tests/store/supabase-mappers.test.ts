@@ -2,16 +2,13 @@
  * Supabase アダプタの行⇔ドメイン マッピング（純関数）の往復テスト。
  * 実 DB I/O は認証が要るため対象外。マッピングの正しさだけをここで担保する。
  */
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Problem } from "../../lib/engine/schema.js";
 import type { ReviewState } from "../../lib/scheduler/types.js";
 import { problemToRow, reviewStateToRow, rowToProblem, rowToReviewState } from "../../lib/store/supabase-store.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 describe("Supabase row mappers", () => {
   it("Problem ⇔ row 往復で内容が保たれる", () => {

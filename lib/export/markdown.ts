@@ -3,8 +3,7 @@
  * README ビジョン「Obsidian vault 形式でも配布」を実体化。数式は $...$、出典必須。
  */
 import type { Problem } from "../engine/schema.js";
-
-const CHOICE_MARKS = ["①", "②", "③", "④", "⑤", "⑥"];
+import { CHOICE_MARKS } from "../shared/choices.js";
 
 function sourceLine(p: Problem): string {
   if (p.source.type === "original") {

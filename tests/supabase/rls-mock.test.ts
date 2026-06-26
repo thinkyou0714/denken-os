@@ -127,6 +127,45 @@ describe("RLS モック: review_states", () => {
   });
 });
 
+// 0005: RLS INSERT/UPDATE の列内容ガード（WITH CHECK に topic 非空を追加）を純関数でモデル化する。
+// 行所有（auth.uid()=user_id）に加え `topic is not null and length(btrim(topic)) > 0` を要求する。
+const topicNonEmpty = (topic: string | null | undefined): boolean =>
+  topic !== null && topic !== undefined && topic.trim().length > 0;
+
+const answerLogsInsertColumnGuard = (authUid: string | null, rowUserId: string, topic: string | null) =>
+  authUid !== null && authUid === rowUserId && topicNonEmpty(topic);
+
+const reviewStatesUpsertColumnGuard = (authUid: string | null, rowUserId: string, topic: string | null) =>
+  authUid !== null && authUid === rowUserId && topicNonEmpty(topic);
+
+describe("RLS 列ガード（0005 の WITH CHECK topic 非空）", () => {
+  const USER_A = "uid-eee";
+  const USER_B = "uid-fff";
+
+  it("自分の行＋非空 topic の INSERT は通る（answer_logs）", () => {
+    expect(answerLogsInsertColumnGuard(USER_A, USER_A, "三相交流電力")).toBe(true);
+  });
+
+  it("自分の行でも topic=null の INSERT は拒否される（列ガード）", () => {
+    expect(answerLogsInsertColumnGuard(USER_A, USER_A, null)).toBe(false);
+  });
+
+  it("自分の行でも空白のみ topic（btrim 後ゼロ長）の INSERT は拒否される", () => {
+    expect(answerLogsInsertColumnGuard(USER_A, USER_A, "   ")).toBe(false);
+  });
+
+  it("非空 topic でも他人名義の INSERT は拒否される（所有ガードは併存）", () => {
+    expect(answerLogsInsertColumnGuard(USER_A, USER_B, "三相交流電力")).toBe(false);
+  });
+
+  it("review_states の upsert/update も同じ列ガードに従う", () => {
+    expect(reviewStatesUpsertColumnGuard(USER_A, USER_A, "誘導電動機")).toBe(true);
+    expect(reviewStatesUpsertColumnGuard(USER_A, USER_A, "")).toBe(false);
+    expect(reviewStatesUpsertColumnGuard(USER_A, USER_A, null)).toBe(false);
+    expect(reviewStatesUpsertColumnGuard(USER_A, USER_B, "誘導電動機")).toBe(false);
+  });
+});
+
 describe("difficulty NOT NULL バリデーション（0004 制約のモデル）", () => {
   interface ReviewState {
     reps: number;

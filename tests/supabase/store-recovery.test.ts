@@ -10,21 +10,17 @@
  * tests/store/supabase-store.test.ts の fake-client パターンを踏襲しつつ、任意の生行
  * （破損行を含む）をテーブルへ直接 seed できるように拡張している。
  */
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Problem } from "../../lib/engine/schema.js";
 import {
   createSupabaseStores,
   SupabaseAnswerLogStore,
   SupabaseProblemStore,
   SupabaseReviewStateStore,
 } from "../../lib/store/supabase-store.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 type Row = Record<string, unknown>;
 

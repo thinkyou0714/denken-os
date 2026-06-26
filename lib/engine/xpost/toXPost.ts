@@ -7,6 +7,7 @@
  * - 本文に URL を入れない（リンクはリプ/プロフ＝05-engagement）。
  * - 予約時刻にジッターを入れる（±分）。
  */
+import { CHOICE_MARKS } from "../../shared/choices.js";
 import type { Problem } from "../schema.js";
 import { splitIntoThread, xWeightedLength } from "./xlength.js";
 
@@ -41,8 +42,6 @@ export function sourceFooter(p: Problem): string {
   }
   return `（出典: ${p.source.citation}）`;
 }
-
-const CHOICE_MARKS = ["①", "②", "③", "④", "⑤", "⑥"];
 
 function choicesLine(p: Problem): string {
   if (!p.choices || p.choices.length === 0) {

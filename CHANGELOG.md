@@ -5,6 +5,49 @@
 
 ## [Unreleased]
 
+### 品質深掘り第5ラウンド — 検証ゲート実効化・ajv⇄zod parity（挙動不変）
+
+成熟コードベース（4ラウンド済）に対し3系統の並列深掘り監査で約100候補を抽出・トリアージし、
+**検証済みで不変条件（挙動・`web/problems.json` バイト・全テスト緑）を壊さない安全項目のみ**を実装。
+カタログとトリアージは [`docs/refactoring/round5/`](docs/refactoring/round5/ideas-100.md)。
+監査指摘には**誤報が複数含まれ**、実コード検証で却下した（aggregate 最頻誤答の非決定性／BACKUP_KEYS の sound 欠落／数値入力の aria 欠落／設定 setter の未クランプ ＝ いずれも既対応・誤報）。
+
+#### Fixed（根本是正）
+- **ajv⇄zod スキーマドリフト是正**: `problem-schema.json`(ajv) に `minLength:1`（id/topic/statement/answer）・
+  `minItems:1`（solution）を追加し zod `.min(1)` と一致させた。空文字・空配列を**両検証系で拒否**する
+  ドリフトテストを追加（実データ52件は全て非空のため `validate:data` 不変・schema は生成に不使用で problems.json バイト不変）。
+- **ドキュメントのドリフト訂正**: 第3ラウンド triage がカバレッジ閾値を「86/77 に床上げ・実装」と記載していたが、
+  実体は `vitest.config.ts` の安定フロア（84/76/91/89）のまま。訂正注記を追加し現フロア方針を正とした。
+
+#### Added（検証ゲート・テスト・ベストプラクティス）
+- **下限ゲートの testability**: `validate-problems.ts` の `EXPECTED_MIN_FILES` 下限ゲートを純関数 `minFilesGate` に抽出し、
+  **失敗パス（51件で fail・全削除で fail）を明示テスト**。「データを削って閾値だけ下げる偽グリーン化」を機械的に防ぐ回帰ピンを追加。
+- **RLS 列ガードのカバレッジ**: `rls-mock.test.ts` に migration 0005 の列内容ガード（`topic` 非空 WITH CHECK）の
+  純関数モデルと4観点テストを追加（所有ガードと併存することを確認）。
+- **PR テンプレ**: 必須CI（validate/secrets-scan/dependency-review/codeql）と任意CI（e2e=非ブロッキング）を明記。
+
+#### Changed（軽微・安全）
+- 設定の「1日の目標」入力欄を、クランプ後の実保存値へ再同期（`reviewCap` と挙動統一・保存値は不変）。
+- `grade.ts` の冗長な末尾 `.trim()` を削除（`\s+` 全除去後の no-op＝出力バイト同一）。
+
+### リファクタリング第4ラウンド — 重複排除・明確化（挙動不変）
+
+3ラウンド（G1–G9 / RG1–RG8 / 第3ラウンド堅牢化）を経た成熟コードベースに対し、
+5系統の並列監査で**挙動を変えない安全な改善のみ**を抽出・トリアージし、高確度の6件を実装。
+`web/problems.json` は**バイト不変**、テスト**1362件**全緑、カバレッジ閾値維持（stmts85.6/branch77.9/funcs92.9/lines90.1）。
+
+- **重複関数の排除**: `figures/index.ts` のプライベート `loopFrame()` を削除し、同一実装の
+  公開 `primitives.loopFrame`（従来未使用）に配線（SVG出力は完全一致）。
+  `web/src/views/practice.ts` のローカル `bar()` を削除し `ui/widgets.ts` の `bar` に統一。
+- **共有定数の一元化**: 2ファイルに重複していた選択肢マーク `["①".."⑥"]` を `lib/shared/choices.ts`
+  に集約。3ファイルに散在していた保存データキー（`denken:seenLevel` ほか）を `web/src/storage-keys.ts`
+  に集約（キー値は逐語維持＝保存形式不変）。
+- **誤誘導コメントの是正**: `dashboard.ts` の `accuracyComponent` は本体が単純な 0..1 クランプなのに
+  JSDoc/コメントが存在しない「0.6 アンカー線形写像」を記述し互いに矛盾していた。コメントのみを実態に
+  合わせて修正（戻り値式は不変）。
+- **テスト基盤の整理**: 11テストファイルの `T-0001` インライン読込を既存ヘルパー `loadProblemFixture`
+  に移行し、`__dirname`/path ボイラープレートを削減（同一 JSON を読むため値・アサーションは不変）。
+
 ### 最高品質化 深掘り100 第2弾 — 試験忠実度・学習機能・テスト基盤（PR #45 ほか）
 
 第1弾(#39)で設計提示に留めた大型項目を実装。テスト 1273→**1362件**。

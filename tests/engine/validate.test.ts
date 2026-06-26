@@ -1,11 +1,8 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { narrationMatchesAnswer, validateProblem } from "../../lib/engine/validate.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001 = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 describe("validateProblem", () => {
   it("検証済みサンプル T-0001 を通す", () => {
