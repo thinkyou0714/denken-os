@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { formatSupervisionReport, supervisionReport, supervisionStage } from "../../lib/audit/supervision.js";
+import {
+  formatSupervisionReport,
+  markSupervisedInJson,
+  supervisionReport,
+  supervisionStage,
+} from "../../lib/audit/supervision.js";
 import type { Problem } from "../../lib/engine/schema.js";
 import { loadProblemFixture } from "../helpers/fixtures.js";
 
@@ -81,5 +86,39 @@ describe("supervisionReport", () => {
     expect(text).toContain("監修カバレッジ");
     expect(text).toContain("1/4");
     expect(text).toContain("理論");
+  });
+});
+
+describe("markSupervisedInJson", () => {
+  it("false を true に書き換える（marked）", () => {
+    const src = '{\n  "validation": { "supervisor_checked": false }\n}';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("marked");
+    expect(r.text).toContain('"supervisor_checked": true');
+    expect(r.text).not.toContain("false");
+  });
+
+  it("対象キー以外の整形・内容を一切変えない", () => {
+    const src =
+      '{\n  "id": "T-0001",\n  "validation": {\n    "human_checked": true,\n    "supervisor_checked": false\n  }\n}';
+    const r = markSupervisedInJson(src);
+    // supervisor_checked の値だけが変わり、それ以外はバイト単位で一致する。
+    expect(r.text).toBe(src.replace('"supervisor_checked": false', '"supervisor_checked": true'));
+    // 構造として妥当な JSON のまま。
+    expect(JSON.parse(r.text).validation.human_checked).toBe(true);
+  });
+
+  it("既に true なら変更なし（already_supervised）", () => {
+    const src = '{ "validation": { "supervisor_checked": true } }';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("already_supervised");
+    expect(r.text).toBe(src);
+  });
+
+  it("フィールドが無ければ field_missing", () => {
+    const src = '{ "validation": { "human_checked": true } }';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("field_missing");
+    expect(r.text).toBe(src);
   });
 });

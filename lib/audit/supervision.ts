@@ -163,3 +163,29 @@ export function formatSupervisionReport(r: SupervisionReport): string {
   }
   return lines.join("\n");
 }
+
+export type MarkOutcome = "marked" | "already_supervised" | "field_missing";
+
+export interface MarkResult {
+  text: string;
+  outcome: MarkOutcome;
+}
+
+/**
+ * 問題 JSON テキスト中の `"supervisor_checked": false` を `true` へ書き換える（純関数）。
+ *
+ * 整形（インデント・他フィールド）を一切壊さないよう、対象キーの値だけを置換する。
+ * 合格者が監修済みと判断した問題に対して人間が実行する（コードが監修を代行するのではない）。
+ *
+ * @returns marked=書換成功 / already_supervised=既に true / field_missing=フィールドなし
+ */
+export function markSupervisedInJson(jsonText: string): MarkResult {
+  if (/"supervisor_checked"\s*:\s*true\b/.test(jsonText)) {
+    return { text: jsonText, outcome: "already_supervised" };
+  }
+  const re = /("supervisor_checked"\s*:\s*)false\b/;
+  if (!re.test(jsonText)) {
+    return { text: jsonText, outcome: "field_missing" };
+  }
+  return { text: jsonText.replace(re, "$1true"), outcome: "marked" };
+}

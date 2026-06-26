@@ -46,8 +46,12 @@ needs_validation       needs_supervision            supervised(完了)
    各問題に本文（Obsidian Markdown）＋監修チェックリスト＋記入欄が付く。
 3. **合格者による監修** — パケットのチェックリストに沿って手で検算・出典確認・物理妥当性・
    誤答選択肢の妥当性・法改正整合・著作権を確認する。
-4. **フラグ更新** — 合格と判断した問題のみ、`data/problems/<id>.json` の
-   `validation.supervisor_checked` を `true` に更新する（**人間が手で**）。要修正は作問へ差し戻す。
+4. **フラグ更新** — 合格と判断した問題のみ、`supervisor_checked` を `true` に更新する。
+   手編集ミスを避けるため専用コマンドを使う（整形を壊さず対象キーのみ書換・冪等）:
+   ```bash
+   npm run supervision:mark -- T-0001 T-0002   # 監修合格した id を列挙
+   ```
+   このフラグは「合格者が監修した」という主張であり、**実行者が責任を負う**。要修正は作問へ差し戻す。
 5. **再集計** — `npm run supervision:status` でカバレッジの前進を確認。
    `npm run audit:status` の「監修済み問題がまだありません」は監修が進むと解消する。
 
