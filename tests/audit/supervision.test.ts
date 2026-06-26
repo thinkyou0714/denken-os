@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { formatSupervisionReport, supervisionReport, supervisionStage } from "../../lib/audit/supervision.js";
+import {
+  formatSupervisionReport,
+  markSupervisedInJson,
+  safeMarkSupervised,
+  supervisionReport,
+  supervisionStage,
+} from "../../lib/audit/supervision.js";
 import type { Problem } from "../../lib/engine/schema.js";
 import { loadProblemFixture } from "../helpers/fixtures.js";
 
@@ -81,5 +87,94 @@ describe("supervisionReport", () => {
     expect(text).toContain("監修カバレッジ");
     expect(text).toContain("1/4");
     expect(text).toContain("理論");
+  });
+});
+
+describe("markSupervisedInJson", () => {
+  it("false を true に書き換える（marked）", () => {
+    const src = '{\n  "validation": { "supervisor_checked": false }\n}';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("marked");
+    expect(r.text).toContain('"supervisor_checked": true');
+    expect(r.text).not.toContain("false");
+  });
+
+  it("対象キー以外の整形・内容を一切変えない", () => {
+    const src =
+      '{\n  "id": "T-0001",\n  "validation": {\n    "human_checked": true,\n    "supervisor_checked": false\n  }\n}';
+    const r = markSupervisedInJson(src);
+    // supervisor_checked の値だけが変わり、それ以外はバイト単位で一致する。
+    expect(r.text).toBe(src.replace('"supervisor_checked": false', '"supervisor_checked": true'));
+    // 構造として妥当な JSON のまま。
+    expect(JSON.parse(r.text).validation.human_checked).toBe(true);
+  });
+
+  it("既に true なら変更なし（already_supervised）", () => {
+    const src = '{ "validation": { "supervisor_checked": true } }';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("already_supervised");
+    expect(r.text).toBe(src);
+  });
+
+  it("validation 内にキーが無ければ末尾に挿入する（marked）", () => {
+    const src = '{\n  "validation": {\n    "human_checked": true\n  }\n}';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("marked");
+    const parsed = JSON.parse(r.text);
+    expect(parsed.validation.supervisor_checked).toBe(true);
+    expect(parsed.validation.human_checked).toBe(true);
+  });
+
+  it("validation の外側の supervisor_checked は誤爆しない（スコープ限定）", () => {
+    // トップレベルに stray な supervisor_checked:false があっても、validation 内だけを true にする。
+    const src = '{\n  "supervisor_checked": false,\n  "validation": {\n    "supervisor_checked": false\n  }\n}';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("marked");
+    const parsed = JSON.parse(r.text);
+    expect(parsed.supervisor_checked).toBe(false); // stray は不変
+    expect(parsed.validation.supervisor_checked).toBe(true); // validation のみ更新
+  });
+
+  it("validation ブロックが無ければ field_missing", () => {
+    const src = '{ "id": "x", "status": "draft" }';
+    const r = markSupervisedInJson(src);
+    expect(r.outcome).toBe("field_missing");
+    expect(r.text).toBe(src);
+  });
+});
+
+describe("safeMarkSupervised（schema 検証＋ステージゲート）", () => {
+  it("validated・未監修のみ marked にする", () => {
+    const src = JSON.stringify(mk({ status: "validated", validation: { supervisor_checked: false } }));
+    const r = safeMarkSupervised(src);
+    expect(r.outcome).toBe("marked");
+    expect(JSON.parse(r.text).validation.supervisor_checked).toBe(true);
+  });
+
+  it("既に監修済みは already_supervised", () => {
+    const src = JSON.stringify(mk({ validation: { supervisor_checked: true } }));
+    expect(safeMarkSupervised(src).outcome).toBe("already_supervised");
+  });
+
+  it("draft（未検証）は not_validated で書き換えない（誤って監修化しない）", () => {
+    const src = JSON.stringify(
+      mk({ status: "draft", validation: { human_checked: false, supervisor_checked: false } }),
+    );
+    const r = safeMarkSupervised(src);
+    expect(r.outcome).toBe("not_validated");
+    expect(JSON.parse(r.text).validation.supervisor_checked).toBe(false); // 不変
+  });
+
+  it("status=validated だが検証4項目が欠ける不整合は invalid（schema が拒否）", () => {
+    // zod の validation-gate refine が status=validated×未充足を弾くため、そもそも parse 不可。
+    const src = JSON.stringify(
+      mk({ status: "validated", validation: { solver_checked: false, supervisor_checked: false } }),
+    );
+    expect(safeMarkSupervised(src).outcome).toBe("invalid");
+  });
+
+  it("壊れた JSON / スキーマ不正は invalid", () => {
+    expect(safeMarkSupervised("{ not json").outcome).toBe("invalid");
+    expect(safeMarkSupervised('{ "id": "x" }').outcome).toBe("invalid"); // 必須欠落
   });
 });

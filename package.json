@@ -47,6 +47,7 @@
     "audit:status:strict": "tsx scripts/audit-status.ts --strict",
     "supervision:status": "tsx scripts/supervision-status.ts",
     "supervision:packet": "tsx scripts/supervision-packet.ts",
+    "supervision:mark": "tsx scripts/supervision-mark.ts",
     "coverage:pastexam": "tsx scripts/pastexam-coverage.ts",
     "release:check": "npm run verify && npm run audit:status:strict",
     "release:semver": "node -e \"const v=require('./package.json').version; const [ma,mi,pa]=v.split('.').map(Number); if([ma,mi,pa].some(isNaN)) { console.error('バージョン形式エラー: '+v); process.exit(1); } console.log('バージョン OK: '+v+' (major='+ma+', minor='+mi+', patch='+pa+')');\""
