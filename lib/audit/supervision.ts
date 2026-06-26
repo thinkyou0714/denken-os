@@ -8,7 +8,7 @@
  *
  * `validation.supervisor_checked` を立てるのは実際に監修した人間のみ。本コードは判定しない。
  */
-import type { Problem } from "../engine/schema.js";
+import { type Problem, problemSchema } from "../engine/schema.js";
 
 /** 監修パイプラインの段階。 */
 export type SupervisionStage = "needs_validation" | "needs_supervision" | "supervised";
@@ -172,20 +172,74 @@ export interface MarkResult {
 }
 
 /**
- * 問題 JSON テキスト中の `"supervisor_checked": false` を `true` へ書き換える（純関数）。
+ * `"validation": { ... }` ブロックを切り出す正規表現。
+ * problem schema の validation は平坦（入れ子の `{}` を持たない）ため `[^{}]*` で本体を捕捉できる。
+ * 1=開き `"validation": {` / 2=本体 / 3=閉じ `}`。
+ */
+const VALIDATION_BLOCK_RE = /("validation"\s*:\s*\{)([^{}]*)(\})/;
+
+/**
+ * 問題 JSON テキストの **validation ブロック内** の `supervisor_checked` を `true` にする（純関数）。
  *
- * 整形（インデント・他フィールド）を一切壊さないよう、対象キーの値だけを置換する。
- * 合格者が監修済みと判断した問題に対して人間が実行する（コードが監修を代行するのではない）。
+ * 整形（インデント・他フィールド）を壊さないよう、validation ブロックに限定して編集する:
+ *  - `false` があれば値だけ `true` に置換
+ *  - キー自体が無ければ validation ブロック末尾に挿入（既存要素のインデントに合わせる）
+ * validation の外側に別の `supervisor_checked` があっても誤爆しない（スコープ限定）。
  *
- * @returns marked=書換成功 / already_supervised=既に true / field_missing=フィールドなし
+ * @returns marked=更新 / already_supervised=既に true / field_missing=validation ブロックなし
  */
 export function markSupervisedInJson(jsonText: string): MarkResult {
-  if (/"supervisor_checked"\s*:\s*true\b/.test(jsonText)) {
-    return { text: jsonText, outcome: "already_supervised" };
-  }
-  const re = /("supervisor_checked"\s*:\s*)false\b/;
-  if (!re.test(jsonText)) {
+  const m = VALIDATION_BLOCK_RE.exec(jsonText);
+  if (!m) return { text: jsonText, outcome: "field_missing" };
+  const open = m[1];
+  const body = m[2];
+  const close = m[3];
+  if (open === undefined || body === undefined || close === undefined) {
     return { text: jsonText, outcome: "field_missing" };
   }
-  return { text: jsonText.replace(re, "$1true"), outcome: "marked" };
+  if (/"supervisor_checked"\s*:\s*true\b/.test(body)) {
+    return { text: jsonText, outcome: "already_supervised" };
+  }
+  let newBody: string;
+  if (/"supervisor_checked"\s*:\s*false\b/.test(body)) {
+    newBody = body.replace(/("supervisor_checked"\s*:\s*)false\b/, "$1true");
+  } else {
+    // キー欠落時は末尾に挿入。既存要素のインデント（最初の "key" の前の空白）に揃える。
+    const indent = body.match(/\n([ \t]+)"/)?.[1] ?? "    ";
+    newBody = body.replace(/(\s*)$/, `,\n${indent}"supervisor_checked": true$1`);
+  }
+  const replaced = `${open}${newBody}${close}`;
+  return { text: jsonText.slice(0, m.index) + replaced + jsonText.slice(m.index + m[0].length), outcome: "marked" };
+}
+
+export type SafeMarkOutcome = "marked" | "already_supervised" | "not_validated" | "invalid";
+
+export interface SafeMarkResult {
+  text: string;
+  outcome: SafeMarkOutcome;
+}
+
+/**
+ * 監修フラグを **安全に** 立てる（純関数）。実 schema で検証し、監修待ち（needs_supervision）の
+ * 問題だけを対象にする。draft 等の未検証問題を誤って supervised 化しないためのゲート。
+ *
+ * @returns marked=更新 / already_supervised=既に監修済み / not_validated=未検証(対象外) / invalid=JSON/スキーマ不正
+ */
+export function safeMarkSupervised(jsonText: string): SafeMarkResult {
+  let data: unknown;
+  try {
+    data = JSON.parse(jsonText);
+  } catch {
+    return { text: jsonText, outcome: "invalid" };
+  }
+  const parsed = problemSchema.safeParse(data);
+  if (!parsed.success) return { text: jsonText, outcome: "invalid" };
+
+  const stage = supervisionStage(parsed.data);
+  if (stage === "supervised") return { text: jsonText, outcome: "already_supervised" };
+  if (stage === "needs_validation") return { text: jsonText, outcome: "not_validated" };
+
+  // needs_supervision のみ書換。validation は 4 項目 true が確定しているのでブロックは存在する。
+  const r = markSupervisedInJson(jsonText);
+  return { text: r.text, outcome: r.outcome === "marked" ? "marked" : "invalid" };
 }

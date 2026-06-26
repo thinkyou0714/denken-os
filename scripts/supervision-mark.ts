@@ -16,7 +16,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { markSupervisedInJson } from "../lib/audit/supervision.js";
+import { safeMarkSupervised } from "../lib/audit/supervision.js";
 import { atomicWriteFileSync, printHelp } from "./shared.js";
 
 const HELP = `\
@@ -45,7 +45,17 @@ function main(): void {
   const argv = process.argv.slice(2);
   if (argv.includes("--help") || argv.includes("-h")) printHelp(HELP);
 
-  const ids = argv.filter((a) => !a.startsWith("-"));
+  // 信頼フラグを誤って立てないよう、不明なオプションは1件でも書込前に拒否する
+  // （例: `--dry-run T-0001` の打ち間違いが黙って T-0001 を監修済みにするのを防ぐ）。
+  const unknownFlags = argv.filter((a) => a.startsWith("-"));
+  if (unknownFlags.length > 0) {
+    console.error(
+      `不明なオプションです: ${unknownFlags.join(", ")}。このコマンドは --help 以外のフラグを受け付けません（id のみ指定）。`,
+    );
+    process.exit(1);
+  }
+
+  const ids = argv;
   if (ids.length === 0) {
     console.error("監修対象の問題IDを1つ以上指定してください（例: npm run supervision:mark -- T-0001）。");
     process.exit(1);
@@ -66,15 +76,18 @@ function main(): void {
       continue;
     }
     const before = readFileSync(path, "utf8");
-    const result = markSupervisedInJson(before);
+    const result = safeMarkSupervised(before);
     if (result.outcome === "marked") {
       atomicWriteFileSync(path, result.text);
       console.log(`✓ ${id}: supervisor_checked = true に更新しました。`);
       marked++;
     } else if (result.outcome === "already_supervised") {
       console.log(`= ${id}: 既に監修済み（変更なし）。`);
+    } else if (result.outcome === "not_validated") {
+      console.error(`✗ ${id}: 未検証（validated でない）ため監修対象外です。先に検証4項目を満たしてください。`);
+      failed++;
     } else {
-      console.error(`✗ ${id}: supervisor_checked フィールドが見つかりません。`);
+      console.error(`✗ ${id}: JSON/スキーマが不正で監修フラグを更新できません。`);
       failed++;
     }
   }
