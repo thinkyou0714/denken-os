@@ -85,13 +85,25 @@ export function smoothedSuccessRate(
   return (c + strength * prior) / (a + strength);
 }
 
+/**
+ * 試行0（学習証拠なし）の論点に適用する overdue 上限（日）。
+ *
+ * 通常 `aggregateByTopic` はログのある論点（attempts≥1）しか生成しないため、この経路では
+ * attempts=0 は発生しない。ただし `weaknessScore` を直接（または将来別経路で）呼ぶ場合、
+ * 「一度も着手していないが due だけ大きく過ぎた論点」が、実際に弱点と判明している論点より
+ * 上位に来る過大評価を防ぐ。試行0では overdue 寄与を 5 日上限に抑える（attempts≥1 は従来通り 30）。
+ */
+export const UNTESTED_OVERDUE_CAP_DAYS = 5;
+
 export function weaknessScore(p: TopicProgress, nowMs: number): number {
   // 異常入力（負のattempts等）でもスコアが破綻しないようクランプする（attempts は本来非負）。
   const attempts = Math.max(0, p.attempts);
   // 平滑化正答率を使う（#58）。少試行の論点は事前へ寄り、ノイズで弱点リストを占有しない。
   const rate = smoothedSuccessRate(p.correct, attempts);
   const overdueDays = Math.max(0, (nowMs - p.dueMs) / DAY_MS);
-  return (1 - rate) * 10 + Math.min(overdueDays, 30) + Math.min(attempts, 5) * 0.1;
+  // 試行0は学習証拠が無いため overdue 寄与を抑える（attempts≥1 の較正済み挙動は不変）。
+  const overdueCap = attempts === 0 ? UNTESTED_OVERDUE_CAP_DAYS : 30;
+  return (1 - rate) * 10 + Math.min(overdueDays, overdueCap) + Math.min(attempts, 5) * 0.1;
 }
 
 /**
