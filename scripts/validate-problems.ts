@@ -85,6 +85,23 @@ export function customChecks(file: string, p: unknown): Failure[] {
   return failures;
 }
 
+/**
+ * 出荷済みデータの大量削除を機械的に止める下限ゲート（length===0 だけでは51件削除を見逃す）。
+ * 新規データ追加で増えるのは歓迎、下回る場合は意図的な削除であることをPRで説明すること。
+ */
+export const EXPECTED_MIN_FILES = 52;
+
+/**
+ * 問題ファイル数が下限を満たすか判定する純関数（テスト可能）。
+ * 下回る場合はCIを止めるためのエラーメッセージを、満たす場合は null を返す。
+ */
+export function minFilesGate(fileCount: number, min = EXPECTED_MIN_FILES): string | null {
+  if (fileCount < min) {
+    return `問題ファイルが ${fileCount} 件で下限 ${min} を下回ります。意図的な削除なら scripts/validate-problems.ts の EXPECTED_MIN_FILES を更新してください。`;
+  }
+  return null;
+}
+
 /** ファイルリストと validate 関数を受け取り失敗一覧を返す純関数（テスト可能）。 */
 export function validateFiles(
   files: string[],
@@ -150,13 +167,10 @@ function main() {
     process.exit(1);
   }
 
-  // 出荷済みデータの大量削除を機械的に止める下限ゲート（length===0 だけでは51件削除を見逃す）。
-  // 新規データ追加で増えるのは歓迎、下回る場合は意図的な削除であることをPRで説明すること。
-  const EXPECTED_MIN_FILES = 52;
-  if (files.length < EXPECTED_MIN_FILES) {
-    console.error(
-      `問題ファイルが ${files.length} 件で下限 ${EXPECTED_MIN_FILES} を下回ります。意図的な削除なら scripts/validate-problems.ts の EXPECTED_MIN_FILES を更新してください。`,
-    );
+  // 出荷済みデータの大量削除を機械的に止める下限ゲート（pure 関数 minFilesGate でテスト可能）。
+  const minErr = minFilesGate(files.length);
+  if (minErr) {
+    console.error(minErr);
     process.exit(1);
   }
 

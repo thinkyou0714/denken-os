@@ -65,4 +65,18 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
     expect(r.ajv).toBe(false);
     expect(r.zod).toBe(false);
   });
+
+  // 空文字・空配列のドリフト是正（Round-5）: zod は .min(1) で弾くが ajv は minLength/minItems
+  // 未指定で空を受理していた。両者を parity させ、空値を両方が拒否することを固定する。
+  it.each(["id", "topic", "statement", "answer"])("空文字の %s は両方が拒否する（ajv⇄zod parity）", (field) => {
+    const r = bothAccept({ ...T0001, [field]: "" });
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  it("空の solution 配列は両方が拒否する（ajv⇄zod parity）", () => {
+    const r = bothAccept({ ...T0001, solution: [] });
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
 });

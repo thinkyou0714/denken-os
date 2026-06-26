@@ -6,10 +6,10 @@
   "required": ["id", "subject", "topic", "difficulty", "statement", "answer", "solution", "validation", "source"],
   "$comment": "正解が選択肢のいずれかと一致する制約(multiple_choice)は、他フィールド参照のため標準JSON Schema draft-07では表現できない。03-quality-pipeline の投稿前チェックリストと生成ツール側で担保する。",
   "properties": {
-    "id": { "type": "string", "description": "連番ID 例: T-0127" },
+    "id": { "type": "string", "minLength": 1, "description": "連番ID 例: T-0127" },
     "exam": { "type": "string", "enum": ["denken2_primary", "denken2_secondary", "denken3"], "description": "対象試験区分" },
     "subject": { "type": "string", "enum": ["理論", "電力", "機械", "法規", "電力管理", "機械制御"] },
-    "topic": { "type": "string", "description": "論点 例: 三相交流電力" },
+    "topic": { "type": "string", "minLength": 1, "description": "論点 例: 三相交流電力" },
     "format": { "type": "string", "enum": ["multiple_choice", "numeric", "descriptive"], "description": "記述(descriptive)は二次の主戦場" },
     "difficulty": { "type": "integer", "minimum": 1, "maximum": 5, "description": "★1-5。実測正答率で補正する" },
     "params": {
@@ -25,11 +25,11 @@
         }
       }
     },
-    "statement": { "type": "string", "description": "問題文" },
+    "statement": { "type": "string", "minLength": 1, "description": "問題文" },
     "figure": { "type": "string", "description": "図/回路図のパスまたは説明(任意)" },
     "choices": { "type": "array", "items": { "type": "string" }, "description": "選択肢。誤りが『成立する引っ掛け』であること。multiple_choice では必須かつ2件以上" },
-    "answer": { "type": "string", "description": "正解(綺麗な値・一意・有限であること)。multiple_choice では choices のいずれかと一致" },
-    "solution": { "type": "array", "items": { "type": "string" }, "description": "解法ステップ(自作。引き写し禁止)" },
+    "answer": { "type": "string", "minLength": 1, "description": "正解(綺麗な値・一意・有限であること)。multiple_choice では choices のいずれかと一致" },
+    "solution": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "解法ステップ(自作。引き写し禁止)" },
     "validation": {
       "type": "object",
       "required": ["solver_checked", "human_checked", "clean_answer", "physically_valid"],

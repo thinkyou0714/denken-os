@@ -55,7 +55,7 @@ npm run typecheck && npm run typecheck:web               # 型チェック（lib
 npm run verify                                            # CI と同一のプリプッシュ確認（lint+型+データ検証+テスト+ビルドを一括実行）
 npm run audit:status                                      # 問題数・形式・監修状況の棚卸し
 npm run release:check                                     # 公開前の厳格チェック（audit strict含む）
-npm test                                                  # ユニットテスト（1362件）
+npm test                                                  # ユニットテスト（1377件）
 ```
 
 引数なしの `npm run gen` で利用可能な topic 一覧を表示。`-t` は `--topic` の短縮形。

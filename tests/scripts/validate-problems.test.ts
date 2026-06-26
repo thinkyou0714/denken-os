@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { validateProblem } from "../../lib/engine/validate.js";
-import { customChecks, validateFiles } from "../../scripts/validate-problems.js";
+import { customChecks, EXPECTED_MIN_FILES, minFilesGate, validateFiles } from "../../scripts/validate-problems.js";
 
 // テスト用の最小限の合格 problem
 const BASE_PROBLEM = {
@@ -157,5 +157,31 @@ describe("validateFiles（I-070）", () => {
     // ENOENT で json_parse エラーが発生する
     expect(failures.length).toBeGreaterThan(0);
     expect(failures[0]?.rule).toBe("json_parse");
+  });
+});
+
+describe("minFilesGate（下限ゲートの失敗パスを明示検証・RT1）", () => {
+  it("下限ちょうど（52件）は通過する（null を返す）", () => {
+    expect(minFilesGate(EXPECTED_MIN_FILES)).toBeNull();
+  });
+
+  it("下限を1件下回る（51件）と非null のエラーメッセージで CI を止める", () => {
+    const err = minFilesGate(EXPECTED_MIN_FILES - 1);
+    expect(err).not.toBeNull();
+    expect(err).toContain("51");
+    expect(err).toContain(String(EXPECTED_MIN_FILES));
+  });
+
+  it("0件（全削除）も確実に弾く", () => {
+    expect(minFilesGate(0)).not.toBeNull();
+  });
+
+  it("下限を上回る（新規追加）件数は通過する", () => {
+    expect(minFilesGate(EXPECTED_MIN_FILES + 100)).toBeNull();
+  });
+
+  it("EXPECTED_MIN_FILES は実データ件数（52）に一致する", () => {
+    // データを削っても閾値だけ下げて偽グリーン化する事故を防ぐ回帰ピン。
+    expect(EXPECTED_MIN_FILES).toBe(52);
   });
 });

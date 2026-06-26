@@ -49,7 +49,11 @@ export function renderSettings(root: HTMLElement): void {
     max: "200",
     value: String(getDailyGoal(storage)),
   }) as HTMLInputElement;
-  goalInput.addEventListener("change", () => setDailyGoal(storage, Number(goalInput.value)));
+  goalInput.addEventListener("change", () => {
+    setDailyGoal(storage, Number(goalInput.value));
+    // クランプ後の実保存値を入力欄へ反映する（capInput と同じ挙動。範囲外入力時のみ作用）。
+    goalInput.value = String(getDailyGoal(storage));
+  });
   const capInput = h("input", {
     type: "number",
     min: "5",
