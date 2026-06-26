@@ -181,11 +181,9 @@ export interface SubjectReadiness {
   accuracy: number;
 }
 
-/** 合格ライン（科目60%）を中立点とした正答率の達成度（0..1）。0.6で0.5, 1.0で1.0 付近に張る。 */
+/** 正答率（0..1）をそのまま達成度成分として返す（範囲外を 0..1 にクランプ）。readiness 式で重み 0.6。 */
 function accuracyComponent(accuracy: number): number {
-  // 0%→0, 合格ライン60%→0.6, 100%→1.0 の単調写像（合格ラインを満たすと十分高い）。
-  // 実測 accuracy をそのまま使うと 60% で「半分しかできていない」印象になるため、
-  // 合格ラインを 0.6 に対応させる線形写像にする（pass=0.6 を基準点に据える）。
+  // accuracy は smoothedSuccessRate 由来で 0..1。下流の readiness 式でも再クランプされるが、ここでも 0..1 を保証する。
   return Math.max(0, Math.min(1, accuracy));
 }
 

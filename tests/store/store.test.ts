@@ -1,14 +1,10 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import type { Problem } from "../../lib/engine/schema.js";
 import { type AnswerLog, aggregateByTopic, weakestTopics } from "../../lib/scheduler/diagnosis.js";
 import { Sm2Scheduler } from "../../lib/scheduler/sm2.js";
 import { InMemoryAnswerLogStore, InMemoryProblemStore, InMemoryReviewStateStore } from "../../lib/store/index.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 describe("InMemory stores", () => {
   it("ProblemStore は upsert/get/list(filter) が動く", async () => {

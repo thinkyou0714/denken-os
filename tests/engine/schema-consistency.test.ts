@@ -12,11 +12,12 @@ import { generate } from "../../lib/engine/generate.js";
 import { StubNarrator } from "../../lib/engine/narrate.js";
 import { problemSchema } from "../../lib/engine/schema.js";
 import { threePhasePower } from "../../lib/engine/templates/index.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
 const jsonSchema = JSON.parse(readFileSync(join(ROOT, "docs/x-strategy/templates/problem-schema.json"), "utf8"));
-const T0001 = JSON.parse(readFileSync(join(ROOT, "data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 const ajv = new Ajv({ allErrors: true, strict: true });
 addFormats(ajv);

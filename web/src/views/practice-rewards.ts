@@ -17,10 +17,8 @@ import {
 } from "../quests.js";
 import { passedStreakMilestone } from "../retention.js";
 import { problems, progress, storage } from "../state/app.js";
+import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { currentLevel, freezeInfo, runFreezeBridge, seenLevel, seenStreakMilestone } from "./practice.js";
-
-const SEEN_LEVEL_KEY = "denken:seenLevel";
-const SEEN_STREAK_MILESTONE_KEY = "denken:seenStreakMilestone";
 
 export interface RewardOutcome {
   /** 重要度順の祝賀メッセージ（先頭をトーストに使う）。 */

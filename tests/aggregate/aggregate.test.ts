@@ -1,12 +1,8 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { aggregate, applyStats, suggestDifficulty } from "../../lib/aggregate/aggregate.js";
-import type { Problem } from "../../lib/engine/schema.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 // choices: ["2.56","3.2","4.0","9.6"], answer "3.2" (index 1)
 
 describe("aggregate", () => {

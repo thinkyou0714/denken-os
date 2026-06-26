@@ -3,12 +3,8 @@
  * エンドツーエンドに検証する。実 DB は認証が要るので、ここではクエリビルダの呼び出し系列を
  * 忠実に模した fake を使い、upsert/get/list/append/byUser/set と error 伝播を確認する。
  */
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { describe, expect, it } from "vitest";
-import type { Problem } from "../../lib/engine/schema.js";
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
 import type { ReviewState } from "../../lib/scheduler/types.js";
 import {
@@ -16,9 +12,9 @@ import {
   SupabaseProblemStore,
   SupabaseReviewStateStore,
 } from "../../lib/store/supabase-store.js";
+import { loadProblemFixture } from "../helpers/fixtures.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const T0001: Problem = JSON.parse(readFileSync(join(__dirname, "../../data/problems/T-0001.json"), "utf8"));
+const T0001 = loadProblemFixture("T-0001");
 
 type Row = Record<string, unknown>;
 
