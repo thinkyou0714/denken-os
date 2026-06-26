@@ -53,6 +53,25 @@ describe("弱点診断", () => {
     expect(weak).toBeGreaterThan(strong);
   });
 
+  it("試行0（未着手）の論点は、大きく overdue でも実弱点を上回らない（過大評価防止）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    const day = 86_400_000;
+    // 一度も着手していないが due だけ1年超過した論点（学習証拠なし）。
+    const untested = weaknessScore({ topic: "u", attempts: 0, correct: 0, dueMs: now - 365 * day }, now);
+    // 実際に弱い論点（3回中0正解・5日 overdue）。
+    const realWeak = weaknessScore({ topic: "w", attempts: 3, correct: 0, dueMs: now - 5 * day }, now);
+    expect(realWeak).toBeGreaterThan(untested);
+  });
+
+  it("試行≥1 の overdue 上限は従来どおり30日（較正不変）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    const day = 86_400_000;
+    // attempts≥1 なら overdue 30日と100日でスコアは同じ（両方30でクランプ＝挙動不変）。
+    const at30 = weaknessScore({ topic: "a", attempts: 2, correct: 1, dueMs: now - 30 * day }, now);
+    const at100 = weaknessScore({ topic: "b", attempts: 2, correct: 1, dueMs: now - 100 * day }, now);
+    expect(at30).toBe(at100);
+  });
+
   it("dueMs は並び順に依存せず最新の解答時刻になる", () => {
     const day = 86_400_000;
     const t0 = Date.UTC(2026, 0, 1);
