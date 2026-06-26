@@ -54,6 +54,8 @@ npm run lint                                              # Biome（lint + forma
 npm run typecheck && npm run typecheck:web               # 型チェック（lib/scripts/tests + web）
 npm run verify                                            # CI と同一のプリプッシュ確認（lint+型+データ検証+テスト+ビルドを一括実行）
 npm run audit:status                                      # 問題数・形式・監修状況の棚卸し
+npm run supervision:status                                # 監修カバレッジ（合格者レビュー進捗・科目/論点別）。--json 対応
+npm run supervision:packet -- --out out/packet.md         # 監修待ち問題のレビューパケット(Markdown)を書き出し
 npm run release:check                                     # 公開前の厳格チェック（audit strict含む）
 npm test                                                  # ユニットテスト（1377件）
 ```
