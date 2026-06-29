@@ -12,11 +12,12 @@
  *   npm run audit:status -- --json
  *   npm run audit:status -- --help
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { auditStatus, formatAuditSummary, type InvalidProblemFile, parseAuditCliOptions } from "../lib/audit/status.js";
 import { type Problem, problemSchema } from "../lib/engine/schema.js";
+import { readProblemJsonItems } from "./problems-io.js";
 import { printHelp } from "./shared.js";
 
 const HELP = `\
@@ -56,20 +57,21 @@ function walk(dir: string): string[] {
 export function readProblems(dataDir: string): { parsed: Problem[]; invalidFiles: InvalidProblemFile[] } {
   const parsed: Problem[] = [];
   const invalidFiles: InvalidProblemFile[] = [];
-  for (const file of readdirSync(dataDir).filter((f) => f.endsWith(".json"))) {
-    const path = join(dataDir, file);
-    try {
-      const raw = JSON.parse(readFileSync(path, "utf8"));
-      const result = problemSchema.safeParse(raw);
-      if (result.success) parsed.push(result.data);
-      else
-        invalidFiles.push({
-          file,
-          reason: result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
-        });
-    } catch (error) {
-      invalidFiles.push({ file, reason: error instanceof Error ? error.message : String(error) });
-    }
+  const { items, errors } = readProblemJsonItems(dataDir);
+  for (const error of errors) {
+    invalidFiles.push({
+      file: error.file,
+      reason: error.error instanceof Error ? error.error.message : String(error.error),
+    });
+  }
+  for (const item of items) {
+    const result = problemSchema.safeParse(item.raw);
+    if (result.success) parsed.push(result.data);
+    else
+      invalidFiles.push({
+        file: item.label,
+        reason: result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
+      });
   }
   return { parsed, invalidFiles };
 }

@@ -4,10 +4,11 @@
  * data/problems/ への直書きパスをテストから排除し、
  * リポジトリルートからの相対パスで一意にアドレスする。
  */
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Problem } from "../../lib/engine/schema.js";
+import { type Problem, problemSchema } from "../../lib/engine/schema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 /** リポジトリルート（tests/helpers/ の2階層上）。 */
@@ -24,6 +25,39 @@ export function fixturePath(...segments: string[]): string {
   return join(ROOT, ...segments);
 }
 
+/** 衝突しない一時ディレクトリを作成し、コールバック後に必ず削除する。 */
+export function withTempDir<T>(prefix: string, fn: (dir: string) => T): T {
+  const dir = mkdtempSync(join(tmpdir(), `${prefix}-`));
+  try {
+    return fn(dir);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/** テスト用の schema-valid な最小問題を生成する。 */
+export function makeProblemFixture(overrides: Partial<Problem> = {}): Problem {
+  return problemSchema.parse({
+    id: "T-9999",
+    subject: "理論",
+    topic: "テスト問題",
+    difficulty: 2,
+    format: "multiple_choice",
+    statement: "テスト",
+    choices: ["A", "B", "C"],
+    answer: "A",
+    solution: ["答えはA"],
+    validation: {
+      solver_checked: true,
+      human_checked: false,
+      clean_answer: true,
+      physically_valid: true,
+    },
+    source: { type: "original" },
+    ...overrides,
+  });
+}
+
 /**
  * data/problems/{id}.json を読み込んで Problem オブジェクトを返す。
  *
@@ -31,5 +65,5 @@ export function fixturePath(...segments: string[]): string {
  */
 export function loadProblemFixture(id: string): Problem {
   const path = fixturePath("data", "problems", `${id}.json`);
-  return JSON.parse(readFileSync(path, "utf8")) as Problem;
+  return problemSchema.parse(JSON.parse(readFileSync(path, "utf8")));
 }
