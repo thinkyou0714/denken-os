@@ -92,8 +92,7 @@ export const vConnectionTransformer = defineTemplate<Params>({
       choices,
       distractors,
       facts: { caseIndex, answer: c.answer },
-      defaultStatement:
-        `定格容量が等しい単相変圧器2台をV結線（オープンデルタ）にして三相負荷に電力を供給する。` + `${c.question}は?`,
+      defaultStatement: `定格容量が等しい単相変圧器2台をV結線（オープンデルタ）にして三相負荷に電力を供給する。${c.question}は?`,
       defaultSolution: [`V結線2台の三相出力は P_V=√3·P_1（P_1=単相1台の定格容量）`, c.fact, `=${answerText}`],
       physicallyValid: true,
     };

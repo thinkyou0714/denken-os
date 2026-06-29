@@ -5,12 +5,13 @@
  *   npm run export:vault -- --out out/vault
  *   npm run export:vault -- --help
  */
-import { mkdirSync, readdirSync, readFileSync } from "node:fs";
+import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Problem } from "../lib/engine/schema.js";
 import { validateProblem } from "../lib/engine/validate.js";
 import { toVaultFiles } from "../lib/export/markdown.js";
+import { readProblemJsonItems } from "./problems-io.js";
 import { atomicWriteFileSync, printHelp } from "./shared.js";
 
 const HELP = `\
@@ -39,20 +40,19 @@ export function parseOut(argv: string[]): string {
 
 /** 問題データを読み込む純関数（テスト可能）。 */
 export function loadProblems(dataDir: string): { problems: Problem[]; skipped: number } {
-  const files = readdirSync(dataDir).filter((f) => f.endsWith(".json"));
+  const { items, errors } = readProblemJsonItems(dataDir);
+  if (errors.length > 0) throw errors[0]?.error;
+
   const problems: Problem[] = [];
   let skipped = 0;
-  for (const f of files) {
-    const data = JSON.parse(readFileSync(join(dataDir, f), "utf8")) as unknown;
-    for (const raw of Array.isArray(data) ? (data as unknown[]) : [data]) {
-      const result = validateProblem(raw);
-      if (result.ok && result.problem) {
-        problems.push(result.problem);
-      } else {
-        skipped += 1;
-        const id = (raw as { id?: string }).id ?? f;
-        process.stderr.write(`⚠ 検証に失敗したため除外: ${id} — ${result.issues.map((i) => i.message).join("; ")}\n`);
-      }
+  for (const item of items) {
+    const result = validateProblem(item.raw);
+    if (result.ok && result.problem) {
+      problems.push(result.problem);
+    } else {
+      skipped += 1;
+      const id = item.raw && typeof item.raw === "object" && "id" in item.raw ? String(item.raw.id) : item.label;
+      process.stderr.write(`⚠ 検証に失敗したため除外: ${id} — ${result.issues.map((i) => i.message).join("; ")}\n`);
     }
   }
   return { problems, skipped };

@@ -9,13 +9,14 @@
  *   problem-schema.json の draft-07 allOf/if/then 構造を AJV v8 strict 対応済み。
  *   schema で表現できる構造不備は compile 時に検出するため strict: true で検証する。
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import { problemSchema } from "../lib/engine/schema.js";
 import { checkProblemInvariants } from "../lib/engine/validate.js";
+import { listJsonFiles, readProblemJsonItems } from "./problems-io.js";
 import { printHelp, validateOrExit } from "./shared.js";
 
 const HELP = `\
@@ -43,10 +44,19 @@ interface Failure {
   message: string;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function recordAt(record: Record<string, unknown>, key: string): Record<string, unknown> | undefined {
+  const value = record[key];
+  return isRecord(value) ? value : undefined;
+}
+
 /** カスタム検証ルール（pure function, テスト可能）。 */
 export function customChecks(file: string, p: unknown): Failure[] {
   const failures: Failure[] = [];
-  const pr = p as Record<string, unknown>;
+  const pr = isRecord(p) ? p : {};
 
   // Code-side invariants (answer ∈ choices, clean_answer 整合) — shared with the
   // zod path (validateProblem) so the CI/ajv gate enforces the SAME invariant set
@@ -61,7 +71,7 @@ export function customChecks(file: string, p: unknown): Failure[] {
 
   // status=validated|published は検証4項目すべて true
   if (pr.status === "validated" || pr.status === "published") {
-    const v = (pr.validation ?? {}) as Record<string, unknown>;
+    const v = recordAt(pr, "validation") ?? {};
     const ok = v.solver_checked && v.human_checked && v.clean_answer && v.physically_valid;
     if (!ok) {
       failures.push({
@@ -73,7 +83,7 @@ export function customChecks(file: string, p: unknown): Failure[] {
   }
 
   // original 以外は citation 必須（schema 済だが二重チェック）
-  const src = pr.source as Record<string, unknown> | undefined;
+  const src = recordAt(pr, "source");
   if (src && src.type !== "original" && !src.citation) {
     failures.push({
       file,
@@ -110,33 +120,46 @@ export function validateFiles(
   getErrors: () => Array<{ instancePath: string; message?: string }>,
 ): Failure[] {
   const failures: Failure[] = [];
-  for (const f of files) {
-    const full = join(dataDir, f);
-    let data: unknown;
+  if (files.length === 0) return failures;
+  const selected = new Set(files);
+  const { items, errors } = readProblemJsonItems(dataDir);
+  const seen = new Set<string>();
+  for (const error of errors) {
+    seen.add(error.file);
+    if (!selected.has(error.file)) continue;
+    failures.push({
+      file: error.path,
+      rule: "json_parse",
+      message: `${error.path}: ${String(error.error)}`,
+    });
+  }
+  for (const item of items) {
+    seen.add(item.file);
+    if (!selected.has(item.file)) continue;
+    const label = join(dataDir, item.label);
+    if (!validate(item.raw)) {
+      for (const err of getErrors()) {
+        failures.push({
+          file: label,
+          rule: "schema",
+          message: `${label}: ${err.instancePath} ${err.message ?? ""}`,
+        });
+      }
+    }
+    failures.push(...customChecks(label, item.raw));
+  }
+  for (const file of selected) {
+    if (seen.has(file)) continue;
+    const full = join(dataDir, file);
     try {
-      data = JSON.parse(readFileSync(full, "utf8"));
-    } catch (e) {
+      JSON.parse(readFileSync(full, "utf8"));
+    } catch (error) {
       failures.push({
         file: full,
         rule: "json_parse",
-        message: `${full}: ${String(e)}`,
+        message: `${full}: ${String(error)}`,
       });
-      continue;
     }
-    const items = Array.isArray(data) ? (data as unknown[]) : [data];
-    items.forEach((p, idx) => {
-      const label = Array.isArray(data) ? `${full}[${idx}]` : full;
-      if (!validate(p)) {
-        for (const err of getErrors()) {
-          failures.push({
-            file: label,
-            rule: "schema",
-            message: `${label}: ${err.instancePath} ${err.message ?? ""}`,
-          });
-        }
-      }
-      failures.push(...customChecks(label, p));
-    });
   }
   return failures;
 }
@@ -155,7 +178,7 @@ function main() {
 
   let files: string[];
   try {
-    files = readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"));
+    files = listJsonFiles(DATA_DIR);
   } catch {
     console.error(`データディレクトリが見つかりません: ${DATA_DIR}`);
     process.exit(1);

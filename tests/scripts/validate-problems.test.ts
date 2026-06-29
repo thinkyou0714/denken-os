@@ -4,29 +4,15 @@
  * G5 が export した customChecks / validateFiles を対象に、
  * 不正 JSON・スキーマ違反・空集合・カスタムルール違反のケースを検証する。
  */
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateProblem } from "../../lib/engine/validate.js";
 import { customChecks, EXPECTED_MIN_FILES, minFilesGate, validateFiles } from "../../scripts/validate-problems.js";
+import { makeProblemFixture, withTempDir } from "../helpers/fixtures.js";
 
 // テスト用の最小限の合格 problem
-const BASE_PROBLEM = {
-  id: "T-9999",
-  subject: "理論",
-  topic: "テスト問題",
-  difficulty: 2,
-  format: "multiple_choice",
-  statement: "テスト",
-  choices: ["A", "B", "C"],
-  answer: "A",
-  solution: ["答えはA"],
-  validation: {
-    solver_checked: true,
-    human_checked: false,
-    clean_answer: true,
-    physically_valid: true,
-  },
-  source: { type: "original" },
-};
+const BASE_PROBLEM = makeProblemFixture();
 
 describe("customChecks（I-070）", () => {
   it("正常な multiple_choice 問題はエラーなし", () => {
@@ -132,6 +118,18 @@ describe("customChecks（I-070）", () => {
     const failures = customChecks("test.json", numeric);
     expect(failures.filter((f) => f.rule === "answer_in_choices")).toHaveLength(0);
   });
+
+  it("null や primitive は throw せず schema 層に任せる", () => {
+    expect(() => customChecks("null.json", null)).not.toThrow();
+    expect(() => customChecks("num.json", 1)).not.toThrow();
+    expect(customChecks("null.json", null)).toHaveLength(0);
+  });
+
+  it("validation/source が object でなくても安全に扱う", () => {
+    const gateFailures = customChecks("test.json", { status: "published", validation: null });
+    expect(gateFailures.some((f) => f.rule === "validation_gate")).toBe(true);
+    expect(() => customChecks("test.json", { source: null })).not.toThrow();
+  });
 });
 
 describe("validateFiles（I-070）", () => {
@@ -145,18 +143,51 @@ describe("validateFiles（I-070）", () => {
     expect(failures).toHaveLength(0);
   });
 
-  it("validate が false を返すファイルは schema エラーとして記録される", () => {
-    // validateFiles は実際のファイルを読むため、
-    // 存在しないファイルを渡すと json_parse エラーが返る（ENOENT）
-    const failures = validateFiles(
-      ["nonexistent.json"],
-      "/tmp/denken-test-noexist-dir",
-      () => false,
-      () => [{ instancePath: "/id", message: "required" }],
-    );
-    // ENOENT で json_parse エラーが発生する
-    expect(failures.length).toBeGreaterThan(0);
-    expect(failures[0]?.rule).toBe("json_parse");
+  it("存在しないファイルは json_parse エラーとして記録される", () => {
+    withTempDir("denken-test-validate-problems-missing", (dir) => {
+      const failures = validateFiles(
+        ["missing.json"],
+        dir,
+        () => true,
+        () => [],
+      );
+
+      expect(failures).toHaveLength(1);
+      expect(failures[0]?.rule).toBe("json_parse");
+    });
+  });
+
+  it("不正 JSON ファイルは json_parse エラーとして記録される", () => {
+    withTempDir("denken-test-validate-problems-json", (dir) => {
+      writeFileSync(join(dir, "bad.json"), "{oops}", "utf8");
+
+      const failures = validateFiles(
+        ["bad.json"],
+        dir,
+        () => true,
+        () => [],
+      );
+
+      expect(failures).toHaveLength(1);
+      expect(failures[0]?.rule).toBe("json_parse");
+    });
+  });
+
+  it("validate が false を返す既存ファイルは schema エラーとして記録される", () => {
+    withTempDir("denken-test-validate-problems-schema", (dir) => {
+      writeFileSync(join(dir, "bad.json"), JSON.stringify({ id: "bad" }), "utf8");
+
+      const failures = validateFiles(
+        ["bad.json"],
+        dir,
+        () => false,
+        () => [{ instancePath: "/subject", message: "required" }],
+      );
+
+      expect(failures).toHaveLength(1);
+      expect(failures[0]?.rule).toBe("schema");
+      expect(failures[0]?.message).toContain("/subject required");
+    });
   });
 });
 
