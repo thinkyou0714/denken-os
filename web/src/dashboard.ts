@@ -7,6 +7,7 @@ import type { Problem, Subject } from "../../lib/engine/schema.js";
 import { smoothedSuccessRate } from "../../lib/scheduler/diagnosis.js";
 import type { FsrsView } from "../../lib/scheduler/fsrs.js";
 import { JST_OFFSET_MS as _JST_OFFSET_MS, DAY_MS } from "./dates.js";
+import { clamp01 } from "./format.js";
 import type { WebAnswerLog } from "./store.js";
 
 export interface Tally {
@@ -184,7 +185,7 @@ export interface SubjectReadiness {
 /** 正答率（0..1）をそのまま達成度成分として返す（範囲外を 0..1 にクランプ）。readiness 式で重み 0.6。 */
 function accuracyComponent(accuracy: number): number {
   // accuracy は smoothedSuccessRate 由来で 0..1。下流の readiness 式でも再クランプされるが、ここでも 0..1 を保証する。
-  return Math.max(0, Math.min(1, accuracy));
+  return clamp01(accuracy);
 }
 
 /**
@@ -202,7 +203,16 @@ export function subjectReadiness(
   problems: Problem[],
   daysLeft: number,
 ): SubjectReadiness {
-  const map = topicSubjectMap(problems);
+  return subjectReadinessWithMap(subject, logs, problems, daysLeft, topicSubjectMap(problems));
+}
+
+function subjectReadinessWithMap(
+  subject: Subject,
+  logs: WebAnswerLog[],
+  problems: Problem[],
+  daysLeft: number,
+  map: ReadonlyMap<string, Subject>,
+): SubjectReadiness {
   // その科目の全論点（カバレッジ分母）。
   const subjectTopics = new Set<string>();
   for (const p of problems) if (p.subject === subject) subjectTopics.add(p.topic);
@@ -217,7 +227,7 @@ export function subjectReadiness(
   }
   const accuracy = smoothedSuccessRate(correct, attempts);
   const coverage = subjectTopics.size > 0 ? Math.min(1, attemptedTopics.size / subjectTopics.size) : 0;
-  const readiness = Math.max(0, Math.min(1, accuracyComponent(accuracy) * 0.6 + coverage * 0.4));
+  const readiness = clamp01(accuracyComponent(accuracy) * 0.6 + coverage * 0.4);
 
   // 残り日数で判定を厳しくする: 直前ほど高い完成度を「順調」とみなす。
   // 余裕がある（>60日）ほど閾値を下げ、間際（<14日）は上げる。
@@ -234,7 +244,8 @@ export function allSubjectReadiness(logs: WebAnswerLog[], problems: Problem[], d
   // 出題に存在する科目のみ対象（問題集に無い科目は判定しない）。
   const order: Subject[] = ["理論", "電力", "機械", "法規", "電力管理", "機械制御"];
   const present = new Set(problems.map((p) => p.subject));
-  return order.filter((s) => present.has(s)).map((s) => subjectReadiness(s, logs, problems, daysLeft));
+  const map = topicSubjectMap(problems);
+  return order.filter((s) => present.has(s)).map((s) => subjectReadinessWithMap(s, logs, problems, daysLeft, map));
 }
 
 /**

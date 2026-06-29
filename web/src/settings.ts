@@ -3,6 +3,7 @@
  * FSRS の目標保持率は store.ts 側で管理する。
  */
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from "../../lib/chat/prompt.js";
+import { clamp } from "./format.js";
 import type { StorageLike } from "./store.js";
 
 const EXAM_DATE_KEY = "denken:examDate";
@@ -46,7 +47,7 @@ export function getDailyGoal(storage: StorageLike): number {
 }
 
 export function setDailyGoal(storage: StorageLike, n: number): void {
-  const clamped = Math.min(200, Math.max(1, Math.round(n)));
+  const clamped = clamp(Math.round(n), 1, 200);
   storage.setItem(DAILY_GOAL_KEY, String(clamped));
 }
 
@@ -80,7 +81,7 @@ export function getReviewCap(storage: StorageLike): number {
 }
 
 export function setReviewCap(storage: StorageLike, n: number): void {
-  const clamped = Math.min(200, Math.max(5, Math.round(n)));
+  const clamped = clamp(Math.round(n), 5, 200);
   storage.setItem(REVIEW_CAP_KEY, String(clamped));
 }
 

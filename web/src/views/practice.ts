@@ -7,6 +7,7 @@
  */
 import type { Problem, Subject } from "../../../lib/engine/schema.js";
 import { reloadProblems } from "../app-init.js";
+import { progressPercent } from "../format.js";
 import {
   bridgeWithFreezes,
   coveredDays,
@@ -98,10 +99,26 @@ export function seenStreakMilestone(): number {
 /** まめ知識の表示位置（セッション内で順繰り。日替わりの開始位置で毎日違う話から始まる）。 */
 let tipIndex = -1;
 
-/** 今日のクエストカード（3つの小目標＋全達成ボーナス表示）。 */
-export function questsCard(): HTMLElement {
-  const todayIdx = dayIndexOf(Date.now());
-  const statuses = questStatuses(dailyQuests(todayIdx), logsOfDay(progress.logs(), todayIdx));
+interface QuestCardStatus {
+  quest: { icon: string; label: string; target: number };
+  value: number;
+  done: boolean;
+}
+
+function questProgressRows(statuses: readonly QuestCardStatus[]): HTMLElement[] {
+  return statuses.map((s) =>
+    h(
+      "div",
+      { class: s.done ? "quest done" : "quest" },
+      h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
+      h("span", { class: "ql" }, s.quest.label),
+      bar(progressPercent(s.value, s.quest.target), `${s.quest.label} の進捗`),
+      h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
+    ),
+  );
+}
+
+function questCard(title: string, bonusText: string, statuses: readonly QuestCardStatus[]): HTMLElement {
   const allDone = statuses.every((s) => s.done);
   const card = h(
     "div",
@@ -109,30 +126,26 @@ export function questsCard(): HTMLElement {
     h(
       "div",
       { class: "qhead" },
-      h("strong", {}, "📋 今日のクエスト"),
-      h(
-        "span",
-        { class: allDone ? "qbonus done" : "qbonus" },
-        allDone
-          ? `✅ 全達成 +${QUEST_CLEAR_BONUS_XP} XP ・ 正解XP×${QUEST_BOOST_MULT}中`
-          : `全達成で +${QUEST_CLEAR_BONUS_XP} XP＆正解XP×${QUEST_BOOST_MULT}`,
-      ),
+      h("strong", {}, title),
+      h("span", { class: allDone ? "qbonus done" : "qbonus" }, bonusText),
     ),
   );
-  for (const s of statuses) {
-    const pct = Math.min(100, Math.round((s.value / s.quest.target) * 100));
-    card.append(
-      h(
-        "div",
-        { class: s.done ? "quest done" : "quest" },
-        h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
-        h("span", { class: "ql" }, s.quest.label),
-        bar(pct, `${s.quest.label} の進捗`),
-        h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
-      ),
-    );
-  }
+  card.append(...questProgressRows(statuses));
   return card;
+}
+
+/** 今日のクエストカード（3つの小目標＋全達成ボーナス表示）。 */
+export function questsCard(): HTMLElement {
+  const todayIdx = dayIndexOf(Date.now());
+  const statuses = questStatuses(dailyQuests(todayIdx), logsOfDay(progress.logs(), todayIdx));
+  const allDone = statuses.every((s) => s.done);
+  return questCard(
+    "📋 今日のクエスト",
+    allDone
+      ? `✅ 全達成 +${QUEST_CLEAR_BONUS_XP} XP ・ 正解XP×${QUEST_BOOST_MULT}中`
+      : `全達成で +${QUEST_CLEAR_BONUS_XP} XP＆正解XP×${QUEST_BOOST_MULT}`,
+    statuses,
+  );
 }
 
 /** 今週のクエストカード（進捗タブ用。日次より大きな積み上げ目標）。 */
@@ -142,34 +155,11 @@ export function weeklyQuestsCard(): HTMLElement {
   // 旧実装は logsOfDay(週番号) を渡しており、週番号は日番号と一致しないため常に空 → 0% 表示だった。
   const statuses = weeklyQuestStatuses(weeklyQuests(weekIdx), logsOfWeek(progress.logs(), weekIdx));
   const allDone = statuses.every((s) => s.done);
-  const card = h(
-    "div",
-    { class: "card quests" },
-    h(
-      "div",
-      { class: "qhead" },
-      h("strong", {}, "🗓️ 今週のクエスト"),
-      h(
-        "span",
-        { class: allDone ? "qbonus done" : "qbonus" },
-        allDone ? `✅ 全達成 +${WEEKLY_CLEAR_BONUS_XP} XP` : `全達成で +${WEEKLY_CLEAR_BONUS_XP} XP`,
-      ),
-    ),
+  return questCard(
+    "🗓️ 今週のクエスト",
+    allDone ? `✅ 全達成 +${WEEKLY_CLEAR_BONUS_XP} XP` : `全達成で +${WEEKLY_CLEAR_BONUS_XP} XP`,
+    statuses,
   );
-  for (const s of statuses) {
-    const pct = Math.min(100, Math.round((s.value / s.quest.target) * 100));
-    card.append(
-      h(
-        "div",
-        { class: s.done ? "quest done" : "quest" },
-        h("span", { class: "qi", "aria-hidden": "true" }, s.quest.icon),
-        h("span", { class: "ql" }, s.quest.label),
-        bar(pct, `${s.quest.label} の進捗`),
-        h("span", { class: "qv" }, s.done ? "✅" : `${Math.min(s.value, s.quest.target)}/${s.quest.target}`),
-      ),
-    );
-  }
-  return card;
 }
 
 /** 初回オンボーディング＝目標設定ウィザード（学習記録ゼロのときだけ。30秒で完了）。 */
