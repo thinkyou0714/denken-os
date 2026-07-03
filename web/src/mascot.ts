@@ -102,8 +102,8 @@ function accessory(tier: MascotTier): string {
     // 金の王冠（Lv40+ 電験マイスター）。
     return (
       `<path d="M20 19 l4 -8 5 6 3 -8 3 8 5 -6 4 8 Z" fill="#ffc62e" stroke="#d99a00" stroke-width="1.4" stroke-linejoin="round"/>` +
-      `<circle cx="24.5" cy="12.5" r="1.6" fill="#ff5d5d"/><circle cx="32" cy="10" r="1.6" fill="#5d83f7"/>` +
-      `<circle cx="39.5" cy="12.5" r="1.6" fill="#34d399"/>`
+      `<circle cx="24.5" cy="12.5" r="1.6" fill="#e05a4e"/><circle cx="32" cy="10" r="1.6" fill="#a84b26"/>` +
+      `<circle cx="39.5" cy="12.5" r="1.6" fill="#4aa876"/>`
     );
   }
   return "";
