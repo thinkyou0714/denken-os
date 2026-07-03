@@ -17,7 +17,8 @@ export function prefersReducedMotion(): boolean {
   }
 }
 
-const CONFETTI_COLORS = ["#ffd645", "#5d83f7", "#34d399", "#f87171", "#f0a4f7", "#7cc4ff"];
+// 祝賀の紙吹雪（「紙×朱」の温色パレットに調和: 金・朱・若葉・珊瑚・生成り・琥珀）。
+const CONFETTI_COLORS = ["#ffd645", "#e5926f", "#7fc99a", "#ef8f7f", "#f2e3b8", "#dcb04e"];
 
 /** 画面上部から紙吹雪を降らせる（animationend で各 span を個別削除。全消滅後に host も除去）。 */
 export function confettiBurst(count = 28): void {

@@ -9,8 +9,8 @@
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone"],
-  "background_color": "#ffffff",
-  "theme_color": "#2b59d4",
+  "background_color": "#f2efe5",
+  "theme_color": "#a84b26",
   "lang": "ja",
   "icons": [
     {
