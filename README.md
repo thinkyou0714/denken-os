@@ -203,3 +203,12 @@ UIは **WAI-ARIA tablist**（タブは左右矢印で移動）・描画例外時
 ## Why "DENKEN"
 
 「電験」のローマ字。学習 OS は「電験合格までのアルゴリズム化」を目指す思想を持つため、試験名そのものをプロダクト名に採用。
+
+## Claude Code で開発する (web / cloud 対応)
+
+このリポジトリは **Claude Code on the web**（claude.ai/code のクラウドセッション）に対応しています。
+
+- 依存は `.claude/bootstrap.sh`（SessionStart フック）が `npm ci` で自動インストール（ローカルでは `node_modules` があれば no-op）。
+- クラウドセッションは `AGENTS.md` と `.claude/skills/`（例: `run-tests`）を自動ロード。
+- MCP は本リポジトリではローカル専用（ホスト型サーバー未設定）。詳細は
+  [`.github/docs/claude-code-web-readiness.md`](https://github.com/thinkyou0714/.github/blob/main/docs/claude-code-web-readiness.md)。
