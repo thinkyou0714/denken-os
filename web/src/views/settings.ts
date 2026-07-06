@@ -4,7 +4,7 @@
 
 import { CHAT_MODELS } from "../../../lib/chat/prompt.js";
 import { exportBackup, importBackup } from "../backup.js";
-import { applyLicenseKey, clearLicense, proInfo, proUnlocked } from "../entitlements.js";
+import { applyLicenseKey, clearLicense, initEntitlements, proInfo, proUnlocked } from "../entitlements.js";
 import { canReserveRest, loadFreezeState, saveFreezeState, studiedDays, toggleRestReservation } from "../freeze.js";
 import { playTone } from "../fx.js";
 import { MONETIZATION, monetizationConfigured } from "../monetization-config.js";
@@ -33,6 +33,7 @@ import { applyTheme, installPrompt, progress, setInstallPrompt, storage } from "
 import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
+import { purchaseButton } from "./paywall.js";
 import { renderHeader, renderNav, switchView } from "./router.js";
 
 export function renderSettings(root: HTMLElement): void {
@@ -265,6 +266,10 @@ function proLicenseCard(): HTMLElement {
               showToast(`⚠️ ${res.reason}`, "OK", () => {});
             }
           })
+          .catch(() => {
+            // applyLicenseKey は原則 reject しないが、想定外でも汎用トーストに流さず理由を示す。
+            showToast("⚠️ ライセンスの検証に失敗しました。もう一度お試しください", "OK", () => {});
+          })
           .finally(() => {
             applyBtn.disabled = false;
           });
@@ -284,19 +289,8 @@ function proLicenseCard(): HTMLElement {
     ),
   );
   if (!proUnlocked()) {
-    if (MONETIZATION.purchaseUrl !== "") {
-      card.append(
-        h(
-          "button",
-          {
-            class: "choice",
-            type: "button",
-            onclick: () => window.open(MONETIZATION.purchaseUrl, "_blank", "noopener,noreferrer"),
-          },
-          "🔑 Pro ライセンスを購入",
-        ),
-      );
-    }
+    const buy = purchaseButton("choice");
+    if (buy) card.append(buy);
     card.append(keyInput, applyBtn);
   } else {
     card.append(
@@ -381,6 +375,9 @@ function backupCard(): HTMLElement {
     if (!window.confirm("バックアップを読み込みます。現在の学習データは上書きされます。よろしいですか？")) return;
     const result = importBackup(storage, await file.text());
     if (result.ok) {
+      // 復元したライセンスを即時反映する（「再読込」を押さなくても Pro 状態が正しくなる）。
+      // 逆方向（ライセンスを含まない/無効なバックアップ）でもキャッシュと保存値の乖離を防ぐ。
+      await initEntitlements(storage).catch(() => false);
       showToast(`✅ ${result.restoredKeys.length} 項目を復元しました`, "再読込", () => location.reload());
     } else {
       showToast(`⚠️ 復元できませんでした: ${result.reason}`, "OK", () => {});

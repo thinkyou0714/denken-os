@@ -12,10 +12,11 @@
 [`docs/strategy/monetization-setup.md`](docs/strategy/monetization-setup.md) に集約。
 
 #### Added
-- **ライセンスキー検証** `web/src/license.ts`: `DENKEN1.<payload>.<sig>` 形式・
+- **ライセンスキー検証** `lib/license/license.ts`: `DENKEN1.<payload>.<sig>` 形式・
   ECDSA P-256 署名を WebCrypto で端末内検証（オフライン動作・公開鍵のみ埋め込み＝偽造不可）。
   期限（JST・exp 当日まで有効）/ sku / 改ざんを検査。
-- **プラン判定と無料枠** `web/src/entitlements.ts`: 無料=学習タブ1日N問（既定10・JST日次リセット）、
+- **プラン判定と無料枠** `web/src/entitlements.ts`: 無料=学習タブの**新しい問題**1日N問
+  （既定10・JST日次リセット。復習ドリル・間違いノート・再出題は数えない）、
   Pro=無制限演習＋模試＋スキルドリル。復習・進捗・公式集・質問タブは無料のまま。
 - **UI**: 模試タブ/スキルドリルの Pro ゲート（`views/paywall.ts`）・学習タブの残数表示・
   設定タブ「Pro ライセンス」カード（キー適用/削除・購入導線）。
@@ -29,6 +30,19 @@
 - `web/src/monetization-config.ts` の `publicKeyJwk` が `null`（出荷時既定）の間、
   全ゲートが不作動＝**既存ユーザーの挙動は一切変わらない**。販売者が
   `license:keygen` → 公開鍵貼付 → `purchaseUrl` 設定した時点で初めて有効化される。
+
+#### レビュー後の堅牢化（8観点並列レビュー → 検証 → 是正）
+- 復習ドリル・間違いノート・再出題（requeue）を無料枠の対象外に（ゲート/カウンタ両方）。
+- バックアップ: 空文字ライセンス（削除トゥームストーン）を書き出さない・復元でも
+  有効キーを上書きしない。復元直後に `initEntitlements` を再実行（再読込不要で反映）。
+- 進行中の模試はロック状態が変わっても再開・完了できる（採点機会を奪わない）。
+- 公開鍵 JWK の形状検証（EC/P-256/x/y 必須・秘密鍵 `d` 入り拒否・不正は fail-open）。
+  `freeDailyLimit: 0` は「演習も Pro 専用」として機能する（キルスイッチ兼用を解消）。
+- `applyLicenseKey` の保存失敗（quota/プライベートモード）で reject せずセッション内解錠。
+- 無料枠切れ時にペイウォールカードが2枚重なる表示を解消。起動時のライセンス検証を
+  スケルトン描画後へ移動（初期表示を待たせない）。
+- レイアウト規約準拠: ライセンス純ロジックを `web/src/` → `lib/license/` へ移動
+  （scripts→web の依存を解消）。鍵生成 API を共通化しテストヘルパーも一元化。
 
 ### デザイン全面刷新 — 「上質な紙の参考書と朱色の採点ペン」
 

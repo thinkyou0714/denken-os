@@ -7,6 +7,23 @@ import { MONETIZATION } from "../monetization-config.js";
 import { h } from "../ui/dom.js";
 import { switchView } from "./router.js";
 
+/**
+ * 決済ページを開くボタン。purchaseUrl 未設定なら null（呼び出し側の分岐を不要に）。
+ * ペイウォールと設定タブの両方で使い、購入導線の文言・挙動を1か所に保つ。
+ */
+export function purchaseButton(cls: string): HTMLElement | null {
+  if (MONETIZATION.purchaseUrl === "") return null;
+  return h(
+    "button",
+    {
+      class: cls,
+      type: "button",
+      onclick: () => window.open(MONETIZATION.purchaseUrl, "_blank", "noopener,noreferrer"),
+    },
+    "🔑 Pro ライセンスを購入",
+  );
+}
+
 export interface PaywallOpts {
   /** 先頭の絵文字アイコン。 */
   icon: string;
@@ -25,19 +42,8 @@ export function paywallCard(opts: PaywallOpts): HTMLElement {
     h("p", { class: "muted" }, opts.description),
   );
   const actions = h("div", { class: "drill-actions" });
-  if (MONETIZATION.purchaseUrl !== "") {
-    actions.append(
-      h(
-        "button",
-        {
-          class: "primary",
-          type: "button",
-          onclick: () => window.open(MONETIZATION.purchaseUrl, "_blank", "noopener,noreferrer"),
-        },
-        "🔑 Pro ライセンスを購入",
-      ),
-    );
-  }
+  const buy = purchaseButton("primary");
+  if (buy) actions.append(buy);
   actions.append(
     h(
       "button",

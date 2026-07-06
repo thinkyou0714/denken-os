@@ -5,6 +5,7 @@
  * ゲートは絶対に作動しない」ことを最重要の不変条件として検証する。
  */
 import { beforeEach, describe, expect, it } from "vitest";
+import { type LicenseJwk, signLicense } from "../../lib/license/license.js";
 import {
   __resetEntitlementsForTest,
   applyLicenseKey,
@@ -19,20 +20,13 @@ import {
   remainingFreeToday,
   usedToday,
 } from "../../web/src/entitlements.js";
-import { type LicenseJwk, signLicense } from "../../web/src/license.js";
 import { MONETIZATION, type MonetizationConfig, monetizationConfigured } from "../../web/src/monetization-config.js";
+import { genKeypair } from "../helpers/license.js";
 import { MemoryStorage, ThrowingStorage } from "../helpers/storage.js";
 
 /** 2026-07-06T03:00:00Z（JST 正午）。 */
 const NOW = Date.UTC(2026, 6, 6, 3, 0, 0);
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
-async function genKeypair(): Promise<{ pub: LicenseJwk; priv: LicenseJwk }> {
-  const pair = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
-  const priv = (await crypto.subtle.exportKey("jwk", pair.privateKey)) as unknown as LicenseJwk;
-  const pub = (await crypto.subtle.exportKey("jwk", pair.publicKey)) as unknown as LicenseJwk;
-  return { pub, priv };
-}
 
 function activeCfg(pub: LicenseJwk, limit = 3): MonetizationConfig {
   return { enabled: true, freeDailyLimit: limit, purchaseUrl: "", publicKeyJwk: pub };
@@ -63,6 +57,32 @@ describe("既定（収益化未設定）の不変条件", () => {
     const cfg: MonetizationConfig = { ...activeCfg(pub), enabled: false };
     expect(featureLocked(cfg)).toBe(false);
     expect(remainingFreeToday(new MemoryStorage(), NOW, cfg)).toBe(Number.POSITIVE_INFINITY);
+  });
+
+  it("freeDailyLimit=0 は「演習も Pro 専用」であり、収益化は無効化されない", async () => {
+    const { pub } = await genKeypair();
+    const cfg = activeCfg(pub, 0);
+    expect(monetizationConfigured(cfg)).toBe(true);
+    expect(featureLocked(cfg)).toBe(true);
+    expect(remainingFreeToday(new MemoryStorage(), NOW, cfg)).toBe(0);
+    expect(practiceGateAllows(new MemoryStorage(), NOW, cfg)).toBe(false);
+  });
+
+  it("壊れた公開鍵 JWK（欠損・EC以外・秘密鍵dの誤貼付）は未設定扱い＝fail-open", async () => {
+    const { pub, priv } = await genKeypair();
+    const broken: MonetizationConfig[] = [
+      { ...activeCfg(pub), publicKeyJwk: { ...pub, y: "" } },
+      { ...activeCfg(pub), publicKeyJwk: { ...pub, kty: "RSA" } },
+      { ...activeCfg(pub), publicKeyJwk: { ...pub, crv: "P-384" } },
+      // 秘密鍵ファイルの JWK（d あり）を公開鍵欄へ誤って貼った場合。
+      { ...activeCfg(pub), publicKeyJwk: priv },
+    ];
+    for (const cfg of broken) {
+      expect(monetizationConfigured(cfg)).toBe(false);
+      expect(featureLocked(cfg)).toBe(false);
+    }
+    // 正しい公開鍵は設定済みと判定される（対照）。
+    expect(monetizationConfigured(activeCfg(pub))).toBe(true);
   });
 });
 
@@ -145,6 +165,15 @@ describe("ライセンスの適用・起動時再検証・解除", () => {
     const res = await applyLicenseKey(new MemoryStorage(), "DENKEN1.a.b", NOW);
     expect(res.ok).toBe(false);
     if (!res.ok) expect(res.reason).toContain("準備中");
+  });
+
+  it("保存失敗（quota/プライベートモード）でも reject せず、セッション内は解錠する", async () => {
+    const { pub, priv } = await genKeypair();
+    const cfg = activeCfg(pub);
+    const key = await signLicense({ sku: "pro" }, priv);
+    const res = await applyLicenseKey(new ThrowingStorage(), key, NOW, cfg);
+    expect(res.ok).toBe(true);
+    expect(proUnlocked()).toBe(true);
   });
 
   it("initEntitlements: 保存済みの有効キーで解錠・無効/期限切れ/未保存では解錠しない", async () => {

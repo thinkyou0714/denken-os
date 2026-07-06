@@ -10,8 +10,8 @@
  * ライセンスの真正性（偽造不可）だけは ECDSA 署名で担保する（license.ts）。
  */
 
+import { type LicensePayload, verifyLicense } from "../../lib/license/license.js";
 import { dayIndex, JST_OFFSET_MS } from "./dates.js";
-import { type LicensePayload, verifyLicense } from "./license.js";
 import { MONETIZATION, type MonetizationConfig, monetizationConfigured } from "./monetization-config.js";
 import type { StorageLike } from "./store.js";
 
@@ -48,10 +48,13 @@ export async function initEntitlements(
   cfg: MonetizationConfig = MONETIZATION,
 ): Promise<boolean> {
   _proPayload = null;
-  if (!monetizationConfigured(cfg) || cfg.publicKeyJwk === null) return false;
+  // publicKeyJwk を local に取り出して null 判定を1回にする（monetizationConfigured と
+  // 独立した第2のゲート条件に見えないように。narrowing のためでもある）。
+  const pub = cfg.publicKeyJwk;
+  if (pub === null || !monetizationConfigured(cfg)) return false;
   const key = storage.getItem(LICENSE_STORAGE_KEY)?.trim() ?? "";
   if (key === "") return false;
-  const res = await verifyLicense(key, cfg.publicKeyJwk, nowMs);
+  const res = await verifyLicense(key, pub, nowMs);
   if (res.ok) _proPayload = res.payload;
   return res.ok;
 }
@@ -65,12 +68,20 @@ export async function applyLicenseKey(
   nowMs: number = Date.now(),
   cfg: MonetizationConfig = MONETIZATION,
 ): Promise<ApplyLicenseResult> {
-  if (cfg.publicKeyJwk === null) return { ok: false, reason: "現在は販売準備中のためライセンスを登録できません" };
+  const pub = cfg.publicKeyJwk;
+  if (pub === null) return { ok: false, reason: "現在は販売準備中のためライセンスを登録できません" };
   const trimmed = key.trim();
   if (trimmed === "") return { ok: false, reason: "ライセンスキーを入力してください" };
-  const res = await verifyLicense(trimmed, cfg.publicKeyJwk, nowMs);
+  const res = await verifyLicense(trimmed, pub, nowMs);
   if (!res.ok) return res;
-  storage.setItem(LICENSE_STORAGE_KEY, trimmed);
+  // 検証済みキーの保存はベストエフォート: quota 超過・プライベートモードで setItem が
+  // throw しても検証は成功しているため、このセッションは解錠して ok を返す
+  // （reject させると設定画面のエラー表示を素通りして汎用トーストだけが出る）。
+  try {
+    storage.setItem(LICENSE_STORAGE_KEY, trimmed);
+  } catch {
+    // 次回起動では無料プランに戻るが、キーの再入力で復帰できる。
+  }
   _proPayload = res.payload;
   return res;
 }
@@ -99,7 +110,8 @@ function loadDailyUse(storage: StorageLike, nowMs: number): DailyUse {
         return { day: today, count: Math.floor(o.count) };
       }
     } catch {
-      // 壊れた保存値は当日 0 として扱う。
+      // 壊れた保存値は当日 0 として扱う（他の storage 読み出しと同じ診断ログ規約）。
+      console.warn(`[entitlements] JSON.parse 失敗: key=${DAILY_USE_STORAGE_KEY}`);
     }
   }
   return { day: today, count: 0 };

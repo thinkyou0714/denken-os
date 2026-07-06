@@ -17,17 +17,11 @@ import {
   parseLicense,
   signLicense,
   verifyLicense,
-} from "../../web/src/license.js";
+} from "../../lib/license/license.js";
+import { genKeypair } from "../helpers/license.js";
 
 /** 2026-07-06T03:00:00Z（JST 正午）を「現在」に固定する。 */
 const NOW = Date.UTC(2026, 6, 6, 3, 0, 0);
-
-async function genKeypair(): Promise<{ pub: LicenseJwk; priv: LicenseJwk }> {
-  const pair = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
-  const priv = (await crypto.subtle.exportKey("jwk", pair.privateKey)) as unknown as LicenseJwk;
-  const pub = (await crypto.subtle.exportKey("jwk", pair.publicKey)) as unknown as LicenseJwk;
-  return { pub, priv };
-}
 
 describe("base64url ヘルパー", () => {
   it("バイト列を可逆にエンコード/デコードできる", () => {

@@ -15,7 +15,7 @@
 import { chmodSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { LicenseJwk } from "../web/src/license.js";
+import { generateLicenseKeyPair } from "../lib/license/license.js";
 import { atomicWriteFileSync, printHelp } from "./shared.js";
 
 const HELP = `\
@@ -42,15 +42,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SECRETS_DIR = join(__dirname, "../secrets");
 const KEY_FILE = join(SECRETS_DIR, "license-signing-key.json");
 
-interface SubtleForKeygen {
-  generateKey(
-    algorithm: { name: string; namedCurve: string },
-    extractable: boolean,
-    keyUsages: readonly string[],
-  ): Promise<{ privateKey: unknown; publicKey: unknown }>;
-  exportKey(format: "jwk", key: unknown): Promise<LicenseJwk>;
-}
-
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   if (argv.includes("--help") || argv.includes("-h")) printHelp(HELP);
@@ -69,17 +60,8 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const subtle = (globalThis as { crypto?: { subtle?: unknown } }).crypto?.subtle as SubtleForKeygen | undefined;
-  if (!subtle) {
-    console.error("WebCrypto が利用できません。Node 20 以上で実行してください。");
-    process.exit(1);
-  }
-
-  const pair = await subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
-  const privateJwk = await subtle.exportKey("jwk", pair.privateKey);
-  const publicJwk = await subtle.exportKey("jwk", pair.publicKey);
-  // 公開鍵スニペットには署名検証に必要な最小フィールドだけを載せる。
-  const publicMinimal: LicenseJwk = { kty: publicJwk.kty, crv: publicJwk.crv, x: publicJwk.x, y: publicJwk.y };
+  // 生成と公開鍵の最小化は lib/license の共通ヘルパーに委譲する（config へそのまま貼れる形）。
+  const { privateJwk, publicJwk: publicMinimal } = await generateLicenseKeyPair();
 
   mkdirSync(SECRETS_DIR, { recursive: true });
   atomicWriteFileSync(

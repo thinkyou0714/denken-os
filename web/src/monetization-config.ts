@@ -10,7 +10,7 @@
  * 秘密鍵（d を含む JWK）は絶対にここへ貼らないこと。
  */
 
-import type { LicenseJwk } from "./license.js";
+import type { LicenseJwk } from "../../lib/license/license.js";
 
 export interface MonetizationConfig {
   /** キルスイッチ。false にすると鍵設定済みでも全ゲートを即時解除する。 */
@@ -33,7 +33,29 @@ export const MONETIZATION: MonetizationConfig = {
   publicKeyJwk: null,
 };
 
-/** 収益化が実際に作動する状態か（キルスイッチ ON かつ 公開鍵設定済み）。 */
+/**
+ * 貼り付けられた公開鍵 JWK の形状検証。手作業転記のため、切り詰め・欠損・
+ * 秘密鍵（d 成分）の誤貼付をここで検出する。不正なら「未設定」として全ゲートを
+ * 開いたままにする（fail-open: 正規購入キーが全滅する事故より安全側）。
+ */
+function isValidPublicJwk(jwk: LicenseJwk): boolean {
+  return (
+    jwk.kty === "EC" &&
+    jwk.crv === "P-256" &&
+    typeof jwk.x === "string" &&
+    jwk.x.length > 0 &&
+    typeof jwk.y === "string" &&
+    jwk.y.length > 0 &&
+    // 秘密鍵の誤貼付（d 成分あり）は公開鍵として扱わない（漏えい検知の一助）。
+    jwk.d === undefined
+  );
+}
+
+/**
+ * 収益化が実際に作動する状態か（キルスイッチ ON かつ 有効な公開鍵設定済み）。
+ * freeDailyLimit は判定に含めない: 0 は「演習も Pro 専用」という正当な設定であり、
+ * キルスイッチを兼ねさせると 0 設定が黙って全ゲートを解除してしまう。
+ */
 export function monetizationConfigured(cfg: MonetizationConfig = MONETIZATION): boolean {
-  return cfg.enabled && cfg.publicKeyJwk !== null && cfg.freeDailyLimit >= 1;
+  return cfg.enabled && cfg.publicKeyJwk !== null && isValidPublicJwk(cfg.publicKeyJwk);
 }

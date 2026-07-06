@@ -14,7 +14,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type LicenseJwk, type LicensePayload, signLicense, verifyLicense } from "../web/src/license.js";
+import { type LicenseJwk, type LicensePayload, signLicense, verifyLicense } from "../lib/license/license.js";
 import { printHelp } from "./shared.js";
 
 const HELP = `\

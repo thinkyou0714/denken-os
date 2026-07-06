@@ -13,7 +13,7 @@
  * 運用手順は docs/strategy/monetization-setup.md を参照。
  */
 
-import { JST_OFFSET_MS } from "./dates.js";
+import { JST_OFFSET_MS } from "../shared/time.js";
 
 /** ライセンス形式のバージョン識別子（署名対象に含める）。 */
 export const LICENSE_PREFIX = "DENKEN1";
@@ -62,6 +62,12 @@ interface SubtleLike {
   ): Promise<unknown>;
   verify(algorithm: typeof EC_SIGN_ALG, key: unknown, signature: Uint8Array, data: Uint8Array): Promise<boolean>;
   sign(algorithm: typeof EC_SIGN_ALG, key: unknown, data: Uint8Array): Promise<ArrayBuffer>;
+  generateKey(
+    algorithm: typeof EC_IMPORT_ALG,
+    extractable: boolean,
+    keyUsages: readonly string[],
+  ): Promise<{ privateKey: unknown; publicKey: unknown }>;
+  exportKey(format: "jwk", key: unknown): Promise<LicenseJwk>;
 }
 
 /** WebCrypto が使えない環境（非 HTTPS の一部旧ブラウザ等）では null。 */
@@ -203,4 +209,18 @@ export async function signLicense(payload: LicensePayload, privateKeyJwk: Licens
   const priv = await subtle.importKey("jwk", privateKeyJwk, EC_IMPORT_ALG, false, ["sign"]);
   const sig = new Uint8Array(await subtle.sign(EC_SIGN_ALG, priv, signedBytes(payloadB64)));
   return `${LICENSE_PREFIX}.${payloadB64}.${b64urlEncodeBytes(sig)}`;
+}
+
+/**
+ * 署名鍵ペアを新規生成する（販売者ツール・テスト用）。
+ * 公開鍵は検証に必要な最小フィールド（kty/crv/x/y）へ正規化して返す
+ * （monetization-config.ts へそのまま貼れる形。key_ops 等の余計な属性を持ち込まない）。
+ */
+export async function generateLicenseKeyPair(): Promise<{ privateJwk: LicenseJwk; publicJwk: LicenseJwk }> {
+  const subtle = getSubtle();
+  if (subtle === null) throw new Error("WebCrypto が利用できません（Node 20+ / ブラウザで実行してください）");
+  const pair = await subtle.generateKey(EC_IMPORT_ALG, true, ["sign", "verify"]);
+  const privateJwk = await subtle.exportKey("jwk", pair.privateKey);
+  const pub = await subtle.exportKey("jwk", pair.publicKey);
+  return { privateJwk, publicJwk: { kty: pub.kty, crv: pub.crv, x: pub.x, y: pub.y } };
 }

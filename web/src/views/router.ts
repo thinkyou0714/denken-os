@@ -11,6 +11,7 @@ import { dayIndexOf } from "../quests.js";
 import { offlineLabel } from "../retention.js";
 import { getDailyGoal, getExamDate, getReviewCap } from "../settings.js";
 import { problems, progress, setView, storage, view } from "../state/app.js";
+import { exam as examInProgress } from "../state/exam.js";
 import { estimateStorageKb, STORAGE_WARN_KB } from "../store.js";
 import { $, h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
@@ -207,6 +208,13 @@ function focusViewHeading(root: HTMLElement): void {
  * views/paywall.ts 側が router の switchView を参照する（ESM の相互参照で解決可能）。
  */
 function renderExamGated(root: HTMLElement): void {
+  // 進行中の模試は必ず再開させる（採点・保存の機会を奪わない）。開始後に
+  // ロック状態へ変わっても（設定でライセンス削除→再入力の途中など）、
+  // 開始済みセッションの完了は妨げない。
+  if (examInProgress !== null) {
+    renderExam(root);
+    return;
+  }
   if (featureLocked()) {
     root.append(
       h("h2", {}, "模試"),
