@@ -7,6 +7,7 @@
  */
 import type { Problem, Subject } from "../../../lib/engine/schema.js";
 import { reloadProblems } from "../app-init.js";
+import { featureLocked, practiceGateAllows, remainingFreeToday } from "../entitlements.js";
 import {
   bridgeWithFreezes,
   coveredDays,
@@ -50,6 +51,7 @@ import { showToast } from "../ui/toast.js";
 import { bar, difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
 import { drillLauncherCard } from "./drills.js";
+import { paywallCard } from "./paywall.js";
 import { renderHeader } from "./router.js";
 
 // re-export todayCount for other views
@@ -376,13 +378,39 @@ export function renderPractice(root: HTMLElement): void {
   root.append(toolbar, h("div", { id: "q" }));
   nextQuestion(root);
   // スキルドリル起動カード（公式導出 / 電卓速算）。#q を題材ホストにする。
+  // フリーミアム作動中はドリルを Pro ゲートに置き換える（既定=未設定では従来どおり）。
   const qHost = root.querySelector("#q") as HTMLElement | null;
-  if (qHost) root.append(drillLauncherCard(qHost));
+  if (qHost) {
+    root.append(
+      featureLocked()
+        ? paywallCard({
+            icon: "🧠",
+            title: "スキルドリル（公式導出・電卓速算）は Pro 機能です",
+            description: "手順の並べ替えと速算トレーニングが解放されます。通常の演習は無料枠で続けられます。",
+          })
+        : drillLauncherCard(qHost),
+    );
+  }
 }
 
 export function nextQuestion(root: HTMLElement): void {
   const host = root.querySelector("#q") as HTMLElement | null;
   if (!host) return;
+  // フリーミアム: 無料枠（1日 N 問）を使い切ったら新しい問題を出さずに案内を出す。
+  // 復習タブ・解答済み問題の解説閲覧には影響しない。既定（収益化未設定）では常に許可。
+  if (!practiceGateAllows(storage)) {
+    practice.current = null;
+    host.replaceChildren(
+      paywallCard({
+        icon: "✏️",
+        title: "今日の無料枠を使い切りました",
+        description:
+          "無料プランの演習は1日の上限があります。明日また無料で続けられます。" +
+          "Pro なら演習が無制限になり、模試・スキルドリルも解放されます。復習タブは今日も無料で使えます。",
+      }),
+    );
+    return;
+  }
   const excludeId = practice.current?.id;
   // 出題の通し番号を進める（再出題タイミングの基準 #49）。
   practice.asked += 1;
@@ -426,6 +454,11 @@ export function nextQuestion(root: HTMLElement): void {
   const meta = h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`);
   const badge = draftBadge(p);
   if (badge) meta.append(" ", badge);
+  // フリーミアム作動中は無料枠の残数を出題メタに添える（残数の見える化＝納得感）。
+  if (featureLocked()) {
+    const left = remainingFreeToday(storage);
+    meta.append(" ", h("span", { class: "muted small" }, `🆓 今日あと${left}問`));
+  }
   host.append(meta, stmt);
   if (p.figure) host.append(figureNode(p.figure));
   // ヒント段階開示: 解答前に解説の先頭ステップ（着眼点）だけ覗ける（最大2段）。

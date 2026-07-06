@@ -5,6 +5,7 @@
 import type { Problem } from "../../../lib/engine/schema.js";
 import type { Rating } from "../../../lib/scheduler/types.js";
 import { cardText } from "../../../lib/share-card/card-text.js";
+import { recordPracticeAnswer } from "../entitlements.js";
 import { formatElapsed } from "../format.js";
 import { confettiBurst, playTone, vibrate, xpFloat } from "../fx.js";
 import { isAnswerCorrect, normalizeNumericInput, partialScore } from "../grade.js";
@@ -153,6 +154,8 @@ export function finalize(
   const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
 
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
+  // フリーミアム: 無料枠カウンタを進める（収益化未設定・Pro 解錠中は何も書かない）。
+  recordPracticeAnswer(storage);
 
   // 間違えた問題はセッション後半で再出題する（短期の想起練習 #49）。
   // 客観式: rating="again"（不正解）。記述: 部分点が合格圏未満。

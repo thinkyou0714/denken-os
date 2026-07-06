@@ -5,6 +5,7 @@
  */
 
 import { reloadProblems } from "./app-init.js";
+import { initEntitlements } from "./entitlements.js";
 import { onKeydown } from "./keyboard.js";
 import { runMigrations } from "./migrate.js";
 import { getTheme } from "./settings.js";
@@ -49,6 +50,9 @@ async function main(): Promise<void> {
   // localStorage スキーマのマイグレーション（現状 no-op。版の記録＋将来の足場）。
   // 描画前に実行し、以降のコードが新スキーマ前提で動けるようにする。
   runMigrations(storage);
+  // フリーミアム: 保存済み Pro ライセンスを描画前に再検証する（収益化未設定なら即 no-op）。
+  // 検証失敗（時計ずれ等）でも起動は続行し、無料プランとして動く。
+  await initEntitlements(storage).catch(() => false);
   applyTheme();
   // system 設定時は OS のテーマ変更に追従。
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {

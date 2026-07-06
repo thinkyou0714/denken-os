@@ -5,6 +5,31 @@
 
 ## [Unreleased]
 
+### 収益化 — フリーミアム基盤（ライセンスキー方式・既定では挙動不変）
+
+戦略 `docs/x-strategy/07`（収益ブリッジ フェーズ3「アプリ フリーミアム」）の実装。
+**サーバ・アカウント登録なし**で動くライセンスキー方式を採用し、販売開始手順は
+[`docs/strategy/monetization-setup.md`](docs/strategy/monetization-setup.md) に集約。
+
+#### Added
+- **ライセンスキー検証** `web/src/license.ts`: `DENKEN1.<payload>.<sig>` 形式・
+  ECDSA P-256 署名を WebCrypto で端末内検証（オフライン動作・公開鍵のみ埋め込み＝偽造不可）。
+  期限（JST・exp 当日まで有効）/ sku / 改ざんを検査。
+- **プラン判定と無料枠** `web/src/entitlements.ts`: 無料=学習タブ1日N問（既定10・JST日次リセット）、
+  Pro=無制限演習＋模試＋スキルドリル。復習・進捗・公式集・質問タブは無料のまま。
+- **UI**: 模試タブ/スキルドリルの Pro ゲート（`views/paywall.ts`）・学習タブの残数表示・
+  設定タブ「Pro ライセンス」カード（キー適用/削除・購入導線）。
+- **販売者CLI**: `npm run license:keygen`（鍵生成・secrets/ は gitignore）/
+  `npm run license:issue -- --email ... [--exp YYYY-MM-DD]`（発行＋自己検証）。
+- **テスト26件**: 署名ラウンドトリップ・改ざん/期限切れ/別鍵の拒否・日次リセット・
+  quota 耐性・**「公開鍵未設定ならゲート絶対不作動」の不変条件**。
+- ライセンスキーをバックアップ書き出しに追加（機種変更で失わない。APIキーは従来どおり除外）。
+
+#### 重要な不変条件
+- `web/src/monetization-config.ts` の `publicKeyJwk` が `null`（出荷時既定）の間、
+  全ゲートが不作動＝**既存ユーザーの挙動は一切変わらない**。販売者が
+  `license:keygen` → 公開鍵貼付 → `purchaseUrl` 設定した時点で初めて有効化される。
+
 ### デザイン全面刷新 — 「上質な紙の参考書と朱色の採点ペン」
 
 学習アプリ（`web/`）のビジュアルアイデンティティを、青系の汎用UIから

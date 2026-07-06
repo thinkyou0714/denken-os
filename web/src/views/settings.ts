@@ -4,8 +4,10 @@
 
 import { CHAT_MODELS } from "../../../lib/chat/prompt.js";
 import { exportBackup, importBackup } from "../backup.js";
+import { applyLicenseKey, clearLicense, proInfo, proUnlocked } from "../entitlements.js";
 import { canReserveRest, loadFreezeState, saveFreezeState, studiedDays, toggleRestReservation } from "../freeze.js";
 import { playTone } from "../fx.js";
+import { MONETIZATION, monetizationConfigured } from "../monetization-config.js";
 import { dayIndexOf } from "../quests.js";
 import {
   getApiKey,
@@ -177,6 +179,8 @@ export function renderSettings(root: HTMLElement): void {
       ),
     ),
     h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
+    // Pro ライセンス（収益化が設定済みのときだけ表示。既定=未設定では何も出ない）。
+    ...(monetizationConfigured() ? [h("h2", {}, "Pro ライセンス"), proLicenseCard()] : []),
     h("h2", {}, "データ"),
     backupCard(),
     ...(installPrompt
@@ -226,6 +230,94 @@ export function renderSettings(root: HTMLElement): void {
       "学習記録をリセット",
     ),
   );
+}
+
+/**
+ * Pro ライセンスカード: 現在のプラン表示・キー入力・購入導線・解除。
+ * 検証は端末内（WebCrypto）で完結し、キーはこの端末の localStorage にのみ保存される
+ * （バックアップの書き出しには含まれる: 機種変更で失わないため）。
+ */
+function proLicenseCard(): HTMLElement {
+  const info = proInfo();
+  const status = proUnlocked()
+    ? `✅ Pro 有効${info?.exp ? `（${info.exp} まで）` : "（買い切り）"}${info?.sub ? ` ・ ${info.sub}` : ""}`
+    : `無料プラン（演習 1日${MONETIZATION.freeDailyLimit}問まで。模試・スキルドリルは Pro）`;
+  const keyInput = h("input", {
+    type: "text",
+    placeholder: "DENKEN1.xxxx.xxxx",
+    autocomplete: "off",
+    spellcheck: "false",
+    "aria-label": "Pro ライセンスキー",
+  }) as HTMLInputElement;
+  const applyBtn = h(
+    "button",
+    {
+      class: "primary",
+      type: "button",
+      onclick: () => {
+        applyBtn.disabled = true;
+        void applyLicenseKey(storage, keyInput.value)
+          .then((res) => {
+            if (res.ok) {
+              showToast("✅ Pro を有効化しました。ありがとうございます！", "OK", () => {});
+              switchView("settings"); // ステータス表示とゲートを最新化
+            } else {
+              showToast(`⚠️ ${res.reason}`, "OK", () => {});
+            }
+          })
+          .finally(() => {
+            applyBtn.disabled = false;
+          });
+      },
+    },
+    "キーを適用",
+  ) as HTMLButtonElement;
+  const card = h(
+    "div",
+    { class: "card" },
+    h("label", {}, "プラン "),
+    h("div", {}, status),
+    h(
+      "div",
+      { class: "muted" },
+      "Pro は開発継続を支える応援プランです。学習記録・復習・公式集はずっと無料で使えます。",
+    ),
+  );
+  if (!proUnlocked()) {
+    if (MONETIZATION.purchaseUrl !== "") {
+      card.append(
+        h(
+          "button",
+          {
+            class: "choice",
+            type: "button",
+            onclick: () => window.open(MONETIZATION.purchaseUrl, "_blank", "noopener,noreferrer"),
+          },
+          "🔑 Pro ライセンスを購入",
+        ),
+      );
+    }
+    card.append(keyInput, applyBtn);
+  } else {
+    card.append(
+      h(
+        "button",
+        {
+          class: "choice",
+          type: "button",
+          onclick: () => {
+            if (!window.confirm("Pro ライセンスをこの端末から削除します。よろしいですか？（キーは再入力できます）"))
+              return;
+            clearLicense(storage);
+            showToast("ライセンスを削除しました", "OK", () => {});
+            switchView("settings");
+          },
+        },
+        "ライセンスを削除",
+      ),
+    );
+  }
+  return card;
 }
 
 /** おやすみ予約: 休む勇気をストリークの罰にしない（健全性）。予約できるのは「今日学習済み」のときの明日だけ。 */

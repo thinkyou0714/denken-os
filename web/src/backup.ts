@@ -41,6 +41,9 @@ export const BACKUP_KEYS: readonly string[] = [
   "denken:badges",
   "denken:sound",
   "denken:mascot",
+  // Pro ライセンスキー（署名付き・偽造不可）。機種変更で失わないよう含める。
+  // APIキーと違い漏えいしても第三者に金銭的被害は及ばない（本人のプラン解錠のみ）。
+  "denken:license",
 ];
 
 export const BACKUP_VERSION = 1;
