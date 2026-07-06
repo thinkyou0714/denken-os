@@ -5,6 +5,7 @@
  */
 
 import { reloadProblems } from "./app-init.js";
+import { initEntitlements } from "./entitlements.js";
 import { onKeydown } from "./keyboard.js";
 import { runMigrations } from "./migrate.js";
 import { getTheme } from "./settings.js";
@@ -49,6 +50,10 @@ async function main(): Promise<void> {
   // localStorage スキーマのマイグレーション（現状 no-op。版の記録＋将来の足場）。
   // 描画前に実行し、以降のコードが新スキーマ前提で動けるようにする。
   runMigrations(storage);
+  // フリーミアム: 保存済み Pro ライセンスの再検証を先に開始する（収益化未設定なら即 no-op）。
+  // スケルトン描画やイベント登録を WebCrypto 検証で待たせないよう、await は
+  // 初回 render を行う reloadProblems の直前まで遅らせる（検証失敗でも無料プランで続行）。
+  const entitlementsReady = initEntitlements(storage).catch(() => false);
   applyTheme();
   // system 設定時は OS のテーマ変更に追従。
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
@@ -86,6 +91,8 @@ async function main(): Promise<void> {
   initRouting();
   renderNav();
   renderSkeleton();
+  // ゲート判定（模試ロック等）が初回描画に正しく効くよう、render 前にプランを確定させる。
+  await entitlementsReady;
   await reloadProblems();
   document.addEventListener("keydown", onKeydown);
   // オフライン状態の変化をヘッダに反映（完全オフライン動作だが状態は明示する）。

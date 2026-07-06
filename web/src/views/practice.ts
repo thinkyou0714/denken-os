@@ -7,6 +7,7 @@
  */
 import type { Problem, Subject } from "../../../lib/engine/schema.js";
 import { reloadProblems } from "../app-init.js";
+import { featureLocked, remainingFreeToday } from "../entitlements.js";
 import {
   bridgeWithFreezes,
   coveredDays,
@@ -18,6 +19,7 @@ import {
 } from "../freeze.js";
 import { mascotHome, mascotSvg, mascotTip, tierForLevel } from "../mascot.js";
 import { formatMath } from "../mathfmt.js";
+import { MONETIZATION } from "../monetization-config.js";
 import {
   dailyQuests,
   dayIndexOf,
@@ -50,6 +52,7 @@ import { showToast } from "../ui/toast.js";
 import { bar, difficultyStars, draftBadge, emptyState, figureNode, svgNode } from "../ui/widgets.js";
 import { levelInfo, QUEST_BOOST_MULT, totalXp, xpByDay } from "../xp.js";
 import { drillLauncherCard } from "./drills.js";
+import { paywallCard } from "./paywall.js";
 import { renderHeader } from "./router.js";
 
 // re-export todayCount for other views
@@ -376,8 +379,20 @@ export function renderPractice(root: HTMLElement): void {
   root.append(toolbar, h("div", { id: "q" }));
   nextQuestion(root);
   // スキルドリル起動カード（公式導出 / 電卓速算）。#q を題材ホストにする。
+  // フリーミアム作動中はドリルを Pro ゲートに置き換える（既定=未設定では従来どおり）。
+  // ただし #q に無料枠切れのペイウォールが出ているときは重ねない（同内容カード2枚の防止）。
   const qHost = root.querySelector("#q") as HTMLElement | null;
-  if (qHost) root.append(drillLauncherCard(qHost));
+  if (qHost && qHost.querySelector(".paywall") === null) {
+    root.append(
+      featureLocked()
+        ? paywallCard({
+            icon: "🧠",
+            title: "スキルドリル（公式導出・電卓速算）は Pro 機能です",
+            description: "手順の並べ替えと速算トレーニングが解放されます。通常の演習は無料枠で続けられます。",
+          })
+        : drillLauncherCard(qHost),
+    );
+  }
 }
 
 export function nextQuestion(root: HTMLElement): void {
@@ -392,6 +407,24 @@ export function nextQuestion(root: HTMLElement): void {
   let next = takeDueRequeue(practice.asked, excludeId);
   // 再出題対象が現在のプール（分野フィルタ）に無いならスキップして通常選択へ。
   if (next && !poolIds.has(next.id)) next = null;
+  practice.currentFromRequeue = next !== null;
+  // フリーミアム: 無料枠（1日 N 問）の対象は「学習タブの新しい問題」だけ。
+  // 復習タブ発のドリル（practice.pool）と再出題（requeue＝解答済みの再想起）は
+  // FSRS の継続ループを守るため無料のまま通す。既定（収益化未設定）では Infinity で常に許可。
+  const freeLeft = remainingFreeToday(storage);
+  if (next === null && !practice.pool && freeLeft <= 0) {
+    practice.current = null;
+    host.replaceChildren(
+      paywallCard({
+        icon: "✏️",
+        title: "今日の無料枠を使い切りました",
+        description:
+          `無料プランで新しく解ける問題は1日${MONETIZATION.freeDailyLimit}問までです。明日また無料で続けられます。` +
+          "Pro なら演習が無制限になり、模試・スキルドリルも解放されます。復習タブ（復習ドリル・間違いノート）は今日も無料で使えます。",
+      }),
+    );
+    return;
+  }
   // 通常選択: 弱点をインターリーブしつつ選ぶ（#50）。
   // 問題単位の弱点バイアス: 同じ topic 内では過去に間違えた問題を優先する（FSRS は topic 単位のまま）。
   next =
@@ -426,6 +459,11 @@ export function nextQuestion(root: HTMLElement): void {
   const meta = h("div", { id: "meta" }, `${p.subject}・${p.topic}・難易度${difficultyStars(p.difficulty)}`);
   const badge = draftBadge(p);
   if (badge) meta.append(" ", badge);
+  // フリーミアム作動中は無料枠の残数を出題メタに添える（残数の見える化＝納得感）。
+  // freeLeft はゲート判定と同じ読み出しを再利用する（storage の二重 parse を避ける）。
+  if (Number.isFinite(freeLeft)) {
+    meta.append(" ", h("span", { class: "muted small" }, `🆓 今日あと${freeLeft}問`));
+  }
   host.append(meta, stmt);
   if (p.figure) host.append(figureNode(p.figure));
   // ヒント段階開示: 解答前に解説の先頭ステップ（着眼点）だけ覗ける（最大2段）。

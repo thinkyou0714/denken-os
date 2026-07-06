@@ -35,6 +35,8 @@ export const practice: {
   recentTopics: string[];
   /** 再出題待ちのキュー（間違えた問題を少しあとで出す #49）。 */
   requeue: RequeueItem[];
+  /** 現在の問題が requeue（再出題）由来か。フリーミアムの無料枠カウント対象外の判定に使う。 */
+  currentFromRequeue: boolean;
 } = {
   current: null,
   shownAt: 0,
@@ -45,6 +47,7 @@ export const practice: {
   asked: 0,
   recentTopics: [],
   requeue: [],
+  currentFromRequeue: false,
 };
 
 /** 直近 topic 履歴に1件積む（新しい順・窓サイズで切る）。session.ts の純関数に委譲。 */
@@ -90,6 +93,7 @@ export function resetPracticeSession(): void {
   practice.asked = 0;
   practice.recentTopics = [];
   practice.requeue = [];
+  practice.currentFromRequeue = false;
 }
 
 /** 現在の問題を設定し、hintsShown をリセットする（新問題表示時に呼ぶ）。 */

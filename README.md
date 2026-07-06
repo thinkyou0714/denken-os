@@ -7,7 +7,7 @@
 **Pre-alpha — コア実装着手** (2026-05-29)
 
 問題生成＆検証エンジン (MVP)・運用ロジック・CI品質ゲート・オフラインWeb MVPを実装済み。
-現時点で本番接続していないものは、X実投稿・外部Supabaseプロジェクト・課金・監修フロー・大規模問題データ。
+現時点で本番接続していないものは、X実投稿・外部Supabaseプロジェクト・課金の決済リンク（フリーミアム基盤自体は実装済み・販売者セットアップ待ち）・監修フロー・大規模問題データ。
 実運用前の人間タスクは [`docs/strategy/human-tasks.md`](docs/strategy/human-tasks.md)、品質ハードニング方針は [`docs/strategy/03-quality-hardening-plan.md`](docs/strategy/03-quality-hardening-plan.md) に分離した。
 進捗を追いたい方は Watch / Star してください。
 
@@ -30,6 +30,7 @@
 | **ゲーミフィケーション（継続の仕組み）** | `web/src/`（**XP/レベル/称号**=解答ログから完全導出・**日替わり/ウィークリークエスト**・**ストリークお守り**=7日ごと獲得で欠席日を自動カバー・**実績バッジ22種**・マスコット**「デンタマ」**=状況反応するインラインSVG・**自分の記録**統計・紙吹雪/効果音/XPフロートの祝賀演出） | `docs/strategy/ideas/13-gamification-duolingo-100.md` |
 | **AI質問チャット（質問タブ）** | `lib/chat/`（検証済みナレッジ60件＝出典必須＋日本語バイグラム検索＋RAGプロンプト）＋`web/src/chat.ts`（**オフラインは内蔵ナレッジで即答／APIキー設定時は Claude をブラウザ直結(BYOK)でストリーミング**。法規は改正注意を自動付与） | `docs/strategy/ideas/10-ai-chat-100.md` |
 | Obsidian/Markdown 書き出し | `lib/export/markdown.ts` ＋ `scripts/export-vault.ts`（vault レイアウト） | README ビジョン |
+| **収益化（フリーミアム基盤）** | `lib/license/`＋`web/src/entitlements.ts`（**ECDSA署名ライセンスキー**＝サーバ不要のオフライン検証・無料枠=新規1日N問（復習/再出題は対象外）・模試/スキルドリルのProゲート。**既定=公開鍵未設定では全機能無料のまま**＝挙動不変）＋`scripts/license-keygen.ts`/`license-issue.ts`（販売者CLI: 鍵生成・キー発行） | `docs/strategy/monetization-setup.md` |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。

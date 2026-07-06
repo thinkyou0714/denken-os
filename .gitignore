@@ -9,6 +9,8 @@ dist/
 .env
 .env.*
 !.env.example
+# ライセンス署名鍵（license:keygen が生成。漏えい＝キー偽造可能になる）
+secrets/
 
 # generated / scratch output
 out/
