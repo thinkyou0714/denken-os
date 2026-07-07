@@ -3,7 +3,11 @@
  * renderDashboard をセクション関数へ分解（I-054）:
  * levelCard / todaySection / xpChartSection / masterySection / statsSection / badgesSection
  */
+
+import { withUtm } from "../../../lib/analytics/utm.js";
 import { evaluateAchievements } from "../achievements.js";
+import { recordClick } from "../bridge.js";
+import { BRIDGE } from "../bridge-config.js";
 import { masteredConceptAreas, recommendNextConcepts } from "../concept-graph.js";
 import {
   accuracyTrend,
@@ -18,16 +22,18 @@ import {
   type SubjectReadiness,
   topicSubjectMap,
 } from "../dashboard.js";
-import { sameJstDay } from "../dates.js";
+import { dayIndex, JST_OFFSET_MS, sameJstDay } from "../dates.js";
 import { loadFreezeState } from "../freeze.js";
 import { buildStudyPlan } from "../plan.js";
 import { getDailyGoal, getExamDate } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
+import { practice as practiceState } from "../state/practice.js";
 import { ghostRace, masteredTopics, myStats } from "../stats.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { bar, emptyState, masteryChip, ringNode, sparklineNode } from "../ui/widgets.js";
 import { type levelInfo, xpByDay, xpBySubject } from "../xp.js";
+import { subjectNoteChip } from "./bridge-cards.js";
 import { currentLevel, freezeInfo, questsCard, weeklyQuestsCard } from "./practice.js";
 import { switchView } from "./router.js";
 
@@ -199,6 +205,31 @@ function readinessSection(root: HTMLElement, logs: ReturnType<typeof progress.lo
       ),
     );
   }
+  // 最初の「要強化」科目にだけ、建設的な次アクションを添える（17-C7/B19。乱発しない）。
+  const worst = rows.find((r) => r.verdict === "遅れ");
+  if (worst) {
+    const actions = h(
+      "div",
+      { class: "drill-actions" },
+      h(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          onclick: () => {
+            practiceState.subject = worst.subject;
+            practiceState.pool = null;
+            switchView("practice");
+          },
+        },
+        `▶ ${worst.subject} を強化する`,
+      ),
+    );
+    // 科目別の攻略 note（設定済み科目のみ。未設定なら内部導線だけ）。
+    const chip = subjectNoteChip(worst.subject, "dashboard");
+    if (chip) actions.append(chip);
+    root.append(actions);
+  }
 }
 
 /**
@@ -306,6 +337,10 @@ function statsSection(
         ),
       );
     }
+    // 課題認識→解決策の順で内部導線を1つだけ（17-C6。学習タブは苦手優先出題が既定）。
+    root.append(
+      h("button", { class: "chip", type: "button", onclick: () => switchView("practice") }, "⚡ 弱点を演習で潰す →"),
+    );
   }
 
   // マスター済み論点（「余裕」評価×3。弱点の隣に「できるようになったこと」も見せる）。
@@ -391,15 +426,162 @@ function badgesSection(
 /** 実績のシェア（Web Share API、無ければクリップボード）。学習の誇りを外へ＝自然な口コミ。 */
 function shareBadge(title: string, icon: string, desc: string): void {
   const text = `🏅 電験学習アプリ DENKEN-OS で実績「${icon}${title}」を解除！（${desc}） #電験 #デンタマ`;
+  shareWithAppUrl(text, "badge");
+}
+
+/**
+ * シェア共通処理（17-C9/C10）: 本文は従来どおり・appUrl 設定時のみ url フィールドに
+ * UTM 付きリンクを添えて流入元を計測可能にする。クリックは台帳に記録。
+ */
+function shareWithAppUrl(text: string, campaign: string): void {
+  recordClick(storage, "share", campaign);
+  const url = BRIDGE.appUrl !== "" ? withUtm(BRIDGE.appUrl, { source: "share", medium: "social", campaign }) : "";
   try {
     if (typeof navigator.share === "function") {
-      void navigator.share({ text }).catch(() => {});
+      void navigator.share(url !== "" ? { text, url } : { text }).catch(() => {});
       return;
     }
-    void navigator.clipboard?.writeText(text).then(() => showToast("📋 シェア文をコピーしました", "OK", () => {}));
+    const full = url !== "" ? `${text}\n${url}` : text;
+    void navigator.clipboard?.writeText(full).then(() => showToast("📋 シェア文をコピーしました", "OK", () => {}));
   } catch {
     // シェア不能でも学習は続行。
   }
+}
+
+// ---- 橋渡し収益: 節目カード・月次リキャップ・記録書き出し（17-C8/C23/C24/B22） ----
+
+const SEEN_CD_MILESTONE_KEY = "denken:seenCdMilestone";
+const SEEN_EXAM_DONE_KEY = "denken:seenExamDone";
+const SEEN_MONTHLY_RECAP_KEY = "denken:seenMonthlyRecap";
+
+/** 試験カウントダウンの節目カード（100/60/30日を跨いだ初回だけ・各1回）。 */
+function countdownMilestoneCard(root: HTMLElement, daysLeft: number): void {
+  if (daysLeft <= 0) return;
+  const milestone = [30, 60, 100].find((m) => daysLeft <= m);
+  if (milestone === undefined) return;
+  const seen = Number(storage.getItem(SEEN_CD_MILESTONE_KEY));
+  if (Number.isFinite(seen) && seen > 0 && seen <= milestone) return; // この節目は表示済み
+  try {
+    storage.setItem(SEEN_CD_MILESTONE_KEY, String(milestone));
+  } catch {
+    // 保存不能でも表示は続行。
+  }
+  root.append(
+    h(
+      "div",
+      { class: "card" },
+      h("strong", {}, `⏳ 試験まで ${daysLeft} 日`),
+      h(
+        "div",
+        { class: "muted" },
+        milestone <= 30
+          ? "直前期です。新しい範囲より弱点の集中復習と模試での実戦感覚を。残り日数で挽回できます。"
+          : "計画の見直しどき。1日の目標問題数と復習上限を設定タブで調整できます。",
+      ),
+    ),
+  );
+}
+
+/** 試験日経過後の労いカード（合否に触れない。多年度戦の離脱防止 17-C23）。 */
+function examDoneCard(root: HTMLElement, daysLeft: number, logs: ReturnType<typeof progress.logs>): void {
+  if (daysLeft > 0) return;
+  const examDate = getExamDate(storage);
+  if (storage.getItem(SEEN_EXAM_DONE_KEY) === examDate) return;
+  try {
+    storage.setItem(SEEN_EXAM_DONE_KEY, examDate);
+  } catch {
+    // 保存不能でも表示は続行。
+  }
+  const days = new Set(logs.map((l) => dayIndex(l.atMs, JST_OFFSET_MS))).size;
+  const text = `⚡ 電験の試験勉強、${days}日間で${logs.length}問を積み上げました。おつかれさま自分！ #電験 #デンタマ`;
+  root.append(
+    h(
+      "div",
+      { class: "card" },
+      h("strong", {}, "🌸 試験おつかれさまでした"),
+      h(
+        "div",
+        { class: "muted" },
+        `あなたはここまで ${days} 日間・${logs.length.toLocaleString("ja-JP")} 問を積み上げました。` +
+          "結果がどうであれ、この積み重ねは消えません。次の試験日は設定タブから更新できます。",
+      ),
+      h(
+        "div",
+        { class: "drill-actions" },
+        h("button", { class: "chip", type: "button", onclick: () => shareWithAppUrl(text, "exam-done") }, "📣 シェア"),
+        h("button", { class: "chip", type: "button", onclick: () => switchView("settings") }, "試験日を更新 →"),
+      ),
+    ),
+  );
+}
+
+/** 月次リキャップ（月替わり初回のみ。前月の学習日数・解答数・正答率＋シェア 17-C24）。 */
+function monthlyRecapCard(root: HTMLElement, logs: ReturnType<typeof progress.logs>): void {
+  const now = new Date(Date.now() + JST_OFFSET_MS);
+  const thisMonth = now.toISOString().slice(0, 7); // YYYY-MM (JST)
+  if (storage.getItem(SEEN_MONTHLY_RECAP_KEY) === thisMonth) return;
+  const prev = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
+  const prevMonth = prev.toISOString().slice(0, 7);
+  const monthLogs = logs.filter((l) => new Date(l.atMs + JST_OFFSET_MS).toISOString().slice(0, 7) === prevMonth);
+  if (monthLogs.length === 0) return; // 前月の記録がなければ出さない（既読にもしない）
+  try {
+    storage.setItem(SEEN_MONTHLY_RECAP_KEY, thisMonth);
+  } catch {
+    // 保存不能でも表示は続行。
+  }
+  const days = new Set(monthLogs.map((l) => dayIndex(l.atMs, JST_OFFSET_MS))).size;
+  const correct = monthLogs.filter((l) => l.correct).length;
+  const acc = Math.round((correct / monthLogs.length) * 100);
+  const label = `${Number(prevMonth.slice(5, 7))}月`;
+  const text = `📊 ${label}の電験学習: ${days}日・${monthLogs.length}問・正答率${acc}%（DENKEN-OS） #電験 #デンタマ`;
+  root.append(
+    h(
+      "div",
+      { class: "card" },
+      h("strong", {}, `📊 ${label}のあゆみ`),
+      h(
+        "div",
+        { class: "muted" },
+        `学習 ${days} 日 ・ ${monthLogs.length.toLocaleString("ja-JP")} 問 ・ 正答率 ${acc}%`,
+      ),
+      h(
+        "div",
+        { class: "drill-actions" },
+        h("button", { class: "chip", type: "button", onclick: () => shareWithAppUrl(text, "monthly") }, "📣 シェア"),
+      ),
+    ),
+  );
+}
+
+/** 学習記録の Markdown 書き出し（17-B22）。note/X にそのまま貼れる素材＝UGC 相互送客。 */
+function recordExportButton(root: HTMLElement, logs: ReturnType<typeof progress.logs>): void {
+  root.append(
+    h(
+      "button",
+      {
+        class: "chip",
+        type: "button",
+        onclick: () => {
+          const o = overall(logs);
+          const days = new Set(logs.map((l) => dayIndex(l.atMs, JST_OFFSET_MS))).size;
+          const weak = byTopic(logs)
+            .filter((t) => t.attempts > 0)
+            .slice(0, 3)
+            .map((t) => `- ${t.topic}（正答率 ${Math.round(t.accuracy * 100)}%）`)
+            .join("\n");
+          const md =
+            `## 電験二種 学習記録\n\n- 学習日数: ${days} 日\n- 解答数: ${logs.length} 問\n` +
+            `- 正答率: ${Math.round(o.accuracy * 100)}%\n\n### いまの弱点\n${weak || "-"}\n\n` +
+            `（DENKEN-OS${BRIDGE.appUrl !== "" ? ` ${BRIDGE.appUrl}` : ""} で記録）\n`;
+          void navigator.clipboard?.writeText(md).then(
+            () => showToast("📋 Markdownをコピーしました（note/Xにどうぞ）", "OK", () => {}),
+            () => showToast("⚠️ コピーできませんでした", "OK", () => {}),
+          );
+        },
+      },
+      "📝 記録を書き出す（Markdown）",
+    ),
+  );
 }
 
 export function renderDashboard(root: HTMLElement): void {
@@ -426,6 +608,10 @@ export function renderDashboard(root: HTMLElement): void {
   const lv = currentLevel();
 
   levelCard(root, lv);
+  // 節目・労い・月次のカード（各1回だけ。17-C8/C23/C24）。
+  examDoneCard(root, plan.daysLeft, logs);
+  countdownMilestoneCard(root, plan.daysLeft);
+  monthlyRecapCard(root, logs);
   todaySection(root, logs, plan, o);
   xpChartSection(root, logs);
   masterySection(root, logs);
@@ -433,4 +619,5 @@ export function renderDashboard(root: HTMLElement): void {
   learningOrderSection(root, logs);
   statsSection(root, logs, lv);
   badgesSection(root, logs, lv);
+  recordExportButton(root, logs);
 }

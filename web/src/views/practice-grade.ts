@@ -5,6 +5,7 @@
 import type { Problem } from "../../../lib/engine/schema.js";
 import type { Rating } from "../../../lib/scheduler/types.js";
 import { cardText } from "../../../lib/share-card/card-text.js";
+import { affiliateActive } from "../bridge-config.js";
 import { recordPracticeAnswer } from "../entitlements.js";
 import { formatElapsed } from "../format.js";
 import { confettiBurst, playTone, vibrate, xpFloat } from "../fx.js";
@@ -28,6 +29,7 @@ import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { solutionNode, sourceText } from "../ui/widgets.js";
 import { totalXp } from "../xp.js";
+import { deepDiveBook } from "./bridge-cards.js";
 import { freezeInfo, nextQuestion, refreshPracticeCards, runFreezeBridge, sessionSummaryCard } from "./practice.js";
 import { processRewards } from "./practice-rewards.js";
 import { renderHeader, renderNav } from "./router.js";
@@ -225,6 +227,11 @@ export function finalize(
       ),
       result.firstChild,
     );
+  }
+  // 深掘り一冊（17-A17）: アフィリエイト設定時のみ、閉じた details を1つだけ添える。
+  if (affiliateActive()) {
+    const dd = deepDiveBook(p.subject);
+    if (dd) result.append(dd);
   }
   result.append(
     h(

@@ -31,6 +31,7 @@
 | **AI質問チャット（質問タブ）** | `lib/chat/`（検証済みナレッジ60件＝出典必須＋日本語バイグラム検索＋RAGプロンプト）＋`web/src/chat.ts`（**オフラインは内蔵ナレッジで即答／APIキー設定時は Claude をブラウザ直結(BYOK)でストリーミング**。法規は改正注意を自動付与） | `docs/strategy/ideas/10-ai-chat-100.md` |
 | Obsidian/Markdown 書き出し | `lib/export/markdown.ts` ＋ `scripts/export-vault.ts`（vault レイアウト） | README ビジョン |
 | **収益化（フリーミアム基盤）** | `lib/license/`＋`web/src/entitlements.ts`（**ECDSA署名ライセンスキー**＝サーバ不要のオフライン検証・無料枠=新規1日N問（復習/再出題は対象外）・模試/スキルドリルのProゲート。**既定=公開鍵未設定では全機能無料のまま**＝挙動不変）＋`scripts/license-keygen.ts`/`license-issue.ts`（販売者CLI: 鍵生成・キー発行） | `docs/strategy/monetization-setup.md` |
+| **橋渡し収益（アフィリ・note・応援）** | `web/src/bridge-config.ts`＋`bridge.ts`（**config駆動・全既定空=導線非表示**。教材ガイド(公式タブ)・note/応援/招待導線・**非侵襲原則の機構化**=1日1件/学習中禁止/オプトアウト・**PR開示バッジ**(ステマ規制)・端末内クリック計測+UTMファーストタッチ）＋`docs/strategy/monetization-policy.md`（無料保護憲章・返金・OSS両立） | `docs/strategy/ideas/17-bridge-revenue-100.md` |
 
 > ハルシネーション根本対策: **正解は LLM に出させずコードで算出**、最後に解説の数値と照合（不一致は破棄）。
 > X 実投稿は無料API枠廃止(2026/2)＋凍結回避のため**既定で下書きエクスポート**（`lib/clients/x-client.ts`）。出題には poll を併設し、集計の一次ソースにする。

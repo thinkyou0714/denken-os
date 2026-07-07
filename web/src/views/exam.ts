@@ -28,6 +28,7 @@ import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { bar, difficultyStars, draftBadge, figureNode, solutionNode, sparklineNode } from "../ui/widgets.js";
 import { buildYearMock } from "../year-mock.js";
+import { examNoteCard } from "./bridge-cards.js";
 import { processRewards } from "./practice-rewards.js";
 import { startDrill } from "./review.js";
 import { renderHeader, switchView } from "./router.js";
@@ -752,5 +753,16 @@ export function renderExamResult(root: HTMLElement): void {
   examScoreSection(root, score, mins);
   if (sec) examSecondarySection(root, exam.set, exam.results);
   else examSubjectSection(root, subjectScores);
+  // 結果直後の次アクション（17-C5）: Pro の価値実感を最大化する内部回遊。
+  root.append(
+    h(
+      "button",
+      { class: "chip", type: "button", onclick: () => switchView("practice") },
+      "⚡ 間違えた論点を演習で仕上げる →",
+    ),
+  );
+  // 攻略記事カード（17-B18）: noteUrl 設定時のみ。判定直後は作戦情報の需要が最大。
+  const noteCard = examNoteCard();
+  if (noteCard) root.append(noteCard);
   examReviewSection(root);
 }
