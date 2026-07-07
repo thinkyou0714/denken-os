@@ -86,8 +86,18 @@ export function nudgeOptedOut(storage: StorageLike): boolean {
   return storage.getItem(NUDGE_OPTOUT_KEY) === "1";
 }
 
-export function setNudgeOptOut(storage: StorageLike, off: boolean): void {
-  storage.setItem(NUDGE_OPTOUT_KEY, off ? "1" : "");
+/**
+ * ご案内オプトアウトを保存する。
+ * @returns 保存に成功したら true（quota 等で失敗したら false。ユーザーが明示的に拒否した
+ * 設定が黙って消えるのは信頼設計上最悪のフェイルなので、呼び出し側で失敗を通知すること）
+ */
+export function setNudgeOptOut(storage: StorageLike, off: boolean): boolean {
+  try {
+    storage.setItem(NUDGE_OPTOUT_KEY, off ? "1" : "");
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 interface NudgeState {

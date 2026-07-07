@@ -25,7 +25,7 @@ import {
 import { dayIndex, JST_OFFSET_MS, sameJstDay } from "../dates.js";
 import { loadFreezeState } from "../freeze.js";
 import { buildStudyPlan } from "../plan.js";
-import { getDailyGoal, getExamDate } from "../settings.js";
+import { getDailyGoal, getExamDate, isOnboarded } from "../settings.js";
 import { problems, progress, storage } from "../state/app.js";
 import { practice as practiceState } from "../state/practice.js";
 import { ghostRace, masteredTopics, myStats } from "../stats.js";
@@ -338,8 +338,21 @@ function statsSection(
       );
     }
     // 課題認識→解決策の順で内部導線を1つだけ（17-C6。学習タブは苦手優先出題が既定）。
+    // 旧ドリルプールが残っていると「弱点優先」にならないため、遷移前に通常モードへ正規化する。
     root.append(
-      h("button", { class: "chip", type: "button", onclick: () => switchView("practice") }, "⚡ 弱点を演習で潰す →"),
+      h(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          onclick: () => {
+            practiceState.pool = null;
+            practiceState.subject = "all";
+            switchView("practice");
+          },
+        },
+        "⚡ 弱点を演習で潰す →",
+      ),
     );
   }
 
@@ -435,7 +448,14 @@ function shareBadge(title: string, icon: string, desc: string): void {
  */
 function shareWithAppUrl(text: string, campaign: string): void {
   recordClick(storage, "share", campaign);
-  const url = BRIDGE.appUrl !== "" ? withUtm(BRIDGE.appUrl, { source: "share", medium: "social", campaign }) : "";
+  let url = "";
+  if (BRIDGE.appUrl !== "") {
+    try {
+      url = withUtm(BRIDGE.appUrl, { source: "share", medium: "social", campaign });
+    } catch {
+      url = BRIDGE.appUrl; // スキーム無し等の設定ミスでもシェア自体は生かす
+    }
+  }
   try {
     if (typeof navigator.share === "function") {
       void navigator.share(url !== "" ? { text, url } : { text }).catch(() => {});
@@ -454,15 +474,22 @@ const SEEN_CD_MILESTONE_KEY = "denken:seenCdMilestone";
 const SEEN_EXAM_DONE_KEY = "denken:seenExamDone";
 const SEEN_MONTHLY_RECAP_KEY = "denken:seenMonthlyRecap";
 
-/** 試験カウントダウンの節目カード（100/60/30日を跨いだ初回だけ・各1回）。 */
+/**
+ * 試験カウントダウンの節目カード（100/60/30日を跨いだ初回だけ・各1回）。
+ * 既読は「試験日:節目」の組で保存する — 試験日を翌年に更新した多年度戦ユーザー（C23）にも
+ * 新しいサイクルで節目ナッジが再び働くようにする。
+ */
 function countdownMilestoneCard(root: HTMLElement, daysLeft: number): void {
   if (daysLeft <= 0) return;
   const milestone = [30, 60, 100].find((m) => daysLeft <= m);
   if (milestone === undefined) return;
-  const seen = Number(storage.getItem(SEEN_CD_MILESTONE_KEY));
-  if (Number.isFinite(seen) && seen > 0 && seen <= milestone) return; // この節目は表示済み
+  const examDate = getExamDate(storage);
+  const raw = storage.getItem(SEEN_CD_MILESTONE_KEY) ?? "";
+  const [seenDate, seenStr] = raw.split(":");
+  const seen = Number(seenStr);
+  if (seenDate === examDate && Number.isFinite(seen) && seen > 0 && seen <= milestone) return; // 表示済み
   try {
-    storage.setItem(SEEN_CD_MILESTONE_KEY, String(milestone));
+    storage.setItem(SEEN_CD_MILESTONE_KEY, `${examDate}:${milestone}`);
   } catch {
     // 保存不能でも表示は続行。
   }
@@ -483,9 +510,13 @@ function countdownMilestoneCard(root: HTMLElement, daysLeft: number): void {
 }
 
 /** 試験日経過後の労いカード（合否に触れない。多年度戦の離脱防止 17-C23）。 */
-function examDoneCard(root: HTMLElement, daysLeft: number, logs: ReturnType<typeof progress.logs>): void {
-  if (daysLeft > 0) return;
+function examDoneCard(root: HTMLElement, logs: ReturnType<typeof progress.logs>): void {
+  // daysUntil は 0 でクランプされ「当日」と「経過後」を区別できないため、JST 日付を直接比較する。
+  // 当日は受験前の朝に出てしまうため翌日以降のみ。試験日を一度も設定していない
+  // （オンボーディング未完了で既定日のままの）ユーザーにも出さない。
   const examDate = getExamDate(storage);
+  const todayJst = new Date(Date.now() + JST_OFFSET_MS).toISOString().slice(0, 10);
+  if (todayJst <= examDate || !isOnboarded(storage)) return;
   if (storage.getItem(SEEN_EXAM_DONE_KEY) === examDate) return;
   try {
     storage.setItem(SEEN_EXAM_DONE_KEY, examDate);
@@ -609,7 +640,7 @@ export function renderDashboard(root: HTMLElement): void {
 
   levelCard(root, lv);
   // 節目・労い・月次のカード（各1回だけ。17-C8/C23/C24）。
-  examDoneCard(root, plan.daysLeft, logs);
+  examDoneCard(root, logs);
   countdownMilestoneCard(root, plan.daysLeft);
   monthlyRecapCard(root, logs);
   todaySection(root, logs, plan, o);

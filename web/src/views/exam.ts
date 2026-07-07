@@ -753,15 +753,8 @@ export function renderExamResult(root: HTMLElement): void {
   examScoreSection(root, score, mins);
   if (sec) examSecondarySection(root, exam.set, exam.results);
   else examSubjectSection(root, subjectScores);
-  // 結果直後の次アクション（17-C5）: Pro の価値実感を最大化する内部回遊。
-  root.append(
-    h(
-      "button",
-      { class: "chip", type: "button", onclick: () => switchView("practice") },
-      "⚡ 間違えた論点を演習で仕上げる →",
-    ),
-  );
   // 攻略記事カード（17-B18）: noteUrl 設定時のみ。判定直後は作戦情報の需要が最大。
+  // （間違いの再演習は examReviewSection 既存の「間違いだけ再演習」が担う＝重複導線を作らない）
   const noteCard = examNoteCard();
   if (noteCard) root.append(noteCard);
   examReviewSection(root);

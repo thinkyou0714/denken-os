@@ -52,7 +52,8 @@ export interface PaywallOpts {
 
 /** ロック説明＋購入導線＋ライセンス入力への導線をまとめたカード。 */
 export function paywallCard(opts: PaywallOpts): HTMLElement {
-  recordShown(storage, "paywall", opts.icon);
+  // 表示はクリック（paywall:pro / paywall:continue-free）と突合できるキーで数える（絵文字キー不使用）。
+  recordShown(storage, "paywall", "pro");
   const card = h(
     "div",
     { class: "card paywall" },

@@ -51,7 +51,15 @@ export const BRIDGE: BridgeConfig = {
   sellerContact: "",
 };
 
-/** アフィリエイトリンクが有効か（＝開示バッジの表示が必要か）。 */
+/** いずれかのアフィリエイト提携が有効か（設定タブの法的情報カード等の表示判定）。 */
 export function affiliateActive(cfg: BridgeConfig = BRIDGE): boolean {
   return cfg.amazonTag !== "" || cfg.courseUrl !== "";
+}
+
+/**
+ * Amazon 提携が有効か。書籍リンク（gearItemUrl）の開示バッジと発火条件は必ずこちらで判定する
+ * — courseUrl だけ設定した構成で「タグなしの素リンクに PR 表示」という逆方向の誤開示を防ぐ。
+ */
+export function amazonAffiliateActive(cfg: BridgeConfig = BRIDGE): boolean {
+  return cfg.amazonTag !== "";
 }

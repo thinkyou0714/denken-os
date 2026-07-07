@@ -7,7 +7,7 @@
 
 import { withUtm } from "../../../lib/analytics/utm.js";
 import { exportLedgerJson, nudgeOptedOut, recordClick, recordShown, setNudgeOptOut } from "../bridge.js";
-import { affiliateActive, BRIDGE } from "../bridge-config.js";
+import { amazonAffiliateActive, BRIDGE } from "../bridge-config.js";
 import { GEAR_SECTIONS, gearItemUrl } from "../gear-guide.js";
 import { storage } from "../state/app.js";
 import { h } from "../ui/dom.js";
@@ -42,7 +42,9 @@ function outboundButton(label: string, url: string, placement: string, campaign:
 
 /** 教材ガイド全体。リンクは常に出す（タグ未設定=素の検索リンク・開示バッジなし）。 */
 export function gearGuideSection(): HTMLElement {
-  const affiliate = affiliateActive();
+  // 開示は「実際に紹介料が入るリンク」にだけ付ける: 書籍リンク＝Amazon 提携時のみ
+  // （courseUrl だけ設定した構成で素リンクに PR 表示する誤開示を防ぐ）。
+  const amazonAffiliate = amazonAffiliateActive();
   const wrap = h(
     "div",
     { class: "card" },
@@ -51,15 +53,20 @@ export function gearGuideSection(): HTMLElement {
       "p",
       { class: "muted small" },
       "独学の定番教材の選び方。アプリ（反復・記録）と紙の教材（記述練習・通読）は補完関係です。" +
-        (affiliate ? " 以下のリンクはアフィリエイトを含みます（購入で運営者に紹介料が入ります）。" : ""),
+        (amazonAffiliate ? " 以下のリンクはアフィリエイトを含みます（購入で運営者に紹介料が入ります）。" : ""),
     ),
   );
-  if (affiliate) wrap.querySelector("strong")?.append(disclosureBadge("affiliate"));
+  if (amazonAffiliate) wrap.querySelector("strong")?.append(disclosureBadge("affiliate"));
   for (const sec of GEAR_SECTIONS) {
-    const det = h("details", {}, h("summary", {}, sec.heading));
+    const det = h("details", {}, h("summary", {}, sec.heading)) as HTMLDetailsElement;
     det.append(h("p", { class: "muted small" }, sec.intro));
+    // 「表示」はセクションを開いた（実際に視認した）ときに、クリックと同じキーで数える
+    // （17-C25 の CTR 突合のため。閉じたままの描画は数えない）。
+    det.addEventListener("toggle", () => {
+      if (!det.open) return;
+      for (const item of sec.items) recordShown(storage, "gear", `${sec.id}:${item.keyword}`);
+    });
     for (const item of sec.items) {
-      recordShown(storage, "gear", sec.id);
       const row = h(
         "div",
         { style: "margin:.3em 0" },
@@ -119,7 +126,9 @@ export function supportCard(): HTMLElement | null {
 /** 作者コンテンツ（note/BOOTH）カード（B17）。両方未設定なら null。 */
 export function creatorContentCard(): HTMLElement | null {
   if (BRIDGE.noteUrl === "" && BRIDGE.boothUrl === "") return null;
-  recordShown(storage, "settings", "creator");
+  // 表示はクリック（settings:note / settings:booth）と同じキーで数える（CTR 突合のため）。
+  if (BRIDGE.noteUrl !== "") recordShown(storage, "settings", "note");
+  if (BRIDGE.boothUrl !== "") recordShown(storage, "settings", "booth");
   const card = h(
     "div",
     { class: "card" },
@@ -136,7 +145,12 @@ export function creatorContentCard(): HTMLElement | null {
 /** 招待リンクカード（C11）。appUrl 未設定なら null。識別子は一切埋め込まない。 */
 export function inviteCard(): HTMLElement | null {
   if (BRIDGE.appUrl === "") return null;
-  const url = withUtm(BRIDGE.appUrl, { source: "invite", medium: "referral", campaign: "invite" });
+  let url = BRIDGE.appUrl;
+  try {
+    url = withUtm(BRIDGE.appUrl, { source: "invite", medium: "referral", campaign: "invite" });
+  } catch {
+    // スキーム無し等の設定ミスで設定タブ全体を落とさない（素の URL でコピーは生かす）。
+  }
   return h(
     "div",
     { class: "card" },
@@ -165,13 +179,24 @@ export function nudgeOptOutCard(): HTMLElement {
   const sel = h("select", {}) as HTMLSelectElement;
   sel.append(h("option", { value: "" }, "表示する"), h("option", { value: "1" }, "表示しない"));
   sel.value = nudgeOptedOut(storage) ? "1" : "";
-  sel.addEventListener("change", () => setNudgeOptOut(storage, sel.value === "1"));
+  sel.addEventListener("change", () => {
+    // 明示的な拒否設定が黙って消えるのは最悪のフェイル。保存失敗は通知して UI を戻す。
+    if (!setNudgeOptOut(storage, sel.value === "1")) {
+      sel.value = nudgeOptedOut(storage) ? "1" : "";
+      showToast("⚠️ 設定を保存できませんでした。端末の空き容量を確認してください", "OK", () => {});
+    }
+  });
   return h(
     "div",
     { class: "card" },
     h("label", {}, "応援・コンテンツのご案内 "),
     sel,
-    h("div", { class: "muted" }, "達成時などに出る応援・読み物のご案内を止められます（機能には影響しません）。"),
+    h(
+      "div",
+      { class: "muted" },
+      "達成時の応援の1行・模試結果や進捗の読み物カード・採点後の書籍案内を止められます" +
+        "（設定タブ内のリンクと教材ガイドは残ります。機能には影響しません）。",
+    ),
   );
 }
 
@@ -224,6 +249,13 @@ export function legalCard(): HTMLElement {
       h(
         "div",
         { class: "muted small" },
+        "※ 所在地・電話番号の省略表示は、プラットフォーム（note/BOOTH 等）経由の販売、" +
+          "または請求に遅滞なく応じられる体制がある場合に限り可能です（消費者庁運用）。" +
+          "自前決済で直販する場合は住所・電話番号の表示が原則必要です。",
+      ),
+      h(
+        "div",
+        { class: "muted small" },
         "返金: キー発行後の返金は原則できません（デジタル商品の性質上）。二重購入・キーが技術的に機能しない場合は連絡先までご相談ください（確認のうえ返金・キー無効化で対応します）。",
       ),
     ),
@@ -248,17 +280,17 @@ export function legalCard(): HTMLElement {
 
 // ---- 進捗・模試・学習タブ向けの文脈カード ----
 
-/** 弱点科目→攻略noteリンクのチップ（B19/A18）。設定済み科目のみ。無ければ null。 */
+/** 弱点科目→攻略noteリンクのチップ（B19/A18）。設定済み科目のみ・オプトアウトで停止。 */
 export function subjectNoteChip(subject: string, placement: string): HTMLElement | null {
   const url = BRIDGE.subjectNoteUrls[subject];
-  if (!url) return null;
+  if (!url || nudgeOptedOut(storage)) return null;
   recordShown(storage, placement, `note-${subject}`);
   return outboundButton(`📖 ${subject}の攻略を読む`, url, placement, `note-${subject}`);
 }
 
-/** 模試判定後の攻略記事カード（B18）。noteUrl 未設定なら null。 */
+/** 模試判定後の攻略記事カード（B18）。noteUrl 未設定・オプトアウト時は null。 */
 export function examNoteCard(): HTMLElement | null {
-  if (BRIDGE.noteUrl === "") return null;
+  if (BRIDGE.noteUrl === "" || nudgeOptedOut(storage)) return null;
   recordShown(storage, "exam", "note");
   return h(
     "div",
@@ -271,10 +303,12 @@ export function examNoteCard(): HTMLElement | null {
 
 /** 深掘り一冊（A17）: 採点結果の下に閉じた details で1冊だけ。affiliate時は開示つき。 */
 export function deepDiveBook(subject: string): HTMLElement | null {
+  // Amazon 提携時のみ発火・開示バッジつき（素リンクへの誤 PR 表示を防ぐ）。オプトアウトで停止。
+  if (!amazonAffiliateActive() || nudgeOptedOut(storage)) return null;
   const sec = subject === "電力管理" || subject === "機械制御" ? GEAR_SECTIONS[1] : GEAR_SECTIONS[0];
   const item = sec?.items[0];
-  if (!item) return null;
-  const det = h(
+  if (!sec || !item) return null;
+  return h(
     "details",
     { class: "muted small" },
     h("summary", {}, "📚 この分野を紙で深掘りするなら"),
@@ -282,9 +316,8 @@ export function deepDiveBook(subject: string): HTMLElement | null {
       "div",
       { style: "margin:.3em 0" },
       outboundButton(`🔗 ${item.title}`, gearItemUrl(item), "practice", `deepdive:${sec.id}`),
-      affiliateActive() ? disclosureBadge("affiliate") : "",
+      disclosureBadge("affiliate"),
       h("div", { class: "muted small" }, item.note),
     ),
   );
-  return det;
 }
