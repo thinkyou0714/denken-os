@@ -11,6 +11,7 @@ export default function Home() {
         <div className="nav-links">
           <a href="#features">特徴</a>
           <a href="/pricing">料金</a>
+          <a href="/sign-in">ログイン</a>
           <a href={SITE.repoUrl}>GitHub</a>
         </div>
       </nav>
