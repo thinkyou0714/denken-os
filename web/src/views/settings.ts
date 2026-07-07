@@ -4,6 +4,7 @@
 
 import { CHAT_MODELS } from "../../../lib/chat/prompt.js";
 import { exportBackup, importBackup } from "../backup.js";
+import { affiliateActive } from "../bridge-config.js";
 import { applyLicenseKey, clearLicense, initEntitlements, proInfo, proUnlocked } from "../entitlements.js";
 import { canReserveRest, loadFreezeState, saveFreezeState, studiedDays, toggleRestReservation } from "../freeze.js";
 import { playTone } from "../fx.js";
@@ -33,6 +34,14 @@ import { applyTheme, installPrompt, progress, setInstallPrompt, storage } from "
 import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
+import {
+  creatorContentCard,
+  inviteCard,
+  ledgerExportCard,
+  legalCard,
+  nudgeOptOutCard,
+  supportCard,
+} from "./bridge-cards.js";
 import { purchaseButton } from "./paywall.js";
 import { renderHeader, renderNav, switchView } from "./router.js";
 
@@ -182,6 +191,8 @@ export function renderSettings(root: HTMLElement): void {
     h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
     // Pro ライセンス（収益化が設定済みのときだけ表示。既定=未設定では何も出ない）。
     ...(monetizationConfigured() ? [h("h2", {}, "Pro ライセンス"), proLicenseCard()] : []),
+    // 応援・読みもの（橋渡し収益 17-B17/C11/C18/D3）。未設定の項目は各カードが null を返す。
+    ...bridgeSection(),
     h("h2", {}, "データ"),
     backupCard(),
     ...(installPrompt
@@ -231,6 +242,18 @@ export function renderSettings(root: HTMLElement): void {
       "学習記録をリセット",
     ),
   );
+}
+
+/**
+ * 応援・読みもの・計測・法的情報のセクション（橋渡し収益）。
+ * 各カードは config 未設定なら null。1枚もなければ見出しごと出さない（既定=何も変わらない）。
+ * 収益化 or アフィリエイトが動いているときはオプトアウト・計測・法的情報も添える。
+ */
+function bridgeSection(): HTMLElement[] {
+  const cards = [supportCard(), creatorContentCard(), inviteCard()].filter((c): c is HTMLElement => c !== null);
+  const anyRevenue = monetizationConfigured() || affiliateActive() || cards.length > 0;
+  if (!anyRevenue) return [];
+  return [h("h2", {}, "応援・読みもの"), ...cards, nudgeOptOutCard(), ledgerExportCard(), legalCard()];
 }
 
 /**
@@ -289,7 +312,7 @@ function proLicenseCard(): HTMLElement {
     ),
   );
   if (!proUnlocked()) {
-    const buy = purchaseButton("choice");
+    const buy = purchaseButton("choice", "settings");
     if (buy) card.append(buy);
     card.append(keyInput, applyBtn);
   } else {

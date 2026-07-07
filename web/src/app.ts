@@ -5,6 +5,7 @@
  */
 
 import { reloadProblems } from "./app-init.js";
+import { captureFirstTouch } from "./bridge.js";
 import { initEntitlements } from "./entitlements.js";
 import { onKeydown } from "./keyboard.js";
 import { runMigrations } from "./migrate.js";
@@ -50,6 +51,19 @@ async function main(): Promise<void> {
   // localStorage スキーマのマイグレーション（現状 no-op。版の記録＋将来の足場）。
   // 描画前に実行し、以降のコードが新スキーマ前提で動けるようにする。
   runMigrations(storage);
+  // 流入ファーストタッチ（17-C12）: 起動 URL の UTM を1回だけ端末内に記録し、
+  // 以後の再シェアに混入しないよう URL から UTM を除去する（外部送信はしない）。
+  try {
+    if (captureFirstTouch(storage, location.href)) {
+      const clean = new URL(location.href);
+      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
+        clean.searchParams.delete(k);
+      }
+      history.replaceState(history.state, "", clean.toString());
+    }
+  } catch {
+    // 記録・URL 清掃は補助機能。失敗しても起動は続行する。
+  }
   // フリーミアム: 保存済み Pro ライセンスの再検証を先に開始する（収益化未設定なら即 no-op）。
   // スケルトン描画やイベント登録を WebCrypto 検証で待たせないよう、await は
   // 初回 render を行う reloadProblems の直前まで遅らせる（検証失敗でも無料プランで続行）。

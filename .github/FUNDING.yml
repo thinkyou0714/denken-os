@@ -1,0 +1,6 @@
+# GitHub の「Sponsor」ボタン設定（17-D1）。
+# アカウント開設後にコメントを外して ID/URL を記入すると、リポジトリ上部に応援ボタンが出る。
+# アプリ内の応援導線は web/src/bridge-config.ts の supportUrl に同じ URL を設定する。
+# github: [thinkyou0714]
+# ko_fi: your-kofi-id
+# custom: ["https://ofuse.me/your-id"]

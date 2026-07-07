@@ -44,6 +44,9 @@ export const BACKUP_KEYS: readonly string[] = [
   // Pro ライセンスキー（署名付き・偽造不可）。機種変更で失わないよう含める。
   // APIキーと違い漏えいしても第三者に金銭的被害は及ばない（本人のプラン解錠のみ）。
   "denken:license",
+  // 収益ナッジのオプトアウト。ユーザーの明示的な拒否設定を機種変更で黙って初期化しない
+  // （非侵襲原則「消せる」の担保。計測台帳・既読フラグは演出用なので含めない）。
+  "denken:bridgeOptOut",
 ];
 
 export const BACKUP_VERSION = 1;

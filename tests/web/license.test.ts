@@ -13,7 +13,6 @@ import {
   isLicenseExpired,
   jstDateString,
   LICENSE_PREFIX,
-  type LicenseJwk,
   parseLicense,
   signLicense,
   verifyLicense,

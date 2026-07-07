@@ -5,6 +5,7 @@ import { FORMULAS, filterFormulas } from "../formulas.js";
 import { formatMath } from "../mathfmt.js";
 import { h, safeHtml } from "../ui/dom.js";
 import { emptyState } from "../ui/widgets.js";
+import { gearGuideSection } from "./bridge-cards.js";
 
 /** 公式タブの検索クエリ（タブ滞在中は保持）。 */
 let formulasQuery = "";
@@ -57,4 +58,6 @@ export function renderFormulas(root: HTMLElement): void {
   });
   root.append(search, list);
   renderFormulaList(list);
+  // 教材ガイド（17-A5）: 公式集を使い込む層に教材の選び方を提供する（リンクは検索結果形式）。
+  root.append(gearGuideSection());
 }

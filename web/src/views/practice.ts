@@ -7,7 +7,9 @@
  */
 import type { Problem, Subject } from "../../../lib/engine/schema.js";
 import { reloadProblems } from "../app-init.js";
-import { featureLocked, remainingFreeToday } from "../entitlements.js";
+import { canShowNudge, markNudgeShown, recordClick, recordShown } from "../bridge.js";
+import { BRIDGE } from "../bridge-config.js";
+import { featureLocked, proUnlocked, remainingFreeToday } from "../entitlements.js";
 import {
   bridgeWithFreezes,
   coveredDays,
@@ -19,7 +21,7 @@ import {
 } from "../freeze.js";
 import { mascotHome, mascotSvg, mascotTip, tierForLevel } from "../mascot.js";
 import { formatMath } from "../mathfmt.js";
-import { MONETIZATION } from "../monetization-config.js";
+import { MONETIZATION, monetizationConfigured } from "../monetization-config.js";
 import {
   dailyQuests,
   dayIndexOf,
@@ -299,6 +301,41 @@ export function sessionSummaryCard(): HTMLElement {
       `明日のクエスト予告: ${tomorrow.map((q) => `${q.icon}${q.label}`).join(" ／ ")}`,
     ),
     h("div", { class: "muted small" }, "このあと続けてもOK。でも、休むのも実力のうち！"),
+    // 応援の1行（未設定・予算外・オプトアウト時は空文字＝何も出ない）。
+    summarySupportLine() ?? "",
+  );
+}
+
+/**
+ * 目標達成まとめの応援1行（17-C4/B20）。感情ピーク×学習終端の1箇所だけ・
+ * アプリ全体で1日1件の予算内・7日クールダウン・オプトアウトで停止。
+ * 出す内容の優先度: Pro購入 → 応援（寄付） → note。どれも未設定なら null。
+ */
+export function summarySupportLine(): HTMLElement | null {
+  const proAvailable = monetizationConfigured() && !proUnlocked() && MONETIZATION.purchaseUrl !== "";
+  const target = proAvailable ? "pro" : BRIDGE.supportUrl !== "" ? "support" : BRIDGE.noteUrl !== "" ? "note" : null;
+  if (target === null) return null;
+  if (!canShowNudge(storage, "summary", { cooldownDays: 7 })) return null;
+  markNudgeShown(storage, "summary");
+  recordShown(storage, "summary", target);
+  const url = target === "pro" ? MONETIZATION.purchaseUrl : target === "support" ? BRIDGE.supportUrl : BRIDGE.noteUrl;
+  const label =
+    target === "pro"
+      ? "🔑 開発を応援する（Pro）→"
+      : target === "support"
+        ? "☕ 開発を応援する →"
+        : "📖 今日の学びを深める（note）→";
+  return h(
+    "button",
+    {
+      class: "chip",
+      type: "button",
+      onclick: () => {
+        recordClick(storage, "summary", target);
+        window.open(url, "_blank", "noopener,noreferrer");
+      },
+    },
+    label,
   );
 }
 
