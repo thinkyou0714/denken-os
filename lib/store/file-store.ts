@@ -20,7 +20,7 @@ import { dirname, join } from "node:path";
 import type { Problem } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
 import type { ReviewState } from "../scheduler/types.js";
-import type { AnswerLogStore, ProblemStore, ReviewStateStore } from "./index.js";
+import type { AnswerLogStore, Entitlement, EntitlementStore, ProblemStore, ReviewStateStore } from "./index.js";
 
 function readJson<T>(file: string, fallback: T): T {
   try {
@@ -109,11 +109,32 @@ export class FileReviewStateStore implements ReviewStateStore {
   }
 }
 
+export class FileEntitlementStore implements EntitlementStore {
+  constructor(private file: string) {}
+
+  private load(): Record<string, Entitlement> {
+    return readJson<Record<string, Entitlement>>(this.file, {});
+  }
+
+  async get(userId: string): Promise<Entitlement | undefined> {
+    return this.load()[userId];
+  }
+  async byStripeCustomer(customerId: string): Promise<Entitlement | undefined> {
+    return Object.values(this.load()).find((e) => e.stripeCustomerId === customerId);
+  }
+  async upsert(e: Entitlement): Promise<void> {
+    const all = this.load();
+    all[e.userId] = e;
+    writeJson(this.file, all);
+  }
+}
+
 /** 既定の保存先ディレクトリにまとめて生成するヘルパ。 */
 export function fileStores(dir: string) {
   return {
     problems: new FileProblemStore(join(dir, "problems.json")),
     answerLogs: new FileAnswerLogStore(join(dir, "answer-logs.json")),
     reviewStates: new FileReviewStateStore(join(dir, "review-states.json")),
+    entitlements: new FileEntitlementStore(join(dir, "entitlements.json")),
   };
 }

@@ -30,7 +30,7 @@ import type { Problem } from "../engine/schema.js";
 import { problemSchema } from "../engine/schema.js";
 import type { AnswerLog } from "../scheduler/diagnosis.js";
 import type { ReviewState } from "../scheduler/types.js";
-import type { AnswerLogStore, ProblemStore, ReviewStateStore } from "./index.js";
+import type { AnswerLogStore, Entitlement, EntitlementStore, ProblemStore, ReviewStateStore } from "./index.js";
 
 // ── lenient モード オプション（II-138）────────────────────────────────────────
 
@@ -209,6 +209,67 @@ function rowToAnswerLog(r: Record<string, unknown>, userId: string): AnswerLog {
   };
 }
 
+// ── entitlements 行 ⇔ ドメイン（収益化・0006 migration に対応）──────────────
+
+export interface EntitlementRow {
+  user_id: string;
+  tier: string;
+  status: string;
+  source: string;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  current_period_end: string | null; // ISO
+  updated_at: string; // ISO
+}
+
+/** zod スキーマ: entitlements テーブル行の検証（tier/status/source は enum で厳密化）。 */
+const entitlementRowSchema = z.object({
+  user_id: z.string().min(1),
+  tier: z.enum(["free", "pro"]),
+  status: z.enum(["active", "trialing", "past_due", "canceled", "none"]),
+  source: z.enum(["stripe", "grant", "default"]),
+  stripe_customer_id: z.string().min(1).nullable(),
+  stripe_subscription_id: z.string().min(1).nullable(),
+  current_period_end: z.string().datetime({ offset: true }).nullable(),
+  updated_at: z.string().datetime({ offset: true }),
+});
+
+export function entitlementToRow(e: Entitlement): EntitlementRow {
+  return {
+    user_id: e.userId,
+    tier: e.tier,
+    status: e.status,
+    source: e.source,
+    stripe_customer_id: e.stripeCustomerId ?? null,
+    stripe_subscription_id: e.stripeSubscriptionId ?? null,
+    current_period_end: e.currentPeriodEndMs === null ? null : new Date(e.currentPeriodEndMs).toISOString(),
+    updated_at: new Date(e.updatedAtMs).toISOString(),
+  };
+}
+
+/**
+ * DB 行を Entitlement ドメインオブジェクトへ変換する。
+ * zod で検証し、失敗時は `"entitlements table, user=<userId>"` を含むエラーを投げる（I-022 と同流儀）。
+ */
+export function rowToEntitlement(r: EntitlementRow): Entitlement {
+  const result = entitlementRowSchema.safeParse(r);
+  if (!result.success) {
+    const issues = result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`entitlements table, user=${r.user_id}: ${issues}`);
+  }
+  const d = result.data;
+  return {
+    userId: d.user_id,
+    tier: d.tier,
+    status: d.status,
+    source: d.source,
+    currentPeriodEndMs: d.current_period_end === null ? null : new Date(d.current_period_end).getTime(),
+    updatedAtMs: new Date(d.updated_at).getTime(),
+    ...(d.stripe_customer_id !== null ? { stripeCustomerId: d.stripe_customer_id } : {}),
+    ...(d.stripe_subscription_id !== null ? { stripeSubscriptionId: d.stripe_subscription_id } : {}),
+  };
+}
+
 // ── ストア実装（薄い I/O ラッパ）──────────────────────────────────────────
 
 export class SupabaseProblemStore implements ProblemStore {
@@ -349,17 +410,57 @@ export class SupabaseReviewStateStore implements ReviewStateStore {
   }
 }
 
+export class SupabaseEntitlementStore implements EntitlementStore {
+  constructor(private client: SupabaseClient) {}
+
+  async get(userId: string): Promise<Entitlement | undefined> {
+    const { data, error } = await this.client.from("entitlements").select("*").eq("user_id", userId).maybeSingle();
+    if (error) fail("entitlements.get", error);
+    return data ? rowToEntitlement(data as EntitlementRow) : undefined;
+  }
+
+  async byStripeCustomer(customerId: string): Promise<Entitlement | undefined> {
+    const { data, error } = await this.client
+      .from("entitlements")
+      .select("*")
+      .eq("stripe_customer_id", customerId)
+      .maybeSingle();
+    if (error) fail("entitlements.byStripeCustomer", error);
+    return data ? rowToEntitlement(data as EntitlementRow) : undefined;
+  }
+
+  async upsert(e: Entitlement): Promise<void> {
+    // 書きは service_role/webhook のみ。RLS は entitlements にユーザー write policy を持たないため
+    // 認証ユーザーの client では拒否される（service_role のみが RLS を bypass する）。
+    const { error } = await this.client.from("entitlements").upsert(entitlementToRow(e));
+    if (error) fail("entitlements.upsert", error);
+  }
+}
+
 /**
- * URL と key（service_role か anon）から3ストアをまとめて作る。
- * url または key が空文字・空白のみの場合は早期に例外を投げる（I-024）。
+ * 既に構築済みの SupabaseClient から全ストアを作る（T11 seam）。
+ * `createSupabaseStores(url,key)` は静的キーで session を持たないため、RLS 下で `auth.uid()` が NULL になり
+ * ユーザー所有テーブル（answer_logs / review_states / entitlements）の読み書きが機能しない。
+ * Next.js の `@supabase/ssr` で作った **per-user 認証クライアント（session JWT 付き）** を渡すと
+ * `auth.uid()` が解決し RLS が正しく効く。webhook からは service_role client を渡す（RLS bypass）。
  */
-export function createSupabaseStores(url: string, key: string) {
-  if (!url.trim()) throw new Error("createSupabaseStores: url が空です");
-  if (!key.trim()) throw new Error("createSupabaseStores: key が空です");
-  const client = createClient(url, key);
+export function createStoresForClient(client: SupabaseClient) {
   return {
     problems: new SupabaseProblemStore(client),
     answerLogs: new SupabaseAnswerLogStore(client),
     reviewStates: new SupabaseReviewStateStore(client),
+    entitlements: new SupabaseEntitlementStore(client),
   };
+}
+
+/**
+ * URL と key（service_role か anon）からストアをまとめて作る。
+ * url または key が空文字・空白のみの場合は早期に例外を投げる（I-024）。
+ * 注: 静的キーで session を持たないため、per-user RLS が要る用途では `createStoresForClient` に
+ * 認証済みクライアントを渡すこと（本関数は service_role / CLI / 公開読み取り向け）。
+ */
+export function createSupabaseStores(url: string, key: string) {
+  if (!url.trim()) throw new Error("createSupabaseStores: url が空です");
+  if (!key.trim()) throw new Error("createSupabaseStores: key が空です");
+  return createStoresForClient(createClient(url, key));
 }

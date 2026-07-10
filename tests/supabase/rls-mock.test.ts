@@ -3,7 +3,7 @@
  * RLS ポリシーのモック検証テスト（RG7）。
  * 実際の Supabase DB なしにポリシーロジックを純関数として検証する。
  */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -163,6 +163,76 @@ describe("RLS 列ガード（0005 の WITH CHECK topic 非空）", () => {
     expect(reviewStatesUpsertColumnGuard(USER_A, USER_A, "")).toBe(false);
     expect(reviewStatesUpsertColumnGuard(USER_A, USER_A, null)).toBe(false);
     expect(reviewStatesUpsertColumnGuard(USER_A, USER_B, "誘導電動機")).toBe(false);
+  });
+});
+
+// 0006: entitlements（本人 READ のみ）+ billing_events（policy ゼロ = deny-all）。
+// 収益化の gate は「サーバ真実源」。ユーザーは自分の entitlement を読めるが書けない（webhook が service_role で書く）。
+const entitlementsSelectPolicy = (authUid: string | null, rowUserId: string) =>
+  authUid !== null && authUid === rowUserId;
+
+/** migration ファイルの実行 SQL のみ（コメント行 -- … を除去し小文字化）を返す。 */
+const execSql = (file: string): string =>
+  readFileSync(file, "utf-8")
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("--"))
+    .join("\n")
+    .toLowerCase();
+
+describe("RLS モック: entitlements（0006 own-row SELECT）", () => {
+  const USER_A = "uid-ggg";
+  const USER_B = "uid-hhh";
+
+  it("本人は自分の entitlement を SELECT できる", () => {
+    expect(entitlementsSelectPolicy(USER_A, USER_A)).toBe(true);
+  });
+  it("他人の entitlement は SELECT できない", () => {
+    expect(entitlementsSelectPolicy(USER_A, USER_B)).toBe(false);
+  });
+  it("未認証では entitlement を SELECT できない", () => {
+    expect(entitlementsSelectPolicy(null, USER_A)).toBe(false);
+  });
+});
+
+describe("0006 migration: RLS 不変条件の静的検査", () => {
+  const sql = execSql(join(__mdir, "../../supabase/migrations/0006_entitlements.sql"));
+
+  it("entitlements と billing_events で RLS を有効化している", () => {
+    expect(sql).toMatch(/alter table public\.entitlements enable row level security/);
+    expect(sql).toMatch(/alter table public\.billing_events enable row level security/);
+  });
+
+  it("entitlements は本人 SELECT のみ（own-row）", () => {
+    expect(sql).toMatch(/create policy entitlements_select_own[\s\S]*?for select using \(auth\.uid\(\) = user_id\)/);
+  });
+
+  it("billing_events には policy を 1 つも作らない（deny-all）", () => {
+    expect(sql).not.toMatch(/create policy[\s\S]*?on public\.billing_events/);
+  });
+});
+
+// W1（レビュー指摘）: 単一ファイル検査は「将来の migration が write policy を足す」退行を見逃す。
+// 全 migration を横断で走査し、entitlements への write policy 追加と using(true) を禁止する。
+describe("全 migration 横断: entitlements write policy 禁止 / using(true) 不在", () => {
+  const migDir = join(__mdir, "../../supabase/migrations");
+  const allSql = readdirSync(migDir)
+    .filter((f) => f.endsWith(".sql"))
+    .map((f) => execSql(join(migDir, f)))
+    .join("\n");
+
+  it("どの migration も entitlements に insert/update/delete policy を作らない（service_role 専用を保つ）", () => {
+    expect(allSql).not.toMatch(/on public\.entitlements\s+for\s+insert/);
+    expect(allSql).not.toMatch(/on public\.entitlements\s+for\s+update/);
+    expect(allSql).not.toMatch(/on public\.entitlements\s+for\s+delete/);
+  });
+
+  it("entitlements に対する create policy は entitlements_select_own のみ", () => {
+    const policies = [...allSql.matchAll(/create policy\s+(\w+)\s+on public\.entitlements/g)].map((m) => m[1]);
+    expect(policies).toEqual(["entitlements_select_own"]);
+  });
+
+  it("どの migration も using(true) を含まない（RLS 無効化ポリシーの禁止）", () => {
+    expect(allSql).not.toMatch(/using\s*\(\s*true\s*\)/);
   });
 });
 
