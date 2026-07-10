@@ -4,8 +4,11 @@
 
 import { CHAT_MODELS } from "../../../lib/chat/prompt.js";
 import { exportBackup, importBackup } from "../backup.js";
+import { affiliateActive } from "../bridge-config.js";
+import { applyLicenseKey, clearLicense, initEntitlements, proInfo, proUnlocked } from "../entitlements.js";
 import { canReserveRest, loadFreezeState, saveFreezeState, studiedDays, toggleRestReservation } from "../freeze.js";
 import { playTone } from "../fx.js";
+import { MONETIZATION, monetizationConfigured } from "../monetization-config.js";
 import { dayIndexOf } from "../quests.js";
 import {
   getApiKey,
@@ -31,6 +34,15 @@ import { applyTheme, installPrompt, progress, setInstallPrompt, storage } from "
 import { SEEN_LEVEL_KEY, SEEN_STREAK_MILESTONE_KEY } from "../storage-keys.js";
 import { h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
+import {
+  creatorContentCard,
+  inviteCard,
+  ledgerExportCard,
+  legalCard,
+  nudgeOptOutCard,
+  supportCard,
+} from "./bridge-cards.js";
+import { purchaseButton } from "./paywall.js";
 import { renderHeader, renderNav, switchView } from "./router.js";
 
 export function renderSettings(root: HTMLElement): void {
@@ -177,6 +189,10 @@ export function renderSettings(root: HTMLElement): void {
       ),
     ),
     h("div", { class: "card" }, h("label", {}, "回答モデル "), modelSel),
+    // Pro ライセンス（収益化が設定済みのときだけ表示。既定=未設定では何も出ない）。
+    ...(monetizationConfigured() ? [h("h2", {}, "Pro ライセンス"), proLicenseCard()] : []),
+    // 応援・読みもの（橋渡し収益 17-B17/C11/C18/D3）。未設定の項目は各カードが null を返す。
+    ...bridgeSection(),
     h("h2", {}, "データ"),
     backupCard(),
     ...(installPrompt
@@ -226,6 +242,99 @@ export function renderSettings(root: HTMLElement): void {
       "学習記録をリセット",
     ),
   );
+}
+
+/**
+ * 応援・読みもの・計測・法的情報のセクション（橋渡し収益）。
+ * 各カードは config 未設定なら null。1枚もなければ見出しごと出さない（既定=何も変わらない）。
+ * 収益化 or アフィリエイトが動いているときはオプトアウト・計測・法的情報も添える。
+ */
+function bridgeSection(): HTMLElement[] {
+  const cards = [supportCard(), creatorContentCard(), inviteCard()].filter((c): c is HTMLElement => c !== null);
+  const anyRevenue = monetizationConfigured() || affiliateActive() || cards.length > 0;
+  if (!anyRevenue) return [];
+  return [h("h2", {}, "応援・読みもの"), ...cards, nudgeOptOutCard(), ledgerExportCard(), legalCard()];
+}
+
+/**
+ * Pro ライセンスカード: 現在のプラン表示・キー入力・購入導線・解除。
+ * 検証は端末内（WebCrypto）で完結し、キーはこの端末の localStorage にのみ保存される
+ * （バックアップの書き出しには含まれる: 機種変更で失わないため）。
+ */
+function proLicenseCard(): HTMLElement {
+  const info = proInfo();
+  const status = proUnlocked()
+    ? `✅ Pro 有効${info?.exp ? `（${info.exp} まで）` : "（買い切り）"}${info?.sub ? ` ・ ${info.sub}` : ""}`
+    : `無料プラン（演習 1日${MONETIZATION.freeDailyLimit}問まで。模試・スキルドリルは Pro）`;
+  const keyInput = h("input", {
+    type: "text",
+    placeholder: "DENKEN1.xxxx.xxxx",
+    autocomplete: "off",
+    spellcheck: "false",
+    "aria-label": "Pro ライセンスキー",
+  }) as HTMLInputElement;
+  const applyBtn = h(
+    "button",
+    {
+      class: "primary",
+      type: "button",
+      onclick: () => {
+        applyBtn.disabled = true;
+        void applyLicenseKey(storage, keyInput.value)
+          .then((res) => {
+            if (res.ok) {
+              showToast("✅ Pro を有効化しました。ありがとうございます！", "OK", () => {});
+              switchView("settings"); // ステータス表示とゲートを最新化
+            } else {
+              showToast(`⚠️ ${res.reason}`, "OK", () => {});
+            }
+          })
+          .catch(() => {
+            // applyLicenseKey は原則 reject しないが、想定外でも汎用トーストに流さず理由を示す。
+            showToast("⚠️ ライセンスの検証に失敗しました。もう一度お試しください", "OK", () => {});
+          })
+          .finally(() => {
+            applyBtn.disabled = false;
+          });
+      },
+    },
+    "キーを適用",
+  ) as HTMLButtonElement;
+  const card = h(
+    "div",
+    { class: "card" },
+    h("label", {}, "プラン "),
+    h("div", {}, status),
+    h(
+      "div",
+      { class: "muted" },
+      "Pro は開発継続を支える応援プランです。学習記録・復習・公式集はずっと無料で使えます。",
+    ),
+  );
+  if (!proUnlocked()) {
+    const buy = purchaseButton("choice", "settings");
+    if (buy) card.append(buy);
+    card.append(keyInput, applyBtn);
+  } else {
+    card.append(
+      h(
+        "button",
+        {
+          class: "choice",
+          type: "button",
+          onclick: () => {
+            if (!window.confirm("Pro ライセンスをこの端末から削除します。よろしいですか？（キーは再入力できます）"))
+              return;
+            clearLicense(storage);
+            showToast("ライセンスを削除しました", "OK", () => {});
+            switchView("settings");
+          },
+        },
+        "ライセンスを削除",
+      ),
+    );
+  }
+  return card;
 }
 
 /** おやすみ予約: 休む勇気をストリークの罰にしない（健全性）。予約できるのは「今日学習済み」のときの明日だけ。 */
@@ -289,6 +398,9 @@ function backupCard(): HTMLElement {
     if (!window.confirm("バックアップを読み込みます。現在の学習データは上書きされます。よろしいですか？")) return;
     const result = importBackup(storage, await file.text());
     if (result.ok) {
+      // 復元したライセンスを即時反映する（「再読込」を押さなくても Pro 状態が正しくなる）。
+      // 逆方向（ライセンスを含まない/無効なバックアップ）でもキャッシュと保存値の乖離を防ぐ。
+      await initEntitlements(storage).catch(() => false);
       showToast(`✅ ${result.restoredKeys.length} 項目を復元しました`, "再読込", () => location.reload());
     } else {
       showToast(`⚠️ 復元できませんでした: ${result.reason}`, "OK", () => {});

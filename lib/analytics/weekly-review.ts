@@ -79,3 +79,33 @@ export function renderWeeklyReview(input: WeeklyReviewInput): string {
   lines.push("");
   return lines.join("\n");
 }
+
+// ---- 収益導線ファネル節（17-C25）----
+
+/** アプリからエクスポートされた導線台帳（web/src/bridge.ts の Ledger と同形）。 */
+export type BridgeLedger = Record<string, { shown: number; clicked: number }>;
+
+/**
+ * 導線別の 表示→クリック ファネルを週次レビュー用 markdown に整形する。
+ * 入力は設定タブの「集計JSONをコピー」で手動エクスポートした台帳（自動収集はしない）。
+ * 判断（導線を削る/増やす）は人間に残す＝数値と気づき欄だけを出す。
+ */
+export function renderBridgeFunnel(ledger: BridgeLedger): string {
+  const rows = Object.entries(ledger)
+    .map(([key, e]) => ({ key, shown: e.shown, clicked: e.clicked, ctr: e.shown > 0 ? e.clicked / e.shown : 0 }))
+    .sort((a, b) => b.clicked - a.clicked);
+  if (rows.length === 0) return "## 収益導線ファネル\n\n（データなし）\n";
+  const lines = rows.map(
+    (r) => `| ${r.key} | ${r.shown} | ${r.clicked} | ${r.shown > 0 ? `${Math.round(r.ctr * 100)}%` : "-"} |`,
+  );
+  return [
+    "## 収益導線ファネル（表示→クリック）",
+    "",
+    "| 導線 (placement:campaign) | 表示 | クリック | CTR |",
+    "|---|---|---|---|",
+    ...lines,
+    "",
+    "気づき・次アクション（削る/残す/場所替え）: ",
+    "",
+  ].join("\n");
+}

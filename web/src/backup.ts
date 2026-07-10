@@ -41,6 +41,12 @@ export const BACKUP_KEYS: readonly string[] = [
   "denken:badges",
   "denken:sound",
   "denken:mascot",
+  // Pro ライセンスキー（署名付き・偽造不可）。機種変更で失わないよう含める。
+  // APIキーと違い漏えいしても第三者に金銭的被害は及ばない（本人のプラン解錠のみ）。
+  "denken:license",
+  // 収益ナッジのオプトアウト。ユーザーの明示的な拒否設定を機種変更で黙って初期化しない
+  // （非侵襲原則「消せる」の担保。計測台帳・既読フラグは演出用なので含めない）。
+  "denken:bridgeOptOut",
 ];
 
 export const BACKUP_VERSION = 1;
@@ -59,7 +65,12 @@ export function exportBackup(storage: StorageLike, nowMs: number = Date.now()): 
   const data: Record<string, string> = {};
   for (const key of BACKUP_KEYS) {
     const v = storage.getItem(key);
-    if (v !== null) data[key] = v;
+    if (v === null) continue;
+    // ライセンスの空文字は clearLicense のトゥームストーン（StorageLike に removeItem が
+    // 無いための消去表現）。バックアップへ含めると、復元時に別端末の有効なキーを
+    // 空文字で潰してしまうため書き出さない。
+    if (key === "denken:license" && v === "") continue;
+    data[key] = v;
   }
   const file: BackupFile = {
     app: "denken-os",
@@ -152,6 +163,8 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
   for (const key of BACKUP_KEYS) {
     const v = (file.data as Record<string, unknown>)[key];
     if (typeof v !== "string") continue;
+    // 空文字ライセンス（旧バックアップのトゥームストーン）で有効なキーを潰さない。
+    if (key === "denken:license" && v === "") continue;
     storage.setItem(key, v);
     restoredKeys.push(key);
   }

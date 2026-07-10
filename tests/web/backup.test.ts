@@ -25,6 +25,36 @@ describe("バックアップ（エクスポート/インポート）", () => {
     expect(BACKUP_KEYS).not.toContain("denken:apiKey");
   });
 
+  it("Pro ライセンスはラウンドトリップで復元される", () => {
+    const src = new MemoryStorage();
+    src.setItem("denken:license", "DENKEN1.payload.sig");
+    src.setItem("denken:logs", "[]");
+    const dst = new MemoryStorage();
+    expect(importBackup(dst, exportBackup(src)).ok).toBe(true);
+    expect(dst.getItem("denken:license")).toBe("DENKEN1.payload.sig");
+  });
+
+  it("空文字ライセンス（clearLicense のトゥームストーン）は書き出さず、復元でも有効なキーを潰さない", () => {
+    // エクスポート側: 空文字は含めない。
+    const src = new MemoryStorage();
+    src.setItem("denken:license", "");
+    src.setItem("denken:logs", "[]");
+    const json = exportBackup(src);
+    expect(JSON.parse(json).data["denken:license"]).toBeUndefined();
+
+    // インポート側: 旧バックアップに空文字が残っていても既存キーを上書きしない。
+    const legacy = JSON.stringify({
+      app: "denken-os",
+      version: 1,
+      exportedAt: "2026-06-10T00:00:00.000Z",
+      data: { "denken:logs": "[]", "denken:license": "" },
+    });
+    const dst = new MemoryStorage();
+    dst.setItem("denken:license", "DENKEN1.valid.key");
+    expect(importBackup(dst, legacy).ok).toBe(true);
+    expect(dst.getItem("denken:license")).toBe("DENKEN1.valid.key");
+  });
+
   it("メタ情報（app/version/exportedAt）を含む", () => {
     const parsed = JSON.parse(exportBackup(new MemoryStorage(), Date.UTC(2026, 5, 10)));
     expect(parsed.app).toBe("denken-os");

@@ -3,6 +3,7 @@
  */
 
 import { BACKUP_KEYS } from "../backup.js";
+import { featureLocked } from "../entitlements.js";
 import { recoveryView } from "../errors.js";
 import { coveredDays, streakBreakdown, studiedDays } from "../freeze.js";
 import { buildStudyPlan } from "../plan.js";
@@ -10,6 +11,7 @@ import { dayIndexOf } from "../quests.js";
 import { offlineLabel } from "../retention.js";
 import { getDailyGoal, getExamDate, getReviewCap } from "../settings.js";
 import { problems, progress, setView, storage, view } from "../state/app.js";
+import { exam as examInProgress } from "../state/exam.js";
 import { estimateStorageKb, STORAGE_WARN_KB } from "../store.js";
 import { $, h } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
@@ -169,7 +171,7 @@ export function render(opts: { focus?: boolean } = {}): void {
     // 親render はルーティングに専念し、1タブの例外が全体を白画面にしない。
     if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
     else if (view === "review") renderViewSafe(root, "review", () => renderReview(root));
-    else if (view === "exam") renderViewSafe(root, "exam", () => renderExam(root));
+    else if (view === "exam") renderViewSafe(root, "exam", () => renderExamGated(root));
     else if (view === "chat") renderViewSafe(root, "chat", () => renderChat(root));
     else if (view === "dashboard") renderViewSafe(root, "dashboard", () => renderDashboard(root));
     else if (view === "formulas") renderViewSafe(root, "formulas", () => renderFormulas(root));
@@ -198,6 +200,35 @@ function focusViewHeading(root: HTMLElement): void {
   } catch {
     // フォーカス移動は補助的。失敗しても描画は完了している。
   }
+}
+
+/**
+ * 模試タブの Pro ゲート（フリーミアム）。収益化が未設定（既定）のうちは常に素通しで、
+ * 挙動は従来と完全に同じ。paywall の import は循環回避のため遅延にせず、
+ * views/paywall.ts 側が router の switchView を参照する（ESM の相互参照で解決可能）。
+ */
+function renderExamGated(root: HTMLElement): void {
+  // 進行中の模試は必ず再開させる（採点・保存の機会を奪わない）。開始後に
+  // ロック状態へ変わっても（設定でライセンス削除→再入力の途中など）、
+  // 開始済みセッションの完了は妨げない。
+  if (examInProgress !== null) {
+    renderExam(root);
+    return;
+  }
+  if (featureLocked()) {
+    root.append(
+      h("h2", {}, "模試"),
+      paywallCard({
+        icon: "📝",
+        title: "模試（本番再現・年度別）は Pro 機能です",
+        description:
+          "時間制限つき模試・科目別合格判定・年度別通し模試が解放されます。" +
+          "学習タブ・復習・公式集は無料のままずっと使えます。",
+      }),
+    );
+    return;
+  }
+  renderExam(root);
 }
 
 /** per-viewエラー境界（II-162）: 1タブの描画失敗を該当タブ内に閉じ込める。 */
@@ -313,4 +344,5 @@ export function initRouting(): void {
 }
 
 // runFreezeBridge は practice.ts からインポート
+import { paywallCard } from "./paywall.js";
 import { runFreezeBridge } from "./practice.js";

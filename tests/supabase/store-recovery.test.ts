@@ -15,6 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createSupabaseStores,
   SupabaseAnswerLogStore,
+  SupabaseEntitlementStore,
   SupabaseProblemStore,
   SupabaseReviewStateStore,
 } from "../../lib/store/supabase-store.js";
@@ -208,10 +209,11 @@ describe("createSupabaseStores: URL/key 空チェック（I-024）", () => {
     expect(() => createSupabaseStores("https://example.supabase.co", "  \t ")).toThrow(/key が空です/);
   });
 
-  it("url と key が揃えば 3 ストアを返す", () => {
+  it("url と key が揃えば 4 ストア（entitlements 含む）を返す", () => {
     const stores = createSupabaseStores("https://example.supabase.co", "anon-key");
     expect(stores.problems).toBeInstanceOf(SupabaseProblemStore);
     expect(stores.answerLogs).toBeInstanceOf(SupabaseAnswerLogStore);
     expect(stores.reviewStates).toBeInstanceOf(SupabaseReviewStateStore);
+    expect(stores.entitlements).toBeInstanceOf(SupabaseEntitlementStore);
   });
 });

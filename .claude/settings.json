@@ -25,5 +25,18 @@
       "Bash(rm -rf*)",
       "Bash(Remove-Item -Recurse -Force*)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/bootstrap.sh\""
+          }
+        ]
+      }
+    ]
   }
 }

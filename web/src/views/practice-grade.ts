@@ -5,6 +5,8 @@
 import type { Problem } from "../../../lib/engine/schema.js";
 import type { Rating } from "../../../lib/scheduler/types.js";
 import { cardText } from "../../../lib/share-card/card-text.js";
+import { affiliateActive } from "../bridge-config.js";
+import { recordPracticeAnswer } from "../entitlements.js";
 import { formatElapsed } from "../format.js";
 import { confettiBurst, playTone, vibrate, xpFloat } from "../fx.js";
 import { isAnswerCorrect, normalizeNumericInput, partialScore } from "../grade.js";
@@ -27,6 +29,7 @@ import { $, h, safeHtml } from "../ui/dom.js";
 import { showToast } from "../ui/toast.js";
 import { solutionNode, sourceText } from "../ui/widgets.js";
 import { totalXp } from "../xp.js";
+import { deepDiveBook } from "./bridge-cards.js";
 import { freezeInfo, nextQuestion, refreshPracticeCards, runFreezeBridge, sessionSummaryCard } from "./practice.js";
 import { processRewards } from "./practice-rewards.js";
 import { renderHeader, renderNav } from "./router.js";
@@ -153,6 +156,10 @@ export function finalize(
   const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
 
   progress.record(p.topic, rating, Date.now(), timeMs, p.id);
+  // フリーミアム: 無料枠カウンタは「学習タブの新しい問題」だけを数える。
+  // 復習タブ発のドリル（pool）と再出題（requeue）は対象外（nextQuestion のゲートと対）。
+  // 収益化未設定・Pro 解錠中は何も書かない。
+  if (!practice.pool && !practice.currentFromRequeue) recordPracticeAnswer(storage);
 
   // 間違えた問題はセッション後半で再出題する（短期の想起練習 #49）。
   // 客観式: rating="again"（不正解）。記述: 部分点が合格圏未満。
@@ -220,6 +227,11 @@ export function finalize(
       ),
       result.firstChild,
     );
+  }
+  // 深掘り一冊（17-A17）: アフィリエイト設定時のみ、閉じた details を1つだけ添える。
+  if (affiliateActive()) {
+    const dd = deepDiveBook(p.subject);
+    if (dd) result.append(dd);
   }
   result.append(
     h(
