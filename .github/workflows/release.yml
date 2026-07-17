@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 # 同一タグへの再 push（強制プッシュ等）時に旧実行を置き換える。
 # cancel-in-progress: true でリリース草稿の二重作成を防ぐ。
@@ -20,6 +20,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
         with:
