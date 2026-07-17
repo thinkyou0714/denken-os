@@ -58,7 +58,7 @@
             "type": "object",
             "required": ["citation"],
             "properties": {
-              "citation": { "type": "string" }
+              "citation": { "type": "string", "minLength": 1, "pattern": "\\S" }
             }
           }
         }

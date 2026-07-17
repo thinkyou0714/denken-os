@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FsrsScheduler } from "../../lib/scheduler/fsrs.js";
+import { FsrsScheduler, reviveCard, toStoredCard } from "../../lib/scheduler/fsrs.js";
 
 describe("FsrsScheduler", () => {
   const now = new Date("2026-01-01T00:00:00.000Z");
@@ -40,5 +40,65 @@ describe("FsrsScheduler", () => {
     expect(v.lapses).toBeGreaterThanOrEqual(0);
     expect(typeof v.stability).toBe("number");
     expect(typeof v.difficulty).toBe("number");
+  });
+
+  it("maximumIntervalDays はハードキャップ（easy の +2 日単調性補正でも超えない）", () => {
+    // ts-fsrs は maximum_interval クランプ後に Hard<Good<Easy の単調性維持で
+    // Good+1/Easy+2 日するため、素のままでは上限を最大2日超える（試験日越えの復習が
+    // 組まれてしまう）。ラッパーの due ハードキャップでこれを防ぐ。
+    const s = new FsrsScheduler(0.9, 5);
+    let card = s.init(now);
+    for (let i = 0; i < 6; i++) {
+      card = s.review(card, "easy", now);
+      expect(s.view(card).dueMs).toBeLessThanOrEqual(now.getTime() + 5 * 24 * 3600_000);
+    }
+  });
+
+  it("lapse → 再学習 → 復習のサイクルで lapses が増え、その後も正常に間隔が延びる", () => {
+    const s = new FsrsScheduler(0.9);
+    let card = s.init(now);
+    let t = now;
+    // 定着させる（good ×3、都度 due 日時まで進める）。
+    for (let i = 0; i < 3; i++) {
+      card = s.review(card, "good", t);
+      t = new Date(s.view(card).dueMs);
+    }
+    const lapsesBefore = s.view(card).lapses;
+    // 忘却（again）→ lapses が増える。
+    card = s.review(card, "again", t);
+    expect(s.view(card).lapses).toBe(lapsesBefore + 1);
+    // 再学習して復習状態へ戻ると、間隔が再び未来へ延びる。
+    t = new Date(s.view(card).dueMs);
+    card = s.review(card, "good", t);
+    t = new Date(s.view(card).dueMs);
+    card = s.review(card, "good", t);
+    expect(s.view(card).dueMs).toBeGreaterThan(t.getTime());
+  });
+
+  // ── Card の永続化境界（serialize/deserialize）──────────────────────────
+  describe("toStoredCard / reviveCard（JSON 往復）", () => {
+    it("レビュー済み Card が JSON 経由で完全に往復する（due / last_review の Date 復元）", () => {
+      const s = new FsrsScheduler(0.9);
+      const card = s.review(s.review(s.init(now), "good", now), "hard", now);
+      const revived = reviveCard(JSON.parse(JSON.stringify(toStoredCard(card))));
+      expect(revived.due.getTime()).toBe(card.due.getTime());
+      expect(revived.last_review?.getTime()).toBe(card.last_review?.getTime());
+      expect(revived.stability).toBe(card.stability);
+      expect(revived.difficulty).toBe(card.difficulty);
+      expect(revived.reps).toBe(card.reps);
+      expect(revived.lapses).toBe(card.lapses);
+      expect(revived.state).toBe(card.state);
+      // 往復後の Card はそのままレビューに使える。
+      const next = s.review(revived, "good", new Date(revived.due));
+      expect(s.view(next).dueMs).toBeGreaterThan(revived.due.getTime());
+    });
+
+    it("未レビュー Card（last_review なし）も往復できる", () => {
+      const s = new FsrsScheduler();
+      const card = s.init(now);
+      const revived = reviveCard(JSON.parse(JSON.stringify(toStoredCard(card))));
+      expect(revived.due.getTime()).toBe(card.due.getTime());
+      expect(revived.last_review).toBeUndefined();
+    });
   });
 });

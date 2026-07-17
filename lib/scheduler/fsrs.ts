@@ -26,6 +26,35 @@ export interface FsrsView {
   scheduledDays: number;
 }
 
+// ── Card の永続化境界（serialize/deserialize）─────────────────────────────
+// ts-fsrs の Card は Date フィールド（due / last_review）を持つ。「どのフィールドが
+// Date か」という知識はライブラリのバージョンに依存するため、ts-fsrs を import する
+// 唯一のこのモジュールに集約する。呼び出し側（web の localStorage 等）が Card の
+// 内部形を知って独自変換すると、ts-fsrs 更新で Date フィールドが増えた際に
+// 保存データが黙って壊れる。
+
+/** JSON 保存用の Card（Date フィールドを ISO 文字列にしたもの）。 */
+export type StoredCard = Omit<Card, "due" | "last_review"> & { due: string; last_review?: string };
+
+/** Card → 保存形。JSON.stringify に安全に渡せる形へ明示変換する。 */
+export function toStoredCard(card: Card): StoredCard {
+  const { due, last_review, ...rest } = card;
+  return {
+    ...rest,
+    due: new Date(due).toISOString(),
+    ...(last_review !== undefined ? { last_review: new Date(last_review).toISOString() } : {}),
+  };
+}
+
+/** 保存形 → Card。Date フィールドを復元する。 */
+export function reviveCard(s: StoredCard): Card {
+  return {
+    ...s,
+    due: new Date(s.due),
+    last_review: s.last_review !== undefined ? new Date(s.last_review) : undefined,
+  } as Card;
+}
+
 function toFsrsRating(r: Rating): Grade {
   switch (r) {
     case "again":
@@ -70,7 +99,20 @@ export class FsrsScheduler {
   /** 採点を反映して次回 Card を返す。 */
   review(card: Card, rating: Rating, now: Date = new Date()): Card {
     const log = this.engine.repeat(card, now);
-    return log[toFsrsRating(rating)].card;
+    const next = log[toFsrsRating(rating)].card;
+    // ts-fsrs は Hard<Good<Easy の間隔単調性を維持するため、maximum_interval での
+    // クランプ後に Good+1 / Easy+2 日され、上限を最大2日超えうる（ソフトキャップ）。
+    // exam-aware の「試験日を越える復習を組まない」保証にはハードキャップが必要なので、
+    // due をここで上限に詰める（記憶状態 stability/difficulty は FSRS のまま保持する）。
+    if (this.maximumIntervalDays !== undefined) {
+      const capDays = Math.max(1, Math.floor(this.maximumIntervalDays));
+      const capMs = now.getTime() + capDays * 24 * 3600_000;
+      if (next.due.getTime() > capMs) {
+        next.due = new Date(capMs);
+        next.scheduled_days = Math.min(next.scheduled_days, capDays);
+      }
+    }
+    return next;
   }
 
   view(card: Card): FsrsView {

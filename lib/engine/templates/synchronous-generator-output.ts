@@ -11,11 +11,8 @@ import { defineTemplate, pick } from "./helpers.js";
 const V_SET: ReadonlyArray<number> = [200, 220, 440];
 const E_SET: ReadonlyArray<number> = [200, 300, 400, 600];
 const XS_SET: ReadonlyArray<number> = [5, 10, 20];
-// [δ(deg), sinδ]
-const DELTA_SET: ReadonlyArray<readonly [number, number]> = [
-  [30, 0.5],
-  [90, 1.0],
-];
+// 負荷角δ(deg)。sinδ は Math.sin で計算する（事前表は持たない）。
+const DELTA_SET: ReadonlyArray<number> = [30, 90];
 
 type Params = {
   phase_voltage: number;
@@ -38,7 +35,7 @@ export const synchronousGeneratorOutput = defineTemplate<Params>({
   },
   paramOrder: ["phase_voltage", "induced_emf", "synchronous_reactance", "load_angle"],
   draw(rng) {
-    const [deg] = pick(DELTA_SET, rng);
+    const deg = pick(DELTA_SET, rng);
     return {
       phase_voltage: pick(V_SET, rng),
       induced_emf: pick(E_SET, rng),

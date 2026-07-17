@@ -42,13 +42,16 @@ describe("loadProblems（I-070）", () => {
     }
   });
 
-  it("不正 JSON ファイルはエラーをスロー（JSON.parse 失敗）", () => {
+  it("不正 JSON ファイルはスローせず skipped として除外する（1 ファイルの破損で全体を落とさない）", () => {
     const dir = join(tmpBase, "bad-json");
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, "bad.json"), "{oops}", "utf8");
     try {
-      // loadProblems は JSON.parse 失敗時にスローする
-      expect(() => loadProblems(dir)).toThrow();
+      // 旧実装は JSON.parse 失敗で即スローし、正常な他ファイルの書き出しまで巻き添えにしていた。
+      // スキーマ違反と同じ graceful なスキップパスに合流させる。
+      const result = loadProblems(dir);
+      expect(result.problems).toHaveLength(0);
+      expect(result.skipped).toBe(1);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

@@ -97,7 +97,9 @@ export const threePhasePower = defineTemplate<Params>({
         R: { value: R, unit: "Ω", realistic_range: [1, 50] },
         X: { value: X, unit: "Ω", realistic_range: [1, 50] },
       },
-      answerValue: P,
+      // answerValue は answerUnit と同じ単位系で持つ（契約: 検算の基準値）。
+      // P は W なので kW に揃える（W のままだと answerUnit="kW" と 1000 倍ずれる）。
+      answerValue: P / 1000,
       answerUnit: "kW",
       answerText: mc.answerText,
       choices: mc.choices,

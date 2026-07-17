@@ -25,6 +25,14 @@ describe("InMemory stores", () => {
     expect((await s.byUser("u2")).size).toBe(0);
   });
 
+  it("AnswerLogStore は順不同 append でも byUser を atMs 昇順で返す（契約）", async () => {
+    const logs = new InMemoryAnswerLogStore();
+    await logs.append("u1", { topic: "後", correct: true, atMs: 3000 });
+    await logs.append("u1", { topic: "先", correct: false, atMs: 1000 });
+    await logs.append("u1", { topic: "中", correct: true, atMs: 2000 });
+    expect((await logs.byUser("u1")).map((l) => l.atMs)).toEqual([1000, 2000, 3000]);
+  });
+
   it("解答ログ→弱点診断のエンドツーエンド（store経由）", async () => {
     const logs = new InMemoryAnswerLogStore();
     const now = Date.UTC(2026, 0, 10);

@@ -94,7 +94,9 @@ export class InMemoryAnswerLogStore implements AnswerLogStore {
     this.byUserMap.set(userId, arr);
   }
   async byUser(userId: string): Promise<AnswerLog[]> {
-    return [...(this.byUserMap.get(userId) ?? [])];
+    // 契約は「atMs 昇順」。Supabase 実装は DB の order で保証するため、
+    // 追記順に依存せずここでもソートして 3 実装の挙動を揃える。
+    return [...(this.byUserMap.get(userId) ?? [])].sort((a, b) => a.atMs - b.atMs);
   }
 }
 

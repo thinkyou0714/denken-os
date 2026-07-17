@@ -8,7 +8,8 @@
  *
  * ## SRI / SW バージョン自動化（RG7）
  * - app.js の SHA-384 を計算して web/index.html の __SRI_HASH__ プレースホルダを書き換える。
- * - 同ハッシュの先頭8文字を使って web/sw.js の __SW_VERSION__ を "v20-<hash>" に書き換える。
+ * - 全キャッシュ対象アセットの内容ハッシュ先頭8文字を使って web/sw.js の版数トークンを
+ *   "<SW_MAJOR>-<hash>" に書き換える（SW_MAJOR 定数が唯一の真実）。
  * - バンドルサイズ予算チェック: BUNDLE_SIZE_LIMIT_KB 環境変数（既定 500）超過時は警告。
  *   GITHUB_STEP_SUMMARY が設定されていれば GitHub Actions のサマリーに書き込む。
  */
@@ -181,10 +182,10 @@ async function main() {
     if (existsSync(p)) versionHash.update(readFileSync(p, "utf-8"));
   }
   const shortHash = versionHash.digest("hex").slice(0, 8);
-  // SW_MAJOR は SW キャッシュ世代の単一の真実。web/sw.js の版数注記（最高品質化=v21）と
+  // SW_MAJOR は SW キャッシュ世代の単一の真実。web/sw.js の版数注記（SW堅牢化第2弾=v22）と
   // 整合させる。以前は "v20" がここにハードコードされ、v21 を出荷しても CACHE が v20 の
   // まま据え置かれていた（SW-01）。
-  const SW_MAJOR = "v21";
+  const SW_MAJOR = "v22";
   const swVersion = `${SW_MAJOR}-${shortHash}`;
 
   const swJsPath = join(ROOT, "web/sw.js");

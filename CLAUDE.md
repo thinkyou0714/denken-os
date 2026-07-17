@@ -191,7 +191,7 @@ npm run build:web
 - Scheduler tests live under `tests/scheduler/`.
 - Web behavior tests live under `tests/web/`.
 - The main local gate is `npm run verify`.
-- The focused docs/config check for Claude settings is `npx biome check .claude/settings.json`.
+- `.claude/settings.json` is outside Biome's `files.includes`, so `biome check` on it is a no-op; validate it with the JSON parse one-liner below instead.
 - JSON validity can be checked with:
 
 ```sh

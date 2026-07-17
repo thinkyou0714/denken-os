@@ -142,6 +142,12 @@ jobs:
       - name: Build offline web app
         run: npm run build:web
 
+      # build:web は web/index.html(SRI ハッシュ)と web/sw.js(キャッシュ版数)を書き換える。
+      # どちらも git 管理下の生成物なので、コミット済みの内容が最新かをここで検証する
+      # （problems.json / data/problems と同じ鮮度ゲート。再生成し忘れをCIで落とす）。
+      - name: Verify committed web/index.html and web/sw.js are fresh
+        run: git diff --exit-code -- web/index.html web/sw.js
+
       - name: Upload web dist
         if: success()
         uses: actions/upload-artifact@v7

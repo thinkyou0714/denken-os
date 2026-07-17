@@ -7,8 +7,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { describe, expect, it } from "vitest";
 import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
 import type { ReviewState } from "../../lib/scheduler/types.js";
+import type { Entitlement } from "../../lib/store/index.js";
 import {
   SupabaseAnswerLogStore,
+  SupabaseEntitlementStore,
   SupabaseProblemStore,
   SupabaseReviewStateStore,
 } from "../../lib/store/supabase-store.js";
@@ -20,6 +22,7 @@ type Row = Record<string, unknown>;
 
 class FakeQuery implements PromiseLike<{ data: Row[]; error: { message: string } | null }> {
   private filters: [string, unknown][] = [];
+  private ordering: { col: string; ascending: boolean } | null = null;
   constructor(
     private store: Row[],
     private error: string | undefined,
@@ -27,7 +30,9 @@ class FakeQuery implements PromiseLike<{ data: Row[]; error: { message: string }
   select(_cols?: string): this {
     return this;
   }
-  order(_col: string, _opts?: unknown): this {
+  // 実 DB の ORDER BY を模して実際にソートする（byUser の「昇順」契約をテストで実効化する）。
+  order(col: string, opts?: { ascending?: boolean }): this {
+    this.ordering = { col, ascending: opts?.ascending !== false };
     return this;
   }
   eq(col: string, val: unknown): this {
@@ -35,7 +40,16 @@ class FakeQuery implements PromiseLike<{ data: Row[]; error: { message: string }
     return this;
   }
   private matched(): Row[] {
-    return this.store.filter((r) => this.filters.every(([c, v]) => r[c] === v));
+    const rows = this.store.filter((r) => this.filters.every(([c, v]) => r[c] === v));
+    if (this.ordering) {
+      const { col, ascending } = this.ordering;
+      rows.sort((a, b) => {
+        const av = String(a[col] ?? "");
+        const bv = String(b[col] ?? "");
+        return ascending ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+    }
+    return rows;
   }
   private pkMatch(row: Row): (r: Row) => boolean {
     if ("id" in row) return (r) => r.id === row.id;
@@ -133,6 +147,15 @@ describe("SupabaseAnswerLogStore", () => {
     expect(logs[1]?.problemId).toBeUndefined();
   });
 
+  it("順不同で append しても byUser は atMs 昇順で返す（契約の実効テスト）", async () => {
+    const store = new SupabaseAnswerLogStore(client());
+    await store.append("u1", { topic: "後", correct: true, atMs: 3000 });
+    await store.append("u1", { topic: "先", correct: false, atMs: 1000 });
+    await store.append("u1", { topic: "中", correct: true, atMs: 2000 });
+    const logs = await store.byUser("u1");
+    expect(logs.map((l) => l.atMs)).toEqual([1000, 2000, 3000]);
+  });
+
   it("error は例外として伝播する", async () => {
     const store = new SupabaseAnswerLogStore(client("db down"));
     await expect(store.append("u1", { topic: "理論", correct: true, atMs: 1 })).rejects.toThrow("db down");
@@ -142,6 +165,16 @@ describe("SupabaseAnswerLogStore", () => {
 
 describe("SupabaseReviewStateStore", () => {
   const st: ReviewState = { reps: 2, lapses: 1, intervalDays: 6, ease: 2.5, dueMs: 1000, lastReviewMs: 500 };
+
+  it("createdAtMs が set → get 往復で保持される（0007 / silent drop 回帰防止）", async () => {
+    const store = new SupabaseReviewStateStore(client());
+    const withCreated: ReviewState = { ...st, createdAtMs: Date.UTC(2026, 0, 1) };
+    await store.set("u1", "理論", withCreated);
+    expect((await store.get("u1", "理論"))?.createdAtMs).toBe(Date.UTC(2026, 0, 1));
+    // 未設定（旧データ相当）は undefined のまま。
+    await store.set("u1", "電力", st);
+    expect((await store.get("u1", "電力"))?.createdAtMs).toBeUndefined();
+  });
 
   it("set → get → byUser が往復する", async () => {
     const store = new SupabaseReviewStateStore(client());
@@ -166,6 +199,67 @@ describe("SupabaseReviewStateStore", () => {
     const bad = new SupabaseReviewStateStore(client("nope"));
     await expect(bad.set("u1", "t", st)).rejects.toThrow("nope");
     await expect(bad.byUser("u1")).rejects.toThrow("nope");
+  });
+});
+
+describe("SupabaseEntitlementStore", () => {
+  const ent: Entitlement = {
+    userId: "u1",
+    tier: "pro",
+    status: "active",
+    source: "stripe",
+    currentPeriodEndMs: Date.UTC(2026, 6, 1),
+    stripeCustomerId: "cus_test_123",
+    stripeSubscriptionId: "sub_test_456",
+    updatedAtMs: Date.UTC(2026, 5, 1),
+  };
+
+  it("upsert → get / byStripeCustomer が往復する", async () => {
+    const store = new SupabaseEntitlementStore(client());
+    await store.upsert(ent);
+    const got = await store.get("u1");
+    expect(got).toEqual(ent);
+    const byCustomer = await store.byStripeCustomer("cus_test_123");
+    expect(byCustomer?.userId).toBe("u1");
+    expect(byCustomer?.tier).toBe("pro");
+  });
+
+  it("同一 userId の upsert は上書きする", async () => {
+    const store = new SupabaseEntitlementStore(client());
+    await store.upsert(ent);
+    await store.upsert({ ...ent, tier: "free", status: "canceled" });
+    const got = await store.get("u1");
+    expect(got?.tier).toBe("free");
+    expect(got?.status).toBe("canceled");
+  });
+
+  it("未登録の userId / customerId は undefined", async () => {
+    const store = new SupabaseEntitlementStore(client());
+    expect(await store.get("nobody")).toBeUndefined();
+    expect(await store.byStripeCustomer("cus_missing")).toBeUndefined();
+  });
+
+  it("stripe 未連携（customerId 無し）の entitlement も往復する", async () => {
+    const store = new SupabaseEntitlementStore(client());
+    const grant: Entitlement = {
+      userId: "u2",
+      tier: "pro",
+      status: "active",
+      source: "grant",
+      currentPeriodEndMs: null,
+      updatedAtMs: Date.UTC(2026, 5, 1),
+    };
+    await store.upsert(grant);
+    const got = await store.get("u2");
+    expect(got).toEqual(grant);
+    expect(got?.stripeCustomerId).toBeUndefined();
+  });
+
+  it("error は操作名付き例外として伝播する", async () => {
+    const store = new SupabaseEntitlementStore(client("boom"));
+    await expect(store.get("u1")).rejects.toThrow("entitlements.get failed: boom");
+    await expect(store.byStripeCustomer("cus_x")).rejects.toThrow("entitlements.byStripeCustomer failed: boom");
+    await expect(store.upsert(ent)).rejects.toThrow("entitlements.upsert failed: boom");
   });
 });
 

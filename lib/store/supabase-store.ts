@@ -132,6 +132,9 @@ export interface ReviewStateRow {
   ease: number;
   due_at: string; // ISO
   last_review_at: string | null;
+  // 0007 migration の列。旧スキーマ由来の行はキー欠落もあるため optional に受ける。
+  // NULL = createdAtMs 未設定（II-141 の optional セマンティクスと一致）。
+  created_at?: string | null; // ISO
 }
 
 /** zod スキーマ: review_states テーブル行の最小検証。 */
@@ -142,7 +145,11 @@ const reviewStateRowSchema = z.object({
   ease: z.number().min(0),
   due_at: z.string().datetime({ offset: true }),
   last_review_at: z.string().datetime({ offset: true }).nullable(),
+  created_at: z.string().datetime({ offset: true }).nullable().optional(),
 });
+// 注: DB の stability / difficulty 列（FSRS 用・0001/0004）は現行の SM-2 系 ReviewState に
+// 対応フィールドが無いため意図的に未マッピング。FSRS 状態を Supabase に永続化する際は、
+// createdAtMs と同じ silent drop を繰り返さないよう、この行スキーマとマッパーを必ず拡張すること。
 
 export function reviewStateToRow(userId: string, topic: string, s: ReviewState): ReviewStateRow {
   return {
@@ -154,6 +161,7 @@ export function reviewStateToRow(userId: string, topic: string, s: ReviewState):
     ease: s.ease,
     due_at: new Date(s.dueMs).toISOString(),
     last_review_at: s.lastReviewMs === null ? null : new Date(s.lastReviewMs).toISOString(),
+    created_at: s.createdAtMs === undefined ? null : new Date(s.createdAtMs).toISOString(),
   };
 }
 
@@ -175,6 +183,7 @@ export function rowToReviewState(r: ReviewStateRow): ReviewState {
     ease: d.ease,
     dueMs: new Date(d.due_at).getTime(),
     lastReviewMs: d.last_review_at === null ? null : new Date(d.last_review_at).getTime(),
+    ...(d.created_at != null ? { createdAtMs: new Date(d.created_at).getTime() } : {}),
   };
 }
 

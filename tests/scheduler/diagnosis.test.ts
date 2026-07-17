@@ -86,4 +86,24 @@ describe("弱点診断", () => {
     expect(m.attempts).toBe(3);
     expect(m.dueMs).toBe(t0 + 2 * day); // 配列末尾(t0+1day)ではなく最新
   });
+
+  it("weakestTopics は同点を topic 名で安定ソートする（入力順に依存しない決定性）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    // 全く同じ成績・同じ due → weaknessScore が同点になる3論点。
+    const mk = (topic: string) => ({ topic, attempts: 2, correct: 1, dueMs: now });
+    const forward = weakestTopics([mk("あ"), mk("い"), mk("う")], now, 2);
+    const backward = weakestTopics([mk("う"), mk("い"), mk("あ")], now, 2);
+    // 挿入順（＝バックエンドの返却順）が違っても同じ結果になる。
+    expect(forward).toEqual(backward);
+    expect(forward).toEqual(["あ", "い"]);
+  });
+
+  it("weaknessScore は未来の dueMs（まだ due でない）を負の overdue として扱わない（0 クランプ）", () => {
+    const now = Date.UTC(2026, 0, 10);
+    const day = 86_400_000;
+    const future = weaknessScore({ topic: "f", attempts: 2, correct: 1, dueMs: now + 10 * day }, now);
+    const dueNow = weaknessScore({ topic: "n", attempts: 2, correct: 1, dueMs: now }, now);
+    // overdue 寄与は 0 で下げ止まる（未来 due がスコアをマイナス方向へ壊さない）。
+    expect(future).toBe(dueNow);
+  });
 });

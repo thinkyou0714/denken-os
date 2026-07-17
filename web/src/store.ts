@@ -8,21 +8,26 @@
  * 4段階評価（again/hard/good/easy）で記憶状態（安定度・難易度）を分離管理する。
  * 互換のため record() は boolean（正誤）も受け付け、true→good / false→again に写像する。
  */
-import type { Card } from "ts-fsrs";
-import type { AnswerLog } from "../../lib/scheduler/diagnosis.js";
-import { examAwareParams } from "../../lib/scheduler/exam-aware.js";
-import { FsrsScheduler, type FsrsView } from "../../lib/scheduler/fsrs.js";
-import type { Rating } from "../../lib/scheduler/types.js";
+import {
+  type AnswerLog,
+  examAwareParams,
+  type FsrsScheduler,
+  type FsrsView,
+  getScheduler,
+  type Rating,
+  reviveCard,
+  type StoredCard,
+  toStoredCard,
+} from "../../lib/scheduler/index.js";
 import { dayIndex as _dayIndex, JST_OFFSET_MS } from "./dates.js";
 import { daysUntil } from "./plan.js";
 
 export interface StorageLike {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
+  /** 任意実装（localStorage は実装済み）。バックアップ復元の巻き戻し等でキー削除に使う。 */
+  removeItem?(key: string): void;
 }
-
-/** localStorage に保存する Card（Date を ISO 文字列にしたもの）。 */
-type StoredCard = Omit<Card, "due" | "last_review"> & { due: string; last_review?: string };
 
 /** 解答ログ（AnswerLog に4段階評価を添える）。 */
 export interface WebAnswerLog extends AnswerLog {
@@ -58,14 +63,6 @@ export const STORAGE_WARN_KB = 3_000; // 3 MB 超で警告
 function ratingOf(x: Rating | boolean): Rating {
   if (typeof x === "boolean") return x ? "good" : "again";
   return x;
-}
-
-function reviveCard(s: StoredCard): Card {
-  return {
-    ...s,
-    due: new Date(s.due),
-    last_review: s.last_review ? new Date(s.last_review) : undefined,
-  } as Card;
 }
 
 export class LocalProgress {
@@ -109,13 +106,23 @@ export class LocalProgress {
     const base = this.desiredRetention();
     const daysLeft = this.examDateIso ? daysUntil(this.examDateIso) : null;
     // daysUntil は過去/不明を 0 にするため、0 のときは「試験なし扱い」へ寄せる（base 維持）。
+    // 【試験当日(daysLeft===0)の扱いは意図的】: 当日は試験本番のため、直前モード(cram)と
+    // 間隔上限を解除して通常スケジュールへ戻す。前日(daysLeft===1)までは cram / 上限1日が
+    // 効くので「当日を越える復習」は前日時点で既に抑止済み。当日に cram を残す設計も可能だが、
+    // 本番当日は新規スケジューリングの意味が薄いため通常挙動を採る（プロダクト判断・非バグ）。
     return examAwareParams(daysLeft && daysLeft > 0 ? daysLeft : null, base);
   }
 
-  /** 実効パラメータで FSRS スケジューラを構築する（試験日を越える復習を組まない）。 */
+  /**
+   * 実効パラメータで FSRS スケジューラを構築する（試験日を越える復習を組まない）。
+   * 公開ファクトリ getScheduler 経由で生成する（実装差し替え可能性の維持。CLAUDE.md 不変条件）。
+   */
   private buildScheduler(): FsrsScheduler {
     const { requestRetention, maximumIntervalDays } = this.examParams();
-    return new FsrsScheduler(requestRetention, maximumIntervalDays);
+    return getScheduler("fsrs", {
+      desiredRetention: requestRetention,
+      ...(maximumIntervalDays !== undefined ? { maximumIntervalDays } : {}),
+    });
   }
 
   /**
@@ -263,7 +270,8 @@ export class LocalProgress {
     const prev = stored ? reviveCard(stored) : this.scheduler.init(now);
     const next = this.scheduler.review(prev, rating, now);
 
-    cards[topic] = next as unknown as StoredCard; // Date は JSON で ISO 文字列化される
+    // 明示変換で保存形へ（Date フィールドの知識は lib/scheduler/fsrs.ts が唯一の所有者）。
+    cards[topic] = toStoredCard(next);
     this.safeSet(CARD_KEY, JSON.stringify(cards));
     // due 件数が変わりうるのでメモ化キャッシュを破棄（blob 長が同じでも内容変化を取りこぼさない）。
     this._dueCountCache = null;

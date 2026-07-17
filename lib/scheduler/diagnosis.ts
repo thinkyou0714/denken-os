@@ -117,9 +117,14 @@ export function weaknessScore(p: TopicProgress, nowMs: number): number {
  * 同 topic で連続不正解 → rate 低下 → `weaknessScore` が上昇 → 優先度が上がる。
  */
 export function weakestTopics(progress: Iterable<TopicProgress>, nowMs: number = Date.now(), limit = 3): string[] {
-  return [...progress]
-    .map((p) => ({ topic: p.topic, score: weaknessScore(p, nowMs) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit)
-    .map((x) => x.topic);
+  return (
+    [...progress]
+      .map((p) => ({ topic: p.topic, score: weaknessScore(p, nowMs) }))
+      // 同点は topic 名で安定ソートする。progress の反復順はログ到着順（バックエンドに
+      // よっては順不同）のため、タイブレークが無いと同じデータでも表示のたびに
+      // 弱点リストの並びが変わりうる（非決定）。
+      .sort((a, b) => b.score - a.score || a.topic.localeCompare(b.topic, "ja"))
+      .slice(0, limit)
+      .map((x) => x.topic)
+  );
 }

@@ -17,7 +17,7 @@ export {
   type ExamAwareParams,
   examAwareParams,
 } from "./exam-aware.js";
-export { FsrsScheduler, type FsrsView } from "./fsrs.js";
+export { FsrsScheduler, type FsrsView, reviveCard, type StoredCard, toStoredCard } from "./fsrs.js";
 export { Sm2Scheduler } from "./sm2.js";
 export type { Rating, ReviewState, Scheduler } from "./types.js";
 
@@ -33,23 +33,29 @@ export type SchedulerKind = "fsrs" | "sm2";
  * @param kind - `"fsrs"`（既定・推奨）または `"sm2"`（後方互換・比較用）。
  * @param options - スケジューラ固有のオプション。
  * @param options.desiredRetention - FSRS の目標保持率（既定 0.9）。fsrs 選択時のみ有効。
+ * @param options.maximumIntervalDays - FSRS の最大間隔（日）。試験日逆算（exam-aware）で
+ *   試験日を越える復習を組まないために使う。fsrs 選択時のみ有効。
  * @returns 選択されたスケジューラのインスタンス。
  *
  * @example
  * ```ts
  * const scheduler = getScheduler("fsrs"); // 既定の FSRS
+ * const exam = getScheduler("fsrs", { desiredRetention: 0.92, maximumIntervalDays: 14 });
  * const sm2 = getScheduler("sm2");        // SM-2（比較・テスト用）
  * ```
  */
-export function getScheduler(kind: "fsrs", options?: { desiredRetention?: number }): FsrsScheduler;
+export function getScheduler(
+  kind: "fsrs",
+  options?: { desiredRetention?: number; maximumIntervalDays?: number },
+): FsrsScheduler;
 export function getScheduler(kind: "sm2"): Sm2Scheduler;
 export function getScheduler(
   kind: SchedulerKind = "fsrs",
-  options?: { desiredRetention?: number },
+  options?: { desiredRetention?: number; maximumIntervalDays?: number },
 ): FsrsScheduler | Sm2Scheduler {
   switch (kind) {
     case "fsrs":
-      return new FsrsScheduler(options?.desiredRetention);
+      return new FsrsScheduler(options?.desiredRetention, options?.maximumIntervalDays);
     case "sm2":
       return new Sm2Scheduler();
     default: {

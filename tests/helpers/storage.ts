@@ -20,6 +20,10 @@ export class MemoryStorage implements StorageLike {
   setItem(k: string, v: string): void {
     this.m.set(k, v);
   }
+
+  removeItem(k: string): void {
+    this.m.delete(k);
+  }
 }
 
 /**

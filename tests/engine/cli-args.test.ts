@@ -32,9 +32,23 @@ describe("parseArgs — --topic の空/欠落ケース", () => {
     // '--count' はオプションライクなので next() が undefined を返す → topic 未設定
     const a = parseArgs(["--topic", "--count", "5"]);
     expect(a.topic).toBeUndefined();
-    // --count は次トークンとして読まれず、5 が count として解釈される
-    // NOTE: '--count' が isOptionLike で弾かれるため count は NaN になる場合あり
-    // ここでは topic が undefined であることのみ確認
+    // --count は次トークンとして読まれず、5 が count として解釈される。
+    // 全ての値取りオプションが next() ガードで統一されたため、count は 5（NaN にならない）。
+    expect(a.count).toBe(5);
+  });
+
+  it("値取りオプションの直後に別オプションが来ても既定を維持し次オプションを誤消費しない", () => {
+    // '--source --out x': 旧実装は source='--out' と誤読していた（argv[++i] 直読）。
+    // next() ガードで source は既定(original)を維持し、--out は正しく out として解釈される。
+    const a = parseArgs(["--source", "--out", "x.json"]);
+    expect(a.source).toBe("original");
+    expect(a.out).toBe("x.json");
+  });
+
+  it("値欠落の --count は既定(5)を維持する（NaN にしない）", () => {
+    const a = parseArgs(["--count"]);
+    expect(a.count).toBe(5);
+    expect(argErrors(a)).toEqual([]);
   });
 
   it("-t の直後に別オプション(-h)が来ても topic は undefined のまま", () => {

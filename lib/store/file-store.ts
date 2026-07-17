@@ -83,7 +83,9 @@ export class FileAnswerLogStore implements AnswerLogStore {
     writeJson(this.file, all);
   }
   async byUser(userId: string): Promise<AnswerLog[]> {
-    return [...(this.load()[userId] ?? [])];
+    // 契約は「atMs 昇順」。Supabase 実装は DB の order で保証するため、
+    // 追記順に依存せずここでもソートして 3 実装の挙動を揃える。
+    return [...(this.load()[userId] ?? [])].sort((a, b) => a.atMs - b.atMs);
   }
 }
 

@@ -11,12 +11,12 @@ Node 22 (`.nvmrc` 参照・`engines>=20`) が必要です。
 ```bash
 npm install
 npm run build:web          # web/src/ をバンドル → web/dist/（web を編集した場合は毎回）
-npm test                   # ユニットテスト（851件）
+npm test                   # ユニットテスト（vitest）
 npm run lint               # Biome（lint + format チェック）
 npm run typecheck          # 型チェック（lib/scripts/tests）
 npm run typecheck:web      # 型チェック（web app）
 npm run validate:data      # data/ の問題を problem-schema.json で検証
-npm run verify             # 上記すべてを一括実行（CI と同一手順）
+npm run verify             # 上記すべてを一括実行（CI の主要ゲートのサブセット）
 ```
 
 ## 開発の約束（絶対原則）
@@ -149,7 +149,7 @@ npm run gen -- -t 三相交流電力 -v          # --topic の短縮形 -t、版
 # gen: xpost スレッドも生成し最初の5件だけ出力、ファイルにも保存
 npm run gen -- --topic 電気加熱の所要時間 --count 3 --xpost --xpost-limit 5 --xpost-out out/post.txt
 
-# build:problems: 全88テンプレから web/problems.json を再生成（1トピック5問に変更する例）
+# build:problems: 全テンプレート（lib/engine/templates/）から web/problems.json を再生成（1トピック5問に変更する例）
 npm run build:problems -- --per-topic 5
 
 # validate:data: data/ 以下の手動問題をスキーマ検証
@@ -173,7 +173,11 @@ npm run build:problems -- --help
 ## PR の前に
 
 プッシュ前は `npm run verify` を実行してください（lint / 型 / データ検証 / テスト / ビルドを一括確認できます）。
-プロジェクトは husky を導入しない方針ですが（CI がゲートを担う）、`verify` は CI と完全に同じ手順です。
+プロジェクトは husky を導入しない方針です（CI がゲートを担う）。`verify` は CI の主要ゲートを
+ローカルで一括実行しますが、CI はさらに `npm audit --omit=dev`・生成物の鮮度検証
+（`build:problems` / `seed:data` / `build:web` 後の差分ゼロ）・カバレッジ閾値付き `test:coverage` を
+実行します。生成物を触った場合は再生成してコミットし、必要なら `npm run test:coverage` も
+ローカルで確認してください。
 
 - [ ] `npm run verify` が緑（全ステップ通過）
 - [ ] `web/src/` を変更した場合は `npm run build:web` を確認した

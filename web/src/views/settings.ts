@@ -396,7 +396,14 @@ function backupCard(): HTMLElement {
     fileInput.value = "";
     if (!file) return;
     if (!window.confirm("バックアップを読み込みます。現在の学習データは上書きされます。よろしいですか？")) return;
-    const result = importBackup(storage, await file.text());
+    let result: ReturnType<typeof importBackup>;
+    try {
+      result = importBackup(storage, await file.text());
+    } catch {
+      // file.text() の失敗等。async change ハンドラ内の未処理 rejection にせず、その場で通知する。
+      showToast("⚠️ 復元できませんでした: ファイルを読み取れませんでした", "OK", () => {});
+      return;
+    }
     if (result.ok) {
       // 復元したライセンスを即時反映する（「再読込」を押さなくても Pro 状態が正しくなる）。
       // 逆方向（ライセンスを含まない/無効なバックアップ）でもキャッシュと保存値の乖離を防ぐ。

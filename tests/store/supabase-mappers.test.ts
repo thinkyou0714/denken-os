@@ -44,4 +44,38 @@ describe("Supabase row mappers", () => {
     const st: ReviewState = { reps: 0, lapses: 0, intervalDays: 0, ease: 2.5, dueMs: 0, lastReviewMs: null };
     expect(rowToReviewState(reviewStateToRow("u1", "t", st)).lastReviewMs).toBeNull();
   });
+
+  it("createdAtMs を往復で保持する（II-141 / 0007。Supabase 経路の silent drop 回帰防止）", () => {
+    const st: ReviewState = {
+      reps: 1,
+      lapses: 0,
+      intervalDays: 1,
+      ease: 2.5,
+      dueMs: Date.UTC(2026, 0, 10),
+      lastReviewMs: null,
+      createdAtMs: Date.UTC(2026, 0, 1),
+    };
+    expect(rowToReviewState(reviewStateToRow("u1", "t", st))).toEqual(st);
+  });
+
+  it("createdAtMs 未設定（旧データ）は往復後も undefined（now() 等で捏造しない）", () => {
+    const st: ReviewState = { reps: 0, lapses: 0, intervalDays: 0, ease: 2.5, dueMs: 0, lastReviewMs: null };
+    const row = reviewStateToRow("u1", "t", st);
+    expect(row.created_at).toBeNull();
+    expect(rowToReviewState(row).createdAtMs).toBeUndefined();
+  });
+
+  it("created_at キーが無い旧スキーマ行も受理する（0007 未適用 DB との互換）", () => {
+    const row = reviewStateToRow("u1", "t", {
+      reps: 0,
+      lapses: 0,
+      intervalDays: 0,
+      ease: 2.5,
+      dueMs: 0,
+      lastReviewMs: null,
+    });
+    delete row.created_at; // 旧スキーマ（キー欠落）行を忠実に再現する
+
+    expect(rowToReviewState(row).createdAtMs).toBeUndefined();
+  });
 });

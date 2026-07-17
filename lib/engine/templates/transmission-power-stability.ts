@@ -9,10 +9,8 @@ import { defineTemplate, pick } from "./helpers.js";
 const VS_SET: ReadonlyArray<number> = [60, 66, 100, 110];
 const VR_SET: ReadonlyArray<number> = [60, 66, 100];
 const X_SET: ReadonlyArray<number> = [40, 50, 60, 66, 100];
-const DELTA_SET: ReadonlyArray<readonly [number, number]> = [
-  [30, 0.5],
-  [90, 1.0],
-];
+// 相差角δ(deg)。sinδ は Math.sin で計算する（事前表は持たない）。
+const DELTA_SET: ReadonlyArray<number> = [30, 90];
 
 type Params = {
   sending_voltage: number;
@@ -35,7 +33,7 @@ export const transmissionPowerStability = defineTemplate<Params>({
   },
   paramOrder: ["sending_voltage", "receiving_voltage", "reactance", "phase_angle"],
   draw(rng) {
-    const [deg] = pick(DELTA_SET, rng);
+    const deg = pick(DELTA_SET, rng);
     return {
       sending_voltage: pick(VS_SET, rng),
       receiving_voltage: pick(VR_SET, rng),
