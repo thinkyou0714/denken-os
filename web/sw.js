@@ -32,8 +32,10 @@
 //         sanitizeSvg・SW堅牢化(fetch失敗フォールバック・install失敗時skipWaiting抑制))
 //   (v20: Wave2リファクタ — CSP/SRI・SW版数自動化・RLS補完・fuzz/統合テスト追加)
 //   (v21: 最高品質化 — stale-while-revalidate(陳腐化解消)・週次クエスト修正・採点/a11y/試験忠実度の根本是正)
+//   (v22: SW堅牢化第2弾 — SRI原子ペア(index.html/app.js)をSWR裏差し替え対象から除外(新HTML×旧JSの
+//         SRI不整合による白画面を防止)・clients.claim()をwaitUntil内で待機)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v21-ebc2127a";
+const CACHE = "denken-os-v22-aeafb0a1";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -49,21 +51,37 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))),
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      // claim も waitUntil 内で待つ（activate 完了前に取りこぼさない）。
+      .then(() => self.clients.claim()),
   );
-  self.clients.claim();
 });
+
+// SRI で結ばれた原子ペア: index.html は dist/app.js の SRI ハッシュ（sha384）を埋め込むため、
+// 片方だけ裏で差し替わると 新HTML×旧JS（またはその逆）となり SRI 検証に失敗して白画面になる。
+// この2つ（と "./"）は install の addAll でのみ「原子的に」更新し、SWR の裏差し替え対象から外す。
+// CACHE 版数はプリキャッシュ全アセットの内容ハッシュ（build:web）なので、どちらかが変わる
+// 配信では必ず sw.js のバイトが変わり SW 更新→新キャッシュへの一括切替が走る（＝陳腐化しない）。
+function isSriAtomicPair(request) {
+  const path = new URL(request.url).pathname;
+  return path.endsWith("/") || path.endsWith("/index.html") || path.endsWith("/dist/app.js");
+}
 
 // stale-while-revalidate: キャッシュを即返ししつつ裏でネットワーク更新する（web#3）。
 // 純 cache-first では SW 版数が上がるまで problems.json / index.html が陳腐化したままだったため、
 // オンライン時は次回読込で最新が反映されるよう、取得成功時にキャッシュを差し替える。
+// ただし SRI 原子ペア（index.html / dist/app.js）は上記の理由で裏差し替えしない。
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE);
   const cached = await cache.match(request);
+  if (cached && isSriAtomicPair(request)) return cached;
   const network = fetch(request)
     .then((res) => {
       // 同一オリジンの正常応答のみ保存（opaque/エラー応答はキャッシュ汚染を避けて保存しない）。
-      if (res?.ok && res.type === "basic") cache.put(request, res.clone());
+      // SRI 原子ペアは install 時の addAll だけがキャッシュを書く。
+      if (res?.ok && res.type === "basic" && !isSriAtomicPair(request)) cache.put(request, res.clone());
       return res;
     })
     .catch(() => null);

@@ -47,7 +47,15 @@ describe("テンプレート不変条件（全7種・多数 seed）", () => {
 
         // 数値の答えは「綺麗な値」。
         const num = Number(g.answerText);
-        if (Number.isFinite(num)) expect(isCleanAnswer(num)).toBe(true);
+        if (Number.isFinite(num)) {
+          expect(isCleanAnswer(num)).toBe(true);
+          // answerValue は answerText と同じ単位系（answerUnit）の真値であること（契約）。
+          // 単位換算を忘れると answerValue が 1000 倍等でずれ、検算基準として機能しない。
+          expect(
+            Math.abs(g.answerValue - num),
+            `${topic}: answerValue=${g.answerValue} が answerText=${g.answerText} と単位不整合`,
+          ).toBeLessThanOrEqual(Math.max(0.02, Math.abs(g.answerValue) * 0.005));
+        }
 
         // 既定の解説に最終値が現れる（反ハルシネーション照合が成立する）。
         expect(narrationMatchesAnswer(g.defaultSolution, g.answerText)).toBe(true);

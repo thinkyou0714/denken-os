@@ -27,6 +27,47 @@ describe("Sm2Scheduler", () => {
     expect(st.dueMs).toBe(t0); // 当日中に再出題
   });
 
+  it("失敗後の再学習は間隔が 1 → 6 → round(6·EF) と最初から進む（relearning 進行）", () => {
+    let st = sched.init(t0);
+    st = sched.review(st, "good", t0); // 1日
+    st = sched.review(st, "good", t0); // 6日
+    st = sched.review(st, "good", t0); // 6*ease
+    st = sched.review(st, "again", t0); // lapse → reps=0, interval=0
+
+    // 再学習: reps が 0 から数え直され、間隔も 1 → 6 と最初から進行する。
+    st = sched.review(st, "good", t0);
+    expect(st.reps).toBe(1);
+    expect(st.intervalDays).toBe(1);
+    st = sched.review(st, "good", t0);
+    expect(st.reps).toBe(2);
+    expect(st.intervalDays).toBe(6);
+    const beforeThird = st;
+    st = sched.review(st, "good", t0);
+    expect(st.reps).toBe(3);
+    // 3回目は round(6·EF)（EF は更新前の値を使う）。lapse で ease は下がっているが下限 1.3 以上。
+    expect(st.intervalDays).toBe(Math.round(6 * beforeThird.ease));
+    expect(st.intervalDays).toBeGreaterThanOrEqual(Math.round(6 * 1.3));
+    expect(st.lapses).toBe(1); // lapse 回数は再学習で減らない
+  });
+
+  it("createdAtMs を持たない旧永続化データの review は createdAtMs を捏造しない", () => {
+    const legacy = { reps: 1, lapses: 0, intervalDays: 1, ease: 2.5, dueMs: t0, lastReviewMs: t0 };
+    const next = sched.review(legacy, "good", t0);
+    expect(next.createdAtMs).toBeUndefined();
+    expect("createdAtMs" in next).toBe(false);
+  });
+
+  it("nowMs が過去へ巻き戻っても間隔・dueMs が破綻しない（クロックスキュー耐性）", () => {
+    let st = sched.init(t0);
+    st = sched.review(st, "good", t0);
+    // 端末時計が 3 日巻き戻った状態でのレビュー。
+    const past = t0 - 3 * 24 * 3600_000;
+    st = sched.review(st, "good", past);
+    expect(Number.isFinite(st.dueMs)).toBe(true);
+    expect(st.intervalDays).toBe(6);
+    expect(st.dueMs).toBe(past + 6 * 24 * 3600_000);
+  });
+
   it("ease は下限1.3を下回らない", () => {
     let st = sched.init(t0);
     for (let i = 0; i < 10; i++) st = sched.review(st, "again", t0);

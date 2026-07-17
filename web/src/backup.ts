@@ -159,14 +159,39 @@ export function importBackup(storage: StorageLike, json: string): ImportResult {
     if (problem) return { ok: false, reason: problem };
   }
 
+  // 書き込みは「全か無か」: setItem は QuotaExceededError 等で途中失敗しうるため、
+  // 現在値をスナップショットしてから書き込み、失敗時は全キーを巻き戻す。
+  // ループ途中で失敗すると先行キーだけ新データに置き換わった不整合
+  // （新しい cards × 古い logs 等）が残り、既存の進捗が半壊するのを防ぐ。
+  const snapshot = new Map<string, string | null>();
+  for (const key of BACKUP_KEYS) snapshot.set(key, storage.getItem(key));
+
   const restoredKeys: string[] = [];
-  for (const key of BACKUP_KEYS) {
-    const v = (file.data as Record<string, unknown>)[key];
-    if (typeof v !== "string") continue;
-    // 空文字ライセンス（旧バックアップのトゥームストーン）で有効なキーを潰さない。
-    if (key === "denken:license" && v === "") continue;
-    storage.setItem(key, v);
-    restoredKeys.push(key);
+  try {
+    for (const key of BACKUP_KEYS) {
+      const v = (file.data as Record<string, unknown>)[key];
+      if (typeof v !== "string") continue;
+      // 空文字ライセンス（旧バックアップのトゥームストーン）で有効なキーを潰さない。
+      if (key === "denken:license" && v === "") continue;
+      storage.setItem(key, v);
+      restoredKeys.push(key);
+    }
+  } catch {
+    // 巻き戻し: 元の値は直前まで実際に保存されていたサイズなので原則書き戻せる。
+    // 万一ここでも失敗した場合に例外を外へ漏らさない（結果は失敗として返す）。
+    for (const [key, old] of snapshot) {
+      try {
+        if (old === null) storage.removeItem?.(key);
+        else storage.setItem(key, old);
+      } catch {
+        // best-effort rollback
+      }
+    }
+    clearDerivedCaches();
+    return {
+      ok: false,
+      reason: "保存領域への書き込みに失敗しました（容量不足の可能性）。データは元の状態に戻しました。",
+    };
   }
   if (restoredKeys.length === 0) return { ok: false, reason: "復元できるデータが見つかりませんでした。" };
   // 復元でストア内容が差し替わったので、集計メモ化キャッシュを破棄して整合を保つ（T-B1）。

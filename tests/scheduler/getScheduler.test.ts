@@ -36,6 +36,20 @@ describe("getScheduler", () => {
     expect(s.desiredRetention).toBeCloseTo(0.85);
   });
 
+  it("FSRS の maximumIntervalDays オプションが転送される（exam-aware の必須シーム）", () => {
+    // 以前はファクトリが desiredRetention しか受けず、試験日逆算（maximumIntervalDays）を
+    // 使う web 側が new FsrsScheduler を直接呼ばざるを得なかった（ファクトリ迂回の根本原因）。
+    const s = getScheduler("fsrs", { desiredRetention: 0.9, maximumIntervalDays: 5 });
+    expect(s.maximumIntervalDays).toBe(5);
+
+    // 挙動でも確認: easy を繰り返しても due が上限（5日）を超えない。
+    const now = new Date("2026-01-01T00:00:00.000Z");
+    let card = s.init(now);
+    for (let i = 0; i < 10; i++) card = s.review(card, "easy", now);
+    const horizon = now.getTime() + 5 * 24 * 3600_000;
+    expect(s.view(card).dueMs).toBeLessThanOrEqual(horizon + 1);
+  });
+
   it("Sm2Scheduler の init() は createdAtMs を含む（II-141）", () => {
     const now = Date.now();
     const s = getScheduler("sm2");

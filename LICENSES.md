@@ -5,7 +5,7 @@ README の方針（アプリ部分 = MIT ／ 問題集データ = CC-BY-SA）を
 
 | 対象 | パス | ライセンス | ファイル |
 |---|---|---|---|
-| ソースコード | `lib/`, `scripts/`, ルートの設定ファイル | MIT | [`LICENSE`](LICENSE) |
+| ソースコード | `lib/`, `scripts/`, `web/`, `tests/`, `types/`, `supabase/`, ルートの設定ファイル | MIT | [`LICENSE`](LICENSE) |
 | 問題データ | `data/**` | CC-BY-SA-4.0 | [`LICENSE-DATA`](LICENSE-DATA) |
 | ドキュメント | `docs/**` | CC-BY-SA-4.0 | [`LICENSE-DATA`](LICENSE-DATA) |
 

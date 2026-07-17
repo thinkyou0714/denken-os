@@ -250,10 +250,15 @@ export function narrationMatchesAnswer(solution: string[], answerText: string): 
     // 非数値の答え（センチネル等）は結論ステップに answerText が現れることを要求。
     return conclusion.includes(answerText);
   }
-  const nums =
-    normalizeSci(conclusion)
-      .match(/[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)
-      ?.map(Number) ?? [];
+  // 係数衝突ガード: 結論ステップは「式 = 最終値」の形が多く、式側の係数
+  // （例: P=3·I²·R の 3、v=2I(...) の 2）が正解と数値一致すると、最終値が
+  // 改変されていても照合が通ってしまう。最後の「=」/「≈」より後ろ（= 最終値side）
+  // だけを照合対象にする。等号が無い結論（「よって約3.2kWとなる」等）は従来どおり
+  // 全体を照合する（式係数を含まないため衝突リスクが低い）。
+  const normalized = normalizeSci(conclusion);
+  const lastEq = Math.max(normalized.lastIndexOf("="), normalized.lastIndexOf("≈"));
+  const segment = lastEq >= 0 ? normalized.slice(lastEq + 1) : normalized;
+  const nums = segment.match(/[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)?.map(Number) ?? [];
   const tol = Math.max(ANSWER_EPSILON, Math.abs(expected) * ANSWER_EPSILON);
   return nums.some((n) => Math.abs(n - expected) <= tol);
 }
@@ -267,5 +272,11 @@ export function narrationMatchesAnswer(solution: string[], answerText: string): 
  * 呼び出し側は決定論の defaultStatement にフォールバックする（問題は失わない）。
  */
 export function statementMatchesParams(statement: string, paramValues: readonly number[]): boolean {
-  return paramValues.every((v) => statement.includes(formatClean(v)));
+  // 部分文字列ではなく数値トークン境界で照合する。substring 判定だと「2」が「200」や
+  // 「3300」の内部にヒットし、LLM が値を改変した問題文でも元の桁が別の数値の一部として
+  // 残っていれば通過してしまう（engine#1 ガードの実効性が失われる）。
+  return paramValues.every((v) => {
+    const escaped = formatClean(v).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?<![\\d.])${escaped}(?![\\d.])`).test(statement);
+  });
 }

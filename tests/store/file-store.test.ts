@@ -41,4 +41,11 @@ describe("FileStores（JSON永続化）", () => {
     await s.answerLogs.append("u1", { topic: "理論", correct: false, atMs: 2 });
     expect((await fileStores(dir).answerLogs.byUser("u1")).length).toBe(2);
   });
+
+  it("AnswerLogStore は順不同 append でも byUser を atMs 昇順で返す（契約）", async () => {
+    const s = fileStores(dir);
+    await s.answerLogs.append("u-order", { topic: "後", correct: true, atMs: 3000 });
+    await s.answerLogs.append("u-order", { topic: "先", correct: false, atMs: 1000 });
+    expect((await fileStores(dir).answerLogs.byUser("u-order")).map((l) => l.atMs)).toEqual([1000, 3000]);
+  });
 });

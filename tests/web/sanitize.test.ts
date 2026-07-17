@@ -50,4 +50,37 @@ describe("sanitizeSvg — SVG サニタイズ", () => {
   it("空の SVG はそのまま返す", () => {
     expect(sanitizeSvg("")).toBe("");
   });
+
+  // ── ブロックリスト強化: on*= / <script / 外部 href を含まない古典的迂回ベクター ──
+
+  it("SMIL <animate> による href 書き換え（javascript:）を拒否する", () => {
+    const svg = `<svg><a><animate attributeName="href" values="javascript:alert(1)"/><text>x</text></a></svg>`;
+    expect(sanitizeSvg(svg)).toBe("");
+  });
+
+  it("SMIL <set> 要素を拒否する", () => {
+    const svg = `<svg><a><set attributeName="href" to="#x"/><text>x</text></a></svg>`;
+    expect(sanitizeSvg(svg)).toBe("");
+  });
+
+  it("<style> 要素を拒否する", () => {
+    const svg = `<svg><style>@import url(//evil.example.com/x.css);</style><rect/></svg>`;
+    expect(sanitizeSvg(svg)).toBe("");
+  });
+
+  it("<foreignObject>（任意 HTML の埋め込み口）を拒否する", () => {
+    const svg = `<svg><foreignObject><iframe src="//evil.example.com"></iframe></foreignObject></svg>`;
+    expect(sanitizeSvg(svg)).toBe("");
+  });
+
+  it("属性位置を問わず javascript: スキームを拒否する", () => {
+    const svg = `<svg><a href="#x" target="javascript:alert(1)"><text>x</text></a></svg>`;
+    expect(sanitizeSvg(svg)).toBe("");
+  });
+
+  it("<settings> のような接頭辞一致の無害な要素名は誤検出しない", () => {
+    // \b 境界により <set> は拒否・<settings> は通す（誤爆防止の回帰テスト）。
+    const svg = `<svg><metadata><settings mode="a"/></metadata><rect/></svg>`;
+    expect(sanitizeSvg(svg)).toBe(svg);
+  });
 });

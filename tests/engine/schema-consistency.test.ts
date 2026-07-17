@@ -79,4 +79,24 @@ describe("schema ドリフト検知（ajv ⇄ zod）", () => {
     expect(r.ajv).toBe(false);
     expect(r.zod).toBe(false);
   });
+
+  // 過去問系の citation ドリフト是正: zod は trim().length>0 の refine で空白のみを弾くが、
+  // ajv 側は minLength/pattern 未指定で "   " を受理していた（実在ドリフト）。
+  it.each([
+    "past_exam_modified",
+    "past_exam_quoted",
+  ])("空白のみの citation（source.type=%s）は両方が拒否する（ajv⇄zod parity）", (type) => {
+    const r = bothAccept({ ...T0001, source: { type, citation: "   " } });
+    expect(r.ajv).toBe(false);
+    expect(r.zod).toBe(false);
+  });
+
+  it("非空の citation（past_exam_modified）は両方が受理する", () => {
+    const r = bothAccept({
+      ...T0001,
+      source: { type: "past_exam_modified", citation: "令和5年度 第二種 一次 理論（改題）" },
+    });
+    expect(r.ajv).toBe(true);
+    expect(r.zod).toBe(true);
+  });
 });

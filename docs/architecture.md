@@ -28,7 +28,7 @@
 │     ├ templates/                                                      │
 │     │   ├ helpers.ts … 共有ヘルパー（pick / buildChoices /           │
 │     │   │               percentage / ensureRange / defineTemplate）   │
-│     │   └ <topic>.ts … 科目別の決定論ソルバ（88テンプレ）            │
+│     │   └ <topic>.ts … 科目別の決定論ソルバ（112テンプレ）           │
 │     └ xpost/ … X投稿パイプライン (toXPost / xlength / publish)       │
 │   engine/index.ts … barrel（単一入口）                               │
 │                                                                      │
@@ -79,7 +79,7 @@ graph TD
         narrate[narrate.ts]
         validate[validate.ts]
         helpers["templates/helpers.ts<br/>pick/buildChoices/defineTemplate"]
-        templates[templates/*.ts<br/>88テンプレ]
+        templates[templates/*.ts<br/>112テンプレ]
         xpost[xpost/]
         barrel[index.ts barrel]
     end
@@ -231,11 +231,12 @@ flowchart TD
 
 ## 検証パイプライン
 
-`npm run verify`（= CI `.github/workflows/validate.yml` と同一手順。プリプッシュ確認に使う）:
+`npm run verify`（CI `.github/workflows/validate.yml` の主要ゲートのサブセット。プリプッシュ確認に使う。
+CI はさらに npm audit・生成物鮮度 diff・カバレッジ閾値を検証する）:
 
 ```
 lint (Biome) → typecheck (lib/scripts/tests) → typecheck:web
-  → validate:data (ajv + JSON Schema) → test (vitest 851件・カバレッジ閾値 stmts85/branch76/funcs92/lines89)
+  → validate:data (ajv + JSON Schema) → test (vitest・カバレッジ閾値は vitest.config.ts の thresholds が正)
   → build:web (esbuild → web/dist/)
 ```
 

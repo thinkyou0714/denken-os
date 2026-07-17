@@ -43,7 +43,16 @@ export function loadProblems(dataDir: string): { problems: Problem[]; skipped: n
   const problems: Problem[] = [];
   let skipped = 0;
   for (const f of files) {
-    const data = JSON.parse(readFileSync(join(dataDir, f), "utf8")) as unknown;
+    // JSON 破損はそのファイルだけスキップ扱いにし、既存の graceful な除外パスに合流させる
+    // （1 ファイルの構文エラーで export:vault 全体を落とさない）。
+    let data: unknown;
+    try {
+      data = JSON.parse(readFileSync(join(dataDir, f), "utf8")) as unknown;
+    } catch (e) {
+      skipped += 1;
+      process.stderr.write(`⚠ JSON 破損のため除外: ${f} — ${e instanceof Error ? e.message : e}\n`);
+      continue;
+    }
     for (const raw of Array.isArray(data) ? (data as unknown[]) : [data]) {
       const result = validateProblem(raw);
       if (result.ok && result.problem) {

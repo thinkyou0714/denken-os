@@ -2,6 +2,26 @@ import { describe, expect, it } from "vitest";
 import { BACKUP_KEYS, exportBackup, importBackup } from "../../web/src/backup.js";
 import { MemoryStorage } from "../helpers/storage.js";
 
+/**
+ * arm() 後の N 回目の setItem だけ QuotaExceededError を投げる Storage。
+ * 「復元の途中失敗 → 巻き戻し書き込みは成功する」（元の値は保存済みサイズ）を再現する。
+ */
+class FailAtNthWriteStorage extends MemoryStorage {
+  private failAt = Number.POSITIVE_INFINITY;
+  private writes = 0;
+
+  arm(failAt: number): void {
+    this.failAt = failAt;
+    this.writes = 0;
+  }
+
+  override setItem(k: string, v: string): void {
+    this.writes += 1;
+    if (this.writes === this.failAt) throw new DOMException("quota", "QuotaExceededError");
+    super.setItem(k, v);
+  }
+}
+
 describe("バックアップ（エクスポート/インポート）", () => {
   it("ラウンドトリップで学習データが復元される", () => {
     const src = new MemoryStorage();
@@ -172,5 +192,45 @@ describe("バックアップ（エクスポート/インポート）", () => {
       data: { "denken:logs": "[]", "denken:cards": "{}" },
     });
     expect(importBackup(dst, json).ok).toBe(true);
+  });
+});
+
+describe("importBackup — 途中失敗時の巻き戻し（全か無か）", () => {
+  const backupJson = JSON.stringify({
+    app: "denken-os",
+    version: 1,
+    data: {
+      "denken:cards": JSON.stringify({ 新論点: { reps: 1 } }),
+      "denken:logs": JSON.stringify([{ topic: "新", correct: true, atMs: 9 }]),
+      "denken:dailyGoal": "30",
+    },
+  });
+
+  it("setItem が途中で失敗しても既存データが半壊しない（全キー巻き戻し）", () => {
+    const dst = new FailAtNthWriteStorage();
+    const oldCards = JSON.stringify({ 旧論点: { reps: 5 } });
+    const oldLogs = JSON.stringify([{ topic: "旧", correct: false, atMs: 1 }]);
+    dst.setItem("denken:cards", oldCards);
+    dst.setItem("denken:logs", oldLogs);
+    // dailyGoal は未設定（復元で新規に書かれるキー）。
+
+    // BACKUP_KEYS 順で cards(1回目)成功 → logs(2回目)で quota 失敗、を再現。
+    dst.arm(2);
+    const r = importBackup(dst, backupJson);
+
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toContain("書き込みに失敗");
+    // 例外は外へ漏れず、全キーが元の状態に戻る（cards は新値のまま残らない）。
+    expect(dst.getItem("denken:cards")).toBe(oldCards);
+    expect(dst.getItem("denken:logs")).toBe(oldLogs);
+    // 未設定だったキーは巻き戻しで削除される（removeItem）。
+    expect(dst.getItem("denken:dailyGoal")).toBeNull();
+  });
+
+  it("失敗しなければ従来どおり全キー復元される（回帰確認）", () => {
+    const dst = new FailAtNthWriteStorage();
+    const r = importBackup(dst, backupJson);
+    expect(r.ok).toBe(true);
+    expect(dst.getItem("denken:dailyGoal")).toBe("30");
   });
 });

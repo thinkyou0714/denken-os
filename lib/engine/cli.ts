@@ -70,13 +70,15 @@ export function parseArgs(argv: string[]): Args {
         break;
       }
       case "--count": {
-        const v = argv[++i];
-        args.count = Number(v);
+        // next() ガードで統一（値欠落・次オプション誤消費を防ぐ）。値が無ければ既定を維持。
+        const v = next();
+        if (v !== undefined) args.count = Number(v);
         break;
       }
       case "--source": {
-        const v = argv[++i];
-        args.source = v as SourceType;
+        // 値欠落時に次のオプション（例: --out）を source として誤読しないよう next() を使う。
+        const v = next();
+        if (v !== undefined) args.source = v as SourceType;
         break;
       }
       case "--citation": {
@@ -93,8 +95,8 @@ export function parseArgs(argv: string[]): Args {
         args.xpost = true;
         break;
       case "--xpost-limit": {
-        const v = argv[++i];
-        args.xpostLimit = Number(v);
+        const v = next();
+        if (v !== undefined) args.xpostLimit = Number(v);
         break;
       }
       case "--xpost-out": {
@@ -103,8 +105,8 @@ export function parseArgs(argv: string[]): Args {
         break;
       }
       case "--seed": {
-        const v = argv[++i];
-        args.seed = Number(v);
+        const v = next();
+        if (v !== undefined) args.seed = Number(v);
         break;
       }
       case "--help":
@@ -219,9 +221,17 @@ async function main() {
     process.exit(1);
   }
 
+  // --seed 未指定でも常に seed 付きで生成し、使った seed をログする。
+  // 出力の再現手段を確保するため（CLAUDE.md「決定論的なパラメータ生成」の実効化）。
+  // Math.random 直流し（旧既定）は同じ出力を二度と再現できなかった。
+  const effectiveSeed = args.seed ?? Date.now() >>> 0;
+  if (args.seed === undefined) {
+    console.error(`--seed 未指定のため seed=${effectiveSeed} を採番しました（再現するには --seed ${effectiveSeed}）。`);
+  }
+
   let problems: Awaited<ReturnType<typeof generate>>;
   try {
-    const rng = makeRng(args.seed);
+    const rng = makeRng(effectiveSeed);
     problems = await generate(template, {
       count: args.count,
       source: args.source,
@@ -264,7 +274,7 @@ async function main() {
 
     for (const p of previewProblems) {
       try {
-        const xpostRng = makeRng(args.seed);
+        const xpostRng = makeRng(effectiveSeed);
         const posts = buildXPosts(p, { ...(xpostRng !== undefined && { rng: xpostRng }) });
         const fmt = (thread: string[]) => thread.map((t, i) => `  [${i + 1}/${thread.length}] ${t}`).join("\n");
         xpostLines.push(`\n[${p.id}] 朝:\n${fmt(posts.morning)}\n\n[${p.id}] 夜:\n${fmt(posts.evening)}`);

@@ -15,11 +15,11 @@
       "*.ts",
       "biome.json",
       "tsconfig.json",
-      "!!**/node_modules",
-      "!!**/out",
-      "!!**/dist",
-      "!!**/data",
-      "!!web/problems.json"
+      "!**/node_modules",
+      "!**/out",
+      "!**/dist",
+      "!**/data",
+      "!web/problems.json"
     ]
   },
   "formatter": {

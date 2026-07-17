@@ -220,6 +220,40 @@ describe("RLS ポリシーの網羅性（全マイグレーション通算）", 
   });
 });
 
+// ── 3b. 全 public テーブルの RLS 有効化（テーブル名列挙の穴を塞ぐ）────────
+// 上のセクションはテーブル名を列挙して検査するため、「RLS を付け忘れた新テーブル」を
+// 検出できない。ここでは全マイグレーションから CREATE TABLE を機械的に抽出し、
+// どのテーブルにも ENABLE ROW LEVEL SECURITY があることを要求する（意図的に RLS を
+// 外す場合は明示的な allowlist に追加して理由を残すこと）。
+describe("全 public テーブルで RLS が有効化されている（全マイグレーション通算）", () => {
+  const allStmts = migrationFiles.flatMap((f) => statementsOf(f));
+  const createdTables = new Set<string>();
+  for (const s of allStmts) {
+    const m = s.match(/^create table (?:if not exists )?(public\.[a-z0-9_]+)/);
+    if (m?.[1]) createdTables.add(m[1]);
+  }
+  // RLS を意図的に有効化しないテーブル（現状なし）。追加する場合は理由コメント必須。
+  const rlsExempt = new Set<string>();
+
+  it("CREATE TABLE の抽出が機能している（パーサ自壊の検知）", () => {
+    expect(createdTables.size).toBeGreaterThanOrEqual(5);
+    expect(createdTables.has("public.problems")).toBe(true);
+    expect(createdTables.has("public.entitlements")).toBe(true);
+  });
+
+  for (const table of [...createdTables].sort()) {
+    if (rlsExempt.has(table)) continue;
+    it(`${table} に ENABLE ROW LEVEL SECURITY がある`, () => {
+      const found = allStmts.some(
+        (s) => s.startsWith(`alter table ${table}`) && s.includes("enable row level security"),
+      );
+      expect(found, `${table} の ENABLE ROW LEVEL SECURITY が見つからない — 新テーブルには必ず RLS を付けること`).toBe(
+        true,
+      );
+    });
+  }
+});
+
 // ── 4. 0002: updated_at トリガと search_path 固定 ───────────────────────
 describe("0002_problems_updated_at.sql: updated_at トリガ", () => {
   const raw = readMigration("0002_problems_updated_at.sql").toLowerCase();

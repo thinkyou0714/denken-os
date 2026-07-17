@@ -51,7 +51,9 @@ export const capacitorEnergy = defineTemplate<Params>({
         capacitance: { value: C_uF, unit: "uF", realistic_range: [1, 100] },
         voltage: { value: V, unit: "V", realistic_range: [10, 200] },
       },
-      answerValue: W,
+      // answerValue は answerUnit と同じ単位系で持つ（契約: 検算の基準値）。
+      // W は J なので mJ に揃える（J のままだと answerUnit="mJ" と 1000 倍ずれる）。
+      answerValue: W * 1000,
       answerUnit: "mJ",
       answerText: text,
       facts: { C_uF, V, W_joule: W },
