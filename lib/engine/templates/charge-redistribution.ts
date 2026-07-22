@@ -8,9 +8,9 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const C1_SET: ReadonlyArray<number> = [1, 2, 3, 4, 6];
-const C2_SET: ReadonlyArray<number> = [1, 2, 3, 6];
-const V0_SET: ReadonlyArray<number> = [100, 120, 200, 300];
+const C1_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 8, 10];
+const C2_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 10];
+const V0_SET: ReadonlyArray<number> = [60, 90, 100, 120, 150, 200, 240, 300];
 
 type Params = {
   charged_capacitance: number;

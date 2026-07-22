@@ -11,9 +11,9 @@ import { defineTemplate, pick } from "./helpers.js";
 
 /** 基準容量〔MV·A〕（問題文に明示する定数）。 */
 const BASE_MVA = 10;
-const ZS_SET: ReadonlyArray<number> = [1, 2, 2.5, 4];
-const ZT_SET: ReadonlyArray<number> = [3, 4.5, 6, 7.5];
-const PT_SET: ReadonlyArray<number> = [2, 2.5, 5];
+const ZS_SET: ReadonlyArray<number> = [1, 1.25, 2, 2.5, 4, 5];
+const ZT_SET: ReadonlyArray<number> = [2.5, 3, 4.5, 5, 6, 7.5, 9];
+const PT_SET: ReadonlyArray<number> = [2, 2.5, 4, 5];
 
 type Params = {
   source_impedance: number;

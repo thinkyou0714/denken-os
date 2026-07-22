@@ -9,7 +9,7 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const A_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 10];
+const A_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 8, 10];
 
 type Params = {
   pole_a: number;

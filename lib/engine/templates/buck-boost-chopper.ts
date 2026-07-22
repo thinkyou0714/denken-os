@@ -8,7 +8,7 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const VIN_SET: ReadonlyArray<number> = [100, 200, 240];
+const VIN_SET: ReadonlyArray<number> = [80, 100, 120, 160, 200, 240, 300];
 const D_SET: ReadonlyArray<number> = [0.2, 0.25, 0.4, 0.5, 0.6, 0.75, 0.8];
 
 type Params = {

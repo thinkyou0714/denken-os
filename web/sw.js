@@ -35,7 +35,7 @@
 //   (v22: SW堅牢化第2弾 — SRI原子ペア(index.html/app.js)をSWR裏差し替え対象から除外(新HTML×旧JSの
 //         SRI不整合による白画面を防止)・clients.claim()をwaitUntil内で待機)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v22-40d8c6cd";
+const CACHE = "denken-os-v22-1d875caa";
 const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {

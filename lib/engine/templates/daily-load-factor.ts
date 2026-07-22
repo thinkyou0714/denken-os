@@ -24,7 +24,7 @@ const TRIPLES_PEAK4: ReadonlyArray<readonly [number, number, number]> = [
   [20, 120, 200],
   [60, 120, 150],
 ];
-const SCALE_SET: ReadonlyArray<number> = [1, 2];
+const SCALE_SET: ReadonlyArray<number> = [1, 1.5, 2, 2.5];
 
 type Params = {
   night_power: number;

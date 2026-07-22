@@ -252,7 +252,7 @@ GitHub Release 草稿を自動作成する（`gh release create --draft`）。
 
 | スクリプト | 主なフラグ |
 |---|---|
-| `npm run build:problems` | `--per-topic <N>`（1トピック当たり問題数・既定80）, `--help` |
+| `npm run build:problems` | `--per-topic <N>`（1トピック当たり問題数・既定300）, `--help` |
 | `npm run gen` | `--topic`（`-t`）, `--count`, `--seed`, `--xpost`, `--xpost-limit <N>`, `--xpost-out <path>`, `--version`（`-v`）, `--help`（`-h`） |
 | `npm run validate:data` | `--help` |
 | `npm run audit:status` | `--strict`, `--help` |

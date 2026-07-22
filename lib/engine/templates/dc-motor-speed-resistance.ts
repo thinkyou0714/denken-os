@@ -9,11 +9,11 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const V_SET: ReadonlyArray<number> = [110, 220];
-const IA_SET: ReadonlyArray<number> = [20, 40];
-const RA_SET: ReadonlyArray<number> = [0.25, 0.5];
-const R_SET: ReadonlyArray<number> = [0.5, 0.75, 1, 1.5];
-const N1_SET: ReadonlyArray<number> = [1000, 1200, 1500];
+const V_SET: ReadonlyArray<number> = [110, 200, 220];
+const IA_SET: ReadonlyArray<number> = [20, 25, 40, 50];
+const RA_SET: ReadonlyArray<number> = [0.2, 0.25, 0.4, 0.5];
+const R_SET: ReadonlyArray<number> = [0.5, 0.6, 0.75, 1, 1.2, 1.5, 2];
+const N1_SET: ReadonlyArray<number> = [900, 1000, 1200, 1500];
 
 type Params = {
   terminal_voltage: number;

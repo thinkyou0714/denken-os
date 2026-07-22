@@ -9,9 +9,9 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const P_SET: ReadonlyArray<number> = [280, 420, 560, 630];
+const P_SET: ReadonlyArray<number> = [280, 336, 420, 504, 560, 630, 840];
 const ETA_SET: ReadonlyArray<number> = [0.4, 0.5];
-const Q_SET: ReadonlyArray<number> = [10, 20, 25, 50];
+const Q_SET: ReadonlyArray<number> = [10, 15, 20, 25, 30, 50];
 /** 冷却水の比熱〔kJ/(kg·K)〕（問題文に明示する定数）。 */
 const SPECIFIC_HEAT = 4.2;
 

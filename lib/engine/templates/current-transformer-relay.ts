@@ -8,8 +8,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const CT_SET: ReadonlyArray<number> = [50, 100, 150, 200, 300, 400];
-const TAP_SET: ReadonlyArray<number> = [4, 5, 6];
+const CT_SET: ReadonlyArray<number> = [50, 75, 100, 150, 200, 300, 400, 500, 600];
+const TAP_SET: ReadonlyArray<number> = [2, 3, 4, 5, 6, 8];
 /** CT 二次定格〔A〕（問題文に明示する定数）。 */
 const CT_SECONDARY = 5;
 
@@ -26,7 +26,7 @@ export const currentTransformerRelay = defineTemplate<Params>({
   pastExam: { area: "変電・変圧器", frequency: "mid", years: [2010, 2014, 2019, 2023] },
   paramSpecs: {
     ct_primary: { unit: "A", realistic_range: [20, 600] },
-    relay_tap: { unit: "A", realistic_range: [3, 8] },
+    relay_tap: { unit: "A", realistic_range: [2, 8] },
   },
   paramOrder: ["ct_primary", "relay_tap"],
   draw(rng) {
@@ -46,7 +46,7 @@ export const currentTransformerRelay = defineTemplate<Params>({
       format: "numeric",
       params: {
         ct_primary: { value: ctPrimary, unit: "A", realistic_range: [20, 600] },
-        relay_tap: { value: tap, unit: "A", realistic_range: [3, 8] },
+        relay_tap: { value: tap, unit: "A", realistic_range: [2, 8] },
       },
       answerValue: operatingCurrent,
       answerUnit: "A",

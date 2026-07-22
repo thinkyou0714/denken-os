@@ -8,10 +8,10 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const P1_SET: ReadonlyArray<number> = [40, 50, 60, 80, 100];
-const PS_SET: ReadonlyArray<number> = [2, 3, 4, 5];
-const S_SET: ReadonlyArray<number> = [0.02, 0.025, 0.04, 0.05];
-const PM_SET: ReadonlyArray<number> = [1, 1.5, 2, 3];
+const P1_SET: ReadonlyArray<number> = [40, 50, 60, 80, 100, 120];
+const PS_SET: ReadonlyArray<number> = [2, 2.5, 3, 4, 5, 6];
+const S_SET: ReadonlyArray<number> = [0.02, 0.025, 0.04, 0.05, 0.06];
+const PM_SET: ReadonlyArray<number> = [1, 1.5, 2, 2.5, 3];
 
 type Params = {
   input_power: number;

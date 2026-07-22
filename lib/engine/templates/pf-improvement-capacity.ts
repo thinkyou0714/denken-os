@@ -9,9 +9,9 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const S_SET: ReadonlyArray<number> = [100, 200, 300, 500];
-const P_SET: ReadonlyArray<number> = [60, 80, 120, 150, 240, 360];
-const PF_SET: ReadonlyArray<number> = [0.8, 0.9, 0.95, 1];
+const S_SET: ReadonlyArray<number> = [75, 100, 150, 200, 300, 500, 750];
+const P_SET: ReadonlyArray<number> = [50, 60, 80, 90, 120, 150, 180, 240, 300, 360, 450, 600];
+const PF_SET: ReadonlyArray<number> = [0.75, 0.8, 0.85, 0.9, 0.95, 1];
 
 type Params = {
   transformer_capacity: number;
