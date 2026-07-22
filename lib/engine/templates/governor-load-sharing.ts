@@ -12,8 +12,8 @@ import { defineTemplate, pick } from "./helpers.js";
 
 const PA_SET: ReadonlyArray<number> = [100, 200, 300, 400];
 const PB_SET: ReadonlyArray<number> = [100, 200, 400];
-const R_SET: ReadonlyArray<number> = [2, 2.5, 4, 5];
-const DP_SET: ReadonlyArray<number> = [30, 45, 60, 90, 120];
+const R_SET: ReadonlyArray<number> = [2, 2.5, 3, 4, 5];
+const DP_SET: ReadonlyArray<number> = [30, 36, 45, 48, 60, 72, 90, 120, 150];
 
 type Params = {
   capacity_a: number;

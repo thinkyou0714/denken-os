@@ -7,10 +7,10 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const W_SET: ReadonlyArray<number> = [1000, 1500, 2000];
-const WC_SET: ReadonlyArray<number> = [400, 500, 750, 1000];
+const W_SET: ReadonlyArray<number> = [800, 1000, 1200, 1500, 2000, 2500];
+const WC_SET: ReadonlyArray<number> = [400, 500, 600, 750, 1000, 1250];
 const V_SET: ReadonlyArray<number> = [1, 1.5, 2];
-const ETA_SET: ReadonlyArray<number> = [0.7, 0.8];
+const ETA_SET: ReadonlyArray<number> = [0.7, 0.8, 0.875];
 const GRAVITY = 9.8;
 
 type Params = {

@@ -9,11 +9,11 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const L_SET: ReadonlyArray<number> = [8, 10, 12];
-const A_SET: ReadonlyArray<number> = [2, 3, 4];
-const B_SET: ReadonlyArray<number> = [2, 3, 4];
-const I1_SET: ReadonlyArray<number> = [40, 60, 100];
-const I2_SET: ReadonlyArray<number> = [40, 60, 80];
+const L_SET: ReadonlyArray<number> = [8, 10, 12, 15, 16, 20];
+const A_SET: ReadonlyArray<number> = [2, 3, 4, 5, 6];
+const B_SET: ReadonlyArray<number> = [2, 3, 4, 5, 6];
+const I1_SET: ReadonlyArray<number> = [40, 50, 60, 80, 100, 120];
+const I2_SET: ReadonlyArray<number> = [40, 50, 60, 80, 100];
 
 type Params = {
   total_length: number;

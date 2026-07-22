@@ -8,8 +8,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const C0_SET: ReadonlyArray<number> = [2, 3, 4, 6];
-const ER_SET: ReadonlyArray<number> = [2, 3, 4, 5];
+const C0_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 8, 10];
+const ER_SET: ReadonlyArray<number> = [2, 3, 4, 5, 7, 9];
 
 type Params = {
   base_capacitance: number;

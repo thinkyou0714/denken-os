@@ -8,9 +8,9 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const R2_SET: ReadonlyArray<number> = [100, 200, 500, 1000];
-const R3_SET: ReadonlyArray<number> = [100, 200, 500];
-const C4_SET: ReadonlyArray<number> = [0.1, 0.2, 0.5, 1];
+const R2_SET: ReadonlyArray<number> = [100, 200, 250, 400, 500, 1000, 2000];
+const R3_SET: ReadonlyArray<number> = [50, 100, 200, 250, 500];
+const C4_SET: ReadonlyArray<number> = [0.1, 0.2, 0.25, 0.4, 0.5, 1, 2];
 
 type Params = {
   resistance_p: number;

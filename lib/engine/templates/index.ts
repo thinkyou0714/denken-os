@@ -4,6 +4,7 @@ import { acBridgeBalance } from "./ac-bridge-balance.js";
 import { allDayEfficiency } from "./all-day-efficiency.js";
 import { allowableTension } from "./allowable-tension.js";
 import { bTypeGrounding } from "./b-type-grounding.js";
+import { balancerCurrent } from "./balancer-current.js";
 import { batteryCapacity } from "./battery-capacity.js";
 import { blockDiagramGain } from "./block-diagram-gain.js";
 import { boostChopper } from "./boost-chopper.js";
@@ -12,19 +13,24 @@ import { buckChopper } from "./buck-chopper.js";
 import { capacitorEnergy } from "./capacitor-energy.js";
 import { capacityFactor } from "./capacity-factor.js";
 import { chargeRedistribution } from "./charge-redistribution.js";
+import { chopperCurrentRipple } from "./chopper-current-ripple.js";
+import { closedLoopTimeConstant } from "./closed-loop-time-constant.js";
 import { combinedCycleEfficiency } from "./combined-cycle-efficiency.js";
 import { condenserCoolingWater } from "./condenser-cooling-water.js";
 import { conductorActualLength } from "./conductor-actual-length.js";
 import { conductorLength } from "./conductor-length.js";
 import { coulombForce } from "./coulomb-force.js";
 import { coupledInductorConnection } from "./coupled-inductor-connection.js";
+import { currentLimitingReactor } from "./current-limiting-reactor.js";
 import { currentTransformerRelay } from "./current-transformer-relay.js";
 import { dailyLoadFactor } from "./daily-load-factor.js";
 import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
+import { dcMotorFieldWeakening } from "./dc-motor-field-weakening.js";
 import { dcMotorSpeedResistance } from "./dc-motor-speed-resistance.js";
 import { deltaWyeResistance } from "./delta-wye-resistance.js";
 import { demandFactor } from "./demand-factor.js";
+import { disturbanceSteadyState } from "./disturbance-steady-state.js";
 import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
 import { electricHeating } from "./electric-heating.js";
@@ -54,16 +60,20 @@ import { inductorEnergy } from "./inductor-energy.js";
 import { insulationResistance } from "./insulation-resistance.js";
 import { insulationTestVoltage } from "./insulation-test-voltage.js";
 import { inverseSquareIlluminance } from "./inverse-square-illuminance.js";
+import { ironLossFrequency } from "./iron-loss-frequency.js";
 import { kirchhoffTwoMesh } from "./kirchhoff-two-mesh.js";
 import { leakageCurrent } from "./leakage-current.js";
 import { lightingDesign } from "./lighting-design.js";
 import { loadFactor } from "./load-factor.js";
 import { loopDistributionCurrent } from "./loop-distribution-current.js";
 import { lossFactor } from "./loss-factor.js";
+import { lossReductionPf } from "./loss-reduction-pf.js";
 import { magneticCircuit } from "./magnetic-circuit.js";
+import { massDefectEnergy } from "./mass-defect-energy.js";
 import { maxDemandComposite } from "./max-demand-composite.js";
 import { maxEfficiencyLoad } from "./max-efficiency-load.js";
 import { maxPowerTransfer } from "./max-power-transfer.js";
+import { maxTorqueStartResistance } from "./max-torque-start-resistance.js";
 import { multiplierResistor } from "./multiplier-resistor.js";
 import { mutualInductance } from "./mutual-inductance.js";
 import { nuclearPowerOutput } from "./nuclear-power-output.js";
@@ -83,9 +93,12 @@ import { powerFactorCorrection } from "./power-factor-correction.js";
 import { pqVoltageDrop } from "./pq-voltage-drop.js";
 import { pumpMotorInput } from "./pump-motor-input.js";
 import { pumpedStorageEfficiency } from "./pumped-storage-efficiency.js";
+import { pumpedStorageGenerationTime } from "./pumped-storage-generation-time.js";
+import { pumpingRequiredPower } from "./pumping-required-power.js";
 import { pwmInverterVoltage } from "./pwm-inverter-voltage.js";
 import { rcTimeConstant } from "./rc-time-constant.js";
 import { reactivePowerCompensation } from "./reactive-power-compensation.js";
+import { reserveMargin } from "./reserve-margin.js";
 import { resistanceTemperature } from "./resistance-temperature.js";
 import { resistorNetwork } from "./resistor-network.js";
 import { rlTimeConstant } from "./rl-time-constant.js";
@@ -107,10 +120,14 @@ import { solenoidMagneticField } from "./solenoid-magnetic-field.js";
 import { specificSpeed } from "./specific-speed.js";
 import { speedRegulation } from "./speed-regulation.js";
 import { starDeltaStarting } from "./star-delta-starting.js";
+import { stationServiceEfficiency } from "./station-service-efficiency.js";
 import { steadyStateError } from "./steady-state-error.js";
 import { supplyVoltageLimit } from "./supply-voltage-limit.js";
+import { switchingLoss } from "./switching-loss.js";
+import { synchronizingCurrent } from "./synchronizing-current.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
 import { synchronousSpeed } from "./synchronous-speed.js";
+import { systemFrequencyConstant } from "./system-frequency-constant.js";
 import { thermalEfficiency } from "./thermal-efficiency.js";
 import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
 import { theveninLoadCurrent } from "./thevenin-load-current.js";
@@ -130,6 +147,7 @@ import { transmissionPowerStability } from "./transmission-power-stability.js";
 import { twoWattmeterPower } from "./two-wattmeter-power.js";
 import type { Template } from "./types.js";
 import { vConnectionTransformer } from "./v-connection-transformer.js";
+import { vfControlSpeed } from "./vf-control-speed.js";
 import { voltageClassification } from "./voltage-classification.js";
 import { voltageDropRate } from "./voltage-drop-rate.js";
 import { wheatstoneBridge } from "./wheatstone-bridge.js";
@@ -194,6 +212,7 @@ const templates: Template[] = [
   nuclearPowerOutput,
   currentTransformerRelay,
   pfImprovementCapacity,
+  massDefectEnergy,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -222,6 +241,7 @@ const templates: Template[] = [
   heatPumpCop,
   inductionMotorEfficiency,
   elevatorCounterweightPower,
+  ironLossFrequency,
   // 法規
   groundingResistance,
   sagTension,
@@ -258,6 +278,14 @@ const templates: Template[] = [
   dcMotorSpeedResistance,
   routhStabilityLimit,
   buckBoostChopper,
+  vfControlSpeed,
+  maxTorqueStartResistance,
+  dcMotorFieldWeakening,
+  chopperCurrentRipple,
+  disturbanceSteadyState,
+  synchronizingCurrent,
+  switchingLoss,
+  closedLoopTimeConstant,
   // 電力管理（二次）
   reactivePowerCompensation,
   hydroPowerOutput,
@@ -275,6 +303,14 @@ const templates: Template[] = [
   loopDistributionCurrent,
   governorLoadSharing,
   seriesPercentImpedanceFault,
+  pumpingRequiredPower,
+  stationServiceEfficiency,
+  balancerCurrent,
+  systemFrequencyConstant,
+  lossReductionPf,
+  reserveMargin,
+  currentLimitingReactor,
+  pumpedStorageGenerationTime,
 ];
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
@@ -304,6 +340,7 @@ export {
   acBridgeBalance,
   allDayEfficiency,
   allowableTension,
+  balancerCurrent,
   batteryCapacity,
   blockDiagramGain,
   boostChopper,
@@ -313,19 +350,24 @@ export {
   capacitorEnergy,
   capacityFactor,
   chargeRedistribution,
+  chopperCurrentRipple,
+  closedLoopTimeConstant,
   combinedCycleEfficiency,
   condenserCoolingWater,
   conductorActualLength,
   conductorLength,
   coulombForce,
   coupledInductorConnection,
+  currentLimitingReactor,
   currentTransformerRelay,
   dailyLoadFactor,
   dcGeneratorEmf,
   dcMotorEmf,
+  dcMotorFieldWeakening,
   dcMotorSpeedResistance,
   deltaWyeResistance,
   demandFactor,
+  disturbanceSteadyState,
   diversityFactor,
   electricEnergy,
   electricHeating,
@@ -354,16 +396,20 @@ export {
   insulationResistance,
   insulationTestVoltage,
   inverseSquareIlluminance,
+  ironLossFrequency,
   kirchhoffTwoMesh,
   leakageCurrent,
   lightingDesign,
   loadFactor,
   loopDistributionCurrent,
   lossFactor,
+  lossReductionPf,
   magneticCircuit,
+  massDefectEnergy,
   maxDemandComposite,
   maxEfficiencyLoad,
   maxPowerTransfer,
+  maxTorqueStartResistance,
   multiplierResistor,
   mutualInductance,
   nuclearPowerOutput,
@@ -382,10 +428,13 @@ export {
   powerFactorCorrection,
   pqVoltageDrop,
   pumpedStorageEfficiency,
+  pumpedStorageGenerationTime,
+  pumpingRequiredPower,
   pumpMotorInput,
   pwmInverterVoltage,
   rcTimeConstant,
   reactivePowerCompensation,
+  reserveMargin,
   resistanceTemperature,
   resistorNetwork,
   rlcResonance,
@@ -408,10 +457,14 @@ export {
   specificSpeed,
   speedRegulation,
   starDeltaStarting,
+  stationServiceEfficiency,
   steadyStateError,
   supplyVoltageLimit,
+  switchingLoss,
+  synchronizingCurrent,
   synchronousGeneratorOutput,
   synchronousSpeed,
+  systemFrequencyConstant,
   thermalEfficiency,
   thermalFuelConsumption,
   theveninLoadCurrent,
@@ -430,6 +483,7 @@ export {
   transmissionPowerStability,
   twoWattmeterPower,
   vConnectionTransformer,
+  vfControlSpeed,
   voltageClassification,
   voltageDropRate,
   wheatstoneBridge,

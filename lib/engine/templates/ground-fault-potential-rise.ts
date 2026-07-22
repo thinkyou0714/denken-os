@@ -8,8 +8,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const IG_SET: ReadonlyArray<number> = [2, 3, 4, 5, 10];
-const RB_SET: ReadonlyArray<number> = [10, 15, 20, 25, 30, 75];
+const IG_SET: ReadonlyArray<number> = [1, 2, 3, 4, 5, 6, 10, 15];
+const RB_SET: ReadonlyArray<number> = [5, 10, 15, 20, 25, 30, 50, 75, 150];
 /** 遮断装置なしの場合の対地電圧上昇の上限〔V〕（電技解釈17条）。 */
 const LIMIT_VOLTAGE = 150;
 
@@ -26,7 +26,7 @@ export const groundFaultPotentialRise = defineTemplate<Params>({
   pastExam: { area: "接地工事", frequency: "high", years: [2007, 2013, 2017, 2021] },
   paramSpecs: {
     ground_fault_current: { unit: "A", realistic_range: [1, 20] },
-    grounding_resistance: { unit: "Ω", realistic_range: [5, 100] },
+    grounding_resistance: { unit: "Ω", realistic_range: [5, 150] },
   },
   paramOrder: ["ground_fault_current", "grounding_resistance"],
   draw(rng) {
@@ -47,7 +47,7 @@ export const groundFaultPotentialRise = defineTemplate<Params>({
       format: "numeric",
       params: {
         ground_fault_current: { value: ig, unit: "A", realistic_range: [1, 20] },
-        grounding_resistance: { value: rb, unit: "Ω", realistic_range: [5, 100] },
+        grounding_resistance: { value: rb, unit: "Ω", realistic_range: [5, 150] },
       },
       answerValue: rise,
       answerUnit: "V",

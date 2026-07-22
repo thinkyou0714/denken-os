@@ -8,8 +8,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const IN_SET: ReadonlyArray<number> = [20, 30, 40, 60];
-const K_SET: ReadonlyArray<number> = [5, 6, 7.5];
+const IN_SET: ReadonlyArray<number> = [20, 24, 30, 36, 40, 48, 60, 72, 80, 100];
+const K_SET: ReadonlyArray<number> = [4.5, 5, 6, 7.5, 9];
 
 type Params = {
   rated_current: number;
@@ -24,7 +24,7 @@ export const starDeltaStarting = defineTemplate<Params>({
   pastExam: { area: "回転機の制御", frequency: "high", years: [2007, 2012, 2016, 2022] },
   paramSpecs: {
     rated_current: { unit: "A", realistic_range: [10, 100] },
-    direct_ratio: { unit: "倍", realistic_range: [4, 8] },
+    direct_ratio: { unit: "倍", realistic_range: [4, 10] },
   },
   paramOrder: ["rated_current", "direct_ratio"],
   draw(rng) {
@@ -44,7 +44,7 @@ export const starDeltaStarting = defineTemplate<Params>({
       format: "descriptive",
       params: {
         rated_current: { value: iN, unit: "A", realistic_range: [10, 100] },
-        direct_ratio: { value: k, unit: "倍", realistic_range: [4, 8] },
+        direct_ratio: { value: k, unit: "倍", realistic_range: [4, 10] },
       },
       answerValue: starCurrent,
       answerUnit: "A",

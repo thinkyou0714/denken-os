@@ -8,8 +8,8 @@
 import { formatClean, isCleanAnswer } from "../clean.js";
 import { defineTemplate, pick } from "./helpers.js";
 
-const LA_SET: ReadonlyArray<number> = [30, 40, 60, 80, 100];
-const LB_SET: ReadonlyArray<number> = [10, 20, 30, 40];
+const LA_SET: ReadonlyArray<number> = [30, 40, 50, 60, 70, 80, 90, 100, 120];
+const LB_SET: ReadonlyArray<number> = [10, 15, 20, 25, 30, 40, 50];
 
 type Params = {
   series_aiding: number;

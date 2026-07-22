@@ -46,7 +46,7 @@ const RETIRED_SIGNATURES = new Set<string>([
   "風圧荷重|area=5|wind_pressure=2940",
 ]);
 
-const PER_TOPIC = 80; // build-problems.ts の既定 perTopic と一致させる。
+const PER_TOPIC = 300; // build-problems.ts の既定 perTopic と一致させる。
 
 /** build-problems.ts の paramsSignature と同一実装。 */
 function paramsSignature(p: Problem): string {
@@ -92,7 +92,7 @@ async function generatedSignatures(): Promise<Set<string>> {
   return sigs;
 }
 
-// PER_TOPIC=80 では全 topic 生成が1パス数秒かかる（CI ランナーではさらに遅い）。
+// PER_TOPIC=300 では全 topic 生成が1パス十数秒かかる（CI ランナーではさらに遅い）。
 // 1パス目を解決テストと決定論テストで共有し、フルパスは合計2回に抑える。
 let firstPassPromise: Promise<Set<string>> | undefined;
 function firstPassSignatures(): Promise<Set<string>> {
