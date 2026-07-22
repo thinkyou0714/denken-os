@@ -59,7 +59,7 @@ export const groundFaultPotentialRise = defineTemplate<Params>({
       defaultSolution: [
         `着眼点: 混触時は地絡電流 Ig が B種接地抵抗 RB を流れ、V=Ig·RB だけ電位が持ち上がる。`,
         `V=${ig}×${rb}=${answerText}V`,
-        `（この上昇を150V以下に抑えるのが RB≤150/Ig=${maxRb}Ω という上限値の根拠）`,
+        `（混触時に電路を自動遮断する装置を施設しない場合、この上昇を150V以下に抑えるのが RB≤150/Ig=${maxRb}Ω という上限値の根拠。1秒以内の遮断装置があれば600V等まで緩和される）`,
         `ポイント: B種の抵抗上限 150/Ig は「混触時の対地電圧上昇の制限」から来ている。`,
       ],
       physicallyValid: true,

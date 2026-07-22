@@ -46,8 +46,9 @@ export const condenserCoolingWater = defineTemplate<Params>({
     const heatRejected = (P * (1 - eta)) / eta; // MW = MJ/s
     if (!isCleanAnswer(heatRejected)) return null;
     const deltaT = heatRejected / (SPECIFIC_HEAT * q); // (MJ/s)/(kJ/(kg·K)×10³kg/s) = K
-    // 現実的な設計範囲（数K〜20K程度）の綺麗な値のみ採用。
-    if (deltaT < 2 || deltaT > 25 || !isCleanAnswer(deltaT)) return null;
+    // 実機の復水器温度上昇（おおむね6〜8K、広めに見て3〜12K）の綺麗な値のみ採用。
+    // 出力に対して流量が1桁小さいような非現実的な組（Δt>12K）はここで棄却される。
+    if (deltaT < 3 || deltaT > 12 || !isCleanAnswer(deltaT)) return null;
     const answerText = formatClean(deltaT);
     const qr = formatClean(heatRejected);
     return {
@@ -63,7 +64,8 @@ export const condenserCoolingWater = defineTemplate<Params>({
       facts: { P, eta, q, heatRejected, deltaT, specificHeat: SPECIFIC_HEAT },
       defaultStatement:
         `タービン室効率 ${eta} の汽力発電所が定格出力 ${P}MW で運転している。` +
-        `タービン室で仕事にならなかった熱はすべて復水器で冷却水に捨てられるものとする。` +
+        `タービン室で仕事にならなかった熱はすべて復水器で冷却水に捨てられ、` +
+        `発電機効率などその他の損失は無視できるものとする。` +
         `冷却水の流量が ${q}t/s、比熱が 4.2kJ/(kg·K) のとき、冷却水の温度上昇 Δt〔K〕を求めよ。`,
       defaultSolution: [
         `着眼点: 復水器が受け持つ熱量は「入熱 − 出力」= P·(1−η)/η。`,

@@ -242,11 +242,11 @@ describe("二種二次・機械制御（descriptive）の閉形式検算", () =>
 });
 
 describe("二種一次・機械/理論/電力/法規（numeric）の閉形式検算", () => {
-  it("変圧器の全日効率（10kV·A, Pi=0.25, Pc=0.2, 全負荷8h+半負荷8h → 93.75%）", () => {
+  it("変圧器の全日効率（25kV·A, Pi=0.5, Pc=0.8, 全負荷8h+半負荷8h → 93.75%）", () => {
     const g = allDayEfficiency.generateFrom({
-      rated_capacity: 10,
-      iron_loss: 0.25,
-      copper_loss: 0.2,
+      rated_capacity: 25,
+      iron_loss: 0.5,
+      copper_loss: 0.8,
       full_hours: 8,
       half_hours: 8,
     });
