@@ -46,7 +46,7 @@ const RETIRED_SIGNATURES = new Set<string>([
   "風圧荷重|area=5|wind_pressure=2940",
 ]);
 
-const PER_TOPIC = 10; // build-problems.ts の既定 perTopic と一致させる。
+const PER_TOPIC = 80; // build-problems.ts の既定 perTopic と一致させる。
 
 /** build-problems.ts の paramsSignature と同一実装。 */
 function paramsSignature(p: Problem): string {
