@@ -46,7 +46,7 @@ const RETIRED_SIGNATURES = new Set<string>([
   "風圧荷重|area=5|wind_pressure=2940",
 ]);
 
-const PER_TOPIC = 10; // build-problems.ts の既定 perTopic と一致させる。
+const PER_TOPIC = 80; // build-problems.ts の既定 perTopic と一致させる。
 
 /** build-problems.ts の paramsSignature と同一実装。 */
 function paramsSignature(p: Problem): string {
@@ -92,6 +92,17 @@ async function generatedSignatures(): Promise<Set<string>> {
   return sigs;
 }
 
+// PER_TOPIC=80 では全 topic 生成が1パス数秒かかる（CI ランナーではさらに遅い）。
+// 1パス目を解決テストと決定論テストで共有し、フルパスは合計2回に抑える。
+let firstPassPromise: Promise<Set<string>> | undefined;
+function firstPassSignatures(): Promise<Set<string>> {
+  firstPassPromise ??= generatedSignatures();
+  return firstPassPromise;
+}
+
+/** 生成が重いテスト用のタイムアウト（Vitest 既定 5s では CI で不足する）。 */
+const GENERATION_TEST_TIMEOUT_MS = 120_000;
+
 describe("legacy-ids.json の整合（#92）", () => {
   it("対応表は405件以上（出荷済みIDの取り違え/欠落の回帰防止）", () => {
     expect(Object.keys(LEGACY_IDS).length).toBeGreaterThanOrEqual(405);
@@ -102,22 +113,30 @@ describe("legacy-ids.json の整合（#92）", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it("legacy-ids.json の全署名が現在の生成物から解決する（廃止分を除く）", async () => {
-    const generated = await generatedSignatures();
-    const unresolved = Object.keys(LEGACY_IDS)
-      .filter((sig) => !RETIRED_SIGNATURES.has(sig))
-      .filter((sig) => !generated.has(sig));
-    expect(
-      unresolved,
-      `次の旧署名が現在のテンプレートから生成されません（旧IDが解決不能）。\n` +
-        `テンプレ仕様を変えたなら legacy-ids.json から該当エントリを削除し、\n` +
-        `意図的な廃止なら RETIRED_SIGNATURES に追記してください:\n  ${unresolved.join("\n  ")}`,
-    ).toEqual([]);
-  });
+  it(
+    "legacy-ids.json の全署名が現在の生成物から解決する（廃止分を除く）",
+    async () => {
+      const generated = await firstPassSignatures();
+      const unresolved = Object.keys(LEGACY_IDS)
+        .filter((sig) => !RETIRED_SIGNATURES.has(sig))
+        .filter((sig) => !generated.has(sig));
+      expect(
+        unresolved,
+        `次の旧署名が現在のテンプレートから生成されません（旧IDが解決不能）。\n` +
+          `テンプレ仕様を変えたなら legacy-ids.json から該当エントリを削除し、\n` +
+          `意図的な廃止なら RETIRED_SIGNATURES に追記してください:\n  ${unresolved.join("\n  ")}`,
+      ).toEqual([]);
+    },
+    GENERATION_TEST_TIMEOUT_MS,
+  );
 
-  it("ID割り当ては決定論的（同一seedで2回生成した署名集合が一致）", async () => {
-    const a = await generatedSignatures();
-    const b = await generatedSignatures();
-    expect([...a].sort()).toEqual([...b].sort());
-  });
+  it(
+    "ID割り当ては決定論的（同一seedで2回生成した署名集合が一致）",
+    async () => {
+      const a = await firstPassSignatures();
+      const b = await generatedSignatures();
+      expect([...a].sort()).toEqual([...b].sort());
+    },
+    GENERATION_TEST_TIMEOUT_MS,
+  );
 });

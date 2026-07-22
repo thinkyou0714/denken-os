@@ -1,36 +1,51 @@
 /** topic 名 → Template のレジストリ。 */
+
+import { acBridgeBalance } from "./ac-bridge-balance.js";
+import { allDayEfficiency } from "./all-day-efficiency.js";
 import { allowableTension } from "./allowable-tension.js";
 import { bTypeGrounding } from "./b-type-grounding.js";
 import { batteryCapacity } from "./battery-capacity.js";
 import { blockDiagramGain } from "./block-diagram-gain.js";
 import { boostChopper } from "./boost-chopper.js";
+import { buckBoostChopper } from "./buck-boost-chopper.js";
 import { buckChopper } from "./buck-chopper.js";
 import { capacitorEnergy } from "./capacitor-energy.js";
 import { capacityFactor } from "./capacity-factor.js";
+import { chargeRedistribution } from "./charge-redistribution.js";
 import { combinedCycleEfficiency } from "./combined-cycle-efficiency.js";
+import { condenserCoolingWater } from "./condenser-cooling-water.js";
 import { conductorActualLength } from "./conductor-actual-length.js";
 import { conductorLength } from "./conductor-length.js";
 import { coulombForce } from "./coulomb-force.js";
+import { coupledInductorConnection } from "./coupled-inductor-connection.js";
+import { currentTransformerRelay } from "./current-transformer-relay.js";
+import { dailyLoadFactor } from "./daily-load-factor.js";
 import { dcGeneratorEmf } from "./dc-generator-emf.js";
 import { dcMotorEmf } from "./dc-motor-emf.js";
+import { dcMotorSpeedResistance } from "./dc-motor-speed-resistance.js";
 import { deltaWyeResistance } from "./delta-wye-resistance.js";
 import { demandFactor } from "./demand-factor.js";
 import { diversityFactor } from "./diversity-factor.js";
 import { electricEnergy } from "./electric-energy.js";
 import { electricHeating } from "./electric-heating.js";
+import { elevatorCounterweightPower } from "./elevator-counterweight-power.js";
 import { firstOrderControl } from "./first-order-control.js";
 import { rotorAcceleration } from "./flywheel-acceleration.js";
 import { fullWaveRectifier } from "./full-wave-rectifier.js";
+import { governorLoadSharing } from "./governor-load-sharing.js";
 import { groundFaultNeutralResistance } from "./ground-fault-neutral-resistance.js";
+import { groundFaultPotentialRise } from "./ground-fault-potential-rise.js";
 import { groundFaultSymmetrical } from "./ground-fault-symmetrical.js";
 import { groundingResistance } from "./grounding-resistance.js";
 import { groundingTypes } from "./grounding-types.js";
 import { guyWireSafety } from "./guy-wire-safety.js";
+import { heatPumpCop } from "./heat-pump-cop.js";
 import { hoistMotorOutput } from "./hoist-motor-output.js";
 import { hvInsulationTestVoltage } from "./hv-insulation-test-voltage.js";
 import { hydroPowerOutput } from "./hydro-power-output.js";
 import { indoorVoltageLimit } from "./indoor-voltage-limit.js";
 import { inducedEmf } from "./induced-emf.js";
+import { inductionMotorEfficiency } from "./induction-motor-efficiency.js";
 import { inductionMotorSpeed } from "./induction-motor-speed.js";
 import { inductionPowerBalance } from "./induction-power-balance.js";
 import { inductionProportionalShift } from "./induction-proportional-shift.js";
@@ -43,6 +58,7 @@ import { kirchhoffTwoMesh } from "./kirchhoff-two-mesh.js";
 import { leakageCurrent } from "./leakage-current.js";
 import { lightingDesign } from "./lighting-design.js";
 import { loadFactor } from "./load-factor.js";
+import { loopDistributionCurrent } from "./loop-distribution-current.js";
 import { lossFactor } from "./loss-factor.js";
 import { magneticCircuit } from "./magnetic-circuit.js";
 import { maxDemandComposite } from "./max-demand-composite.js";
@@ -57,8 +73,10 @@ import { parallelConductorForce } from "./parallel-conductor-force.js";
 import { parallelImpedanceMagnitude } from "./parallel-impedance-magnitude.js";
 import { parallelPercentImpedance } from "./parallel-percent-impedance.js";
 import { parallelPlateField } from "./parallel-plate-field.js";
+import { partialDielectricCapacitor } from "./partial-dielectric-capacitor.js";
 import { percentImpedanceConversion } from "./percent-impedance-conversion.js";
 import { percentImpedanceShortCircuit } from "./percent-impedance-short-circuit.js";
+import { pfImprovementCapacity } from "./pf-improvement-capacity.js";
 import { pointChargePotential } from "./point-charge-potential.js";
 import { poleEmbedmentDepth } from "./pole-embedment-depth.js";
 import { powerFactorCorrection } from "./power-factor-correction.js";
@@ -73,9 +91,11 @@ import { resistorNetwork } from "./resistor-network.js";
 import { rlTimeConstant } from "./rl-time-constant.js";
 import { rlcResonance } from "./rlc-resonance.js";
 import { rotationalPower } from "./rotational-power.js";
+import { routhStabilityLimit } from "./routh-stability-limit.js";
 import { sagTension } from "./sag-tension.js";
 import { secondOrderResponse } from "./second-order-response.js";
 import { seriesCapacitance } from "./series-capacitance.js";
+import { seriesPercentImpedanceFault } from "./series-percent-impedance-fault.js";
 import { seriesRlCurrent } from "./series-rl-current.js";
 import { shortCircuitCapacity } from "./short-circuit-capacity.js";
 import { shortCircuitOhm } from "./short-circuit-ohm.js";
@@ -86,6 +106,7 @@ import { smallScaleElectricalFacility } from "./small-scale-electrical-facility.
 import { solenoidMagneticField } from "./solenoid-magnetic-field.js";
 import { specificSpeed } from "./specific-speed.js";
 import { speedRegulation } from "./speed-regulation.js";
+import { starDeltaStarting } from "./star-delta-starting.js";
 import { steadyStateError } from "./steady-state-error.js";
 import { supplyVoltageLimit } from "./supply-voltage-limit.js";
 import { synchronousGeneratorOutput } from "./synchronous-generator-output.js";
@@ -94,6 +115,7 @@ import { thermalEfficiency } from "./thermal-efficiency.js";
 import { thermalFuelConsumption } from "./thermal-fuel-consumption.js";
 import { theveninLoadCurrent } from "./thevenin-load-current.js";
 import { threePhasePower } from "./three-phase-power.js";
+import { threePhaseRectifier } from "./three-phase-rectifier.js";
 import { transformerCapacitySelection } from "./transformer-capacity-selection.js";
 import { transformerEfficiency } from "./transformer-efficiency.js";
 import { transformerExcitingCurrent } from "./transformer-exciting-current.js";
@@ -145,6 +167,10 @@ const templates: Template[] = [
   twoWattmeterPower,
   kirchhoffTwoMesh,
   parallelImpedanceMagnitude,
+  partialDielectricCapacitor,
+  acBridgeBalance,
+  coupledInductorConnection,
+  chargeRedistribution,
   // 電力
   demandFactor,
   powerFactorCorrection,
@@ -166,6 +192,8 @@ const templates: Template[] = [
   transformerTap,
   pumpedStorageEfficiency,
   nuclearPowerOutput,
+  currentTransformerRelay,
+  pfImprovementCapacity,
   // 機械
   inductionMotorSpeed,
   transformerEfficiency,
@@ -190,6 +218,10 @@ const templates: Template[] = [
   inductionSecondaryCopperLoss,
   vConnectionTransformer,
   pwmInverterVoltage,
+  allDayEfficiency,
+  heatPumpCop,
+  inductionMotorEfficiency,
+  elevatorCounterweightPower,
   // 法規
   groundingResistance,
   sagTension,
@@ -210,6 +242,7 @@ const templates: Template[] = [
   transformerCapacitySelection,
   hvInsulationTestVoltage,
   smallScaleElectricalFacility,
+  groundFaultPotentialRise,
   // 機械制御（二次）
   transformerVoltageRegulation,
   synchronousGeneratorOutput,
@@ -220,6 +253,11 @@ const templates: Template[] = [
   steadyStateError,
   secondOrderResponse,
   blockDiagramGain,
+  threePhaseRectifier,
+  starDeltaStarting,
+  dcMotorSpeedResistance,
+  routhStabilityLimit,
+  buckBoostChopper,
   // 電力管理（二次）
   reactivePowerCompensation,
   hydroPowerOutput,
@@ -232,6 +270,11 @@ const templates: Template[] = [
   parallelPercentImpedance,
   lossFactor,
   maxDemandComposite,
+  dailyLoadFactor,
+  condenserCoolingWater,
+  loopDistributionCurrent,
+  governorLoadSharing,
+  seriesPercentImpedanceFault,
 ];
 
 const registry = new Map<string, Template>(templates.map((t) => [t.topic, t]));
@@ -258,37 +301,51 @@ export function listTopics(): string[] {
 
 export type { Template };
 export {
+  acBridgeBalance,
+  allDayEfficiency,
   allowableTension,
   batteryCapacity,
   blockDiagramGain,
   boostChopper,
   bTypeGrounding,
+  buckBoostChopper,
   buckChopper,
   capacitorEnergy,
   capacityFactor,
+  chargeRedistribution,
   combinedCycleEfficiency,
+  condenserCoolingWater,
   conductorActualLength,
   conductorLength,
   coulombForce,
+  coupledInductorConnection,
+  currentTransformerRelay,
+  dailyLoadFactor,
   dcGeneratorEmf,
   dcMotorEmf,
+  dcMotorSpeedResistance,
   deltaWyeResistance,
   demandFactor,
   diversityFactor,
   electricEnergy,
   electricHeating,
+  elevatorCounterweightPower,
   firstOrderControl,
   fullWaveRectifier,
+  governorLoadSharing,
   groundFaultNeutralResistance,
+  groundFaultPotentialRise,
   groundFaultSymmetrical,
   groundingResistance,
   groundingTypes,
   guyWireSafety,
+  heatPumpCop,
   hoistMotorOutput,
   hvInsulationTestVoltage,
   hydroPowerOutput,
   indoorVoltageLimit,
   inducedEmf,
+  inductionMotorEfficiency,
   inductionMotorSpeed,
   inductionPowerBalance,
   inductionProportionalShift,
@@ -301,6 +358,7 @@ export {
   leakageCurrent,
   lightingDesign,
   loadFactor,
+  loopDistributionCurrent,
   lossFactor,
   magneticCircuit,
   maxDemandComposite,
@@ -315,8 +373,10 @@ export {
   parallelImpedanceMagnitude,
   parallelPercentImpedance,
   parallelPlateField,
+  partialDielectricCapacitor,
   percentImpedanceConversion,
   percentImpedanceShortCircuit,
+  pfImprovementCapacity,
   pointChargePotential,
   poleEmbedmentDepth,
   powerFactorCorrection,
@@ -332,9 +392,11 @@ export {
   rlTimeConstant,
   rotationalPower,
   rotorAcceleration,
+  routhStabilityLimit,
   sagTension,
   secondOrderResponse,
   seriesCapacitance,
+  seriesPercentImpedanceFault,
   seriesRlCurrent,
   shortCircuitCapacity,
   shortCircuitOhm,
@@ -345,6 +407,7 @@ export {
   solenoidMagneticField,
   specificSpeed,
   speedRegulation,
+  starDeltaStarting,
   steadyStateError,
   supplyVoltageLimit,
   synchronousGeneratorOutput,
@@ -353,6 +416,7 @@ export {
   thermalFuelConsumption,
   theveninLoadCurrent,
   threePhasePower,
+  threePhaseRectifier,
   transformerCapacitySelection,
   transformerEfficiency,
   transformerExcitingCurrent,
