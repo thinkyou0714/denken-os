@@ -42,7 +42,7 @@
 web/src/ の構成（G6 リファクタ後）:
 
     app.ts          — エントリポイント（90行）
-    app-init.ts     — problems.json 読込
+    app-init.ts     — 問題データ読込（科目別シャード＋マニフェスト／combined フォールバック）
     keyboard.ts     — グローバルキーボードハンドラ
     ui/             — DOM ヘルパー・トースト・共通ウィジェット
     views/          — タブ別画面（router + practice/review/exam/chat/dashboard/formulas/settings）

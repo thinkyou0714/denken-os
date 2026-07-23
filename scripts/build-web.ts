@@ -19,6 +19,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { build } from "esbuild";
+import { allShardSlugs, MANIFEST_FILE, SHARD_DIR } from "../lib/shared/problem-shards.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -174,6 +175,10 @@ async function main() {
     outfile, // web/dist/app.js
     join(ROOT, "web/index.html"),
     join(ROOT, "web/problems.json"),
+    // 分割ロード: マニフェスト＋科目別シャードもプリキャッシュ対象なので版数ハッシュに含める。
+    // どれか1つでも内容が変われば sw.js のバイトが変わり、SW 更新→キャッシュ一括切替が走る。
+    join(ROOT, "web", SHARD_DIR, MANIFEST_FILE),
+    ...allShardSlugs().map((slug) => join(ROOT, "web", SHARD_DIR, `${slug}.json`)),
     join(ROOT, "web/manifest.webmanifest"),
     join(ROOT, "web/icon.svg"),
   ];

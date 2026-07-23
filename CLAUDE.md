@@ -133,7 +133,11 @@ npm run build:web
 - `web/index.html` is the static entrypoint.
 - `web/sw.js` is the service worker.
 - `web/manifest.webmanifest` is the PWA manifest.
-- `web/problems.json` is the web problem bundle.
+- `web/problems.json` is the combined web problem bundle (kept for backward-compat and as a load fallback).
+- `web/problems/<slug>.json` are per-subject shards and `web/problems/manifest.json` is their index (split-load).
+- `lib/shared/problem-shards.ts` is the single source of truth for the subject→slug map, manifest type, and shard paths (shared by build, web, and tests).
+- `web/src/app-init.ts` loads via the manifest+shards first and falls back to `web/problems.json`.
+- `scripts/build-problems.ts` emits both the combined bundle and the shards+manifest deterministically.
 - `scripts/build-web.ts` builds `web/dist/app.js` with esbuild.
 - `npm run typecheck:web` typechecks `web/src` through `web/tsconfig.json`.
 - `npm run build:web` builds the web bundle and updates deterministic build artifacts.

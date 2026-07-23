@@ -13,14 +13,22 @@
  *   npm run build:problems -- --per-topic 5
  *   npm run build:problems -- --help
  */
-import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generate } from "../lib/engine/generate.js";
 import { StubNarrator } from "../lib/engine/narrate.js";
-import type { Problem } from "../lib/engine/schema.js";
+import type { Problem, Subject } from "../lib/engine/schema.js";
 import { getTemplate, listTopics } from "../lib/engine/templates/index.js";
 import { validateProblem, validateProblemSet } from "../lib/engine/validate.js";
+import {
+  MANIFEST_FILE,
+  type ProblemManifest,
+  SHARD_DIR,
+  SUBJECT_SLUGS,
+  shardFileName,
+} from "../lib/shared/problem-shards.js";
 // G3 が lib/shared/rng.ts を新設予定。同一 xorshift 出力を保証。
 import { hashSeed, seededRng } from "../lib/shared/rng.js";
 import { atomicWriteFileSync, printHelp, validateOrExit } from "./shared.js";
@@ -123,6 +131,52 @@ export function parseCliOptions(argv: string[]): { perTopic: number } {
   return { perTopic };
 }
 
+/**
+ * 科目別シャードとマニフェストを web/problems/ に書き出す（分割ロード対応）。
+ *
+ * - 全6科目それぞれに `<slug>.json`（問題配列）を出力する。該当問題が0件の科目でも
+ *   空配列のシャードを必ず出力する（sw.js の固定プリキャッシュ一覧と整合させ、
+ *   404 による install 失敗を防ぐ）。
+ * - manifest.json は各シャードの記述子（subject/slug/file/count）と合計数・版数を持つ。
+ * - version は combined JSON の内容ハッシュ（決定論的・タイムスタンプ非依存）。
+ * - シャード内の問題順は combined 配列の並びを保つ（決定論的）。
+ */
+function writeShards(problems: Problem[]): void {
+  const dir = join(ROOT, "web", SHARD_DIR);
+  mkdirSync(dir, { recursive: true });
+
+  // 科目 → その科目の問題（combined の並びを保持）。
+  const bySubject = new Map<Subject, Problem[]>();
+  for (const subject of Object.keys(SUBJECT_SLUGS) as Subject[]) bySubject.set(subject, []);
+  for (const p of problems) {
+    const list = bySubject.get(p.subject);
+    // schema 外の科目は想定しないが、防御的に既知科目のみシャード化する。
+    if (list) list.push(p);
+  }
+
+  const shards: ProblemManifest["shards"] = [];
+  for (const subject of Object.keys(SUBJECT_SLUGS) as Subject[]) {
+    const list = bySubject.get(subject) ?? [];
+    const file = shardFileName(subject);
+    atomicWriteFileSync(join(dir, file), `${JSON.stringify(list, null, 2)}\n`);
+    shards.push({ subject, slug: SUBJECT_SLUGS[subject], file, count: list.length });
+  }
+
+  // 版数は combined の内容ハッシュ（同一入力→同一出力の決定論を保つ）。
+  const version = createHash("sha256").update(JSON.stringify(problems)).digest("hex").slice(0, 12);
+  const manifest: ProblemManifest = {
+    version,
+    total: problems.length,
+    shards,
+  };
+  atomicWriteFileSync(join(dir, MANIFEST_FILE), `${JSON.stringify(manifest, null, 2)}\n`);
+
+  const covered = shards.reduce((n, s) => n + s.count, 0);
+  console.log(
+    `web/${SHARD_DIR}/ を生成: ${shards.length}シャード / 計${covered}問 (manifest ${MANIFEST_FILE}, version ${version})`,
+  );
+}
+
 async function main(): Promise<void> {
   const { perTopic } = parseCliOptions(process.argv.slice(2));
 
@@ -157,6 +211,13 @@ async function main(): Promise<void> {
 
   const out = join(ROOT, "web", "problems.json");
   atomicWriteFileSync(out, `${JSON.stringify(problems, null, 2)}\n`);
+
+  // --- 科目別シャード + マニフェスト（分割ロード対応）---
+  // 後方互換のため combined な problems.json は据え置き、追加で科目ごとの小さな JSON と
+  // その索引（manifest.json）を書き出す。web 側はマニフェスト経由で読み、失敗時は
+  // combined にフォールバックする（app-init.ts）。順序は上の problems 配列の並びを保つ
+  // ため決定論的。
+  writeShards(problems);
 
   const byFormat = problems.reduce<Record<string, number>>((acc, p) => {
     const f = p.format ?? "multiple_choice";
