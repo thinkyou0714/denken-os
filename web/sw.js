@@ -35,8 +35,25 @@
 //   (v22: SW堅牢化第2弾 — SRI原子ペア(index.html/app.js)をSWR裏差し替え対象から除外(新HTML×旧JSの
 //         SRI不整合による白画面を防止)・clients.claim()をwaitUntil内で待機)
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v22-1d875caa";
-const ASSETS = ["./", "./index.html", "./dist/app.js", "./problems.json", "./manifest.webmanifest", "./icon.svg"];
+const CACHE = "denken-os-v22-c8689e39";
+// 問題データは科目別シャード（分割ロード）＋ combined フォールバックの両方をプリキャッシュする。
+// シャード一覧は科目の固定集合（6科目）に対応し、lib/shared/problem-shards.ts の SUBJECT_SLUGS と
+// 一致させること（該当0件の科目でも空配列シャードが必ず出力されるため 404 にならない）。
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./dist/app.js",
+  "./problems.json",
+  "./problems/manifest.json",
+  "./problems/theory.json",
+  "./problems/power.json",
+  "./problems/machine.json",
+  "./problems/law.json",
+  "./problems/power-mgmt.json",
+  "./problems/machine-ctrl.json",
+  "./manifest.webmanifest",
+  "./icon.svg",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
