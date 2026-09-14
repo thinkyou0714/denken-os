@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="電験二種 学習OS — FSRS間隔反復・模試・AIチャット対応のオフライン PWA。電験に、確かな力を。" />
     <!-- script-src の sha256 は下部のインライン FOUC 防止スクリプトのハッシュ。スクリプト変更時は再計算（docs/refactoring/round2 参照）。 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kTrWdDD77A48JF/DFC5ygGL8txhFNongFMH11qqQcvg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com; worker-src 'self'; manifest-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-kTrWdDD77A48JF/DFC5ygGL8txhFNongFMH11qqQcvg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com; worker-src 'self'; object-src 'self' https://www.shiken.or.jp; manifest-src 'self';" />
     <title>DENKEN-OS — 電験二種 学習</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
     <link rel="apple-touch-icon" href="./icon.svg" />
     <meta name="theme-color" content="#1f1d19" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#a84b26" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="./service/lab.css" />
     <style>
       /* ================================================================
          DENKEN-OS Design Tokens v2
@@ -893,6 +894,6 @@
       <a href="./sheet-diff.html">帳票変更点抽出ツール</a>（部品表・端子表の差分）
     </footer>
 
-    <script type="module" src="./dist/app.js" integrity="sha384-jzNY46zEOFoRudnHt49A8/toXwyWXbIM/Z4IUEnt4y9UdJi4J3f8JUJrREievYEi" crossorigin="anonymous"></script>
+    <script type="module" src="./dist/app.js" integrity="sha384-JtW+gby0WMjj15NHGS8M/TN3mTye8E/M5JPLVkqQ/vMALkwZXLNwR4ErFxmKiIGb" crossorigin="anonymous"></script>
   </body>
 </html>

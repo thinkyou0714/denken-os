@@ -15,7 +15,7 @@
  */
 import { createHash } from "node:crypto";
 import { appendFileSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { build } from "esbuild";
@@ -71,16 +71,19 @@ function printSizeReport(files: Array<{ name: string; raw: number; gzip: number 
 }
 
 /** esbuild を実行し、失敗時はエラー内容を出して終了する（app/toolkit の2エントリで共用）。 */
+const generatedChunks = new Set<string>();
 async function runBuild(entry: string, outfile: string): Promise<void> {
   let result: Awaited<ReturnType<typeof build>>;
   try {
     result = await build({
-      entryPoints: [entry],
+      entryPoints: [{ in: entry, out: basename(outfile, ".js") }],
       bundle: true,
       format: "esm",
       target: "es2022",
       platform: "browser",
-      outfile,
+      outdir: dirname(outfile),
+      splitting: true,
+      chunkNames: "chunks/[name]-[hash]",
       sourcemap: true,
       minify: true,
       plugins: [tsResolve],
@@ -103,6 +106,8 @@ async function runBuild(entry: string, outfile: string): Promise<void> {
     process.exit(1);
   }
 
+  for (const name of Object.keys(result.metafile?.outputs ?? {}))
+    if (name.includes("/chunks/") && name.endsWith(".js")) generatedChunks.add(`./${name.replace(/^web\//, "")}`);
   if (result.errors.length > 0) {
     console.error("esbuild ビルドエラー:");
     for (const err of result.errors) {
@@ -188,12 +193,26 @@ async function main() {
   injectSri(toolkitOutfile, join(ROOT, "web/toolkit.html"));
   injectSri(sheetDiffOutfile, join(ROOT, "web/sheet-diff.html"));
 
+  const workerPath = join(ROOT, "web/sw.js");
+  const workerText = readFileSync(workerPath, "utf8");
+  writeFileSync(
+    workerPath,
+    workerText.replace(
+      /const APP_CHUNKS = \[[\s\S]*?\];/,
+      `const APP_CHUNKS = [\n${[...generatedChunks]
+        .sort()
+        .map((path) => `  ${JSON.stringify(path)},`)
+        .join("\n")}\n];`,
+    ),
+    "utf8",
+  );
   // --- SW バージョン自動更新（II-187）---
   // sw.js がプリキャッシュする全アセットの内容を版数ハッシュに含める（Codex#1 指摘の根本対応）。
   // app.js だけをハッシュすると、problems.json や index.html/CSS のみ変わった配信で sw.js が
   // バイト不変のままになり、ブラウザが SW 更新を検知せず古いキャッシュを返し続ける。
   // SRI 注入後の index.html を読むため、この計算は SRI 注入の後に置く。
   const cachedAssetPaths = [
+    ...[...generatedChunks].map((p) => join(ROOT, "web", p)),
     outfile, // web/dist/app.js
     join(ROOT, "web/index.html"),
     // 設計計算ツールキット・帳票変更点抽出ツール（SRI 原子ペア第2・第3組。sw.js の ASSETS と一致させる）。
@@ -202,6 +221,8 @@ async function main() {
     sheetDiffOutfile, // web/dist/sheet-diff.js
     join(ROOT, "web/sheet-diff.html"),
     join(ROOT, "web/problems.json"),
+    join(ROOT, "web/service/manifest.json"),
+    join(ROOT, "web/service/lab.css"),
     // 分割ロード: マニフェスト＋科目別シャードもプリキャッシュ対象なので版数ハッシュに含める。
     // どれか1つでも内容が変われば sw.js のバイトが変わり、SW 更新→キャッシュ一括切替が走る。
     join(ROOT, "web", SHARD_DIR, MANIFEST_FILE),

@@ -1,3 +1,4 @@
+import { isSite } from "../service/platform.js";
 /**
  * views/router.ts — TABS定義・ヘッダ・ナビ・ルーティング・エラーバウンダリ。
  */
@@ -27,6 +28,7 @@ import { renderSettings } from "./settings.js";
 let _persistErrNotified = false;
 
 export const TABS: ReadonlyArray<readonly [string, string, string]> = [
+  ...(isSite ? [["lab", "学習ラボ", "◈"] as const] : []),
   ["practice", "学習", "✏️"],
   ["review", "復習", "🔁"],
   ["exam", "模試", "📝"],
@@ -59,7 +61,7 @@ export function renderHeader(): void {
     todayCount: 0,
     dailyGoal: getDailyGoal(storage),
   }).daysLeft;
-  $("countdown").textContent = `試験まで ${days} 日`;
+  $("countdown").textContent = getExamDate(storage) ? `試験まで ${days} 日` : "試験日を設定";
   updateNetStatus();
 }
 
@@ -169,10 +171,29 @@ export function render(opts: { focus?: boolean } = {}): void {
   try {
     // per-viewエラー境界（II-162）: 各タブの描画例外はそのタブ内でrecovery表示。
     // 親render はルーティングに専念し、1タブの例外が全体を白画面にしない。
-    if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
+    if (view === "lab")
+      renderViewSafe(root, "lab", () => {
+        const host = h("div", {});
+        root.append(host);
+        void import("../service/lab.js")
+          .then((m) => m.renderLab(host))
+          .catch((error) => renderErrorBoundary(host, error));
+      });
+    else if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
     else if (view === "review") renderViewSafe(root, "review", () => renderReview(root));
     else if (view === "exam") renderViewSafe(root, "exam", () => renderExamGated(root));
-    else if (view === "chat") renderViewSafe(root, "chat", () => renderChat(root));
+    else if (view === "chat")
+      renderViewSafe(root, "chat", () => {
+        if (!isSite) {
+          renderChat(root);
+          return;
+        }
+        const host = h("div", {});
+        root.append(host);
+        void import("../service/tutor-ui.js")
+          .then((m) => m.renderTutor(host))
+          .catch((error) => renderErrorBoundary(host, error));
+      });
     else if (view === "dashboard") renderViewSafe(root, "dashboard", () => renderDashboard(root));
     else if (view === "formulas") renderViewSafe(root, "formulas", () => renderFormulas(root));
     else if (view === "settings") renderViewSafe(root, "settings", () => renderSettings(root));
@@ -306,7 +327,7 @@ function maybeWarnStorage(): void {
 /** 現在の location.hash からタブ ID を取り出す（不明・空は practice）。 */
 function viewFromHash(): string {
   const id = location.hash.replace(/^#/, "");
-  return isKnownView(id) ? id : "practice";
+  return isKnownView(id) ? id : isSite ? "lab" : "practice";
 }
 
 /** スキップリンク（href="#view"）由来の hash は経路ではないので無視する。 */

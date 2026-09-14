@@ -18,6 +18,7 @@
  * すべて受理される（`npm run validate:data` で確認）。
  */
 import { z } from "zod";
+import { gradingPolicySchema } from "../service/assessment.js";
 
 export const examEnum = z.enum(["denken2_primary", "denken2_secondary", "denken3"]);
 export const subjectEnum = z.enum(["理論", "電力", "機械", "法規", "電力管理", "機械制御"]);
@@ -102,6 +103,7 @@ export const problemSchema = z
     figure: z.string().optional(),
     choices: z.array(z.string()).optional(),
     answer: z.string().min(1),
+    grading: gradingPolicySchema.optional(),
     solution: z.array(z.string()).min(1),
     validation: validationSchema,
     source: sourceSchema,

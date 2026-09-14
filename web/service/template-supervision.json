@@ -1,0 +1,1509 @@
+{
+  "total": 160,
+  "supervised": 0,
+  "stale": 0,
+  "unsupervised": 160,
+  "coverage": 0,
+  "problemsSupervised": 0,
+  "problemsTotal": 0,
+  "problemCoverage": 0,
+  "bySubject": [
+    {
+      "subject": "機械",
+      "total": 30,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 30,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    },
+    {
+      "subject": "機械制御",
+      "total": 22,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 22,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    },
+    {
+      "subject": "電力",
+      "total": 24,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 24,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    },
+    {
+      "subject": "電力管理",
+      "total": 26,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 26,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    },
+    {
+      "subject": "法規",
+      "total": 22,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 22,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    },
+    {
+      "subject": "理論",
+      "total": 36,
+      "supervised": 0,
+      "stale": 0,
+      "unsupervised": 36,
+      "problemsSupervised": 0,
+      "problemsTotal": 0
+    }
+  ],
+  "queue": [
+    {
+      "topic": "％インピーダンスと短絡電流",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "dc6367334869b57d",
+      "problemCount": 0
+    },
+    {
+      "topic": "％インピーダンスの容量換算",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "4733d93d28863575",
+      "problemCount": 0
+    },
+    {
+      "topic": "B種接地の対地電位上昇",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "df9abdeccc6430dd",
+      "problemCount": 0
+    },
+    {
+      "topic": "B種接地工事の接地抵抗",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "6f6f6fc1e3861f6d",
+      "problemCount": 0
+    },
+    {
+      "topic": "B種接地抵抗",
+      "subject": "法規",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "ac22b2d1298c54c9",
+      "problemCount": 0
+    },
+    {
+      "topic": "PWMインバータの出力電圧",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "5ed0b800de2099c5",
+      "problemCount": 0
+    },
+    {
+      "topic": "RC回路の時定数",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "f743a0db243f7cfc",
+      "problemCount": 0
+    },
+    {
+      "topic": "RLC直列回路の共振",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "6eeddf40a25397a5",
+      "problemCount": 0
+    },
+    {
+      "topic": "RL回路の時定数",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "aa2a57ab95de881a",
+      "problemCount": 0
+    },
+    {
+      "topic": "V/f制御と周波数変更後の回転速度",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "a715c37edc9446dc",
+      "problemCount": 0
+    },
+    {
+      "topic": "V結線変圧器の出力比・利用率",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "c62fffe1e5cc059c",
+      "problemCount": 0
+    },
+    {
+      "topic": "Y-Δ始動の始動電流",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "f83c370a80f2337a",
+      "problemCount": 0
+    },
+    {
+      "topic": "オペアンプ反転増幅",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "7feae44f6ac40bc9",
+      "problemCount": 0
+    },
+    {
+      "topic": "オペアンプ非反転増幅",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "a651df0daf019e80",
+      "problemCount": 0
+    },
+    {
+      "topic": "ガバナ特性と負荷分担",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "61f04ae55f84096f",
+      "problemCount": 0
+    },
+    {
+      "topic": "キルヒホッフの法則（2メッシュ回路）",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "22de563f9faa9835",
+      "problemCount": 0
+    },
+    {
+      "topic": "クーロンの法則",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "2469674797277a50",
+      "problemCount": 0
+    },
+    {
+      "topic": "コイルの磁気エネルギー",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "5d1c18679b4bb2e0",
+      "problemCount": 0
+    },
+    {
+      "topic": "コンデンサの静電エネルギー",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "2d3e00e8a0f6eb2b",
+      "problemCount": 0
+    },
+    {
+      "topic": "コンデンサの直列合成容量",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "c7d494f27b448e58",
+      "problemCount": 0
+    },
+    {
+      "topic": "コンデンサの電荷再配分",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "3684629cfd125a8e",
+      "problemCount": 0
+    },
+    {
+      "topic": "コンバインドサイクルの熱効率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "ea8670d7f1251bce",
+      "problemCount": 0
+    },
+    {
+      "topic": "スイッチング損失の計算",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "aa46c7c8d85767f3",
+      "problemCount": 0
+    },
+    {
+      "topic": "ソレノイド内の磁界",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "c283dff060ed38d1",
+      "problemCount": 0
+    },
+    {
+      "topic": "テブナンの定理",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "9f4ccbb5994e71dc",
+      "problemCount": 0
+    },
+    {
+      "topic": "トランジスタの電流増幅率",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "6bceb3f84865d282",
+      "problemCount": 0
+    },
+    {
+      "topic": "ヒートポンプの消費電力",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "76c53c24ea4a74c4",
+      "problemCount": 0
+    },
+    {
+      "topic": "フィードバックによる時定数短縮",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "0bdb1fb65b1e80d5",
+      "problemCount": 0
+    },
+    {
+      "topic": "ホイートストンブリッジ",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "544b6e29461e1303",
+      "problemCount": 0
+    },
+    {
+      "topic": "ラウス安定判別によるゲイン限界",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "1001f3bc3d256e9c",
+      "problemCount": 0
+    },
+    {
+      "topic": "ループ配電線の電流分布",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "5ee4418e2d627b3d",
+      "problemCount": 0
+    },
+    {
+      "topic": "一次遅れ系のステップ応答",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "8b958afacbdcd064",
+      "problemCount": 0
+    },
+    {
+      "topic": "一線地絡電流（対称座標法）",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "874a308a54086f65",
+      "problemCount": 0
+    },
+    {
+      "topic": "屋内電路の対地電圧制限",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "c2f7975a9d078fa0",
+      "problemCount": 0
+    },
+    {
+      "topic": "架空電線の実長",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "87bd5378441e604c",
+      "problemCount": 0
+    },
+    {
+      "topic": "火力発電の燃料消費量",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "bc9e40db994975d0",
+      "problemCount": 0
+    },
+    {
+      "topic": "回転体の加速時間",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "fe693132a07c409f",
+      "problemCount": 0
+    },
+    {
+      "topic": "回転体の出力とトルク",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "7afc86f7793e5908",
+      "problemCount": 0
+    },
+    {
+      "topic": "外乱に対する定常偏差",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "2f3796016b155098",
+      "problemCount": 0
+    },
+    {
+      "topic": "巻上機の所要出力",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "7a7ad8ed665dc151",
+      "problemCount": 0
+    },
+    {
+      "topic": "基準容量換算と三相短絡容量",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "47c147455a1abe38",
+      "problemCount": 0
+    },
+    {
+      "topic": "汽力発電の熱効率",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "3beb95d854cf6114",
+      "problemCount": 0
+    },
+    {
+      "topic": "汽力発電の発電端効率（効率の積）",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "e583fefb8a47cdf2",
+      "problemCount": 0
+    },
+    {
+      "topic": "供給電圧の維持基準",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "7b28e72bc67da9fa",
+      "problemCount": 0
+    },
+    {
+      "topic": "供給力と供給予備率",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "48d428cf64325ad2",
+      "problemCount": 0
+    },
+    {
+      "topic": "系統周波数特性定数と周波数低下",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "53771f3fc3b3bb1d",
+      "problemCount": 0
+    },
+    {
+      "topic": "原子力発電の電気出力",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "65cbfa3584a6cd1e",
+      "problemCount": 0
+    },
+    {
+      "topic": "限流リアクトルによる短絡容量抑制",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "3f757ecc4d9134f8",
+      "problemCount": 0
+    },
+    {
+      "topic": "交流ブリッジのインダクタンス測定",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "a4ff197b7f635792",
+      "problemCount": 0
+    },
+    {
+      "topic": "降圧チョッパの出力電圧",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "1ef1e04660ee64bb",
+      "problemCount": 0
+    },
+    {
+      "topic": "降圧チョッパの電流リプル",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "2c924dba99685b8d",
+      "problemCount": 0
+    },
+    {
+      "topic": "高圧架空電線の高さ",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "8981de00a863cc85",
+      "problemCount": 0
+    },
+    {
+      "topic": "合成最大需要電力",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "2ed39b44facea5d0",
+      "problemCount": 0
+    },
+    {
+      "topic": "最大電力伝送",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "cb41f98694c1477b",
+      "problemCount": 0
+    },
+    {
+      "topic": "三相交流電力",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "2ae685aa9b149b8c",
+      "problemCount": 0
+    },
+    {
+      "topic": "三相全波整流回路の直流電圧",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "1e5a12b8a806ec1b",
+      "problemCount": 0
+    },
+    {
+      "topic": "三相短絡容量",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "5762aeb2e58b71b0",
+      "problemCount": 0
+    },
+    {
+      "topic": "始動時最大トルクの二次挿入抵抗",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "678cf0a8cb7c8c09",
+      "problemCount": 0
+    },
+    {
+      "topic": "支持物の根入れ深さ",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "d4b38ae7ada24f37",
+      "problemCount": 0
+    },
+    {
+      "topic": "支線の安全率",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "ac6a841b4c39fa01",
+      "problemCount": 0
+    },
+    {
+      "topic": "磁気回路の磁束",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "babecbea43da1fc7",
+      "problemCount": 0
+    },
+    {
+      "topic": "質量欠損と発電電力量",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "082d542718c667ae",
+      "problemCount": 0
+    },
+    {
+      "topic": "需要率",
+      "subject": "電力",
+      "exam": "denken3",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "f314497da6cda23f",
+      "problemCount": 0
+    },
+    {
+      "topic": "周波数変更後の鉄損",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "e8259dbab7d354d7",
+      "problemCount": 0
+    },
+    {
+      "topic": "所内率と送電端熱効率",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "664ed2576d4b63d6",
+      "problemCount": 0
+    },
+    {
+      "topic": "小規模事業用電気工作物の範囲",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "4586fb2c8abef573",
+      "problemCount": 0
+    },
+    {
+      "topic": "昇圧チョッパの出力電圧",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "11c320948cb15e50",
+      "problemCount": 0
+    },
+    {
+      "topic": "昇降圧チョッパの出力電圧",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "f6fba73388f6fad8",
+      "problemCount": 0
+    },
+    {
+      "topic": "照明設計（光束法）",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "fa69724b4356cd1e",
+      "problemCount": 0
+    },
+    {
+      "topic": "水車の比速度",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "85b34920cc347d76",
+      "problemCount": 0
+    },
+    {
+      "topic": "水力発電出力",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "0f72604f856fb097",
+      "problemCount": 0
+    },
+    {
+      "topic": "制御系の定常偏差",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "ec282f29469d987f",
+      "problemCount": 0
+    },
+    {
+      "topic": "接地工事の種類と抵抗値",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "a56d45c7f21e8d4c",
+      "problemCount": 0
+    },
+    {
+      "topic": "設備利用率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "6758317e043fa74d",
+      "problemCount": 0
+    },
+    {
+      "topic": "絶縁耐力試験電圧",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "8c45d564782de5ac",
+      "problemCount": 0
+    },
+    {
+      "topic": "相互インダクタンスと合成",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "38e8550e08ba1526",
+      "problemCount": 0
+    },
+    {
+      "topic": "送電効率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "22e8308258f7315a",
+      "problemCount": 0
+    },
+    {
+      "topic": "送電線の電圧降下(PQ式)",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "75d4f19d17f27cc1",
+      "problemCount": 0
+    },
+    {
+      "topic": "送電線の電力損失",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "cbca5f3b3c2f8a0f",
+      "problemCount": 0
+    },
+    {
+      "topic": "送電電力（安定度）",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "e337825a6df41a37",
+      "problemCount": 0
+    },
+    {
+      "topic": "損失係数と負荷率",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "d62a267e70604048",
+      "problemCount": 0
+    },
+    {
+      "topic": "単相2線式の電圧降下",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "e2b91fca73fc741f",
+      "problemCount": 0
+    },
+    {
+      "topic": "単相3線式のバランサ電流",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "df3ecccb05ad042c",
+      "problemCount": 0
+    },
+    {
+      "topic": "単相全波整流の直流電圧",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "8331758e373b38f4",
+      "problemCount": 0
+    },
+    {
+      "topic": "単相直列回路の電流",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "b589bec8996de83f",
+      "problemCount": 0
+    },
+    {
+      "topic": "単相半波整流の直流電圧",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "70bb486de9b8e707",
+      "problemCount": 0
+    },
+    {
+      "topic": "短絡電流（オーム法）",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "d9c990b66f15afc2",
+      "problemCount": 0
+    },
+    {
+      "topic": "蓄電池の容量",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "b29a72c66d59bff6",
+      "problemCount": 0
+    },
+    {
+      "topic": "中性点抵抗接地系統の一線地絡電流",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "6d1472e233ba506c",
+      "problemCount": 0
+    },
+    {
+      "topic": "調相設備容量",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "320952a12cd247fb",
+      "problemCount": 0
+    },
+    {
+      "topic": "調速機の速度調定率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "dffbebfe0340cefc",
+      "problemCount": 0
+    },
+    {
+      "topic": "直並列合成抵抗",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "13a322b9238e97b3",
+      "problemCount": 0
+    },
+    {
+      "topic": "直流電動機の界磁弱め制御",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "9e9956e7f2e6bfbe",
+      "problemCount": 0
+    },
+    {
+      "topic": "直流電動機の逆起電力",
+      "subject": "機械",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "80430075158fa624",
+      "problemCount": 0
+    },
+    {
+      "topic": "直流発電機の誘導起電力",
+      "subject": "機械",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "de8d79fd39ddc7d9",
+      "problemCount": 0
+    },
+    {
+      "topic": "直流分巻電動機の抵抗制御",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "225f2fd29409a271",
+      "problemCount": 0
+    },
+    {
+      "topic": "釣合いおもり付き巻上機の出力",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "3cfe8da7de939c05",
+      "problemCount": 0
+    },
+    {
+      "topic": "低圧幹線の許容電流",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "e9a890b4944d828a",
+      "problemCount": 0
+    },
+    {
+      "topic": "低圧電路の絶縁抵抗",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "36dc32fda1277104",
+      "problemCount": 0
+    },
+    {
+      "topic": "抵抗の温度変化",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "d7a52030ddbc766d",
+      "problemCount": 0
+    },
+    {
+      "topic": "点光源の照度(逆二乗則)",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "8fbd30b7f279fcab",
+      "problemCount": 0
+    },
+    {
+      "topic": "点電荷の電位",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "46f14fb518b078a3",
+      "problemCount": 0
+    },
+    {
+      "topic": "電圧の区分",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "b628291d4a2733a1",
+      "problemCount": 0
+    },
+    {
+      "topic": "電圧維持に必要な調相容量",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 5,
+      "stage": "unsupervised",
+      "fingerprint": "9479eeede69f1284",
+      "problemCount": 0
+    },
+    {
+      "topic": "電圧降下率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "1cbecf1b3b23d746",
+      "problemCount": 0
+    },
+    {
+      "topic": "電気加熱の所要時間",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "340bc2390ade55ee",
+      "problemCount": 0
+    },
+    {
+      "topic": "電磁誘導起電力",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "ed9cc3499a72a1e9",
+      "problemCount": 0
+    },
+    {
+      "topic": "電線のたるみ",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "c231c82bf0c25a9d",
+      "problemCount": 0
+    },
+    {
+      "topic": "電線の許容張力",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "6af948ed59725a3d",
+      "problemCount": 0
+    },
+    {
+      "topic": "電線の許容電流と電流減少係数",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "9021a06241b527af",
+      "problemCount": 0
+    },
+    {
+      "topic": "電線の実長",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "5278b9be48b4e8b2",
+      "problemCount": 0
+    },
+    {
+      "topic": "電力用コンデンサによる母線電圧上昇",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "adf6b3e64f42d168",
+      "problemCount": 0
+    },
+    {
+      "topic": "電力量",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "70ebd7583b107afc",
+      "problemCount": 0
+    },
+    {
+      "topic": "同期速度",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "4ca61796f66f975a",
+      "problemCount": 0
+    },
+    {
+      "topic": "同期発電機の出力",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "a3fcc2c466ed7eef",
+      "problemCount": 0
+    },
+    {
+      "topic": "同期発電機の短絡比",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "d80d57b7d1bb9a22",
+      "problemCount": 0
+    },
+    {
+      "topic": "同期発電機の電圧変動率（零力率）",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "a9d6290f6c7d4565",
+      "problemCount": 0
+    },
+    {
+      "topic": "特別高圧の絶縁耐力試験電圧",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "7eb1ac08e68116dd",
+      "problemCount": 0
+    },
+    {
+      "topic": "二次系の固有角周波数",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "9e41f8bf59975666",
+      "problemCount": 0
+    },
+    {
+      "topic": "二電力計法による三相電力",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "2a7277e92142adf8",
+      "problemCount": 0
+    },
+    {
+      "topic": "日負荷曲線と負荷率",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "9cc2f9fff8ee6821",
+      "problemCount": 0
+    },
+    {
+      "topic": "倍率器",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "61d042ca9a3150c1",
+      "problemCount": 0
+    },
+    {
+      "topic": "不等率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "166fc436d976b18d",
+      "problemCount": 0
+    },
+    {
+      "topic": "負荷率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "49ad20035c03a379",
+      "problemCount": 0
+    },
+    {
+      "topic": "負帰還系の合成ゲイン",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "1a259b67b661df06",
+      "problemCount": 0
+    },
+    {
+      "topic": "風圧荷重",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "6f4c074eacf60348",
+      "problemCount": 0
+    },
+    {
+      "topic": "復水器の冷却水温度上昇",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "0ac7f0c87df248f8",
+      "problemCount": 0
+    },
+    {
+      "topic": "複素インピーダンスの並列合成",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "cf7641f92df95628",
+      "problemCount": 0
+    },
+    {
+      "topic": "分流器",
+      "subject": "理論",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "bf6c6e859751e9a4",
+      "problemCount": 0
+    },
+    {
+      "topic": "平行導体間の電磁力",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "ecfb02836949428a",
+      "problemCount": 0
+    },
+    {
+      "topic": "平行平板コンデンサの電界",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "312c8c14b647392e",
+      "problemCount": 0
+    },
+    {
+      "topic": "並行運転発電機の循環電流",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "ce5b764a4c19f9b1",
+      "problemCount": 0
+    },
+    {
+      "topic": "並列電源の合成％インピーダンス",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "d0f9e24edd3c63bb",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器のタップ切換",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "8b7d29ca5a193045",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の巻数比",
+      "subject": "機械",
+      "exam": "denken3",
+      "difficulty": 1,
+      "stage": "unsupervised",
+      "fingerprint": "e5502a022456682f",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の効率",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "4409a422bd54e8bc",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の最大効率負荷率",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "6bb3a0c91e5e39b5",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の全日効率",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "069fa1dfc8c5e89f",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の電圧変動率",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "918fa6f92591f69b",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器の励磁電流",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "2e5b1b6b63acfa06",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器並行運転の負荷分担",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "485255d1e06e8a8f",
+      "problemCount": 0
+    },
+    {
+      "topic": "変圧器容量の選定",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "d75b2c48459d24a2",
+      "problemCount": 0
+    },
+    {
+      "topic": "変流器と過電流継電器の動作電流",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "8f6dacc11a021a46",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘電体を半分挿入したコンデンサ",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "2cd20936db28d8ad",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘導電動機の回転速度",
+      "subject": "機械",
+      "exam": "denken3",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "7017881c560a27d4",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘導電動機の効率（損失内訳）",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "99e6c3e86e60cd0d",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘導電動機の二次効率",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "67aac9f9dcf0bdfe",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘導電動機の二次銅損",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "4b8e1599e804ce00",
+      "problemCount": 0
+    },
+    {
+      "topic": "誘導電動機の比例推移",
+      "subject": "機械制御",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "1652b01bfcb8fc8a",
+      "problemCount": 0
+    },
+    {
+      "topic": "揚水に必要な電動機入力",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "cdd01282431e84ae",
+      "problemCount": 0
+    },
+    {
+      "topic": "揚水ポンプの電動機入力",
+      "subject": "機械",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "2ece329f014c724e",
+      "problemCount": 0
+    },
+    {
+      "topic": "揚水発電の総合効率",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "fe26121682fa3b7f",
+      "problemCount": 0
+    },
+    {
+      "topic": "揚水発電の発電可能時間",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "efe7da2ee66c2aaf",
+      "problemCount": 0
+    },
+    {
+      "topic": "力率改善",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "42a9f37d9ab95ef9",
+      "problemCount": 0
+    },
+    {
+      "topic": "力率改善による線路損失低減",
+      "subject": "電力管理",
+      "exam": "denken2_secondary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "f631fd435c8ecbc1",
+      "problemCount": 0
+    },
+    {
+      "topic": "力率改善による変圧器の余裕容量",
+      "subject": "電力",
+      "exam": "denken2_primary",
+      "difficulty": 4,
+      "stage": "unsupervised",
+      "fingerprint": "7d426f19b3b5b533",
+      "problemCount": 0
+    },
+    {
+      "topic": "漏えい電流",
+      "subject": "法規",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "8f065e8ec4bc546c",
+      "problemCount": 0
+    },
+    {
+      "topic": "和動・差動接続と相互インダクタンス",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "70182d22d9196dd9",
+      "problemCount": 0
+    },
+    {
+      "topic": "Δ-Y変換",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 2,
+      "stage": "unsupervised",
+      "fingerprint": "a82d1cb1f9f3df16",
+      "problemCount": 0
+    },
+    {
+      "topic": "Δ結線とY結線の消費電力",
+      "subject": "理論",
+      "exam": "denken2_primary",
+      "difficulty": 3,
+      "stage": "unsupervised",
+      "fingerprint": "6be85d47ebcebbb4",
+      "problemCount": 0
+    }
+  ],
+  "orphans": []
+}

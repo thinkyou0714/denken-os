@@ -52,12 +52,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build offline web app (web/dist/app.js)
-        run: npm run build:web
+      - name: Verify exact source before publishing
+        run: npm run verify
 
       - uses: actions/configure-pages@v6
         with:
           enablement: true
+
+      - name: Prepare verified official PDF assets
+        run: node --import tsx scripts/fetch-official-papers.ts
 
       - name: Upload web/ as Pages artifact
         uses: actions/upload-pages-artifact@v5

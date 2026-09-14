@@ -1,0 +1,2430 @@
+{
+  "version": 1,
+  "sourceCommit": "33fe6dc145ab90badf3affee7d1e59c79f80dc7e",
+  "scope": "機能の実装と、監修・外部接続・実測の完了を分けて管理する。全項目の効果検証済みという意味ではない。",
+  "entries": [
+    {
+      "delta": "既存ゲートを配信へ接続",
+      "dep": [],
+      "done": "通常学習は承認済み版だけ。検証用は明示切替し、成績に混ぜない。",
+      "id": 1,
+      "refs": "R2,R3,R4,R5",
+      "risk": "初期の問題数が減る。範囲を限定して開始する。",
+      "size": "M＋監修",
+      "title": "学習用と検証用の問題を分離",
+      "why": "生成問題はdraft、監修台帳は空。未監修表示だけでは信頼して覚える利用者を守りきれない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存検算の拡張",
+      "dep": [],
+      "done": "まず6科目各10ケースを提案。公式解答・独立手計算・境界条件を保存する。",
+      "id": 2,
+      "refs": "R4,S2,S3",
+      "risk": "60件は初期検証量の提案で、全範囲の保証にはならない。",
+      "size": "M＋監修",
+      "title": "公式解答を基準にした正解セット",
+      "why": "同じ実装から作った正解とテストだけでは、式の誤りを共通に見逃す。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "二次2科目の独立評価ケースと電気の専門家による照合を追加する。一次4科目155空欄は公式解答との回帰テストを実装。"
+    },
+    {
+      "delta": "既存単問形式を拡張",
+      "dep": [
+        2
+      ],
+      "done": "大問→小問→空欄、共通選択肢、選択群、配点を別々に保存・表示できる。",
+      "id": 3,
+      "refs": "R6,R8,S3,S5",
+      "risk": "旧問題IDを変更すると履歴が壊れる。旧形式も読める変換層を置く。",
+      "size": "L",
+      "title": "二種一次の大問・空欄・共通解答群",
+      "why": "2026年理論は複数空欄・イ〜ヨの解答群・選択大問を含む。単純5択では本番を再現できない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "台帳・指紋機能を運用接続",
+      "dep": [
+        1,
+        2
+      ],
+      "done": "代表・境界・反例を審査し対象版を記録。変更時の失効と再審査を通しで確認する。",
+      "id": 4,
+      "refs": "R3,R15",
+      "risk": "代表3例だけの審査では条件分岐を保証できない。分岐一覧も必須にする。",
+      "size": "M＋監修",
+      "title": "テンプレート監修を実運用する",
+      "why": "監修機構はあるが台帳0件。チェックの実施者・対象版がなければ監修済みを証明できない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "テンプレートの監修判断は未実施。既存CLI・版の指紋・台帳出力を継続使用し、個別問題の承認は管理画面から行う。"
+    },
+    {
+      "delta": "既存表示・算出根拠を修正",
+      "dep": [],
+      "done": "正答率・未見成績・範囲・件数を分け、合否の確率表示をしない。",
+      "id": 5,
+      "refs": "R9",
+      "risk": "見た目の分かりやすさが下がるため、次の学習行動を併記する。",
+      "size": "S",
+      "title": "合格見込みを学習到達指標へ整理",
+      "why": "現行は正答率由来の項×0.6＋着手範囲×0.4の合成。合格確率として検証した値ではない。",
+      "priority": "P0",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "決定論ソルバーを強化",
+      "dep": [
+        2
+      ],
+      "done": "三相電力等を別公式で照合。片側に故意の誤りを入れると検知できる。",
+      "id": 6,
+      "refs": "R4",
+      "risk": "独立性のない同じ式の書き換えは検算と数えない。",
+      "size": "M＋監修",
+      "title": "独立した計算経路による照合",
+      "why": "コード算出でも式・結線条件が誤れば正解自体が誤る。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "全テンプレートの独立検算を済ませたという意味ではない。代表物理モデルと既存エンジン検証を組み合わせた初期実装。"
+    },
+    {
+      "delta": "数値整合チェックを拡張",
+      "dep": [
+        2,
+        6
+      ],
+      "done": "入力・途中式・答えに量と単位を持ち、変換前後の次元が一致する。",
+      "id": 7,
+      "refs": "R4,R7",
+      "risk": "単位表記の誤正規化に備え、元の表記も保存する。",
+      "size": "L",
+      "title": "単位・次元・倍率の型付き検証",
+      "why": "数値一致だけではW/kW、kWh/MWh、線間/相の取り違えを拾えない。",
+      "priority": "P0",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存物理フラグを強化",
+      "dep": [
+        2,
+        6,
+        7
+      ],
+      "done": "効率、損失、力率、すべり等の定義域と保存則をテンプレごとに検証する。",
+      "id": 8,
+      "refs": "R4",
+      "risk": "全機器に同じ境界を当てない。発電・回生等の動作条件を分ける。",
+      "size": "M＋監修",
+      "title": "物理条件と境界値の検証",
+      "why": "フラグの一致確認と物理的に正しい条件の検証は別。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "全範囲の境界値は監修とともに拡充する。数値モデルの禁止条件・初期値・定常値をテスト。"
+    },
+    {
+      "delta": "一律許容差を拡張",
+      "dep": [
+        2,
+        7
+      ],
+      "done": "許容絶対差・相対差・丸め・単位・許容表現を問題版ごとに定義する。",
+      "id": 9,
+      "refs": "R7,S3",
+      "risk": "学習用の許容差を公式採点規則と表示しない。",
+      "size": "M",
+      "title": "問題別の数値採点条件",
+      "why": "現行numericは相対0.5%等の共通規則。要求精度・単位・ゼロ近傍で適切な条件が違う。",
+      "priority": "P0",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存質問チャットを強化",
+      "dep": [
+        2,
+        6,
+        7
+      ],
+      "done": "根拠不足・条件不足は追加質問か保留。数値の断定は検証結果に限る。",
+      "id": 10,
+      "refs": "R12,S9,S10",
+      "risk": "保留が多すぎる場合は、回答可能な教材範囲を先に増やす。",
+      "size": "L",
+      "title": "AIが確定できない回答の保留",
+      "why": "現在のプロンプトは途中式を要求するが、対話内の計算を必ずソルバーへ渡す仕組みではない。",
+      "priority": "P0",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存sourceスキーマを拡張",
+      "dep": [],
+      "done": "試験区分、年度、問番号、公式URL、取得日、改変箇所、権利条件を持つ。",
+      "id": 11,
+      "refs": "R6,S2",
+      "risk": "公式問題の利用条件は他社の解説・図版の転載許可にならない。",
+      "size": "M",
+      "title": "公式原典・改題・独自解説の来歴",
+      "why": "出典文字列だけでは年度・大問・空欄や改変内容を安定して追えない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存改正注意表示を拡張",
+      "dep": [
+        11
+      ],
+      "done": "出題時点の答え・現行注記・根拠条項・確認日を別記録にする。",
+      "id": 12,
+      "refs": "R12,S17",
+      "risk": "差分検出のみで法的意味を自動確定しない。",
+      "size": "M＋監修",
+      "title": "法規の適用日と出題時点を分離",
+      "why": "過去問の当時の答えと現行の制度を混ぜると、正答を誤って学ぶ。",
+      "priority": "P0",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "適用日・出題日・原典・判断者を保存可能。現在の法規台帳の専門確認が必要。"
+    },
+    {
+      "delta": "既存IDを保って履歴を拡張",
+      "dep": [
+        3,
+        11
+      ],
+      "done": "答案はproblem_idとrevisionに固定。再採点は別記録で理由を残す。",
+      "id": 13,
+      "refs": "R6,R16",
+      "risk": "保存量が増える。原本と派生集計を分ける。",
+      "size": "L",
+      "title": "問題・解説・答案を版で結ぶ",
+      "why": "教材修正後に旧答案を新解答で採点すると、過去の成績が無断で変わる。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存バックアップの移行検証",
+      "dep": [
+        13
+      ],
+      "done": "旧側で書出し、新側で検証・取り込み・件数照合。旧データを残して復旧できる。",
+      "id": 14,
+      "refs": "R12,R16",
+      "risk": "不完全な取り込みで上書きしない。プレビューと重複防止を用意する。",
+      "size": "M",
+      "title": "旧サイトから学習記録を移す",
+      "why": "公開元が変わると旧サイトのブラウザ保存は自動で読めない。",
+      "priority": "P0",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "未接続部分の設計・検証",
+      "dep": [
+        13
+      ],
+      "done": "個人検証・会員公開それぞれの認証経路、所有者確認、正本DBを一つずつ決める。",
+      "id": 15,
+      "refs": "R1,R14,S13,P1",
+      "risk": "公開形態が未定のため選定は保留。二重の正本や暗黙のID互換を作らない。",
+      "size": "L",
+      "title": "利用者IDと保存先の境界を決める",
+      "why": "SupabaseのDDLはあるが実接続はREADME上未了。ChatGPTのIDとSupabaseのIDは別体系。",
+      "priority": "P0",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "BYOKのサービス向け代替案",
+      "dep": [
+        10,
+        15
+      ],
+      "done": "運営キーを配信せず、認証・回数・トークン・同時数の上限をサーバーで確認する。",
+      "id": 16,
+      "refs": "R12,P1",
+      "risk": "運営費が発生。個人BYOK継続は別案として選べる。",
+      "size": "M",
+      "title": "AIキーと利用上限をサーバー管理",
+      "why": "現行は利用者のキーを端末保存して直接APIを呼ぶ。一般利用者には設定と管理の負担がある。",
+      "priority": "P0",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "固定既定日を置換",
+      "dep": [],
+      "done": "公式公表日と本人の対象年・段階を分離し、未公表日は未定表示にする。",
+      "id": 17,
+      "refs": "R12,S1,S4",
+      "risk": "自己採点を合格確定として保存しない。本人確認済みと未確定を分ける。",
+      "size": "M",
+      "title": "試験日・段階・免除期限を管理",
+      "why": "既定日が2026-08-30のため、現在は過去日。二次資格や科目免除の条件も学習計画を左右する。",
+      "priority": "P0",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存40分野の集計を拡張",
+      "dep": [
+        3,
+        11
+      ],
+      "done": "年度別の原典→分野→教材を対応づけ、分類カバーと問題・配点カバーを分ける。",
+      "id": 18,
+      "refs": "R10,S2",
+      "risk": "出題頻度を将来の出題確率と断言しない。欠測も表示する。",
+      "size": "L＋監修",
+      "title": "実際の出題に基づく範囲評価",
+      "why": "現行の分野網羅は定義した分類のカバー率。過去問全問を習得できる証拠にはならない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "一次4科目の原典・空欄と科目別収録数を可視化。複数年度の全出題と論点の対応付けは継続作業。"
+    },
+    {
+      "delta": "既存manifest・PWAの強化",
+      "dep": [
+        1,
+        13
+      ],
+      "done": "manifestに各ファイルのハッシュを持ち、全件確認後に教材版を切り替える。",
+      "id": 19,
+      "refs": "R2,R11",
+      "risk": "オフライン端末への即時撤回は保証できない。版・最終確認日を表示する。",
+      "size": "M",
+      "title": "教材一式を同一版で配信",
+      "why": "件数一致だけでは旧新のシャード混在を検知しきれない。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存公開フローを拡張",
+      "dep": [
+        14,
+        15,
+        19
+      ],
+      "done": "コードSHA・教材版・ゲート結果を固定。手動公開も同じ条件で、旧版へ戻せる。",
+      "id": 20,
+      "refs": "R13,P1",
+      "risk": "DB変更は画面の巻戻しだけで戻らない。追加型変更と旧版互換を基本にする。",
+      "size": "M",
+      "title": "公開前検証と巻き戻しを共通化",
+      "why": "GitHub PagesとSitesで異なる検証を通すと、公開先ごとに品質がずれる。",
+      "priority": "P0",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存取込計画を具体化",
+      "dep": [
+        3,
+        11,
+        13
+      ],
+      "done": "1年度1科目から二重照合し、問題・解答群・図・公式解答・配点が一致する。",
+      "id": 21,
+      "refs": "R6,R17,S2,S3",
+      "risk": "抽出した数式や図はOCRだけで承認しない。",
+      "size": "L＋監修",
+      "title": "公式過去問を小問まで取り込む",
+      "why": "原典と生成ドリルの対応がなければ、本番との差を測れない。",
+      "priority": "P1",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "一次4科目155空欄を収録し、年度の追加画面を実装。全年度の原典転記・監修は未完了。"
+    },
+    {
+      "delta": "既存年度風模試を拡張",
+      "dep": [
+        3,
+        17,
+        21
+      ],
+      "done": "実年度モードは原典の順序・選択規則・時間・配点。生成模試には別の名称を付ける。",
+      "id": 22,
+      "refs": "R8,R17,S3,S5",
+      "risk": "本番形式への慣れと実力測定を分け、既見年度の結果を過大評価しない。",
+      "size": "L",
+      "title": "年度そのものを再現する模試",
+      "why": "現行year-mockは頻度重みや論点分散による構成で、年度の原問題を再現するものではない。",
+      "priority": "P1",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存自動分類ルーブリックを補強",
+      "dep": [
+        2,
+        13,
+        21
+      ],
+      "done": "正答要素・別解・誤り・単位の扱いを問題別に監修し、学習用目安と明記する。",
+      "id": 23,
+      "refs": "R18,S2,S5",
+      "risk": "取得した公式資料では細かな部分点配分を確認できず、公式得点とは同一視できない。",
+      "size": "L＋監修",
+      "title": "二次の採点観点を人が定義",
+      "why": "解説行の役割から機械的に配点を作ると、重要な論点や別解がずれる。",
+      "priority": "P1",
+      "implementation": [
+        "web/src/service/admin-ui.ts",
+        "site/admin.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "採点観点の定義・版固定・人による得点記録を実装。公式の部分点基準を推定していない。"
+    },
+    {
+      "delta": "既存模試状態を拡張",
+      "dep": [
+        13,
+        15,
+        22
+      ],
+      "done": "答案・選択大問・開始時刻・期限・中断を保存し、復帰時の扱いをモード別に統一する。",
+      "id": 24,
+      "refs": "R8,R16",
+      "risk": "練習の一時停止と本番モードの経過時間を混ぜない。",
+      "size": "M",
+      "title": "模試の中断・復帰を復元可能に",
+      "why": "再読込や端末休止で答案や時刻が失われると結果を比較できない。",
+      "priority": "P1",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "学習効果測定を追加",
+      "dep": [
+        2,
+        13,
+        18,
+        21
+      ],
+      "done": "練習に未使用の問題系列を事前・事後評価に留保し、AI・解説参照を記録する。",
+      "id": 25,
+      "refs": "S6,S9,S10",
+      "risk": "数値だけを変えた同テンプレは未見系列と扱わない。",
+      "size": "M＋監修",
+      "title": "ヒントなし未見テストを設ける",
+      "why": "支援中の正答率が上がっても、支援を外した実力向上とは限らない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存間違いノートを拡張",
+      "dep": [
+        13
+      ],
+      "done": "誤答後に原因を任意選択し、不明も残す。選択結果を次の練習へ結ぶ。",
+      "id": 26,
+      "refs": "R1,S8",
+      "risk": "選択肢から心理や原因を自動断定しない。",
+      "size": "S",
+      "title": "誤答原因を学習者が選べる",
+      "why": "不正解だけでは、知識不足・式選択・計算・読み落としを区別できない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存段階ヒントを拡張",
+      "dep": [
+        13
+      ],
+      "done": "初回回答、ヒント段階、解説閲覧後の再回答を別ログにする。",
+      "id": 27,
+      "refs": "R1,S10",
+      "risk": "ログ量と操作負荷を抑え、取得は自動・表示は簡潔にする。",
+      "size": "M",
+      "title": "ヒント使用を成績と分けて記録",
+      "why": "ヒント後の正答を自力正答と混ぜると、理解度や復習日を誤る。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存解法スライドを拡張",
+      "dep": [
+        4,
+        26,
+        27
+      ],
+      "done": "式に入る前に前提と選定理由を答え、使えない条件の反例も確認する。",
+      "id": 28,
+      "refs": "R17,S8,S9",
+      "risk": "毎問必須にすると時間が増える。初学・誤答時に重点化する。",
+      "size": "M＋監修",
+      "title": "公式を選ぶ理由の演習",
+      "why": "代入だけを覚えても、条件が変わると適用する式を選べない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存検算表示を演習化",
+      "dep": [
+        6,
+        7,
+        8
+      ],
+      "done": "代入し直し・桁・上限下限のうち適切な確認を学習者が実施できる。",
+      "id": 29,
+      "refs": "R4,R17,S8",
+      "risk": "検算方法の選択自体を監修し、循環した確認を避ける。",
+      "size": "M＋監修",
+      "title": "答えの逆算・概算を学習に組み込む",
+      "why": "正解の閲覧だけでは、本番で自分の計算ミスを発見する行動が育ちにくい。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存典型誤答を拡張",
+      "dep": [
+        4,
+        26
+      ],
+      "done": "各選択肢に原因候補と反証を付け、正答後も他の選択肢を確認できる。",
+      "id": 30,
+      "refs": "R4,R17",
+      "risk": "もっともらしい説明を後付けせず、誤答生成規則と整合させる。",
+      "size": "M＋監修",
+      "title": "選択肢ごとに誤りの根拠を付ける",
+      "why": "不正解の理由が一つだけでは、別の誤り方を直せない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "原因候補は表示できるが、各問題の選択肢別解説を専門家が確定する作業は残る。"
+    },
+    {
+      "delta": "既存topic単位FSRSを拡張",
+      "dep": [
+        13,
+        25,
+        27
+      ],
+      "done": "技能×課題形式の状態を持ち、一つの暗記正解で全技能を習得扱いにしない。",
+      "id": 31,
+      "refs": "R16,S11",
+      "risk": "細分化しすぎると記録が疎になる。少数の意味ある技能から始める。",
+      "size": "L",
+      "title": "同じ論点内の技能を分けて測る",
+      "why": "現行はtopic単位の記憶状態。同じ論点でも公式暗記・導出・応用は別の技能。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存前提グラフを運用拡張",
+      "dep": [
+        26,
+        31
+      ],
+      "done": "原因と技能から短い前提課題を提案し、完了後に元の問題へ戻る。",
+      "id": 32,
+      "refs": "R1,S8",
+      "risk": "前提不足を推定で確定しない。本人のスキップと診断問題を用意する。",
+      "size": "M＋監修",
+      "title": "つまずきから前提知識へ戻す",
+      "why": "苦手問題を繰り返すだけでは、複素数等の前提の不足が残る。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存4段階評価を改善",
+      "dep": [
+        23,
+        27,
+        31
+      ],
+      "done": "忘却・支援あり・自力成功を分離し、採点結果と記憶評価の変換規則を確認する。",
+      "id": 33,
+      "refs": "R18,S11",
+      "risk": "Ankiの知見を長い計算問題へそのまま一般化せず、復習結果で評価する。",
+      "size": "M",
+      "title": "FSRS評価と実際の想起を整合",
+      "why": "FSRSでは忘れた回答をHardにすると間隔が不適切になる。部分点との直結も検証が必要。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存逆算計画を拡張",
+      "dep": [
+        17,
+        24,
+        31
+      ],
+      "done": "本人が設定した時間枠に、形式別の実測時間を用いて復習・新規を収める。",
+      "id": 34,
+      "refs": "R1,S7,S11",
+      "risk": "初期推定は外れるため、幅を示して本人が調整できる。",
+      "size": "M",
+      "title": "問題数から所要時間中心の計画へ",
+      "why": "短い暗記1問と二次計算1問を同じ件数で予定すると計画が崩れる。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存出題選択を拡張",
+      "dep": [
+        25,
+        28,
+        31
+      ],
+      "done": "基本を確認後、送電効率・機器効率などを混ぜ、未見テストで効果を確認する。",
+      "id": 35,
+      "refs": "S8",
+      "risk": "初心者に一律混合はしない。混乱・離脱が増えれば戻す。",
+      "size": "M",
+      "title": "習得後に類似分野を混ぜる",
+      "why": "同じ式の反復では、どの式を選ぶかの判断が省略されやすい。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存復習に評価枠を追加",
+      "dep": [
+        25,
+        31,
+        33
+      ],
+      "done": "例として7日後の自力再解答を測り、難易度と既見条件を揃えて比較する。",
+      "id": 36,
+      "refs": "S6,S7",
+      "risk": "7日が最適と決めつけない。試験日・題材で間隔を調整する。",
+      "size": "M",
+      "title": "日を空けた定着確認",
+      "why": "直後の正答は長期の定着と区別が必要。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存計算ドリルを拡張",
+      "dep": [
+        7,
+        26
+      ],
+      "done": "本人の誤りからW/kW、Wh/kWh、秒/時等を選び、元問題に戻せる。",
+      "id": 37,
+      "refs": "R1,S8",
+      "risk": "計算器の自動換算だけで通過させない。",
+      "size": "S＋監修",
+      "title": "単位換算だけの弱点ドリル",
+      "why": "電力・エネルギー・時間の単位変換は複数科目に波及する。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "独自ドリルは監修待ちとして通常成績から除外。"
+    },
+    {
+      "delta": "既存係数演習を拡張",
+      "dep": [
+        7,
+        28
+      ],
+      "done": "同じ量で結線・実効値・最大値等だけを変え、係数の理由を比較する。",
+      "id": 38,
+      "refs": "R17,S8",
+      "risk": "適用条件の違う問題を同じ公式としてまとめない。",
+      "size": "M＋監修",
+      "title": "係数を条件で説明するドリル",
+      "why": "√3・3・1/2等は条件付きで現れ、暗記だけでは誤用を防ぎにくい。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "独自ドリルは監修待ちとして通常成績から除外。"
+    },
+    {
+      "delta": "既存短絡計算を学習へ接続",
+      "dep": [
+        6,
+        7,
+        28
+      ],
+      "done": "基準容量・基準電圧・実量を並べ、変換後も実電流が整合することを確認する。",
+      "id": 39,
+      "refs": "R1,S1",
+      "risk": "単位法の定義と結線を混同しない。対象範囲を監修する。",
+      "size": "M＋監修",
+      "title": "基準容量を変える％Z演習",
+      "why": "数式の代入より基準量の統一で誤る可能性を確認したい。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "基準容量変更の計算と検証を実装。新しい補助教材の監修は残る。"
+    },
+    {
+      "delta": "既存速算ドリルを拡張",
+      "dep": [
+        26,
+        29
+      ],
+      "done": "四則・√中心の実機操作手順を練習し、入力ミスと式の誤りを分けて振り返る。",
+      "id": 40,
+      "refs": "R1,S1",
+      "risk": "機種固有キーは別手順にし、唯一の正解操作としない。",
+      "size": "M＋監修",
+      "title": "本番で使える電卓の手順練習",
+      "why": "公式では関数電卓を使用できない。アプリだけで可能な計算手順では本番へ移せない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "学習用四則・sqrt・べきの計算器。実機のキー配列や個別機種まで再現しない。"
+    },
+    {
+      "delta": "採点補助の追加候補",
+      "dep": [
+        7,
+        9,
+        23
+      ],
+      "done": "入力した各行を検証可能な式へ対応づけ、最初の不整合を示す。",
+      "id": 41,
+      "refs": "R7,R18",
+      "risk": "解釈できない手順は誤答とせず確認待ちにする。",
+      "size": "L",
+      "title": "途中式のどこで誤ったかを示す",
+      "why": "最終値だけの判定では、式の理解と計算ミスが区別できない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "計算中心教材の拡張候補",
+      "dep": [
+        18,
+        21,
+        23
+      ],
+      "done": "公式の範囲に対応する『現象→原因→対策』の短答と根拠を監修する。",
+      "id": 42,
+      "refs": "R10,S1,S2",
+      "risk": "対象分野の不足は原典対応表で確認してから追加する。",
+      "size": "L＋監修",
+      "title": "電力分野の論説・因果関係を補強",
+      "why": "計算テンプレの量だけでは、設備・材料・運用を説明する能力を測れない。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "既存の電力管理教材・論説記録・因果関係ドリルを接続。新規ドリルの監修は残る。"
+    },
+    {
+      "delta": "既存記述・スライドを拡張",
+      "dep": [
+        23,
+        25,
+        27
+      ],
+      "done": "方針・式・代入・結論の欄を段階的に減らし、最後は白紙で解けるか測る。",
+      "id": 43,
+      "refs": "R17,R18,S8,S9",
+      "risk": "型にはめて別解を排除しない。",
+      "size": "M＋監修",
+      "title": "二次答案の骨組みから自立へ",
+      "why": "模範解答を読む段階と、白紙から答案を書く段階の間に支援が必要。",
+      "priority": "P1",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存二次問題選択を拡張",
+      "dep": [
+        22,
+        24
+      ],
+      "done": "開始時に選んだ理由・所要時間予想を記録し、終了後に実績と比較する。",
+      "id": 44,
+      "refs": "R8,S3,S5",
+      "risk": "解かなかった問題の得点をAIが事実として補完しない。",
+      "size": "M",
+      "title": "選択大問の見極め練習",
+      "why": "解ける問題を選ぶ行動も時間内得点を左右する。",
+      "priority": "P1",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存タイマーを拡張",
+      "dep": [
+        22,
+        24,
+        44
+      ],
+      "done": "大問別の経過・保留・再訪を記録し、次回の配分案を本人が選べる。",
+      "id": 45,
+      "refs": "R8,S5",
+      "risk": "速さだけで評価せず、正確性・読み時間と併せて扱う。",
+      "size": "M",
+      "title": "解く順序と時間配分の振り返り",
+      "why": "総時間だけでは、停滞や見直し不足の場所が分からない。",
+      "priority": "P1",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存学習セッションを拡張",
+      "dep": [
+        24,
+        34
+      ],
+      "done": "時間枠に応じて短答・復習・長問を選び、中断しても続きを戻せる。",
+      "id": 46,
+      "refs": "S14,H1",
+      "risk": "提示時間は保証ではない。実測から調整する。",
+      "size": "M",
+      "title": "5分・15分・45分の学習枠",
+      "why": "社会人の空き時間に収まらなければ継続しにくいという仮説。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存タブ入口を整理",
+      "dep": [
+        17,
+        31,
+        34
+      ],
+      "done": "試験段階・期限・弱点から一つ提案し、変更理由と別の選択肢を示す。",
+      "id": 47,
+      "refs": "R1,H1",
+      "risk": "推薦への固定化を避け、科目や課題を自由に選べる。",
+      "size": "M",
+      "title": "ホームに次の一問と理由を提示",
+      "why": "機能が多いと、その日に何をするかの判断が増える。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存復習上限を拡張",
+      "dep": [
+        33,
+        34
+      ],
+      "done": "本日分・保留分・目安時間を表示し、新規を減らす案も提示する。",
+      "id": 48,
+      "refs": "R1,S11",
+      "risk": "残件数で焦らせない。達成可能な量を優先表示する。",
+      "size": "S",
+      "title": "復習の積み残しを見える化",
+      "why": "上限だけで復習を隠すと、未処理量や試験までの不足が分からない。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存復帰歓迎を学習面へ拡張",
+      "dep": [
+        25,
+        34,
+        48
+      ],
+      "done": "短い再確認から負荷を調整し、過去の進捗を削除せず再開できる。",
+      "id": 49,
+      "refs": "R1,H1",
+      "risk": "休止日数だけで忘却や意欲を決めつけない。",
+      "size": "M",
+      "title": "休止後の再開メニュー",
+      "why": "継続演出があっても、戻った人の理解度と時間は変化している。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存逆算スケジュールを拡張",
+      "dep": [
+        17,
+        34,
+        48
+      ],
+      "done": "本人の週の時間枠を基に、延期・範囲縮小・復習優先を比較できる。",
+      "id": 50,
+      "refs": "S7,S11,H1",
+      "risk": "予定変更は提案として示し、本人の目標年を勝手に変更しない。",
+      "size": "M",
+      "title": "週の予定と実績から計画を調整",
+      "why": "一度決めた問題数を維持すると、予定変更や長問で未達が蓄積する。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存導出ドリルを改善",
+      "dep": [
+        25,
+        28,
+        31
+      ],
+      "done": "途中式の省略量を習熟に合わせ、最後に同じ関係を自力で導けるか確認する。",
+      "id": 51,
+      "refs": "R1,S8,S9",
+      "risk": "作業記憶の負荷を見て、初学者には完全例へ戻る道を残す。",
+      "size": "M＋監修",
+      "title": "公式導出の穴埋めを段階調整",
+      "why": "導出を表示するだけでは、何を自力で再現できたか不明。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "段階的な導出演習を実装。補助教材の監修は未実施。"
+    },
+    {
+      "delta": "既存SVGを操作可能に",
+      "dep": [
+        6,
+        7,
+        8
+      ],
+      "done": "R・X・電圧を変えた図と数値を同じ検証済み計算から更新する。",
+      "id": 52,
+      "refs": "R1,H1",
+      "risk": "生成画像で位置や値を描かず、計算した幾何で表示する。",
+      "size": "M＋監修",
+      "title": "フェーザ図を操作して式と照合",
+      "why": "図と式の対応が見えれば、位相・符号の理解が進むという仮説。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存図解を拡張",
+      "dep": [
+        6,
+        7,
+        8
+      ],
+      "done": "値を変えても入力＝出力＋損失が成立し、どの損失を含むか説明できる。",
+      "id": 53,
+      "refs": "R1,H1",
+      "risk": "モデルで省略した損失を明記する。",
+      "size": "M＋監修",
+      "title": "電力・損失の流れを操作する",
+      "why": "機器の入力・出力・損失を可視化して、二重計上の理解を確認する。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存制御テンプレを拡張",
+      "dep": [
+        6,
+        8,
+        28
+      ],
+      "done": "時定数・減衰等を変える前に予想し、解析式や数値解と比較できる。",
+      "id": 54,
+      "refs": "R1,H1",
+      "risk": "安定性・モデル範囲外は表示を止め、実機全般へ一般化しない。",
+      "size": "L＋監修",
+      "title": "制御応答の変化を予想して確認",
+      "why": "係数と波形の因果関係を理解できるか検証したい。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存RC/RL教材を拡張",
+      "dep": [
+        6,
+        8,
+        28
+      ],
+      "done": "初期値・終値・傾きを入力後、検証済み波形と比較する。",
+      "id": 55,
+      "refs": "R1,H1",
+      "risk": "複数エネルギー要素へ単純一次モデルを誤適用しない。",
+      "size": "M＋監修",
+      "title": "過渡現象を初期・定常値から解く",
+      "why": "時定数の暗記に加え、初期条件と終値から式を組む力を確認する。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "新規演習候補",
+      "dep": [
+        7,
+        25,
+        52
+      ],
+      "done": "空欄図に軸、単位、向き、特徴点を配置し、理由も確認する。",
+      "id": 56,
+      "refs": "S6,H1",
+      "risk": "描画技能を電気理解の点数に混ぜない。選択式の代替も用意する。",
+      "size": "L＋監修",
+      "title": "図や特性を自分で再構成する",
+      "why": "完成図を眺めるだけでは、軸・向き・基準量を説明できるか分からない。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "教材横断の整備候補",
+      "dep": [
+        11,
+        21
+      ],
+      "done": "問題内の記号を明示し、原典表記とサービス内の説明を対応づける。",
+      "id": 57,
+      "refs": "S2,H1",
+      "risk": "原典を無断で書き換えず、注記として区別する。",
+      "size": "M＋監修",
+      "title": "記号・用語の対応表を統一",
+      "why": "資料ごとのV/E、線間/相、実効値/最大値の違いが混乱を招き得る。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "記号と用語の対応表を実装。新規の補助説明は監修待ち。"
+    },
+    {
+      "delta": "既存解説の品質改善",
+      "dep": [
+        4,
+        57
+      ],
+      "done": "専門表現・平易な説明・式・具体例を対応づけ、必要時だけ展開する。",
+      "id": 58,
+      "refs": "S8,S9,H1",
+      "risk": "比喩を物理法則そのものとして教えず、成立範囲を示す。",
+      "size": "M＋監修",
+      "title": "難しい表現を平易な説明へ結ぶ",
+      "why": "専門用語だけでは、背景知識の少ない利用者が先へ進めない。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "平易な説明と前提を表示。新規の補助説明は監修待ち。"
+    },
+    {
+      "delta": "新規演習候補",
+      "dep": [
+        23,
+        25,
+        58
+      ],
+      "done": "一文説明を学習用の要点一覧と比較し、不足項目を本人が確認できる。",
+      "id": 59,
+      "refs": "S8",
+      "risk": "文章の上手さを理解度と混同せず、AI判定は候補表示に留める。",
+      "size": "M＋監修",
+      "title": "自分の言葉で説明する練習",
+      "why": "分かった感覚と、要点を再現できることを区別したい。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存末尾出典を拡張",
+      "dep": [
+        11,
+        12,
+        13
+      ],
+      "done": "式・前提・法規注記ごとに章節や原典箇所へ辿れる。",
+      "id": 60,
+      "refs": "R12,S2",
+      "risk": "URL切れに備え、題名・版・該当箇所も保存する。",
+      "size": "M＋監修",
+      "title": "解説の各段階に根拠を付ける",
+      "why": "資料名だけでは、その式や条件を支持する箇所へ戻りにくい。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "問題版・教材出典を表示。解説の各主張と原典の該当箇所の精査は監修時に追加。"
+    },
+    {
+      "delta": "既存結論先行チャットを改善",
+      "dep": [
+        10,
+        16,
+        27
+      ],
+      "done": "学習中は一段ずつヒント。本人が解説を見る選択もでき、閲覧を記録する。",
+      "id": 61,
+      "refs": "R12,S9,S10",
+      "risk": "支援を拒み続けない。行き詰まり時は監修済み解説へ案内する。",
+      "size": "M",
+      "title": "AIのヒント指導と解説閲覧を分ける",
+      "why": "解答を即表示する対話は、自力で考える機会を減らす可能性がある。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存文字列出力を拡張",
+      "dep": [
+        7,
+        9,
+        10,
+        16
+      ],
+      "done": "前提・式・単位・計算参照ID・根拠IDを分け、画面表示前に整合を検証する。",
+      "id": 62,
+      "refs": "R4,R12",
+      "risk": "利用者入力を任意コードとして実行しない。許可した演算だけを使う。",
+      "size": "L",
+      "title": "AIの計算結果を構造化して検証",
+      "why": "自由文の中の数値は、検証箇所を特定しにくい。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存内蔵ナレッジ検索を拡張",
+      "dep": [
+        10,
+        11,
+        12,
+        60
+      ],
+      "done": "引用対象の版と該当箇所を付け、支持できない主張は保留する。",
+      "id": 63,
+      "refs": "R12,S9",
+      "risk": "検索件数を増やすだけで精度改善とみなさない。",
+      "size": "L＋監修",
+      "title": "検索した根拠が答えを支えるか確認",
+      "why": "関連語が見つかったことと、回答の主張を支持することは異なる。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "引用IDと計算を検証し、自由文は確認候補として保留。文章全体の意味を自動保証する機能ではない。"
+    },
+    {
+      "delta": "新規検証基盤候補",
+      "dep": [
+        2,
+        10,
+        62,
+        63
+      ],
+      "done": "不足条件・誤前提・古い法規・図・単位・指示上書き要求等を固定問題で比較する。",
+      "id": 64,
+      "refs": "S9,S10",
+      "risk": "評価用問題を回答例へ混ぜて点数を上げない。",
+      "size": "M＋監修",
+      "title": "AI回答の固定評価セット",
+      "why": "モデルやプロンプト変更で、以前正しかった回答が退行する可能性がある。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "固定出力検査・サーバーの保留動作を実装。古い法規・画像を含む専門評価セットと実モデルの評価を追加する。"
+    },
+    {
+      "delta": "既存Claude依存を整理",
+      "dep": [
+        16,
+        62,
+        64
+      ],
+      "done": "中立な入出力を定義し、モデル別アダプタを同じ評価セットで判定する。",
+      "id": 65,
+      "refs": "R12,H1",
+      "risk": "機能差と費用差を隠さず、基準未達時は旧モデルへ戻す。",
+      "size": "M",
+      "title": "LLMを差し替えて同じ評価を実施",
+      "why": "教材や採点まで特定API形式に結びつくと、変更の影響が広がる。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "Anthropic・互換APIアダプターと共通の出力検査を実装。外部キー未設定のため実モデルの比較は未実施。"
+    },
+    {
+      "delta": "既存Markdown書出しを拡張",
+      "dep": [
+        11,
+        13,
+        27
+      ],
+      "done": "問題版・本人答案・ヒント履歴・参照先だけを確認してコピーできる。",
+      "id": 66,
+      "refs": "R1,H1",
+      "risk": "APIキー、連絡先、他会員情報は含めない。送信は本人が行う。",
+      "size": "S",
+      "title": "外部AIへ渡す学習文脈を書き出す",
+      "why": "他LLMでも教材根拠と本人のつまずきを引き継げると移植しやすい。",
+      "priority": "P2",
+      "implementation": [
+        "site/tutor.ts",
+        "lib/service/tutor-evaluation.ts",
+        "web/src/service/tutor-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存シャード読込を改善",
+      "dep": [
+        19
+      ],
+      "done": "選択科目から読み、容量と版を表示してオフライン教材を管理できる。",
+      "id": 67,
+      "refs": "R11",
+      "risk": "横断検索との両立が必要。未取得範囲を『問題なし』と表示しない。",
+      "size": "M",
+      "title": "必要な科目だけ読み込み・保存",
+      "why": "現行は科目別ファイルでも起動時に全科目を読み込む。",
+      "priority": "P2",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存端末保存を同期へ接続",
+      "dep": [
+        13,
+        14,
+        15,
+        19
+      ],
+      "done": "答案に一意IDを持ち、再送で増えず、競合時も原記録を失わない。",
+      "id": 68,
+      "refs": "R16,P1",
+      "risk": "時刻の異なる端末を到着順だけで上書きしない。",
+      "size": "L",
+      "title": "オフライン答案の同期と重複防止",
+      "why": "通信再試行や複数端末で同じ答案が重複すると、成績と復習がずれる。",
+      "priority": "P2",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存UIの操作確認・改善",
+      "dep": [
+        3,
+        9
+      ],
+      "done": "縦横・外付けキーボード・指操作で数式、回答、見直しが完了できる。",
+      "id": 69,
+      "refs": "S12,H1",
+      "risk": "対応端末を無制限に増やさず、実利用機種から確認する。",
+      "size": "M",
+      "title": "iPadとスマホの数式入力を改善",
+      "why": "小さい入力欄や画面キーボードで、理解以外の操作が負担になり得る。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存アクセシビリティを検証・改善",
+      "dep": [
+        3,
+        69
+      ],
+      "done": "主要経路をキーボードで完走。文字拡大、焦点、数式の代替説明を確認する。",
+      "id": 70,
+      "refs": "S12",
+      "risk": "自動検査だけで適合認定としない。人による操作確認を行う。",
+      "size": "M",
+      "title": "キーボード・拡大・読み上げに対応",
+      "why": "正確な内容でも読み取れず操作できなければ学習が成立しない。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "キーボード移動・ラベル・構造的アクセシビリティをテスト。iPad実機・拡大表示・読み上げの実地検証は残る。"
+    },
+    {
+      "delta": "既存演出設定を拡張",
+      "dep": [],
+      "done": "学習・模試中の不要な演出をまとめて制御し、設定を尊重する。",
+      "id": 71,
+      "refs": "R1,S12,H1",
+      "risk": "報酬表示を減らす効果は個人差があるため選択制にする。",
+      "size": "S",
+      "title": "集中モードを学習画面全体へ適用",
+      "why": "報酬・音・演出が長い計算や筆記を妨げる利用者もいる。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存解法スライドの拡張候補",
+      "dep": [
+        4,
+        57,
+        60
+      ],
+      "done": "監修済み台本から音声を作り、単位・添字を確認し、対応スライドを残す。",
+      "id": 72,
+      "refs": "R17,S14",
+      "risk": "音声だけで複雑な図を理解した扱いにしない。",
+      "size": "M＋監修",
+      "title": "短い音声と式・字幕を同期",
+      "why": "通勤中の復習需要はあるが、式の読み間違いは教材誤りになる。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "ブラウザ音声合成による段階再生。対応ブラウザの実機確認と解説の監修は残る。"
+    },
+    {
+      "delta": "既存自動再生を学習向けに改善",
+      "dep": [
+        25,
+        27,
+        51
+      ],
+      "done": "重要な式の手前で停止し、予想・回答後に続きを表示する。",
+      "id": 73,
+      "refs": "R17,S6,S9",
+      "risk": "全ページで止めず、学習段階に合わせて切替可能にする。",
+      "size": "M",
+      "title": "スライド途中に自力回答を挟む",
+      "why": "自動再生の完了は解法を再現できた証拠にならない。",
+      "priority": "P2",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "段階再生途中の自力説明入力を実装。授業効果の実測は未実施。"
+    },
+    {
+      "delta": "既存印刷を拡張",
+      "dep": [
+        13,
+        21,
+        23
+      ],
+      "done": "問題・答案欄・解答を別出力し、問題IDと版でデジタル履歴に戻れる。",
+      "id": 74,
+      "refs": "R17,H1",
+      "risk": "印刷物の古い法規や撤回に備え、版と確認先を載せる。",
+      "size": "M",
+      "title": "問題冊子と解答冊子を分離出力",
+      "why": "紙で自力演習したい場合、同じ紙に解答があると測定条件が崩れる。",
+      "priority": "P2",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存教材・公式検索を拡張",
+      "dep": [
+        11,
+        18,
+        19
+      ],
+      "done": "級・段階・年度・論点・出典・検証状態で絞り込み、未収録も区別する。",
+      "id": 75,
+      "refs": "S15,S16,H1",
+      "risk": "高度な検索を初期画面へ出しすぎない。通常は一つの検索欄にする。",
+      "size": "M",
+      "title": "年度・分野・検証状態で検索",
+      "why": "問題量が増えると、根拠のある必要教材へ到達しにくい。",
+      "priority": "P2",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存KPIを会員向けに整理",
+      "dep": [
+        13,
+        15,
+        68
+      ],
+      "done": "記録目的・保持期間・削除・共有範囲を定義し、答案と運用ログを分ける。",
+      "id": 76,
+      "refs": "S13,H1",
+      "risk": "詳細ログを削りすぎて誤採点を追跡不能にしない。",
+      "size": "M",
+      "title": "必要な学習指標だけ集める",
+      "why": "学習改善に不要な個人情報を増やすと、管理負担と移行負担が増える。",
+      "priority": "P3",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存β計画の具体化",
+      "dep": [
+        20,
+        25,
+        46,
+        47,
+        70
+      ],
+      "done": "5〜10人程度を初期の操作検証案とし、開始→演習→復習→記録を観察する。",
+      "id": 77,
+      "refs": "R1,H1",
+      "risk": "この人数で合格率改善を証明できるとは扱わない。募集実行は別途判断。",
+      "size": "M＋協力者",
+      "title": "少人数で学習経路を検証",
+      "why": "制作者本人だけでは、初心者の操作・理解の問題を発見しきれない。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "匿名の試用記録・学習指標の保存画面を実装。実際の利用者による試用は未実施。"
+    },
+    {
+      "delta": "既存難易度提案を運用拡張",
+      "dep": [
+        25,
+        27,
+        76,
+        77
+      ],
+      "done": "初回・無支援の成績と回答時間を分け、標本数と偏り付きで補正案を出す。",
+      "id": 78,
+      "refs": "R1,H1",
+      "risk": "少数回答や特定層だけで全員向けの難易度を確定しない。",
+      "size": "L",
+      "title": "問題難易度を実測で補正",
+      "why": "制作者の難易度ラベルと受験者の難しさは一致しない場合がある。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "初回自力回答を人数別に集計。30人未満では難度補正を保留する。現時点で学習者データなし。"
+    },
+    {
+      "delta": "現行指標の将来代替・保留候補",
+      "dep": [
+        5,
+        25,
+        76,
+        77,
+        78
+      ],
+      "done": "独立した年度・受験者の結果で校正と偏りを検証できた場合だけ導入を判断する。",
+      "id": 79,
+      "refs": "R9,H1",
+      "risk": "回答偏り・脱落・教材既見の影響が大きければ到達指標のままにする。",
+      "size": "L＋継続データ",
+      "title": "合格確率表示を検証後に再検討",
+      "why": "合否データなしで確率を作ると判断を誤らせる。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "条件付き機能・保留",
+      "remaining": "合格確率表示は無効。確率の校正に必要な実受験結果・サンプルが得られるまで再導入を保留。"
+    },
+    {
+      "delta": "既存監修運用を改善",
+      "dep": [
+        1,
+        4,
+        20
+      ],
+      "done": "監修時間・修正率・滞留を計測し、仕掛かり数と公開範囲を制限する。",
+      "id": 80,
+      "refs": "R3,R15,H1",
+      "risk": "監修者の週の稼働が未確定。固定の公開頻度を約束しない。",
+      "size": "S＋監修",
+      "title": "監修できる量に作問量を合わせる",
+      "why": "生成が速くても審査が追い付かなければ未監修教材が積み上がる。",
+      "priority": "P3",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "監修可能件数と積み残しの計算・記録を実装。監修所要時間の実測値が必要。"
+    },
+    {
+      "delta": "手動運用を管理画面へ発展",
+      "dep": [
+        4,
+        13,
+        15,
+        80
+      ],
+      "done": "担当・審査対象版・判断・公開履歴を表示し、承認権限を分ける。",
+      "id": 81,
+      "refs": "R15,H1",
+      "risk": "小規模では台帳運用で足りる。管理画面のために監修開始を遅らせない。",
+      "size": "L",
+      "title": "監修・訂正の管理画面",
+      "why": "審査待ち・承認・公開を同じ担当者の曖昧な状態にすると訂正漏れが起きる。",
+      "priority": "P3",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "公開時の新設候補",
+      "dep": [
+        1,
+        11,
+        18,
+        75
+      ],
+      "done": "対象試験・範囲・更新日・検証の意味・実例を公開前に確認できる。",
+      "id": 82,
+      "refs": "H1",
+      "risk": "一般公開を選ぶ場合だけ着手する。未監修数を検証済み数に含めない。",
+      "size": "M",
+      "title": "検証済み教材の公開カタログ",
+      "why": "教材量の宣伝だけでは対象範囲と根拠のある品質を判断しにくい。",
+      "priority": "P3",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "二次答案入力の新設候補",
+      "dep": [
+        7,
+        9,
+        15,
+        23,
+        41
+      ],
+      "done": "元画像と認識式を対照し、本人が確定した式だけを採点に渡す。",
+      "id": 83,
+      "refs": "H1,P1",
+      "risk": "画像の保存期限・削除・外部送信の扱いを明示する。低品質画像は再提出へ戻す。",
+      "size": "L",
+      "title": "手書き答案を本人確認して取り込む",
+      "why": "途中式を毎回入力し直す負担は大きいが、OCRの誤読をそのまま採点すると学習を誤らせる。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "画像の本人別保存・削除・転記確認を実装。自動OCRは外部AI設定待ち。手入力は使用可能。"
+    },
+    {
+      "delta": "自動採点の補完候補",
+      "dep": [
+        23,
+        41,
+        81
+      ],
+      "done": "自動評価で保留した答案に、採点観点と人の根拠付きフィードバックを返せる。",
+      "id": 84,
+      "refs": "R18,H1",
+      "risk": "監修者の対応時間と料金負担を決めるまで常時対応を約束しない。",
+      "size": "L＋継続監修",
+      "title": "二次答案を人が確認する経路",
+      "why": "同じ結論でも別解・記述の妥当性は固定キーワードで決まらない。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "共有を選んだ質問を人が確認し、観点別得点・回答を本人へ返す。対応する監修者は未割当。"
+    },
+    {
+      "delta": "既存Markdown出力を拡張",
+      "dep": [
+        11,
+        13,
+        26,
+        66
+      ],
+      "done": "Markdownと構造化データに原典・問題版・自分の誤答理由を付け、再取り込みも検討できる。",
+      "id": 85,
+      "refs": "R1,R16,H1",
+      "risk": "他者の有料解説を自動転載しない。個人メモと教材の利用条件を区別する。",
+      "size": "M",
+      "title": "ノートと学習履歴を持ち出す",
+      "why": "サービス外のノートと教材の版が切れると、訂正後も古い解説を参照し続ける。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存訂正機能を学習者へ接続",
+      "dep": [
+        13,
+        19,
+        81
+      ],
+      "done": "影響した答案と修正理由をサイト内で表示し、必要な再学習へ戻せる。",
+      "id": 86,
+      "refs": "R1,H1",
+      "risk": "メール等は本人の希望と配信設定がある場合だけ。すべての微修正を再学習扱いにしない。",
+      "size": "M",
+      "title": "影響する教材訂正をまとめて知らせる",
+      "why": "学習済みの問題が訂正されても気づかなければ、誤った知識が残る。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "運営作業の自動化候補",
+      "dep": [
+        11,
+        12,
+        81
+      ],
+      "done": "公式URLの変更を差分候補として保存し、人の確認後に影響教材へ紐付ける。",
+      "id": 87,
+      "refs": "S17,H1",
+      "risk": "法的意味・適用時点・正答を自動決定しない。通知先や周期は導入時に定義する。",
+      "size": "M＋監修",
+      "title": "法規の変更候補をn8nで集める",
+      "why": "参照先を手で巡回するだけでは変更確認が遅れやすい。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "n8nワークフローと下書き受け口を実装。n8n接続・資格情報・実行経路の確認は未実施。"
+    },
+    {
+      "delta": "運営作業の自動化候補",
+      "dep": [
+        3,
+        11,
+        21,
+        81
+      ],
+      "done": "n8n等でURL・版・ハッシュ・重複を確認し、原典付きの下書きまで作る。",
+      "id": 88,
+      "refs": "S2,S3,H1",
+      "risk": "PDFの文字順・図・空欄を人が照合する。取得成功を公開承認と同一視しない。",
+      "size": "M＋監修",
+      "title": "公式過去問の取り込み候補を自動作成",
+      "why": "年度追加時の転記と出典入力を繰り返すと、問番号や解答の対応ミスが起きる。",
+      "priority": "P3",
+      "implementation": [
+        "scripts/build-service-data.ts",
+        "web/service/papers.json",
+        "web/src/service/paper-ui.ts",
+        "web/src/service/admin-ui.ts",
+        "site/worker.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "公式資料収集ワークフローは未稼働。URL・ハッシュで重複を防ぐ下書き受け口を実装。"
+    },
+    {
+      "delta": "既存履歴・集計を拡張",
+      "dep": [
+        13,
+        27,
+        68,
+        76
+      ],
+      "done": "イベントID・問題版・採点器版・日時・支援状態から同じ集計を再構築できる。",
+      "id": 89,
+      "refs": "R16,H1",
+      "risk": "ログを無期限に増やさない。保持期間と削除方針を定め、要約と原記録を区別する。",
+      "size": "L",
+      "title": "学習イベントから集計を再現する",
+      "why": "指標変更や同期後に過去の集計根拠を復元できないと、改善効果を比較できない。",
+      "priority": "P3",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "機械的アクセシビリティ確認を補完",
+      "dep": [
+        69,
+        70,
+        77
+      ],
+      "done": "画面拡大・キーボード等を使う参加者が主要課題を完了でき、詰まりを改修へ戻す。",
+      "id": 90,
+      "refs": "S12,H1",
+      "risk": "少人数の成功を全利用者への保証にしない。支援技術と端末を記録する。",
+      "size": "M",
+      "title": "実際の利用者で操作の詰まりを測る",
+      "why": "仕様への適合確認だけでは、数式を読む・入力する・移動する負担を測り切れない。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "操作テストの課題・匿名記録画面を実装。実利用者の観察は未実施。"
+    },
+    {
+      "delta": "休眠中の課金・権限機構を再設計",
+      "dep": [
+        15,
+        76,
+        93
+      ],
+      "done": "契約状態の確定情報から権限を計算し、サーバー側で各操作を確認する。",
+      "id": 91,
+      "refs": "R1,R14,S13,P1,H1",
+      "risk": "有料公開するならP0へ繰り上げる。課金サービスと認証の対応は公開方式確定後に検証する。",
+      "size": "L",
+      "title": "会員権限をサーバーで判定する",
+      "why": "料金機能を有効にするだけでは、有料範囲へのアクセス権限を保証できない。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "事業検証の新設候補",
+      "dep": [
+        77,
+        80
+      ],
+      "done": "対象者への聞き取りと試用で、継続理由・離脱理由・必要な支援を整理する。",
+      "id": 92,
+      "refs": "S14,S15,S16,H1",
+      "risk": "回答者の支払意思を売上予測として扱わない。価格は別途判断する。",
+      "size": "M",
+      "title": "有料化前に継続価値を確かめる",
+      "why": "作問量への反応と、実際に継続して支払う理由は異なる。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "継続理由・支払意思を記録集計。決済の契約・課金開始は含まない。"
+    },
+    {
+      "delta": "サービス運用の不足を補う",
+      "dep": [
+        14,
+        15,
+        85
+      ],
+      "done": "退会、保存データの削除、書き出し、課金停止の対象と反映時点を区別して確認できる。",
+      "id": 93,
+      "refs": "H1",
+      "risk": "会員公開ならP0へ繰り上げる。保存が必要な記録は目的と期間を別に示す。",
+      "size": "L",
+      "title": "退会・削除・書き出しの経路を用意",
+      "why": "学習記録が本人の管理から離れると、継続利用や移行の判断がしにくい。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "運営指標の新設候補",
+      "dep": [
+        16,
+        76,
+        80
+      ],
+      "done": "利用者一人・学習一回あたりのAPI、保存、監修、支援コストを分けて計測する。",
+      "id": 94,
+      "refs": "H1",
+      "risk": "価格・契約単価は導入時に再確認する。仮の単価で採算を確定しない。",
+      "size": "M",
+      "title": "一人あたりの継続運用費を測る",
+      "why": "LLM代だけを見ると、監修・画像・問い合わせの費用を見落とす。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "入力した単価と実測トークン・監修時間から運用費を計算。料金・労務単価は未入力。"
+    },
+    {
+      "delta": "既存質問体験の補完候補",
+      "dep": [
+        10,
+        13,
+        81,
+        84
+      ],
+      "done": "質問・参照問題版・不足条件を一覧化し、解決・教材修正・対象外の判断を記録する。",
+      "id": 95,
+      "refs": "R1,S14,S16,H1",
+      "risk": "有人対応の対象と所要時間を決める。無制限の個別指導を暗黙に含めない。",
+      "size": "M＋運用",
+      "title": "未解決の質問を対応待ちに残す",
+      "why": "AIが保留した後の行き先がないと、正確さを上げても学習が止まる。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存参考資料を学習経路へ接続",
+      "dep": [
+        11,
+        31,
+        75
+      ],
+      "done": "各技能に対応する原典・公式資料・許諾済み教材へのリンクと対象範囲を確認する。",
+      "id": 96,
+      "refs": "S14,S15,S16,H1",
+      "risk": "提携や紹介料がある場合は明示する。リンク切れと版の更新を確認する。",
+      "size": "M＋保守",
+      "title": "外部教材を弱点ごとに案内する",
+      "why": "自サービスで不足する論点を無理にAIで埋めるより、根拠のある補助教材が有効な場合がある。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "公式と補助教材の案内を実装。教材ごとの専門レビュー・有料教材の契約は未実施。"
+    },
+    {
+      "delta": "データ・LLM可搬性を実地確認",
+      "dep": [
+        13,
+        14,
+        15,
+        65,
+        85,
+        89
+      ],
+      "done": "教材・答案・復習状態を標準形式から検証環境へ復元し、件数と重要指標を照合する。",
+      "id": 97,
+      "refs": "H1,P1",
+      "risk": "認証秘密や課金情報を学習データの書き出しに混ぜない。全ホストへの無改造移行は約束しない。",
+      "size": "L",
+      "title": "別環境で復元できることを確かめる",
+      "why": "エクスポート機能があっても、認証IDや固有DBに依存していると移行できない。",
+      "priority": "P3",
+      "implementation": [
+        "site/worker.ts",
+        "site/transfer.ts",
+        "site/admin.ts",
+        "web/src/service/data-ui.ts",
+        "web/src/service/library-ui.ts",
+        "web/src/service/admin-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "既存XP・バッジを検証改善",
+      "dep": [
+        25,
+        27,
+        36,
+        71,
+        76,
+        77
+      ],
+      "done": "定着・再挑戦・自力回答を評価候補にし、無支援成績と継続への影響を比較する。",
+      "id": 98,
+      "refs": "R1,H1",
+      "risk": "順位競争や連続記録の喪失で復帰しにくくしない。効果がなければ追加しない。",
+      "size": "M",
+      "title": "ごほうびを学習成果と両立させる",
+      "why": "回答数の報酬だけでは簡単な既見問題の連打を増やし、習得を過大評価する。",
+      "priority": "P3",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "機能実装",
+      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+    },
+    {
+      "delta": "二種安定後の対象拡張候補",
+      "dep": [
+        3,
+        17,
+        18,
+        21,
+        77,
+        80
+      ],
+      "done": "着手時の公式制度を再調査し、二種の教材・採点・進捗と区分できる。",
+      "id": 99,
+      "refs": "R6,H1",
+      "risk": "現行三種制度の詳細は本資料の調査対象外。初期対象に選ぶ場合は順位と調査を組み替える。",
+      "size": "L＋監修",
+      "title": "三種・CBTを別試験プロファイルで拡張",
+      "why": "試験区分を混ぜると、科目名が同じでも形式・難度・制度の違いを隠してしまう。",
+      "priority": "P3",
+      "implementation": [
+        "lib/service/assessment.ts",
+        "lib/service/review-schedule.ts",
+        "web/src/service/lab.ts",
+        "web/src/service/learning-ui.ts"
+      ],
+      "software": "条件付き機能・保留",
+      "remaining": "二種と区分した三種・CBT設定枠と共通の年度データ形式を実装。三種の最新制度再調査・教材監修後に有効な対策を拡充。"
+    },
+    {
+      "delta": "将来の学習実験候補",
+      "dep": [
+        59,
+        61,
+        64,
+        72,
+        76,
+        77
+      ],
+      "done": "短い概念説明で試し、文字起こしの訂正と元教材への参照を付けて効果を測る。",
+      "id": 100,
+      "refs": "S8,H1",
+      "risk": "数式・記号の音声誤認、騒音、費用を検証する。口頭だけで計算の正誤を確定しない。",
+      "size": "L",
+      "title": "音声による考え方の説明を試す",
+      "why": "手が使いにくい場面で因果関係を口に出して確認できる可能性がある。",
+      "priority": "P3",
+      "implementation": [
+        "lib/service/quantities.ts",
+        "web/src/service/tools-ui.ts",
+        "web/src/service/foundations-ui.ts",
+        "web/service/lab.css"
+      ],
+      "software": "機能実装・追加検証あり",
+      "remaining": "対応ブラウザで音声入力し、本人の確認後に説明を保存。対応端末での実地検証は残る。"
+    }
+  ]
+}

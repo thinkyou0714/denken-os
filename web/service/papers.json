@@ -1,0 +1,1952 @@
+[
+  {
+    "id": "denken2-2026-theory",
+    "revision": "official-20260830-v1",
+    "title": "2026年度 二種一次 理論",
+    "exam": "denken2_primary",
+    "subject": "理論",
+    "durationMinutes": 90,
+    "source": {
+      "title": "令和8年度第二種電気主任技術者一次試験 理論",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q01.pdf",
+      "year": 2026,
+      "exam": "第二種一次",
+      "retrievedAt": "2026-09-14",
+      "modified": "原典PDFは変更なし。解答・配点を入力用に構造化。",
+      "license": "電気技術者試験センター公表問題の教育目的利用。出典・改変表示を付す。"
+    },
+    "questionPdf": "./service/official/20260830_ch_second_q01.pdf",
+    "answerPdf": "./service/official/20260830_ch_second_a01.pdf",
+    "groups": [
+      {
+        "id": "q1",
+        "title": "問1",
+        "statement": "原典PDFの問1を解答してください。図と数式は原典を参照します。",
+        "page": 4,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q1_1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "カ"
+          },
+          {
+            "id": "q1_2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q1_3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ホ"
+          },
+          {
+            "id": "q1_4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q1_5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ロ"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q2",
+        "title": "問2",
+        "statement": "原典PDFの問2を解答してください。図と数式は原典を参照します。",
+        "page": 6,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q2_1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ル"
+          },
+          {
+            "id": "q2_2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q2_3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q2_4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "カ"
+          },
+          {
+            "id": "q2_5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ハ"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q3",
+        "title": "問3",
+        "statement": "原典PDFの問3を解答してください。図と数式は原典を参照します。",
+        "page": 8,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q3_1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q3_2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q3_3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q3_4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ロ"
+          },
+          {
+            "id": "q3_5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ホ"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q4",
+        "title": "問4",
+        "statement": "原典PDFの問4を解答してください。図と数式は原典を参照します。",
+        "page": 10,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q4_1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "カ"
+          },
+          {
+            "id": "q4_2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ワ"
+          },
+          {
+            "id": "q4_3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q4_4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ホ"
+          },
+          {
+            "id": "q4_5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "イ"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q5",
+        "title": "問5",
+        "statement": "原典PDFの問5を解答してください。図と数式は原典を参照します。",
+        "page": 12,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q5_1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q5_2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ト"
+          },
+          {
+            "id": "q5_3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q5_4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "チ"
+          },
+          {
+            "id": "q5_5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ル"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q6",
+        "title": "問6",
+        "statement": "原典PDFの問6を解答してください。図と数式は原典を参照します。",
+        "page": 14,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q6_1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ト"
+          },
+          {
+            "id": "q6_2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ホ"
+          },
+          {
+            "id": "q6_3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "チ"
+          },
+          {
+            "id": "q6_4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q6_5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "リ"
+          }
+        ],
+        "skillIds": []
+      },
+      {
+        "id": "q7",
+        "title": "問7",
+        "statement": "原典PDFの問7を解答してください。図と数式は原典を参照します。",
+        "page": 16,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q7_1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ル"
+          },
+          {
+            "id": "q7_2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q7_3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "イ"
+          },
+          {
+            "id": "q7_4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q7_5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "リ"
+          }
+        ],
+        "selectionGroup": "optional",
+        "skillIds": []
+      },
+      {
+        "id": "q8",
+        "title": "問8",
+        "statement": "原典PDFの問8を解答してください。図と数式は原典を参照します。",
+        "page": 18,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q8_1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ニ"
+          },
+          {
+            "id": "q8_2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q8_3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q8_4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ホ"
+          },
+          {
+            "id": "q8_5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "リ"
+          }
+        ],
+        "selectionGroup": "optional",
+        "skillIds": []
+      }
+    ],
+    "selections": [
+      {
+        "id": "optional",
+        "count": 1
+      }
+    ],
+    "status": "source_verified"
+  },
+  {
+    "id": "denken2-2026-power",
+    "revision": "official-20260830-v1",
+    "title": "2026年度 二種一次 電力",
+    "exam": "denken2_primary",
+    "subject": "電力",
+    "durationMinutes": 90,
+    "source": {
+      "title": "令和8年度第二種電気主任技術者一次試験 電力",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q02.pdf",
+      "year": 2026,
+      "exam": "第二種一次",
+      "retrievedAt": "2026-09-14",
+      "modified": "原典PDFは変更なし。解答・配点を入力用に構造化。",
+      "license": "電気技術者試験センター公表問題の教育目的利用。出典・改変表示を付す。"
+    },
+    "questionPdf": "./service/official/20260830_ch_second_q02.pdf",
+    "answerPdf": "./service/official/20260830_ch_second_a01.pdf",
+    "groups": [
+      {
+        "id": "q1",
+        "title": "問1：火力・CO2",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 4,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q1-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "イ"
+          },
+          {
+            "id": "q1-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q1-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "チ"
+          },
+          {
+            "id": "q1-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q1-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "カ"
+          }
+        ],
+        "skillIds": [
+          "火力・CO2"
+        ]
+      },
+      {
+        "id": "q2",
+        "title": "問2：調相設備",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 5,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q2-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q2-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q2-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "チ"
+          },
+          {
+            "id": "q2-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q2-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ワ"
+          }
+        ],
+        "skillIds": [
+          "調相設備"
+        ]
+      },
+      {
+        "id": "q3",
+        "title": "問3：電圧安定性",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 6,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q3-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "チ"
+          },
+          {
+            "id": "q3-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ト"
+          },
+          {
+            "id": "q3-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q3-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q3-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "リ"
+          }
+        ],
+        "skillIds": [
+          "電圧安定性"
+        ]
+      },
+      {
+        "id": "q4",
+        "title": "問4：地中ケーブル",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 7,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q4-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ル"
+          },
+          {
+            "id": "q4-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q4-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q4-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ロ"
+          },
+          {
+            "id": "q4-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ハ"
+          }
+        ],
+        "skillIds": [
+          "地中ケーブル"
+        ]
+      },
+      {
+        "id": "q5",
+        "title": "問5：水力発電",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 8,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q5-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q5-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q5-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ル"
+          },
+          {
+            "id": "q5-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "カ"
+          },
+          {
+            "id": "q5-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ハ"
+          }
+        ],
+        "skillIds": [
+          "水力発電"
+        ]
+      },
+      {
+        "id": "q6",
+        "title": "問6：電力貯蔵",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 9,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q6-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "チ"
+          },
+          {
+            "id": "q6-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ニ"
+          },
+          {
+            "id": "q6-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q6-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ハ"
+          },
+          {
+            "id": "q6-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ヌ"
+          }
+        ],
+        "skillIds": [
+          "電力貯蔵"
+        ]
+      },
+      {
+        "id": "q7",
+        "title": "問7：回線選択保護",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 10,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q7-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ワ"
+          },
+          {
+            "id": "q7-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ト"
+          },
+          {
+            "id": "q7-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ニ"
+          },
+          {
+            "id": "q7-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "リ"
+          },
+          {
+            "id": "q7-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ル"
+          }
+        ],
+        "skillIds": [
+          "回線選択保護"
+        ]
+      }
+    ],
+    "selections": [],
+    "status": "source_verified"
+  },
+  {
+    "id": "denken2-2026-machine",
+    "revision": "official-20260830-v1",
+    "title": "2026年度 二種一次 機械",
+    "exam": "denken2_primary",
+    "subject": "機械",
+    "durationMinutes": 90,
+    "source": {
+      "title": "令和8年度第二種電気主任技術者一次試験 機械",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q03.pdf",
+      "year": 2026,
+      "exam": "第二種一次",
+      "retrievedAt": "2026-09-14",
+      "modified": "原典PDFは変更なし。解答・配点を入力用に構造化。",
+      "license": "電気技術者試験センター公表問題の教育目的利用。出典・改変表示を付す。"
+    },
+    "questionPdf": "./service/official/20260830_ch_second_q03.pdf",
+    "answerPdf": "./service/official/20260830_ch_second_a01.pdf",
+    "groups": [
+      {
+        "id": "q1",
+        "title": "問1：同期発電機",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 4,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q1-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q1-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ト"
+          },
+          {
+            "id": "q1-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q1-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ワ"
+          },
+          {
+            "id": "q1-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ヨ"
+          }
+        ],
+        "skillIds": [
+          "同期発電機"
+        ]
+      },
+      {
+        "id": "q2",
+        "title": "問2：誘導電動機",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 6,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q2-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ロ"
+          },
+          {
+            "id": "q2-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "チ"
+          },
+          {
+            "id": "q2-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q2-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q2-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "カ"
+          }
+        ],
+        "skillIds": [
+          "誘導電動機"
+        ]
+      },
+      {
+        "id": "q3",
+        "title": "問3：変圧器効率",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 8,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q3-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ト"
+          },
+          {
+            "id": "q3-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ロ"
+          },
+          {
+            "id": "q3-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q3-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q3-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ヲ"
+          }
+        ],
+        "skillIds": [
+          "変圧器効率"
+        ]
+      },
+      {
+        "id": "q4",
+        "title": "問4：整流回路",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 10,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q4-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ル"
+          },
+          {
+            "id": "q4-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q4-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q4-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ロ"
+          },
+          {
+            "id": "q4-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ヌ"
+          }
+        ],
+        "skillIds": [
+          "整流回路"
+        ]
+      },
+      {
+        "id": "q5",
+        "title": "問5：鉛蓄電池",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 12,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q5-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ホ"
+          },
+          {
+            "id": "q5-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "カ"
+          },
+          {
+            "id": "q5-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "イ"
+          },
+          {
+            "id": "q5-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ワ"
+          },
+          {
+            "id": "q5-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "チ"
+          }
+        ],
+        "skillIds": [
+          "鉛蓄電池"
+        ]
+      },
+      {
+        "id": "q6",
+        "title": "問6：電気加熱",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 13,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q6-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q6-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ニ"
+          },
+          {
+            "id": "q6-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ト"
+          },
+          {
+            "id": "q6-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "リ"
+          },
+          {
+            "id": "q6-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ヲ"
+          }
+        ],
+        "skillIds": [
+          "電気加熱"
+        ]
+      },
+      {
+        "id": "q7",
+        "title": "問7：測光量",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 14,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q7-1-B",
+            "label": "(1) 定義B",
+            "points": 1,
+            "answer": "ロ",
+            "choices": [
+              "イ",
+              "ロ",
+              "ハ",
+              "ニ",
+              "ホ",
+              "ヘ",
+              "ト"
+            ]
+          },
+          {
+            "id": "q7-1-C",
+            "label": "(1) 単位C",
+            "points": 1,
+            "answer": "g",
+            "choices": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ]
+          },
+          {
+            "id": "q7-2-B",
+            "label": "(2) 定義B",
+            "points": 1,
+            "answer": "イ",
+            "choices": [
+              "イ",
+              "ロ",
+              "ハ",
+              "ニ",
+              "ホ",
+              "ヘ",
+              "ト"
+            ]
+          },
+          {
+            "id": "q7-2-C",
+            "label": "(2) 単位C",
+            "points": 1,
+            "answer": "c",
+            "choices": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ]
+          },
+          {
+            "id": "q7-3-B",
+            "label": "(3) 定義B",
+            "points": 1,
+            "answer": "ホ",
+            "choices": [
+              "イ",
+              "ロ",
+              "ハ",
+              "ニ",
+              "ホ",
+              "ヘ",
+              "ト"
+            ]
+          },
+          {
+            "id": "q7-3-C",
+            "label": "(3) 単位C",
+            "points": 1,
+            "answer": "e",
+            "choices": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ]
+          },
+          {
+            "id": "q7-4-B",
+            "label": "(4) 定義B",
+            "points": 1,
+            "answer": "ハ",
+            "choices": [
+              "イ",
+              "ロ",
+              "ハ",
+              "ニ",
+              "ホ",
+              "ヘ",
+              "ト"
+            ]
+          },
+          {
+            "id": "q7-4-C",
+            "label": "(4) 単位C",
+            "points": 1,
+            "answer": "b",
+            "choices": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ]
+          },
+          {
+            "id": "q7-5-B",
+            "label": "(5) 定義B",
+            "points": 1,
+            "answer": "ニ",
+            "choices": [
+              "イ",
+              "ロ",
+              "ハ",
+              "ニ",
+              "ホ",
+              "ヘ",
+              "ト"
+            ]
+          },
+          {
+            "id": "q7-5-C",
+            "label": "(5) 単位C",
+            "points": 1,
+            "answer": "a",
+            "choices": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ]
+          }
+        ],
+        "skillIds": [
+          "測光量"
+        ],
+        "selectionGroup": "optional"
+      },
+      {
+        "id": "q8",
+        "title": "問8：メカトロニクス",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 15,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q8-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q8-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ル"
+          },
+          {
+            "id": "q8-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "リ"
+          },
+          {
+            "id": "q8-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q8-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ニ"
+          }
+        ],
+        "skillIds": [
+          "メカトロニクス"
+        ],
+        "selectionGroup": "optional"
+      }
+    ],
+    "selections": [
+      {
+        "id": "optional",
+        "count": 1
+      }
+    ],
+    "status": "source_verified"
+  },
+  {
+    "id": "denken2-2026-law",
+    "revision": "official-20260830-v1",
+    "title": "2026年度 二種一次 法規",
+    "exam": "denken2_primary",
+    "subject": "法規",
+    "durationMinutes": 65,
+    "source": {
+      "title": "令和8年度第二種電気主任技術者一次試験 法規",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q04.pdf",
+      "year": 2026,
+      "exam": "第二種一次",
+      "retrievedAt": "2026-09-14",
+      "modified": "原典PDFは変更なし。解答・配点を入力用に構造化。",
+      "license": "電気技術者試験センター公表問題の教育目的利用。出典・改変表示を付す。"
+    },
+    "questionPdf": "./service/official/20260830_ch_second_q04.pdf",
+    "answerPdf": "./service/official/20260830_ch_second_a01.pdf",
+    "groups": [
+      {
+        "id": "q1",
+        "title": "問1：保安規程",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 4,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q1-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q1-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q1-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q1-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ホ"
+          },
+          {
+            "id": "q1-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ト"
+          }
+        ],
+        "skillIds": [
+          "保安規程"
+        ]
+      },
+      {
+        "id": "q2",
+        "title": "問2：風力設備技術基準",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 6,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q2-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ル"
+          },
+          {
+            "id": "q2-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "リ"
+          },
+          {
+            "id": "q2-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ニ"
+          },
+          {
+            "id": "q2-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ヌ"
+          },
+          {
+            "id": "q2-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ワ"
+          }
+        ],
+        "skillIds": [
+          "風力設備技術基準"
+        ]
+      },
+      {
+        "id": "q3",
+        "title": "問3：保安原則",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 8,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q3-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ワ"
+          },
+          {
+            "id": "q3-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ト"
+          },
+          {
+            "id": "q3-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q3-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "イ"
+          },
+          {
+            "id": "q3-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ヨ"
+          }
+        ],
+        "skillIds": [
+          "保安原則"
+        ]
+      },
+      {
+        "id": "q4",
+        "title": "問4：接地・等電位",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 10,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q4-1",
+            "label": "(1)",
+            "points": 3,
+            "answer": "ホ"
+          },
+          {
+            "id": "q4-2",
+            "label": "(2)",
+            "points": 3,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q4-3",
+            "label": "(3)",
+            "points": 3,
+            "answer": "カ"
+          },
+          {
+            "id": "q4-4",
+            "label": "(4)",
+            "points": 3,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q4-5",
+            "label": "(5)",
+            "points": 3,
+            "answer": "ロ"
+          }
+        ],
+        "skillIds": [
+          "接地・等電位"
+        ]
+      },
+      {
+        "id": "q5",
+        "title": "問5：短絡容量",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 12,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q5-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ハ"
+          },
+          {
+            "id": "q5-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q5-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ヲ"
+          },
+          {
+            "id": "q5-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "イ"
+          },
+          {
+            "id": "q5-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ヘ"
+          }
+        ],
+        "skillIds": [
+          "短絡容量"
+        ]
+      },
+      {
+        "id": "q6",
+        "title": "問6：用語定義",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 13,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q6-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ト"
+          },
+          {
+            "id": "q6-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "ヨ"
+          },
+          {
+            "id": "q6-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "イ"
+          },
+          {
+            "id": "q6-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "チ"
+          },
+          {
+            "id": "q6-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ハ"
+          }
+        ],
+        "skillIds": [
+          "用語定義"
+        ]
+      },
+      {
+        "id": "q7",
+        "title": "問7：電圧・無効電力",
+        "statement": "公式PDFの問題文・図・式・解答群を確認して、各空欄に回答してください。",
+        "page": 14,
+        "choices": [
+          "イ",
+          "ロ",
+          "ハ",
+          "ニ",
+          "ホ",
+          "ヘ",
+          "ト",
+          "チ",
+          "リ",
+          "ヌ",
+          "ル",
+          "ヲ",
+          "ワ",
+          "カ",
+          "ヨ"
+        ],
+        "blanks": [
+          {
+            "id": "q7-1",
+            "label": "(1)",
+            "points": 2,
+            "answer": "ル"
+          },
+          {
+            "id": "q7-2",
+            "label": "(2)",
+            "points": 2,
+            "answer": "カ"
+          },
+          {
+            "id": "q7-3",
+            "label": "(3)",
+            "points": 2,
+            "answer": "ロ"
+          },
+          {
+            "id": "q7-4",
+            "label": "(4)",
+            "points": 2,
+            "answer": "ヘ"
+          },
+          {
+            "id": "q7-5",
+            "label": "(5)",
+            "points": 2,
+            "answer": "ヨ"
+          }
+        ],
+        "skillIds": [
+          "電圧・無効電力"
+        ]
+      }
+    ],
+    "selections": [],
+    "status": "source_verified"
+  }
+]

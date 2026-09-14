@@ -193,14 +193,12 @@ function readinessSection(root: HTMLElement, logs: ReturnType<typeof progress.lo
   if (rows.every((r) => r.attempts === 0)) return;
   const verdictStyle = (v: SubjectReadiness["verdict"]): string =>
     v === "順調" ? "color:var(--ok)" : v === "もう少し" ? "color:var(--accent)" : "color:var(--ng)";
-  const verdictIcon = (v: SubjectReadiness["verdict"]): string =>
-    v === "順調" ? "🟢" : v === "もう少し" ? "🟡" : "🔴";
   root.append(
-    h("h2", {}, "科目別 合格見込み（推定）"),
+    h("h2", {}, "科目別 学習到達状況"),
     h(
       "p",
       { class: "muted small" },
-      "直近の正答率・論点カバレッジ・残り日数からの推定です（合否を保証するものではありません）。",
+      "回答の正答率と着手した論点の割合を分けて表示します。ヒントなしの未見成績は学習ラボで確認できます。",
     ),
   );
   for (const r of rows) {
@@ -209,11 +207,11 @@ function readinessSection(root: HTMLElement, logs: ReturnType<typeof progress.lo
         "div",
         { class: "row" },
         h("span", {}, r.subject),
-        bar(Math.round(r.readiness * 100)),
+        bar(Math.round(r.coverage * 100)),
         h(
           "span",
           { style: verdictStyle(r.verdict) },
-          `${verdictIcon(r.verdict)} ${r.verdict} ${Math.round(r.readiness * 100)}%`,
+          `正答率 ${Math.round(r.accuracy * 100)}% ／ 着手範囲 ${Math.round(r.coverage * 100)}% ／ ${r.attempts}回答`,
         ),
       ),
     );

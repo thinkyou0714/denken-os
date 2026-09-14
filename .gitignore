@@ -28,3 +28,6 @@ npm-debug.log*
 
 # test coverage
 coverage/
+
+# Official PDFs are verified against pinned hashes at build time.
+web/service/official/*.pdf
