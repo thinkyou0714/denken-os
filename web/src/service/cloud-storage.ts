@@ -1,4 +1,4 @@
-import { ApiError, api, records, saveRecord } from "./client.js";
+import { ApiError, api, records, saveRecord, setApiIdentity } from "./client.js";
 
 export interface Identity {
   id: string;
@@ -81,10 +81,19 @@ class CloudStorage implements Storage {
       }, 500);
   }
   async initialize() {
+    const wasReady = this.ready;
+    this.ready = false;
+    if (this.timer) clearTimeout(this.timer);
+    if (this.active) await this.active.catch(() => {});
+    if (wasReady) this.persistQueue();
     try {
       identity = await api<Identity>("me");
       this.owner = identity.id;
-      window.localStorage.setItem("denken:lastSiteIdentity", JSON.stringify(identity));
+      this.pending = {};
+      this.values = {};
+      this.base = {};
+      this.revision = 0;
+      setApiIdentity(this.owner);
       const response = await records<{ data: Record<string, string> }>("legacy");
       const current = response.items.find((r) => r.id === "current");
       this.revision = current?.revision ?? 0;
@@ -109,10 +118,11 @@ class CloudStorage implements Storage {
       }
       this.ready = true;
       this.persistQueue();
+      window.localStorage.setItem("denken:lastSiteIdentity", JSON.stringify(identity));
       this.announce("同期済み");
       if (Object.keys(this.pending).length) void this.flush().catch(() => {});
     } catch (error) {
-      if (!navigator.onLine) {
+      if (!navigator.onLine && !(error instanceof ApiError && [401, 403, 409].includes(error.status))) {
         const cached = window.localStorage.getItem("denken:lastSiteIdentity");
         if (cached) {
           const person = JSON.parse(cached) as Identity;
@@ -125,6 +135,7 @@ class CloudStorage implements Storage {
             };
             identity = person;
             this.owner = person.id;
+            setApiIdentity(this.owner);
             this.base = q.base;
             this.pending = q.pending;
             this.revision = q.revision;
@@ -139,6 +150,8 @@ class CloudStorage implements Storage {
           }
         }
       }
+      identity = null;
+      setApiIdentity(null);
       this.announce(
         error instanceof ApiError && error.status === 401 ? "サインインが必要" : "接続待ち・入力は端末に保持",
       );
@@ -154,15 +167,16 @@ class CloudStorage implements Storage {
     if (!this.ready || !Object.keys(this.pending).length) return;
     const changed = { ...this.pending },
       sent = { ...this.values },
-      base = { ...this.base };
+      base = { ...this.base },
+      owner = this.owner;
     this.active = (async () => {
       try {
         const me = await api<Identity>("me");
-        if (me.id !== this.owner)
+        if (me.id !== owner || this.owner !== owner)
           throw new Error("利用者が変わっています。保存待ちの内容を保管し、再読み込みしてください。");
         let result: { id: string; revision: number };
         try {
-          result = await saveRecord("legacy", "current", { data: sent }, this.revision);
+          result = await saveRecord("legacy", "current", { data: sent }, this.revision, owner);
         } catch (error) {
           if (!(error instanceof ApiError) || error.status !== 409) throw error;
           const current = (await records<{ data: Record<string, string> }>("legacy")).items.find(
@@ -181,7 +195,7 @@ class CloudStorage implements Storage {
             if (v === null) delete sent[k];
             else sent[k] = v;
           }
-          result = await saveRecord("legacy", "current", { data: sent }, current?.revision ?? 0);
+          result = await saveRecord("legacy", "current", { data: sent }, current?.revision ?? 0, owner);
         }
         this.revision = result.revision;
         this.base = { ...sent };

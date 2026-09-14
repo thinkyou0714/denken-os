@@ -12,6 +12,18 @@ export interface TutorEnvironment {
   LLM_API_KEY?: string;
   LLM_API_URL?: string;
 }
+export function tutorConfigured(env: TutorEnvironment) {
+  if (!env.TUTOR_MODEL) return false;
+  if (env.TUTOR_PROVIDER === "compatible") {
+    if (!env.LLM_API_KEY || !env.LLM_API_URL) return false;
+    try {
+      return new URL(env.LLM_API_URL).protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+  return (!env.TUTOR_PROVIDER || env.TUTOR_PROVIDER === "anthropic") && !!env.ANTHROPIC_API_KEY;
+}
 export async function tutor(
   env: TutorEnvironment,
   owner: string,
@@ -43,7 +55,7 @@ export async function tutor(
       sources,
       held: false,
     };
-  if ((!env.ANTHROPIC_API_KEY && !env.LLM_API_KEY) || !env.TUTOR_MODEL)
+  if (!tutorConfigured(env))
     return {
       mode: "verified-explanation",
       answer: problem.solution.join("\n"),

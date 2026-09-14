@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "sourceCommit": "33fe6dc145ab90badf3affee7d1e59c79f80dc7e",
   "scope": "機能の実装と、監修・外部接続・実測の完了を分けて管理する。全項目の効果検証済みという意味ではない。",
   "entries": [
@@ -341,10 +341,16 @@
         "site/admin.ts",
         "web/src/service/data-ui.ts",
         "web/src/service/library-ui.ts",
-        "web/src/service/admin-ui.ts"
+        "web/src/service/admin-ui.ts",
+        "site/identity.ts",
+        "web/src/service/client.ts",
+        "web/src/service/cloud-storage.ts",
+        "tests/service/identity.test.ts",
+        "tests/service/client.test.ts",
+        "tests/service/cloud-storage.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "利用者切替中の読書き・初期読込失敗・認証拒否時のオフライン復元を検証。ID転送欠落への互換処理は確認済みの既存所有者に限定。転送側の復旧後に互換設定を解除する。"
     },
     {
       "delta": "BYOKのサービス向け代替案",
@@ -363,10 +369,12 @@
       "implementation": [
         "site/tutor.ts",
         "lib/service/tutor-evaluation.ts",
-        "web/src/service/tutor-ui.ts"
+        "web/src/service/tutor-ui.ts",
+        "tests/service/tutor-runtime.test.ts",
+        "web/src/service/admin-ui.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "選択したAIの設定不足時は確認済み解説を表示し、外部通信と課金対象の要求を行わないことを検証。実サービスのキーとモデルは未設定。"
     },
     {
       "delta": "固定既定日を置換",
@@ -431,10 +439,12 @@
         "web/service/papers.json",
         "web/src/service/paper-ui.ts",
         "web/src/service/admin-ui.ts",
-        "site/worker.ts"
+        "site/worker.ts",
+        "web/src/service/catalog.ts",
+        "tests/service/catalog.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "教材ハッシュ・件数・パス・監修状態が不正な場合の拒否と、オフライン用カタログを自動検証。運用時の教材監修は別途必要。"
     },
     {
       "delta": "既存公開フローを拡張",
@@ -456,10 +466,13 @@
         "web/service/papers.json",
         "web/src/service/paper-ui.ts",
         "web/src/service/admin-ui.ts",
-        "site/worker.ts"
+        "site/worker.ts",
+        "docs/service/STATUS.md",
+        "docs/service/OPERATIONS.md",
+        "tests/service/ui.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "全体テストと既存の網羅率基準を公開ゲートに含める。今回は閾値・計測除外を変更せず、保存・画面操作・AI設定の回帰検証を追加。"
     },
     {
       "delta": "既存取込計画を具体化",
@@ -1597,10 +1610,14 @@
         "site/admin.ts",
         "web/src/service/data-ui.ts",
         "web/src/service/library-ui.ts",
-        "web/src/service/admin-ui.ts"
+        "web/src/service/admin-ui.ts",
+        "web/src/service/events.ts",
+        "web/src/service/cloud-storage.ts",
+        "tests/service/events.test.ts",
+        "tests/service/cloud-storage.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "利用者別キュー、重複再送、通信復帰、競合、同時編集、破損原文の保持を検証。未送信答案の件数・理由を表示。実端末の継続利用は未測定。"
     },
     {
       "delta": "既存UIの操作確認・改善",
@@ -1919,10 +1936,11 @@
         "web/service/papers.json",
         "web/src/service/paper-ui.ts",
         "web/src/service/admin-ui.ts",
-        "site/worker.ts"
+        "site/worker.ts",
+        "tests/service/ui.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "監修判断の本人確認・根拠入力と運営の主要操作をDOMで検証。接続設定の状態を運営画面へ追加。教材の承認は人の判断を待つ。"
     },
     {
       "delta": "公開時の新設候補",
@@ -2026,10 +2044,13 @@
         "site/admin.ts",
         "web/src/service/data-ui.ts",
         "web/src/service/library-ui.ts",
-        "web/src/service/admin-ui.ts"
+        "web/src/service/admin-ui.ts",
+        "web/src/service/events.ts",
+        "tests/service/events.test.ts",
+        "tests/service/ui.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "保存待ちの書き出しに未送信の通常演習答案を追加し、破損キューも原文で保全。模試の未同期下書きは模試画面で別途書き出す。"
     },
     {
       "delta": "既存訂正機能を学習者へ接続",
@@ -2340,10 +2361,12 @@
         "site/admin.ts",
         "web/src/service/data-ui.ts",
         "web/src/service/library-ui.ts",
-        "web/src/service/admin-ui.ts"
+        "web/src/service/admin-ui.ts",
+        "tests/service/cloud-storage.test.ts",
+        "tests/service/client.test.ts"
       ],
       "software": "機能実装",
-      "remaining": "実装済み。運用中の教材更新と利用状況に応じて見直す。"
+      "remaining": "別利用者のキャッシュ・保存待ち・同時切替と、競合時の書き出しを自動検証。外部ホスト全般への無改造移行は対象外。"
     },
     {
       "delta": "既存XP・バッジを検証改善",
@@ -2426,5 +2449,6 @@
       "software": "機能実装・追加検証あり",
       "remaining": "対応ブラウザで音声入力し、本人の確認後に説明を保存。対応端末での実地検証は残る。"
     }
-  ]
+  ],
+  "lastReview": "2026-09-14"
 }

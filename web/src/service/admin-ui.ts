@@ -14,7 +14,10 @@ export async function renderAdmin(root: HTMLElement) {
     "監修と運営",
     "新しい教材は、代表例・境界条件・反例を人が確認してから公開します。収集候補は承認操作まで通常学習に入りません。",
   );
-  nav.append(link("100案の実装状況と完了条件", "./service/implementation.html"));
+  nav.append(
+    link("100案の実装状況と完了条件", "./service/implementation.html"),
+    link("継続実装の記録と残る準備", "./service/STATUS.md"),
+  );
   root.append(nav);
   await reviewPanel(root);
   const papers = panel(
@@ -321,11 +324,45 @@ async function supportPanel(root: HTMLElement) {
 
 async function operationsPanel(root: HTMLElement) {
   const overview = await api<{
+    runtime?: {
+      checkedAt: number;
+      database: string;
+      authentication: string;
+      tutorConfigured: boolean;
+      ocrConfigured: boolean;
+      imageStorage: boolean;
+      automationConfigured: boolean;
+    };
     members: { id: string; role: string; status: string }[];
     usage: { day: string; kind: string; requests: number; input_tokens: number; output_tokens: number }[];
     audit: { action: string; target: string; created_at: number }[];
     calibration: { problemId: string; learners: number; rate: number | null }[];
   }>("admin/overview");
+  if (overview.runtime) {
+    const runtime = overview.runtime;
+    const status = panel("接続状況と残る準備", `確認日時：${new Date(runtime.checkedAt).toLocaleString("ja-JP")}`);
+    const configured = (yes: boolean) => (yes ? "設定済み・外部通信は未確認" : "未設定");
+    status.append(
+      table(
+        ["機能", "現在の状態"],
+        [
+          ["学習記録の保存先", "接続確認済み"],
+          [
+            "本人確認",
+            runtime.authentication === "owner-compatibility" ? "既存の所有者との一致を確認" : "利用者IDで確認",
+          ],
+          ["答案画像の保存", runtime.imageStorage ? "利用可能" : "未設定"],
+          ["外部AIの説明候補", configured(runtime.tutorConfigured)],
+          ["画像の自動転記", configured(runtime.ocrConfigured)],
+          [
+            "公式資料の自動収集",
+            runtime.automationConfigured ? "受け口の設定済み・n8nの稼働は別途確認" : "接続設定待ち",
+          ],
+        ],
+      ),
+    );
+    root.querySelector(".lab-panel")?.after(status);
+  }
   const wrap = panel("監修量と運用費");
   const minutes = input("1週間の監修時間（分）", "120", "number"),
     per = input("1件の実測監修時間（分）", "30", "number"),

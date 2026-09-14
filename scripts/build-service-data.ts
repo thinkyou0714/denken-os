@@ -83,3 +83,4 @@ writeFileSync(
 );
 writeFileSync(`${output}/implementation-plan.json`, readFileSync("docs/service/implementation-plan.json", "utf8"));
 writeFileSync(`${output}/OPERATIONS.md`, readFileSync("docs/service/OPERATIONS.md", "utf8"));
+writeFileSync(`${output}/STATUS.md`, readFileSync("docs/service/STATUS.md", "utf8"));

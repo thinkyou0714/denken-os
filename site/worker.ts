@@ -12,9 +12,10 @@ import { dataRoutes } from "./data-routes.js";
 import { digest, logAudit, readRecords, writeRecord } from "./db.js";
 import type { Env } from "./environment.js";
 import { body, failure, json } from "./http.js";
+import { authenticatedIdentity } from "./identity.js";
 
 import { validLegacy } from "./transfer.js";
-import { tutor } from "./tutor.js";
+import { tutor, tutorConfigured } from "./tutor.js";
 
 interface Member {
   id: string;
@@ -101,11 +102,14 @@ const recordInput = z.object({
 async function handle(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url),
     path = url.pathname;
+  if (path === "/favicon.ico") return Response.redirect(new URL("/icon.svg", url), 302);
   if (!path.startsWith("/api/"))
     return env.ASSETS ? env.ASSETS.fetch(request) : new Response("Not found", { status: 404 });
-  if (path === "/api/health") return json({ ok: true, service: "denken-os", schema: 1 });
   if (!env.DB) return failure("学習記録の保存先に接続できません。入力を残したまま再試行してください。", 503);
-  const userId = request.headers.get("oai-authenticated-user-id");
+  if (path === "/api/health" && request.method === "GET") {
+    await env.DB.prepare("SELECT id FROM members LIMIT 1").first();
+    return json({ ok: true, service: "denken-os", schema: 1, database: "ready" });
+  }
   // Automation is a narrowly scoped, optional draft-ingestion capability only.
   if (path === "/api/automation/draft" && request.method === "POST") {
     if (!env.AUTOMATION_KEY || request.headers.get("authorization") !== `Bearer ${env.AUTOMATION_KEY}`)
@@ -126,7 +130,12 @@ async function handle(request: Request, env: Env): Promise<Response> {
     const created = await writeRecord(env.DB, "catalog", "ingest", key, { ...value, status: "draft" }, 0);
     return json({ id: key, created, status: "draft" });
   }
-  if (!userId) return failure("ChatGPTへのサインインが必要です", 401);
+  const authenticated = await authenticatedIdentity(request, env);
+  if (!authenticated) return failure("本人確認が完了していません。ChatGPTでサインインし直してください。", 401);
+  const userId = authenticated.id;
+  const expectedOwner = request.headers.get("x-denken-owner");
+  if (expectedOwner && expectedOwner !== userId)
+    return failure("利用者が変わっています。保存待ちの内容を残したまま、元の利用者でサインインしてください。", 409);
   if (request.method !== "GET" && request.method !== "HEAD") {
     const origin = request.headers.get("origin");
     if (origin && origin !== url.origin) return failure("同じサイトから操作してください", 403);
@@ -139,8 +148,9 @@ async function handle(request: Request, env: Env): Promise<Response> {
     return json({
       id: me.id,
       role: me.role,
-      externalAI: !!((env.ANTHROPIC_API_KEY || env.LLM_API_KEY) && env.TUTOR_MODEL),
+      externalAI: tutorConfigured(env),
       imageStorage: !!env.BUCKET,
+      authentication: authenticated.method,
     });
   const storedPapers =
     path === "/api/catalog" || path.startsWith("/api/exam/") ? await readRecords(env.DB, "catalog", "paper") : [];
@@ -514,6 +524,15 @@ async function handle(request: Request, env: Env): Promise<Response> {
     ).all();
     return json({
       members: users.results,
+      runtime: {
+        checkedAt: Date.now(),
+        database: "ready",
+        authentication: authenticated.method,
+        tutorConfigured: tutorConfigured(env),
+        ocrConfigured: !!(env.BUCKET && env.ANTHROPIC_API_KEY && env.TUTOR_MODEL),
+        imageStorage: !!env.BUCKET,
+        automationConfigured: !!env.AUTOMATION_KEY,
+      },
       audit: logs.results,
       usage: costs.results,
       calibration: await calibration(env.DB),

@@ -2,7 +2,7 @@ import { importBackup } from "../backup.js";
 import { catalogue } from "./catalog.js";
 import { api, download, records, saveRecord } from "./client.js";
 import { cloudStorage, identity } from "./cloud-storage.js";
-import { flushAttempts } from "./events.js";
+import { flushAttempts, pendingAttemptsExport } from "./events.js";
 import { disclosure, emptyState } from "./study-ui.js";
 import { area, button, check, h, input, link, notice, panel, select, table } from "./ui.js";
 
@@ -30,7 +30,10 @@ export async function renderData(root: HTMLElement) {
       notice(storage, "再送を確認しました");
     }),
     button("保存待ちの内容を書き出す", () =>
-      download("DENKEN-pending.json", JSON.stringify(cloudStorage.pendingExport(), null, 2)),
+      download(
+        "DENKEN-pending.json",
+        JSON.stringify({ ...cloudStorage.pendingExport(), attempts: pendingAttemptsExport() }, null, 2),
+      ),
     ),
     button("学習記録をすべて書き出す", async () => {
       const data = await api<unknown>("export");
@@ -213,12 +216,13 @@ async function imagePanel(root: HTMLElement) {
     problem.field,
     file.field,
     button("画像を保存して表示", async () => {
+      if (!identity?.id) throw new Error("本人確認が必要です。接続を確認してください。");
       const image = file.input.files?.[0];
       if (!image) throw new Error("画像を選んでください");
       if (image.size > 5_000_000) throw new Error("画像は5MB以内にしてください");
       const response = await fetch("/api/assets", {
         method: "POST",
-        headers: { "content-type": image.type },
+        headers: { "content-type": image.type, "x-denken-owner": identity.id },
         body: image,
         credentials: "same-origin",
       });

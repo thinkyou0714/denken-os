@@ -1,5 +1,6 @@
 import { identity, syncStatus } from "./cloud-storage.js";
 import { renderData } from "./data-ui.js";
+import { attemptSyncStatus, flushAttempts } from "./events.js";
 import { renderReviewQueue, renderToday } from "./home-ui.js";
 import { type LearningOptions, renderLearning } from "./learning-ui.js";
 import { renderLibrary } from "./library-ui.js";
@@ -31,11 +32,13 @@ export function renderLab(root: HTMLElement) {
   const canReview = identity?.role === "owner" || identity?.role === "reviewer";
   const pages = canReview ? PAGES : PAGES.slice(0, -1);
   const title = h("h2", { class: "study-page-title", tabindex: "-1" });
-  const status = h("span", { class: "study-sync", role: "status" }, syncStatus);
+  const status = h("span", { class: "study-sync", role: "status" }, attemptSyncStatus() || syncStatus);
   const statusChanged = () => {
-    status.textContent = syncStatus;
+    status.textContent = attemptSyncStatus() || syncStatus;
   };
   window.addEventListener("denken-sync", statusChanged);
+  window.addEventListener("denken-attempt-sync", statusChanged);
+  void flushAttempts().catch(() => {});
   const sidebar = h("aside", { class: "study-sidebar" });
   const brand = h(
     "a",
@@ -177,6 +180,7 @@ export function renderLab(root: HTMLElement) {
   dispose = () => {
     serial++;
     window.removeEventListener("denken-sync", statusChanged);
+    window.removeEventListener("denken-attempt-sync", statusChanged);
     window.removeEventListener("denken-lab-route", routeChanged);
     root.removeEventListener("keydown", closeOnEscape);
   };
