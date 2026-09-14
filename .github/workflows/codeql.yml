@@ -54,3 +54,28 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
+
+      - name: Summarize CodeQL findings in job logs
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import { existsSync, readdirSync, readFileSync } from "node:fs";
+          import { join } from "node:path";
+          const directory = "../results";
+          if (existsSync(directory)) {
+            for (const file of readdirSync(directory).filter(name => name.endsWith(".sarif"))) {
+              const report = JSON.parse(readFileSync(join(directory, file), "utf8"));
+              for (const run of report.runs ?? []) {
+                for (const result of run.results ?? []) {
+                  const location = result.locations?.[0]?.physicalLocation;
+                  console.log("CODEQL_FINDING " + JSON.stringify({
+                    rule: result.ruleId,
+                    file: location?.artifactLocation?.uri,
+                    line: location?.region?.startLine,
+                    message: result.message?.text,
+                  }));
+                }
+              }
+            }
+          }
+          NODE
