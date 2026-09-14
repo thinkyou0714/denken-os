@@ -102,7 +102,7 @@ const recordInput = z.object({
 async function handle(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url),
     path = url.pathname;
-  if (path === "/favicon.ico") return Response.redirect(new URL("/icon.svg", url), 302);
+  if (path === "/favicon.ico") return new Response(null, { status: 302, headers: { location: "/icon.svg" } });
   if (!path.startsWith("/api/"))
     return env.ASSETS ? env.ASSETS.fetch(request) : new Response("Not found", { status: 404 });
   if (!env.DB) return failure("学習記録の保存先に接続できません。入力を残したまま再試行してください。", 503);

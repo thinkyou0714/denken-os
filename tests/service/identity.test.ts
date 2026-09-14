@@ -85,5 +85,7 @@ it("checks the actual database before reporting healthy and serves the existing 
   expect((await worker.fetch(new Request("https://example.test/api/health"), {} as Env)).status).toBe(503);
   const icon = await worker.fetch(new Request("https://example.test/favicon.ico"), env);
   expect(icon.status).toBe(302);
-  expect(icon.headers.get("location")).toBe("https://example.test/icon.svg");
+  expect(icon.headers.get("location")).toBe("/icon.svg");
+  const untrustedHost = await worker.fetch(new Request("https://untrusted.example/favicon.ico"), env);
+  expect(untrustedHost.headers.get("location")).toBe("/icon.svg");
 });
