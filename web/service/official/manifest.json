@@ -1,0 +1,41 @@
+{
+  "source": "https://www.shiken.or.jp/chief/second/qa/",
+  "license": "電気技術者試験センター公表問題の教育目的利用。出典と改変表示はpapers.jsonに記録。",
+  "files": [
+    {
+      "file": "20251116_ch_second_a01_tk.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20251116_ch_second_a01_tk.pdf",
+      "sha256": "25e98f20db905f395b096c45abb8dc557b7f4533717d0e289012aa77048841df"
+    },
+    {
+      "file": "20251116_ch_second_q01.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20251116_ch_second_q01.pdf",
+      "sha256": "b35d4eb94e3b7024761c72d9af58108f0e9bfa6160f9e659c0b50bed8a0bdaad"
+    },
+    {
+      "file": "20260830_ch_second_a01.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_a01.pdf",
+      "sha256": "96a106b2e30ba64f7ca6718356a24b530769f644ff277830ff6b82a93a91d687"
+    },
+    {
+      "file": "20260830_ch_second_q01.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q01.pdf",
+      "sha256": "f4dbf04ba2e233118402354aeb961526013f4b0ea9c4397e2e0966909c1c3865"
+    },
+    {
+      "file": "20260830_ch_second_q02.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q02.pdf",
+      "sha256": "4cc06e418d0416c2b538e87a7452889f90cece156ce00b1394cb45f16f07d2e3"
+    },
+    {
+      "file": "20260830_ch_second_q03.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q03.pdf",
+      "sha256": "d97e3933c8e0ab118aace92196c6ae9bf85dd477b81e6104df86ad003336fd0e"
+    },
+    {
+      "file": "20260830_ch_second_q04.pdf",
+      "url": "https://www.shiken.or.jp/chief/upload/20260830_ch_second_q04.pdf",
+      "sha256": "5a5d7a2182bff66de440ef83ee8c954d384faca757dd1c123774df188bfb5e25"
+    }
+  ]
+}

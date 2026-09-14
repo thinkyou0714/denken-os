@@ -13,8 +13,8 @@ const CHAT_MODEL_KEY = "denken:chatModel";
 const ONBOARDED_KEY = "denken:onboarded";
 const REVIEW_CAP_KEY = "denken:reviewCap";
 
-/** 既定の試験日（2026年度 電験二種 一次試験の目安）。設定で上書き可。 */
-export const DEFAULT_EXAM_DATE = "2026-08-30";
+/** 試験日が決まるまでは未設定。過去の日付を初期値にしない。 */
+export const DEFAULT_EXAM_DATE = "";
 export const DEFAULT_DAILY_GOAL = 10;
 /** 1日に出す復習の上限（retention.ts の既定と揃える）。 */
 export const DEFAULT_REVIEW_CAP = 30;
@@ -33,11 +33,16 @@ export function setTheme(storage: StorageLike, t: ThemePref): void {
 
 export function getExamDate(storage: StorageLike): string {
   const raw = storage.getItem(EXAM_DATE_KEY);
-  return raw && /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : DEFAULT_EXAM_DATE;
+  return raw && validExamDate(raw) ? raw : DEFAULT_EXAM_DATE;
 }
 
+function validExamDate(iso: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const date = new Date(`${iso}T00:00:00Z`);
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === iso;
+}
 export function setExamDate(storage: StorageLike, iso: string): void {
-  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) storage.setItem(EXAM_DATE_KEY, iso);
+  if (iso === "" || validExamDate(iso)) storage.setItem(EXAM_DATE_KEY, iso);
 }
 
 export function getDailyGoal(storage: StorageLike): number {

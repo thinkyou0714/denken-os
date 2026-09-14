@@ -1,0 +1,55 @@
+{
+  "version": "29edcc058d18d6dd2295b52a73807fd3c665c8d842b31d0f02911f2081bc0d43",
+  "catalog": {
+    "file": "catalog-29edcc058d18d6dd.json",
+    "sha256": "29edcc058d18d6dd2295b52a73807fd3c665c8d842b31d0f02911f2081bc0d43",
+    "count": 52
+  },
+  "experimental": {
+    "total": 12890,
+    "shards": [
+      {
+        "subject": "理論",
+        "slug": "theory",
+        "file": "theory.json",
+        "count": 3230,
+        "sha256": "c5019c6bffd8a4eccccb4ca8287fca8443b893e978c722b130692e6c3d3856b2"
+      },
+      {
+        "subject": "電力",
+        "slug": "power",
+        "file": "power.json",
+        "count": 1857,
+        "sha256": "3d97ad378760b390efd91f4cb71f66ea8e699d7dd0ca7bea77fedb619a269323"
+      },
+      {
+        "subject": "機械",
+        "slug": "machine",
+        "file": "machine.json",
+        "count": 2293,
+        "sha256": "2ba0d33671186bb95e9c00feede10fe0b8c96c22b73d575d94bf6c42d3d7dd22"
+      },
+      {
+        "subject": "法規",
+        "slug": "law",
+        "file": "law.json",
+        "count": 860,
+        "sha256": "83e255397b7ead0fd99a82576f8920952d10631b91062ee20e29f2cbea3d4039"
+      },
+      {
+        "subject": "電力管理",
+        "slug": "power-mgmt",
+        "file": "power-mgmt.json",
+        "count": 2849,
+        "sha256": "aa2ecff8d7e1149ebf06360d6651f65226112601cfb9cbb5651c231375733613"
+      },
+      {
+        "subject": "機械制御",
+        "slug": "machine-ctrl",
+        "file": "machine-ctrl.json",
+        "count": 1801,
+        "sha256": "809310bbc1416c302ae7c23299758e336a0d692378f4a32b7c6c594992a46b7a"
+      }
+    ]
+  }
+}

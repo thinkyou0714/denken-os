@@ -31,6 +31,7 @@ import {
   questStatuses,
   weekIndexOf,
 } from "../quests.js";
+import { recordPracticeEvent } from "../service/events.js";
 import { getDailyGoal, getSoundLevel } from "../settings.js";
 import { installPrompt, progress, storage } from "../state/app.js";
 import { enqueueRequeue, practice, setCombo, todayCount } from "../state/practice.js";
@@ -185,7 +186,7 @@ export function revealDescriptive(host: HTMLElement, p: Problem): void {
     h(
       "div",
       { class: "gradeui solution" },
-      h("strong", {}, "模範解答（採点観点）"),
+      h("strong", {}, "模範解答（学習用の採点観点）"),
       h(
         "p",
         { class: "muted" },
@@ -249,7 +250,10 @@ export function finalize(
   const questsBefore = allQuestsClear(logsOfDay(progress.logs(), todayIdx), todayIdx);
   const weeklyBefore = allWeeklyQuestsClear(logsOfWeek(progress.logs(), weekIdx), weekIdx);
 
-  progress.record(p.topic, rating, Date.now(), timeMs, p.id, chosen);
+  progress.record(p.topic, practice.hintsShown > 0 ? "again" : rating, Date.now(), timeMs, p.id, chosen);
+  void recordPracticeEvent(p, chosen ?? p.answer, practice.hintsShown, practice.shownAt).catch(() =>
+    showToast("答案は保存待ちです。接続後に再送します。", "OK", () => {}),
+  );
   // フリーミアム: 無料枠カウンタは「学習タブの新しい問題」だけを数える。
   // 復習タブ発のドリル（pool）と再出題（requeue）は対象外（nextQuestion のゲートと対）。
   // 収益化未設定・Pro 解錠中は何も書かない。

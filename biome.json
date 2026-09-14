@@ -8,6 +8,8 @@
   "files": {
     "includes": [
       "lib/**",
+      "site/**",
+      "db/**",
       "scripts/**",
       "tests/**",
       "web/src/**",

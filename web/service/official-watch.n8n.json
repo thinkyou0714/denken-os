@@ -1,0 +1,186 @@
+{
+  "name": "DENKEN-OS 公式資料の変更候補",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Tokyo"
+  },
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "手動確認",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "weekly",
+      "name": "週次確認",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        160
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "sources",
+      "name": "公式の参照先",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return [{json:{url:'https://www.shiken.or.jp/chief/second/qa/',title:'第二種 公式問題・解答の更新候補',kind:'paper'}},{json:{url:'https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/electric/',title:'電力安全の公表情報・法規変更候補',kind:'law'}}];"
+      }
+    },
+    {
+      "id": "fetch",
+      "name": "原典を取得",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "html"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "draft",
+      "name": "変更候補に整形",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return $input.all().map((item,index)=>{const source=$('公式の参照先').all()[index].json;const html=String(item.json.html||'');const text=html.replace(/<script[\\s\\S]*?<\\/script>/gi,'').replace(/<style[\\s\\S]*?<\\/style>/gi,'').replace(/<[^>]*>/g,' ').replace(/\\s+/g,' ').trim();let hash=2166136261;for(const c of text){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}return {json:{...source,hash:(hash>>>0).toString(16),excerpt:text.slice(0,20000)}};});"
+      }
+    },
+    {
+      "id": "save",
+      "name": "監修待ちへ保存",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://denken-os.thinkyou0714.chatgpt.site/api/automation/draft",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 20000
+        }
+      }
+    },
+    {
+      "id": "notes",
+      "name": "接続と監修の条件",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -270
+      ],
+      "parameters": {
+        "width": 700,
+        "height": 180,
+        "content": "未稼働。保存ノードに、Sitesの許可された接続経路とAuthorizationヘッダーを資格情報として設定してください。キーをJSON本文に書かないでください。所有者限定のSitesへの外部接続可否を先に確認します。差分は候補として保存され、教材は自動公開されません。URLやPDF構造の変更時は監修画面で確認します。"
+      }
+    }
+  ],
+  "connections": {
+    "手動確認": {
+      "main": [
+        [
+          {
+            "node": "公式の参照先",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "週次確認": {
+      "main": [
+        [
+          {
+            "node": "公式の参照先",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "公式の参照先": {
+      "main": [
+        [
+          {
+            "node": "原典を取得",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "原典を取得": {
+      "main": [
+        [
+          {
+            "node": "変更候補に整形",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "変更候補に整形": {
+      "main": [
+        [
+          {
+            "node": "監修待ちへ保存",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

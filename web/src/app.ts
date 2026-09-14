@@ -1,3 +1,6 @@
+import { isSite } from "./service/platform.js";
+import { button, h, notice } from "./service/ui.js";
+import { registerLearningTools } from "./service/webmcp.js";
 /**
  * app.ts — 電験二種 学習OS（オフライン PWA）のエントリポイント。
  * タブ型 SPA: 学習 / 復習 / 模試 / 質問 / 進捗 / 公式 / 設定。
@@ -9,9 +12,10 @@ import { captureFirstTouch } from "./bridge.js";
 import { initEntitlements } from "./entitlements.js";
 import { onKeydown } from "./keyboard.js";
 import { runMigrations } from "./migrate.js";
-import { getTheme } from "./settings.js";
+import { cloudStorage } from "./service/cloud-storage.js";
+import { getExamDate, getTheme } from "./settings.js";
 import type { InstallPromptEvent } from "./state/app.js";
-import { applyTheme, loadFailed, setInstallPrompt, storage } from "./state/app.js";
+import { applyTheme, loadFailed, progress, setInstallPrompt, storage } from "./state/app.js";
 import { showToast } from "./ui/toast.js";
 import { runFreezeBridge } from "./views/practice.js";
 import { initRouting, renderHeader, renderNav, updateNetStatus } from "./views/router.js";
@@ -48,6 +52,25 @@ function registerServiceWorker(): void {
 }
 
 async function main(): Promise<void> {
+  if (isSite) {
+    try {
+      await cloudStorage.initialize();
+    } catch (error) {
+      const root = document.getElementById("view");
+      if (root) {
+        root.replaceChildren();
+        notice(root, error instanceof Error ? error.message : "接続を確認できません", true);
+        root.append(
+          h("a", { href: "/signin-with-chatgpt?return_to=%2F", target: "_top" }, "ChatGPTでサインイン"),
+          button("接続を再確認", () => {
+            location.reload();
+          }),
+        );
+      }
+      return;
+    }
+  }
+  progress.setExamDate(getExamDate(storage) || null);
   // localStorage スキーマのマイグレーション（現状 no-op。版の記録＋将来の足場）。
   // 描画前に実行し、以降のコードが新スキーマ前提で動けるようにする。
   runMigrations(storage);
@@ -118,6 +141,7 @@ async function main(): Promise<void> {
   });
   window.addEventListener("offline", updateNetStatus);
   registerServiceWorker();
+  if (isSite) registerLearningTools();
 }
 
 void main();

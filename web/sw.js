@@ -41,11 +41,21 @@
 //   (v25: ツールキット第4弾(力率改善コンデンサ容量・短絡電流/遮断容量・接地抵抗)で8モジュールへ拡張。
 //         帳票ツールは Excel ブック(.xlsx)の直読みに対応(ブラウザ内 unzip・外部送信なし))
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v25-688fa60f";
-// 問題データは科目別シャード（分割ロード）＋ combined フォールバックの両方をプリキャッシュする。
-// シャード一覧は科目の固定集合（6科目）に対応し、lib/shared/problem-shards.ts の SUBJECT_SLUGS と
-// 一致させること（該当0件の科目でも空配列シャードが必ず出力されるため 404 にならない）。
+const CACHE = "denken-os-v25-04912e96";
+// 通常学習の教材を同じ版でキャッシュ。生成問題の科目別ダウンロードは利用者が選ぶ。
+const APP_CHUNKS = [
+  "./dist/chunks/admin-ui-5HF7FJ3L.js",
+  "./dist/chunks/chunk-2EPQMSPZ.js",
+  "./dist/chunks/chunk-3B526KAU.js",
+  "./dist/chunks/chunk-3FMNLDQL.js",
+  "./dist/chunks/chunk-6W6S7DND.js",
+  "./dist/chunks/chunk-AOSVCUEL.js",
+  "./dist/chunks/chunk-ZOMCBPNO.js",
+  "./dist/chunks/lab-S23B4ZY7.js",
+  "./dist/chunks/tutor-ui-EQ6DWINB.js",
+];
 const ASSETS = [
+  ...APP_CHUNKS,
   "./",
   "./index.html",
   "./dist/app.js",
@@ -53,14 +63,9 @@ const ASSETS = [
   "./dist/toolkit.js",
   "./sheet-diff.html",
   "./dist/sheet-diff.js",
-  "./problems.json",
-  "./problems/manifest.json",
-  "./problems/theory.json",
-  "./problems/power.json",
-  "./problems/machine.json",
-  "./problems/law.json",
-  "./problems/power-mgmt.json",
-  "./problems/machine-ctrl.json",
+  "./service/manifest.json",
+  "./service/catalog.json",
+  "./service/lab.css",
   "./manifest.webmanifest",
   "./icon.svg",
 ];
@@ -69,7 +74,18 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((c) => c.addAll(ASSETS))
+      .then(async (c) => {
+        await c.addAll(ASSETS);
+        const manifest = await (await c.match("./service/manifest.json")).json();
+        const response = await fetch(`./service/${manifest.catalog.file}`);
+        if (!response.ok) throw new Error("Catalogue fetch failed");
+        const bytes = await response.clone().arrayBuffer();
+        const hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))]
+          .map((n) => n.toString(16).padStart(2, "0"))
+          .join("");
+        if (hash !== manifest.catalog.sha256) throw new Error("Catalogue integrity failed");
+        await c.put(`./service/${manifest.catalog.file}`, response);
+      })
       .then(() => self.skipWaiting()),
     // addAll が失敗した場合（ネットワークエラー等）は skipWaiting しない。
     // アクティブ化を保留することで、破損したキャッシュが使われるのを防ぐ。
@@ -80,7 +96,13 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((k) => k.startsWith("denken-") && k !== CACHE && k !== "denken-study-downloads")
+            .map((k) => caches.delete(k)),
+        ),
+      )
       // claim も waitUntil 内で待つ（activate 完了前に取りこぼさない）。
       .then(() => self.clients.claim()),
   );
@@ -99,6 +121,8 @@ function isSriAtomicPair(request) {
     path.endsWith("/") ||
     path.endsWith("/index.html") ||
     path.endsWith("/dist/app.js") ||
+    path.endsWith("/service/manifest.json") ||
+    path.endsWith("/service/lab.css") ||
     path.endsWith("/toolkit.html") ||
     path.endsWith("/dist/toolkit.js") ||
     path.endsWith("/sheet-diff.html") ||
@@ -112,7 +136,7 @@ function isSriAtomicPair(request) {
 // ただし SRI 原子ペア（index.html / dist/app.js）は上記の理由で裏差し替えしない。
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE);
-  const cached = await cache.match(request);
+  const cached = (await cache.match(request)) ?? (await (await caches.open("denken-study-downloads")).match(request));
   if (cached && isSriAtomicPair(request)) return cached;
   const network = fetch(request)
     .then((res) => {
@@ -140,6 +164,11 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   // 同一オリジンのみ SW が扱う（外部 API 等は素通し）。
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
+  if (
+    url.origin !== self.location.origin ||
+    url.pathname.startsWith("/api/") ||
+    /\/(signin-with-chatgpt|signout-with-chatgpt|callback)/.test(url.pathname)
+  )
+    return;
   event.respondWith(staleWhileRevalidate(event.request));
 });

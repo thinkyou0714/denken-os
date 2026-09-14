@@ -1,3 +1,4 @@
+import { isSite } from "../service/platform.js";
 /**
  * views/router.ts — TABS定義・ヘッダ・ナビ・ルーティング・エラーバウンダリ。
  */
@@ -27,6 +28,7 @@ import { renderSettings } from "./settings.js";
 let _persistErrNotified = false;
 
 export const TABS: ReadonlyArray<readonly [string, string, string]> = [
+  ...(isSite ? [["lab", "学習ラボ", "◈"] as const] : []),
   ["practice", "学習", "✏️"],
   ["review", "復習", "🔁"],
   ["exam", "模試", "📝"],
@@ -59,7 +61,7 @@ export function renderHeader(): void {
     todayCount: 0,
     dailyGoal: getDailyGoal(storage),
   }).daysLeft;
-  $("countdown").textContent = `試験まで ${days} 日`;
+  $("countdown").textContent = getExamDate(storage) ? `試験まで ${days} 日` : "試験日を設定";
   updateNetStatus();
 }
 
@@ -142,6 +144,8 @@ export function switchView(id: string, opts: { fromHistory?: boolean } = {}): vo
 
 export function render(opts: { focus?: boolean } = {}): void {
   const root = $("view");
+  document.body.dataset.studyShell = String(isSite && view === "lab");
+  if (view !== "lab") document.body.dataset.studyActive = "false";
   // replaceChildren() は innerHTML="" より冪等で、既存ノードのGCが効きやすい（II-157）。
   root.replaceChildren();
   // aria-busy: 描画中をスクリーンリーダーに伝える（II-157）。
@@ -169,10 +173,29 @@ export function render(opts: { focus?: boolean } = {}): void {
   try {
     // per-viewエラー境界（II-162）: 各タブの描画例外はそのタブ内でrecovery表示。
     // 親render はルーティングに専念し、1タブの例外が全体を白画面にしない。
-    if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
+    if (view === "lab")
+      renderViewSafe(root, "lab", () => {
+        const host = h("div", {});
+        root.append(host);
+        void import("../service/lab.js")
+          .then((m) => m.renderLab(host))
+          .catch((error) => renderErrorBoundary(host, error));
+      });
+    else if (view === "practice") renderViewSafe(root, "practice", () => renderPractice(root));
     else if (view === "review") renderViewSafe(root, "review", () => renderReview(root));
     else if (view === "exam") renderViewSafe(root, "exam", () => renderExamGated(root));
-    else if (view === "chat") renderViewSafe(root, "chat", () => renderChat(root));
+    else if (view === "chat")
+      renderViewSafe(root, "chat", () => {
+        if (!isSite) {
+          renderChat(root);
+          return;
+        }
+        const host = h("div", {});
+        root.append(host);
+        void import("../service/tutor-ui.js")
+          .then((m) => m.renderTutor(host))
+          .catch((error) => renderErrorBoundary(host, error));
+      });
     else if (view === "dashboard") renderViewSafe(root, "dashboard", () => renderDashboard(root));
     else if (view === "formulas") renderViewSafe(root, "formulas", () => renderFormulas(root));
     else if (view === "settings") renderViewSafe(root, "settings", () => renderSettings(root));
@@ -305,8 +328,9 @@ function maybeWarnStorage(): void {
 
 /** 現在の location.hash からタブ ID を取り出す（不明・空は practice）。 */
 function viewFromHash(): string {
-  const id = location.hash.replace(/^#/, "");
-  return isKnownView(id) ? id : "practice";
+  const raw = location.hash.replace(/^#/, "");
+  const id = isSite && raw.startsWith("lab/") ? "lab" : raw;
+  return isKnownView(id) ? id : isSite ? "lab" : "practice";
 }
 
 /** スキップリンク（href="#view"）由来の hash は経路ではないので無視する。 */
@@ -325,19 +349,25 @@ export function initRouting(): void {
     if (!isRouteHash()) return; // スキップリンクの #view は無視。
     const id = viewFromHash();
     if (id !== view) switchView(id, { fromHistory: true });
+    else if (isSite && id === "lab") window.dispatchEvent(new Event("denken-lab-route"));
   });
   // 手動の hash 変更（アドレスバー編集等）にも追従する。
   window.addEventListener("hashchange", () => {
     if (!isRouteHash()) return; // スキップリンクの #view は無視。
     const id = viewFromHash();
     if (id !== view) switchView(id, { fromHistory: true });
+    else if (isSite && id === "lab") window.dispatchEvent(new Event("denken-lab-route"));
   });
   // 初期 hash を尊重（共有 URL からの直接起動など）。既定は practice。
   const initial = viewFromHash();
   setView(initial);
   // 初期状態を replaceState で履歴に固定（戻るで空 hash 状態に落ちないように）。
   try {
-    history.replaceState({ view: initial }, "", `#${initial}`);
+    history.replaceState(
+      { view: initial },
+      "",
+      initial === "lab" && location.hash.startsWith("#lab/") ? location.hash : `#${initial}`,
+    );
   } catch {
     // history 不可環境でも以降の描画は通常どおり。
   }

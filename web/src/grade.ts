@@ -10,6 +10,7 @@
 import { ratingForScore } from "../../lib/curriculum/rubric.js";
 import type { Problem } from "../../lib/engine/schema.js";
 import type { Rating } from "../../lib/scheduler/types.js";
+import { gradeQuantity } from "../../lib/service/quantities.js";
 
 /**
  * ユーザー入力を数値文字列に正規化する。
@@ -47,6 +48,7 @@ export const NUMERIC_ABS_FLOOR = 1e-9;
  */
 export function isAnswerCorrect(problem: Problem, given: string): boolean {
   if (problem.format === "numeric") {
+    if (problem.grading) return gradeQuantity(given, problem.answer, problem.grading).correct === true;
     const normalized = normalizeNumericInput(given);
     // 空入力を弾く: Number("") は 0 なので、答えが "0" の問題で空回答が正解扱いになるのを防ぐ。
     if (normalized === "") return false;

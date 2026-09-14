@@ -101,13 +101,14 @@ describe("生成されたシャード（web/problems/）と combined の整合",
   });
 });
 
-describe("sw.js プリキャッシュにシャード＋マニフェストが含まれる", () => {
+describe("sw.js は通常教材を配り、検証用シャードは選択ダウンロードする", () => {
   const swSource = readFileSync(join(WEB, "sw.js"), "utf8");
 
-  it("manifest と全6シャードのパスが ASSETS に列挙されている", () => {
-    expect(swSource).toContain(`./${SHARD_DIR}/${MANIFEST_FILE}`);
+  it("通常教材マニフェストを含み、全科目の先読みをしない", () => {
+    expect(swSource).toContain("./service/manifest.json");
+    expect(swSource).toContain("./service/catalog.json");
     for (const slug of allShardSlugs()) {
-      expect(swSource, `${slug}.json が sw.js の ASSETS にない`).toContain(`./${SHARD_DIR}/${slug}.json`);
+      expect(swSource, `${slug}.json を一括先読みしない`).not.toContain(`./${SHARD_DIR}/${slug}.json`);
     }
   });
 });
