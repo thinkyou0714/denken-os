@@ -305,6 +305,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
             selected: z.array(z.string()),
             visited: z.array(z.object({ group: z.string(), at: z.number() })).default([]),
             reasons: z.record(z.string(), z.string()).default({}),
+            flagged: z.array(z.string()).max(200).default([]),
           })
           .parse(input.body);
         input.body = { ...previous, ...edits };

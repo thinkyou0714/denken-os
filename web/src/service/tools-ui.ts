@@ -47,6 +47,18 @@ export function renderTools(root: HTMLElement) {
   drillPanel(root);
   drawingPanel(root);
   audioPanel(root);
+  const panels = [...root.querySelectorAll<HTMLElement>(":scope > .lab-panel")];
+  const chooser = select(
+    "使う学習ツール",
+    panels.map((p) => p.querySelector("h3")?.textContent ?? "学習ツール"),
+    "図と式を操作する",
+  );
+  const show = () => {
+    for (const p of panels) p.hidden = p.querySelector("h3")?.textContent !== chooser.input.value;
+  };
+  chooser.input.onchange = show;
+  root.prepend(chooser.field);
+  show();
 }
 
 const MODELS: Record<string, { key: string; labels: string[]; values: number[] }> = {

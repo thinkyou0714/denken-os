@@ -41,16 +41,18 @@
 //   (v25: ツールキット第4弾(力率改善コンデンサ容量・短絡電流/遮断容量・接地抵抗)で8モジュールへ拡張。
 //         帳票ツールは Excel ブック(.xlsx)の直読みに対応(ブラウザ内 unzip・外部送信なし))
 // ★ CACHE の版数は build:web が自動更新する（プレースホルダ置換）。手動編集禁止。
-const CACHE = "denken-os-v25-92f727eb";
+const CACHE = "denken-os-v25-337a564a";
 // 通常学習の教材を同じ版でキャッシュ。生成問題の科目別ダウンロードは利用者が選ぶ。
 const APP_CHUNKS = [
   "./dist/chunks/admin-ui-46OJR3C3.js",
   "./dist/chunks/chunk-6O7ATRJ7.js",
+  "./dist/chunks/chunk-AOSVCUEL.js",
   "./dist/chunks/chunk-KB54JGPK.js",
   "./dist/chunks/chunk-OGXHBVVD.js",
-  "./dist/chunks/chunk-OOL2Y433.js",
-  "./dist/chunks/lab-TMF7WVXI.js",
-  "./dist/chunks/tutor-ui-GQPZDJ3H.js",
+  "./dist/chunks/chunk-P5KJL5IJ.js",
+  "./dist/chunks/chunk-XA67EF5X.js",
+  "./dist/chunks/lab-ZNU54Q66.js",
+  "./dist/chunks/tutor-ui-6JO7ANPR.js",
 ];
 const ASSETS = [
   ...APP_CHUNKS,

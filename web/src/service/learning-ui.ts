@@ -8,62 +8,187 @@ import { safeHtml } from "../ui/dom.js";
 import { solutionNode } from "../ui/widgets.js";
 import { type CatalogueProblem, catalogue } from "./catalog.js";
 import { allAttempts, download, saveRecord } from "./client.js";
+import { identity } from "./cloud-storage.js";
 import { saveAttempt } from "./events.js";
+import { disclosure, focusHeading, stat } from "./study-ui.js";
 import { area, button, check, h, input, notice, panel, select, table } from "./ui.js";
 
-export async function renderLearning(root: HTMLElement) {
+export interface LearningOptions {
+  ids?: string[];
+  subject?: string;
+  mode?: string;
+  autoStart?: boolean;
+  onExit?: () => void;
+}
+const MODES = ["自力演習", "復習", "未見候補テスト", "説明練習"];
+const MODE_LABELS: Record<string, string> = {
+  自力演習: "一問ずつ学ぶ",
+  復習: "解き直す",
+  未見候補テスト: "初めての問題で確認",
+  説明練習: "説明して理解する",
+};
+
+export async function renderLearning(root: HTMLElement, options: LearningOptions = {}) {
   const attempts = (await allAttempts()).items;
-  const settings = panel("自力演習を選ぶ");
-  const mode = select("練習の目的", ["自力演習", "復習", "未見候補テスト", "説明練習"]);
-  const subject = select("科目", ["すべて", ...new Set(catalogue.map((p) => p.subject))]);
+  const setup = panel("どの問題を解きますか？");
+  const mode = select("練習の目的", MODES, options.mode ?? "自力演習");
+  for (const option of mode.input.options) option.textContent = MODE_LABELS[option.value] ?? option.value;
+  const subject = select("科目", ["すべて", ...new Set(catalogue.map((p) => p.subject))], options.subject ?? "すべて");
   const skill = select("確認する技能", SKILLS, "式の選択");
-  const mix = check("慣れた分野は関連する論点を混ぜる");
-  const chooser = select("問題", []);
-  const work = h("div", {});
+  const mix = check("関連する論点を混ぜて出題する");
+  const chooser = select("最初の問題", []);
+  const count = select("一度に学ぶ問題数", ["1", "3", "5"], "5");
+  let candidates: CatalogueProblem[] = [];
+  const availability = h("p", { class: "muted", role: "status" });
+  const work = h("div", { class: "study-session" });
   const refresh = () => {
-    let candidates = catalogue.filter((p) => subject.input.value === "すべて" || p.subject === subject.input.value);
+    candidates = catalogue.filter((p) => subject.input.value === "すべて" || p.subject === subject.input.value);
     if (mode.input.value === "未見候補テスト")
       candidates = candidates.filter((p) => !attempts.some((a) => a.family === p.family || a.problemId === p.id));
-    if (mode.input.value === "復習")
+    if (mode.input.value === "復習") {
+      const latest = new Map<string, Attempt>();
+      for (const a of [...attempts].sort((a, b) => b.finishedAt - a.finishedAt))
+        if (!latest.has(a.problemId)) latest.set(a.problemId, a);
       candidates.sort(
-        (a, b) =>
-          Number(attempts.some((t) => t.problemId === b.id && !t.correct)) -
-          Number(attempts.some((t) => t.problemId === a.id && !t.correct)),
+        (a, b) => Number(latest.get(b.id)?.correct === false) - Number(latest.get(a.id)?.correct === false),
       );
+    }
     if (mix.input.checked)
       candidates = candidates
         .map((p) => ({ p, sort: crypto.getRandomValues(new Uint32Array(1))[0] ?? 0 }))
         .sort((a, b) => a.sort - b.sort)
-        .map((x) => x.p);
+        .map((v) => v.p);
     chooser.input.replaceChildren(
-      ...candidates.map((p) => h("option", { value: p.id }, `${p.subject}｜${p.topic}｜${p.id}`)),
+      ...candidates.map((p, i) =>
+        h(
+          "option",
+          { value: p.id },
+          `${i + 1}. ${p.topic} · ${p.format === "descriptive" ? "記述" : p.format === "numeric" ? "計算" : "選択"}`,
+        ),
+      ),
     );
+    availability.textContent = `${candidates.length}問から選べます。${mode.input.value === "未見候補テスト" ? "このモードではヒントを使わずに回答します。" : "回答すると、その場で解説を確認できます。"}`;
   };
   subject.input.onchange = refresh;
   mode.input.onchange = refresh;
   mix.input.onchange = refresh;
   refresh();
-  settings.append(
-    h("div", { class: "lab-grid" }, mode.field, subject.field, skill.field, chooser.field),
-    mix.field,
+  const startSession = (queue: CatalogueProblem[]) => {
+    if (!queue.length) {
+      notice(setup, "条件に合う問題がありません。科目や練習の目的を変えてください。", true);
+      return;
+    }
+    setup.hidden = true;
+    const outcomes: Attempt[] = [];
+    let index = 0;
+    const end = () => {
+      document.body.dataset.studyActive = "false";
+      work.replaceChildren();
+      const result = panel("今回の学習を振り返る");
+      result.classList.add("study-session-complete");
+      const scored = outcomes.filter((a) => a.correct !== null);
+      result.append(
+        h(
+          "dl",
+          { class: "study-stats" },
+          stat("回答した問題", `${outcomes.length}問`),
+          stat("正答", `${scored.filter((a) => a.correct).length} / ${scored.length}問`),
+          stat("ヒントなし", `${outcomes.filter((a) => a.hints === 0 && !a.revealed).length}問`),
+        ),
+      );
+      const retry = outcomes.filter((a) => a.correct === false || a.hints > 0 || a.revealed);
+      if (retry.length) result.append(h("p", {}, `${retry.length}問は、時間を空けてもう一度確認しましょう。`));
+      else result.append(h("p", {}, "おつかれさまでした。次は復習の時期に合わせて確認しましょう。"));
+      if (outcomes.some((a) => a.correct === null))
+        result.append(h("p", { class: "muted" }, "記述問題は自動で正誤を決めず、答案を保存しています。"));
+      result.append(
+        button("今日の学習へ戻る", () => (options.onExit ? options.onExit() : reset()), true),
+        button("別の問題を選ぶ", reset),
+      );
+      work.append(result);
+      if (work.isConnected) focusHeading(result.querySelector("h3"));
+    };
+    const reset = () => {
+      document.body.dataset.studyActive = "false";
+      setup.hidden = false;
+      work.replaceChildren();
+      refresh();
+      focusHeading(setup.querySelector("h3"));
+    };
+    const next = () => {
+      if (index >= queue.length) {
+        end();
+        return;
+      }
+      work.replaceChildren();
+      const bar = h(
+        "div",
+        { class: "study-session-bar" },
+        button("問題選択へ戻る", reset),
+        h("span", {}, `${index + 1} / ${queue.length} 問`),
+        h("span", { class: "study-mode-label" }, MODE_LABELS[mode.input.value] ?? mode.input.value),
+      );
+      const meter = h("progress", {
+        class: "study-progress",
+        value: String(index),
+        max: String(queue.length),
+        "aria-label": "今回の学習の進み具合",
+      });
+      const question = h("div", {});
+      work.append(bar, meter, question);
+      const currentProblem = queue[index];
+      if (!currentProblem) {
+        end();
+        return;
+      }
+      renderQuestion(question, currentProblem, skill.input.value, mode.input.value, attempts, {
+        onComplete: (attempt) => {
+          outcomes.push(attempt);
+        },
+        onNext: () => {
+          index++;
+          next();
+        },
+        nextLabel: index === queue.length - 1 ? "学習のまとめを見る" : "次の問題へ",
+      });
+      if (work.isConnected) focusHeading(question.querySelector("h3"));
+    };
+    next();
+  };
+  setup.append(
+    h("div", { class: "lab-grid" }, subject.field, mode.field),
+    chooser.field,
+    disclosure("出題条件を詳しく選ぶ", h("div", { class: "lab-grid" }, count.field, skill.field), mix.field),
+    availability,
     button(
-      "この問題を開始",
+      "学習を始める",
       () => {
-        const p = catalogue.find((p) => p.id === chooser.input.value);
-        work.replaceChildren();
-        if (!p) {
-          notice(
-            work,
-            "条件に合う問題がありません。未見系列が不足する場合は、確認済みの別系列を追加する必要があります。",
-          );
-          return;
-        }
-        renderQuestion(work, p, skill.input.value, mode.input.value, attempts);
+        const chosen = candidates.find((p) => p.id === chooser.input.value);
+        startSession(
+          chosen ? [chosen, ...candidates.filter((p) => p.id !== chosen.id)].slice(0, Number(count.input.value)) : [],
+        );
       },
       true,
     ),
   );
-  root.append(settings, work);
+  root.append(setup, work);
+  if (options.autoStart && options.ids?.length)
+    startSession(options.ids.map((id) => catalogue.find((p) => p.id === id)).filter((p): p is CatalogueProblem => !!p));
+}
+
+interface QuestionActions {
+  onComplete?: (attempt: Attempt) => void;
+  onNext?: () => void;
+  nextLabel?: string;
+}
+interface Draft {
+  answer: string;
+  hints: number;
+  revealed: boolean;
+  why: string;
+  estimate: string;
+  cause: string;
+  startedAt: number;
 }
 
 export function renderQuestion(
@@ -72,92 +197,193 @@ export function renderQuestion(
   skill: string,
   modeName: string,
   history: Attempt[],
+  options: QuestionActions = {},
 ) {
-  const startedAt = Date.now();
-  let hints = 0,
-    revealed = false,
-    given = "",
-    submitted = false;
   const mode: Attempt["mode"] = modeName === "未見候補テスト" ? "holdout" : modeName === "復習" ? "review" : "practice";
-  const wrap = panel(p.topic),
-    unseen = check("この問題と同じ解法の系列を、以前に学習していない");
-  wrap.append(
-    h("p", { class: "lab-meta" }, `${p.subject} ／ ${p.id} ／ ${skill}`),
-    h("div", { class: "statement", html: safeHtml(formatMath(p.statement)) }),
-  );
-  if (p.figure) wrap.append(h("div", { class: "figure", html: safeHtml(p.figure) }));
-  if (mode === "holdout") wrap.append(unseen.field);
-  const work = h("div", { class: "lab-answer-area" });
-  const answer = area(
-    p.format === "descriptive" ? "自分の答案・説明" : "自分の答え",
-    "",
-    p.format === "descriptive" ? 6 : 2,
-  );
-  if (p.format === "multiple_choice" && p.choices) {
-    for (const choice of p.choices) {
-      const b = button(choice, () => {
-        given = choice;
-        answer.input.value = choice;
-        for (const other of work.querySelectorAll("button")) other.setAttribute("aria-pressed", String(other === b));
-      });
-      b.setAttribute("aria-pressed", "false");
-      work.append(b);
+  const draftKey = identity ? `denken:studyDraft:${identity.id}:${p.id}:${p.revision}:${mode}` : null;
+  let draft: Draft | null = null;
+  if (draftKey) {
+    try {
+      draft = JSON.parse(sessionStorage.getItem(draftKey) ?? "null") as Draft | null;
+    } catch {
+      /* A malformed tab-local draft must not block study. */
     }
   }
-  work.append(answer.field);
-  const why = area("この式を選んだ理由・成立条件（任意）", "", 2);
-  const estimate = input("答えの桁・上限下限の予想（任意）");
-  const cause = select("つまずきの原因", CAUSES);
-  const scaffold = check("答案の骨組みを表示する");
-  const scaffolding = h("div", { class: "lab-scaffold" });
-  scaffold.input.onchange = () => {
-    scaffolding.replaceChildren();
-    if (scaffold.input.checked) {
-      hints++;
+  let startedAt = typeof draft?.startedAt === "number" && draft.startedAt <= Date.now() ? draft.startedAt : Date.now();
+  if (Date.now() - startedAt > 24 * 3600000) startedAt = Date.now();
+  let hints =
+    typeof draft?.hints === "number" && Number.isFinite(draft.hints) ? Math.max(0, Math.min(100, draft.hints)) : 0;
+  let revealed = draft?.revealed === true,
+    submitted = false;
+  const wrap = panel(p.topic);
+  wrap.classList.add("study-question-workspace");
+  wrap.dataset.questionActive = "true";
+  if (root.isConnected) document.body.dataset.studyActive = "true";
+  const question = h(
+    "section",
+    { class: "study-question-stem", "aria-label": "問題文" },
+    h(
+      "p",
+      { class: "study-question-meta" },
+      `${p.subject} · ${p.format === "descriptive" ? "記述問題" : p.format === "numeric" ? "計算問題" : "選択問題"}`,
+    ),
+    h("div", { class: "statement study-statement", html: safeHtml(formatMath(p.statement)) }),
+  );
+  if (p.figure) question.append(h("div", { class: "figure study-figure", html: safeHtml(p.figure) }));
+  const why = area("この式を選んだ理由・成立条件", typeof draft?.why === "string" ? draft.why : "", 3);
+  const estimate = input("答えの桁・上限下限の予想", typeof draft?.estimate === "string" ? draft.estimate : "");
+  const cause = select("つまずきの原因", CAUSES, typeof draft?.cause === "string" ? draft.cause : "不明");
+  question.append(disclosure("考えたことをメモする（任意）", why.field, estimate.field, cause.field));
+  question.append(
+    disclosure(
+      "出典・問題情報",
+      h("p", {}, p.source.citation ?? "DENKEN-OS独自教材"),
+      h("p", { class: "lab-meta" }, `${p.id} · ${p.revision.slice(0, 12)} · ${skill}`),
+    ),
+  );
+  const work = h("section", { class: "study-answer-pane", "aria-label": "回答と解説" });
+  const answer = area(
+    p.format === "descriptive" ? "自分の答案・説明" : "自分の答え",
+    typeof draft?.answer === "string" ? draft.answer : "",
+    p.format === "descriptive" ? 8 : 2,
+  );
+  const saveDraft = () => {
+    if (!draftKey || submitted) return;
+    try {
+      sessionStorage.setItem(
+        draftKey,
+        JSON.stringify({
+          answer: answer.input.value,
+          hints,
+          revealed,
+          why: why.input.value,
+          estimate: estimate.input.value,
+          cause: cause.input.value,
+          startedAt,
+        }),
+      );
+    } catch {
+      /* Explicit submit remains available if tab storage is full. */
     }
-    if (scaffold.input.checked)
-      scaffolding.append(
+  };
+  for (const field of [answer.input, why.input, estimate.input, cause.input])
+    field.addEventListener("input", saveDraft);
+  const answerControls = h("div", { class: "study-answer-controls" });
+  answerControls.append(h("h4", {}, p.format === "multiple_choice" ? "答えを一つ選ぶ" : "自分の答えを書く"));
+  const radios: HTMLInputElement[] = [];
+  if (p.format === "multiple_choice" && p.choices) {
+    const choices = h("fieldset", { class: "study-choices" }, h("legend", { class: "sr-only" }, "回答の選択肢"));
+    for (const [i, choice] of p.choices.entries()) {
+      const radio = h("input", { type: "radio", name: `answer-${p.id}`, value: choice }) as HTMLInputElement;
+      radio.checked = answer.input.value === choice;
+      radio.onchange = () => {
+        if (!submitted) {
+          answer.input.value = choice;
+          saveDraft();
+        }
+      };
+      radios.push(radio);
+      choices.append(
+        h(
+          "label",
+          { class: "study-choice" },
+          radio,
+          h("span", { class: "study-choice-key", "aria-hidden": "true" }, String(i + 1)),
+          h("span", { html: safeHtml(formatMath(choice)) }),
+        ),
+      );
+    }
+    answerControls.append(choices);
+  } else {
+    answer.input.placeholder =
+      p.format === "descriptive" ? "使う式 → 代入 → 計算 → 結論の順に書いてみましょう。" : "数値と、必要な単位を入力";
+    answerControls.append(answer.field);
+    if (p.format === "numeric")
+      answerControls.append(
+        h(
+          "p",
+          { class: "lab-meta" },
+          p.grading?.requireUnit
+            ? `単位「${p.grading.unit}」を付けて回答してください。`
+            : "半角・全角の数値で回答できます。",
+        ),
+      );
+  }
+  const unseen = check("この問題と同じ解法の問題を、以前に学習していない");
+  if (mode === "holdout") answerControls.append(unseen.field);
+  const result = h("div", { class: "study-result" });
+  const hintBox = h("div", { class: "lab-hints", "aria-live": "polite" });
+  let stepHints = 0;
+  const hint = button("考え方のヒント", () => {
+    const max = Math.max(0, p.solution.length - 1);
+    if (stepHints >= max) {
+      notice(hintBox, "ここまでの式から計算してみましょう。解説全体を開くこともできます。");
+      return;
+    }
+    hints = Math.min(100, hints + 1);
+    const text = p.solution[stepHints++] ?? "";
+    saveDraft();
+    hintBox.append(h("div", { class: "study-hint", html: safeHtml(formatMath(text)) }));
+  });
+  const scaffold = check("答案の組み立て方を見る");
+  const scaffoldBody = h("div", {});
+  scaffold.input.onchange = () => {
+    scaffoldBody.replaceChildren();
+    if (scaffold.input.checked) {
+      hints = Math.min(100, hints + 1);
+      saveDraft();
+      scaffoldBody.append(
         h(
           "ol",
           {},
-          h("li", {}, "条件と、求める量を整理する"),
-          h("li", {}, "使う式と、適用できる理由を書く"),
-          h("li", {}, "単位をそろえて代入する"),
-          h("li", {}, "結論に単位を付け、概算・逆算する"),
+          ...[
+            "条件と求める量を整理する",
+            "使う式と理由を書く",
+            "単位をそろえて代入する",
+            "結論に単位を付けて検算する",
+          ].map((text) => h("li", {}, text)),
         ),
       );
+    }
   };
-  const hintBox = h("div", { class: "lab-hints" });
-  const hint = button("考え方のヒントを一つ", () => {
-    if (mode === "holdout") {
-      notice(hintBox, "未見候補テストでは支援を使いません。練習へ切り替えて利用してください。");
-      return;
-    }
-    const max = Math.max(0, p.solution.length - 1);
-    if (hints >= max) {
-      notice(hintBox, "ここまでの式から自分で計算してみてください。必要なら解説全体を開けます。");
-      return;
-    }
-    hints++;
-    hintBox.append(h("p", {}, `ヒント${hints}：${p.solution[hints - 1]}`));
-  });
-  const reveal = button("解説を確認する", () => {
+  const reveal = button("解説を見てから学ぶ", () => {
     revealed = true;
-    hintBox.replaceChildren(solutionNode(p, "確認済み解説"));
+    saveDraft();
+    hintBox.replaceChildren(
+      h("p", { class: "lab-meta" }, "解説を見た回答として記録します。"),
+      solutionNode(p, "確認済み解説"),
+    );
   });
-  const result = h("div", {}),
-    actions = h("div", { class: "lab-actions" });
+  const help = disclosure(
+    "解けないときのサポート",
+    h("div", { class: "lab-actions" }, hint, reveal),
+    scaffold.field,
+    scaffoldBody,
+    hintBox,
+  );
+  if (mode === "holdout") {
+    hint.disabled = true;
+    reveal.disabled = true;
+    scaffold.input.disabled = true;
+    help.hidden = true;
+  }
   const submit = button(
-    p.format === "descriptive" ? "答案を保存して確認" : "回答して確認",
+    p.format === "descriptive" ? "答案を保存して確認する" : "回答する",
     async () => {
       if (submitted) return;
-      given = answer.input.value.trim();
+      const given = answer.input.value.trim();
+      result.replaceChildren();
       if (!given) {
-        notice(result, "回答を入力してください", true);
+        notice(result, "答えを入力、または選択してください。", true);
+        (radios[0] ?? answer.input).focus();
         return;
       }
-      if (mode === "holdout" && (!unseen.input.checked || revealed)) {
-        notice(result, "未見・無支援の条件を満たしません。練習として保存するか、別の未見候補を選んでください。", true);
+      if (mode === "holdout" && (!unseen.input.checked || hints > 0 || revealed)) {
+        notice(
+          result,
+          "初めての問題であることを確認してください。ヒントや解説を見た場合は練習モードで回答してください。",
+          true,
+        );
         return;
       }
       const correct =
@@ -189,12 +415,7 @@ export function renderQuestion(
         cause: cause.input.value as Attempt["cause"],
         graderVersion: "service-1",
       };
-      try {
-        await saveAttempt(attempt);
-        notice(result, "答案を端末に記録しました。同期状況は画面上部で確認できます。");
-      } catch {
-        notice(result, "答案を端末の保存待ちに残しました。接続後に再送します。");
-      }
+      await saveAttempt(attempt);
       progress.record(
         p.topic,
         correct && !hints && !revealed ? "good" : "again",
@@ -204,49 +425,75 @@ export function renderQuestion(
         given,
       );
       submitted = true;
+      if (draftKey) sessionStorage.removeItem(draftKey);
       answer.input.readOnly = true;
+      for (const radio of radios) radio.disabled = true;
+      unseen.input.disabled = true;
+      submit.hidden = true;
+      help.hidden = true;
       history.push(attempt);
-      result.append(
+      options.onComplete?.(attempt);
+      const outcome = h(
+        "div",
+        { class: `study-outcome ${correct === null ? "held" : correct ? "correct" : "incorrect"}`, role: "status" },
         h(
           "h4",
+          { tabindex: "-1" },
+          correct === null ? "答案を保存しました" : correct ? "正解です" : "ここを確認しましょう",
+        ),
+        h(
+          "p",
           {},
           correct === null
-            ? "記述答案は観点別に確認します"
-            : correct
-              ? "正答と一致しました"
-              : "正答と照合して復習しましょう",
+            ? "解説と自分の答案を、手順ごとに見比べましょう。"
+            : `${hints > 0 || revealed ? "ヒント・解説を使った回答" : "自力での回答"}として記録しました。`,
         ),
-        solutionNode(p, "解説"),
       );
+      result.append(outcome);
+      if (correct !== null)
+        result.append(
+          h(
+            "div",
+            { class: "study-answer-comparison" },
+            h("div", {}, h("span", {}, "あなたの答え"), h("strong", { html: safeHtml(formatMath(given)) })),
+            h("div", {}, h("span", {}, "正答"), h("strong", { html: safeHtml(formatMath(p.answer)) })),
+          ),
+        );
+      result.append(solutionNode(p, "解き方を理解する"));
       if (p.format === "descriptive")
         result.append(
-          table(
-            ["行", "数値式の確認", "結果"],
-            inspectSteps(given).map((row) => [row.line, row.status, row.reason]),
-          ),
-          h(
-            "p",
-            { class: "muted" },
-            "数値式の一致だけで、電気的な前提や論説の正しさは判定しません。解釈できない式は保留です。",
+          disclosure(
+            "数値式の検算結果",
+            table(
+              ["行", "数値式の確認", "結果"],
+              inspectSteps(given).map((row) => [row.line, row.status, row.reason]),
+            ),
+            h(
+              "p",
+              { class: "muted" },
+              "数値の一致だけで電気的な前提や論説の正しさは判定しません。解釈できない式は保留です。",
+            ),
           ),
         );
-      if (p.choices) {
+      if (p.choices)
         result.append(
-          h("h4", {}, "各選択肢の確認"),
-          table(
-            ["選択肢", "照合", "自分で確認する点"],
-            p.choices.map((choice) => [
-              choice,
-              choice === p.answer ? "正答" : "不一致",
-              choice === p.answer ? "解説の前提・単位を確認" : distractorReason(choice, p.answer),
-            ]),
+          disclosure(
+            "ほかの選択肢を確認する",
+            table(
+              ["選択肢", "照合", "確認する点"],
+              p.choices.map((choice) => [
+                choice,
+                choice === p.answer ? "正答" : "不一致",
+                choice === p.answer ? "解説の前提・単位を確認" : distractorReason(choice, p.answer),
+              ]),
+            ),
           ),
         );
-      }
-      const next = PREREQUISITES[cause.input.value] ?? ["問題の条件", "使う式", "単位と検算"];
-      result.append(
-        h("h4", {}, "戻って確認する前提"),
-        h("ul", {}, ...next.map((v) => h("li", {}, v))),
+      const reflection = area("次に気をつけること（任意）", "", 2);
+      const reflect = disclosure(
+        "つまずきをノートに残す",
+        cause.field,
+        reflection.field,
         button("間違いノートへ残す", async () => {
           await saveRecord("note", crypto.randomUUID(), {
             problemId: p.id,
@@ -256,62 +503,70 @@ export function renderQuestion(
             cause: cause.input.value,
             reason: why.input.value,
             estimate: estimate.input.value,
-            text: "",
+            text: reflection.input.value,
             createdAt: Date.now(),
           });
-          notice(result, "版付きのノートを保存しました");
-        }),
-        button("人による確認を依頼欄に残す", async () => {
-          await saveRecord("support", crypto.randomUUID(), {
-            problemId: p.id,
-            revision: p.revision,
-            question: given,
-            context: why.input.value,
-            status: "waiting",
-            createdAt: Date.now(),
-            shareWithReviewer: true,
-          });
-          notice(result, "確認待ちに登録しました。対応時間は未設定です。");
+          notice(reflect, "学習ノートに保存しました");
         }),
       );
+      result.append(reflect);
+      result.append(
+        disclosure(
+          "前提の確認・質問・書き出し",
+          h(
+            "ul",
+            {},
+            ...(PREREQUISITES[cause.input.value] ?? ["問題の条件", "使う式", "単位と検算"]).map((text) =>
+              h("li", {}, text),
+            ),
+          ),
+          button("監修者への確認依頼を残す", async () => {
+            await saveRecord("support", crypto.randomUUID(), {
+              problemId: p.id,
+              revision: p.revision,
+              question: given,
+              context: why.input.value,
+              status: "waiting",
+              createdAt: Date.now(),
+              shareWithReviewer: true,
+            });
+            notice(result, "確認待ちに登録しました。対応時間は未設定です。");
+          }),
+          button("ノート・別のAIへ引き継ぐ", () =>
+            download(
+              `DENKEN-${p.id}.md`,
+              portableContext({
+                problemId: p.id,
+                revision: p.revision,
+                statement: p.statement,
+                answer: given,
+                hints,
+                source: p.source.citation ?? "DENKEN-OS独自教材",
+              }),
+              "text/markdown",
+            ),
+          ),
+        ),
+      );
+      if (options.onNext)
+        result.append(
+          h("div", { class: "study-next-action" }, button(options.nextLabel ?? "次の問題へ", options.onNext, true)),
+        );
+      if (result.isConnected) focusHeading(outcome.querySelector("h4"));
     },
     true,
   );
-  if (mode === "holdout") {
-    hint.disabled = true;
-    reveal.disabled = true;
-    scaffold.input.disabled = true;
-  }
-  actions.append(hint, reveal, submit);
-  const exportContext = () =>
-    portableContext({
-      problemId: p.id,
-      revision: p.revision,
-      statement: p.statement,
-      answer: answer.input.value,
-      hints,
-      source: p.source.citation ?? "DENKEN-OS独自教材",
-    });
-  const exportButton = button("ノート・別のAIへ引き継ぐ", () =>
-    download(`DENKEN-${p.id}.md`, exportContext(), "text/markdown"),
+  const actions = h(
+    "div",
+    { class: "study-submit" },
+    submit,
+    h("span", { class: "lab-meta" }, "入力途中の答えは、このタブで復元できます。"),
   );
-  wrap.append(
-    work,
-    why.field,
-    estimate.field,
-    cause.field,
-    scaffold.field,
-    scaffolding,
-    actions,
-    hintBox,
-    result,
-    exportButton,
-    h(
-      "p",
-      { class: "muted" },
-      `出典：${p.source.citation ?? "DENKEN-OS独自教材"} ／ 問題版 ${p.revision.slice(0, 12)}`,
-    ),
-  );
+  if (draft?.answer) answerControls.append(h("p", { class: "lab-meta" }, "入力途中の回答を復元しました。"));
+  if (revealed || hints > 0)
+    answerControls.append(h("p", { class: "lab-meta" }, "前回この問題で使用したヒント・解説も記録に引き継ぎます。"));
+  work.append(answerControls, actions, help, result);
+  wrap.append(h("div", { class: "study-problem-columns" }, question, work));
   root.append(wrap);
 }
 
@@ -319,10 +574,9 @@ function distractorReason(choice: string, answer: string): string {
   const get = (value: string) => Number(value.normalize("NFKC").match(/[-+]?\d+(?:\.\d+)?/)?.[0]);
   const given = get(choice),
     correct = get(answer);
-  if (!Number.isFinite(given) || !Number.isFinite(correct) || !correct)
-    return "式を適用する条件・単位・選択肢の内容を解説と比較";
+  if (!Number.isFinite(given) || !Number.isFinite(correct) || !correct) return "式の適用条件・単位・内容を解説と比較";
   const ratio = given / correct;
-  const factors: [[number, string], [number, string], [number, string], [number, string], [number, string]] = [
+  const factors: [number, string][] = [
     [1000, "k/Mなどの接頭語"],
     [0.001, "k/Mなどの接頭語"],
     [3, "三相と一相の区別"],

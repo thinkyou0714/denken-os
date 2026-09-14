@@ -3,13 +3,22 @@ import { catalogue } from "./catalog.js";
 import { api, download, records, saveRecord } from "./client.js";
 import { cloudStorage, identity } from "./cloud-storage.js";
 import { flushAttempts } from "./events.js";
+import { disclosure, emptyState } from "./study-ui.js";
 import { area, button, check, h, input, link, notice, panel, select, table } from "./ui.js";
 
 export async function renderData(root: HTMLElement) {
   await notesPanel(root);
-  await imagePanel(root);
-  migrationPanel(root);
-  await feedbackPanel(root);
+  const images = h("div", {}),
+    migration = h("div", {}),
+    feedback = h("div", {});
+  await imagePanel(images);
+  migrationPanel(migration);
+  await feedbackPanel(feedback);
+  root.append(
+    disclosure("手書き答案を保存・確認する", images),
+    disclosure("記録の移行・取り込み", migration),
+    disclosure("質問の回答・フィードバック", feedback),
+  );
   const storage = panel(
     "自分のデータを管理する",
     "学習記録は本人ごとに保存します。保存待ちの内容は端末に残し、再送します。",
@@ -58,15 +67,19 @@ export async function renderData(root: HTMLElement) {
             )
               localStorage.removeItem(key);
           }
+          for (let i = sessionStorage.length - 1; i >= 0; i--) {
+            const key = sessionStorage.key(i);
+            if (key?.startsWith(`denken:studyDraft:${identity.id}:`)) sessionStorage.removeItem(key);
+          }
         }
         notice(storage, "学習記録を削除しました。画面を再読み込みしてください。");
       }),
     ),
   );
-  root.append(storage);
+  root.append(disclosure("バックアップ・保存待ち・データ管理", storage));
 }
 async function notesPanel(root: HTMLElement) {
-  const wrap = panel("間違いノートと訂正");
+  const wrap = panel("学習ノート");
   const topic = input("論点"),
     text = area("自分の説明・気づいたこと"),
     cause = select("つまずき", [
@@ -82,36 +95,64 @@ async function notesPanel(root: HTMLElement) {
     ]);
   const rows = await records("note"),
     list = h("div", {});
+  const search = input("ノートを検索");
+  search.input.type = "search";
+  search.input.placeholder = "論点や気づいたことで検索";
   const render = () => {
     list.replaceChildren();
-    for (const row of rows.items) {
+    const found = rows.items.filter((r) =>
+      JSON.stringify(r.body).toLocaleLowerCase().includes(search.input.value.toLocaleLowerCase()),
+    );
+    if (!found.length)
+      list.append(
+        emptyState(
+          rows.items.length ? "該当するノートがありません" : "気づきを一つ、残しておきましょう",
+          rows.items.length
+            ? "キーワードを変えて探してみてください。"
+            : "演習の解説から、間違いの原因や次に気をつけることを保存できます。",
+        ),
+      );
+    for (const row of found) {
       const b = row.body;
       const card = panel(String(b.topic ?? b.type ?? "ノート"));
       card.append(
-        h("p", {}, String(b.text ?? b.reason ?? b.answer ?? "")),
-        h("p", { class: "muted" }, [b.problemId, b.revision, b.cause].filter(Boolean).join(" ／ ")),
+        h("p", { class: "lab-prose" }, String(b.text || b.reason || b.answer || "")),
+        h(
+          "p",
+          { class: "muted" },
+          [b.cause, new Date(row.updated_at).toLocaleDateString("ja-JP")].filter(Boolean).join(" · "),
+        ),
       );
       const edit = area("追記・修正", String(b.text ?? ""));
       let revision = row.revision;
       card.append(
-        edit.field,
-        button("ノートを更新", async () => {
-          const result = await saveRecord("note", row.id, { ...b, text: edit.input.value }, revision);
-          revision = result.revision;
-          notice(card, "更新しました");
-        }),
-        button("Markdownで書き出す", () =>
-          download(
-            `DENKEN-note-${row.id}.md`,
-            `# ${b.topic ?? "学習ノート"}\n\n問題: ${b.problemId ?? ""}\n版: ${b.revision ?? ""}\n\n${edit.input.value}\n\n自分の答案: ${b.answer ?? ""}\n原因: ${b.cause ?? ""}`,
-            "text/markdown",
+        disclosure(
+          "ノートを編集・書き出す",
+          edit.field,
+          button("ノートを更新", async () => {
+            const result = await saveRecord("note", row.id, { ...b, text: edit.input.value }, revision);
+            revision = result.revision;
+            row.revision = result.revision;
+            b.text = edit.input.value;
+            const text = card.querySelector<HTMLElement>(".lab-prose");
+            if (text) text.textContent = edit.input.value;
+            notice(card, "更新しました");
+          }),
+          button("Markdownで書き出す", () =>
+            download(
+              `DENKEN-note-${row.id}.md`,
+              `# ${b.topic ?? "学習ノート"}\n\n問題: ${b.problemId ?? ""}\n版: ${b.revision ?? ""}\n\n${edit.input.value}\n\n自分の答案: ${b.answer ?? ""}\n原因: ${b.cause ?? ""}`,
+              "text/markdown",
+            ),
           ),
+          h("p", { class: "lab-meta" }, [b.problemId, b.revision].filter(Boolean).join(" ／ ")),
         ),
       );
       list.append(card);
     }
   };
-  wrap.append(
+  const composer = disclosure(
+    "新しいノートを書く",
     topic.field,
     text.field,
     cause.field,
@@ -133,8 +174,9 @@ async function notesPanel(root: HTMLElement) {
       },
       true,
     ),
-    list,
   );
+  search.input.oninput = render;
+  wrap.append(search.field, composer, list);
   root.append(wrap);
   render();
   const corrections = await records("correction");
@@ -150,7 +192,7 @@ async function notesPanel(root: HTMLElement) {
     ),
   );
   if (!corrections.items.length) notice(digest, "登録された訂正情報はありません。");
-  root.append(digest);
+  root.append(disclosure("教材の訂正情報を確認する", digest));
 }
 async function imagePanel(root: HTMLElement) {
   const wrap = panel(

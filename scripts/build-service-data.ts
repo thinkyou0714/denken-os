@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import "./build-ui-research.js";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { templateSupervisionReport } from "../lib/audit/template-supervision.js";
 import { problemSchema } from "../lib/engine/schema.js";

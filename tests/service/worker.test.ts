@@ -93,10 +93,13 @@ describe("authenticated study service with actual SQLite", () => {
         await request("records/exam", "owner", "POST", {
           id: start.id,
           expectedRevision: 1,
-          body: { answers: { q1_1: "カ" }, selected: ["q7"] },
+          body: { answers: { q1_1: "カ" }, selected: ["q7"], flagged: ["q1"] },
         })
       ).status,
     ).toBe(201);
+    expect(await (await request("records/exam", "owner")).json()).toMatchObject({
+      items: [{ body: { flagged: ["q1"] } }],
+    });
     const input = {
       paperId: "denken2-2026-theory",
       revision: "official-20260830-v1",

@@ -144,6 +144,8 @@ export function switchView(id: string, opts: { fromHistory?: boolean } = {}): vo
 
 export function render(opts: { focus?: boolean } = {}): void {
   const root = $("view");
+  document.body.dataset.studyShell = String(isSite && view === "lab");
+  if (view !== "lab") document.body.dataset.studyActive = "false";
   // replaceChildren() は innerHTML="" より冪等で、既存ノードのGCが効きやすい（II-157）。
   root.replaceChildren();
   // aria-busy: 描画中をスクリーンリーダーに伝える（II-157）。
@@ -326,7 +328,8 @@ function maybeWarnStorage(): void {
 
 /** 現在の location.hash からタブ ID を取り出す（不明・空は practice）。 */
 function viewFromHash(): string {
-  const id = location.hash.replace(/^#/, "");
+  const raw = location.hash.replace(/^#/, "");
+  const id = isSite && raw.startsWith("lab/") ? "lab" : raw;
   return isKnownView(id) ? id : isSite ? "lab" : "practice";
 }
 
@@ -346,19 +349,25 @@ export function initRouting(): void {
     if (!isRouteHash()) return; // スキップリンクの #view は無視。
     const id = viewFromHash();
     if (id !== view) switchView(id, { fromHistory: true });
+    else if (isSite && id === "lab") window.dispatchEvent(new Event("denken-lab-route"));
   });
   // 手動の hash 変更（アドレスバー編集等）にも追従する。
   window.addEventListener("hashchange", () => {
     if (!isRouteHash()) return; // スキップリンクの #view は無視。
     const id = viewFromHash();
     if (id !== view) switchView(id, { fromHistory: true });
+    else if (isSite && id === "lab") window.dispatchEvent(new Event("denken-lab-route"));
   });
   // 初期 hash を尊重（共有 URL からの直接起動など）。既定は practice。
   const initial = viewFromHash();
   setView(initial);
   // 初期状態を replaceState で履歴に固定（戻るで空 hash 状態に落ちないように）。
   try {
-    history.replaceState({ view: initial }, "", `#${initial}`);
+    history.replaceState(
+      { view: initial },
+      "",
+      initial === "lab" && location.hash.startsWith("#lab/") ? location.hash : `#${initial}`,
+    );
   } catch {
     // history 不可環境でも以降の描画は通常どおり。
   }
