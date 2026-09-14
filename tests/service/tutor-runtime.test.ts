@@ -74,7 +74,7 @@ it("uses the selected provider's key and reports configured status consistently 
     .fn<typeof fetch>()
     .mockImplementation(async (url) =>
       Response.json(
-        String(url).includes("anthropic.com")
+        String(url) === "https://api.anthropic.com/v1/messages"
           ? { content: [{ text }], usage: { input_tokens: 100, output_tokens: 50 } }
           : { choices: [{ message: { content: text } }], usage: { prompt_tokens: 100, completion_tokens: 50 } },
       ),
@@ -98,6 +98,10 @@ it("uses the selected provider's key and reports configured status consistently 
     });
   }
   expect(new Headers(fetcher.mock.calls[0]?.[1]?.headers).get("x-api-key")).toBe("anthropic-test-key");
+  expect(fetcher.mock.calls.map(([url]) => String(url))).toEqual([
+    "https://api.anthropic.com/v1/messages",
+    "https://example.test/v1/chat/completions",
+  ]);
   expect(new Headers(fetcher.mock.calls[1]?.[1]?.headers).get("authorization")).toBe("Bearer compatible-test-key");
   expect((await database.binding.prepare("SELECT * FROM usage").all()).results).toMatchObject([
     { requests: 2, input_tokens: 200, output_tokens: 100, in_flight: 0 },
